@@ -893,12 +893,12 @@ def checkTimedReset():
 
 def preview_question():
     code = json.loads(request.vars.code)
-    with open("applications/runestone/build/preview/_sources/index.rst", "w", encoding="utf-8") as ixf:
+    with open("applications/{}/build/preview/_sources/index.rst".format(request.application), "w", encoding="utf-8") as ixf:
         ixf.write(code)
 
-    res = os.system('applications/runestone/scripts/build_preview.sh')
+    res = os.system('applications/{}/scripts/build_preview.sh'.format(request.application))
     if res == 0:
-        with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
+        with open('applications/{}/build/preview/build/preview/index.html'.format(request.application),'r') as ixf:
             src = ixf.read()
             tree = html.fromstring(src)
             component = tree.cssselect(".runestone")

@@ -21,7 +21,7 @@
 <div class="row ">
 <!-- Carousel
     ================================================== -->
-    <link href="/runestone/static/css/carousel.css" rel="stylesheet">
+    <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
     <div id="myCarousel" class="carousel slide col-md-8" data-ride="carousel">
       <!-- Indicators -->
       <ol class="carousel-indicators">
@@ -116,36 +116,51 @@
 {{ if request.args(0) == 'login': }}
     <div id="web2py_user_form" class="col-md-4">
         <form class="form-horizontal" method="post">
-            <div class="form-group">
-                <div class="col-sm-offset-2">
-                <label for="auth_user_username" class="control-label">Username</label>
-                <input type="text" class="form-control col-xs-4" id="auth_user_username" name="username"
-                       placeholder="Enter username">
-            </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2">
-                    <label for="auth_user_password" class="control-label ">Password</label>
-                    <div>
-                        <input type="password" class="form-control" id="auth_user_password" name="password"
-                               placeholder="Enter password">
-                </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2">
-                    <div class="checkbox">
-                        <label>
-                            <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
-                        </label>
+            {{if not session.auth_two_factor_user:}}
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                    <label for="auth_user_username" class="control-label">Username</label>
+                    <input type="text" class="form-control col-xs-4" id="auth_user_username" name="username"
+                           placeholder="Enter username" autofocus>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-4">
-                    <button type="submit" class="btn btn-default">Login</button>
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                        <label for="auth_user_password" class="control-label">Password</label>
+                        <div>
+                            <input type="password" class="form-control" id="auth_user_password" name="password"
+                                   placeholder="Enter password">
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                        <div class="checkbox">
+                            <label>
+                                <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-4">
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </div>
+                </div>
+            {{else:}}
+                <div class="form-group">
+                    <div class="col-sm-offset-2">
+                    <label for="authentication_code" class="control-label">Authentication code</label>
+                    <input class="form-control col-xs-4" id="authentication_code" name="authentication_code" type="password"
+                           placeholder="Enter code" autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-4">
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </div>
+                </div>
+            {{pass}}
         {{=form.custom.end}}
         </form>
         <!-- </form> Must use this to get all the good defaults for the form -->
@@ -158,7 +173,7 @@
         {{pass}}
         </div>
     </div>
-    {{pass}}
+{{pass}}
 
 
 {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
@@ -248,7 +263,7 @@
                     <label for="auth_user_accept_tcp">I Agree</label>
                 </td>
                 <td class="w2p_fw ui-widget">
-                    <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp">  I have read and accept your <a href="/runestone/default/privacy">privacy policy</a>
+                    <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp">  I have read and accept your <a href="/{{=request.application}}/default/privacy">privacy policy</a>
                 </td>
             </tr>
             <tr id="donation_row">

@@ -30,7 +30,7 @@ getDiffs = function(sid, divid) {
 
     params.divid = divid || $("#exerciseid").val();
     params.sid = sid || $("#studentid").val();
-    $.get("/runestone/ajax/getCodeDiffs", params, function(data) {
+    $.get("/{{=request.application}}/ajax/getCodeDiffs", params, function(data) {
         diffdata = JSON.parse(data);
         diffcount = diffdata.code.length-1;
         displayCoachData();

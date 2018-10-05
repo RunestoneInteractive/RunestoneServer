@@ -201,7 +201,7 @@ def canonicalize(div_id):
         # return canonical url, without #anchors
         if full_url.rfind('#') > 0:
             full_url = full_url[:url.rfind('#')]
-        full_url = full_url.replace('/runestone/static/pip2/', '')
+        full_url = full_url.replace('/{}/static/pip2/'.format(request.application), '')
         return full_url
     else:
         return div_id
