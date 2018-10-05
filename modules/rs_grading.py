@@ -1,7 +1,7 @@
 import datetime
 import logging
 from math import ceil
-
+from psycopg2 import IntegrityError
 from outcome_request import OutcomeRequest
 
 # When testing, the ``settings`` object isn't defined. Import it in this case.
