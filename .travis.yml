@@ -4,7 +4,7 @@ python:
 services:
 - postgresql
 addons:
-  postgresql: '9.4'
+  postgresql: '9.6'
 script:
 - mkdir runestone
 # Move everything except the newly-created ``runestone/`` directory into ``runestone/``. See https://askubuntu.com/questions/91740/how-to-move-all-files-in-current-folder-to-subfolder.
