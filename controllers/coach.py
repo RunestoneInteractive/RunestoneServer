@@ -44,7 +44,7 @@ def lint_one(code, conn, curs, divid, row, sid):
             ins = '''insert into coach_hints (category,symbol,msg_id,line,col,obj,msg,source)
                  values('%s','%s','%s',%s,%s,'%s','%s',%d)''' % (
             g.groups()[:-1] + (g.group(7).replace("'", ''), row[0],))
-            # print ins
+            # print(ins)
             curs.execute(ins)
     conn.commit()
 

@@ -240,7 +240,7 @@ db.define_table('user_courses',
 ##
 ## >>> db.mytable.insert(myfield='value')
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
+## >>> for row in rows: print(row.id, row.myfield)
 #########################################################################
 
 

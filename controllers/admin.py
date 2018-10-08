@@ -1491,7 +1491,7 @@ def _get_toc_and_questions():
                           'practice_picker': practice_picker,
                           'question_picker': question_picker})
     # except Exception as ex:
-    #     print ex
+    #     print(ex)
     #     return json.dumps({})
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
