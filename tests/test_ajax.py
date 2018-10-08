@@ -17,47 +17,102 @@
 import unittest
 import json
 import datetime
+import sys
+from functools import wraps
+
 from gluon.globals import Request, Session
 from gluon.tools import Auth
-from dateutil.parser import parse
-import sys
+from mock import patch, Mock
 
 # This doesn't work -- ``__file__`` is ``applications\runestone\models\user_biography.py`` on my PC. ???
 #sys.path.append(os.path.dirname(__file__))
 sys.path.append('applications/runestone/tests')
 from ci_utils import is_linux
 
-# bring in the ajax controllers
+
+# ``hsblog`` workaround
+# =====================
+# The ``hsblog`` endpoint timestamps all entries with ``utcnow`` rounded to the nearest second. Results from ``getAssessResults`` are selected based on the most recent commit, again based on this rounded timestamp. If there are two calls to ``hsblog`` within the same second, ``getAssessResults`` will return the first call, not the expected second call, since the timestamps are identical. Therefore, this function uses a mocked ``datetime`` to sleep for 1 (simulated) second before calling ``hsblog``.
+#
+# **Important**: To use this function, the test routine which calls it must be decorated with ``mock_utcnow``.
+def sleep_hsblog():
+    mock_sleep(1)
+    return hsblog()
 
 
-# clean up the database
-db(db.useinfo.div_id == 'unit_test_1').delete()
-db.commit()
+# This decorator mocks ``datetime.datetime.utcnow`` such that calls to ``mock_sleep`` advance the reported time. This is faster than using ``time.sleep`` to insert actual delays.
+def mock_utcnow(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Record the time when this test is run.
+        utcnow = datetime.datetime.utcnow()
+        # This is based on a `Stack Overflow post <https://stackoverflow.com/a/51213128>`_.
+        with patch.object(datetime, 'datetime', Mock(wraps=datetime.datetime)):
+            # Return this time, until it's updated by ``mock_sleep``.
+            datetime.datetime.utcnow.return_value = utcnow
+            return f(*args, **kwargs)
 
-class TestAjaxEndpoints(unittest.TestCase):
+    return decorated_function
+
+
+# Move the mocked timer forward to ``time_sec``. This only works if the datetime object has been mocked.
+def mock_sleep(time_sec):
+    datetime.datetime.utcnow.return_value += datetime.timedelta(seconds=time_sec)
+
+
+# Test helper class
+# =================
+# Provide a class with utility functions for creating synthetic test data. Eventually, all test classes should derive from this. However, I can't figure out how to put this in a separate module due to web2py globals confusion.
+class Web2pyTestCase(unittest.TestCase):
     def setUp(self):
         global request, session, auth
-        request = Request(globals()) # Use a clean Request object
+        request = Request(globals())  # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
+        # bring in the ajax controllers
         execfile("applications/runestone/controllers/ajax.py", globals())
+
+        # Create a default user and course.
+        self.course_name_1 = 'test_course_1'
+        self.course_id_1 = self.createCourse(self.course_name_1)
+        self.user_name_1 = 'test_user_1'
+        self.user_id_1 = self.createUser(self.user_name_1, self.course_id_1)
 
     def tearDown(self):
         # In case of an error, roll back the last transaction to leave the
-        # database in a working state.
+        # database in a working state. Also, attempt to leave the database in a
+        # clean state for the next test.
         db.rollback()
 
+    def createCourse(self, course_name='test_course_1', term_start_date='2000-01-01', login_required=True):
+        return db.courses.insert(
+            course_name=course_name, base_course=course_name,
+            term_start_date=term_start_date,
+            login_required=login_required,
+        )
+
+    def createUser(self, username, course_id):
+        user_id = db.auth_user.insert(username=username, course_id=course_id)
+        db.user_courses.insert(user_id=user_id, course_id=course_id)
+        return user_id
+
+    def makeInstructor(self, user_id, course_id):
+        return db.course_instructor.insert(course=course_id, instructor=user_id)
+
+
+# Test cases
+# ==========
+class TestAjaxEndpoints(Web2pyTestCase):
     def testHSBLog(self):
         # Set up the request object
-        request.vars["act"] = 'run'
+        request.vars.act = 'run'
         request.vars.event = 'activecode'
-        request.vars.course = 'thinkcspy'
+        request.vars.course = self.course_name_1
         request.vars.div_id = 'unit_test_1'
         request.client = "foobar"
 
         # call the function
-        res = hsblog()
-        res = json.loads(res)
+        res = json.loads(hsblog())
         self.assertEqual(len(res.keys()), 2)
         self.assertEqual(res['log'], True)
         time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamp'], '%Y-%m-%d %H:%M:%S')
@@ -66,184 +121,157 @@ class TestAjaxEndpoints(unittest.TestCase):
         # make sure the basic db stuff was written
         dbres = db(db.useinfo.div_id == 'unit_test_1').select(db.useinfo.ALL)
         self.assertEqual(len(dbres), 1)
-        self.assertEqual(dbres[0].course_id, 'thinkcspy')
+        self.assertEqual(dbres[0].course_id, self.course_name_1)
 
     def testInstructorStatus(self):
-        auth.login_user(db.auth_user(11))
-        course = 'testcourse'
-        self.assertTrue(verifyInstructorStatus(course,auth.user.id))
-        auth.login_user(db.auth_user(1663))
-        self.assertFalse(verifyInstructorStatus(course,auth.user.id))
+        self.makeInstructor(self.user_id_1, self.course_id_1)
+        auth.login_user(db.auth_user(self.user_id_1))
+        self.assertTrue(verifyInstructorStatus(self.course_name_1, auth.user.id))
 
+        user_id_2 = self.createUser('test_user_2', self.course_id_1)
+        auth.login_user(db.auth_user(user_id_2))
+        self.assertFalse(verifyInstructorStatus(self.course_name_1, auth.user.id))
+
+
+    @mock_utcnow
     def testGetAssessResults(self):
         """
         getAssessResults
         test_question2_4_1 | user_1662 correct answer is 1 on second try
+
         """
-        #globals auth, db
-        # can login user with auth.login_user(db.auth_user(60)) then auth.user will be defined
-
-        #mchoice
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'test_question2_4_1'
-        request.vars.sid = 'user_1662'
+        # Create a mchoice answer.
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.div_id = 'test_mchoice_1'
+        request.vars.sid = self.user_name_1
+        request.vars.answer = '1'
+        request.vars.act = request.vars.answer
+        request.vars.correct = 'F'
         request.vars.event = 'mChoice'
-
-        res = getAssessResults()
-        res = json.loads(res)
-        self.assertEqual(res['answer'], '1')
-        self.assertEqual(res['correct'], True)
-
-        request.vars["act"] = '3'
-        request.vars.answer = '3'
-        request.vars.correct = 'T'
-        request.vars.event = 'mChoice'
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'testAddmchoice1'
+        request.vars.course = self.course_name_1
         request.client = "foobar"
-        res = hsblog()
-        request.vars.sid = 'user_11'
-        res = getAssessResults()
-        res = json.loads(res)
+        sleep_hsblog()
+
+        # Verify that it's incorrect.
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], '1')
+        self.assertEqual(res['correct'], False)
+
+        # Now add a correct answer.
+        request.vars.answer = '3'
+        request.vars.act = request.vars.answer
+        request.vars.correct = 'T'
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '3')
         self.assertEqual(res['correct'], True)
 
+    @mock_utcnow
     def testGetParsonsResults(self):
-        # Parsons
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        request.vars.sid = 'user_1662'
+        # Create an entry.
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.answer = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+        request.vars.act = request.vars.answer
+        request.vars.correct = 'F'
         request.vars.event = 'parsons'
-        request.vars.div_id = '3_8'
+        request.vars.course = self.course_name_1
+        request.vars.div_id = 'test_parsons_1'
+        request.vars.sid = self.user_name_1
+        request.vars.source = 'test_source_1'
+        request.client = "foobar"
+        sleep_hsblog()
+
+        # Check it.
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0', msg=None)
-        # self.assertEqual(res['correct'], True) # TODO: why isn't correct returned?
-        request.vars["act"] = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
-        request.vars.answer = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
-        request.vars.correct = 'F'
-        request.vars.event = 'parsons'
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'testAddParsons1'
-        request.client = "foobar"
-        res = hsblog()
-        request.vars.sid = 'user_11'
-        res = getAssessResults()
-        res = json.loads(res)
-        self.assertEqual(res['answer'], '0_0-1_2_0-3_4_0-5_1-6_1-7_0')
-        #self.assertEqual(res['correct'], False)
 
-
+    @mock_utcnow
     def testGetClickableResults(self):
-        # Parsons
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        # clickable
+        auth.login_user(db.auth_user(self.user_id_1))
         request.vars.event = 'clickableArea'
-        request.vars.div_id = 'ca_id_str'
-        request.vars.sid = 'user_1674'
-        res = json.loads(getAssessResults())
-        self.assertEqual(res['answer'], '0;1', msg=None)
-        self.assertEqual(res['correct'], False)
-        # timestamp 2017-09-04 00:56:34
-        self.assertEqual("2017-09-04 00:56:34", res['timestamp'], msg=None)
-        request.vars["act"] = '0;1'
-        request.vars.answer = '0;1'
-        request.vars.correct = 'F'
-        request.vars.event = 'clickableArea'
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'testAddClickable1'
+        request.vars.course = self.course_name_1
+        request.vars.div_id = 'test_parsons_1'
+        request.vars.sid = self.user_name_1
         request.client = "foobar"
-        res = hsblog()
-        request.vars.sid = 'user_11'
-        res = getAssessResults()
-        res = json.loads(res)
+        request.vars.answer = '0;1'
+        request.vars.act = request.vars.answer
+        request.vars.correct = 'F'
+        sleep_hsblog()
+
+        res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], '0;1')
         self.assertEqual(res['correct'], False)
 
-
+    @mock_utcnow
     def testGetShortAnswerResults(self):
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.course = self.course_name_1
         request.vars.event = 'shortanswer'
-        request.vars.div_id = 'turtle_reflect'
-        request.vars.sid = 'user_1669'
-        res = json.loads(getAssessResults())
-        self.assertTrue("Moving the turtle" in res['answer'])
-        request.vars["act"] = 'hello_test'
+        request.vars.sid = self.user_name_1
+        request.vars.div_id = 'test_short_anser_1'
         request.vars.answer = 'hello_test'
+        request.vars.act = request.vars.answer
         request.vars.correct = 'F'
-        request.vars.event = 'shortanswer'
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'testAddShortanswer1'
         request.client = "foobar"
-        res = hsblog()
-        request.vars.sid = 'user_11'
-        res = getAssessResults()
-        res = json.loads(res)
+        sleep_hsblog()
+
+        res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], 'hello_test')
 
-
-    # fitb
+    @mock_utcnow
     def testGetFITBAnswerResults(self):
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
+        auth.login_user(db.auth_user(self.user_id_1))
+
+        # Test client-side grading.
+        request.vars.course = self.course_name_1
+        request.vars.sid = self.user_name_1
         request.vars.event = 'fillb'
-        request.vars["act"] = '42'
-        request.vars.answer = '42'
-        request.vars.correct = 'T'
-        request.vars.div_id = 'testAddFillb1'
+        request.vars.div_id = 'test_fitb_1'
         request.client = "foobar"
-        res = hsblog()
-        request.vars.sid = 'user_11'
-        res = getAssessResults()
-        res = json.loads(res)
-        self.assertEqual(res['answer'], '42')
-        self.assertTrue(res['correct'])
+        request.vars.answer = '["blue","away"]'
+        request.vars.act = request.vars.answer
+        request.vars.correct = 'F'
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], request.vars.answer)
+        self.assertFalse(res['correct'])
 
-
-
-                # dragndrop
+    @mock_utcnow
     def testGetDragNDropResults(self):
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        auth.login_user(db.auth_user(11))
-        request.vars["act"] = '0;1;2'
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.course = self.course_name_1
+        request.vars.sid = self.user_name_1
         request.vars.answer = '0;1;2'
+        request.vars.act = request.vars.answer
         request.vars.correct = 'T'
         request.vars.event = 'dragNdrop'
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'demovideodnd'
+        request.vars.div_id = 'test_dnd_1'
         request.client = "foobar"
         request.vars.minHeight = '512'
-        res = hsblog()
-        request.vars.sid = 'user_11'
+        sleep_hsblog()
+
         res = json.loads(getAssessResults())
         self.assertTrue(res['correct'])
 
-
     def testGetHist(self):
-        """
-        user_1662 | 2017-09-22 20:29:19 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:29:34 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:29:43 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:30:16 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:30:28 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:31:24 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:31:54 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:33:15 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:33:32 | bnm_fruitco_selection
-        user_1662 | 2017-09-22 20:43:58 | bnm_fruitco_selection
-        """
-        request.vars.acid = 'bnm_fruitco_selection'
-        request.vars.sid = 'user_1662'
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.course = self.course_name_1
+        request.vars.sid = self.user_name_1
+        request.vars.div_id = 'test_activecode_1'
+        request.vars.error_info = 'success'
+        request.vars.event = 'activecode'
+        request.vars.to_save = 'true'
+        for x in range(0, 10):
+            request.vars.code = 'test_code_{}'.format(x)
+            runlog()
 
-        res = gethist()
-        res = json.loads(res)
+        request.vars.acid = request.vars.div_id
+        request.vars.sid = self.user_name_1
+        res = json.loads(gethist())
         self.assertEqual(len(res['timestamps']), 10)
         self.assertEqual(len(res['history']), 10)
-        self.assertEqual(parse(res['timestamps'][-1]), parse('2017-09-22 20:43:58'))
-        self.assertEqual(parse(res['timestamps'][0]), parse('2017-09-22 20:29:19'))
+        time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamps'][-1], '%Y-%m-%dT%H:%M:%S')
+        self.assertLess(time_delta, datetime.timedelta(seconds=1))
         prog = json.loads(getprog())
         self.assertEqual(res['history'][-1],prog[0]['source'])
 
@@ -252,29 +280,116 @@ class TestAjaxEndpoints(unittest.TestCase):
         runlog should add an entry into the useinfo table as well as the code and acerror_log tables...
         code and acerror_log seem pretty redundant... This ought to be cleaned up.
         """
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        request.vars.div_id = "unittest_div_111"
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.course = self.course_name_1
+        request.vars.sid = self.user_name_1
+        request.vars.div_id = 'test_activecode_1'
         request.vars.code = "this is a unittest"
-        error_info = "succes"
+        request.vars.error_info = 'success'
         request.vars.event = 'activecode'
         request.vars.to_save = "True"
-
         runlog()
-        request.vars.acid = 'unittest_div_111'
+
+        request.vars.acid = request.vars.div_id
         prog = json.loads(getprog())
         self.assertEqual(prog[0]['source'], "this is a unittest")
 
     def testGetLastPage(self):
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
+        auth.login_user(db.auth_user(self.user_id_1))
+        request.vars.course = self.course_name_1
+        request.vars.lastPageUrl = 'test_chapter_1/subchapter_a.html'
+        request.vars.lastPageScrollLocation = 100
+        request.vars.completionFlag = '1'
+        # Call ``getlastpage`` first to insert a new record.
+        getlastpage()
+        # Then, we can update it with the required info.
+        updatelastpage()
+
+        # Now, test a query.
         res = json.loads(getlastpage())
-
-        self.assertEqual('/runestone/static/testcourse/SimplePythonData/Exercises.html',
+        self.assertEqual(request.vars.lastPageUrl,
                          res[0]['lastPageUrl'])
+        self.assertEqual('Test chapter 1', res[0]['lastPageChapter'])
 
-        self.assertEqual('Simple Python Data', res[0]['lastPageChapter'])
+    def test_GetNumOnline(self):
+        # Put some users online and record that in the database.
+        self.testGettop10Answers()
+        res = json.loads(getnumonline())
+        # this is 6 because gettop10 adds data for 6 users to useinfo.
+        self.assertEqual(6, res[0]['online'])
 
+    def testGettop10Answers(self):
+        user_ids = []
+        for index in range(0, 6):
+            user_ids.append(self.createUser('test_user_{}'.format(index + 2),
+                                            self.course_id_1))
+            auth.login_user(db.auth_user(user_ids[-1]))
+            request.vars.event = 'fillb'
+            request.vars.course = self.course_name_1
+            request.vars.div_id = 'test_fitb_1'
+            if index % 2 == 1:
+                request.vars.answer = '42'
+                request.vars.act = request.vars.answer
+                request.vars.correct = 'T'
+            else:
+                request.vars.answer = '41'
+                request.vars.act = request.vars.answer
+                request.vars.correct = 'F'
+            # ``sleep_hsblog `` doesn't work here -- I assume more than just the
+            # ``utcnow`` function gets called.
+            hsblog()
+
+        auth.login_user(db.auth_user(user_ids[0]))
+        res, misc = json.loads(gettop10Answers())
+        self.assertEqual(res[0]['answer'], '41')
+        self.assertEqual(res[0]['count'], 3)
+        self.assertEqual(res[1]['answer'], '42')
+        self.assertEqual(res[1]['count'], 3)
+        self.assertEqual(misc['yourpct'], 0)
+
+    @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.')
+    def testPreviewQuestion(self):
+        src = """
+.. activecode:: preview_test1
+
+   Hello World
+   ~~~~
+   print("Hello World")
+
+"""
+        request.vars.code = json.dumps(src)
+        res = json.loads(preview_question())
+        self.assertTrue('id="preview_test1"' in res)
+        self.assertTrue('print("Hello World")' in res)
+        self.assertTrue('</textarea>' in res)
+        self.assertTrue('<textarea data-component="activecode"' in res)
+        self.assertTrue('<div data-childcomponent="preview_test1"' in res)
+
+    def testGetUserLoggedIn(self):
+        auth.login_user(db.auth_user(self.user_id_1))
+        res = json.loads(getuser())
+        self.assertEqual(self.user_name_1, res[0]['nick'])
+        auth.logout_bare()
+
+    def testGetUserNotLoggedIn(self):
+        res = json.loads(getuser())[0]
+        self.assertTrue('redirect' in res)
+
+    def test_donations(self):
+        auth.login_user(db.auth_user(self.user_id_1))
+        res = save_donate()
+        self.assertIsNone(res)
+        res = json.loads(did_donate())
+        self.assertTrue(res['donate'])
+
+    def test_non_donor(self):
+        auth.login_user(db.auth_user(self.user_id_1))
+        res = json.loads(did_donate())
+        self.assertFalse(res['donate'])
+
+        ## ========================================================================
+        # All the following tests should eventually be ported to use synthetic data
+        ## ========================================================================
 
 # getaggregateresults
 #    id   |      timestamp      |       div_id       |    sid    | course_name | correct | answer
@@ -344,8 +459,6 @@ class TestAjaxEndpoints(unittest.TestCase):
         for student in res['reslist']:
             self.assertEqual(student[1], expect[student[0]])
 
-
-
     def testGetCompletionStatus(self):
         auth.login_user(db.auth_user(11))
         request.vars.lastPageUrl = 'https://runestone.academy/runestone/static/testcourse/PythonTurtle/InstancesAHerdofTurtles.html'
@@ -363,87 +476,13 @@ class TestAjaxEndpoints(unittest.TestCase):
         row = db((db.user_sub_chapter_progress.chapter_id == 'Recursion') & (db.user_sub_chapter_progress.sub_chapter_id == 'SierpinskiTriangle')).select().first()
         self.assertIsNotNone(row)
         self.assertIsNone(row.end_date)
-        today = datetime.datetime.now()
+        today = datetime.datetime.utcnow()
         self.assertEqual(row.start_date.month, today.month)
         self.assertEqual(row.start_date.day, today.day)
         self.assertEqual(row.start_date.year, today.year)
 
         res = json.loads(getAllCompletionStatus())
         self.assertEqual(409, len(res))
-
-    def test_GetNumOnline(self):
-        # Put some users online and record that in the database.
-        self.testGettop10Answers()
-        db.commit()
-        res = json.loads(getnumonline())
-        # this is 6 because gettop10 adds data for 6 users to useinfo.
-        self.assertEqual(6, res[0]['online'])
-
-    def testGetUserLoggedIn(self):
-        auth.login_user(db.auth_user(11))
-        res = json.loads(getuser())
-        self.assertEqual('user_11', res[0]['nick'])
-        auth.logout_bare()
-
-    def testGetUserNotLoggedIn(self):
-        res = json.loads(getuser())[0]
-        self.assertTrue('redirect' in res)
-
-
-    def testGettop10Answers(self):
-        # We don't have any fillb answers in our test database, so lets add some.
-        db.questions.insert(base_course='thinkcspy', name='fillb1',
-                            chapter='Exceptions',
-                            subchapter='using-exceptions',
-                            htmlsrc='<h2>Hello World</h2>', question_type='fillintheblank')
-
-        for user in [11, 1662, 1663, 1665, 1667, 1670]:
-            auth.login_user(db.auth_user(user))
-            request.vars["act"] = 'run'
-            request.vars.event = 'fillb'
-            request.vars.course = 'testcourse'
-            request.vars.div_id = 'fillb1'
-            if user % 2 == 1:
-                request.vars.act = '42'
-                request.vars.answer = '42'
-                request.vars.correct = 'T'
-            else:
-                request.vars.act = '41'
-                request.vars.answer = '41'
-                request.vars.correct = 'F'
-            res = hsblog()
-
-        auth.login_user(db.auth_user(11))
-        request.vars.course = 'testcourse'
-        request.vars.div_id = 'fillb1'
-        res = json.loads(gettop10Answers())
-        misc = res[1]
-        res = res[0]
-        self.assertEqual(len(res), 2)
-        self.assertEqual(res[0]['answer'], '42')
-        self.assertEqual(res[0]['count'], 4)
-        self.assertEqual(res[1]['answer'], '41')
-        self.assertEqual(res[1]['count'], 2)
-        self.assertEqual(misc['yourpct'], 100)
-
-    @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.')
-    def testPreviewQuestion(self):
-        src = """
-.. activecode:: preview_test1
-
-   Hello World
-   ~~~~
-   print("Hello World")
-
-"""
-        request.vars.code = json.dumps(src)
-        res = json.loads(preview_question())
-        self.assertTrue('id="preview_test1"' in res)
-        self.assertTrue('print("Hello World")' in res)
-        self.assertTrue('</textarea>' in res)
-        self.assertTrue('<textarea data-component="activecode"' in res)
-        self.assertTrue('<div data-childcomponent="preview_test1"' in res)
-
 
     # TODO: Cannot verify any questions other than activecodes and readings -- mchoice et al not stored??
     def test_getassignmentgrade(self):
@@ -470,24 +509,12 @@ class TestAjaxEndpoints(unittest.TestCase):
         res = db((db.user_sub_chapter_progress.user_id == 1667) &
                 (db.user_sub_chapter_progress.sub_chapter_id == 'VariableNamesandKeywords')).select().first()
 
-        now = datetime.datetime.now()
+        now = datetime.datetime.utcnow()
 
         self.assertEqual(res.status, 1)
         self.assertEqual(res.end_date.month, now.month)
         self.assertEqual(res.end_date.day, now.day)
         self.assertEqual(res.end_date.year, now.year)
-
-    def test_donations(self):
-        auth.login_user(db.auth_user(1667))
-        res = save_donate()
-        self.assertIsNone(res)
-        res = json.loads(did_donate())
-        self.assertTrue(res['donate'])
-
-    def test_non_donor(self):
-        auth.login_user(db.auth_user(11))
-        res = json.loads(did_donate())
-        self.assertFalse(res['donate'])
 
     def test_datafile(self):
         db.source_code.insert(course_id='testcourse',
@@ -507,19 +534,18 @@ class TestAjaxEndpoints(unittest.TestCase):
         self.assertIsNone(res['data'])
 
 
+def runTests(cls_to_test):
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(cls_to_test))
+    res = unittest.TextTestRunner(verbosity=2).run(suite)
+    if len(res.errors) == 0 and len(res.failures) == 0:
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 
-
-
-suite = unittest.TestSuite()
-suite.addTest(unittest.makeSuite(TestAjaxEndpoints))
-res = unittest.TextTestRunner(verbosity=2).run(suite)
-if len(res.errors) == 0 and len(res.failures) == 0:
-    sys.exit(0)
-else:
-    print("nonzero errors exiting with 1", res.errors, res.failures)
-    sys.exit(1)
-
+if __name__ == '__main__':
+    runTests(TestAjaxEndpoints)
 
 # One month of AJAX on runestone.academy
 #      endpoint           calls   avg time   max time

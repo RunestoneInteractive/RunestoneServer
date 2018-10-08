@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import cgi
 import json
 import os
 import requests
@@ -176,6 +175,8 @@ def index():
 
 
 def error():
+    # As recommended in http://web2py.com/books/default/chapter/29/04/the-core#Routes-on-error, pass on the error code that brought us here. TODO: This actually returns a 500 (Internal server error). ???
+    #response.status = request.vars.code
     return dict()
 
 

@@ -6,6 +6,7 @@ services:
 addons:
   postgresql: '9.4'
 script:
+- pip install -U -r requirements-test.txt
 - mkdir runestone
 # Move everything except the newly-created ``runestone/`` directory into ``runestone/``. See https://askubuntu.com/questions/91740/how-to-move-all-files-in-current-folder-to-subfolder.
 - mv !(runestone) runestone
