@@ -401,19 +401,38 @@ def updatelastpage():
     lastPageChapter = lastPageUrl.split("/")[-2]
     lastPageSubchapter = ".".join(lastPageUrl.split("/")[-1].split(".")[:-1])
     if auth.user:
-        db((db.user_state.user_id == auth.user.id) &
-                 (db.user_state.course_id == course)).update(
-                   last_page_url=lastPageUrl,
-                   last_page_chapter=lastPageChapter,
-                   last_page_subchapter=lastPageSubchapter,
-                   last_page_scroll_location=lastPageScrollLocation,
-                   last_page_accessed_on=datetime.datetime.utcnow())
-        db((db.user_sub_chapter_progress.user_id == auth.user.id) &
-           (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
-           (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
-                   status=completionFlag,
-                   end_date=datetime.datetime.utcnow())
+        done = False
+        num_tries = 3
+        while not done and num_tries > 0:
+            try:
+                db((db.user_state.user_id == auth.user.id) &
+                        (db.user_state.course_id == course)).update(
+                        last_page_url=lastPageUrl,
+                        last_page_chapter=lastPageChapter,
+                        last_page_subchapter=lastPageSubchapter,
+                        last_page_scroll_location=lastPageScrollLocation,
+                        last_page_accessed_on=datetime.datetime.utcnow())
+                done = True
+            except:
+                num_tries -= 1
+        if num_tries == 0:
+            raise Exception("Failed to save the user state in update_last_page")
 
+        done = False
+        num_tries = 3
+        while not done and num_tries > 0:
+            try:
+                db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
+                        status=completionFlag,
+                        end_date=datetime.datetime.utcnow())
+                done = True
+            except:
+                num_tries -= 1
+        if num_tries == 0:
+            raise Exception("Failed to save sub chapter progress in update_last_page")
+        
         practice_settings = db(db.course_practice.course_name == auth.user.course_name)
         if (practice_settings.count() != 0 and
             practice_settings.select().first().flashcard_creation_method == 0):
