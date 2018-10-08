@@ -185,7 +185,7 @@ def runlog():    # Log errors and runs with code
     done = False
     while num_tries > 0 and not done:
         try:
-            db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
+            db.useinfo.insert(sid=sid, act=act[:512], div_id=div_id, event=event, timestamp=ts, course_id=course)
             done = True
         except Exception as e:
             logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
