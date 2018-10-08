@@ -205,13 +205,31 @@ def _get_practice_data(user, timezoneoffset):
             flashcards = db((db.user_topic_practice.course_name == user.course_name) &
                             (db.user_topic_practice.user_id == user.id)).select(orderby=db.user_topic_practice.id)
 
+            # We need the following `for` loop to make sure the number of repetitions for both blocking and interleaving
+            # groups are the same.
+            for f in flashcards:
+                f_logs = db((db.user_topic_practice_log.course_name == user.course_name) &
+                            (db.user_topic_practice_log.user_id == user.id) &
+                            (db.user_topic_practice_log.chapter_label == f.chapter_label) &
+                            (db.user_topic_practice_log.sub_chapter_label == f.sub_chapter_label)
+                            ).select(orderby=db.user_topic_practice_log.end_practice)
+                f["blocking_eligible_date"] = f.next_eligible_date
+                if len(f_logs) > 0:
+                    days_to_add = sum([f_log.i_interval for f_log in f_logs[0:-1]])
+                    days_to_add -= (f_logs[-1].end_practice - f_logs[0].end_practice).days
+                    if days_to_add > 0:
+                        f["blocking_eligible_date"] += datetime.timedelta(days=days_to_add)
+
             if interleaving == 1:
                 # Select only those where enough time has passed since last presentation.
                 presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
                 available_flashcards_num = len(presentable_flashcards)
             else:
                 # Select only those that are not mastered yet.
-                presentable_flashcards = [f for f in flashcards if (f.e_factor * f.q < 10 and f.q != -1)]
+                presentable_flashcards = [f for f in flashcards
+                                          if (f.q * f.e_factor < 12.5 and
+                                              f.blocking_eligible_date < practice_settings.end_date and
+                                              (f.q != -1 or (f.next_eligible_date - now_local.date()).days != 1))]
                 available_flashcards_num = len(presentable_flashcards)
                 if len(presentable_flashcards) > 0:
                     # It's okay to continue with the next chapter if there is no more question in the current chapter
@@ -751,7 +769,7 @@ def practice():
             # it becomes too difficult for them to pass it and the system asks them the same question many times
             # (because most subchapters have only one question). To solve this issue, I changed the blocking formula.
             f_card["mastery_percent"] = int(100 * f_card.user_topic_practice.e_factor *
-                                            f_card.user_topic_practice.q / 10)
+                                            f_card.user_topic_practice.q / 12.5)
             if f_card["mastery_percent"] > 100:
                 f_card["mastery_percent"] = 100
 
