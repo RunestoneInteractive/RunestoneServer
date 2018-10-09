@@ -65,11 +65,11 @@
 					<tr class="search">
 						{{for item in range(len(gradetable[row])):}}
 							{{if item > 4 and gradetable[row][item] != 'n/a':}}
-								<td class="{{=assignments[item-4]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-4]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
+								<td class="{{=assignments[item-5]['name']}}"><a href="questiongrades?sid={{=students[row]['username']}}&assignment_id={{=assignments[item-4]['id']}}" style="color:blue;">{{=gradetable[row][item]}}%</a></td>
 							{{elif item <= 4:}}
 								<td class="roguecol">{{=gradetable[row][item]}}</td>
 							{{else:}}
-								<td class="{{=assignments[item-4]['name']}}"></td>
+								<td class="{{=assignments[item-5]['name']}}"></td>
 							{{pass}}
 						{{pass}}
 					</tr>
