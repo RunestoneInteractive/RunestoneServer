@@ -179,7 +179,7 @@ def grades():
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
     ).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name,
-             db.auth_user.id, db.auth_user.email,
+             db.auth_user.id, db.auth_user.email, db.auth_user.course_name,
              orderby=(db.auth_user.last_name, db.auth_user.first_name))
 
 
@@ -192,11 +192,32 @@ def grades():
     rows = db.executesql(query, [course['id'], course['id']])
 
     studentinfo = {}
+    practice_setting = db(db.course_practice.course_name == auth.user.course_name).select().first()
+    practice_average = 0
     for s in students:
-        studentinfo[s.id]= {'last_name': s.last_name,
-                            'first_name': s.first_name,
-                            'username': s.username,
-                            'email': s.email}
+        practice_grade = 0
+        if practice_setting.spacing == 1:
+            practice_completion_count = db((db.user_topic_practice_Completion.course_name == s.course_name) &
+                                           (db.user_topic_practice_Completion.user_id == s.id)).count()
+            total_possible_points = practice_setting.day_points * practice_setting.max_practice_days
+            points_received = practice_setting.day_points * practice_completion_count
+        else:
+            practice_completion_count = db((db.user_topic_practice_log.course_name == s.course_name) &
+                                           (db.user_topic_practice_log.user_id == s.id) &
+                                           (db.user_topic_practice_log.q != 0) &
+                                           (db.user_topic_practice_log.q != -1)).count()
+            total_possible_points = practice_setting.question_points * practice_setting.max_practice_questions
+            points_received = practice_setting.question_points * practice_completion_count
+
+        practice_average += 100 * points_received / total_possible_points
+        studentinfo[s.id] = {'last_name': s.last_name,
+                             'first_name': s.first_name,
+                             'username': s.username,
+                             'email': s.email,
+                             'practice': '{0:.2f}'.format((100 * points_received/total_possible_points)
+                                                          ) if total_possible_points > 0 else 'n/a'}
+    practice_average /= len(students)
+    practice_average = '{0:.2f}'.format(practice_average)
 
     # create a matrix indexed by user.id and assignment.id
     gradebook = OrderedDict((sid.id, OrderedDict()) for sid in students)
@@ -221,6 +242,7 @@ def grades():
         studentrow.append(studentinfo[k]['last_name'])
         studentrow.append(studentinfo[k]['username'])
         studentrow.append(studentinfo[k]['email'])
+        studentrow.append(studentinfo[k]['practice'])
         for assignment in gradebook[k]:
             studentrow.append(gradebook[k][assignment])
         gradetable.append(studentrow)
@@ -235,7 +257,7 @@ def grades():
 
     return dict(course_id=auth.user.course_name, course_name=auth.user.course_name,
                 assignments=assignments, students=students, gradetable=gradetable,
-                averagerow=averagerow)
+                averagerow=averagerow, practice_average=practice_average)
 
 @auth.requires_login()
 def questiongrades():
