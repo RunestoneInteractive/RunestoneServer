@@ -59,9 +59,9 @@ Installation
        sudo apt-get install libpq-dev
        sudo apt-get install libxml2-dev libxslt1-dev
 
-   **OS X**
+   **macOS**
 
-   On an OS X installation You must install Xcode and the command line tools.  Free from the app store.  Then, I recommend you install homebrew (http://brew.sh)  then run the following commands:
+   On an macOS installation You must install Xcode and the command line tools.  Free from the App Store.  Then, I recommend you install homebrew (http://brew.sh)  then run the following commands:
 
    ::
 
@@ -270,7 +270,7 @@ What's New
 How to Contribute
 -----------------
 
-#. Get a github (free) account.
+#. Get a Github (free) account.
 #. Make a fork of this project.  That will create a repository in your
    account for you to have read/write access to.  Very nice, complete
    instructions for making a fork are here:  ``https://help.github.com/articles/fork-a-repo``
@@ -314,7 +314,7 @@ I have begun a project to document the `Runestone Interactive <http://docs.runes
 Enable Bug Reporting on Github
 ------------------------------
 
-The Runestone server now has a controller to allow users to enter bug reports without needing a github account.  But for this to work you will need to configure ``settings.github_token`` in ``models/1.py``
+The Runestone server now has a controller to allow users to enter bug reports without needing a Github account.  But for this to work you will need to configure ``settings.github_token`` in ``models/1.py``
 
 Creating Your Own Textbook
 --------------------------
