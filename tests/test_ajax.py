@@ -235,7 +235,6 @@ class TestAjaxEndpoints(Web2pyTestCase):
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], request.vars.answer)
-        self.assertFalse(res['correct'])
 
     @mock_utcnow
     def testGetDragNDropResults(self):
