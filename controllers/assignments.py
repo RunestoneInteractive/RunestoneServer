@@ -694,6 +694,11 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
               (db.questions.practice == True)).select()
 
 
+# Gets invoked from lti to set timezone and then redirect to practice()
+def settz_then_practice():
+    return dict(course_name=request.vars.get('course_name', 'UMSI106'))
+
+
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
 def practiceNotStartedYet():
     return dict(course_id=auth.user.course_name,
