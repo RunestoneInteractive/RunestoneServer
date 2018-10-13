@@ -7,31 +7,32 @@
 
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-<h1>Support Runestone Interactive</h1>
+        <h1>Support Runestone Interactive</h1>
 
-<p>Your support of Runestone Interaction is vital to our future.
-    Runestone has grown from one introductory computer science
-    course to supporting hundreds of courses and thousands of
-    students every day!</p>
-<p>If I get enough support through donations I can devote full time to this
-    project.  Your support goes directly to Runestone Interactive LLC to
-    support hosting and ongoing development efforts</p>
-<p>Thank You! <br/>Brad Miller, Founder and Chief Developer -- Runestone Interactive LLC</p>
+        <p>Your support of Runestone Interaction is vital to our future.
+            Runestone has grown from one introductory computer science
+            course to supporting hundreds of courses and thousands of
+            students every day!</p>
+        <p>If I get enough support through donations I can devote full time to this
+            project.  Your support goes directly to Runestone Interactive LLC to
+            support hosting and ongoing development efforts</p>
+        <p>Thank You! <br/>
+            Brad Miller, Founder and Chief Developer -- Runestone Interactive LLC</p>
 
-<div class="panel panel-default">
-    <div class="panel-heading">Donation Amount</div>
-    <div class="panel panel-body">
-    <input type="radio" name="donate" id="donate10" value="10.00"> $10</input></br>
-    <input type="radio" name="donate" id="donate20" value="20.00"> $20</input></br>
-    <input type="radio" name="donate" id="donate50" value="50.00"> $50</input></br>
-    Other<input type="text" name="donate" id="donateother" value=""/>
-    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Donation Amount</div>
+            <div class="panel panel-body">
+                <input type="radio" name="donate" id="donate10" value="10.00"> <label for="donate10">$10</label><br>
+                <input type="radio" name="donate" id="donate20" value="20.00"> <label for="donate20">$20</label><br>
+                <input type="radio" name="donate" id="donate50" value="50.00"> <label for="donate50">$50</label><br>
+                Other: <input type="text" name="donate" id="donateother" value=""/>
+            </div>
+        </div>
     </div>
 </div>
-        </div>
- <div id="paypal-button"></div>
+<div id="paypal-button"></div>
 
-  <script>
+<script>
     paypal.Button.render({
       env: 'production', // Or 'sandbox', 'production'
       client: {
@@ -92,7 +93,7 @@
          */
       }
     }, '#paypal-button');
-  </script>
+</script>
 
 {{ if request.args: }}
 <script>

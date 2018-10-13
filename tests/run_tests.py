@@ -4,6 +4,8 @@ import argparse
 import re
 from ci_utils import xqt, pushd
 
+COVER_DIRS = 'applications/runestone/tests,applications/runestone/controllers,applications/runestone/models'
+
 # Assume we are running with working directory in tests
 
 if __name__ == '__main__':
@@ -24,8 +26,9 @@ if __name__ == '__main__':
     #   else:
     #       raise ValueError("unknown value for WEB2PY_CONFIG")
 
-    # HINT: make sure that you export TEST_DBURL in your environment; not set here because it's specific to local
-    # setup, possibly with a password, and thus can't be committed to the repo.
+    # HINT: make sure that you export ``TEST_DBURL`` in your environment; it is
+    # not set here because it's specific to the local setup, possibly with a
+    # password, and thus can't be committed to the repo.
     assert os.environ['TEST_DBURL']
 
     # Extract the components of the DBURL. The expected format is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
@@ -52,20 +55,20 @@ if __name__ == '__main__':
     if parsed_args.skipdbinit:
         print('Skipping DB initialization.')
     else:
-        # make sure runestone_test is nice and clean
+        # make sure runestone_test is nice and clean.
         xqt('dropdb --echo --if-exists "{}"'.format(dbname),
             'createdb --echo "{}"'.format(dbname),
             'psql "{}" < runestone_test.sql'.format(dbname))
         # Build the test book to add in db fields needed.
         with pushd('test_book'):
-            # The runestone build process only look at ``DBURL``.
+            # The runestone build process only looks at ``DBURL``.
             os.environ['DBURL'] = os.environ['TEST_DBURL']
             xqt('{} -m runestone build --all'.format(sys.executable))
 
     with pushd('../../..'):
-        # Now run
-        cover_dirs = 'applications/runestone/tests,applications/runestone/controllers,applications/runestone/models'
-        xqt('{} -m coverage run --source={} web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py'.format(sys.executable, cover_dirs))
-        xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, cover_dirs, x)
-              for x in ['test_dashboard.py', 'test_admin.py', 'test_assignments.py']])
+        # Now run tests.
+        xqt('{} -m coverage erase'.format(sys.executable),
+            '{} -m unittest applications.runestone.tests.test_server'.format(sys.executable),
+            *['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
+              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']])
         xqt('{} -m coverage report'.format(sys.executable))
