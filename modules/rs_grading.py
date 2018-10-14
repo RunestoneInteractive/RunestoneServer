@@ -453,7 +453,7 @@ def send_lti_grades(assignment_id, assignment_points, course_id, lti_record, db)
             (db.grades.auth_user == student.id) &
             (db.grades.assignment == assignment_id)).select().first()
 
-        if grade.lis_result_sourcedid and grade.lis_outcome_url:
+        if grade and grade.lis_result_sourcedid and grade.lis_outcome_url:
             send_lti_grade(assignment_points,
                            score=grade.score,
                            consumer=lti_record.consumer,
