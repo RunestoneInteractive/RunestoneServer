@@ -194,22 +194,24 @@ def grades():
     studentinfo = {}
     practice_setting = db(db.course_practice.course_name == auth.user.course_name).select().first()
     practice_average = 0
+    total_possible_points = 0
     for s in students:
         practice_grade = 0
-        if practice_setting.spacing == 1:
-            practice_completion_count = db((db.user_topic_practice_Completion.course_name == s.course_name) &
-                                           (db.user_topic_practice_Completion.user_id == s.id)).count()
-            total_possible_points = practice_setting.day_points * practice_setting.max_practice_days
-            points_received = practice_setting.day_points * practice_completion_count
-        else:
-            practice_completion_count = db((db.user_topic_practice_log.course_name == s.course_name) &
-                                           (db.user_topic_practice_log.user_id == s.id) &
-                                           (db.user_topic_practice_log.q != 0) &
-                                           (db.user_topic_practice_log.q != -1)).count()
-            total_possible_points = practice_setting.question_points * practice_setting.max_practice_questions
-            points_received = practice_setting.question_points * practice_completion_count
-
-        practice_average += 100 * points_received / total_possible_points
+        if practice_setting:
+            if practice_setting.spacing == 1:
+                practice_completion_count = db((db.user_topic_practice_Completion.course_name == s.course_name) &
+                                            (db.user_topic_practice_Completion.user_id == s.id)).count()
+                total_possible_points = practice_setting.day_points * practice_setting.max_practice_days
+                points_received = practice_setting.day_points * practice_completion_count
+            else:
+                practice_completion_count = db((db.user_topic_practice_log.course_name == s.course_name) &
+                                            (db.user_topic_practice_log.user_id == s.id) &
+                                            (db.user_topic_practice_log.q != 0) &
+                                            (db.user_topic_practice_log.q != -1)).count()
+                total_possible_points = practice_setting.question_points * practice_setting.max_practice_questions
+                points_received = practice_setting.question_points * practice_completion_count
+        if total_possible_points > 0:
+            practice_average += 100 * points_received / total_possible_points
         studentinfo[s.id] = {'last_name': s.last_name,
                              'first_name': s.first_name,
                              'username': s.username,
