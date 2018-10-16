@@ -169,7 +169,8 @@ def index():
 
         # check number of classes, if more than 1, send to course selection, if only 1, send to book
         num_courses = db(db.user_courses.user_id == auth.user.id).count()
-        if num_courses == 1:
+        # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
+        if num_courses == 1 and os.environ.get('WEB2PY_CONFIG') != 'test':
             redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
         redirect('/%s/default/courses' % request.application)
 
@@ -297,7 +298,7 @@ def removecourse():
         if row.course_name == request.args[0] and course_id_query:
             session.flash = T("Sorry, you cannot remove your current active course.")
         else:
-            db((db.user_courses.user_id == auth.user.id) & 
+            db((db.user_courses.user_id == auth.user.id) &
                (db.user_courses.course_id == course_id_query[0].id)).delete()
 
     redirect('/%s/default/courses' % request.application)
