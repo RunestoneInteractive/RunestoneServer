@@ -15,7 +15,7 @@
 
 <div id="dashboard">
 	<h1>{{=course_name}}</h1>
-	<h2>Gradebook</h2> 
+	<h2>Gradebook</h2>
 	<div>
 		<label for="studentsearch">Filter by Student</label>
 		<input type="text" id="studentsearch" onkeyup="searchStudent()" placeholder="Name of student..">
@@ -43,7 +43,7 @@
 			</thead>
 
 			<tbody>
-				<tr bgcolor="lightgray" id="classaverage">
+				<tr style="background-color: lightgray" id="classaverage">
 					<td>Class Average</td>
 					<td> </td>
 					<td> </td>
@@ -100,7 +100,7 @@
 		      	} else {
 		        	tr[i].style.display = "none";
 		      	}
-		  	}       
+		  	}
 		}
 	}
 
@@ -118,18 +118,18 @@
 	    		// Because sorting adds a span to the innerHTML of the head td's
 	    		rogue = tablehead[i].innerHTML.split('<span id="sorttable_sort');
 	    		console.log(rogue[0])
-		    	tds = document.getElementsByClassName(rogue[0]); 
+		    	tds = document.getElementsByClassName(rogue[0]);
 		    	if (tablehead[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
 		    		tablehead[i].style.display = "";
 		    		for (j = 0; j < tds.length; j ++) {
 		    			tds[j].style.display = "";
 		    		}
-			    	
+
 		    	} else {
 		    		tablehead[i].style.display = "none";
 		    		for (j = 0; j < tds.length; j ++) {
 		    			tds[j].style.display = "none";
-		    		}	
+		    		}
 		    	}
 		    }
 	    }
