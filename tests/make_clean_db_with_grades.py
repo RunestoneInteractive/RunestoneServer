@@ -12,7 +12,7 @@
 from gluon.globals import Request
 
 # bring in the assignments controllers
-execfile("applications/runestone/modules/rs_grading.py", globals())
+execfile("applications/{}/modules/rs_grading.py".format(request.application), globals())
 
 # clean up the database
 db(db.useinfo.div_id == 'unit_test_1').delete()

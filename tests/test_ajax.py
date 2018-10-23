@@ -67,6 +67,7 @@ class Web2pyTestCase(unittest.TestCase):
     def setUp(self):
         global request, session, auth
         request = Request(globals())  # Use a clean Request object
+        request.application = 'runestone'
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         # bring in the ajax controllers

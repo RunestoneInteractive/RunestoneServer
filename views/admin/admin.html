@@ -31,7 +31,7 @@
 
 
 
-            <form  style="margin-top: 20px;" action="/runestone/sections/newCourse" method="post">
+            <form  style="margin-top: 20px;" action="/{{=request.application}}/sections/newCourse" method="post">
                 <button style="text-align: center; font-size: 12pt;" class="list-group-item" type="submit">New Course</button>
                 </form>
             </div>
@@ -41,7 +41,7 @@
           <div class="tab-content">
 
               <div id="manageStudents" class="tab-pane fade">
-                  <form id="removeStudents" method="POST" action="/runestone/admin/removeStudents">
+                  <form id="removeStudents" method="POST" action="/{{=request.application}}/admin/removeStudents">
                       <div class="col-md-3">
                           <h3 style="text-align: center">Students</h3>
                           <select id="studentList" class="form-control" size="10" name="studentList" multiple>
@@ -68,10 +68,10 @@
 
 
 
-         <form class="button" action="/runestone/sections/addSection" method="post" style="display: inline-block">
+         <form class="button" action="/{{=request.application}}/sections/addSection" method="post" style="display: inline-block">
              <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
 
-                <form class="button" action="/runestone/sections/remove" method="post" style="display: inline-block">
+                <form class="button" action="/{{=request.application}}/sections/remove" method="post" style="display: inline-block">
                 <input style="width: 35px; height:30px;" type="submit" value="-">
                 </form>
 
@@ -89,7 +89,7 @@
             <a data-toggle="tab" href="#students" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">{{=startDate}}</h4>
                 </a>
-                <form class="button" action="/runestone/sections/changeDate" method="post" style="text-align: center">
+                <form class="button" action="/{{=request.application}}/sections/changeDate" method="post" style="text-align: center">
              <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
                 </div>
 
@@ -116,7 +116,7 @@
       <h4 style="text-align: center">Change Log</h4>
       <div style="border: groove; white-space: pre" id="changelog"></div>
 
-    <form name="confirm" method="POST" action="/runestone/admin/admin">
+    <form name="confirm" method="POST" action="/{{=request.application}}/admin/admin">
       <input type="hidden" name="projectname" value="{{=coursename}}" />
       <input type="hidden" name="coursetype" value="rebuildcourse" />
       <div class="checkbox">
@@ -147,7 +147,7 @@
 
 
 
-      <form  method="post" action="/runestone/admin/backup" style="margin-top: 16px;">
+      <form  method="post" action="/{{=request.application}}/admin/backup" style="margin-top: 16px;">
                 <input type="submit" class="btn btn-default" value="Download Backup"/>
                 </form>
 
@@ -336,7 +336,7 @@
     $('#AddInstructorTab').css('background-color','transparent');
         $('#DeleteTab').css('background-color','transparent');
             var obj = new XMLHttpRequest();
-        obj.open('GET','/runestone/admin/indexrst/', true);
+        obj.open('GET','/{{=request.application}}/admin/indexrst/', true);
         obj.send(JSON.stringify({avariable: 'avariable'}));
         obj.onreadystatechange = function() {
             if (obj.readyState == 4 && obj.status == 200) {
@@ -355,7 +355,7 @@
 
 
         var obj = new XMLHttpRequest();
-        obj.open("GET", "/runestone/admin/getChangeLog", true);
+        obj.open("GET", "/{{=request.application}}/admin/getChangeLog", true);
         obj.send(JSON.stringify({variable: 'variable'}));
         obj.onreadystatechange = function () {
 
