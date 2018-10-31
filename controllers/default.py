@@ -172,7 +172,7 @@ def index():
         # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
         if num_courses == 1 and os.environ.get('WEB2PY_CONFIG') != 'test':
             redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
-        redirect('/%s/default/courses' % request.application)
+        redirect(URL(c='default', f='courses'))
 
 
 def error():
