@@ -67,7 +67,6 @@ def user():
         form[0].insert(-1, my_extra_element)
         form.element('#auth_user_username')['_readonly'] = True
 
-    if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
         if form.process().accepted:
             # auth.user session object doesn't automatically update when the DB gets updated
