@@ -920,9 +920,20 @@ def preview_question():
         env = dict(os.environ)
         # Prevent any changes to the database when building a preview question.
         del env['DBURL']
-        res = subprocess.call([sys.executable, '-m', 'runestone', 'build'], cwd='applications/{}/build/preview'.format(request.application), env=env)
-        if res != 0:
-            return json.dumps('Error: Runestone build failed.')
+        # Run a runestone build.
+        popen_obj = subprocess.Popen(
+            [sys.executable, '-m', 'runestone', 'build'],
+            # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
+            cwd='applications/{}/build/preview'.format(request.application),
+            # Capture the build output in case of an error.
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            # Pass the modified environment which doesn't contain ``DBURL``.
+            env=env)
+        stdout, stderr = popen_obj.communicate()
+        # If there was an error, return stdout and stderr from the build.
+        if popen_obj.returncode != 0:
+            return json.dumps('Error: Runestone build failed:\n\n' +
+                              stdout + '\n' + stderr)
 
         with open('applications/{}/build/preview/build/preview/index.html'.format(request.application), 'r', encoding='utf-8') as ixf:
             src = ixf.read()
