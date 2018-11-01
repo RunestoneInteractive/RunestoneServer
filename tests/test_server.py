@@ -18,7 +18,6 @@ import subprocess
 from pprint import pprint
 from contextlib import contextmanager
 from io import open
-from urllib import urlencode
 from textwrap import dedent
 import json
 
@@ -172,13 +171,16 @@ class _TestClient(WebClient):
         expected_string='',
         # The number of validation errors expected. If None, no validation is performed.
         expected_errors=None,
-        # A dictionary of query parameters
-        params=None):
+        # An optional dictionary of query parameters.
+        params=None,
+        # The expected status code from the request.
+        expected_status=200,
+        # All additional keyword arguments are passed to the ``post`` method.
+        **kwargs):
 
-        actual_url = url + '?' + urlencode(params) if params else url
         try:
-            self.get(actual_url)
-            assert self.status == 200
+            self.post(url, **kwargs)
+            assert self.status == expected_status
             if expected_string:
                 assert expected_string in self.text
 
@@ -201,8 +203,7 @@ class _TestClient(WebClient):
             raise
 
     def logout(self):
-        self.get('default/user/logout')
-        assert self.status == 200
+        self.validate('default/user/logout', 'Logged out')
 
     # Always logout after a test finishes.
     def tearDown(self):
@@ -223,21 +224,22 @@ class _TestUser(object):
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.username = username
+        self.first_name = 'test'
+        self.last_name = 'user'
+        self.email = self.username + '@foo.com'
         self.password = password
         self.course_name = course_name
 
     def __enter__(self):
         # Registration doesn't work unless we're logged out.
         self.test_client.logout()
-        # First get the form to read the CSRF key, so that registration will work.
-        self.test_client.get('default/user/register')
         # Now, post the registration.
-        self.test_client.post('default/user/register', data=dict(
+        self.test_client.validate('default/user/register', 'Course Selection', data=dict(
             username=self.username,
-            first_name='test',
-            last_name='user',
+            first_name=self.first_name,
+            last_name=self.last_name,
             # The e-mail address must be unique.
-            email=self.username + '@foo.com',
+            email=self.email,
             password=self.password,
             password_two=self.password,
             # Note that ``course_id`` is (on the form) actually a course name.
@@ -247,14 +249,6 @@ class _TestUser(object):
             _next='/runestone/default/index',
             _formname='register',
         ))
-        # If this fails, write the resulting HTML to a file.
-        try:
-            assert self.test_client.status == 200
-            assert 'Course Selection' in self.test_client.text
-        except AssertionError:
-            with open('default-user-register.html', 'wb') as f:
-                f.write(self.test_client.text)
-            raise
 
         # Schedule this user for deletion.
         self.exit_stack_object = ExitStack()
@@ -392,7 +386,7 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
                          expected_errors)
 
 
-# Test instructor-only pages.
+# Validate the HTML in instructor-only pages.
 @pytest.mark.parametrize('url, expected_string, expected_errors',
 [
     # web2py-generated stuff produces two extra errors.
@@ -422,24 +416,99 @@ def test_2(url, expected_string, expected_errors, test_client,
                              expected_errors)
 
 
+# Test the ``ajax/preview_question`` endpoint.
 def test_3(test_client, test_user_1):
     preview_question = 'ajax/preview_question'
     # Passing no parameters should raise an error.
     test_client.validate(preview_question, 'Error: ')
-    # Passing something to the wrong parameter name should raise an error.
-    test_client.validate(preview_question, 'Error: ', params={'junk': 'xxx'})
     # Passing something not JSON-encoded should raise an error.
-    test_client.validate(preview_question, 'Error: ', params={'code': 'xxx'})
-    # Passing invalid RST should generate an error.
-    test_client.validate(preview_question, 'WARNING', params={'code': '"*hi"'})
+    test_client.validate(preview_question, 'Error: ', data={'code': 'xxx'})
     # Passing invalid RST should produce a Sphinx warning.
-    test_client.validate(preview_question, 'Error: ', params={'code': '"*hi*"'})
+    test_client.validate(preview_question, 'WARNING', data={'code': '"*hi"'})
+    # Passing valid RST with no Runestone component should produce an error.
+    test_client.validate(preview_question, 'Error: ', data={'code': '"*hi*"'})
     # Passing a string with Unicode should work. Note that 0x0263 == 611; the JSON-encoded result will use this.
-    test_client.validate(preview_question, '&#611;', params={'code': json.dumps(dedent(u'''\
+    test_client.validate(preview_question, '&#611;', data={'code': json.dumps(dedent(u'''\
         .. fillintheblank:: question_1
 
             Mary had a \u0263.
 
             -   :x: Whatever.
     '''))})
+    # Verify that ``question_1`` is not in the database. TODO: This passes even if the ``DBURL`` env variable in ``ajax.py`` fucntion ``preview_question`` isn't deleted. So, this test doesn't work.
+    db = test_user_1.runestone_db_tools.db
+    assert len(db(db.fitb_answers.div_id == 'question_1').select()) == 0
     # TODO: Add a test case for when the runestone build produces a non-zero return code.
+
+
+# Test the ``default/user/profile`` endpoint.
+def test_4(test_client, test_user_1):
+    test_user_1.login()
+    runestone_db_tools = test_user_1.runestone_db_tools
+    course_name = 'test_course_2'
+    with runestone_db_tools.create_course(course_name) as test_course_2_id:
+        # Test a non-existant course.
+        test_client.validate('default/user/profile', 'Errors in form', data=dict(
+            username=test_user_1.username,
+            first_name=test_user_1.first_name,
+            last_name=test_user_1.last_name,
+            email=test_user_1.email,
+            # Though the field is ``course_id``, it's really the course name.
+            course_id='does_not_exist',
+            accept_tcp='on',
+            section='x',
+            _next='/runestone/default/index',
+            id=str(test_user_1.user_id),
+            _formname='auth_user/' + str(test_user_1.user_id),
+        ))
+
+        # Test an invalid e-mail address. TODO: This doesn't produce an error message.
+        #test_client.validate('default/user/profile', 'Errors in form', data=dict(
+        #    username=test_user_1.username,
+        #    first_name=test_user_1.first_name,
+        #    last_name=test_user_1.last_name,
+        #    email='not a valid e-mail address',
+        #    # Though the field is ``course_id``, it's really the course name.
+        #    course_id=test_user_1.course_name,
+        #    accept_tcp='on',
+        #    section='x',
+        #    _next='/runestone/default/index',
+        #    id=str(test_user_1.user_id),
+        #    _formname='auth_user/' + str(test_user_1.user_id),
+        #))
+
+        # Change the user's profile data.
+        username = 'a_different_username'
+        first_name = 'a different first'
+        last_name = 'a different last'
+        email = 'a_different_email@foo.com'
+        section = 'a_different_section'
+        test_client.validate('default/user/profile', 'Course Selection', data=dict(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            # Though the field is ``course_id``, it's really the course name.
+            course_id=course_name,
+            # Omit the checkbox, meaning it's not checked.
+            #accept_tcp='on',
+            section=section,
+            _next='/runestone/default/index',
+            id=str(test_user_1.user_id),
+            _formname='auth_user/' + str(test_user_1.user_id),
+        ))
+        # Check the values.
+        db = runestone_db_tools.db
+        user = db(db.auth_user.id == test_user_1.user_id).select().first()
+        # The username shouldn't be changable.
+        assert user.username == test_user_1.username
+        assert user.first_name == first_name
+        assert user.last_name == last_name
+        # TODO: The e-mail address isn't updated.
+        #assert user.email == email
+        assert user.course_id == test_course_2_id
+        assert user.accept_tcp == False
+        # TODO: I'm not sure where the section is stored.
+        #assert user.section == section
+
+        # TODO: Test for an error if ``email`` is invalid.
