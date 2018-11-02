@@ -442,3 +442,4 @@ def test_3(test_client, test_user_1):
 
             -   :x: Whatever.
     '''))})
+    # TODO: Add a test case for when the runestone build produces a non-zero return code.
