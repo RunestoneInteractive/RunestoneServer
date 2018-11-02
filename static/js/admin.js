@@ -1582,20 +1582,22 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
-    opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices = false;
-    opt.graderactive = false;
-    opt.python3 = true;
-    if (typeof moreOpts !== 'undefined') {
-        for (let key in moreOpts) {
-            opt[key] = moreOpts[key]
+    if (opt.orig) {
+        opt.lang = $(opt.orig).data('lang')
+        opt.useRunestoneServices = false;
+        opt.graderactive = false;
+        opt.python3 = true;
+        if (typeof moreOpts !== 'undefined') {
+            for (let key in moreOpts) {
+                opt[key] = moreOpts[key]
+            }
         }
-    }
+}
 
     if (typeof component_factory === 'undefined') {
         alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
     } else {
-        if (!component_factory[componentKind]) {
+        if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html() ) {
             jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
         } else {
             let res = component_factory[componentKind](opt);
