@@ -18,6 +18,9 @@ import subprocess
 from pprint import pprint
 from contextlib import contextmanager
 from io import open
+from urllib import urlencode
+from textwrap import dedent
+import json
 
 # Third-party imports
 # -------------------
@@ -63,7 +66,7 @@ def web2py_server():
          '--source=' + COVER_DIRS, 'web2py.py', '-a', 'junk_password',
          '--nogui'])
     # Wait for the server to come up. The delay varies; this is a guess.
-    time.sleep(1.5)
+    time.sleep(1)
 
     # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
     yield web2py_server
@@ -168,10 +171,13 @@ class _TestClient(WebClient):
         # An optional string that, if provided, must be in the text returned by the server
         expected_string='',
         # The number of validation errors expected. If None, no validation is performed.
-        expected_errors=None):
+        expected_errors=None,
+        # A dictionary of query parameters
+        params=None):
 
+        actual_url = url + '?' + urlencode(params) if params else url
         try:
-            self.get(url)
+            self.get(actual_url)
             assert self.status == 200
             if expected_string:
                 assert expected_string in self.text
@@ -189,6 +195,7 @@ class _TestClient(WebClient):
 
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
+            print(self.text[:200])
             with open(url.replace('/', '-') + '.html', 'wb') as f:
                 f.write(self.text.replace('\r\n', '\n'))
             raise
@@ -245,7 +252,7 @@ class _TestUser(object):
             assert self.test_client.status == 200
             assert 'Course Selection' in self.test_client.text
         except AssertionError:
-            with open('register.html', 'wb') as f:
+            with open('default-user-register.html', 'wb') as f:
                 f.write(self.test_client.text)
             raise
 
@@ -254,20 +261,22 @@ class _TestUser(object):
         self.exit_stack = self.exit_stack_object.__enter__()
         self.exit_stack.callback(self._delete_user)
 
-        # Record the ID of this course.
+        # Record IDs
         db = self.runestone_db_tools.db
         self.course_id = db(db.courses.course_name == self.course_name).select(db.courses.id).first().id
-
-        # Finally, add the user to the specified course and schedule it for deletion.
-        db = self.runestone_db_tools.db
         self.user_id = db(db.auth_user.username == self.username).select(db.auth_user.id).first().id
-        self.exit_stack.enter_context(self.runestone_db_tools.add_user_to_course(self.user_id, self.course_id))
 
         return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.exit_stack_object.__exit__(exc_type, exc_value, traceback)
 
     # Delete the user created by entering this context manager.
     def _delete_user(self):
         db = self.runestone_db_tools.db
+        # Delete the course this user registered for.
+        db(( db.user_courses.course_id == self.course_id) & (db.user_courses.user_id == self.user_id) ).delete()
+        # Delete the user.
         db(db.auth_user.username == self.username).delete()
         db.commit()
 
@@ -278,14 +287,30 @@ class _TestUser(object):
             _formname='login',
         ))
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.exit_stack_object.__exit__(exc_type, exc_value, traceback)
+    def make_instructor(self, course_id=None):
+        # If ``course_id`` isn't specified, use this user's ``course_id``.
+        course_id = course_id or self.course_id
+        return self.runestone_db_tools.make_instructor(self.user_id, course_id)
+
+    def add_user_to_course(self, course_id=None):
+        # If ``course_id`` isn't specified, use this user's ``course_id``.
+        course_id = course_id or self.course_id
+        return self.runestone_db_tools.add_user_to_course(self.user_id, course_id)
 
 
 # Present ``_TestUser`` as a fixture.
 @pytest.fixture
 def test_user(test_client, runestone_db_tools):
     return lambda *args, **kwargs: _TestUser(test_client, runestone_db_tools, *args, **kwargs)
+
+
+# Provide easy access to a test user and course.
+@pytest.fixture
+def test_user_1(runestone_db_tools, test_user):
+    with runestone_db_tools.create_course('test_course_1'), \
+        test_user('test_user_1', 'password_1', 'test_course_1') as test_user_1:
+
+        yield test_user_1
 
 
 # Tests
@@ -358,15 +383,13 @@ def test_user(test_client, runestone_db_tools):
     # TODO: Many other views!
 ])
 def test_1(url, requires_login, expected_string, expected_errors, test_client,
-           test_user, runestone_db_tools):
-    with runestone_db_tools.create_course('test_course_1'), \
-        test_user('test_user_1', 'password_1', 'test_course_1') as test_user_1:
-        if requires_login:
-            test_user_1.login()
-        else:
-            test_client.logout()
-        test_client.validate(url, expected_string,
-                             expected_errors)
+           test_user_1):
+    if requires_login:
+        test_user_1.login()
+    else:
+        test_client.logout()
+    test_client.validate(url, expected_string,
+                         expected_errors)
 
 
 # Test instructor-only pages.
@@ -382,11 +405,9 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
     #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
 ])
 def test_2(url, expected_string, expected_errors, test_client,
-           test_user, runestone_db_tools):
-    with runestone_db_tools.create_course('test_course_1'), \
-        test_user('test_user_1', 'password_1', 'test_course_1') as test_user_1, \
-        test_user('test_instructor_1', 'password_1', 'test_course_1') as test_instructor_1, \
-        runestone_db_tools.make_instructor(test_instructor_1.user_id, test_instructor_1.course_id):
+           test_user, test_user_1):
+    with test_user('test_instructor_1', 'password_1', 'test_course_1') as test_instructor_1, \
+        test_instructor_1.make_instructor():
 
         # Make sure that non-instructors are redirected.
         test_client.logout()
@@ -399,3 +420,26 @@ def test_2(url, expected_string, expected_errors, test_client,
         test_instructor_1.login()
         test_client.validate(url, expected_string,
                              expected_errors)
+
+
+def test_3(test_client, test_user_1):
+    preview_question = 'ajax/preview_question'
+    # Passing no parameters should raise an error.
+    test_client.validate(preview_question, 'Error: ')
+    # Passing something to the wrong parameter name should raise an error.
+    test_client.validate(preview_question, 'Error: ', params={'junk': 'xxx'})
+    # Passing something not JSON-encoded should raise an error.
+    test_client.validate(preview_question, 'Error: ', params={'code': 'xxx'})
+    # Passing invalid RST should generate an error.
+    test_client.validate(preview_question, 'WARNING', params={'code': '"*hi"'})
+    # Passing invalid RST should produce a Sphinx warning.
+    test_client.validate(preview_question, 'Error: ', params={'code': '"*hi*"'})
+    # Passing a string with Unicode should work. Note that 0x0263 == 611; the JSON-encoded result will use this.
+    test_client.validate(preview_question, '&#611;', params={'code': json.dumps(dedent(u'''\
+        .. fillintheblank:: question_1
+
+            Mary had a \u0263.
+
+            -   :x: Whatever.
+    '''))})
+    # TODO: Add a test case for when the runestone build produces a non-zero return code.

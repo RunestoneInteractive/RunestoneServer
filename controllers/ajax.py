@@ -1,11 +1,12 @@
 import json
 import datetime
 import logging
-import time
+import subprocess
 import uuid
 from collections import Counter
 from diff_match_patch import *
-import os, sys
+import os
+import sys
 from io import open
 from lxml import html
 
@@ -192,7 +193,7 @@ def runlog():    # Log errors and runs with code
             num_tries -= 1
     if num_tries == 0:
         raise Exception("Runlog Failed to insert into useinfo")
-    
+
     num_tries = 3
     done = False
     while num_tries > 0 and not done:
@@ -224,7 +225,7 @@ def runlog():    # Log errors and runs with code
                         timestamp=ts,
                         course_id=auth.user.course_id,
                         language=request.vars.lang)
-                    done = True 
+                    done = True
                 except:
                     num_tries -= 1
                     logger.error("INSERT into code FAILED retrying")
@@ -432,7 +433,7 @@ def updatelastpage():
                 num_tries -= 1
         if num_tries == 0:
             raise Exception("Failed to save sub chapter progress in update_last_page")
-        
+
         practice_settings = db(db.course_practice.course_name == auth.user.course_name)
         if (practice_settings.count() != 0 and
             practice_settings.select().first().flashcard_creation_method == 0):
@@ -694,9 +695,9 @@ def getpollresults():
     response.headers['content-type'] = 'application/json'
 
 
-    query = '''select act from useinfo 
-    join (select sid,  max(id) mid 
-        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T 
+    query = '''select act from useinfo
+    join (select sid,  max(id) mid
+        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T
         on id = T.mid'''.format(div_id, course)
 
     rows = db.executesql(query)
@@ -723,8 +724,8 @@ def getpollresults():
 
     user_res = None
     if auth.user:
-        user_res = db((db.useinfo.sid == auth.user.username) & 
-            (db.useinfo.course_id == course) & 
+        user_res = db((db.useinfo.sid == auth.user.username) &
+            (db.useinfo.course_id == course) &
             (db.useinfo.div_id == div_id)).select(db.useinfo.act, orderby=~db.useinfo.id).first()
 
     if user_res:
@@ -908,14 +909,33 @@ def checkTimedReset():
         return json.dumps({"canReset":True})
 
 
+# The request variable ``code`` must contain JSON-encoded RST to be rendered by Runestone. Only the HTML containing the actual Runestone component will be returned.
 def preview_question():
-    code = json.loads(request.vars.code)
-    with open("applications/{}/build/preview/_sources/index.rst".format(request.application), "w", encoding="utf-8") as ixf:
-        ixf.write(code)
+    try:
+        code = json.loads(request.vars.code)
+        with open("applications/{}/build/preview/_sources/index.rst".format(request.application), "w", encoding="utf-8") as ixf:
+            ixf.write(code)
 
-    res = os.system('applications/{}/scripts/build_preview.sh'.format(request.application))
-    if res == 0:
-        with open('applications/{}/build/preview/build/preview/index.html'.format(request.application),'r') as ixf:
+        # Note that ``os.environ`` isn't a dict, it's an object whose setter modifies environment variables. So, modifications of a copy/deepcopy still `modify the original environment <https://stackoverflow.com/questions/13142972/using-copy-deepcopy-on-os-environ-in-python-appears-broken>`_. Therefore, convert it to a dict, where modifications will not affect the environment.
+        env = dict(os.environ)
+        # Prevent any changes to the database when building a preview question.
+        del env['DBURL']
+        # Run a runestone build.
+        popen_obj = subprocess.Popen(
+            [sys.executable, '-m', 'runestone', 'build'],
+            # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
+            cwd='applications/{}/build/preview'.format(request.application),
+            # Capture the build output in case of an error.
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            # Pass the modified environment which doesn't contain ``DBURL``.
+            env=env)
+        stdout, stderr = popen_obj.communicate()
+        # If there was an error, return stdout and stderr from the build.
+        if popen_obj.returncode != 0:
+            return json.dumps('Error: Runestone build failed:\n\n' +
+                              stdout + '\n' + stderr)
+
+        with open('applications/{}/build/preview/build/preview/index.html'.format(request.application), 'r', encoding='utf-8') as ixf:
             src = ixf.read()
             tree = html.fromstring(src)
             component = tree.cssselect(".runestone")
@@ -927,11 +947,11 @@ def preview_question():
                     ctext = html.tostring(component[0])
                     logger.debug("error - ", ctext)
                 else:
-                    ctext = "Unknown error occurred"
+                    ctext = "Error: Runestone content missing."
 
             return json.dumps(ctext)
-
-    return json.dumps(res)
+    except Exception as ex:
+        return json.dumps('Error: {}'.format(ex))
 
 
 def save_donate():
