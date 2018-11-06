@@ -106,7 +106,7 @@ def populateSubchapter(fpath, fn, fh):
     for line in fh:
         mo = div_re.match(line)
         if mo:
-            print chapter, subchapter, mo.group(1), mo.group(2)
+            print(chapter, subchapter, mo.group(1), mo.group(2))
             divt = mo.group(1)
             divid = mo.group(2)
             if divt == 'actex' and divid in odd_ex_list:

@@ -1,4 +1,4 @@
-So you want to help with the development of the Runestone Server.  Thanks!  
+So you want to help with the development of the Runestone Server.  Thanks!
 
 This document is meant to be a collection of things that will make that a bit easier.
 
@@ -36,7 +36,7 @@ Ok, with that out of the way, lets look at the structure of the source.  Web2py 
                         showassignments.html
                 errors/
                 databases/
-                        
+
 The web2py.py application folder is what you get when you download web2py from web2py.com.  All web2py applications have their own folder inside the web2py applications folder.  Out of the box, web2py comes with a welcome app, and this is where you clone the RunestoneServer repository to the the runestone folder.
 
 Three critical folders inside runestone are the models, views, and controllers folders.  The models folder is where you write your table definitions for any database tables you are using in your application.  The files in the model folder are loaded in alphabetical order, so if you have some tables that depend on others you can control the order they are loaded by naming the files appropriately. Importantly, 0.py and 1.py are loaded right away and typically contain configuration information.  There is also a `databases` folder where web2py keeps track of meta information about each table.  it uses this to detect when you have made a schema change and will automatically do its best to update the tables in the database and migrate any data to the new schema.  You should never edit any of these files, or you will cause more trouble than its worth.
@@ -56,7 +56,7 @@ Generally the web2py documentation is pretty good, if you are confused after loo
 
 ## Unit Testing
 
-We have a small set of unit tests that we really want to grow into a full blown full coverage set of tests.  To run the unit tests you will need to `cd tests` and the run the run_tests.sh script. You should also set your TEST_DBURL environment variable to connect to the runestone_test database.
+We have a small set of unit tests that we really want to grow into a full blown full coverage set of tests.  To run the unit tests you will need to `pip install -U -r requirements-test.txt`, `cd tests`, then run the `run_tests.py` script. You should also set your `TEST_DBURL` environment variable to connect to the runestone_test database.
 
 We have a Travis-CI job set up to automatically test all PR's if your pull request does not pass it won't be accepted.
 

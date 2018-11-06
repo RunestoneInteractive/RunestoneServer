@@ -21,7 +21,7 @@ def get_lint(code, divid, sid):
 
     pyl_opts = ' --msg-template="{C}: {symbol}: {msg_id}:{line:3d},{column}: {obj}: {msg}" '
     pyl_opts += ' --reports=n '
-    pyl_opts += ' --rcfile='+os.path.join(os.getcwd(), "applications/runestone/pylintrc")
+    pyl_opts += ' --rcfile='+os.path.join(os.getcwd(), "applications/{}/pylintrc".format(request.application))
     #pyl_opts += ' --rcfile=' + os.path.join(os.getcwd(), "../pylintrc")
     try:
         (pylint_stdout, pylint_stderr) = lint.py_run(fn + pyl_opts, True, script='pylint')
@@ -44,7 +44,7 @@ def lint_one(code, conn, curs, divid, row, sid):
             ins = '''insert into coach_hints (category,symbol,msg_id,line,col,obj,msg,source)
                  values('%s','%s','%s',%s,%s,'%s','%s',%d)''' % (
             g.groups()[:-1] + (g.group(7).replace("'", ''), row[0],))
-            # print ins
+            # print(ins)
             curs.execute(ins)
     conn.commit()
 

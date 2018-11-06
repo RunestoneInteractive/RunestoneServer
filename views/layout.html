@@ -1,282 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>
-      {{=response.title or request.application}}
-    </title>
-
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
-    <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
-    <link rel="shortcut icon"
-    href="{{=URL('static','favicon.ico')}}" type="image/ico" />
-    <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
-    <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
-    <script src="{{=URL('static', 'js/web2py.js')}}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
-    {{ block moreincludes }}
-    {{ end }}
-    <script type="text/javascript">
-      var eBookConfig = {};
-      var portPart = '';
-      eBookConfig.host = "";
-      eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
-      eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
-      eBookConfig.logLevel = 10;
-      eBookConfig.loginRequired = true;
-    </script>
-  </head>
-<body>
-{{ block navbar }}
-<!-- needed for Facebook button -->
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<!-- Begin navbar -->
-<div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
-{{ if response.flash: }}
-    <div class="flash">{{=response.flash or ''}}</div>
-{{ pass }}
-
-  <div class="container">
-
-    <div class="navbar-header">
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-
-      <div>
-        <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
-      </div>
-    </div>
-
-    <div class="navbar-collapse collapse navbar-ex1-collapse">
-
-      <ul class="nav navbar-nav navbar-right">
-
-        <li class="divider-vertical"></li>
-
-        <!-- social media dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
-          </a>
-          <ul class="dropdown-menu social-menu">
-              <li>
-                <div>
-                  <b>Runestone in social media:</b>
+    <head>
+        <title>
+            {{=response.title or request.application}}
+        </title>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
+        <link rel="shortcut icon"
+            href="{{=URL('static','favicon.ico')}}" type="image/ico" />
+        <script src="{{=URL('static', 'js/jquery-1.10.2.min.js')}}"></script>
+        <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
+        <script src="{{=URL('static', 'js/web2py.js')}}"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script>
+        {{ block moreincludes }}
+        {{ end }}
+        <script type="text/javascript">
+            var eBookConfig = {};
+            var portPart = '';
+            eBookConfig.host = "";
+            eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
+            eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+            eBookConfig.logLevel = 10;
+            eBookConfig.loginRequired = true;
+        </script>
+    </head>
+    <body>
+        {{ block navbar }}
+        <!-- needed for Facebook button -->
+        <div id="fb-root"></div>
+        <script>
+            (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <!-- Begin navbar -->
+        <div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+            {{ if response.flash: }}
+                <div class="flash">{{=response.flash or ''}}</div>
+            {{ pass }}
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                    <button type='button' class='navbar-toggle' data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+                    <div>
+                        <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                    </div>
                 </div>
-                <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
-              </li>
-
-              <li class="divider"></li>
-              <li>
-                <div>
-                  <b>Help support us:</b>
+                <div class="navbar-collapse collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="divider-vertical"></li>
+                        <!-- social media dropdown -->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
+                            </a>
+                            <ul class="dropdown-menu social-menu">
+                                <li>
+                                    <div>
+                                        <b>Runestone in social media:</b>
+                                    </div>
+                                    <a href="https://twitter.com/iRunestone" class="twitter-follow-button" data-show-count="true">Follow @iRunestone</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                                    <div class="fb-like" data-href="https://www.facebook.com/RunestoneInteractive" data-send="false" data-layout="button_count" data-width="300" data-show-faces="false" data-font="arial"></div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div>
+                                        <b>Help support us:</b>
+                                    </div>
+                                    <div>
+                                        <a href="{{=URL("default", "donate")}}"> <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- end social media dropdown -->
+                        <li class="divider-vertical"></li>
+                        <!-- user account dropdown -->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
+                            </a>
+                            <ul class="dropdown-menu user-menu">
+                                {{ if auth.user: }}
+                                    <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
+                                {{ else: }}
+                                    <li><span class='loggedinuser'>Not logged in</span></li>
+                                {{ pass }}
+                                {{ if auth.user: }}
+                                    <li class="divider"></li>
+                                    <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
+                                {{ pass }}
+                                <!---
+                                    <li class="divider"></li>
+                                    <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
+                                    <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
+                                    <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
+                                <li class="divider"></li>
+                                <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
+                                <li class="divider"></li>
+                                {{ if auth.user: }}
+                                    <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
+                                    <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
+                                    <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
+                                    <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+                                {{ else: }}
+                                    <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
+                                    <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
+                                {{ pass }}
+                            </ul>
+                        </li>
+                        <!-- end user account dropdown -->
+                        <li class="divider-vertical"></li>
+                        <!-- help menu dropdown -->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+                            </a>
+                            <ul class="dropdown-menu user-menu">
+                                <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
+                                <li class="divider"></li>
+                                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+                                <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li class="divider-vertical"></li>
+                        {{ if request.controller == "default":}}
+                            <!-- open library dropdown -->
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/{{=request.application}}/static/fopp/index.html">Foundations of Python Programming</a></li>
+                                    <li><a href="/{{=request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist: Interactive edition</a></li>
+                                    <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures using Python</a></li>
+                                    <li><a href="/{{=request.application}}/static/cppds/index.html">Problem Solving With Algorithms and Data Structures using C++</a></li>
+                                    <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
+                                    <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
+                                    <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
+                                    <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
+                                    <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
+                                    <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>
+                                    <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
+                                </ul>
+                            </li>
+                        {{ elif auth.user: }}
+                            <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
+                        {{ else: }}
+                            <li><a href="/{{=request.application}}/default">Login</a></li>
+                        {{ pass }}
+                        <li class="divider-vertical"></li>
+                        {{if 'user_navs' in globals() and user_navs: }}
+                            {{if 'auth' in globals() and auth.user:}}
+                                <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
+                            {{pass}}
+                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login':}}
+                                <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
+                            {{pass}}
+                        {{pass}}
+                        <li class="divider-vertical"></li>
+                    </ul>
+                    {{if request.args(0) == 'login':}}
+                        <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
+                    {{pass}}
                 </div>
-                  <div>
-                      <a href="{{=URL("default", "donate")}}"> <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"></a>
-                  </div>
-              </li>
-          </ul>
-        </li>
-        <!-- end social media dropdown -->
+            </div>
+        </div>
+        <!-- End navbar -->
+        {{ end }}
+        <!-- begin body content -->
+        <div class="container">
+            {{include}}
+        </div>
+        <!-- end body content -->
+        {{ block footer }}
+        <!-- begin footer -->
+        <footer class="footer" style="margin-top:20px;">
+            <div class="container">
+                <p class="pull-right">
+                    {{ if auth.user: }}
+                        <span class='loggedinuser'>{{=auth.user.email}}</span> | <a href="#">Back to top</a>
+                    {{ else: }}
+                        <span class='loggedinuser'>Not logged in</span> | <a href="#">Back to top</a>
+                    {{ pass }}
+                </p>
+                <p>
+                    &copy; Copyright 2018 Runestone Interactive LLC
+                    {{ if settings.academy_mode: }}
+                        &emsp; ● <a href="/{{=request.application}}/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/{{=request.application}}/default/terms">Terms of Service</a>
+                    {{ pass }}
+                </p>
+            </div>
+        </footer>
+        <!-- end footer -->
+        {{ end }}
+        <script type="text/javascript" id="cookieinfo"
+            src="//cookieinfoscript.com/js/cookieinfo.min.js"
+            data-bg="#645862"
+            data-fg="#FFFFFF"
+            data-link="#F1D600"
+            data-cookie="CookieInfoScript"
+            data-message="By continuing to visit this site you agree to our use of cookies and our privacy policy."
+            data-moreinfo="https://runestone.academy/runestone/default/privacy"
+            data-text-align="left"
+            data-close-text="Got it!"></script>
+        <script type='text/javascript'>
+            // do some styling of the web2py login and registration form
+            // this is done here because web2py doesn't have an easy way
+            // to add class to the auth form. We don't want to duplicate the
+            // styles from .form-control into our custom CSS.
+            var el = $("#web2py_user_form");
+            el.find("input[type='text']").addClass('form-control');
+            el.find("input[type='password']").addClass('form-control');
+        </script>
+        {{ if request.application == 'runestone': }}
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-32029811-1']);
+                _gaq.push(['_trackPageview']);
 
-        <li class="divider-vertical"></li>
-
-        <!-- user account dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-user" style="opacity:0.9;"></i>
-          </a>
-          <ul class="dropdown-menu user-menu">
-            {{ if auth.user: }}
-              <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
-            {{ else: }}
-              <li><span class='loggedinuser'>Not logged in</span></li>
-            {{ pass }}
-            {{ if auth.user: }}
-              <li class="divider"></li>
-              <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
-              <li class="divider"></li>
-              <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
-            {{ pass }}
-            <!---
-            <li class="divider"></li>
-            <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
-            <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
-            <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
-            <li class="divider"></li>
-            <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
-            <li class="divider"></li>
-            {{ if auth.user: }}
-              <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-              <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-              <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
-              <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
-            {{ else: }}
-              <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
-              <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
-            {{ pass }}
-          </ul>
-        </li>
-        <!-- end user account dropdown -->
-
-        <li class="divider-vertical"></li>
-
-        <!-- help menu dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
-          </a>
-          <ul class="dropdown-menu user-menu">
-
-            <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
-            <li class="divider"></li>
-            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-            <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
-          </ul>
-        </li>
-
-        <li class="divider-vertical"></li>
-
-      </ul>
-
-      <ul class="nav navbar-nav">
-
-        <li class="divider-vertical"></li>
-
-        {{ if request.controller == "default":}}
-        <!-- open library dropdown -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/{{=request.application}}/static/fopp/index.html">Foundations of Python Programming</a></li>
-            <li><a href="/{{=request.application}}/static/thinkcspy/index.html">How To Think Like a Computer Scientist: Interactive edition</a></li>
-            <li><a href="/{{=request.application}}/static/pythonds/index.html">Problem Solving With Algorithms and Data Structures using Python</a></li>            
-            <li><a href="/{{=request.application}}/static/cppds/index.html">Problem Solving With Algorithms and Data Structures using C++</a></li>            
-            <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
-            <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
-            <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
-            <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
-            <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
-            <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>            
-            <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
-          </ul>
-        </li>
-          {{ elif auth.user: }}
-          <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
-          {{ else: }}
-          <li><a href="/{{=request.application}}/default">Login</a></li>
-          {{ pass }}
-        <li class="divider-vertical"></li>
-
-        {{if 'user_navs' in globals() and user_navs: }}
-
-          {{if 'auth' in globals() and auth.user:}}
-              <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
-          {{pass}}
-          {{if 'auth' in globals() and not auth.user and request.args(0) != 'login':}}
-          <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
-          {{pass}}
-        {{pass}}
-
-
-
-        <li class="divider-vertical"></li>
-
-      </ul>
-        {{if request.args(0) == 'login':}}
-        <a href="/{{=request.application}}/default/user/register"><button class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</button></a>
-        {{pass}}
-    </div>
-  </div>
-
-</div>
-<!-- End navbar -->
-{{ end }}
-
-<!-- begin body content -->
-  <div class="container">
-    {{include}}
-  </div>
-<!-- end body content -->
-
-{{ block footer }}
-<!-- begin footer -->
-  <footer class="footer" style="margin-top:20px;">
-    <div class="container">
-      <p class="pull-right">
-        {{ if auth.user: }}
-          <span class='loggedinuser'>{{=auth.user.email}}</span> | <a href="#">Back to top</a>
-        {{ else: }}
-          <span class='loggedinuser'>Not logged in</span> | <a href="#">Back to top</a>
+                (function() {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
         {{ pass }}
-      </p>
-      <p>
-        &copy; Copyright 2018 Runestone Interactive LLC
-          {{ if settings.academy_mode: }}
-          &emsp; ● <a href="/runestone/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/runestone/default/terms">Terms of Service</a>
-          {{ pass }}
-      </p>
-    </div>
-  </footer>
-<!-- end footer -->
-{{ end }}
-
-<script type="text/javascript" id="cookieinfo"
-	src="//cookieinfoscript.com/js/cookieinfo.min.js"
-	data-bg="#645862"
-	data-fg="#FFFFFF"
-	data-link="#F1D600"
-  data-cookie="CookieInfoScript"
-  data-message="By continuing to visit this site you agree to our use of cookies and our privacy policy. "
-  data-moreinfo="https://runestone.academy/runestone/default/privacy"
-	data-text-align="left"
-       data-close-text="Got it!">
-</script>
-
-</body>
-<script type='text/javascript'>
-  // do some styling of the web2py login and registration form
-  // this is done here because web2py doesn't have an easy way
-  // to add class to the auth form. We don't want to duplicate the
-  // styles from .form-control into our custom CSS.
-  var el = $("#web2py_user_form");
-  el.find("input[type='text']").addClass('form-control');
-  el.find("input[type='password']").addClass('form-control');
-</script>
-
-{{ if request.application == 'runestone': }}
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-32029811-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-{{ pass }}
-
+    </body>
 </html>
