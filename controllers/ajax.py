@@ -9,6 +9,7 @@ import os
 import sys
 from io import open
 from lxml import html
+import bleach
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -100,8 +101,8 @@ def hsblog():
         #       (db.fitb_answers.div_id == div_id) &
         #       (db.fitb_answers.course_name == auth.user.course_name) &
         #       (db.fitb_answers.correct == 'T')).count() == 0:
-            answer = request.vars.answer
-            correct = request.vars.correct
+            answer = bleach.clean(request.vars.answer)
+            correct = bleach.clean(request.vars.correct)
             db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
