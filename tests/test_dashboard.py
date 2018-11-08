@@ -10,11 +10,8 @@
 #
 
 import unittest
-import json
-import datetime
 from gluon.globals import Request, Session
 from gluon.tools import Auth
-from dateutil.parser import parse
 
 # bring in the ajax controllers
 

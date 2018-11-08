@@ -117,9 +117,6 @@ def _get_practice_data(user, timezoneoffset):
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=timezoneoffset)
-    print("timezoneoffset:", timezoneoffset)
-    print("now.date():", now.date())
-    print("now_local.date():", now_local.date())
 
     # Since each authenticated user has only one active course, we retrieve the course this way.
     course = db(db.courses.id == user.course_id).select().first()
@@ -208,13 +205,31 @@ def _get_practice_data(user, timezoneoffset):
             flashcards = db((db.user_topic_practice.course_name == user.course_name) &
                             (db.user_topic_practice.user_id == user.id)).select(orderby=db.user_topic_practice.id)
 
+            # We need the following `for` loop to make sure the number of repetitions for both blocking and interleaving
+            # groups are the same.
+            for f in flashcards:
+                f_logs = db((db.user_topic_practice_log.course_name == user.course_name) &
+                            (db.user_topic_practice_log.user_id == user.id) &
+                            (db.user_topic_practice_log.chapter_label == f.chapter_label) &
+                            (db.user_topic_practice_log.sub_chapter_label == f.sub_chapter_label)
+                            ).select(orderby=db.user_topic_practice_log.end_practice)
+                f["blocking_eligible_date"] = f.next_eligible_date
+                if len(f_logs) > 0:
+                    days_to_add = sum([f_log.i_interval for f_log in f_logs[0:-1]])
+                    days_to_add -= (f_logs[-1].end_practice - f_logs[0].end_practice).days
+                    if days_to_add > 0:
+                        f["blocking_eligible_date"] += datetime.timedelta(days=days_to_add)
+
             if interleaving == 1:
                 # Select only those where enough time has passed since last presentation.
                 presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
                 available_flashcards_num = len(presentable_flashcards)
             else:
                 # Select only those that are not mastered yet.
-                presentable_flashcards = [f for f in flashcards if (f.e_factor <= 2.5 and f.q != -1)]
+                presentable_flashcards = [f for f in flashcards
+                                          if (f.q * f.e_factor < 12.5 and
+                                              f.blocking_eligible_date < practice_settings.end_date and
+                                              (f.q != -1 or (f.next_eligible_date - now_local.date()).days != 1))]
                 available_flashcards_num = len(presentable_flashcards)
                 if len(presentable_flashcards) > 0:
                     # It's okay to continue with the next chapter if there is no more question in the current chapter
@@ -226,15 +241,16 @@ def _get_practice_data(user, timezoneoffset):
                     shuffle(presentable_flashcards)
 
             # How many times has this user submitted their practice from the beginning of today (12:00 am) till now?
-            practiced_today_count = db((db.user_topic_practice_log.course_name == user.course_name) &
-                                       (db.user_topic_practice_log.user_id == user.id) &
-                                       (db.user_topic_practice_log.q != 0) &
-                                       (db.user_topic_practice_log.q != -1) &
-                                       (db.user_topic_practice_log.end_practice >= datetime.datetime(now.year,
-                                                                                                     now.month,
-                                                                                                     now.day,
-                                                                                                     0, 0, 0,
-                                                                                                     0))).count()
+            practiced_log = db((db.user_topic_practice_log.course_name == user.course_name) &
+                           (db.user_topic_practice_log.user_id == user.id) &
+                           (db.user_topic_practice_log.q != 0) &
+                           (db.user_topic_practice_log.q != -1)).select()
+            practiced_today_count = 0
+            for pr in practiced_log:
+                if (pr.end_practice - datetime.timedelta(hours=pr.timezoneoffset) >=
+                        datetime.datetime(now_local.year, now_local.month, now_local.day, 0, 0, 0, 0)):
+                    practiced_today_count += 1
+
             practice_completion_count = _get_practice_completion(user.id, user.course_name, spacing)
 
             if practice_graded == 1:
@@ -616,8 +632,9 @@ def chooseAssignment():
 def _get_lti_record(oauth_consumer_key):
     return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
 
-def _get_course_practice_record(course_name):
-    return db(db.course_practice.course_name == course_name).select().first()
+def _get_course_practice_record(course_name, user_id):
+    return db((db.course_practice.course_name == course_name) &
+              (db.course_practice.auth_user_id == user_id)).select().first()
 
 def _get_student_practice_grade(sid, course_name):
     return db((db.practice_grades.auth_user==sid) &
@@ -675,6 +692,11 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
                 (db.questions.topic == None) &
                 (db.questions.subchapter == sub_chapter_label))) &
               (db.questions.practice == True)).select()
+
+
+# Gets invoked from lti to set timezone and then redirect to practice()
+def settz_then_practice():
+    return dict(course_name=request.vars.get('course_name', settings.default_course))
 
 
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
@@ -749,8 +771,14 @@ def practice():
             f_card["mastery_percent"] = int(f_card["remaining_days"])
         else:
             # The maximum q is 5.0 and the minimum e_factor that indicates mastery of the topic is 2.5. `5 * 2.5 = 12.5`
+            # I learned that when students under the blocking condition answer something wrong multiple times,
+            # it becomes too difficult for them to pass it and the system asks them the same question many times
+            # (because most subchapters have only one question). To solve this issue, I changed the blocking formula.
             f_card["mastery_percent"] = int(100 * f_card.user_topic_practice.e_factor *
                                             f_card.user_topic_practice.q / 12.5)
+            if f_card["mastery_percent"] > 100:
+                f_card["mastery_percent"] = 100
+
         f_card["mastery_color"] = "danger"
         if f_card["mastery_percent"] >= 75:
             f_card["mastery_color"] = "success"
@@ -817,7 +845,7 @@ def practice():
                 # send practice grade via lti, if setup for that
                 lti_record = _get_lti_record(session.oauth_consumer_key)
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
-                course_settings = _get_course_practice_record(auth.user.course_name)
+                course_settings = _get_course_practice_record(auth.user.course_name, auth.user.id)
 
                 practice_completion_count = _get_practice_completion(auth.user.id,
                                                                      auth.user.course_name,

@@ -48,12 +48,12 @@
 
 
 <script>
-	$('#hideId').css('display','none');
+    $('#hideId').css('display','none');
 </script>
 
 <script type="text/javascript">
   if(! eBookConfig) {
-	  eBookConfig = {};
+      eBookConfig = {};
   }
   eBookConfig.host = '';
   eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
@@ -69,13 +69,13 @@
 </script>
 
 <style>
-	.completed {
-		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/completed.png');
-	}
-	.started {
-		list-style-type: circle;
-		list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
-	}
+    .completed {
+        list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/completed.png');
+    }
+    .started {
+        list-style-type: circle;
+        list-style-image: url('/{{=request.application}}/static/{{=course_id}}/_static/active.png');
+    }
     .NextQuestionAnchor {
         font-size: 19px;
     }
@@ -182,7 +182,7 @@
 </script>
 
 <div id='part1' style="padding-left: 40px">
-	<h1 style='text-align:center'>Review Practice Questions</h1>
+    <h1 style='text-align:center'>Review Practice Questions</h1>
     <div class="alert alert-danger" style="margin-right: 40px;">
          {{ if flashcard_count > 1: }}
              {{ if spacing == 1: }}
@@ -399,9 +399,9 @@
 </div>
 
 <script>
-	//console.log(document.getElementsByClassName('nav nav-tabs'))
-	// This script renders the html into elements in the DOM
-	// The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
+    //console.log(document.getElementsByClassName('nav nav-tabs'))
+    // This script renders the html into elements in the DOM
+    // The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
 {{ if flashcard_count > 0: }}
     $(window).on('load', function (e) {
@@ -460,23 +460,23 @@
     });
 {{ pass }}
 {{ if practice_today_left > 0 or q: }}
-	var questionHtmlCode = document.getElementById("htmlblock");
-	// Interestingly, javascript won't understand the html string without first dumping it into an html element
-	// a console.log of the html string within the questioninfo array would only give an unexpected token error
-	// pulling the html strings from the script element provides the string that javascript recognizes
-	// even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the
+    var questionHtmlCode = document.getElementById("htmlblock");
+    // Interestingly, javascript won't understand the html string without first dumping it into an html element
+    // a console.log of the html string within the questioninfo array would only give an unexpected token error
+    // pulling the html strings from the script element provides the string that javascript recognizes
+    // even after stringifying the json.dumps version of a dictionary with the html as a value and then parsing the
     // result, the html string was still seen as an undefined type according to javascript
 
-	// The htmlDecode is needed to unescape the html that the server has sent.
-	// because only unescaped html gets rendered as html elements
+    // The htmlDecode is needed to unescape the html that the server has sent.
+    // because only unescaped html gets rendered as html elements
 
-	function htmlDecode(input){
-  		let e = document.createElement('div');
-  		e.innerHTML = input;
-  		return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-	}
+    function htmlDecode(input){
+          let e = document.createElement('div');
+          e.innerHTML = input;
+          return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
 
-	let $div = $("#QuestionContainer");
+    let $div = $("#QuestionContainer");
     let unescapedhtml = htmlDecode(questionHtmlCode.innerHTML);
     let change = $.parseHTML(unescapedhtml, keepScripts=true);
     $div.append(change);

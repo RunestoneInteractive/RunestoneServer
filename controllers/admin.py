@@ -1299,10 +1299,11 @@ def editindexrst():
         logger.error(ex)
 
 def _get_assignment(assignment_id):
-    return db(db.assignments.id == assignmentid).select().first()
+    return db(db.assignments.id == assignment_id).select().first()
 
 def _get_lti_record(oauth_consumer_key):
-    return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
+    if oauth_consumer_key:
+        return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def releasegrades():
@@ -1373,12 +1374,15 @@ def _get_toc_and_questions():
             # So we cannot directly use the labels retrieved from q.topic as chapter_name and
             # sub_chapter_name and we need to query the corresponding chapter_name and sub_chapter_name from the
             # corresponding tables.
+            topic_not_found = True
             if q.topic is not None:
+                topic_not_found = False
                 try:
                     chap, subch = q.topic.split('/')
                 except:
                     # a badly formed "topic" for the question; just ignore it
                     logger.info("Bad Topic: {}".format(q.topic))
+                    topic_not_found = True
                 try:
                     chapter = db((db.chapters.course_id == auth.user.course_name) &
                                   (db.chapters.chapter_label == chap)) \
@@ -1390,38 +1394,47 @@ def _get_toc_and_questions():
                 except:
                     # topic's chapter and subchapter are not in the book; ignore this topic
                     logger.info("Missing Chapter {} or Subchapter {} for topic {}".format(chap, subch, q.topic))
-            else:
+                    topic_not_found = True
+
+            if topic_not_found:
+                topic_not_found = False
                 chap = q.chapter
                 subch = q.subchapter
-                chapter = db((db.chapters.course_id == auth.user.course_name) &
-                             (db.chapters.chapter_label == chap)) \
-                    .select()[0]
+                try:
+                    chapter = db((db.chapters.course_id == auth.user.course_name) &
+                                 (db.chapters.chapter_label == chap)) \
+                        .select()[0]
 
-                sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
-                                      (db.sub_chapters.sub_chapter_label == subch)) \
-                    .select()[0].sub_chapter_name
+                    sub_chapter_name = db((db.sub_chapters.chapter_id == chapter.id) &
+                                          (db.sub_chapters.sub_chapter_label == subch)) \
+                        .select()[0].sub_chapter_name
+                except:
+                    # topic's chapter and subchapter are not in the book; ignore this topic
+                    logger.info("Missing Chapter {} or Subchapter {}".format(chap, subch))
+                    topic_not_found = True
 
-            chapter_name = chapter.chapter_name
-            # Find the item in practice picker for this chapter
-            p_ch_info = None
-            for ch_info in practice_picker:
-                if ch_info['text'] == chapter_name:
-                    p_ch_info = ch_info
-            if not p_ch_info:
-                # if there isn't one, add one
-                p_ch_info = {}
-                practice_picker.append(p_ch_info)
-                p_ch_info['text'] = chapter_name
-                p_ch_info['children'] = []
-            # add the subchapter
-            p_sub_ch_info = {}
-            if sub_chapter_name not in [child['text'] for child in p_ch_info['children']]:
-                p_ch_info['children'].append(p_sub_ch_info)
-                p_sub_ch_info['id'] = "{}/{}".format(chapter_name, sub_chapter_name)
-                p_sub_ch_info['text'] = sub_chapter_name
-                # checked if
-                p_sub_ch_info['state'] = {'checked':
-                                          (chapter_name, sub_chapter_name) in chapters_and_subchapters_taught}
+            if not topic_not_found:
+                chapter_name = chapter.chapter_name
+                # Find the item in practice picker for this chapter
+                p_ch_info = None
+                for ch_info in practice_picker:
+                    if ch_info['text'] == chapter_name:
+                        p_ch_info = ch_info
+                if not p_ch_info:
+                    # if there isn't one, add one
+                    p_ch_info = {}
+                    practice_picker.append(p_ch_info)
+                    p_ch_info['text'] = chapter_name
+                    p_ch_info['children'] = []
+                # add the subchapter
+                p_sub_ch_info = {}
+                if sub_chapter_name not in [child['text'] for child in p_ch_info['children']]:
+                    p_ch_info['children'].append(p_sub_ch_info)
+                    p_sub_ch_info['id'] = "{}/{}".format(chapter_name, sub_chapter_name)
+                    p_sub_ch_info['text'] = sub_chapter_name
+                    # checked if
+                    p_sub_ch_info['state'] = {'checked':
+                                              (chapter_name, sub_chapter_name) in chapters_and_subchapters_taught}
 
         # chapters are associated with courses, not with base_courses
         chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
@@ -1490,7 +1503,7 @@ def _get_toc_and_questions():
                           'practice_picker': practice_picker,
                           'question_picker': question_picker})
     # except Exception as ex:
-    #     print ex
+    #     print(ex)
     #     return json.dumps({})
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
