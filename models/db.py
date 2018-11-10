@@ -103,8 +103,8 @@ db.define_table('cohort_master',
 def getCourseNameFromId(courseid):
     ''' used to compute auth.user.course_name field '''
     q = db.courses.id == courseid
-    course_name = db(q).select()[0].course_name
-    return course_name
+    row = db(q).select().first()
+    return row.course_name if row else ''
 
 
 def verifyInstructorStatus(course, instructor):
