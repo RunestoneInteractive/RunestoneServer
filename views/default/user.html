@@ -1,18 +1,19 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
 
+{{block moreincludes}}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+        .rscontainer {
+            padding-left: 20px;
+            padding-right:20px;
+            padding-top: 20px;
+        }
+    </style>
+{{end}}
 
 {{block statusbar}}
 {{end}}
-
-<style type="text/css">
-    .rscontainer {
-        padding-left: 20px;
-        padding-right:20px;
-        padding-top: 20px;
-    }
-</style>
 
 <div class="container rscontainer">
 
