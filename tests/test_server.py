@@ -367,8 +367,7 @@ def test_user_1(runestone_db_tools, test_user):
 
     # Assignments
     ('assignments/index', True, 'Student Progress for', 1),
-    # FIXME: There's a duplicated id ``fb-root`` on this page.
-    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
+    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 1),
     ('assignments/chooseAssignment', True, 'Assignments', 1),
 
     # Misc
