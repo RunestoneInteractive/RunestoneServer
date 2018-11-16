@@ -140,4 +140,5 @@ def makePavement(http_host, rvars, sourcedir, base_course):
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
 
-scheduler = Scheduler(db, migrate='runestone_')
+if settings.lti_only !=True:
+   scheduler = Scheduler(db, migrate='runestone_')
