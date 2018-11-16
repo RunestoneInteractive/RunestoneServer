@@ -14,10 +14,17 @@
 
 {{block statusbar}}
 {{end}}
+<style type="text/css">
+    .rscontainer {
+        padding-left: 20px;
+        padding-right:20px;
+        padding-top: 20px;
+    }
+</style>
 
 <div class="container rscontainer">
 
-    {{if request.args(0) != 'register':}}
+    {{if (request.args(0) != 'register') & (settings.lti_only != True):}}
 
         <div class="row">
             <!-- Carousel
@@ -96,7 +103,7 @@
             {{pass}}
 
             <!--  LOGIN -->
-            {{ if request.args(0) == 'login': }}
+            {{ if (request.args(0) == 'login') & (settings.lti_only != True) : }}
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
@@ -158,7 +165,7 @@
             {{pass}}
 
 
-            {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
+            {{if (request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']) & (settings.lti_only != True) : }}
                 <div id="web2py_user_form" class="col-md-4">
                     {{=form}}
                     {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
@@ -171,7 +178,7 @@
 
     <div class="content row">
         <!-- REGISTRATION -->
-        {{if request.args(0) == 'register': }}
+        {{if (request.args(0) == 'register') & (settings.lti_only != True): }}
             <div id="registration_div">
                 <div class="col-md-6 col-md-offset-3">
                     <h2>Runestone Registration</h2>
@@ -310,7 +317,7 @@
             </div> <!-- end register div -->
         {{pass}}
 
-        {{if request.args(0) == 'register':}}
+        {{if (request.args(0) == 'register') & (settings.lti_only != True):}}
             <div class="col-md-6">
                 <h4>Registration Hints</h4>
                 <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
@@ -324,7 +331,7 @@
             </div>
         {{pass}}
 
-        {{if request.args(0) != 'register':}}
+        {{if (request.args(0) != 'register') & (settings.lti_only != True) :}}
             <div class="row">
                 <div class='col-md-6'>
                     <h2>About Runestone</h2>
@@ -350,6 +357,7 @@
                 </div>
             </div>
         {{pass}}
+        {{ if settings.lti_only != True: }}
         <div class="col-md-6">
             <h2>Your Privacy</h2>
             <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
@@ -364,8 +372,16 @@
                 If you have questions about this please feel free to <a
                         href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
         </div>
+        {{ pass }}
     </div>
 </div>
+
+         {{ if settings.lti_only == True: }}
+        <div class="col-md-12">
+            <h2>Please log in via your Learning Management System</h2>
+
+        </div>
+        {{ pass }}
 
 <script language="javascript" type="text/javascript">
     var cur_course = $('#auth_user_course_id').val();
@@ -376,3 +392,6 @@
        $(this).select();
     });
 </script>
+
+
+

@@ -16,7 +16,6 @@ logger.setLevel(settings.log_level)
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
-
     if 'everyday' in request.env.http_host:
         redirect('http://interactivepython.org/runestone/everyday')
 
@@ -311,16 +310,17 @@ def coursechooser():
 
 @auth.requires_login()
 def removecourse():
-    course_id_query = db(db.courses.course_name == request.args[0]).select(db.courses.id)
-    # todo: properly encode course_names to handle courses with special characters
-    # Check if they're about to remove their currently active course
-    auth_query = db(db.auth_user.id == auth.user.id).select()
-    for row in auth_query:
-        if row.course_name == request.args[0] and course_id_query:
-            session.flash = T("Sorry, you cannot remove your current active course.")
-        else:
-            db((db.user_courses.user_id == auth.user.id) &
-               (db.user_courses.course_id == course_id_query[0].id)).delete()
+    if settings.lti_only == False:
+      course_id_query = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+      # todo: properly encode course_names to handle courses with special characters
+      # Check if they're about to remove their currently active course
+      auth_query = db(db.auth_user.id == auth.user.id).select()
+      for row in auth_query:
+          if row.course_name == request.args[0] and course_id_query:
+              session.flash = T("Sorry, you cannot remove your current active course.")
+          else:
+              db((db.user_courses.user_id == auth.user.id) &
+                 (db.user_courses.course_id == course_id_query[0].id)).delete()
 
     redirect('/%s/default/courses' % request.application)
 
@@ -355,47 +355,46 @@ def reportabug():
 
 @auth.requires_login()
 def sendreport():
-    # settings.github_token should be set to a valid Github access token
-    # that has full repo access in models/1.py
-
-    if request.vars['bookerror'] == 'on':
-        basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
-        if basecourse is None:
-            url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+    if settings.academy_mode == True:
+        if request.vars['bookerror'] == 'on':
+            basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
+            if basecourse is None:
+                url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % request.vars['coursename']
+            else:
+                url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
         else:
-            url = 'https://api.github.com/repos/RunestoneInteractive/%s/issues' % basecourse
-    else:
-        url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
-    reqsession = requests.Session()
-    reqsession.auth = ('token', settings.github_token)
-    coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
-    pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
-    details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
-    uname = request.vars['username'] if request.vars['username'] else "anonymous"
-    uemail = request.vars['useremail'] if request.vars['useremail'] else "no_email"
-    userinfo = uname + ' ' + uemail
+            url = 'https://api.github.com/repos/RunestoneInteractive/RunestoneComponents/issues'
+        reqsession = requests.Session()
+        reqsession.auth = ('token', settings.github_token)
+        coursename = request.vars['coursename'] if request.vars['coursename'] else "None Provided"
+        pagename = request.vars['pagename'] if request.vars['pagename'] else "None Provided"
+        details = request.vars['bugdetails'] if request.vars['bugdetails'] else "None Provided"
+        uname = request.vars['username'] if request.vars['username'] else "anonymous"
+        uemail = request.vars['useremail'] if request.vars['useremail'] else "no_email"
+        userinfo = uname + ' ' + uemail
 
-    body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
-    issue = {'title': request.vars['bugtitle'],
-             'body': body}
-    logger.debug("POSTING ISSUE %s ", issue)
-    r = reqsession.post(url, json.dumps(issue))
-    if r.status_code == 201:
-        session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
-    else:
-        session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
-    logger.debug("POST STATUS = %s", r.status_code)
+        body = 'Error reported in course ' + coursename + ' on page ' + pagename + ' by user ' + userinfo + '\n' + details
+        issue = {'title': request.vars['bugtitle'],
+                 'body': body}
+        logger.debug("POSTING ISSUE %s ", issue)
+        r = reqsession.post(url, json.dumps(issue))
+        if r.status_code == 201:
+            session.flash = 'Successfully created Issue "%s"' % request.vars['bugtitle']
+        else:
+            session.flash = 'Could not create Issue "%s"' % request.vars['bugtitle']
+        logger.debug("POST STATUS = %s", r.status_code)
 
-    course_check = 0
-    if auth.user:
-        course_check = db(db.user_courses.user_id == auth.user.id).count()
+        course_check = 0
+        if auth.user:
+            course_check = db(db.user_courses.user_id == auth.user.id).count()
 
-    if course_check == 1 and request.vars['coursename']:
-        redirect('/%s/static/%s/index.html' % (request.application, request.vars['coursename']))
-    elif course_check > 1:
-        redirect('/%s/default/courses' % request.application)
-    else:
-        redirect('/%s/default/' % request.application)
+        if course_check == 1 and request.vars['coursename']:
+            redirect('/%s/static/%s/index.html' % (request.application, request.vars['coursename']))
+        elif course_check > 1:
+            redirect('/%s/default/courses' % request.application)
+        else:
+            redirect('/%s/default/' % request.application)
+    redirect('/%s/default/' % request.application)
 
 
 def terms():

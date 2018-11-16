@@ -110,6 +110,8 @@ Please consider having your own school or department do likewise.
 </div>
 
 <div class="col-md-6">
+
+    {{ if settings.academy_mode == True: }}
 <h3>Contribute to the Project</h3>
 <ul>
    	<li>
@@ -138,11 +140,12 @@ Please consider having your own school or department do likewise.
 </ul>
 </div>
 
+
 <div class="col-md-6"
 <h4>Build Information</h4>
 <p><a href="http://github.com/bnmnetp/runestone/blob/master/ChangeLog.rst">View ChangeLog</a></p>
 </div>
-
+{{ pass }}
 {{ if build_info: }}
 <table class="table table-striped table-bordered table-condensed">
 <tr><td>Current Version (version-build-hash)</td><td>My Version</td></tr>

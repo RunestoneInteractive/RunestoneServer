@@ -35,6 +35,7 @@
     <body>
         {{ block navbar }}
         <!-- needed for Facebook button -->
+    {{ if settings.academy_mode == True: }}
         <div id="fb-root"></div>
         <script>
             (function(d, s, id) {
@@ -45,6 +46,7 @@
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         </script>
+     {{ pass }}
         <!-- Begin navbar -->
         <div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
             {{ if response.flash: }}
@@ -66,6 +68,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="divider-vertical"></li>
                         <!-- social media dropdown -->
+                     {{ if settings.academy_mode == True: }}
+
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
@@ -89,6 +93,7 @@
                                 </li>
                             </ul>
                         </li>
+                        {{ pass }}
                         <!-- end social media dropdown -->
                         <li class="divider-vertical"></li>
                         <!-- user account dropdown -->
@@ -185,6 +190,7 @@
                 </div>
             </div>
         </div>
+
         <!-- End navbar -->
         {{ end }}
         <!-- begin body content -->
@@ -213,6 +219,8 @@
         </footer>
         <!-- end footer -->
         {{ end }}
+
+        {{ if settings.academy_mode == True: }}
         <script type="text/javascript" id="cookieinfo"
             src="//cookieinfoscript.com/js/cookieinfo.min.js"
             data-bg="#645862"
@@ -223,6 +231,7 @@
             data-moreinfo="https://runestone.academy/runestone/default/privacy"
             data-text-align="left"
             data-close-text="Got it!"></script>
+        {{ pass }}
         <script type='text/javascript'>
             // do some styling of the web2py login and registration form
             // this is done here because web2py doesn't have an easy way

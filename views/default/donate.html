@@ -1,7 +1,9 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
-<script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
 
+    {{ if settings.academy_mode == True: }}
+    <script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
+    {{ pass }}
 {{block statusbar}}
 {{end}}
 
