@@ -852,15 +852,15 @@ def practice():
                 course_name=auth.user.course_name,
                 practice_completion_date=now_local.date()
             )
+            practice_completion_count = _get_practice_completion(auth.user.id,
+                                                                    auth.user.course_name,
+                                                                    spacing)
             if practice_graded == 1:
                 # send practice grade via lti, if setup for that
                 lti_record = _get_lti_record(session.oauth_consumer_key)
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
                 course_settings = _get_course_practice_record(auth.user.course_name, auth.user.id)
 
-                practice_completion_count = _get_practice_completion(auth.user.id,
-                                                                     auth.user.course_name,
-                                                                     spacing)
                 if spacing == 1:
                     total_possible_points = day_points * max_days
                     points_received = day_points * practice_completion_count
