@@ -35,7 +35,7 @@
     <body>
         {{ block navbar }}
         <!-- needed for Facebook button -->
-    {{ if settings.academy_mode == True: }}
+    {{ if settings.academy_mode: }}
         <div id="fb-root"></div>
         <script>
             (function(d, s, id) {
@@ -68,7 +68,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="divider-vertical"></li>
                         <!-- social media dropdown -->
-                     {{ if settings.academy_mode == True: }}
+                     {{ if settings.academy_mode: }}
 
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -111,7 +111,7 @@
                                     <li class="divider"></li>
                                     <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
                                     <li class="divider"></li>
-                                    {{ if settings.academy_mode == True: }}
+                                    {{ if settings.academy_mode: }}
                                     <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
                                     {{ pass }}
                                 {{ pass }}
@@ -120,12 +120,12 @@
                                     <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
-                                {{ if settings.lti_only == False: }}
+                                {{ if not settings.lti_only_mode: }}
                                 <li class="divider"></li>
                                 <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
                                 <li class="divider"></li>
                                 {{ pass }}
-                                {{ if settings.lti_only == False: }}
+                                {{ if not settings.lti_only_mode: }}
                                 {{ if auth.user: }}
                                     <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
                                     <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
@@ -228,7 +228,7 @@
         <!-- end footer -->
         {{ end }}
 
-        {{ if settings.academy_mode == True: }}
+        {{ if settings.academy_mode: }}
         <script type="text/javascript" id="cookieinfo"
             src="//cookieinfoscript.com/js/cookieinfo.min.js"
             data-bg="#645862"

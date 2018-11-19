@@ -140,5 +140,5 @@ def makePavement(http_host, rvars, sourcedir, base_course):
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
 
-if settings.academy_mode != True:
+if not settings.academy_mode:
    scheduler = Scheduler(db, migrate='runestone_')

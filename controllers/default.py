@@ -310,7 +310,7 @@ def coursechooser():
 
 @auth.requires_login()
 def removecourse():
-    if settings.lti_only == False:
+    if not settings.academy_mode:
       course_id_query = db(db.courses.course_name == request.args[0]).select(db.courses.id)
       # todo: properly encode course_names to handle courses with special characters
       # Check if they're about to remove their currently active course
@@ -355,7 +355,7 @@ def reportabug():
 
 @auth.requires_login()
 def sendreport():
-    if settings.academy_mode == True:
+    if settings.academy_mode:
         if request.vars['bookerror'] == 'on':
             basecourse = db(db.courses.course_name == request.vars['coursename']).select().first().base_course
             if basecourse is None:

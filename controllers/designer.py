@@ -16,7 +16,7 @@ import random
 @auth.requires_login()
 def index():
     basicvalues = {}
-    if settings.academy_mode == True:
+    if settings.academy_mode:
         """
         example action using the internationalization operator T and flash
         rendered by views/default/index.html or views/generic.html
@@ -31,7 +31,7 @@ def index():
 
 def build():
     buildvalues = {}
-    if settings.academy_mode == True:
+    if settings.academy_mode:
         buildvalues['pname']=request.vars.projectname
         buildvalues['pdescr']=request.vars.projectdescription
 
@@ -156,7 +156,7 @@ def build_custom():
 
 @auth.requires_membership('instructor')
 def delete_course():
-    if settings.academy_mode == True:
+    if settings.academy_mode:
         verify_form = FORM(TABLE(TR(LABEL("Really Delete:", INPUT(_name='checkyes', requires=IS_NOT_EMPTY(), _type="checkbox"))),
                            TR(LABEL("Type in the name of the course to verify: ", INPUT(_name='coursename', requires=IS_NOT_EMPTY() ))),
                            TR(INPUT(_type='submit')),
