@@ -61,7 +61,11 @@
                     <span class="icon-bar"></span>
                     </button>
                     <div>
-                        <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                       {{ if settings.lti_only_mode: }}
+                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;'">&nbsp;</a>
+                        {{ else: }}
+                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                        {{ pass }}
                     </div>
                 </div>
                 <div class="navbar-collapse collapse navbar-ex1-collapse">
