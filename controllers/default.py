@@ -67,9 +67,11 @@ def user():
         form[0].insert(-1, my_extra_element)
         form.element('#auth_user_username')['_readonly'] = True
 
-    if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
-        if form.process().accepted:
+        if form.validate():
+            # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
+            del form.vars.username
+            form.record.update_record(**dict(form.vars))
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
