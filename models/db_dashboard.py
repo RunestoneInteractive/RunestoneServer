@@ -426,15 +426,20 @@ class DashboardDataAnalyzer(object):
                     self.grades[assign["name"]] = {}
                     for userEntry in rl:
                         rslogger.debug("GETTING USER SCORES %s",userEntry)
-                        s += userEntry["grades"]["score"]   # Calculating average
-                        count += 1
-                        if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
-                            self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+                        this_score = userEntry["grades"]["score"]
+                        if this_score:
+                            s += this_score   # Calculating average
+                            count += 1
+                            if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
+                                self.grades[assign["name"]]["score"] = this_score
 
                     if 'score' not in self.grades[assign["name"]]:
                             self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
                     rslogger.debug("COUNT = %s", count)
-                    average = s/count
+                    try:
+                        average = s/count
+                    except:
+                        average = 0
                     self.grades[assign["name"]]["class_average"] = "{:.02f}".format(average)
                     self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 
