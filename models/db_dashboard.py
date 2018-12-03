@@ -427,7 +427,7 @@ class DashboardDataAnalyzer(object):
                     for userEntry in rl:
                         rslogger.debug("GETTING USER SCORES %s",userEntry)
                         this_score = userEntry["grades"]["score"]
-                        if this_score:
+                        if this_score != None:
                             s += this_score   # Calculating average
                             count += 1
                             if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
