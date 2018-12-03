@@ -25,8 +25,8 @@ def index():
         last_name = names[-1]
         first_name = ' '.join(names[:-1])
     email = request.vars.get('lis_person_contact_email_primary', None)
-    instructor = ("Instructor" in request.vars.get('roles', None)) or \
-                 ("TeachingAssistant" in request.vars.get('roles', None))
+    instructor = ("Instructor" in request.vars.get('roles', [])) or \
+                 ("TeachingAssistant" in request.vars.get('roles', []))
     result_source_did=request.vars.get('lis_result_sourcedid', None)
     outcome_url=request.vars.get('lis_outcome_service_url', None)
     # print(request.vars)
