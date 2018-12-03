@@ -5,6 +5,8 @@ services:
 - postgresql
 addons:
   postgresql: '9.4'
+env:
+- WEB2PY_VERSION=2.17.2
 script:
 - pip install -U -r requirements-test.txt
 - mkdir runestone
@@ -13,7 +15,8 @@ script:
 - export LANG=en_US.UTF-8
 - export WEB2PY_CONFIG=test
 - export TEST_DBURL=postgres://postgres:@localhost/runestone_test
-- wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip
+# This URL was taken from a `post <https://groups.google.com/forum/#!topic/web2py/VXgsvfz67Fc>`_. Don't download the tagged releases from github, since they lack the DAL.
+- wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
 - unzip web2py_src.zip
 - cd web2py/applications
 - mv ../../runestone .

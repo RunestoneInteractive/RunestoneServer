@@ -5,7 +5,9 @@ import requests
 from urllib import unquote
 from urllib2 import HTTPError
 import logging
+
 from gluon.restricted import RestrictedError
+from gluon.tools import addrow
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -62,14 +64,23 @@ def user():
             sectname = sectname.name
         else:
             sectname = 'default'
-        my_extra_element = TR(LABEL('Section Name'),
-                              INPUT(_name='section', value=sectname, _type='text'))
-        form[0].insert(-1, my_extra_element)
+        # Add the section. Taken from ``gluon.tools.addrow`` where ``style='table3cols'``.
+        form[0].insert(-1,
+            TR(
+                TD(LABEL('Section Name: ', _for='auth_user_section', _id='auth_user_section__label'), _class='w2p_fl'),
+                TD(INPUT(_name='section', _type='text', _value=sectname, _id='auth_user_section', _class='string'), _class='w2p_fw'),
+                TD('', _class='w2p_fc'),
+                _id='auth_user_section__row',
+            )
+        )
+        # Make the username read-only.
         form.element('#auth_user_username')['_readonly'] = True
 
-    if 'profile' in request.args(0):
         form.vars.course_id = auth.user.course_name
-        if form.process().accepted:
+        if form.validate():
+            # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
+            del form.vars.username
+            form.record.update_record(**dict(form.vars))
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
