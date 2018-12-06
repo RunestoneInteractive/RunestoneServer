@@ -14,19 +14,13 @@
 
 {{block statusbar}}
 {{end}}
-<style type="text/css">
-    .rscontainer {
-        padding-left: 20px;
-        padding-right:20px;
-        padding-top: 20px;
-    }
-</style>
 
 <div class="container rscontainer">
 
-    {{if (request.args(0) != 'register') & (not settings.lti_only_mode):}}
+    {{if (request.args(0) != 'register'):}}
 
         <div class="row">
+          {{ if settings.academy_mode: }}
             <!-- Carousel
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
@@ -101,9 +95,10 @@
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
             {{pass}}
-
+          {{pass}}
             <!--  LOGIN -->
-            {{ if (request.args(0) == 'login') & (not settings.lti_only_mode) : }}
+          {{if not settings.lti_only_mode:}}
+            {{ if (request.args(0) == 'login'): }}
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
@@ -165,7 +160,7 @@
             {{pass}}
 
 
-            {{if (request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']) & (not settings.lti_only_mode) : }}
+            {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
                 <div id="web2py_user_form" class="col-md-4">
                     {{=form}}
                     {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
@@ -173,12 +168,16 @@
                     {{pass}}
                 </div>
             {{pass}}
+          {{else:}}
+            Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+          {{pass}}
         </div>
     {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
 
     <div class="content row">
         <!-- REGISTRATION -->
-        {{if (request.args(0) == 'register') & (not settings.lti_only_mode): }}
+        {{if (request.args(0) == 'register'): }} <!-- register page -->
+          {{if not settings.lti_only_mode:}}
             <div id="registration_div">
                 <div class="col-md-6 col-md-offset-3">
                     <h2>Runestone Registration</h2>
@@ -315,10 +314,7 @@
                         We allow you to use Runestone for free, but it definitely is not free. Runestone takes lots of work and server resources.</p>
                 </div>
             </div> <!-- end register div -->
-        {{pass}}
-
-        {{if (request.args(0) == 'register') & (not settings.lti_only_mode):}}
-            <div class="col-md-6">
+             <div class="col-md-6">
                 <h4>Registration Hints</h4>
                 <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
                 <ul>
@@ -329,9 +325,12 @@
                     <li><strong>pip2</strong> for Programs, Information, People</li>
                 </ul>
             </div>
-        {{pass}}
+          {{else:}} <!-- lti_only_mode -->
+            Registration is disabled. Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+          {{pass}}
+        {{pass}} <!-- end register page -->
 
-        {{if (request.args(0) != 'register') & (not settings.lti_only_mode) :}}
+        {{if (request.args(0) != 'register') and settings.academy_mode:}}
             <div class="row">
                 <div class='col-md-6'>
                     <h2>About Runestone</h2>
@@ -357,31 +356,24 @@
                 </div>
             </div>
         {{pass}}
-        {{ if settings.academy_mode: }}
-        <div class="col-md-6">
-            <h2>Your Privacy</h2>
-            <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                of our educational mission we do collect usage data to help us better understand how you learn and how you
-                use our
-                books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                this data to publish
-                academic papers. We would never publish anything that revealed your identity. We may share this data with
-                fellow
-                educational researchers, but rest assured that all personally identifying information will be anonymized
-                before we do.
-                If you have questions about this please feel free to <a
-                        href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
-        </div>
-        {{ pass }}
+        {{if settings.academy_mode:}}
+            <div class="col-md-6">
+                <h2>Your Privacy</h2>
+                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+                    of our educational mission we do collect usage data to help us better understand how you learn and how you
+                    use our
+                    books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+                    this data to publish
+                    academic papers. We would never publish anything that revealed your identity. We may share this data with
+                    fellow
+                    educational researchers, but rest assured that all personally identifying information will be anonymized
+                    before we do.
+                    If you have questions about this please feel free to <a
+                            href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+            </div>
+        {{pass}}
     </div>
 </div>
-
-         {{ if settings.lti_only_mode: }}
-        <div class="col-md-12">
-            <h2>Please log in via your Learning Management System</h2>
-
-        </div>
-        {{ pass }}
 
 <script language="javascript" type="text/javascript">
     var cur_course = $('#auth_user_course_id').val();
@@ -392,6 +384,3 @@
        $(this).select();
     });
 </script>
-
-
-

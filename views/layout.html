@@ -146,23 +146,26 @@
                         </li>
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
-                        <!-- help menu dropdown -->
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
-                            </a>
-                            <ul class="dropdown-menu user-menu">
-                                <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
-                                <li class="divider"></li>
-                                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-                                <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
-                            </ul>
-                        </li>
-                        <li class="divider-vertical"></li>
+                        {{ if settings.academy_mode: }}
+
+                            <!-- help menu dropdown -->
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+                                </a>
+                                <ul class="dropdown-menu user-menu">
+                                    <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+                                    <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
+                                </ul>
+                            </li>
+                            <li class="divider-vertical"></li>
+                        {{pass}}
                     </ul>
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
-                        {{ if request.controller == "default":}}
+                        {{ if request.controller == "default" and settings.academy_mode:}}
                             <!-- open library dropdown -->
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
@@ -182,7 +185,7 @@
                             </li>
                         {{ elif auth.user: }}
                             <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
-                        {{ else: }}
+                        {{ elif not settings.lti_only_mode: }}
                             <li><a href="/{{=request.application}}/default">Login</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
@@ -190,13 +193,13 @@
                             {{if 'auth' in globals() and auth.user:}}
                                 <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
                             {{pass}}
-                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login':}}
+                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login' and not settings.lti_only_mode:}}
                                 <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
                             {{pass}}
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if request.args(0) == 'login':}}
+                    {{if request.args(0) == 'login' and settings.academy_mode:}}
                         <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                     {{pass}}
                 </div>
