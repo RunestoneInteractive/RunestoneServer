@@ -170,6 +170,9 @@
             {{pass}}
           {{else:}}
             Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+            {{if settings.coursera_mode:}}
+               <p>At the beginning of each study session, you will need to first use one of the links at the top of a lesson that says something like, "Single Sign On: Interactive Textbook and Practice Opportunities." Once you've done that, you'll be able to use the textbook for the duration of your learning sessions, including the links to individual textbook pages in Coursera.</p>
+            {{pass}}
           {{pass}}
         </div>
     {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
