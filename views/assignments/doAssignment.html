@@ -109,26 +109,31 @@
     {{pass}}
 
     {{if len(questioninfo) > 0:}}
-        <div id='questions' style='margin-left:15%;'>
-        <h3>Questions</h3>
-            {{count=0}}
-            {{for q in questioninfo:}}
-                    {{ if q['comment'] != 'ungraded':}}
-                        <div style='float:right; width:30%;'>
-                        <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-                        <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+        <div id='questions'>
+            <style>
+                .ac_section > * {
+                    max-width: 100%;
+                }
+            </style>
+            <h3>Questions</h3>
+                {{count=0}}
+                {{for q in questioninfo:}}
+                        {{ if q['comment'] != 'ungraded':}}
+                            <div style='float:right; width:30%;'>
+                            <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+                            <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+                            </div>
+                        {{ else: }}
+                            <div style='float:right; width:10%;'>
+                            <h5 style='text-align:center;'>Not yet graded</h5>
+                            </div>
+                        {{pass}}
+                        <div class='oneq full-width' id='{{=count}}'>
+                            <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
                         </div>
-                    {{ else: }}
-                        <div style='float:right; width:10%;'>
-                        <h5 style='text-align:center;'>Not yet graded</h5>
-                        </div>
-                    {{pass}}
-                    <span><div class='oneq' id='{{=count}}' style='width:90%;'>
-                        <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
-                    </div></span>
 
-                {{count += 1}}
-            {{pass}}
+                    {{count += 1}}
+                {{pass}}
 
         </div>
     {{pass}}
