@@ -511,3 +511,31 @@ def test_4(test_client, test_user_1):
         #assert user.section == section
 
         # TODO: Test for an error if ``email`` is invalid.
+
+# Test that the course name is correctly preserved across registrations if other fields are invalid.
+def test_5(test_client, runestone_db_tools):
+    # Registration doesn't work unless we're logged out.
+    test_client.logout()
+    course_name = 'a_course_name'
+    with runestone_db_tools.create_course(course_name) as course:
+        # Now, post the registration.
+        username = 'username'
+        first_name = 'first'
+        last_name = 'last'
+        email = 'e@mail.com'
+        password = 'password'
+        test_client.validate('default/user/register', 'Please fix the following errors in your registration', data=dict(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            # The e-mail address must be unique.
+            email=email,
+            password=password,
+            password_two=password + 'oops',
+            # Note that ``course_id`` is (on the form) actually a course name.
+            course_id=course_name,
+            accept_tcp='on',
+            donate='0',
+            _next='/runestone/default/index',
+            _formname='register',
+        ))

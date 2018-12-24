@@ -116,6 +116,16 @@ def user():
             # add a row to section_users for this user with the section selected.
             redirect(URL('default', 'index'))
 
+    if 'register' in request.args(0):
+        # The validation function ``IS_COURSE_ID`` in ``models/db.py`` changes the course name supplied to a course ID. If the overall form doesn't validate, the value when the form is re-displayed with errors will contain the ID instead of the course name. Change it back to the course name. Note: if the user enters a course for the course name, it will be displayed as the corresponding course name after a failed validation. I don't think this case is important enough to fix.
+        try:
+            course_id = int(form.vars.course_id)
+        except:
+            pass
+        else:
+            # Look up the course name based on the ID.
+            form.vars.course_id = getCourseNameFromId(course_id)
+
     # this looks horrible but it seems to be the only way to add a CSS class to the submit button
     try:
         form.element(_id='submit_record__row')[1][0]['_class'] = 'btn btn-default'
