@@ -342,6 +342,8 @@ def getuser():
             res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
+    if session.readings:
+        res['readings'] = session.readings
     logger.debug("returning login info: %s" % res)
     return json.dumps([res])
 

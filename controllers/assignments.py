@@ -607,6 +607,12 @@ def doAssignment():
             questionslist.append(info)
             questions_score += info['score']
 
+    # put readings into a session variable, to enable next/prev button
+    readings_names = []
+    for chapname in readings:
+        readings_names = readings_names + ["{}/{}.html".format(d['chapter'], d['subchapter']) for d in readings[chapname]['subchapters']]
+    session.readings = readings_names
+
     return dict(course=course,
                 course_name=auth.user.course_name,
                 assignment=assignment,
