@@ -138,7 +138,7 @@ function autoGrade() {
     var question = getSelectedItem("question")
     var studentID = getSelectedItem("student")
     var enforceDeadline = $('#enforceDeadline').is(':checked')
-    jQuery.ajax({
+    var params = {
         url: eBookConfig.autogradingURL,
         type: "POST",
         dataType: "JSON",
@@ -150,12 +150,26 @@ function autoGrade() {
         },
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
-            calculateTotals();
-            alert(retdata.message);
+            //alert(retdata.message);
         }
-    }).always(function () {
+    }
+
+    if (assignment != null && question === null && studentID == null) {
+        for (let s in students) {
+            params.data.sid = s;
+            params.async = false;
+            let res = jQuery.ajax(params);
+            $("#autogradingform").append(`${res.responseJSON.message} for ${s} </br>`)
+        }
+        calculateTotals();
         $("#autogradesubmit").prop("disabled", false);
-    });
+    } else {
+        jquery.axax(params).always(function () {
+            calculateTotals();
+            $("#autogradesubmit").prop("disabled", false);
+        });
+    }
+
 }
 
 function calculateTotals(sid) {
@@ -1323,7 +1337,7 @@ function assignmentInfo() {
             // Put the qeustion in the table.
             let name = question['name'];
             allQuestions.push(createQuestionObject(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']));
-            // Check this question in the question tree picker.  
+            // Check this question in the question tree picker.
             // Assumes that the picker tree is built before we do this loop.
             tqp.check_node(tqp.get_node(name));
         }
