@@ -155,16 +155,19 @@ function autoGrade() {
     }
 
     if (assignment != null && question === null && studentID == null) {
+        let i = 0;
         for (let s in students) {
             params.data.sid = s;
             params.async = false;
             let res = jQuery.ajax(params);
-            $("#autogradingform").append(`${res.responseJSON.message} for ${s} </br>`)
+            setTimeout(function(s) {
+                $("#autogradingform").append(`${res.responseJSON.message} for ${s} </br>`)
+            }, 10, s);
         }
         calculateTotals();
         $("#autogradesubmit").prop("disabled", false);
     } else {
-        jquery.axax(params).always(function () {
+        jQuery.ajax(params).always(function () {
             calculateTotals();
             $("#autogradesubmit").prop("disabled", false);
         });
