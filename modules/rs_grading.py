@@ -613,11 +613,16 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, timez
                    (db.user_topic_practice.sub_chapter_label == sub_chapter_label) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
 
+    if not flashcard:
+        # the flashcard for this question has been deleted since the practice page was loaded, probably
+        # because the user marked the corresponding page as unread. In that case, don't try to update the flashcard.
+        return
+
     # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
     flashcards = db((db.user_topic_practice.course_name == course_name) &
                     (db.user_topic_practice.user_id == sid)).select()
     # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if now_local.date() >= flashcard.next_eligible_date]
+    presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
 
     if q:
         # User clicked one of the self-evaluated answer buttons.
