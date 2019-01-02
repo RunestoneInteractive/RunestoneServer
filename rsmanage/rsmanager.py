@@ -268,6 +268,10 @@ def build(config, course, repo, skipclone):
     else:
         click.echo("Deploy failed, check the log to see what went wrong.")
 
+    click.echo("Cleaning up")
+    os.chdir("..")
+    subprocess.call("rm -rf {}".format(proj_dir), shell=True)
+
 
 #
 #    inituser
