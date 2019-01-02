@@ -418,7 +418,7 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
 
 def _get_students(course_id, sid = None, db=None):
     if sid:
-        # sid which is passed in is a username, not a row id
+        # sid which is passed in is a row id, not a username; get the username
         student_rows = db((db.user_courses.course_id == course_id) &
                           (db.user_courses.user_id == db.auth_user.id) &
                           (db.auth_user.username == sid)
