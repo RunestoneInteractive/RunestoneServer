@@ -1,6 +1,8 @@
 import subprocess, os, re, signal, json, sys, csv, shutil
 import click
 from sqlalchemy import create_engine
+from pkg_resources import resource_string, resource_filename
+
 
 class Config(object):
     def __init__(self):
@@ -16,6 +18,7 @@ APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
 BUILDDIR = '{}/build'.format(APP_PATH)
 PRIVATEDIR = '{}/private'.format(APP_PATH)
+CUSTOMDIR = '{}/custom_courses'.format(APP_PATH)
 
 @click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
@@ -163,10 +166,13 @@ def shutdown(config):
 @click.option("--python3", is_flag=True, help="Use python3 style syntax")
 @click.option("--login-required", is_flag=True, help="Only registered users can access this course?")
 @click.option("--institution", help="Your institution")
+@click.option("--language", default="python", help="Default Language for your course")
+@click.option("--host", default="runestone.academy", help="runestone server host name")
 @pass_config
-def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution):
+def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution, language, host):
     """Create a course in the database"""
-    #TODO:  Add options for all of the things we prompt for
+
+    os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
     done = False
     while not done:
@@ -199,6 +205,7 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
 
     click.echo("Course added to DB successfully")
 
+    makePavement(host, python3, login_required, course_name, basecourse, language)
 
 #
 #    build
@@ -482,6 +489,31 @@ def findProjectRoot():
         prevdir = start
         start = os.path.dirname(start)
     raise IOError("You must be in a web2py application to run rsmanage")
+
+
+def makePavement(http_host, python3, login_required, course_name, base_course, language):
+    paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
+    opts = {'master_url': 'https://' + http_host,
+            'project_name': course_name,
+            'build_dir': 'build',
+            'log_level': 10,
+            'use_services': 'true',
+            'dburl': os.environ.get("DBURL"),
+            'basecourse': base_course,
+            'default_ac_lang': language,
+            'downloads_enabled': 'false',
+            'enable_chatcodes': 'false',
+            'login_req': 'true' if login_required else 'false',
+            'python3': 'true' if python3 else 'false',
+            'dest': '../../static'
+            }
+
+    paver_stuff = paver_stuff % opts
+    if not os.path.exists(os.path.join(CUSTOMDIR,course_name)):
+        os.mkdir(os.path.join(CUSTOMDIR,course_name))
+
+    with open(os.path.join(CUSTOMDIR, course_name, 'pavement.py'), 'w') as fp:
+        fp.write(paver_stuff)
 
 #
 #    fill_practice_log_missings
