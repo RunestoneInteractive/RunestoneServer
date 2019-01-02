@@ -56,6 +56,11 @@ if environ.get('WEB2PY_MIGRATE', "") != 'fake':
         db.executesql('''CREATE INDEX questions_name_idx ON questions USING btree (name);''')
         db.executesql('''CREATE INDEX sub_chapters_chapter_id_idx ON sub_chapters USING btree (chapter_id);''')
         db.executesql('''CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);''')
+        db.executesql('''create index code_sid_idx on code using btree(sid)''')
+        db.executesql('''create index code_acid_idx on code using btree(acid)''')
+        db.executesql('''code_course_id_idx on code using btree(course_id)''')
+        db.executesql('''create index code_timestamp_idx on code using btree(timestamp)''')
+        db.executesql('''create index mult_scd_idx on mchoice_answers (div_id, course_name, sid)''')
     except:
         click.echo(message="The creation of one or more indices/constraints failed", file=None, nl=True, err=False, color='red')
         sys.exit(1)
