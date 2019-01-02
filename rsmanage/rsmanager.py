@@ -1,4 +1,4 @@
-import subprocess, os, re, signal, json, sys, csv
+import subprocess, os, re, signal, json, sys, csv, shutil
 import click
 from sqlalchemy import create_engine
 
@@ -50,7 +50,7 @@ def cli(config, verbose, if_clean):
         if count != 0:
             click.echo("The database is already inititlized Exiting")
             sys.exit()
-    
+
 
     config.verbose = verbose
 
@@ -228,19 +228,28 @@ def build(config, course, repo, skipclone):
     proj_dir = os.path.basename(repo).replace(".git","")
     click.echo("Switching to project dir {}".format(proj_dir))
     os.chdir(proj_dir)
+    paver_file = os.path.join("..","..",'custom_courses',course,'pavement.py')
+    click.echo("Checking for pavement {}".format(paver_file))
+    if os.path.exists(paver_file):
+        shutil.copy(paver_file, 'pavement.py')
+    else:
+        cont = click.confirm("WARNING -- NOT USING CUSTOM PAVEMENT FILE - continue")
+        if not cont:
+            sys.exit()
+
     try:
         if os.path.exists('pavement.py'):
             sys.path.insert(0, os.getcwd())
-            from pavement import project_name, dest
+            from pavement import options, dest
         else:
             click.echo("I can't find a pavement.py file in {} you need that to build".format(os.getcwd()))
             exit(1)
     except ImportError as e:
-        click.echo("You do not appear to have project_name defined in your pavement.py file.")
+        click.echo("You do not appear to have a good pavement.py file.")
         print(e)
         exit(1)
 
-    if project_name != course:
+    if options.project_name != course:
         click.echo("Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(course, project_name))
         exit(1)
 
@@ -422,7 +431,7 @@ def findinstructor(config, course):
         course = click.prompt("enter the course name")
     eng = create_engine(config.dburl)
     query = '''
-    select username, first_name, last_name, email 
+    select username, first_name, last_name, email
 from auth_user join course_instructor on auth_user.id = instructor join courses on course = courses.id
 where courses.course_name = %s order by last_name
 '''
