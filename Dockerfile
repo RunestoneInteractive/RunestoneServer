@@ -50,16 +50,36 @@ RUN eatmydata apt-get install -y --no-install-recommends \
 RUN git clone --recursive https://github.com/web2py/web2py /usr/local/lib/web2py && \
     ln -s /usr/local/lib/web2py/web2py.py /usr/local/bin/web2py.py
 
-RUN mkdir -p ${WEB2PY_APPS_PATH} && \
-    cd ${WEB2PY_APPS_PATH} && \
-    git clone https://github.com/RunestoneInteractive/RunestoneServer runestone
-
 # A few missing ones
 RUN eatmydata apt-get install -y --no-install-recommends \
         python-wheel
 
+# The rest could be done by a regular user
+RUN useradd -s /bin/bash -M --home-dir ${WEB2PY_PATH} runestone
+RUN mkdir -p ${WEB2PY_PATH} && \
+    chown runestone ${WEB2PY_PATH}
+
+USER postgres
+RUN service postgresql start && \
+  psql postgres -c "CREATE USER runestone superuser password '${DB_PASSWORD}';" && \
+  service postgresql stop
+
+USER runestone
+WORKDIR ${WEB2PY_PATH}
+
+RUN mkdir -p ${WEB2PY_APPS_PATH} && \
+    cd ${WEB2PY_APPS_PATH} && \
+    git clone https://github.com/RunestoneInteractive/RunestoneServer runestone
+
+
 RUN cd ${WEB2PY_APPS_PATH}/runestone && \
     pip install -r requirements.txt
-    
 
+USER root
+ARG WEB2PY_PORT=8080
+
+# Start configuration
+EXPOSE ${WEB2PY_PORT}
+
+CMD service postgresql start && su -c /bin/bash runestone 
 #RUN apt-get clean
