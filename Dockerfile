@@ -45,27 +45,28 @@ RUN eatmydata apt-get install -y --no-install-recommends \
         python-cssselect \
         python-oauth2client
     
-
-# Install additional components
-RUN git clone --recursive https://github.com/web2py/web2py /usr/local/lib/web2py && \
-    ln -s /usr/local/lib/web2py/web2py.py /usr/local/bin/web2py.py
+# So it could be available at run time
+ARG WEB2PY_PORT=8080
+ENV WEB2PY_PATH=${WEB2PY_PATH}
+ENV BOOKS_PATH=${WEB2PY_APPS_PATH}/runestone/books
+EXPOSE ${WEB2PY_PORT}
 
 # A few missing ones
+#  rsync is needed when deploying a built book
+#  vim - just for pleasure of being able to do any changes right within
+#  wget - just in case
 RUN eatmydata apt-get install -y --no-install-recommends \
-        python-wheel
+        python-wheel rsync wget
 
-# The rest could be done by a regular user
-RUN useradd -s /bin/bash -M --home-dir ${WEB2PY_PATH} runestone
-RUN mkdir -p ${WEB2PY_PATH} && \
-    chown runestone ${WEB2PY_PATH}
 
-USER postgres
-RUN service postgresql start && \
-  psql postgres -c "CREATE USER runestone superuser password '${DB_PASSWORD}';" && \
-  service postgresql stop
+# The rest could be done and ran under a regular (well, staff for installing under /usr/local) user
+RUN useradd -s /bin/bash -M -g staff --home-dir ${WEB2PY_PATH} runestone
+RUN mkdir -p /srv && chown -R runestone /srv
 
 USER runestone
-WORKDIR ${WEB2PY_PATH}
+
+# Install additional components
+RUN git clone --recursive https://github.com/web2py/web2py ${WEB2PY_PATH}
 
 RUN mkdir -p ${WEB2PY_APPS_PATH} && \
     cd ${WEB2PY_APPS_PATH} && \
@@ -73,13 +74,14 @@ RUN mkdir -p ${WEB2PY_APPS_PATH} && \
 
 
 RUN cd ${WEB2PY_APPS_PATH}/runestone && \
-    pip install -r requirements.txt
+    pip install --system -r requirements.txt
 
+# TODO: various cleanups
+#RUN apt-get clean
 USER root
-ARG WEB2PY_PORT=8080
+WORKDIR ${WEB2PY_PATH}
 
 # Start configuration
-EXPOSE ${WEB2PY_PORT}
 
-CMD service postgresql start && su -c /bin/bash runestone 
-#RUN apt-get clean
+COPY docker/entrypoint.sh /usr/local/sbin/entrypoint.sh
+CMD /bin/bash /usr/local/sbin/entrypoint.sh
