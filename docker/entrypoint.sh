@@ -30,6 +30,24 @@ if [ ! -e "$stamp" ]; then
     # Let's use https
     # Wouldn't "just work" magically.  Requires certificates etc. Eventually!
     # echo -e '\nsettings.server_type = "https://"' >> $WEB2PY_PATH/applications/runestone/models/0.py
+
+    # Setup students
+    if [ -e '/srv/configs/instructors.csv' ]; then
+        info "Setting up instructors"
+        su -c "rsmanage inituser --fromfile /srv/configs/instructors.csv" runestone
+        cut -d, -f1,6 /srv/configs/instructors.csv \
+        | tr ',' ' ' \
+        | while read n c ; do
+            su -c "rsmanage addinstructor  --username $n --course $c" runestone;
+        done
+    fi
+    if [ -e '/srv/configs/students.csv' ]; then
+        info "Setting up students"
+        su -c "rsmanage inituser --fromfile /srv/configs/students.csv" runestone
+        info "Students were provided -- disabling signup!"
+        # Disable signup
+        echo -e "\nauth.settings.actions_disabled.append('register')" >> $WEB2PY_PATH/applications/runestone/models/db.py
+    fi
     touch "$stamp"
 else
     info "Already initialized"
@@ -44,6 +62,9 @@ cd "${BOOKS_PATH}"
         su -c "runestone build && runestone deploy" runestone;
     );
 done
+
+# for debugging
+# su -c 'bash' runestone
 
 # Run the beast
 info "Starting the server"
