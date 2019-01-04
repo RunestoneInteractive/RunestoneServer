@@ -184,8 +184,8 @@ def index():
             del session.donate
             redirect(URL(c='default', f='donate', args=amt))
 
-        if session.build:
-            del session.build
+        if session.build_course:
+            del session.build_course
             redirect(URL(c='designer', f='index'))
 
         # check number of classes, if more than 1, send to course selection, if only 1, send to book
