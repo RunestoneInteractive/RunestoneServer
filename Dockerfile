@@ -1,26 +1,24 @@
 FROM debian:stretch-backports
 MAINTAINER Yaroslav O. Halchenko <debian@onerussian.com>
 
+# TODO: convert generation to neurodocker call after all is cool
+
+# Define some ARGs which could be passed into while building
+# TODO: in reality there some hardcoding already probably present
+#       in the entrypoint.sh script.
 ARG WEB2PY_PATH=/srv/web2py
 ARG WEB2PY_APPS_PATH=${WEB2PY_PATH}/applications
+ARG WEB2PY_PORT=8080
+# And export some as env vars so they could be available at run time
+ENV WEB2PY_PATH=${WEB2PY_PATH}
+ENV BOOKS_PATH=${WEB2PY_APPS_PATH}/runestone/books
 
-# TODO: Figure out the whole desired setup.  
-#  - Books probably should live outside an be bind mounted inside (/srv/runstone/books?)
-#  - or may be the entire server be bind mounted from outside?
+# Expose that port on the network
+EXPOSE ${WEB2PY_PORT}
 
-# TODO: convert generation to neurodocker call after all is cool
 
 # To prevent interactive debconf during installations
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get install -y eatmydata
-
-RUN eatmydata apt-get update && echo "count 1" && \
-    eatmydata apt-get install -y --no-install-recommends \
-        git \
-        python-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
-        libpq-dev libxml2-dev libxslt1-dev
-
 # Components from requirements.txt which are available in Debian
 # Missing ones:
 #  runestone -- is the RunestoneComponents, https://pypi.org/project/runestone/, may be install from Git?
@@ -29,7 +27,17 @@ RUN eatmydata apt-get update && echo "count 1" && \
 #  sphinxcontrib-paverutils -- N/A
 #  sphinx -- we need stretch-backports
 #  pytz ... ?
-RUN eatmydata apt-get install -y --no-install-recommends \
+# A few missing ones
+#  rsync is needed when deploying a built book
+#  vim - just for pleasure of being able to do any changes right within
+#  wget - just in case
+RUN apt-get update && \
+    apt-get install -y eatmydata && \
+    eatmydata apt-get update && echo "count 1" && \
+    eatmydata apt-get install -y --no-install-recommends \
+        git \
+        python-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
+        libpq-dev libxml2-dev libxslt1-dev \
         python-diff-match-patch \
         python-lxml \
         python-numpy \
@@ -43,20 +51,9 @@ RUN eatmydata apt-get install -y --no-install-recommends \
         python-sphinx \
         python-sqlalchemy \
         python-cssselect \
-        python-oauth2client
-    
-# So it could be available at run time
-ARG WEB2PY_PORT=8080
-ENV WEB2PY_PATH=${WEB2PY_PATH}
-ENV BOOKS_PATH=${WEB2PY_APPS_PATH}/runestone/books
-EXPOSE ${WEB2PY_PORT}
-
-# A few missing ones
-#  rsync is needed when deploying a built book
-#  vim - just for pleasure of being able to do any changes right within
-#  wget - just in case
-RUN eatmydata apt-get install -y --no-install-recommends \
-        python-wheel rsync wget
+        python-oauth2client \
+        python-wheel rsync wget && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # The rest could be done and ran under a regular (well, staff for installing under /usr/local) user
@@ -74,14 +71,13 @@ RUN mkdir -p ${WEB2PY_APPS_PATH} && \
 
 
 RUN cd ${WEB2PY_APPS_PATH}/runestone && \
-    pip install --system -r requirements.txt
+    pip install --system -r requirements.txt && \
+    rm -rf ${WEB2PY_PATH}/.cache/*
 
-# TODO: various cleanups
-#RUN apt-get clean
 USER root
 WORKDIR ${WEB2PY_PATH}
 
-# Start configuration
-
+# All configuration will be done within entrypoint.sh upon initial run
+# of the container
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint.sh
 CMD /bin/bash /usr/local/sbin/entrypoint.sh
