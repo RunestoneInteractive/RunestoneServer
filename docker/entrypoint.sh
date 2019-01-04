@@ -26,8 +26,10 @@ if [ ! -e "$stamp" ]; then
     cd "$BOOKS_PATH/.."
     su -c "rsmanage initdb" runestone
     cp $WEB2PY_PATH/applications/runestone/scripts/run_scheduler.py $WEB2PY_PATH/
+
     # Let's use https
-    echo -e '\nsettings.server_type = "https://"' >> $WEB2PY_PATH/applications/runestone/models/0.py
+    # Wouldn't "just work" magically.  Requires certificates etc. Eventually!
+    # echo -e '\nsettings.server_type = "https://"' >> $WEB2PY_PATH/applications/runestone/models/0.py
     touch "$stamp"
 else
     info "Already initialized"
