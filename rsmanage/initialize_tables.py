@@ -19,9 +19,9 @@ if db(db.courses.id > 0).isempty():
     db.courses.insert(course_name='TeacherCSP', base_course='TeacherCSP', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='JavaReview', base_course='apcsareview', term_start_date=datetime.date(2000, 1, 1))
     db.courses.insert(course_name='publicpy3', base_course='pip2', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='fopp', base_course='fopp', term_start_date=datetime.date(2000, 1, 1))    
-    db.courses.insert(course_name='cppds', base_course='cppds', term_start_date=datetime.date(2000, 1, 1))        
-    db.courses.insert(course_name='webfundamentals', base_course='webfundamentals', term_start_date=datetime.date(2000, 1, 1))            
+    db.courses.insert(course_name='fopp', base_course='fopp', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='cppds', base_course='cppds', term_start_date=datetime.date(2000, 1, 1))
+    db.courses.insert(course_name='webfundamentals', base_course='webfundamentals', term_start_date=datetime.date(2000, 1, 1))
 else:
     click.echo(message="Your database already has Courses")
 
@@ -56,10 +56,15 @@ if environ.get('WEB2PY_MIGRATE', "") != 'fake':
         db.executesql('''CREATE INDEX questions_name_idx ON questions USING btree (name);''')
         db.executesql('''CREATE INDEX sub_chapters_chapter_id_idx ON sub_chapters USING btree (chapter_id);''')
         db.executesql('''CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);''')
+        db.executesql('''create index code_sid_idx on code using btree(sid)''')
+        db.executesql('''create index code_acid_idx on code using btree(acid)''')
+        db.executesql('''create index code_course_id_idx on code using btree(course_id)''')
+        db.executesql('''create index code_timestamp_idx on code using btree(timestamp)''')
+        db.executesql('''create index mult_scd_idx on mchoice_answers (div_id, course_name, sid)''')
     except:
         click.echo(message="The creation of one or more indices/constraints failed", file=None, nl=True, err=False, color='red')
         sys.exit(1)
-        
+
 if "--list_tables" in sys.argv:
     res = db.executesql("""
     SELECT table_name
