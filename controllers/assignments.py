@@ -632,9 +632,8 @@ def chooseAssignment():
 def _get_lti_record(oauth_consumer_key):
     return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
 
-def _get_course_practice_record(course_name, user_id):
-    return db((db.course_practice.course_name == course_name) &
-              (db.course_practice.auth_user_id == user_id)).select().first()
+def _get_course_practice_record(course_name):
+    return db(db.course_practice.course_name == course_name).select().first()
 
 def _get_student_practice_grade(sid, course_name):
     return db((db.practice_grades.auth_user==sid) &
@@ -845,7 +844,7 @@ def practice():
                 # send practice grade via lti, if setup for that
                 lti_record = _get_lti_record(session.oauth_consumer_key)
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
-                course_settings = _get_course_practice_record(auth.user.course_name, auth.user.id)
+                course_settings = _get_course_practice_record(auth.user.course_name)
 
                 practice_completion_count = _get_practice_completion(auth.user.id,
                                                                      auth.user.course_name,
@@ -857,7 +856,11 @@ def practice():
                     total_possible_points = question_points * max_questions
                     points_received = question_points * practice_completion_count
 
-                if lti_record and practice_grade and course_settings:
+                if lti_record and \
+                        practice_grade and \
+                        practice_grade.lis_outcome_url and \
+                        practice_grade.lis_result_sourcedid and \
+                        course_settings:
                     if spacing == 1:
                         send_lti_grade(assignment_points=max_days,
                                        score=practice_completion_count,
