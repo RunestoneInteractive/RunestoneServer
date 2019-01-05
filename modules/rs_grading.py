@@ -2,15 +2,12 @@ import datetime
 import logging
 from math import ceil
 from psycopg2 import IntegrityError
+
+from gluon import current
 from outcome_request import OutcomeRequest
 
-# When testing, the ``settings`` object isn't defined. Import it in this case.
-try:
-    logger
-except:
-    execfile('applications/runestone/models/0.py', globals())
-logger = logging.getLogger(settings.logger)
-logger.setLevel(settings.log_level)
+logger = logging.getLogger(current.settings.logger)
+logger.setLevel(current.settings.log_level)
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
