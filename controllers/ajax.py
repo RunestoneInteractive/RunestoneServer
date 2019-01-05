@@ -225,6 +225,16 @@ def runlog():    # Log errors and runs with code
                         timestamp=ts,
                         course_id=auth.user.course_id,
                         language=request.vars.lang)
+                    if request.vars.partner:
+                        # todo - validate students are in same class
+                        newcode = "# This code was shared by {}\n\n".format(sid) + code
+                        db.code.insert(sid=request.vars.partner,
+                            acid=div_id,
+                            code=newcode,
+                            emessage=error_info,
+                            timestamp=ts,
+                            course_id=auth.user.course_id,
+                            language=request.vars.lang)
                     done = True
                 except:
                     num_tries -= 1
