@@ -3,6 +3,7 @@ import datetime
 import logging
 import subprocess
 import uuid
+from bleach import clean
 from collections import Counter
 from diff_match_patch import *
 import os
@@ -612,14 +613,14 @@ def _getStudentResults(question):
         currentAnswers = []
 
         for row in res:
-            answer = row.answer
+            answer = clean(row.answer)
 
             if row.sid == currentSid:
                 currentAnswers.append(answer)
             else:
                 currentAnswers.sort()
                 resultList.append((currentSid, currentAnswers))
-                currentAnswers = [row.answer]
+                currentAnswers = [answer]
                 currentSid = row.sid
 
         currentAnswers.sort()
@@ -655,7 +656,7 @@ def getaggregateresults():
     tdata = {}
     tot = 0
     for row in result:
-        tdata[row.useinfo.act] = row[count]
+        tdata[clean(row.useinfo.act)] = row[count]
         tot += row[count]
 
     tot = float(tot)
@@ -753,7 +754,7 @@ def gettop10Answers():
                 (db.fitb_answers.course_name == course) &
                 (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, db.fitb_answers.answer.count(),
                     groupby=db.fitb_answers.answer, orderby=~db.fitb_answers.answer.count())
-        res = [{'answer':row.fitb_answers.answer, 'count':row._extra.values()[0]} for row in rows[:10] ]
+        res = [{'answer':clean(row.fitb_answers.answer), 'count':row._extra.values()[0]} for row in rows[:10] ]
     except Exception as e:
         logger.debug(e)
         res = 'error in query'
