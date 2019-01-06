@@ -31,7 +31,7 @@
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
-
+<script type="text/javascript" src="{{=URL('static', 'js/selfgrade.js')}}"></script>
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
@@ -63,6 +63,9 @@
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+
 </script>
 
 <style>
@@ -109,36 +112,36 @@
     {{pass}}
 
     {{if len(questioninfo) > 0:}}
-        <div id='questions'>
-            <style>
-                .ac_section > * {
-                    max-width: 100%;
-                }
-            </style>
-            <h3>Questions</h3>
-                {{count=0}}
-                {{for q in questioninfo:}}
-                        {{ if q['comment'] != 'ungraded':}}
-                            <div style='float:right; width:30%;'>
-                            <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-                            <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
-                            </div>
-                        {{ else: }}
-                            <div style='float:right; width:10%;'>
-                            <h5 style='text-align:center;'>Not yet graded</h5>
-                            </div>
-                        {{pass}}
-                        <div class='oneq full-width' id='{{=count}}'>
-                            <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+        <div id='questions' style='margin-left:15%;'>
+        <h3>Questions</h3>
+            {{count=0}}
+            {{for q in questioninfo:}}
+                    {{ if q['comment'] != 'ungraded':}}
+                        <div style='float:right; width:30%;'>
+                        <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+                        <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
                         </div>
+                    {{ else: }}
+                        <div style='float:right; width:10%;'>
+                        <h5 style='text-align:center;'>Not yet graded</h5>
+                        </div>
+                    {{pass}}
+                    <span><div class='oneq' id='{{=count}}' style='width:90%;'>
+                        <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+                    </div></span>
 
-                    {{count += 1}}
-                {{pass}}
+                {{count += 1}}
+            {{pass}}
 
         </div>
     {{pass}}
 </div>
-
+{{ if settings.coursera_mode: }}
+<div style="text-align:center">
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton"> Grade Me</button>
+</div>
+{{ pass }}
+</div>
 <script>
     //console.log(document.getElementsByClassName('nav nav-tabs'))
     // This script renders the html into elements in the DOM
@@ -169,6 +172,13 @@
         let change = $.parseHTML(unescapedhtml, keepScripts=true);
         $div.append(change);
     }
+{{ if settings.coursera_mode: }}
+
+    $("#gradeMeButton").on("click", function(){
+        $('#gradeMeButton').css('visibility', 'hidden');
+        selfGrade({{=assignment['id']}}, {{=student_id}})});
+{{ pass }}
+
 
 
 </script>
