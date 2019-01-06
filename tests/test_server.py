@@ -59,11 +59,14 @@ def web2py_controller(
 # Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `module <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
 @pytest.fixture(scope='module')
 def web2py_server():
+    password = 'junk_password'
     # Start the web2py server.
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
-         '--source=' + COVER_DIRS, 'web2py.py', '-a', 'junk_password',
+         '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
          '--nogui'])
+    # Save the password used.
+    web2py_server.password = password
     # Wait for the server to come up. The delay varies; this is a guess.
     time.sleep(1)
 
@@ -159,7 +162,8 @@ def runestone_db_tools(runestone_db):
 
 # Create a client for accessing the Runestone server.
 class _TestClient(WebClient):
-    def __init__(self):
+    def __init__(self, web2py_server):
+        self.web2py_server = web2py_server
         super(_TestClient, self).__init__('http://127.0.0.1:8000/runestone/',
                                           postbacks=True)
 
@@ -197,9 +201,32 @@ class _TestClient(WebClient):
 
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
-            print(self.text[:200])
-            with open(url.replace('/', '-') + '.html', 'wb') as f:
+            validation_file = url.replace('/', '-') + '.html'
+            with open(validation_file, 'wb') as f:
                 f.write(self.text.replace('\r\n', '\n'))
+            print('Validation failure saved to {}.'.format(validation_file))
+            raise
+
+        except RuntimeError as e:
+            # Provide special handling for web2py exceptions by saving the
+            # resulting traceback.
+            if e.args[0].startswith('ticket '):
+                # Create a client to access the admin interface.
+                admin_client = WebClient('http://127.0.0.1:8000/admin/',
+                                         postbacks=True)
+                # Log in.
+                admin_client.post('', data={'password':
+                                            self.web2py_server.password})
+                assert admin_client.status == 200
+                # Get the error.
+                error_code = e.args[0][len('ticket '):]
+                admin_client.get('default/ticket/' + error_code)
+                assert admin_client.status == 200
+                # Save it to a file.
+                traceback_file = url.replace('/', '-') + '_traceback.html'
+                with open(traceback_file, 'wb') as f:
+                    f.write(admin_client.text.replace('\r\n', '\n'))
+                print('Traceback saved to {}.'.format(traceback_file))
             raise
 
     def logout(self):
@@ -213,7 +240,7 @@ class _TestClient(WebClient):
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
 def test_client(web2py_server):
-    tc = _TestClient()
+    tc = _TestClient(web2py_server)
     yield tc
     tc.tearDown()
 

@@ -2,7 +2,7 @@ from gluon.scheduler import Scheduler
 import stat
 import shutil
 from os import path
-import os
+import os, os.path
 import sys
 import re
 from paver.easy import sh
@@ -88,7 +88,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     #
     # move the sourcedir/build/projectname folder into static
     #
-    shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
+    # todo check if dest is a symlink and remove it instead of calling rmtree
+    if os.path.islink(os.path.join(workingdir,'static',rvars['projectname'])):
+        os.remove(os.path.join(workingdir,'static',rvars['projectname']))
+    else:
+        shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
     shutil.move(os.path.join(sourcedir,'build',rvars['projectname']),
                 os.path.join(workingdir,'static',rvars['projectname']) )
     #

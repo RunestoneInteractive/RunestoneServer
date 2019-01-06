@@ -353,6 +353,7 @@ class DashboardDataAnalyzer(object):
         inums = [x.instructor for x in self.instructors]
         self.users.exclude(lambda x: x.id in inums)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
+        # todo:  Yikes!  Loading all of the log data for a large or even medium class is a LOT
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
             (db.auth_user.course_id == auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
             (db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status,db.auth_user.id)
