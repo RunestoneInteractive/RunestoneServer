@@ -111,7 +111,14 @@ def index():
             user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
             user['section'] = section_id
             user.update_record()
-            db.user_courses.update_or_insert(user_id=user.id,course_id=course_id)
+            # Before creating a new user, present payment or donation options.
+            if not db((db.user_courses.user_id==user.id) &
+                      (db.user_courses.course_id==course_id)).select().first():
+                # Store the current URL, so this request can be completed after creating the user.
+                session.lti_url_next = full_uri
+                auth.login_user(user)
+                redirect(URL(c='default'))
+
             if instructor:
                 db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
             else:
