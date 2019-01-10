@@ -155,6 +155,7 @@ def hsblog():
     return json.dumps(res)
 
 def runlog():    # Log errors and runs with code
+    response.headers['content-type'] = 'application/json'
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -226,15 +227,18 @@ def runlog():    # Log errors and runs with code
                         course_id=auth.user.course_id,
                         language=request.vars.lang)
                     if request.vars.partner:
-                        # todo - validate students are in same class
-                        newcode = "# This code was shared by {}\n\n".format(sid) + code
-                        db.code.insert(sid=request.vars.partner,
-                            acid=div_id,
-                            code=newcode,
-                            emessage=error_info,
-                            timestamp=ts,
-                            course_id=auth.user.course_id,
-                            language=request.vars.lang)
+                        if _same_class(sid, request.vars.partner):
+                            newcode = "# This code was shared by {}\n\n".format(sid) + code
+                            db.code.insert(sid=request.vars.partner,
+                                acid=div_id,
+                                code=newcode,
+                                emessage=error_info,
+                                timestamp=ts,
+                                course_id=auth.user.course_id,
+                                language=request.vars.lang)
+                        else:
+                            res = {'message': 'You must be enrolled in the same class as your partner'}
+                            return json.dumps(res)
                     done = True
                 except:
                     num_tries -= 1
@@ -242,7 +246,6 @@ def runlog():    # Log errors and runs with code
             if num_tries == 0:
                 raise Exception("Runlog Failed to insert into code")
 
-    response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
@@ -987,3 +990,10 @@ def get_datafile():
         file_contents = None
 
     return json.dumps(dict(data=file_contents))
+
+
+def _same_class(user1, user2):
+    user1_course = db(db.auth_user.username == user1).select(db.auth_user.course_id).first()
+    user2_course = db(db.auth_user.username == user2).select(db.auth_user.course_id).first()
+
+    return user1_course == user2_course
