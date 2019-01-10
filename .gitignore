@@ -55,3 +55,4 @@ tests/test_book/build_info
 *.egg-info/
 *.egg
 AC_scripts
+Pipfile.lock
