@@ -54,3 +54,4 @@ tests/test_book/build_info
 .vscode/*
 *.egg-info/
 *.egg
+AC_scripts
