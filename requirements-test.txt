@@ -3,3 +3,5 @@ mock
 py_w3c
 pytest
 contextlib2
+# Install the development version of the Runstone Components, rather than the released version.
+https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
