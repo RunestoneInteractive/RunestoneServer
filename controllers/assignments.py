@@ -511,7 +511,11 @@ def doAssignment():
             return redirect(URL('assignments', 'chooseAssignment'))
 
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
-                   (db.assignment_questions.question_id == db.questions.id)) \
+                   (db.assignment_questions.question_id == db.questions.id) & \
+                   (db.chapters.chapter_label == db.questions.chapter) & \
+                   (db.chapters.course_id == course.course_name) & \
+                   (db.sub_chapters.chapter_id == db.chapters.id) & \
+                   (db.sub_chapters.sub_chapter_label == db.questions.subchapter)) \
         .select(db.questions.name,
                 db.questions.htmlsrc,
                 db.questions.id,
@@ -520,8 +524,9 @@ def doAssignment():
                 db.assignment_questions.points,
                 db.assignment_questions.activities_required,
                 db.assignment_questions.reading_assignment,
+                db.chapters.chapter_name,
+                db.sub_chapters.sub_chapter_name,
                 orderby=db.assignment_questions.sorting_priority)
-
 
     try:
         db.useinfo.insert(sid=auth.user.username,act='viewassignment',div_id=assignment.name,
@@ -565,15 +570,18 @@ def doAssignment():
             comment=comment,
             chapter=q.questions.chapter,
             subchapter=q.questions.subchapter,
+            chapter_name=q.chapters.chapter_name,
+            subchapter_name=q.sub_chapters.sub_chapter_name,
             name=q.questions.name,
             activities_required=q.assignment_questions.activities_required
         )
         if q.assignment_questions.reading_assignment:
             # add to readings
-            if q.questions.chapter not in readings:
+            ch_name = q.chapters.chapter_name
+            if ch_name not in readings:
                 # add chapter info
                 completion = db((db.user_chapter_progress.user_id == auth.user.id) & \
-                                (db.user_chapter_progress.chapter_id == q.questions.chapter)).select().first()
+                                (db.user_chapter_progress.chapter_id == ch_name)).select().first()
                 if not completion:
                     status = 'notstarted'
                 elif completion.status == 1:
@@ -582,7 +590,7 @@ def doAssignment():
                     status = 'started'
                 else:
                     status = 'notstarted'
-                readings[q.questions.chapter] = dict(status=status, subchapters=[])
+                readings[ch_name] = dict(status=status, subchapters=[])
 
             # add subchapter info
             # add completion status to info
@@ -599,7 +607,7 @@ def doAssignment():
                 status = 'notstarted'
             info['status'] = status
 
-            readings[q.questions.chapter]['subchapters'].append(info)
+            readings[ch_name]['subchapters'].append(info)
             readings_score += info['score']
 
         else:
