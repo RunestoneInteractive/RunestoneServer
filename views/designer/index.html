@@ -23,6 +23,11 @@
         return false;
     }
 
+    if (! /^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(x)) {
+        alert("Error: Your project name can only contain ASCII letters digits and - or _");
+        return false;
+    }
+
     if (basecourse == "") {
         alert('Error: You must select a book for your course')
         return false;
@@ -71,14 +76,14 @@
 
         <div class="radio">
           <label>
-            <input type="radio" name="coursetype" value="pythonds" /> 
+            <input type="radio" name="coursetype" value="pythonds" />
             Problem Solving with Algorithms and Data Structures using Python, Brad Miller and David Ranum
           </label>
         </div>
 
         <div class="radio">
           <label>
-            <input type="radio" name="coursetype" value="fopp" /> 
+            <input type="radio" name="coursetype" value="fopp" />
             Foundations of Python Programming
           </label>
         </div>
@@ -113,23 +118,23 @@
 
           <div class="radio">
             <label>
-              <input type="radio" name="coursetype" value="cppds" /> 
+              <input type="radio" name="coursetype" value="cppds" />
               Problem Solving with Algorithms and Data Structures using C++, Brad Miller, David Ranum and Jan Pearce
             </label>
           </div>
-  
+
         <!-- <label>
           OR
         </label>
 
         <div class="radio">
           <label>
-            <input type="radio" name="coursetype" value="custom" /> 
+            <input type="radio" name="coursetype" value="custom" />
             Build a Custom Course
           </label>
         </div>  -->
       </div>
-      
+
       <br />
 
       <div class='form-group'>

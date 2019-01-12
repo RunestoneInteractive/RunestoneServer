@@ -21,7 +21,7 @@ function gradeIndividualItem() {
         var s_column = document.getElementById("gradingcolumn1");
         if (s_column.selectedIndex != -1) {
             //make sure they've selected a student from column 1
-            var student = s_column.options[s_column.selectedIndex].value;
+            var student = s_column.options[s_column.selectedIndex].value; // TODO .value should be sid not name
             var student_dict = students;
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
@@ -571,7 +571,7 @@ function pickedStudents(column) {
         var key = keys[i];
         var option = document.createElement("option");
         option.text = studentslist[key];
-        option.value = studentslist[key];
+        option.value = studentslist[key]; // TODO: just store key here
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
 
