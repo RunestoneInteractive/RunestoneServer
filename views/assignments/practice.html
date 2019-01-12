@@ -206,8 +206,12 @@
                  of {{=max_days}} days of your review practice.
                  {{ else: }}
                  answered the recommended {{=questions_to_complete_day}} questions correctly on
-                 {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}} out of
-                 {{=max_days}} recommended days of your review practice.
+                 {{=practice_completion_count}} day{{='' if practice_completion_count == 1 else 's'}}
+                    {{ if not settings.coursera_mode: }}
+                        out of {{=max_days}} days of your review practice.
+                    {{ else: }}
+                        .
+                    {{ pass }}
                  {{ pass }}
              </p>
          {{ else: }}
@@ -215,24 +219,30 @@
                  {{ if practice_graded == 1: }}
                  received {{=points_received}} point{{='' if points_received == 1 else 's'}} out of
                  {{=total_possible_points}} possible point{{='' if total_possible_points == 1 else 's'}} for answering
-                 {{=practice_completion_count}} question{{='' if practice_completion_count == 1 else 's'}} out
-                 of {{=max_questions}} questions to complete your practice.
+                 {{=practice_completion_count}} question{{='' if practice_completion_count == 1 else 's'}}
+                    {{ if not settings.coursera_mode: }}
+                        out of {{=max_questions}} questions to complete your practice.
+                    {{ else: }}
+                        .
+                    {{ pass }}
                  {{ else: }}
                  answered {{=practice_completion_count}} question{{='' if practice_completion_count == 1 else 's'}}.
                  {{ pass }}
                  </p>
          {{ pass }}
-         {{ if remaining_days > 0: }}
-            <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
-         {{ else: }}
-            <p>The practicing period this semester is over, though you can continue practicing
-             {{ if practice_graded == 1: }}
-                without receiving any extra points.
+        {{if not settings.coursera_mode:}}
+             {{ if remaining_days > 0: }}
+                <p>{{=remaining_days}} days are remaining to the end of the practicing period this semester.</p>
              {{ else: }}
-                and improve your long-term learning.
+                <p>The practicing period this semester is over, though you can continue practicing
+                 {{ if practice_graded == 1: }}
+                    without receiving any extra points.
+                 {{ else: }}
+                    and improve your long-term learning.
+                 {{ pass }}
+                </p>
              {{ pass }}
-            </p>
-         {{ pass }}
+        {{ pass }}
     </div>
     {{ if flashcard_count > 0: }}
          {{ if practice_today_left == 0 and not q: }}
