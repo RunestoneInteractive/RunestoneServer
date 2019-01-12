@@ -93,11 +93,13 @@
                     <li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
                     <ul>
                     {{for r in readings[reading]['subchapters']:}}
-                        <li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
-                        {{if r['comment'] != 'ungraded':}}
-                            </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
-                        {{else:}}
-                            </br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
+                        <li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter_name']}}</a>
+                        {{if r['points'] > 0:}}
+                            {{if r['comment'] != 'ungraded':}}
+                                </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
+                            {{else:}}
+                                </br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
+                            {{pass}}
                         {{pass}}
                     </li>
 
