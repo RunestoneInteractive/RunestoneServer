@@ -10,11 +10,8 @@ def index():
 
     myrecord = None
     consumer = None
-    params = None
     masterapp = None
-    oauth_error = None
     userinfo = None
-    logged_in = False
 
     user_id = request.vars.get('user_id', None)
     last_name = request.vars.get('lis_person_name_family', None)
@@ -50,6 +47,8 @@ def index():
         userinfo = dict()
         userinfo['first_name'] = first_name
         userinfo['last_name'] = last_name
+        # In the `Canvas Student View <https://community.canvaslms.com/docs/DOC-13122-415261153>` as of 7-Jan-2019, the ``lis_person_contact_email_primary`` is an empty string. In this case, use the userid instead.
+        email = email or (user_id + '@junk.com')
         userinfo['email'] = email
 
     key = request.vars.get('oauth_consumer_key', None)
@@ -62,7 +61,7 @@ def index():
         else:
             session.oauth_consumer_key = key
     # print(1, myrecord, userinfo)
-    if myrecord is not None : 
+    if myrecord is not None :
         masterapp = myrecord.application
         if len(masterapp) < 1 :
             masterapp = 'welcome'
@@ -73,9 +72,12 @@ def index():
         oauth_server.add_signature_method(oauth.OAuthSignatureMethod_PLAINTEXT())
         oauth_server.add_signature_method(oauth.OAuthSignatureMethod_HMAC_SHA1())
 
-        full_uri = settings.lti_uri
-        oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None, dict(request.vars),
-                                                        query_string=request.env.query_string)
+        # Use ``setting.lti_uri`` if it's defined; otherwise, use the current URI (which must be built from its components). Don't include query parameters, which causes a filure in OAuth security validation.
+        full_uri = settings.get('lti_uri',
+          '{}://{}{}'.format(request.env.wsgi_url_scheme,
+                             request.env.http_host, request.url))
+        oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None,
+          dict(request.vars), query_string=request.env.query_string)
 
         try:
             # print("secret: ", myrecord.secret)
@@ -98,33 +100,31 @@ def index():
         # print(userinfo)
         user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
         # print(user)
-        if user is None :
+        if user is None:
             return dict(logged_in=False, lti_errors=["Unable to create user record", request.vars],
                         masterapp=masterapp)
-        else:
-            # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
-            course_id = request.vars.get('custom_course_id', None)
-            section_id = request.vars.get('custom_section_id', None)
-            if course_id:
-                user['course_id'] = course_id
-                user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
-                user['section'] = section_id
-                user.update_record()
-                db.user_courses.update_or_insert(user_id=user.id,course_id=course_id)
-                if instructor:
-                    db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
-                else:
-                    db((db.course_instructor.instructor == user.id) & (db.course_instructor.course == course_id)).delete()
-            if section_id:
-                # set the section in the section_users table
-                # test this
-                db.section_users.update_or_insert(db.section_users.auth_user == user['id'], auth_user=user['id'], section = section_id)
+        # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
+        course_id = request.vars.get('custom_course_id', None)
+        section_id = request.vars.get('custom_section_id', None)
+        if course_id:
+            user['course_id'] = course_id
+            user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
+            user['section'] = section_id
+            user.update_record()
+            db.user_courses.update_or_insert(user_id=user.id,course_id=course_id)
+            if instructor:
+                db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
+            else:
+                db((db.course_instructor.instructor == user.id) & (db.course_instructor.course == course_id)).delete()
+        if section_id:
+            # set the section in the section_users table
+            # test this
+            db.section_users.update_or_insert(db.section_users.auth_user == user['id'], auth_user=user['id'], section = section_id)
 
     #    print(user, type(user))
     #    print("Logging in...")
         auth.login_user(user)
     #    print("Logged in...")
-        logged_in = True
 
     if assignment_id:
         # save the guid and url for reporting back the grade
