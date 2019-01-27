@@ -555,6 +555,7 @@ def doAssignment():
         if assignment['released']:
             # get score and comment
             grade = db((db.question_grades.sid == auth.user.username) &
+                       (db.question_grades.course_name == auth.user.course_name) &
                        (db.question_grades.div_id == q.questions.name)).select().first()
             if grade:
                 score, comment = grade.score, grade.comment
