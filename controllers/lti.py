@@ -3,6 +3,12 @@ import uuid
 from applications.runestone.modules import oauth
 from applications.runestone.modules import oauth_store
 
+
+# For some reason, URL query parameters are being processed twice by Canvas and returned as a list, like [23, 23]. So, just take the first element in the list.
+def _param_converter(param):
+    return param[0] if isinstance(param, list) else param
+
+
 def index():
 
     #print("In imslti.py")
@@ -28,11 +34,7 @@ def index():
     outcome_url=request.vars.get('lis_outcome_service_url', None)
     # print(request.vars)
     # print(result_source_did, outcome_url)
-    assignment_id=request.vars.get('assignment_id', None)
-    if assignment_id and type(assignment_id) == type([]):
-        # for some reason, url query parameters are being processed twice by Canvas and returned as a list, like [23, 23]
-        # so just take the first element in the list
-        assignment_id=assignment_id[0]
+    assignment_id = _param_converter(request.vars.get('assignment_id', None))
     practice = request.vars.get('practice', None)
 
     if user_id is None :
@@ -103,9 +105,9 @@ def index():
         if user is None:
             return dict(logged_in=False, lti_errors=["Unable to create user record", request.vars],
                         masterapp=masterapp)
-        # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone
-        course_id = request.vars.get('custom_course_id', None)
-        section_id = request.vars.get('custom_section_id', None)
+        # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
+        course_id = _param_converter(request.vars.get('custom_course_id', None))
+        section_id = _param_converter(request.vars.get('custom_section_id', None))
         if course_id:
             user['course_id'] = course_id
             user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
