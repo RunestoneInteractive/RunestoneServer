@@ -137,11 +137,16 @@ def index():
         redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
 
     elif practice:
-        db.practice_grades.update_or_insert((db.practice_grades.auth_user == user.id),
-                                   auth_user=user.id,
-                                   lis_result_sourcedid=result_source_did,
-                                   lis_outcome_url=outcome_url,
-                                   course_name=getCourseNameFromId(course_id))
+        if outcome_url and result_source_did:
+            db.practice_grades.update_or_insert((db.practice_grades.auth_user == user.id),
+                                                auth_user=user.id,
+                                                lis_result_sourcedid=result_source_did,
+                                                lis_outcome_url=outcome_url,
+                                                course_name=getCourseNameFromId(course_id))
+        else: # don't overwrite outcome_url and result_source_did
+            db.practice_grades.update_or_insert((db.practice_grades.auth_user == user.id),
+                                                auth_user=user.id,
+                                                course_name=getCourseNameFromId(course_id))
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
