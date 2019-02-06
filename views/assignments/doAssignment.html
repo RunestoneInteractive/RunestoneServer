@@ -79,7 +79,11 @@
     <h1 style='text-align:center'>{{=assignment['name']}}</h1>
     <h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}</h2>
     <span style="float:right; margin-right:1cm;">
-        {{='Score: {} of {} = {:2.1f}%'.format(questions_score + readings_score, assignment['points'], 100*(questions_score + readings_score)/assignment['points'])}}
+        {{if assignment['points'] > 0:}}
+            {{='Score: {} of {} = {:2.1f}%'.format(questions_score + readings_score, assignment['points'], 100*(questions_score + readings_score)/assignment['points'])}}
+        {{else:}}
+            This assignment is ungraded
+        {{pass}}
     </span>
     <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
