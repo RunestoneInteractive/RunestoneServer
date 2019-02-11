@@ -68,6 +68,9 @@
     </form>
   </div>
 
+  <div id="autogradingprogress">
+  </div>
+
   <div id="assignmentTotalform" style="text-align: center; visibility: hidden; background-color: rgba(219,103,14,.71); margin: 10px; padding: 5px; border-radius: 10px;">
     <strong>Override student score for whole assignment.</strong>
     <form>
@@ -136,7 +139,7 @@
   var assignmentids = JSON.parse(document.getElementById("getassignmentids").innerHTML);
   var assignment_deadlines = JSON.parse(document.getElementById("getassignment_deadlines").innerHTML);
   var question_points = JSON.parse(document.getElementById("getquestion_points").innerHTML);
-  
+
   $('#autogradingform').submit(function(event) {
     event.preventDefault();
     $("#autogradesubmit").prop("disabled", true);
