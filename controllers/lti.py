@@ -49,7 +49,7 @@ def index():
         userinfo = dict()
         userinfo['first_name'] = first_name
         userinfo['last_name'] = last_name
-        # In the `Canvas Student View <https://community.canvaslms.com/docs/DOC-13122-415261153>` as of 7-Jan-2019, the ``lis_person_contact_email_primary`` is an empty string. In this case, use the userid instead.
+        # In the `Canvas Student View <https://community.canvaslms.com/docs/DOC-13122-415261153>`_ as of 7-Jan-2019, the ``lis_person_contact_email_primary`` is an empty string. In this case, use the userid instead.
         email = email or (user_id + '@junk.com')
         userinfo['email'] = email
 
@@ -96,11 +96,15 @@ def index():
         userinfo['username'] = email
         # print(db.auth_user.password.validate('1C5CHFA_enUS503US503'))
         # pw = db.auth_user.password.validate('2C5CHFA_enUS503US503')[0];
-        pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
-    #    print(pw)
-        userinfo['password'] = pw
-        # print(userinfo)
-        user = auth.get_or_create_user(userinfo, update_fields=['email', 'first_name', 'last_name', 'password'])
+        # Only assign a password if we're creating the user.
+        update_fields = ['email', 'first_name', 'last_name']
+        if not db(db.auth_user.username == userinfo['username']).select(db.auth_user.id).first():
+            pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
+            # print(pw)
+            userinfo['password'] = pw
+            # print(userinfo)
+            update_fields.append('password')
+        user = auth.get_or_create_user(userinfo, update_fields=update_fields)
         # print(user)
         if user is None:
             return dict(logged_in=False, lti_errors=["Unable to create user record", request.vars],
