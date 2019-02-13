@@ -117,7 +117,17 @@ def index():
             user['course_name'] = getCourseNameFromId(course_id)    # need to set course_name because calls to verifyInstructor use it
             user['section'] = section_id
             user.update_record()
-            # Before creating a new user, present payment or donation options.
+
+            # Update instructor status.
+            if instructor:
+                # Give the instructor free access to the book.
+                db.user_courses.update_or_insert(user_id=user.id, course_id=course_id)
+                db.course_instructor.update_or_insert(instructor=user.id, course=course_id)
+            else:
+                db((db.course_instructor.instructor == user.id) &
+                   (db.course_instructor.course == course_id)).delete()
+
+            # Before creating a new user_courses record, present payment or donation options.
             if not db((db.user_courses.user_id==user.id) &
                       (db.user_courses.course_id==course_id)).select().first():
                 # Store the current URL, so this request can be completed after creating the user.
@@ -125,10 +135,6 @@ def index():
                 auth.login_user(user)
                 redirect(URL(c='default'))
 
-            if instructor:
-                db.course_instructor.update_or_insert(instructor = user.id, course = course_id)
-            else:
-                db((db.course_instructor.instructor == user.id) & (db.course_instructor.course == course_id)).delete()
         if section_id:
             # set the section in the section_users table
             # test this
