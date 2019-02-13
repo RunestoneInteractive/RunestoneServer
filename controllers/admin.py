@@ -52,6 +52,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     video=[],
     youtube=[],
     poll=[],
+    reveal=[],
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS
 )
