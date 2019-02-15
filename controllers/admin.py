@@ -33,7 +33,8 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     youtube=['interact'],
     poll=['interact'],
     page=['interact'],
-    showeval=['interact']
+    showeval=['interact'],
+    reveal = []
 )
 
 ALL_WHICH_OPTIONS = ['first_answer', 'last_answer', 'best_answer']
@@ -51,6 +52,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     video=[],
     youtube=[],
     poll=[],
+    reveal=[],
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS
 )
@@ -723,18 +725,18 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
-    return dict(assignmentinfo=json.dumps(assignments), students=searchdict, 
-                chapters=json.dumps(chapter_labels), 
+    return dict(assignmentinfo=json.dumps(assignments), students=searchdict,
+                chapters=json.dumps(chapter_labels),
                 gradingUrl = URL('assignments', 'get_problem'),
-                autogradingUrl = URL('assignments', 'autograde'), 
+                autogradingUrl = URL('assignments', 'autograde'),
                 gradeRecordingUrl = URL('assignments', 'record_grade'),
-                calcTotalsURL = URL('assignments', 'calculate_totals'), 
+                calcTotalsURL = URL('assignments', 'calculate_totals'),
                 setTotalURL=URL('assignments', 'record_assignment_score'),
-                getCourseStudentsURL = URL('admin', 'course_students'), 
+                getCourseStudentsURL = URL('admin', 'course_students'),
                 get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
-                course_id = auth.user.course_name, 
-                assignmentids=json.dumps(assignmentids), 
-                assignment_deadlines=json.dumps(assignment_deadlines), 
+                course_id = auth.user.course_name,
+                assignmentids=json.dumps(assignmentids),
+                assignment_deadlines=json.dumps(assignment_deadlines),
                 question_points=json.dumps(question_points)
                 )
 
@@ -776,7 +778,7 @@ def backup():
 def removeStudents():
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
-    answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers', 
+    answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers',
                      'dragndrop_answers', 'fitb_answers','parsons_answers',
                      'shortanswer_answers']
 
@@ -801,9 +803,9 @@ def removeStudents():
                 (db.useinfo.course_id == auth.user.course_name)).update(course_id=baseCourseName)
             for tbl in answer_tables:
                 db( (db[tbl].sid == sid) & (db[tbl].course_name == auth.user.course_name)).update(course_name=baseCourseName)
-            db((db.code.sid == sid) & 
+            db((db.code.sid == sid) &
                (db.code.course_id == auth.user.course_id)).update(course_id=baseCourseID)
-            db((db.acerror_log.sid == sid) & 
+            db((db.acerror_log.sid == sid) &
                (db.acerror_log.course_id == auth.user.course_name)).update(course_id=baseCourseName)
             # leave user_chapter_progress and user_sub_chapter_progress alone for now.
 

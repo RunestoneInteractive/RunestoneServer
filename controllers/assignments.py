@@ -510,7 +510,11 @@ def doAssignment():
             return redirect(URL('assignments', 'chooseAssignment'))
 
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
-                   (db.assignment_questions.question_id == db.questions.id)) \
+                   (db.assignment_questions.question_id == db.questions.id) & \
+                   (db.chapters.chapter_label == db.questions.chapter) & \
+                   (db.chapters.course_id == course.course_name) & \
+                   (db.sub_chapters.chapter_id == db.chapters.id) & \
+                   (db.sub_chapters.sub_chapter_label == db.questions.subchapter)) \
         .select(db.questions.name,
                 db.questions.htmlsrc,
                 db.questions.id,
@@ -519,8 +523,9 @@ def doAssignment():
                 db.assignment_questions.points,
                 db.assignment_questions.activities_required,
                 db.assignment_questions.reading_assignment,
+                db.chapters.chapter_name,
+                db.sub_chapters.sub_chapter_name,
                 orderby=db.assignment_questions.sorting_priority)
-
 
     try:
         db.useinfo.insert(sid=auth.user.username,act='viewassignment',div_id=assignment.name,
@@ -549,6 +554,7 @@ def doAssignment():
         if assignment['released']:
             # get score and comment
             grade = db((db.question_grades.sid == auth.user.username) &
+                       (db.question_grades.course_name == auth.user.course_name) &
                        (db.question_grades.div_id == q.questions.name)).select().first()
             if grade:
                 score, comment = grade.score, grade.comment
@@ -564,15 +570,18 @@ def doAssignment():
             comment=comment,
             chapter=q.questions.chapter,
             subchapter=q.questions.subchapter,
+            chapter_name=q.chapters.chapter_name,
+            subchapter_name=q.sub_chapters.sub_chapter_name,
             name=q.questions.name,
             activities_required=q.assignment_questions.activities_required
         )
         if q.assignment_questions.reading_assignment:
             # add to readings
-            if q.questions.chapter not in readings:
+            ch_name = q.chapters.chapter_name
+            if ch_name not in readings:
                 # add chapter info
                 completion = db((db.user_chapter_progress.user_id == auth.user.id) & \
-                                (db.user_chapter_progress.chapter_id == q.questions.chapter)).select().first()
+                                (db.user_chapter_progress.chapter_id == ch_name)).select().first()
                 if not completion:
                     status = 'notstarted'
                 elif completion.status == 1:
@@ -581,7 +590,7 @@ def doAssignment():
                     status = 'started'
                 else:
                     status = 'notstarted'
-                readings[q.questions.chapter] = dict(status=status, subchapters=[])
+                readings[ch_name] = dict(status=status, subchapters=[])
 
             # add subchapter info
             # add completion status to info
@@ -598,7 +607,7 @@ def doAssignment():
                 status = 'notstarted'
             info['status'] = status
 
-            readings[q.questions.chapter]['subchapters'].append(info)
+            readings[ch_name]['subchapters'].append(info)
             readings_score += info['score']
 
         else:
@@ -638,9 +647,8 @@ def chooseAssignment():
 def _get_lti_record(oauth_consumer_key):
     return db(db.lti_keys.consumer == oauth_consumer_key).select().first()
 
-def _get_course_practice_record(course_name, user_id):
-    return db((db.course_practice.course_name == course_name) &
-              (db.course_practice.auth_user_id == user_id)).select().first()
+def _get_course_practice_record(course_name):
+    return db(db.course_practice.course_name == course_name).select().first()
 
 def _get_student_practice_grade(sid, course_name):
     return db((db.practice_grades.auth_user==sid) &
@@ -851,7 +859,7 @@ def practice():
                 # send practice grade via lti, if setup for that
                 lti_record = _get_lti_record(session.oauth_consumer_key)
                 practice_grade = _get_student_practice_grade(auth.user.id, auth.user.course_name)
-                course_settings = _get_course_practice_record(auth.user.course_name, auth.user.id)
+                course_settings = _get_course_practice_record(auth.user.course_name)
 
                 practice_completion_count = _get_practice_completion(auth.user.id,
                                                                      auth.user.course_name,
@@ -863,7 +871,11 @@ def practice():
                     total_possible_points = question_points * max_questions
                     points_received = question_points * practice_completion_count
 
-                if lti_record and practice_grade and course_settings:
+                if lti_record and \
+                        practice_grade and \
+                        practice_grade.lis_outcome_url and \
+                        practice_grade.lis_result_sourcedid and \
+                        course_settings:
                     if spacing == 1:
                         send_lti_grade(assignment_points=max_days,
                                        score=practice_completion_count,
