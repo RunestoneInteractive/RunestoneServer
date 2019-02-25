@@ -36,8 +36,6 @@ node_modules
 /test
 */_static/blockly*.html
 /static/*
-tests/test_book/build
-tests/test_book/build_info
 # except
 !/static/_static
 !/static/_sources
