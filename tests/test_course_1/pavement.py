@@ -11,11 +11,13 @@ from socket import gethostname
 sys.path.append(os.getcwd())
 
 # The project name, for use below.
-project_name = "test_course_1"
+project_name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
+# True if this project uses Runestone services.
+use_services = True
 # The root directory for ``runestone serve``.
 serving_dir = "./build/" + project_name
 # The destination directory for ``runestone deploy``.
-dest = "../../static"
+dest = "./published"
 
 options(
     sphinx = Bunch(docroot=".",),
@@ -25,23 +27,25 @@ options(
         sourcedir="_sources",
         outdir=serving_dir,
         confdir=".",
-        template_args={'course_id': project_name,
-                       'login_required':'true',
-                       'appname': 'runestone',
+        template_args={'login_required':'true',
                        'loglevel': 10,
-                       'course_url': 'http://127.0.0.1:8000',
-                       'use_services': 'true',
                        'python3': 'false',
                        'dburl': 'postgresql://user:password@localhost/runestone',
                        'default_ac_lang': 'python',
-                       'basecourse': 'test_course_1',
                        'jobe_server': 'http://jobe2.cosc.canterbury.ac.nz',
                        'proxy_uri_runs': '/jobe/index.php/restapi/runs/',
                        'proxy_uri_files': '/jobe/index.php/restapi/files/',
                        'downloads_enabled': 'false',
                        'enable_chatcodes': 'False',
-                       'allow_pairs': 'False'
-                        }
+                       'allow_pairs': 'False',
+
+                       'use_services': use_services,
+                       'basecourse': project_name,
+                       # If ``use_services`` is 'true', then the following values are ignored, since they're provided by the server.
+                       'course_id': project_name,
+                       'appname': 'runestone',
+                       'course_url': '',
+                      }
     )
 )
 
