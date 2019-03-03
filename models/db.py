@@ -84,6 +84,7 @@ db.define_table('courses',
   Field('base_course', 'string'),
   Field('python3', type='boolean', default=True),
   Field('login_required', type='boolean', default=True),
+  Field('allow_pairs', type='boolean', default=False),
   migrate='runestone_courses.table'
 )
 
