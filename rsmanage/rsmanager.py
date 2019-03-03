@@ -195,7 +195,7 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
             login_required = 'T'
 
         if not allow_pairs:
-            allow_pairs = 'T' if click.confirm("Enable pair programming support", default='F') else 'T'
+            allow_pairs = 'T' if click.confirm("Enable pair programming support", default=False) else 'F'
         else:
             allow_pairs = 'F'
 
