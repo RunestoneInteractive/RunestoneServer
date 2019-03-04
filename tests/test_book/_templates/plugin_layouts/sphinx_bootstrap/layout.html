@@ -11,7 +11,7 @@
     '_static'+'/processing-1.4.1.min.js',
     '_static'+'/jquery.hotkey.js',
     '_static'+'/jquery-migrate-1.2.1.min.js',
-    '_static'+'/presenter_mode.js',    
+    '_static'+'/presenter_mode.js',
   ]
 %}
 
@@ -52,11 +52,11 @@
 
       <div>
         <a class="brand-logo" style='background: transparent url("{{pathto('_static/img/logo_small.png', 1)}}") no-repeat 0px 0px;' href="/{{appname}}/default/user/login">&nbsp; </a>
-        <a class="navbar-brand" href="{{ pathto(master_doc) }}">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
+        <a class="navbar-brand" href="{{ pathto(master_doc) }}" aria-label="index-page">{% if theme_navbar_title -%}{{ theme_navbar_title|e }}{%- else -%}{{ project|e }}{%- endif -%}</a>
       </div>
     </div>
 
-     
+
 
     <div class="navbar-collapse collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-right" >
@@ -106,9 +106,9 @@
           </a>
           <ul class='dropdown-menu'>
             {% if 'overview' in course_id %}
-                <li><a href='/{{appname}}/static/{{course_id}}/overview.html'>Table of Contents</a></li>
+                <li><a href='/{{appname}}/static/{{course_id}}/overview.html' aria-label="index-page">Table of Contents</a></li>
             {% else: %}
-                <li><a href='{{ pathto(master_doc) }}'>Table of Contents</a></li>
+                <li><a href='{{ pathto(master_doc) }}' aria-label="index-page">Table of Contents</a></li>
             {% endif %}
             <li><a href='/{{appname}}/static/{{course_id}}/genindex.html'>Book Index</a></li>
             <li class="divider"></li>
@@ -209,7 +209,7 @@
           <li>{% include "sourcelink.html" %}</li>
         {% endif %}
       </ul>
-      
+
     </div>
   </div>
 </div>
@@ -218,7 +218,7 @@
 {%- block extrahead %}
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<meta content='width=device-width, initial-scale=1.0' name='viewport' />
 <link rel="shortcut icon" href="/{{appname}}/static/favicon.ico" type="image/ico" />
 
 <script type="text/javascript">
@@ -241,6 +241,7 @@
   eBookConfig.proxyuri_files = '{{proxy_uri_files}}';
   eBookConfig.downloadsEnabled = {{downloads_enabled}};
   eBookConfig.enable_chatcodes = {{enable_chatcodes}} ? {{ enable_chatcodes }} : false;
+  eBookConfig.allow_pairs = {{allow_pairs}} ? {{allow_pairs}} : false;
 </script>
 
 <div id="fb-root"></div>

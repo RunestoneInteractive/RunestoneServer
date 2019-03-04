@@ -111,8 +111,7 @@ rst_prolog = (
 # requires **all** the following:
 #
 # - The use of Runestone services (``eBookConfig.useRunestoneServices === true``)
-# - A valid login (``eBookConfig.loginRequired === true``)
-# - Logging enabled (``eBookConfig.logLevel  > 0``)
+# - Logging enabled (``eBookConfig.logLevel > 0``)
 #
 # The first two conditions cause the ``RunestoneBase.logBookEvent`` in ``runestonebase.js`` to post a student response to the server. The last conditions ensures that ``hsblog`` in ``ajax.py`` on the server will return a response containing grading information.
 runestone_server_side_grading = True
