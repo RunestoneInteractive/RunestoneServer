@@ -35,10 +35,17 @@ config = environ.get("WEB2PY_CONFIG", "NOT SET")
 
 if config == "production":
     settings.database_uri = environ["DBURL"]
+    # Set these
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_SECRET_KEY')
 elif config == "development":
     settings.database_uri = environ.get("DEV_DBURL")
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_DEV_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_DEV_SECRET_KEY')
 elif config == "test":
     settings.database_uri = environ.get("TEST_DBURL")
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_TEST_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_TEST_SECRET_KEY')
 else:
     print("To configure web2py you should set up both WEB2PY_CONFIG and")
     print("XXX_DBURL values in your environment -- See README for more detail")
