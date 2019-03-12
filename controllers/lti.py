@@ -10,10 +10,6 @@ def _param_converter(param):
 
 
 def index():
-
-    #print("In imslti.py")
-#    print(dict(request.vars))
-
     myrecord = None
     consumer = None
     masterapp = None
@@ -32,8 +28,6 @@ def index():
                  ("TeachingAssistant" in request.vars.get('roles', []))
     result_source_did=request.vars.get('lis_result_sourcedid', None)
     outcome_url=request.vars.get('lis_outcome_service_url', None)
-    # print(request.vars)
-    # print(result_source_did, outcome_url)
     assignment_id = _param_converter(request.vars.get('assignment_id', None))
     practice = request.vars.get('practice', None)
 
@@ -56,18 +50,15 @@ def index():
     key = request.vars.get('oauth_consumer_key', None)
     if key is not None:
         myrecord = db(db.lti_keys.consumer==key).select().first()
-    #    print(myrecord, type(myrecord))
         if myrecord is None :
             return dict(logged_in=False, lti_errors=["Could not find oauth_consumer_key", request.vars],
                         masterapp=masterapp)
         else:
             session.oauth_consumer_key = key
-    # print(1, myrecord, userinfo)
     if myrecord is not None :
         masterapp = myrecord.application
         if len(masterapp) < 1 :
             masterapp = 'welcome'
-    #    print("masterapp", masterapp)
         session.connect(request, response, masterapp=masterapp, db=db)
 
         oauth_server = oauth.OAuthServer(oauth_store.LTI_OAuthDataStore(myrecord.consumer,myrecord.secret))
@@ -82,10 +73,7 @@ def index():
           dict(request.vars), query_string=request.env.query_string)
 
         try:
-            # print("secret: ", myrecord.secret)
-            # print("Incoming request from:", full_uri)
             consumer, token, params = oauth_server.verify_request(oauth_request)
-            # print("Verified.")
         except oauth.OAuthError, err:
             return dict(logged_in=False, lti_errors=["OAuth Security Validation failed:"+err.message, request.vars],
                         masterapp=masterapp)
@@ -94,18 +82,13 @@ def index():
     # Time to create / update / login the user
     if userinfo and (consumer is not None):
         userinfo['username'] = email
-        # print(db.auth_user.password.validate('1C5CHFA_enUS503US503'))
-        # pw = db.auth_user.password.validate('2C5CHFA_enUS503US503')[0];
         # Only assign a password if we're creating the user.
         update_fields = ['email', 'first_name', 'last_name']
         if not db(db.auth_user.username == userinfo['username']).select(db.auth_user.id).first():
             pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
-            # print(pw)
             userinfo['password'] = pw
-            # print(userinfo)
             update_fields.append('password')
         user = auth.get_or_create_user(userinfo, update_fields=update_fields)
-        # print(user)
         if user is None:
             return dict(logged_in=False, lti_errors=["Unable to create user record", request.vars],
                         masterapp=masterapp)
@@ -140,14 +123,10 @@ def index():
             # test this
             db.section_users.update_or_insert(db.section_users.auth_user == user['id'], auth_user=user['id'], section = section_id)
 
-    #    print(user, type(user))
-    #    print("Logging in...")
         auth.login_user(user)
-    #    print("Logged in...")
 
     if assignment_id:
         # save the guid and url for reporting back the grade
-        # print(user.id, assignment_id)
         db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
                                    auth_user=user.id,
                                    assignment=assignment_id,
@@ -169,4 +148,3 @@ def index():
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
     redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
-
