@@ -31,6 +31,7 @@ import hmac
 import binascii
 
 import logging
+import six
 
 VERSION = '1.0' # Hi Blaine!
 HTTP_METHOD = 'GET'
@@ -80,11 +81,11 @@ class OAuthConsumer(object):
         self.key = key
         self.secret = secret
 
-   
+
 class OAuthToken(object):
     """OAuthToken is a data type that represents an End User via either an access
     or request token.
-    
+
     key -- the token
     secret -- the token secret
 
@@ -99,7 +100,7 @@ class OAuthToken(object):
     def to_string(self):
         return urllib.urlencode({'oauth_token': self.key,
             'oauth_token_secret': self.secret})
- 
+
     def from_string(s):
         """ Returns a token from something like:
         oauth_token_secret=xxx&oauth_token=xxx
@@ -118,11 +119,11 @@ class OAuthRequest(object):
     """OAuthRequest represents the request and can be serialized.
 
     OAuth parameters:
-        - oauth_consumer_key 
+        - oauth_consumer_key
         - oauth_token
         - oauth_signature_method
-        - oauth_signature 
-        - oauth_timestamp 
+        - oauth_signature
+        - oauth_timestamp
         - oauth_nonce
         - oauth_version
         ... any additional parameters, as defined by the Service Provider.
@@ -154,7 +155,7 @@ class OAuthRequest(object):
     def get_nonoauth_parameters(self):
         """Get any non-OAuth parameters."""
         parameters = {}
-        for k, v in self.parameters.iteritems():
+        for k, v in six.iteritems(self.parameters):
             # Ignore oauth parameters.
             if k.find('oauth_') < 0:
                 parameters[k] = v
@@ -165,7 +166,7 @@ class OAuthRequest(object):
         auth_header = 'OAuth realm="%s"' % realm
         # Add the oauth parameters.
         if self.parameters:
-            for k, v in self.parameters.iteritems():
+            for k, v in six.iteritems(self.parameters):
                 if k[:6] == 'oauth_':
                     auth_header += ', %s="%s"' % (k, escape(str(v)))
         return {'Authorization': auth_header}
@@ -173,7 +174,7 @@ class OAuthRequest(object):
     def to_postdata(self):
         """Serialize as post data for a POST request."""
         return '&'.join(['%s=%s' % (escape(str(k)), escape(str(v))) \
-            for k, v in self.parameters.iteritems()])
+            for k, v in six.iteritems(self.parameters)])
 
     def to_url(self):
         """Serialize as a URL for a GET request."""
@@ -212,10 +213,10 @@ class OAuthRequest(object):
         elif scheme == 'https' and netloc[-4:] == ':443':
             netloc = netloc[:-4]
         normal = '%s://%s%s' % (scheme, netloc, path)
-        if len(query) > 0 : 
+        if len(query) > 0 :
             normal = normal + "?" + query
         return normal
-        
+
 
     def sign_request(self, signature_method, consumer, token):
         """Set the signature parameter to the result of build_signature."""
@@ -320,7 +321,7 @@ class OAuthRequest(object):
     def _split_url_string(param_str):
         """Turn URL string into parameters."""
         parameters = cgi.parse_qs(param_str, keep_blank_values=False)
-        for k, v in parameters.iteritems():
+        for k, v in six.iteritems(parameters):
             parameters[k] = urllib.unquote(v[0])
         return parameters
     _split_url_string = staticmethod(_split_url_string)
@@ -392,7 +393,7 @@ class OAuthServer(object):
     def get_callback(self, oauth_request):
         """Get the callback URL."""
         return oauth_request.get_parameter('oauth_callback')
- 
+
     def build_authenticate_header(self, realm=''):
         """Optional support for the authenticate header."""
         return {'WWW-Authenticate': 'OAuth realm="%s"' % realm}
@@ -554,7 +555,7 @@ class OAuthSignatureMethod_HMAC_SHA1(OAuthSignatureMethod):
 
     def get_name(self):
         return 'HMAC-SHA1'
-        
+
     def build_signature_base_string(self, oauth_request, consumer, token):
         sig = (
             escape(oauth_request.get_normalized_http_method()),

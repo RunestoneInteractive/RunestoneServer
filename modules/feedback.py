@@ -22,7 +22,7 @@ def is_server_feedback(div_id, course):
     if not query_results:
         return False, None
     # If feedback is present, decode it.
-    feedback = query_results.questions.feedback
+    feedback = query_results and query_results.questions.feedback
     if feedback is not None:
         feedback = json.loads(feedback)
         return query_results.courses.login_required, feedback

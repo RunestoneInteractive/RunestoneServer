@@ -57,7 +57,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{ for answer, frequency in response_frequency.iteritems():}}
+						{{ for answer, frequency in six.iteritems(response_frequency):}}
 						<tr>
 							<td>{{=answer}}</td>
 							<td>{{=frequency}}</td>

@@ -32,7 +32,7 @@ EVENT_TABLE = {'mChoice':'mchoice_answers',
 
 
 def compareAndUpdateCookieData(sid):
-    if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
+    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid:
         db.useinfo.update_or_insert(db.useinfo.sid == request.cookies['ipuser'].value, sid=sid)
 
 def hsblog():
@@ -588,11 +588,12 @@ def _getCorrectStats(miscdata,event):
         course = db(db.courses.course_name == miscdata['course']).select().first()
         tbl = db[dbtable]
 
-        rows = db((tbl.sid == sid) & (tbl.timestamp > course.term_start_date)).select(tbl.correct, tbl.correct.count(),groupby=tbl.correct)
+        count_expr = tbl.correct.count()
+        rows = db((tbl.sid == sid) & (tbl.timestamp > course.term_start_date)).select(tbl.correct, count_expr, groupby=tbl.correct)
         total = 0
         correct = 0
         for row in rows:
-            count = row._extra.values()[0]
+            count = row[count_expr]
             total += count
             if row[dbtable].correct:
                 correct = count
@@ -763,11 +764,12 @@ def gettop10Answers():
 
     try:
         dbcourse = db(db.courses.course_name == course).select().first()
+        count_expr = db.fitb_answers.answer.count()
         rows = db((db.fitb_answers.div_id == question) &
                 (db.fitb_answers.course_name == course) &
-                (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, db.fitb_answers.answer.count(),
-                    groupby=db.fitb_answers.answer, orderby=~db.fitb_answers.answer.count())
-        res = [{'answer':clean(row.fitb_answers.answer), 'count':row._extra.values()[0]} for row in rows[:10] ]
+                (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, count_expr,
+                    groupby=db.fitb_answers.answer, orderby=~count_expr, limitby=(0, 10))
+        res = [{'answer':clean(row.fitb_answers.answer), 'count':row[count_expr]} for row in rows]
     except Exception as e:
         logger.debug(e)
         res = 'error in query'
@@ -967,11 +969,11 @@ def preview_question():
             tree = html.fromstring(src)
             component = tree.cssselect(".runestone")
             if len(component) > 0:
-                ctext = html.tostring(component[0])
+                ctext = html.tostring(component[0]).decode('utf-8')
             else:
                 component = tree.cssselect(".system-message")
                 if len(component) > 0:
-                    ctext = html.tostring(component[0])
+                    ctext = html.tostring(component[0]).decode('utf-8')
                     logger.debug("error - ", ctext)
                 else:
                     ctext = "Error: Runestone content missing."

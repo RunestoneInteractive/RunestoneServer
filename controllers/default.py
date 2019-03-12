@@ -2,12 +2,12 @@
 import json
 import os
 import requests
-from urllib import unquote
-from urllib2 import HTTPError
+from six.moves.urllib.parse import unquote
+from six.moves.urllib.error import HTTPError
 import logging
 
 from gluon.restricted import RestrictedError
-from gluon.contrib.stripe import StripeForm
+from stripe_form import StripeForm
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)

@@ -9,10 +9,9 @@
 # python web2py.py -S runestone -M -R applications/runestone/tests/test_ajax.py
 #
 
-from gluon.globals import Request
-
 # bring in the assignments controllers
-execfile("applications/{}/modules/rs_grading.py".format(request.application), globals())
+exec_file = "applications/{}/modules/rs_grading.py".format(request.application)
+exec(compile(open(exec_file, 'r' if six.PY3 else 'rb').read(), exec_file, 'exec'), globals())
 
 # clean up the database
 db(db.useinfo.div_id == 'unit_test_1').delete()

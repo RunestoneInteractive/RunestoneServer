@@ -9,6 +9,7 @@ from random import shuffle
 from collections import OrderedDict
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+import six
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -42,7 +43,7 @@ def index():
     data_analyzer.load_assignment_metrics(request.vars.sid, studentView=True)
 
     chapters = []
-    for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
+    for chapter_label, chapter in six.iteritems(data_analyzer.chapter_progress.chapters):
         chapters.append({
             "label": chapter.chapter_label,
             "status": chapter.status_text(),

@@ -71,7 +71,7 @@ class Web2pyTestCase(unittest.TestCase):
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         # bring in the ajax controllers
-        execfile("applications/runestone/controllers/ajax.py", globals())
+        exec(compile(open("applications/runestone/controllers/ajax.py").read(), "applications/runestone/controllers/ajax.py", 'exec'), globals())
 
         # Create a default user and course.
         self.course_name_1 = 'test_course_1'
@@ -290,7 +290,7 @@ class TestAjaxEndpoints(Web2pyTestCase):
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertTrue(res['correct'])
-        self.assertEquals(res['displayFeed'], ['Correct.'])
+        self.assertEqual(res['displayFeed'], ['Correct.'])
 
         request.vars.answer = '["0b1010"]'
         request.vars.act = request.vars.answer
@@ -309,21 +309,21 @@ class TestAjaxEndpoints(Web2pyTestCase):
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEquals(res['displayFeed'], ['Close.'])
+        self.assertEqual(res['displayFeed'], ['Close.'])
 
         request.vars.answer = '["11"]'
         request.vars.act = request.vars.answer
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEquals(res['displayFeed'], ['Close.'])
+        self.assertEqual(res['displayFeed'], ['Close.'])
 
         request.vars.answer = '["8"]'
         request.vars.act = request.vars.answer
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEquals(res['displayFeed'], ['Nope.'])
+        self.assertEqual(res['displayFeed'], ['Nope.'])
 
         # Test client-side grading.
         db(db.courses.course_name == self.course_name_1).update(login_required=False)
