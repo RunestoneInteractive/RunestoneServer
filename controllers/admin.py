@@ -591,20 +591,6 @@ def admin():
     my_vers = 0
     mst_vers = 0
     bugfix = False
-    rebuild_notice = path.join('applications',request.application,'REBUILD')
-    if os.path.exists(rebuild_notice):
-        rebuild_post = os.path.getmtime(rebuild_notice)
-        if rebuild_post > last_build:
-            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-            bugfix = True
-    if master_build and my_build and not bugfix:
-        mst_vers,mst_bld,mst_hsh = master_build.split('-')
-        my_vers,my_bld,my_hsh = my_build.split('-')
-        if my_vers != mst_vers:
-            response.flash = "Updates available, consider rebuilding"
-
-#    return dict(, course_name=auth.user.course_name)
-
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
     instructordict = {}
@@ -647,16 +633,10 @@ def admin():
         except:
             logger.error("Bad date format, not updating start date")
 
-        # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
-                                                                       rvars=request.vars,
-                                                                       base_course=course.base_course,
-                                                                       application=request.application,
-                                                                       http_host=request.env.http_host), immediate=True)
         uuid = row['uuid']
 
 
-        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
+        course_url=path.join('/',request.application,'books/published', request.vars.projectname, 'index.html')
 
 
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
@@ -756,27 +736,6 @@ def getChangeLog():
         return "No ChangeLog for this book\n\n\n"
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def backup():
-    #Begin the process of zipping up a backup file
-    #This function will put the backup book in runestone/static/bookname/backup.zip
-    import zipfile
-    bookQuery = db(db.courses.course_name == auth.user.course_name).select()
-    base_course = bookQuery[0].base_course
-    toBeZippedPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup')
-    tobeZippedDirectory = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/'+base_course)
-
-    zip = zipfile.ZipFile("%s.zip" % (toBeZippedPath), "w", zipfile.ZIP_DEFLATED)
-    abs_src = os.path.abspath(tobeZippedDirectory)
-    for dirname, subdirs, files in os.walk(tobeZippedDirectory):
-        for filename in files:
-            absname = os.path.abspath(os.path.join(dirname, filename))
-            arcname = absname[len(abs_src) + 1:]
-            zip.write(absname, arcname)
-    zip.close()
-    directoryPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup.zip')
-    return response.stream(directoryPath, attachment=True)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
@@ -868,7 +827,7 @@ def removeassign():
         assignment_id = int(request.args[0])
     except:
         session.flash = "Cannot remove assignment with id of {}".format(request.args[0])
-        return;
+        return
     db(db.assignments.id == assignment_id).delete()
 
 # Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
