@@ -7,7 +7,7 @@ from urllib2 import HTTPError
 import logging
 
 from gluon.restricted import RestrictedError
-from gluon.tools import addrow
+from gluon.contrib.stripe import StripeForm
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -83,28 +83,8 @@ def user():
             form.record.update_record(**dict(form.vars))
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
+            # TODO: Why is this necessary?
             auth.user.course_name = db(db.auth_user.id == auth.user.id).select()[0].course_name
-            # problem is that
-            in_db = db(
-                (db.user_courses.user_id == auth.user.id) & (db.user_courses.course_id == auth.user.course_id)).select()
-            db_check = []
-            for row in in_db:
-                db_check.append(row)
-            if not db_check:
-                db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
-            res = db(db.chapters.course_id == auth.user.course_name)
-            logger.debug("PROFILE checking for progress table %s ", res)
-            if res.count() > 0:
-                chapter_label = res.select().first().chapter_label
-                if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
-                              (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
-                    db.executesql('''
-                       INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
-                       SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
-                       FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
-                    ''', (auth.user.id, auth.user.course_name))
-            else:
-                session.flash = 'This course is not set up for tracking progress'
             # Add user to default section for course.
             sect = db((db.sections.course_id == auth.user.course_id) &
                       (db.sections.name == form.vars.section)).select(db.sections.id).first()
@@ -144,6 +124,48 @@ def download(): return response.download(request, db)
 def call(): return service()
 
 
+# Determine the student price for a given ``course_id``. Returns a value in cents, where 0 cents indicates a free book.
+def _course_price(course_id):
+    # Look for a student price for this course.
+    course = db(db.courses.id == course_id).select(db.courses.student_price, db.courses.base_course).first()
+    assert course
+    price = course.student_price
+    # Only look deeper if a price isn't set (even a price of 0).
+    if price is None:
+        # See if the base course has a student price.
+        base_course = db(db.courses.course_name == course.base_course).select(db.courses.student_price).first()
+        # If this is already a base course, we're done.
+        if base_course:
+            price = base_course.student_price
+    # If price is ``None`` or negative, return a free course.
+    return max(price or 0, 0)
+
+
+@auth.requires_login()
+def payment():
+    # The payment will be made for ``auth.user.course_id``. Get the corresponding course name.
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    assert course.course_name
+    form = StripeForm(
+        pk=settings.STRIPE_PUBLISHABLE_KEY,
+        sk=settings.STRIPE_SECRET_KEY,
+        amount=_course_price(auth.user.course_id),
+        description="Access to the {} textbook from {}".format(course.course_name, settings.title)
+    ).process()
+    if form.accepted:
+        # Save the payment info, then redirect to the index.
+        user_courses_id = db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
+        db.payments.insert(user_courses_id=user_courses_id, charge_id=form.response['id'])
+        db.commit()
+        return dict(request=request, course=course, payment_success=True)
+    elif form.errors:
+        return dict(form=form, payment_success=False)
+    # Fix up CSS -- the ``hidden`` attribute hides any error feedback.
+    html = form.xml().replace('"payment-errors error hidden"', '"payment-errors error"')
+    return dict(html=html, payment_success=None)
+
+
+
 @auth.requires_login()
 def index():
 #    print("REFERER = ", request.env.http_referer)
@@ -161,6 +183,13 @@ def index():
         for row in in_db:
             db_check.append(row)
         if not db_check:
+            # The user hasn't been enrolled in this course yet. Check the price for the course.
+            price = _course_price(auth.user.course_id)
+            # If the price is non-zero, then require a payment. Otherwise, ask for a donation.
+            if price > 0:
+                redirect(URL('payment'))
+            else:
+                session.request_donation = True
             db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
         try:
             logger.debug("INDEX - checking for progress table")
@@ -179,14 +208,19 @@ def index():
             session.flash = "Your course is not set up to track your progress"
         # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
-        if session.donate and session.donate != "0":
-            amt = session.donate
-            del session.donate
-            redirect(URL(c='default', f='donate', args=amt))
+        if session.request_donation:
+            del session.request_donation
+            redirect(URL(c='default', f='donate'))
 
         if session.build_course:
             del session.build_course
             redirect(URL(c='designer', f='index'))
+
+        # See if we need to do a redirect from LTI.
+        if session.lti_url_next:
+            # This is a one-time redirect.
+            del session.lti_url_next
+            redirect(session.lti_url_next)
 
         # check number of classes, if more than 1, send to course selection, if only 1, send to book
         num_courses = db(db.user_courses.user_id == auth.user.id).count()

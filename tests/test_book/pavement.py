@@ -6,29 +6,30 @@ import os, sys
 from runestone.server import get_dburl
 from sphinxcontrib import paverutils
 import pkg_resources
+from socket import gethostname
 
 sys.path.append(os.getcwd())
 
-home_dir = os.getcwd()
-master_url = 'http://127.0.0.1:8000'
-master_app = 'runestone'
-serving_dir = "./build/test_course_1"
+# The project name, for use below.
+project_name = "test_course_1"
+# The root directory for ``runestone serve``.
+serving_dir = "./build/" + project_name
+# The destination directory for ``runestone deploy``.
 dest = "../../static"
 
 options(
     sphinx = Bunch(docroot=".",),
 
     build = Bunch(
-        builddir="./build/test_course_1",
+        builddir=serving_dir,
         sourcedir="_sources",
-        outdir="./build/test_course_1",
+        outdir=serving_dir,
         confdir=".",
-        project_name = "test_course_1",
-        template_args={'course_id': 'test_course_1',
+        template_args={'course_id': project_name,
                        'login_required':'true',
-                       'appname':master_app,
+                       'appname': 'runestone',
                        'loglevel': 10,
-                       'course_url':master_url,
+                       'course_url': 'http://127.0.0.1:8000',
                        'use_services': 'true',
                        'python3': 'false',
                        'dburl': 'postgresql://user:password@localhost/runestone',
@@ -38,10 +39,17 @@ options(
                        'proxy_uri_runs': '/jobe/index.php/restapi/runs/',
                        'proxy_uri_files': '/jobe/index.php/restapi/files/',
                        'downloads_enabled': 'false',
-                       'enable_chatcodes': 'False'
+                       'enable_chatcodes': 'False',
+                       'allow_pairs': 'False'
                         }
     )
 )
+
+# if we are on runestone-deploy then use the proxy server not canterbury
+if gethostname() == 'runestone-deploy':
+    del options.build.template_args['jobe_server']
+    del options.build.template_args['proxy_uri_runs']
+    del options.build.template_args['proxy_uri_files']
 
 version = pkg_resources.require("runestone")[0].version
 options.build.template_args['runestone_version'] = version

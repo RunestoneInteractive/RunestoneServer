@@ -158,3 +158,10 @@ db.define_table('shortanswer_answers',
     Field('answer','text'),
     migrate='runestone_shortanswer_answers.table'
     )
+    
+db.define_table('payments',
+    Field('user_courses_id', db.user_courses, required=True),
+    # A `Stripe charge ID <https://stripe.com/docs/api/charges/object#charge_object-id>`_. Per the `Stripe docs <https://stripe.com/docs/upgrades>`_, this is always 255 characters or less.
+    Field('charge_id', 'string', length=255, required=True),
+    migrate='runestone_payments.table'
+)

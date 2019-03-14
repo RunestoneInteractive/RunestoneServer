@@ -194,7 +194,7 @@ def runlog():    # Log errors and runs with code
             db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
             done = True
         except Exception as e:
-            logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
+            logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={} exception={}".format(sid, act, div_id, event, ts, course, e))
             num_tries -= 1
     if num_tries == 0:
         raise Exception("Runlog Failed to insert into useinfo")
