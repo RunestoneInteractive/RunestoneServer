@@ -42,7 +42,8 @@ if __name__ == '__main__':
         help='Reset the unit test based on current grading code.')
     parser.add_argument('--skipdbinit', action='store_true',
         help='Skip initialization of the test database.')
-    parsed_args = parser.parse_args()
+    # Per https://docs.python.org/2/library/argparse.html#partial-parsing, gather any known args. These will be passed to pytest.
+    parsed_args, extra_args = parser.parse_known_args()
 
     if parsed_args.rebuildgrades:
         with pushd('../../..'):
@@ -66,9 +67,12 @@ if __name__ == '__main__':
             xqt('{} -m runestone build --all'.format(sys.executable))
 
     with pushd('../../..'):
+        if extra_args:
+            print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
         xqt('{} -m coverage erase'.format(sys.executable),
-            '{} -m pytest -v applications/runestone/tests/test_server.py'.format(sys.executable),
+            '{} -m pytest -v applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
             *['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']])
+              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']]
+            )
         xqt('{} -m coverage report'.format(sys.executable))

@@ -18,6 +18,9 @@ def is_server_feedback(div_id, course):
         .select(current.db.questions.feedback,
                 current.db.courses.login_required).first())
 
+    # check for query_results
+    if not query_results:
+        return False, None
     # If feedback is present, decode it.
     feedback = query_results.questions.feedback
     if feedback is not None:

@@ -168,8 +168,9 @@ def shutdown(config):
 @click.option("--institution", help="Your institution")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
+@click.option("--allow_pairs", is_flag=True, default=False, help="enable experimental pair programming support")
 @pass_config
-def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution, language, host):
+def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution, language, host, allow_pairs):
     """Create a course in the database"""
 
     os.chdir(findProjectRoot())  # change to a known location
@@ -193,19 +194,24 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
         else:
             login_required = 'T'
 
+        if not allow_pairs:
+            allow_pairs = 'T' if click.confirm("Enable pair programming support", default=False) else 'F'
+        else:
+            allow_pairs = 'F'
+
         res = eng.execute("select id from courses where course_name = '{}'".format(course_name)).first()
         if not res:
             done = True
         else:
             click.confirm("Course {} already exists continue with a different name?".format(course_name), default=True, abort=True)
 
-    eng.execute("""insert into courses (course_name, base_course, python3, term_start_date, login_required, institution)
-                values ('{}', '{}', '{}', '{}', '{}', '{}')
-                """.format(course_name, basecourse, python3, start_date, login_required, institution ))
+    eng.execute("""insert into courses (course_name, base_course, python3, term_start_date, login_required, institution, allow_pairs)
+                values ('{}', '{}', '{}', '{}', '{}', '{}', '{}')
+                """.format(course_name, basecourse, python3, start_date, login_required, institution, allow_pairs ))
 
     click.echo("Course added to DB successfully")
 
-    makePavement(host, python3, login_required, course_name, basecourse, language)
+    makePavement(host, python3, login_required, course_name, basecourse, language, allow_pairs)
 
 #
 #    build
@@ -491,7 +497,7 @@ def findProjectRoot():
     raise IOError("You must be in a web2py application to run rsmanage")
 
 
-def makePavement(http_host, python3, login_required, course_name, base_course, language):
+def makePavement(http_host, python3, login_required, course_name, base_course, language, allow_pairs):
     paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
     opts = {'master_url': 'https://' + http_host,
             'project_name': course_name,
@@ -505,7 +511,8 @@ def makePavement(http_host, python3, login_required, course_name, base_course, l
             'enable_chatcodes': 'false',
             'login_req': 'true' if login_required else 'false',
             'python3': 'true' if python3 else 'false',
-            'dest': '../../static'
+            'dest': '../../static',
+            'allow_pairs': 'true' if allow_pairs else 'false'
             }
 
     paver_stuff = paver_stuff % opts
