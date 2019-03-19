@@ -1,8 +1,7 @@
+import signal
 from os import path
 import os
-from datetime import date, timedelta
 import datetime
-import re
 from random import randint
 from collections import OrderedDict
 from paver.easy import sh
