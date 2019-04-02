@@ -252,7 +252,7 @@ The Harder Way
 Documentation
 -------------
 
-Documentation for the project is on our official `documentation site <http://runestoneinteractive.org/build/html/index.html>`_  This includes
+Links to documentation for the project are on our official `home page <http://runestoneinteractive.org/index.html>`_  This includes
 the list of dependencies you need to install in order to build the books included in the repository, or to set up
 a complete server environment.
 
@@ -297,7 +297,7 @@ donation using `gittip <https://www.gittip.com/bnmnetp/>`_
 More Documentation
 ------------------
 
-I have begun a project to document the `Runestone Interactive <http://docs.runestoneinteractive.org/build/html/index.html>`_ tools
+I have begun a project to document the `Runestone Interactive <https://runestone.academy/runestone/static/authorguide/index.html>`_ tools
 
 * All of the Runestone Interactive extensions to sphinx:
 

@@ -146,22 +146,21 @@
                         </li>
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
-                        {{ if settings.academy_mode: }}
-
-                            <!-- help menu dropdown -->
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                                <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
-                                </a>
-                                <ul class="dropdown-menu user-menu">
-                                    <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
-                                    <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
-                                </ul>
-                            </li>
-                            <li class="divider-vertical"></li>
-                        {{pass}}
+                        {{ if settings.academy_mode: }}                                                        
+                        <!-- help menu dropdown -->
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+                            </a>
+                            <ul class="dropdown-menu user-menu">
+                                <li><a href='https://runestone.academy/runestone/static/instructorguide/index.html'>Help for Instructors</a></li>
+                                <li class="divider"></li>
+                                <li><a href='http://www.runestoneinteractive.org/pages/about.html'>About Runestone</a></li>
+                                <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        {{pass}}                            
                     </ul>
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
@@ -180,9 +179,10 @@
                                     <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
                                     <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
                                     <li><a href="/{{=request.application}}/static/cpp4python/index.html">C++ for Python Programmers <strong>New</strong></a></li>
-                                    <li><a href="/{{=request.application}}/static/httlads/index.html">How to Think like a Data Scientist<strong>Beta</strong></a></li>
+                                    <li><a href="/{{=request.application}}/static/httlads/index.html">How to Think like a Data Scientist <strong>Beta</strong></a></li>
                                     <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>
                                     <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
+                                    <li><a href="/{{=request.application}}/static/instructorguide/index.html">Runestone Instructor Guide</a></li>
                                 </ul>
                             </li>
                         {{ elif auth.user: }}
