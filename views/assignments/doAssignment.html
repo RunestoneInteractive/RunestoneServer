@@ -60,9 +60,10 @@
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
+  {{ if settings.coursera_mode: }}
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
   eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
-
+  {{ pass }}
 </script>
 
 <style>
