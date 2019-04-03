@@ -9,8 +9,7 @@ Runestone Interactive Server and API
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
    :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-
-.. image:: http://bnmnetp.me:8088/buildStatus/icon?job=RunestoneServer
+.. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
    :alt: Build Status
 
 
