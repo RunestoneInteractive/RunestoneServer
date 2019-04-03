@@ -137,6 +137,10 @@ def makePavement(http_host, rvars, sourcedir, base_course):
         opts['allow_pairs'] = 'true'
     else:
         opts['allow_pairs'] = 'false'
+    if 'short_name' in rvars:
+        opts['short_name'] = short_name.replace(' ','\\ ')
+    else:
+        opts['short_name'] = None
 
     opts['dest'] = '../../static'
 
