@@ -28,7 +28,7 @@ class TestDashboardEndpoints(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
-        execfile("applications/runestone/controllers/dashboard.py", globals())
+        exec(compile(open("applications/runestone/controllers/dashboard.py").read(), "applications/runestone/controllers/dashboard.py", 'exec'), globals())
 
 
     def testStudentReport(self):

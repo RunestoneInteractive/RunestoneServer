@@ -64,7 +64,8 @@ if __name__ == '__main__':
         with pushd('test_book'):
             # The runestone build process only looks at ``DBURL``.
             os.environ['DBURL'] = os.environ['TEST_DBURL']
-            xqt('{} -m runestone build --all'.format(sys.executable))
+            xqt('{} -m runestone build --all'.format(sys.executable),
+                '{} -m runestone deploy'.format(sys.executable))
 
     with pushd('../../..'):
         if extra_args:

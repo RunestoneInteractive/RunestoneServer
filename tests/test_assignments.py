@@ -32,7 +32,7 @@ class TestGradingFunction(unittest.TestCase):
     def setUp(self):
         global request
         request = Request(globals()) # Use a clean Request object
-        execfile("applications/runestone/controllers/assignments.py", globals())
+        exec(compile(open("applications/runestone/controllers/assignments.py").read(), "applications/runestone/controllers/assignments.py", 'exec'), globals())
 
     def test_reproduce_scores(self):
         # fetch all of the autograded questions_grades
@@ -74,7 +74,7 @@ class TestGradingFunction(unittest.TestCase):
 
 
     def testASlashInSubchapter(self):
-        execfile("applications/runestone/controllers/admin.py", globals())
+        exec(compile(open("applications/runestone/controllers/admin.py").read(), "applications/runestone/controllers/admin.py", 'exec'), globals())
         auth.login_user(db.auth_user(11))
         bad_name = 'Exceptions/When to use try/except'
 

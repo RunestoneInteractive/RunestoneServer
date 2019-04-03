@@ -7,6 +7,7 @@ from datetime import date, timedelta, datetime
 from operator import itemgetter
 from collections import OrderedDict
 from paver.easy import sh
+import six
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -55,7 +56,7 @@ def index():
     progress_metrics = data_analyzer.progress_metrics
 
     logger.debug("starting problem_id, metric loop")
-    for problem_id, metric in problem_metrics.problems.iteritems():
+    for problem_id, metric in six.iteritems(problem_metrics.problems):
         stats = metric.user_response_stats()
 
         if data_analyzer.questions[problem_id]:
@@ -91,7 +92,7 @@ def index():
     logger.debug("getting questsions")
     questions = sorted(questions, key=itemgetter("chapter"))
     logger.debug("starting sub_chapter loop")
-    for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
+    for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
         sections.append({
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
@@ -106,7 +107,7 @@ def index():
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
-    for user, activity in user_activity.user_activities.iteritems():
+    for user, activity in six.iteritems(user_activity.user_activities):
         read_data.append({
             "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
             "sid":activity.username,
@@ -153,7 +154,7 @@ def studentreport():
     data_analyzer.load_assignment_metrics(request.vars.id)
 
     chapters = []
-    for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
+    for chapter_label, chapter in six.iteritems(data_analyzer.chapter_progress.chapters):
         chapters.append({
             "label": chapter.chapter_label,
             "status": chapter.status_text(),
@@ -294,7 +295,7 @@ def exercisemetrics():
     problem_metric = problem_metrics.problems[prob_id]
     response_frequency = problem_metric.aggregate_responses
 
-    for username, user_responses in problem_metric.user_responses.iteritems():
+    for username, user_responses in six.iteritems(problem_metric.user_responses):
         responses = user_responses.responses[:4]
         responses += [''] * (4 - len(responses))
         answers.append({
@@ -303,7 +304,7 @@ def exercisemetrics():
             "answers":responses
             })
 
-    for attempts, count in problem_metric.user_number_responses().iteritems():
+    for attempts, count in six.iteritems(problem_metric.user_number_responses()):
         attempt_histogram.append({
             "attempts": attempts,
             "frequency": count
