@@ -1493,7 +1493,7 @@ def _get_toc_and_questions():
                 questions_query = db((db.courses.course_name == auth.user.course_name) & \
                                      (db.questions.base_course == db.courses.base_course) & \
                                   (db.questions.chapter == ch.chapter_label) & \
-                                  (db.questions.question_type <> 'page') & \
+                                  (db.questions.question_type != 'page') & \
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
                 for question in questions_query:
                     q_info = dict(

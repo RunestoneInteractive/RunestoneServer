@@ -16,4 +16,6 @@ SQLAlchemy>=1.0.14
 cssselect>=1.0
 oauth2>=1.9
 bleach>=3.0
+pathlib2
+stripe
 -e rsmanage/

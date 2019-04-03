@@ -18,6 +18,7 @@
 # Standard library
 # ----------------
 import sys
+import os
 import time
 import subprocess
 from pprint import pprint
@@ -25,8 +26,13 @@ from contextlib import contextmanager
 from io import open
 from textwrap import dedent
 import json
-import thread
 import re
+from threading import Thread
+import os
+try:
+    from contextlib import ExitStack
+except:
+    from contextlib2 import ExitStack
 
 # Third-party imports
 # -------------------
@@ -34,10 +40,12 @@ import pytest
 from gluon.contrib.webclient import WebClient
 import gluon.shell
 from py_w3c.validators.html.validator import HTMLValidator
-from contextlib2 import ExitStack
+import six
+from six.moves.urllib.error import HTTPError
 
 # Local imports
 # -------------
+sys.path.append(os.path.dirname(__file__))
 from run_tests import COVER_DIRS
 
 
@@ -77,7 +85,8 @@ def web2py_controller_import(
         # The controller, as a string.
         controller):
 
-    execfile('applications/{}/controllers/{}.py'.format(env['request'].application, controller), env)
+    exec_file = 'applications/{}/controllers/{}.py'.format(env['request'].application, controller)
+    exec(compile(open(exec_file, 'r' if six.PY3 else 'rb').read(), exec_file, 'exec'), env)
     return DictToObject(env)
 
 
@@ -96,7 +105,7 @@ def web2py_controller(
 # Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `module <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
 @pytest.fixture(scope='module')
 def web2py_server():
-    password = 'junk_password'
+    password = 'pass'
 
     # For debug, uncomment the next two lines, then run web2py manually to see all debug messages.
     ##yield DictToObject(dict(password=password))
@@ -119,7 +128,8 @@ def web2py_server():
               'web2py server stderr\n'
               '--------------------\n')
         print(stderr)
-    thread.start_new_thread(echo, tuple())
+    echo_thread = Thread(target=echo)
+    echo_thread.start()
 
     # Save the password used.
     web2py_server.password = password
@@ -131,6 +141,7 @@ def web2py_server():
 
     # Terminate the server to give web2py time to shut down gracefully.
     web2py_server.terminate()
+    echo_thread.join()
 
 
 # The name of the Runestone controller.
@@ -229,6 +240,13 @@ def runestone_db_tools(runestone_db):
     return _RunestoneDbTools(runestone_db)
 
 
+# Given the ``test_client.text``, prepare to write it to a file.
+def _html_prep(text_str):
+    _str = text_str.replace('\r\n', '\n')
+    # Deal with fun Python 2 encoding quirk.
+    return _str if six.PY2 else _str.encode('utf-8')
+
+
 # Create a client for accessing the Runestone server.
 class _TestClient(WebClient):
     def __init__(self, web2py_server):
@@ -250,14 +268,24 @@ class _TestClient(WebClient):
         **kwargs):
 
         try:
-            self.post(url, **kwargs)
+            try:
+                self.post(url, **kwargs)
+            except HTTPError as e:
+                # If this was the expected result, return.
+                if e.code == expected_status:
+                    # Since this is an error of some type, these paramets must be empty, since they can't be checked.
+                    assert not expected_string
+                    assert not expected_errors
+                    return ''
+                else:
+                    raise
             assert self.status == expected_status
             if expected_string:
                 if isinstance(expected_string, str):
                     assert expected_string in self.text
                 else:
                     # Assume ``expected_string`` is a list of strings.
-                    assert any(string in self.text for string in expected_string)
+                    assert all(string in self.text for string in expected_string)
 
             if expected_errors is not None:
                 vld = HTMLValidator()
@@ -270,11 +298,13 @@ class _TestClient(WebClient):
                     print('Warnings for {}: {}'.format(url, len(vld.warnings)))
                     pprint(vld.warnings)
 
+            return self.text if six.PY3 else self.text.decode('utf-8')
+
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
             validation_file = url.replace('/', '-') + '.html'
             with open(validation_file, 'wb') as f:
-                f.write(self.text.replace('\r\n', '\n'))
+                f.write(_html_prep(self.text))
             print('Validation failure saved to {}.'.format(validation_file))
             raise
 
@@ -296,7 +326,7 @@ class _TestClient(WebClient):
                 # Save it to a file.
                 traceback_file = url.replace('/', '-') + '_traceback.html'
                 with open(traceback_file, 'wb') as f:
-                    f.write(admin_client.text.replace('\r\n', '\n'))
+                    f.write(_html_prep(admin_client.text))
                 print('Traceback saved to {}.'.format(traceback_file))
             raise
 
@@ -395,7 +425,7 @@ class _TestUser(object):
     # A context manager to update this user's profile. If a course was added, it returns that course's ID; otherwise, it returns None.
     @contextmanager
     def update_profile(self,
-        # This parameter is passed to ``test_clint.validate``.
+        # This parameter is passed to ``test_client.validate``.
         expected_string=None,
         # An updated username, or ``None`` to use ``self.username``.
         username=None,
@@ -468,15 +498,15 @@ class _TestUser(object):
 
         # Get the signature from the HTML of the payment page.
         self.test_client.validate('default/payment')
-        match = re.search('<input type="hidden" name="signature" value="([^ ]*)" \/>',
+        match = re.search('<input type="hidden" name="signature" value="([^ ]*)" />',
                           self.test_client.text)
         signature = match.group(1)
 
         try:
-            self.test_client.validate('default/payment',
-                ['Thank you for your payment', 'Payment failed'],
+            html = self.test_client.validate('default/payment',
                 data=dict(stripeToken=stripe_token, signature=signature)
             )
+            assert ('Thank you for your payment' in html) or ('Payment failed' in html)
 
             yield None
 
@@ -484,6 +514,35 @@ class _TestUser(object):
             db = self.runestone_db_tools.db
             db((db.user_courses.course_id == course_id) &
                (db.user_courses.user_id == self.user_id) ).delete()
+            # Try to delete the payment
+            try:
+                db((db.user_courses.user_id == self.user_id) &
+                   (db.user_courses.course_id == course_id) &
+                   (db.user_courses.id == db.payments.user_courses_id)) \
+                   .delete()
+            except:
+                pass
+            db.commit()
+
+    @contextmanager
+    def hsblog(self, **kwargs):
+        try:
+            yield json.loads(self.test_client.validate('ajax/hsblog',
+                                                       data=kwargs))
+        finally:
+            # Try to remove this hsblog entry.
+            event = kwargs.get('event')
+            div_id = kwargs.get('div_id')
+            course = kwargs.get('course')
+            db = self.runestone_db_tools.db
+            criteria = ((db.useinfo.sid == self.username) &
+                        (db.useinfo.act == kwargs.get('act', '')) &
+                        (db.useinfo.div_id == div_id) &
+                        (db.useinfo.event == event) &
+                        (db.useinfo.course_id == course) )
+            useinfo_row = db(criteria).select(db.useinfo.id, orderby=db.useinfo.id).last()
+            if useinfo_row:
+                del db.useinfo[useinfo_row.id]
 
 
 # Present ``_TestUser`` as a fixture.
@@ -507,9 +566,8 @@ def test_user_1(runestone_db_tools, test_user):
 @pytest.mark.skip(reason='Only needed for manual testing.')
 def test_manual(runestone_db_tools, test_user):
     # Modify this as desired to create courses, users, etc. for manual testing.
-    with runestone_db_tools.create_course(student_price=2000) as course_1, \
-         test_user('bob', 'bob', course_1.course_name,
-                   is_free=False) as test_user_1:
+    with runestone_db_tools.create_course() as course_1, \
+         test_user('bob', 'bob', course_1.course_name) as test_user_1:
 
         # Pause in the debugginer until manual testing is done.
         import pdb; pdb.set_trace()
@@ -806,7 +864,4 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
         for token in ['tok_chargeCustomerFail', 'tok_chargeDeclined']:
             with test_user_1.make_payment(token):
                 assert not did_payment()
-
-
-        # TODO: Test with more tokens, test failures. Delete payment from db.
 
