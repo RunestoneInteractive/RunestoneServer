@@ -17,9 +17,10 @@
 
 <div class="container rscontainer">
 
-    {{if request.args(0) != 'register':}}
+    {{if (request.args(0) != 'register'):}}
 
         <div class="row">
+          {{ if settings.academy_mode: }}
             <!-- Carousel
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
@@ -94,9 +95,10 @@
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
             {{pass}}
-
+          {{pass}}
             <!--  LOGIN -->
-            {{ if request.args(0) == 'login': }}
+          {{if not settings.lti_only_mode:}}
+            {{ if (request.args(0) == 'login'): }}
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
@@ -166,12 +168,19 @@
                     {{pass}}
                 </div>
             {{pass}}
+          {{else:}}
+            Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+            {{if settings.coursera_mode:}}
+               <p>At the beginning of each study session, you will need to first use one of the links at the top of a lesson that says something like, "Single Sign On: Interactive Textbook and Practice Opportunities." Once you've done that, you'll be able to use the textbook for the duration of your learning sessions, including the links to individual textbook pages in Coursera.</p>
+            {{pass}}
+          {{pass}}
         </div>
     {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
 
     <div class="content row">
         <!-- REGISTRATION -->
-        {{if request.args(0) == 'register': }}
+        {{if (request.args(0) == 'register'): }} <!-- register page -->
+          {{if not settings.lti_only_mode:}}
             <div id="registration_div">
                 <div class="col-md-6 col-md-offset-3">
                     <h2>Runestone Registration</h2>
@@ -290,10 +299,7 @@
                     </div> <!-- end form div -->
                 </div>
             </div> <!-- end register div -->
-        {{pass}}
-
-        {{if request.args(0) == 'register':}}
-            <div class="col-md-6">
+             <div class="col-md-6">
                 <h4>Registration Hints</h4>
                 <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
                 <ul>
@@ -304,9 +310,12 @@
                     <li><strong>pip2</strong> for Programs, Information, People</li>
                 </ul>
             </div>
-        {{pass}}
+          {{else:}} <!-- lti_only_mode -->
+            Registration is disabled. Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+          {{pass}}
+        {{pass}} <!-- end register page -->
 
-        {{if request.args(0) != 'register':}}
+        {{if (request.args(0) != 'register') and settings.academy_mode:}}
             <div class="row">
                 <div class='col-md-6'>
                     <h2>About Runestone</h2>
@@ -332,20 +341,22 @@
                 </div>
             </div>
         {{pass}}
-        <div class="col-md-6">
-            <h2>Your Privacy</h2>
-            <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                of our educational mission we do collect usage data to help us better understand how you learn and how you
-                use our
-                books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                this data to publish
-                academic papers. We would never publish anything that revealed your identity. We may share this data with
-                fellow
-                educational researchers, but rest assured that all personally identifying information will be anonymized
-                before we do.
-                If you have questions about this please feel free to <a
-                        href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
-        </div>
+        {{if settings.academy_mode:}}
+            <div class="col-md-6">
+                <h2>Your Privacy</h2>
+                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+                    of our educational mission we do collect usage data to help us better understand how you learn and how you
+                    use our
+                    books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+                    this data to publish
+                    academic papers. We would never publish anything that revealed your identity. We may share this data with
+                    fellow
+                    educational researchers, but rest assured that all personally identifying information will be anonymized
+                    before we do.
+                    If you have questions about this please feel free to <a
+                            href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+            </div>
+        {{pass}}
     </div>
 </div>
 

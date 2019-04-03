@@ -10,6 +10,7 @@ from collections import OrderedDict
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
 import six
+import bleach
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -717,7 +718,7 @@ def settz_then_practice():
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
 def practiceNotStartedYet():
     return dict(course_id=auth.user.course_name,
-                message1=request.vars.message1, message2=request.vars.message2)
+                message1=bleach.clean(request.vars.message1), message2=bleach.clean(request.vars.message2))
 
 
 # Gets invoked when the student requests practicing topics.

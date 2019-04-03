@@ -2,9 +2,6 @@
 
 {{block tabcontent}}
 
-<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
-
-
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/prettify.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/hammer.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
@@ -31,7 +28,7 @@
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
-
+<script type="text/javascript" src="{{=URL('static', 'js/selfgrade.js')}}"></script>
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
@@ -63,6 +60,10 @@
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
+  {{ if settings.coursera_mode: }}
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+  {{ pass }}
 </script>
 
 <style>
@@ -144,7 +145,12 @@
         </div>
     {{pass}}
 </div>
-
+{{ if settings.coursera_mode: }}
+<div style="text-align:center">
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton"> Grade Me</button>
+</div>
+{{ pass }}
+</div>
 <script>
     //console.log(document.getElementsByClassName('nav nav-tabs'))
     // This script renders the html into elements in the DOM
@@ -175,6 +181,13 @@
         let change = $.parseHTML(unescapedhtml, keepScripts=true);
         $div.append(change);
     }
+{{ if settings.coursera_mode: }}
+
+    $("#gradeMeButton").on("click", function(){
+        $('#gradeMeButton').css('visibility', 'hidden');
+        selfGrade({{=assignment['id']}}, {{=student_id}})});
+{{ pass }}
+
 
 
 </script>
