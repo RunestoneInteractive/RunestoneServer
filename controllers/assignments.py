@@ -724,7 +724,7 @@ def settz_then_practice():
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
 def practiceNotStartedYet():
     return dict(course=get_course_row(db.courses.ALL), course_id=auth.user.course_name,
-                message1=bleach.clean(request.vars.message1), message2=bleach.clean(request.vars.message2))
+                message1=bleach.clean(request.vars.message1 or ''), message2=bleach.clean(request.vars.message2 or ''))
 
 
 # Gets invoked when the student requests practicing topics.
