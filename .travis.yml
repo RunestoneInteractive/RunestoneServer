@@ -29,9 +29,7 @@ script:
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
 - cd ..
 - cd tests
-# Now actually run the tests.
-- python run_tests.py
-# Rebuild the grades just to make sure this works.
+# Now actually run the tests, rebuilding the database first.
 - python run_tests.py --rebuildgrades
 notifications:
   slack:

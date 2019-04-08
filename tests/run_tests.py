@@ -67,15 +67,6 @@ if __name__ == '__main__':
     # Per https://docs.python.org/2/library/argparse.html#partial-parsing, gather any known args. These will be passed to pytest.
     parsed_args, extra_args = parser.parse_known_args()
 
-    if parsed_args.rebuildgrades:
-        with pushd('../../..'):
-            print("recalculating grades tables")
-            xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
-            # TODO: Need a sql script to drop a bunch of tables which web2py auto-creates. Anything named ``table_migrate_prefix + 'table_name'``, plus anything else that's empty. Also, move the execution of the runestone build here.
-            print("dumping the data")
-            xqt('pg_dump --no-owner runestone_test > applications/runestone/tests/runestone_test.sql')
-        sys.exit(0)
-
     if parsed_args.skipdbinit:
         print('Skipping DB initialization.')
     else:
@@ -86,22 +77,36 @@ if __name__ == '__main__':
         # Let web2py recreate certain tables not in the test database.
         for path in glob.glob('../databases/test_runestone_*.table'):
             os.remove(path)
-        # Copy the test book to the books directory.
-        rmtree('../books/test_course_1', ignore_errors=True)
-        # Sometimes this fails for no good reason on Windows. Retry.
-        for retry in range(100):
-            try:
-                copytree('test_course_1', '../books/test_course_1')
-                break
-            except WindowsError:
-                if retry == 99:
-                    raise
-        # Build the test book to add in db fields needed.
-        with pushd('../books/test_course_1'):
-            # The runestone build process only looks at ``DBURL``.
-            os.environ['DBURL'] = os.environ['TEST_DBURL']
-            xqt('{} -m runestone build --all'.format(sys.executable),
-                '{} -m runestone deploy'.format(sys.executable))
+
+        if parsed_args.rebuildgrades:
+            with pushd('../../..'):
+                print("recalculating grades tables")
+                # TODO: Running this causes the tests to fail.
+                #xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
+
+            # Copy the test book to the books directory.
+            rmtree('../books/test_course_1', ignore_errors=True)
+            # Sometimes this fails for no good reason on Windows. Retry.
+            for retry in range(100):
+                try:
+                    copytree('test_course_1', '../books/test_course_1')
+                    break
+                except WindowsError:
+                    if retry == 99:
+                        raise
+            # Build the test book to add in db fields needed.
+            with pushd('../books/test_course_1'):
+                # The runestone build process only looks at ``DBURL``.
+                os.environ['DBURL'] = os.environ['TEST_DBURL']
+                xqt('{} -m runestone build --all'.format(sys.executable),
+                    '{} -m runestone deploy'.format(sys.executable))
+
+            print("dumping the data")
+            xqt(
+                # Remove all tables that web2py auto-creates before saving the table.
+                'psql "{}" < runestone_clean.sql'.format(dbname),
+                'pg_dump --no-owner "{}" > runestone_test.sql'.format(dbname),
+            )
 
     with pushd('../../..'):
         if extra_args:

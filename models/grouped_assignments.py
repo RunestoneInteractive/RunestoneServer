@@ -626,7 +626,7 @@ db.assignments.release_grades = Field.Method(lambda row, released=True: assignme
 db.define_table('problems',
     Field('assignment', db.assignments),
     Field('acid', 'string'),
-    migrate='runestones_problems.table',
+    migrate=table_migrate_prefix_test + 'runestones_problems.table',
     )
 
 db.define_table('grades',
@@ -657,7 +657,7 @@ db.define_table('deadlines',
     Field('assignment', db.assignments, requires=IS_IN_DB(db, 'assignments.id', db.assignments._format)),
     Field('section', db.sections, requires=IS_EMPTY_OR(IS_IN_DB(db, 'sections.id', '%(name)s'))),
     Field('deadline', 'datetime'),
-    migrate='runestone_deadlines.table',
+    migrate=table_migrate_prefix + 'deadlines.table',
     )
 
 db.define_table('question_grades',

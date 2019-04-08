@@ -16,7 +16,7 @@ db.define_table('course_practice',
                 #   assignment deadline passes.
                 # A value of 2 indicates manually by the instructor, as it is implemented currently.
                 Field('flashcard_creation_method', type='integer', default=0),
-                migrate='course_practice.table')
+                migrate=table_migrate_prefix + 'course_practice.table')
 
 
 db.define_table('user_topic_practice',
@@ -33,7 +33,7 @@ db.define_table('user_topic_practice',
                 Field('next_eligible_date', type='date'),
                 Field('creation_time', type='datetime'),
                 Field('timezoneoffset', type='integer', default=0),
-                migrate='runestone_spacing.table')
+                migrate=table_migrate_prefix + 'spacing.table')
 
 
 db.define_table('user_topic_practice_log',
@@ -51,14 +51,14 @@ db.define_table('user_topic_practice_log',
                 Field('end_practice', type='datetime'),
                 Field('timezoneoffset', type='integer', default=0),
                 Field('next_eligible_date', type='date'),
-                migrate='runestone_spacing_log.table')
+                migrate=table_migrate_prefix + 'spacing_log.table')
 
 
 db.define_table('user_topic_practice_Completion',
                 Field('user_id', db.auth_user),
                 Field('course_name', 'string'),
                 Field('practice_completion_date', type='date'),
-                migrate='user_topic_practice_Completion.table')
+                migrate=table_migrate_prefix + 'user_topic_practice_Completion.table')
 
 
 db.define_table('user_topic_practice_survey',
@@ -69,7 +69,7 @@ db.define_table('user_topic_practice_survey',
                 Field('response_time', type='datetime',
                       default=request.now, update=request.now, writable=False),
                 Field('timezoneoffset', type='integer', default=0),
-                migrate='user_topic_practice_survey.table')
+                migrate=table_migrate_prefix + 'user_topic_practice_survey.table')
 
 
 db.define_table('user_topic_practice_feedback',
@@ -80,4 +80,4 @@ db.define_table('user_topic_practice_feedback',
                 Field('response_time', type='datetime',
                       default=request.now, update=request.now, writable=False),
                 Field('timezoneoffset', type='integer', default=0),
-                migrate='user_topic_practice_feedback.table')
+                migrate=table_migrate_prefix + 'user_topic_practice_feedback.table')
