@@ -43,7 +43,7 @@ db.define_table('acerror_log',
                 Field('course_id','string'),
                 Field('code','text'),
                 Field('emessage','text'),
-                migrate='runestone_acerror_log.table'
+                migrate=table_migrate_prefix + 'acerror_log.table'
                 )
 
 ##table to store the last position of the user. 1 row per user, per course
@@ -56,7 +56,7 @@ db.define_table('user_state',
   Field('last_page_subchapter','string'),
   Field('last_page_scroll_location','string'),
   Field('last_page_accessed_on','datetime'),
-  migrate='runestone_user_state.table'
+  migrate=table_migrate_prefix + 'user_state.table'
 )
 
 # Table to match instructor(s) to their course(s)
@@ -75,7 +75,7 @@ db.define_table('coach_hints',
     Field('obj','string'),
     Field('msg','string'),
     Field('source',db.acerror_log),
-    migrate='runestone_coach_hints.table'
+    migrate=table_migrate_prefix + 'coach_hints.table'
     )
 
 db.define_table('timed_exam',
@@ -88,7 +88,7 @@ db.define_table('timed_exam',
     Field('skipped','integer'),
     Field('time_taken','integer'),
     Field('reset','boolean'),
-    migrate='runestone_timed_exam.table'
+    migrate=table_migrate_prefix + 'timed_exam.table'
     )
 
 db.define_table('mchoice_answers',
@@ -163,7 +163,7 @@ db.define_table('payments',
     Field('user_courses_id', db.user_courses, required=True),
     # A `Stripe charge ID <https://stripe.com/docs/api/charges/object#charge_object-id>`_. Per the `Stripe docs <https://stripe.com/docs/upgrades>`_, this is always 255 characters or less.
     Field('charge_id', 'string', length=255, required=True),
-    migrate='runestone_payments.table'
+    migrate=table_migrate_prefix + 'payments.table'
     )
 
 db.define_table('lp_answers',
@@ -173,5 +173,5 @@ db.define_table('lp_answers',
     Field('course_name','string'),
     Field('answer','text'),
     Field('correct','double'),
-    migrate='runestone_lp_answers.table'
+    migrate=table_migrate_prefix + 'lp_answers.table'
     )
