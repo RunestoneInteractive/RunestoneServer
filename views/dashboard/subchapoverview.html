@@ -11,12 +11,10 @@
         <option value="dividmax" {{if request.vars.tablekind == 'dividmax':}}selected{{pass}}>Last Interaction with all Activities</option>
         <option value="dividnum" {{if request.vars.tablekind == 'dividnum':}}selected{{pass}}>Number of Interactions with each Activity</option>
     </select>
+
+    <button type="submit" name="action" value="tocsv">Download CSV</button>
 </form>
 
-<button onclick="$('#scsummary').tableToCSV()">Download Table to CSV</button>
-
 {{=XML(summary)}}
-
-<script src="/runestone/static/js/jquery.tabletoCSV.js"></script>
 
 {{ end }}

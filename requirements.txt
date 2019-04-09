@@ -18,4 +18,5 @@ oauth2>=1.9
 bleach>=3.0
 pathlib2
 stripe
+pandas
 -e rsmanage/

@@ -8,6 +8,8 @@ from operator import itemgetter
 from collections import OrderedDict
 from paver.easy import sh
 import six
+import pandas as pd
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -312,12 +314,16 @@ def exercisemetrics():
 
     return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
 
-import pandas as pd
 
 @auth.requires_login()
 def subchapoverview():
     #course = db(db.courses.id == auth.user.course_id).select().first()
     course = auth.user.course_name
+
+    is_instructor = verifyInstructorStatus(course, auth.user.id)
+    if not is_instructor:
+        session.flash = "Not Authorized for this page"
+        return redirect(URL('default','user'))
 
     data = pd.read_sql_query("""
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
@@ -343,5 +349,10 @@ def subchapoverview():
 
     pt = data.pivot_table(index=idxlist, values=values, columns='sid', aggfunc=afunc)
 
-    return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
-        summary=pt.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary"))
+    if request.vars.action == "tocsv":
+        response.headers['Content-Type']='application/vnd.ms-excel'
+        response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
+        return pt.to_csv(na_rep=" ")
+    else:
+        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
+            summary=pt.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))
