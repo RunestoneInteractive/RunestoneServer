@@ -1,0 +1,22 @@
+{{extend 'admin/instructors.html'}}
+
+{{ block tabcontent }}
+<h2>{{=course_name}}</h2>
+<hr>
+
+<form action="/runestone/dashboard/subchapoverview" style="display: inline-block">
+    <select name="tablekind" id="tabselect" onchange="this.form.submit()">
+        <option value="sccount" {{if request.vars.tablekind == 'sccount':}}selected{{pass}}>Count of Subchapter Activities</option>
+        <option value="dividmin" {{if request.vars.tablekind == 'dividmin':}}selected{{pass}}>First Interaction with all Activities</option>
+        <option value="dividmax" {{if request.vars.tablekind == 'dividmax':}}selected{{pass}}>Last Interaction with all Activities</option>
+        <option value="dividnum" {{if request.vars.tablekind == 'dividnum':}}selected{{pass}}>Number of Interactions with each Activity</option>
+    </select>
+</form>
+
+<button onclick="$('#scsummary').tableToCSV()">Download Table to CSV</button>
+
+{{=XML(summary)}}
+
+<script src="/runestone/static/js/jquery.tabletoCSV.js"></script>
+
+{{ end }}

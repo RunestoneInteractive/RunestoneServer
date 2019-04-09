@@ -311,3 +311,37 @@ def exercisemetrics():
             })
 
     return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+
+import pandas as pd
+
+@auth.requires_login()
+def subchapoverview():
+    #course = db(db.courses.id == auth.user.course_id).select().first()
+    course = auth.user.course_name
+
+    data = pd.read_sql_query("""
+    select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
+    join questions on div_id = name
+    where course_id = '{}'""".format(course), os.environ.get('DBURL'))
+    data = data[~data.sid.str.contains('@')]
+    if 'tablekind' not in request.vars:
+        request.vars.tablekind = 'sccount'
+
+    values = "timestamp"
+    idxlist = ['chapter', 'subchapter', 'div_id']
+
+    if request.vars.tablekind == "sccount":
+        values = "div_id"
+        afunc = "nunique"
+        idxlist = ['chapter', 'subchapter']
+    elif request.vars.tablekind == "dividmin":
+        afunc = "min"
+    elif request.vars.tablekind == "dividmax":
+        afunc = "max"
+    else:
+        afunc = "count"
+
+    pt = data.pivot_table(index=idxlist, values=values, columns='sid', aggfunc=afunc)
+
+    return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
+        summary=pt.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary"))
