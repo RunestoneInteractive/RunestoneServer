@@ -512,7 +512,8 @@ def makePavement(http_host, python3, login_required, course_name, base_course, l
             'login_req': 'true' if login_required else 'false',
             'python3': 'true' if python3 else 'false',
             'dest': '../../static',
-            'allow_pairs': 'true' if allow_pairs else 'false'
+            'allow_pairs': 'true' if allow_pairs else 'false',
+            'short_name': course_name
             }
 
     paver_stuff = paver_stuff % opts
