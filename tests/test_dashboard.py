@@ -11,9 +11,11 @@
 
 import unittest
 import sys
+from bs4 import BeautifulSoup
 
 from gluon.globals import Request, Session
 from gluon.tools import Auth
+from StringIO import StringIO
 
 # bring in the ajax controllers
 
@@ -44,6 +46,34 @@ class TestDashboardEndpoints(unittest.TestCase):
         self.assertEqual(res['assignments']['List Practice']['score'], 13.0)
         self.assertEqual(res['assignments']['List Practice']['class_average'], '7.82') #todo: why a string?
 
+
+
+    def test_subchapoverview(self):
+        auth.login_user(db.auth_user(11))
+        session.auth = auth
+        request.vars.tablekind = 'sccount'
+
+        res = subchapoverview()
+        self.assertIsNotNone(res)
+        soup = BeautifulSoup(res['summary'])
+        thlist = soup.select('th')
+        self.assertEqual(thlist[11].text, 'user_1671')
+        rl = soup.select('tr')
+        cl = rl[10].select('td')
+        self.assertEqual(cl[5].text, '4.0')
+        self.assertEqual(cl[17].text, '6.0')
+        request.vars.action = 'tocsv'
+        request.vars.tablekind = 'dividmin'
+        res = subchapoverview()
+        csvf = StringIO(res)
+        rows = csvf.readlines()
+        cols = rows[18].split(',')
+        self.assertEqual(cols[0], 'Dictionaries')
+        self.assertEqual(cols[2], 'ch12_dict11')
+        self.assertEqual(cols[-1].strip(), '2017-10-26 22:25:38')
+        cols = rows[122].split(',')
+        self.assertEqual(cols[0], 'GeneralIntro')
+        self.assertEqual(cols[3], '2017-08-30 22:29:30')
 
 
 suite = unittest.TestSuite()
