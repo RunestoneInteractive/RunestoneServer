@@ -11,6 +11,7 @@
 
 import unittest
 import sys
+from bs4 import BeautifulSoup
 
 from gluon.globals import Request, Session
 from gluon.tools import Auth
@@ -45,6 +46,21 @@ class TestDashboardEndpoints(unittest.TestCase):
         self.assertEqual(res['assignments']['List Practice']['class_average'], '7.82') #todo: why a string?
 
 
+
+    def test_subchapoverview(self):
+        auth.login_user(db.auth_user(11))
+        session.auth = auth
+        request.vars.tablekind = 'sccount'
+
+        res = subchapoverview()
+        self.assertIsNotNone(res)
+        soup = BeautifulSoup(res['summary'])
+        thlist = soup.select('th')
+        self.assertEqual(thlist[11].text, 'user_1671')
+        rl = soup.select('tr')
+        cl = rl[10].select('td')
+        self.assertEqual(cl[5].text, '4.0')
+        self.assertEqual(cl[17].text, '6.0')
 
 suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestDashboardEndpoints))

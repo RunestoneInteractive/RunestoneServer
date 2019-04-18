@@ -328,7 +328,7 @@ def subchapoverview():
     data = pd.read_sql_query("""
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
     join questions on div_id = name
-    where course_id = '{}'""".format(course), os.environ.get('DBURL'))
+    where course_id = '{}'""".format(course), settings.database_uri)
     data = data[~data.sid.str.contains('@')]
     if 'tablekind' not in request.vars:
         request.vars.tablekind = 'sccount'
