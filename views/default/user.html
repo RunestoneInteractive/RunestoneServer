@@ -24,7 +24,11 @@
             <!-- Carousel
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
+            {{ if (not auth.user): }}
             <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
+            {{else: }}
+            <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel">
+            {{ pass }}
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -91,14 +95,14 @@
                     </div>
                 </div><a class="left carousel-control" data-slide="prev" href="#myCarousel"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" data-slide="next" href="#myCarousel"><span class="glyphicon glyphicon-chevron-right"></span></a>
             </div><!-- /.carousel -->
-            <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
             {{pass}}
           {{pass}}
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
-            {{ if (request.args(0) == 'login'): }}
+            {{ if (request.args(0) == 'login' and not auth.user): }}
+                <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
@@ -148,12 +152,12 @@
                         {{pass}}
                     {{=form.custom.end}}
                     <!-- Must use this to get all the good defaults for the form -->
-                    <div id='auth-actions' class="col-md-4">
+                    <div id='auth-actions' style="margin-left: 20px;">
                         {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
                             <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
                                 role="button">{{=T('Lost Password')}}</a>
                             <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
-                                role="button">{{=T('email my username')}}</a>
+                                role="button">{{=T('Forgot Username')}}</a>
                         {{pass}}
                     </div>
                 </div>
