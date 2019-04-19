@@ -101,8 +101,10 @@
           {{pass}}
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
-            {{ if (request.args(0) == 'login' and not auth.user): }}
-                <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+          {{ if not auth.user or request.args(0) == 'impersonate': }}
+            <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+          {{ pass }}
+          {{ if request.args(0) == 'login' and not auth.user: }}
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
