@@ -107,7 +107,7 @@
                             </a>
                             <ul class="dropdown-menu user-menu">
                                 {{ if auth.user: }}
-                                    <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
+                                    <li><span class='loggedinuser'>{{=auth.user.username}}</span></li>
                                 {{ else: }}
                                     <li><span class='loggedinuser'>Not logged in</span></li>
                                 {{ pass }}
@@ -146,7 +146,7 @@
                         </li>
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
-                        {{ if settings.academy_mode: }}                                                        
+                        {{ if settings.academy_mode: }}
                         <!-- help menu dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -160,7 +160,7 @@
                             </ul>
                         </li>
                         <li class="divider-vertical"></li>
-                        {{pass}}                            
+                        {{pass}}
                     </ul>
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
