@@ -349,9 +349,20 @@ def getuser():
 
     if auth.user:
         try:
-            res = {'email': auth.user.email, 'nick': auth.user.username,
-                   'cohortId': auth.user.cohort_id, 'donated': auth.user.donated,
-                   'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id)}
+            # return the list of courses that auth.user is registered for to keep them from
+            # accidentally wandering into courses they are not registered for.
+            cres = db( (db.user_courses.user_id == auth.user.id) &
+                       (db.user_courses.course_id == db.courses.id)).select(db.courses.course_name)
+            clist = []
+            for row in cres:
+                clist.append(row.course_name)
+            res = {'email': auth.user.email,
+                   'nick': auth.user.username,
+                   'cohortId': auth.user.cohort_id,
+                   'donated': auth.user.donated,
+                   'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id),
+                   'course_list': clist
+                   }
             session.timezoneoffset = request.vars.timezoneoffset
             logger.debug("setting timezone offset in session %s hours" % session.timezoneoffset)
         except:
