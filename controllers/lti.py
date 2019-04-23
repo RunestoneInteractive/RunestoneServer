@@ -74,7 +74,7 @@ def index():
 
         try:
             consumer, token, params = oauth_server.verify_request(oauth_request)
-        except oauth.OAuthError, err:
+        except oauth.OAuthError as err:
             return dict(logged_in=False, lti_errors=["OAuth Security Validation failed:"+err.message, request.vars],
                         masterapp=masterapp)
             consumer = None
