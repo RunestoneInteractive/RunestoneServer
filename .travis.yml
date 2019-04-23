@@ -1,12 +1,13 @@
 language: python
 python:
 - '2.7'
+- '3.6'
 services:
 - postgresql
 addons:
   postgresql: '9.4'
 env:
-- WEB2PY_VERSION=2.17.2
+- WEB2PY_VERSION=2.18.4
 script:
 - pip install -U -r requirements-test.txt
 - mkdir runestone
