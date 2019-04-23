@@ -58,6 +58,7 @@ class TestGradingFunction(unittest.TestCase):
                         db.question_grades.score)
 
         # for each one, see if the computed score matches the recorded one
+        bad_count = 0
         for g in graded:
             sc = _autograde_one_q(course_name=g.question_grades.course_name,
                                               sid=g.question_grades.sid,
@@ -68,9 +69,16 @@ class TestGradingFunction(unittest.TestCase):
                                               autograde=g.assignment_questions.autograde,
                                               which_to_grade=g.assignment_questions.which_to_grade,
                                               save_score=False, db=db)
-            self.assertEqual(sc,
-                             g.question_grades.score,
-                             "Failed for graded question {} got a score of {}".format(g,sc))
+            if sc != g.question_grades.score:
+                print("got {} expected {}".format(sc, g.question_grades.score), g)
+                bad_count += 1
+            #     self.assertEqual(sc,
+            #                  g.question_grades.score,
+            #                  "Failed for graded question {} got a score of {}".format(g,sc))
+            # except:
+            #     bad_count += 1
+
+        self.assertEqual(bad_count, 0)
 
 
     def testASlashInSubchapter(self):

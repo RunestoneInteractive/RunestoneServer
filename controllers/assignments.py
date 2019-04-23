@@ -547,8 +547,8 @@ def doAssignment():
     for q in questions:
         if q.questions.htmlsrc:
             # This replacement is to render images
-            htmlsrc = bytes(q.questions.htmlsrc).decode('utf8').replace('src="../_static/', 'src="../static/' + course[
-                'course_name'] + '/_static/')
+            htmlsrc = bytes(q.questions.htmlsrc, 'utf8').decode('utf8').replace('src="../_static/',
+                'src="../static/' + course['course_name'] + '/_static/')
             htmlsrc = htmlsrc.replace("../_images",
                                       "/{}/static/{}/_images".format(request.application, course.course_name))
         else:

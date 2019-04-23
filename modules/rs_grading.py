@@ -2,6 +2,7 @@ import datetime
 import logging
 from math import ceil
 from psycopg2 import IntegrityError
+from decimal import Decimal, ROUND_HALF_UP
 
 from gluon import current
 from outcome_request import OutcomeRequest
@@ -13,14 +14,15 @@ def _profile(start, msg):
     delta = datetime.datetime.now() - start
     print("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
 
-
+D1 = Decimal('1')
 def _score_from_pct_correct(pct_correct, points, autograde):
     # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
     if autograde == 'interact' or autograde == 'visited':
         return points
     elif autograde == 'pct_correct':
         # prorate credit based on percentage correct
-        return int(round((pct_correct * points)/100.0))
+        # 2.x result return int(((pct_correct * points)/100.0))
+        return int(Decimal((pct_correct * points)/100.0).quantize(D1, ROUND_HALF_UP)  )
     elif autograde == 'all_or_nothing' or autograde == 'unittest':
         # 'unittest' is legacy, now deprecated
         # have to get *all* tests to pass in order to get any credit
