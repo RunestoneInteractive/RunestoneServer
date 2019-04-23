@@ -548,11 +548,11 @@ def doAssignment():
         if q.questions.htmlsrc:
             # This replacement is to render images
             if six.PY3:
-                bts = bytes(q.questions.htmlsrc, 'utf8')
+                bts = q.questions.htmlsrc
             else:
-                bts = bytes(q.questions.htmlsrc)
+                bts = bytes(q.questions.htmlsrc).decode('utf8')
 
-            htmlsrc = bts.decode('utf8').replace('src="../_static/',
+            htmlsrc = bts.replace('src="../_static/',
                 'src="../static/' + course['course_name'] + '/_static/')
             htmlsrc = htmlsrc.replace("../_images",
                                       "/{}/static/{}/_images".format(request.application, course.course_name))
