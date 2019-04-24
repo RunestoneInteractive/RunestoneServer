@@ -638,7 +638,10 @@ def _getStudentResults(question):
         currentAnswers = []
 
         for row in res:
-            answer = clean(row.answer)
+            if row.answer:
+                answer = clean(row.answer)
+            else:
+                answer = None
 
             if row.sid == currentSid:
                 currentAnswers.append(answer)
