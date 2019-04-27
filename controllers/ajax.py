@@ -476,7 +476,7 @@ def updatelastpage():
                                                  lastPageSubchapter)
             if len(questions) > 0:
                 now = datetime.datetime.utcnow()
-                now_local = now - datetime.timedelta(hours=float(session.timezoneoffset))
+                now_local = now - datetime.timedelta(hours=float(session.timezoneoffset) if 'timezoneoffset' in session else 0)
                 existing_flashcards = db((db.user_topic_practice.user_id == auth.user.id) &
                                          (db.user_topic_practice.course_name == auth.user.course_name) &
                                          (db.user_topic_practice.chapter_label == lastPageChapter) &
