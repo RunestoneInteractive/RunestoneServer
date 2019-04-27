@@ -26,7 +26,7 @@ Installation
 
 #. Install python.
 
-   First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
+   First, make sure you have Python installed.  Web2py has  been ported to Python3, but we have not finished all of our Python 3 testing yet. If you are a developer feel free to jump in with Python 3.
 
 #. Install and make a Python virtualenv
 
