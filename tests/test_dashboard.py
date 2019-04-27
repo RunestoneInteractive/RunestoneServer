@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 
 from gluon.globals import Request, Session
 from gluon.tools import Auth
-from StringIO import StringIO
+from six import StringIO
 
 # bring in the ajax controllers
 
