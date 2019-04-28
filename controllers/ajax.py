@@ -221,6 +221,7 @@ def runlog():    # Log errors and runs with code
         if 'to_save' in request.vars and (request.vars.to_save == "True" or request.vars.to_save == "true"):
             num_tries = 3
             done = False
+            dbcourse = db(db.courses.course_name == course).select().first()
             while num_tries > 0 and not done:
                 try:
                     db.code.insert(sid=sid,
@@ -228,7 +229,7 @@ def runlog():    # Log errors and runs with code
                         code=code,
                         emessage=error_info,
                         timestamp=ts,
-                        course_id=auth.user.course_id,
+                        course_id=dbcourse,
                         language=request.vars.lang)
                     if request.vars.partner:
                         if _same_class(sid, request.vars.partner):
@@ -238,7 +239,7 @@ def runlog():    # Log errors and runs with code
                                 code=newcode,
                                 emessage=error_info,
                                 timestamp=ts,
-                                course_id=auth.user.course_id,
+                                course_id=dbcourse,
                                 language=request.vars.lang)
                         else:
                             res = {'message': 'You must be enrolled in the same class as your partner'}
