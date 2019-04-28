@@ -48,6 +48,8 @@ Then, use docker-compose to bring the containers up.
 docker-compose up -d
 ```
 
+And go to [http://0.0.0.0:8080](http://0.0.0.0:8080) to see the application.
+
 ## Development Tips
 
 ### 1. Testing the Entrypoint

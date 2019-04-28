@@ -59,20 +59,18 @@ RUN apt-get update && \
         python-sqlalchemy \
         python-cssselect \
         python-oauth2client \
-        python-wheel rsync wget && \
+        python-wheel rsync wget nginx && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # The rest could be done and ran under a regular (well, staff for installing under /usr/local) user
 RUN useradd -s /bin/bash -M -g staff --home-dir ${WEB2PY_PATH} runestone && \
-    mkdir -p /srv /etc/uwsgi /etc/init && \
-    pip install uwsgi
+    mkdir -p /srv
 
 # Install additional components
-RUN wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip && \
-    unzip web2py_src.zip && \
-    mv web2py ${WEB2PY_PATH} && \
-    mv ${WEB2PY_PATH}/handlers/wsgihandler.py ${WEB2PY_PATH}/
+RUN git clone https://github.com/web2py/web2py ${WEB2PY_PATH} && \
+    cd ${WEB2PY_PATH} && \
+    git submodule update --init --recursive
 
 RUN mkdir -p ${RUNESTONE_PATH}
 ADD . ${RUNESTONE_PATH}
@@ -82,7 +80,8 @@ WORKDIR ${RUNESTONE_PATH}
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
     pip install --system -r requirements.txt && \
-    rm -rf ${WEB2PY_PATH}/.cache/*
+    rm -rf ${WEB2PY_PATH}/.cache/* && \
+    mv ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py
 
 WORKDIR ${WEB2PY_PATH}
 

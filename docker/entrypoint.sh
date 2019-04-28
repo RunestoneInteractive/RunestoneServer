@@ -26,9 +26,6 @@ if [ ! -f "$stamp" ]; then
     info "Initializing"
     rsmanage initdb --
     
-    # Run the scheduler alongside the main application
-    cp $WEB2PY_PATH/applications/runestone/scripts/run_scheduler.py $WEB2PY_PATH/
-
     # Setup students, if the file exists
     if [ -e '/srv/configs/instructors.csv' ]; then
         info "Setting up instructors"
@@ -73,4 +70,4 @@ cd "$WEB2PY_PATH"
 python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X runestone  &
 sleep 3
 info "Starting the scheduler"
-python ${RUNESTONE_PATH}/scripts/run_scheduler.py runestone
+python ${WEB2PY_PATH}/run_scheduler.py runestone
