@@ -11,8 +11,6 @@ services:
   runestone:
     image: runestone/server
     #command: tail -F peanutbutter
-    volumes:
-      - .:/code
     links:
       - db
     ports:
