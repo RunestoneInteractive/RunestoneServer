@@ -45,20 +45,9 @@ RUN apt-get update && \
         unzip \
         python-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
-        python-diff-match-patch \
-        python-lxml \
+        python-setuptools \
         python-numpy \
         python-dev \
-        python-psycopg2 \
-        pylint \
-        python-dateutil \
-        python-requests \
-        python-selenium \
-        python-six \
-        python-sphinx \
-        python-sqlalchemy \
-        python-cssselect \
-        python-oauth2client \
         python-wheel rsync wget nginx && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
