@@ -134,7 +134,7 @@ $ docker-compose stop
 $ docker-compose rm
 ```
 
-### 5. Previous Database
+### 3. Previous Database
 
 Once you create the containers, you'll notice a "databases" subfolder is generated
 on the host. This happens after the initialization, as the runestone folder
@@ -196,7 +196,7 @@ And then shell inside (see next section). Once inside, you can then issue comman
 to test the entrypoint - since the others were started
 with docker-compose (postgres) everything is ready to go.
 
-### 4. Shelling Inside
+### 5. Shelling Inside
 
 You can shell into the container to look around, or otherwise test. When you enter,
 you'll be in the web2py folder, where runstone is an application under applications:
