@@ -23,14 +23,22 @@ export DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone
 
 # Initialize the database
 if [ ! -f "$stamp" ]; then
+
+    info "Install rsmanage local module"
+    pip install -e ${RUNESTONE_PATH}/rsmanage
+
+    info "Creating auth key"
+    mkdir -p ${RUNESTONE_PATH}/private
+    echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > ${RUNESTONE_PATH}/private/auth.key
+    
     info "Initializing"
     rsmanage initdb --
     
     # Setup students, if the file exists
-    if [ -e '/srv/configs/instructors.csv' ]; then
+    if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" ]; then
         info "Setting up instructors"
-        rsmanage inituser --fromfile /srv/configs/instructors.csv
-        cut -d, -f1,6 /srv/configs/instructors.csv \
+        rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/instructors.csv
+        cut -d, -f1,6 ${RUNESTONE_PATH}/configs/instructors.csv \
         | tr ',' ' ' \
         | while read n c ; do
             rsmanage addinstructor  --username $n --course $c
@@ -38,9 +46,9 @@ if [ ! -f "$stamp" ]; then
     fi
 
     # Setup students, again if the file exists
-    if [ -e '/srv/configs/students.csv' ]; then
+    if [ -f "${RUNESTONE_PATH}/configs/students.csv" ]; then
         info "Setting up students"
-        rsmanage inituser --fromfile /srv/configs/students.csv
+        rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/students.csv
         info "Students were provided -- disabling signup!"
         # Disable signup
         echo -e "\nauth.settings.actions_disabled.append('register')" >> $WEB2PY_PATH/applications/runestone/models/db.py

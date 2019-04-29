@@ -12,13 +12,7 @@ services:
     image: runestone/server
     #command: tail -F peanutbutter
     volumes:
-      - ./books:/srv/web2py/applications/runestone/books
-      - ./controllers:/srv/web2py/applications/runestone/controllers
-      - ./models:/srv/web2py/applications/runestone/models
-      - ./modules:/srv/web2py/applications/runestone/modules
-      - ./scripts:/srv/web2py/applications/runestone/scripts
-      - ./views:/srv/web2py/applications/runestone/views
-      - ./static:/srv/web2py/applications/runestone/static
+      - ./:/srv/web2py/applications/runestone
     links:
       - db
     ports:
