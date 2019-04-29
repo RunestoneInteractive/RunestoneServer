@@ -1,15 +1,15 @@
 # Docker Deployment
 
-Using [docker-compose](https://docs.docker.com/compose/install/) and [Docker](https://docs.docker.com/install/) 
-we can easily bring up the server without needing to install dependencies 
+Using [docker-compose](https://docs.docker.com/compose/install/) and [Docker](https://docs.docker.com/install/)
+we can easily bring up the server without needing to install dependencies
 on the host. If you haven't yet, visit the links to install both docker-compose and docker.
 
 ## Setup
 
 ### 1. Add Books
 
-You can add any [books](https://github.com/RunestoneInteractive) that you want 
-installed in the application into the [books](../books) folder. 
+You can add any [books](https://github.com/RunestoneInteractive) that you want
+installed in the application into the [books](../books) folder.
 They will be installed upon start or restart. For example, here is how I might
 add the [thinkcspy](https://github.com/RunestoneInteractive/thinkcspy) lesson:
 
@@ -20,11 +20,18 @@ git clone https://github.com/RunestoneInteractive/thinkcspy.git
 
 ### 2. Add Users
 
-If you have an instructors.csv or students.csv that you want to add to the database, 
-put them in a folder called "configs" in the root of the repository:
+If you have an instructors.csv or students.csv that you want to add to the database,
+put them in a folder called "configs" in the root of the repository:  The format of the csv files is to have one person per line with the format of each line as follows:
+
+```
+username,email,first_name,last_name,pw,course
+```
+
+This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.
+
 
 ```bash
-$ mkdir -p 
+$ mkdir -p
 ```
 
 ### 3. Build
@@ -44,7 +51,7 @@ using the docker-compose file.
 ### 4. Environment
 
 For a development deployment (meaning on your local machine to test and develop)
-you can use the docker-compose file as is, **no changes are necessary**. 
+you can use the docker-compose file as is, **no changes are necessary**.
 However, if you want to deploy a production Runestone Server, you will need
 to change the default usernames and passwords. Notice how there are environment
 variables for the database (POSTGRES_*) in the `environment` section of the
@@ -77,7 +84,7 @@ of the `db` and `uwsgi` images and replace with:
      - .env
 ```
 
-Once your environment is ready to go (again, for development you can leave the 
+Once your environment is ready to go (again, for development you can leave the
 defaults), use docker-compose to bring the containers up.
 
 ```bash
@@ -90,7 +97,7 @@ And go to [http://0.0.0.0:8080](http://0.0.0.0:8080) to see the application.
 
 ### 1. Updating Books or Runestone
 
-If you look at the docker-compose file, you'll notice that the root of the respository 
+If you look at the docker-compose file, you'll notice that the root of the respository
 is bound as a volume to the container:
 
 ```bash
@@ -102,7 +109,7 @@ is bound as a volume to the container:
 This means that if you make changes to the repository root
 (the runestone application) they will also be made in the container!
 For example, if you add a new book, the files will also be in the container.
-You won't need to rebuild the container, however, to properly get the book running, 
+You won't need to rebuild the container, however, to properly get the book running,
 you *will* need to restart it.
 
 ```bash
@@ -160,7 +167,7 @@ And then when the container is running, find it's id by doing:
 CONTAINER_ID=$(echo `docker-compose ps -q runestone` |  cut -c1-12)
 ```
 
-And then shell inside (see next section). Once inside, you can then issue commands 
+And then shell inside (see next section). Once inside, you can then issue commands
 to test the entrypoint - since the others were started
 with docker-compose (postgres) everything is ready to go.
 
@@ -171,9 +178,9 @@ you'll be in the web2py folder, where runstone is an application under applicati
 
 ```bash
 $ docker exec -it $CONTAINER_ID bash
-root@60e279f00b2e:/srv/web2py# 
+root@60e279f00b2e:/srv/web2py#
 ```
 
 Remember that the folder under web2py applications/runestone is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change in
-permissions on the host. 
+permissions on the host.
