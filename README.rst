@@ -1,10 +1,6 @@
 Runestone Interactive Server and API
 ====================================
 
-.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
-   :target: https://waffle.io/RunestoneInteractive/RunestoneServer
-   :alt: 'Stories in Ready'
-
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
    :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
@@ -19,6 +15,14 @@ Relationship to other Runestone components
 If you just want to use Runestone's capabilities to build pre-existing books or to make your own books using Sphinx and directives like ActiveCode, then you won't need this repository at all.
 
 This repository has the extra materials needed for running a web2py server with extra features for running courses using Runestone books and tools.
+
+
+Docker Installation
+-------------------
+
+The easiest way to deploy or develop Runstone Server is to use Docker, and a `Dockerfile <Dockerfile>`_ is provided for that.
+You can simply build the container, and run it, providing the database password sourced from an environment variable (or similar). 
+Please see complete instructions in the `docker <docker>_` folder included here.
 
 
 Installation

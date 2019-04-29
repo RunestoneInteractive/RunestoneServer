@@ -1,6 +1,12 @@
 Runestone ChangeLog
 ===================
 
+3.5.x August 2015
+-----------------
+
+* Addition of Dockerfile for container deployment
+
+
 3.1.1 September 1, 2014
 -----------------------
 
