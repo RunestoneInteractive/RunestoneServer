@@ -10,6 +10,7 @@ services:
 
   runestone:
     image: runestone/server
+    restart: always
     #command: tail -F peanutbutter
     volumes:
       - ./:/srv/web2py/applications/runestone

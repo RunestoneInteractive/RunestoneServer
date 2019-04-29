@@ -57,8 +57,6 @@ if [ ! -f "$stamp" ]; then
         fi
     else
         info "${RUNESTONE_PATH}/databases exists, cannot init until removed from the host."
-        info "docker-compose stop"
-        info "docker-compose rm"
         info "sudo rm -rf databases"
         exit 1
     fi

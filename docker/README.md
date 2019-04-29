@@ -134,7 +134,39 @@ $ docker-compose stop
 $ docker-compose rm
 ```
 
-### 3. Testing the Entrypoint
+### 5. Previous Database
+
+Once you create the containers, you'll notice a "databases" subfolder is generated
+on the host. This happens after the initialization, as the runestone folder
+is bound to the host. If you remove the containers and try to bring them up
+without removing this folder, you'll see an error (and the container won't start):
+
+```bash
+$ docker-compose logs runestone
+/srv/web2py/applications/runestone/databases exists, cannot init until removed from the host.
+sudo rm -rf databases
+```
+
+The message tells you to remove the databases folder. Since the container is restarting
+on its own, you should be able to remove it, and then wait, and it will start cleanly.
+As an alternative, you can stop and rebuild the container, changing the `WEB2PY_MIGRATE` 
+variable to be Fake in [entrypoint.sh](entrypoint.sh) and try again:
+
+```bash
+export WEB2PY_MIGRATE=Fake
+```
+
+You would rebuild the container like this:
+
+```bash
+$ docker build -t runestone/server .
+```
+
+For now, it's recommended to remove the folder. Hopefully we will
+develop a cleaner solution to handle migrations.
+
+
+### 4. Testing the Entrypoint
 
 If you want to test the [entrypoint.sh](entrypoint.sh) script, the easiest thing
 to do is add a command to the docker-compose to disable it, and then run commands
