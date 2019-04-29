@@ -90,22 +90,17 @@ And go to [http://0.0.0.0:8080](http://0.0.0.0:8080) to see the application.
 
 ### 1. Updating Books or Runestone
 
-If you look at the docker-compose file, you'll notice that subfolders of
-the root of the respository bind to `/srv/web2py/applications/runestone/<subfolder>` in the container.
+If you look at the docker-compose file, you'll notice that the root of the respository 
+is bound as a volume to the container:
 
 ```bash
     volumes:
-      - ./books:/srv/web2py/applications/runestone/books
-      - ./controllers:/srv/web2py/applications/runestone/controllers
+      - .:/srv/web2py/applications/runestone
     ...
 ```
 
-With these volume in place, it means that if you make changes to the repository root
-(the runestone application) they will also be made in the container! The reason
-we don't bind the entire runestone folder is that some files are generated when the
-container is built (that are unlikely to be changed) and need to persist in the container.
-
-However, for things like books, binding the "books" folder makes development easy.
+This means that if you make changes to the repository root
+(the runestone application) they will also be made in the container!
 For example, if you add a new book, the files will also be in the container.
 You won't need to rebuild the container, however, to properly get the book running, 
 you *will* need to restart it.
