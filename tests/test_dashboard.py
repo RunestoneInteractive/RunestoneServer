@@ -68,11 +68,14 @@ class TestDashboardEndpoints(unittest.TestCase):
         csvf = StringIO(res)
         rows = csvf.readlines()
         cols = rows[18].split(',')
-        self.assertEqual(cols[0], 'Dictionaries')
+        print(cols)
+        self.assertEqual(cols[0], ' ')
         self.assertEqual(cols[2], 'ch12_dict11')
-        self.assertEqual(cols[-1].strip(), '2017-10-26 22:25:38')
+        self.assertEqual(cols[-3].strip(), '2017-10-26 22:25:38')
+        self.assertEqual(cols[-1].strip(), 'Aliasingandcopying')
         cols = rows[122].split(',')
-        self.assertEqual(cols[0], 'GeneralIntro')
+        print(cols)
+        self.assertEqual(cols[0], ' ')
         self.assertEqual(cols[3], '2017-08-30 22:29:30')
 
 

@@ -32,9 +32,10 @@ def index():
     questions = []
     sections = []
 
-    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
-        session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
-        return redirect(URL('admin','admin'))
+    if settings.academy_mode:
+        if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
+            session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
+            return redirect(URL('admin','admin'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
@@ -349,10 +350,23 @@ def subchapoverview():
 
     pt = data.pivot_table(index=idxlist, values=values, columns='sid', aggfunc=afunc)
 
+    cmap = pd.read_sql_query("""select chapter_num, sub_chapter_num, chapter_label, sub_chapter_label
+        from sub_chapters join chapters on chapters.id = sub_chapters.chapter_id
+        where chapters.course_id = '{}'
+        order by chapter_num, sub_chapter_num;
+        """.format(course), settings.database_uri )
+
+    if request.vars.tablekind != "sccount":
+        pt = pt.reset_index(2)
+
+    l = pt.merge(cmap, left_index=True, right_on=['chapter_label', 'sub_chapter_label'], how='outer')
+    l = l.set_index(['chapter_num','sub_chapter_num']).sort_index()
+
+
     if request.vars.action == "tocsv":
         response.headers['Content-Type']='application/vnd.ms-excel'
         response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
-        return pt.to_csv(na_rep=" ")
+        return l.to_csv(na_rep=" ")
     else:
         return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
-            summary=pt.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))
+            summary=l.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))
