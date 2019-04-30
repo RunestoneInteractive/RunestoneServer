@@ -17,6 +17,7 @@ ENV WEB2PY_PATH=${WEB2PY_PATH}
 ENV RUNESTONE_PATH=${WEB2PY_APPS_PATH}/runestone
 ENV BOOKS_PATH=${RUNESTONE_PATH}/books
 ENV WEB2PY_VERSION=2.18.4
+ENV DBHOST=db
 
 # Expose that port on the network
 EXPOSE ${WEB2PY_PORT}
@@ -69,6 +70,7 @@ WORKDIR ${RUNESTONE_PATH}
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
     pip install --system -r requirements.txt && \
+    pip install --system -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     mv ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py
 

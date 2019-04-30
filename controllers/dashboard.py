@@ -32,7 +32,7 @@ def index():
     questions = []
     sections = []
 
-    if settings.academy_mode:
+    if settings.academy_mode and not settings.docker_institution_mode:
         if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
             session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
             return redirect(URL('admin','admin'))

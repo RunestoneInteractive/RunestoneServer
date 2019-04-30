@@ -20,6 +20,7 @@ fi
 export WEB2PY_CONFIG=production
 export WEB2PY_MIGRATE=Yes
 export DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone
+export TEST_DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test
 
 # Initialize the database
 if [ ! -f "$stamp" ]; then
@@ -30,12 +31,16 @@ if [ ! -f "$stamp" ]; then
     info "Creating auth key"
     mkdir -p ${RUNESTONE_PATH}/private
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > ${RUNESTONE_PATH}/private/auth.key
-    
+
+    info "Creating pgpass file"
+    echo "db:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" > /root/.pgpass
+    chmod 600 /root/.pgpass
+
     # Only run initdb if we don't find a databases folder
     if [ ! -d "${RUNESTONE_PATH}/databases" ]; then
         info "Initializing"
         rsmanage initdb --
-    
+
         # Setup students, if the file exists
         if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" ]; then
             info "Setting up instructors"
