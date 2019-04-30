@@ -112,11 +112,17 @@ def initdb(config, list_tables, reset, fake):
         click.echo(message="Database Initialization Failed")
 
 @cli.command()
+@click.option("--fake", is_flag=True, help="perform a fake migration")
 @pass_config
-def migrate(config):
+def migrate(config, fake):
     "Startup web2py and load the models with Migrate set to Yes"
     os.chdir(findProjectRoot())
-    os.environ['WEB2PY_MIGRATE'] = 'Yes'
+
+    if fake:
+        os.environ['WEB2PY_MIGRATE'] = 'fake'
+    else:
+        os.environ['WEB2PY_MIGRATE'] = 'Yes'
+
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py", shell=True)
 
 
