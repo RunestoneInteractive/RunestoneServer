@@ -71,7 +71,6 @@ WORKDIR ${RUNESTONE_PATH}
 # base courses as their course when using docker to host their own courses.
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
-    echo "settings.docker_institution_mode = True" >> models/1.py && \
     pip install --system -r requirements.txt && \
     pip install --system -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \

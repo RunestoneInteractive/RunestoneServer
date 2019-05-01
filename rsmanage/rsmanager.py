@@ -43,6 +43,7 @@ def cli(config, verbose, if_clean):
     config.conf = conf
     config.dbname = re.match(r'postgres.*//.*?@.*?/(.*)', config.dburl).group(1)
     config.dbhost = re.match(r'postgres.*//.*?@(.*?)/(.*)', config.dburl).group(1)
+    config.dbuser = re.match(r'postgres.*//(.*?):.*?@(.*?)/(.*)', config.dburl).group(1)
 
     if verbose:
         echoEnviron(config)
@@ -63,8 +64,9 @@ def cli(config, verbose, if_clean):
 @click.option("--list_tables", is_flag=True, help="List all of the defined tables when done")
 @click.option("--reset", is_flag=True, help="drop database and delete all migration information")
 @click.option("--fake", is_flag=True, help="perform a fake migration")
+@click.option("--force", is_flag=True, help="answer Yes to confirm questions")
 @pass_config
-def initdb(config, list_tables, reset, fake):
+def initdb(config, list_tables, reset, fake, force):
     """Initialize and optionally reset the database"""
     os.chdir(findProjectRoot())
     if not os.path.exists(DBSDIR):
@@ -76,10 +78,11 @@ def initdb(config, list_tables, reset, fake):
         os.mkdir(PRIVATEDIR)
 
     if reset:
-        click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
-        res = subprocess.call("dropdb --if-exists --host={} {}".format(config.dbhost,config.dbname),shell=True)
+        if not force:
+            click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
+        res = subprocess.call("dropdb --if-exists --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         if res == 0:
-            res = subprocess.call("createdb --echo --host={} {}".format(config.dbhost, config.dbname),shell=True)
+            res = subprocess.call("createdb --echo --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -371,20 +374,26 @@ def env(config, checkdb):
         2: database exists but no databases folder
         3: both database and databases folder exist
     """
+    os.chdir(findProjectRoot())
     dbinit = 0
     dbdir = 0
     if checkdb:
         count = check_db_for_useinfo(config)
         if count == 0:
             dbinit = 0
+            print("Database not initialized")
         else:
             dbinit = 2
+            print("Database is initialized")
     if os.path.exists(DBSDIR):
         dbdir = 1
+        print("Database migration folder exists")
     else:
         dbdir = 0
+        print("No Database Migration Folder")
 
     echoEnviron(config)
+    print("Exiting with result of {}".format(dbinit|dbdir))
 
     sys.exit(dbinit|dbdir)
 

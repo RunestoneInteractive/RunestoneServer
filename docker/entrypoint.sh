@@ -36,47 +36,81 @@ if [ ! -f "$stamp" ]; then
     echo "db:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" > /root/.pgpass
     chmod 600 /root/.pgpass
 
-    # Only run initdb if we don't find a databases folder
-    if [ ! -d "${RUNESTONE_PATH}/databases" ]; then
-        info "Initializing"
-        rsmanage initdb
-
-        # Setup students, if the file exists
-        if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" ]; then
-            info "Setting up instructors"
-            rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/instructors.csv
-            cut -d, -f1,6 ${RUNESTONE_PATH}/configs/instructors.csv \
-            | tr ',' ' ' \
-            | while read n c ; do
-                rsmanage addinstructor  --username $n --course $c
-            done
-        fi
-
-        # Setup students, again if the file exists
-        if [ -f "${RUNESTONE_PATH}/configs/students.csv" ]; then
-            info "Setting up students"
-            rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/students.csv
-            info "Students were provided -- disabling signup!"
-            # Disable signup
-            echo -e "\nauth.settings.actions_disabled.append('register')" >> $WEB2PY_PATH/applications/runestone/models/db.py
-        fi
-    else
-        info "${RUNESTONE_PATH}/databases exists, cannot init until removed from the host."
-        info "sudo rm -rf databases"
-        exit 1
+    if [ ! -f "${RUNESTONE_PATH}/models/1.py" ]; then
+        touch "${RUNESTONE_PATH}/models/1.py"
     fi
+    echo "settings.docker_institution_mode = True" >> "${RUNESTONE_PATH}/models/1.py"
 
     touch "${stamp}"
 else
     info "Already initialized"
 fi
 
+info "Checking the State of Database and Migration Info"
+set +e
+rsmanage env --checkdb
+dbstate="$?"
+info "Got result of $dbstate"
+set -e
+
+case $dbstate in
+    0)
+        info "Initializing DB and databases"
+        rsmanage initdb
+        ;;
+    1)
+        info "Removing databases folder and initializing"
+        rsmanage initdb --reset --force
+        ;;
+    2)
+        info "Warning -- Database initialized but missing databases/ Trying a fake migration"
+        rsmanage migrate --fake
+        ;;
+    3)
+        info "All is good, no initialization needed"
+        ;;
+    *)
+        info "Unexpected result from checkdb"
+        exit 1
+
+esac
+
 RETRIES=5
 
-until psql -h $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
   echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
-  sleep 1
+  sleep 2
 done
+
+# Setup students, if the file exists
+if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" -a "${RUNESTONE_PATH}/configs/instructors.csv" -nt iadd.stamp ]; then
+    info "Setting up instructors"
+    rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/instructors.csv
+    cut -d, -f1,6 ${RUNESTONE_PATH}/configs/instructors.csv \
+    | tr ',' ' ' \
+    | while read n c ; do
+        rsmanage addinstructor  --username $n --course $c  || echo "unable to add instructor"
+    done
+    touch iadd.stamp
+fi
+
+# Setup students, again if the file exists
+if [ -f "${RUNESTONE_PATH}/configs/students.csv" -a "${RUNESTONE_PATH}/configs/students.csv" -nt sadd.stamp ]; then
+    info "Setting up students"
+    rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/students.csv
+    info "Students were provided -- disabling signup!"
+    # Disable signup
+    echo -e "\nauth.settings.actions_disabled.append('register')" >> $WEB2PY_PATH/applications/runestone/models/db.py
+    touch sadd.stamp
+fi
+
+# Uncomment for debugging
+# /bin/bash
+
+# Run the beast
+info "Starting the server"
+cd "$WEB2PY_PATH"
+python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X runestone  &
 
 ## Go through all books and build
 info "Building & Deploying books"
@@ -88,13 +122,5 @@ cd "${BOOKS_PATH}"
     );
 done
 
-# Uncomment for debugging
-# /bin/bash
-
-# Run the beast
-info "Starting the server"
-cd "$WEB2PY_PATH"
-python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X runestone  &
-sleep 3
 info "Starting the scheduler"
 python ${WEB2PY_PATH}/run_scheduler.py runestone
