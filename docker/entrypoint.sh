@@ -36,6 +36,10 @@ if [ ! -f "$stamp" ]; then
     echo "db:5432:*:$POSTGRES_USER:$POSTGRES_PASSWORD" > /root/.pgpass
     chmod 600 /root/.pgpass
 
+    # add a new setting so that institutions can run using a base book like thinkcspy as their
+    # course.  On Runestone.academy we don't let anyone be an instructor for the base courses
+    # because they are open to anyone.  This makes for a much less complicated deployment strategy
+    # for an institution that just wants to run their own server and use one or two books.
     if [ ! -f "${RUNESTONE_PATH}/models/1.py" ]; then
         touch "${RUNESTONE_PATH}/models/1.py"
     fi
