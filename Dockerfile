@@ -72,7 +72,8 @@ RUN mkdir -p private && \
     pip install --system -r requirements.txt && \
     pip install --system -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
-    mv ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py
+    cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
+    cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
 

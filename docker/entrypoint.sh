@@ -71,6 +71,13 @@ else
     info "Already initialized"
 fi
 
+RETRIES=5
+
+until psql -h $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
+  sleep 1
+done
+
 ## Go through all books and build
 info "Building & Deploying books"
 cd "${BOOKS_PATH}"

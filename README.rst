@@ -20,8 +20,8 @@ This repository has the extra materials needed for running a web2py server with 
 Docker Installation
 -------------------
 
-The easiest way to deploy or develop Runstone Server is to use Docker, and a `Dockerfile <Dockerfile>`_ is provided for that.
-You can simply build the container, and run it, providing the database password sourced from an environment variable (or similar). 
+The easiest way to deploy or develop Runestone Server is to use Docker, and a `Dockerfile <Dockerfile>`_ is provided for that.
+You can simply build the container, and run it, providing the database password sourced from an environment variable (or similar).
 Please see complete instructions in the `docker <docker>`_ folder included here.
 
 
