@@ -39,7 +39,7 @@ if [ ! -f "$stamp" ]; then
     # Only run initdb if we don't find a databases folder
     if [ ! -d "${RUNESTONE_PATH}/databases" ]; then
         info "Initializing"
-        rsmanage initdb --
+        rsmanage initdb
 
         # Setup students, if the file exists
         if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" ]; then
