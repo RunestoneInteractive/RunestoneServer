@@ -19,12 +19,6 @@ ENV BOOKS_PATH=${RUNESTONE_PATH}/books
 ENV WEB2PY_VERSION=2.18.4
 ENV DBHOST=db
 
-# Put these here so they are defined in a shell
-ENV WEB2PY_CONFIG=production
-ENV WEB2PY_MIGRATE=Yes
-ENV DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone
-ENV TEST_DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test
-
 # Expose that port on the network
 EXPOSE ${WEB2PY_PORT}
 

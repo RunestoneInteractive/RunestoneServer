@@ -22,3 +22,7 @@ services:
       POSTGRES_PASSWORD: 'runestone'
       POSTGRES_USER: 'runestone'
       POSTGRES_DB: 'runestone'
+      WEB2PY_CONFIG: 'production'
+      WEB2PY_MIGRATE: 'Yes'
+      DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
+      TEST_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test'
