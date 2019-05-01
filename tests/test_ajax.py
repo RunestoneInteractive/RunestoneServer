@@ -290,7 +290,8 @@ class TestAjaxEndpoints(Web2pyTestCase):
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertTrue(res['correct'])
-        self.assertEqual(res['displayFeed'], ['Correct.'])
+        # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
+        self.assertIn(res['displayFeed'], (['Correct.'], ['<p>Correct.</p>\n']))
 
         request.vars.answer = '["0b1010"]'
         request.vars.act = request.vars.answer
@@ -309,21 +310,22 @@ class TestAjaxEndpoints(Web2pyTestCase):
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEqual(res['displayFeed'], ['Close.'])
+        # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
+        self.assertIn(res['displayFeed'], (['Close.'], ['<p>Close.</p>\n']))
 
         request.vars.answer = '["11"]'
         request.vars.act = request.vars.answer
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEqual(res['displayFeed'], ['Close.'])
+        self.assertIn(res['displayFeed'], (['Close.'], ['<p>Close.</p>\n']))
 
         request.vars.answer = '["8"]'
         request.vars.act = request.vars.answer
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertFalse(res['correct'])
-        self.assertEqual(res['displayFeed'], ['Nope.'])
+        self.assertIn(res['displayFeed'], (['Nope.'], ['<p>Nope.</p>\n']))
 
         # Test client-side grading.
         db(db.courses.course_name == self.course_name_1).update(login_required=False)
