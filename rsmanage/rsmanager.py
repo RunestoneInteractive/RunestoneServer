@@ -361,7 +361,7 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             click.echo("Success")
 
 @cli.command()
-@click.option("--checkdb", help="check state of db and databases")
+@click.option("--checkdb", is_flag=True, help="check state of db and databases folder")
 @pass_config
 def env(config, checkdb):
     """Print out your configured environment
