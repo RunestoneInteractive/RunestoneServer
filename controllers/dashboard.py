@@ -146,7 +146,7 @@ def index():
     "name":"Exercises Missed"
     }]
 
-    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
+    return dict(assignments=assignments, course=course, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
 
 @auth.requires_login()
 def studentreport():
@@ -166,7 +166,7 @@ def studentreport():
     activity = data_analyzer.formatted_activity.activities
 
     logger.debug("GRADES = %s",data_analyzer.grades)
-    return dict(course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(course=get_course_row(), user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 @auth.requires_login()
 def studentprogress():
@@ -261,7 +261,7 @@ def grades():
             averagerow.append('n/a')
 
 
-    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name,
+    return dict(course=course,
                 assignments=assignments, students=students, gradetable=gradetable,
                 averagerow=averagerow, practice_average=practice_average)
 
@@ -281,7 +281,7 @@ def questiongrades():
         session.flash = "Student {} not found for course {}".format(sid, course.course_name)
         return redirect(URL('dashboard','grades'))
 
-    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
+    return dict(assignment=assignment, student=student, rows=rows, total=0, course=course)
 
 @auth.requires_login()
 def exercisemetrics():
@@ -313,7 +313,7 @@ def exercisemetrics():
             "frequency": count
             })
 
-    return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+    return dict(course=get_course_row(), answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
 
 
 @auth.requires_login()

@@ -169,7 +169,7 @@ def payment():
 def index():
 #    print("REFERER = ", request.env.http_referer)
 
-    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+    course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
 
     if not course or 'boguscourse' in course.course_name:
         # if login was handled by Janrain, user didn't have a chance to choose the course_id;
@@ -225,7 +225,13 @@ def index():
         num_courses = db(db.user_courses.user_id == auth.user.id).count()
         # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
         if num_courses == 1 and os.environ.get('WEB2PY_CONFIG') != 'test':
-            redirect('/%s/static/%s/index.html' % (request.application, course.course_name))
+            # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
+            static_path = 'static/%s/index.html' % course.course_name
+            if os.path.exists(os.path.join(request.folder, static_path)):
+                redirect('/%s/%s' % (request.application, static_path))
+            else:
+                redirect(URL(c='books', f='published', args=[course.base_course, 'index.html']))
+
         redirect(URL(c='default', f='courses'))
 
 
@@ -317,17 +323,17 @@ def remove():
 
 @auth.requires_login()
 def coursechooser():
-    res = db(db.courses.course_name == request.args[0]).select(db.courses.id)
+    res = db(db.courses.course_name == request.args[0]).select(db.courses.id, db.courses.base_course).first()
 
-    if len(res) > 0:
-        db(db.auth_user.id == auth.user.id).update(course_id=res[0].id)
+    if res:
+        db(db.auth_user.id == auth.user.id).update(course_id=res.id)
         db(db.auth_user.id == auth.user.id).update(course_name=request.args[0])
         auth.user.update(course_name=request.args[0])
-        auth.user.update(course_id=res[0].id)
-        res = db(db.chapters.course_id == auth.user.course_name)
+        auth.user.update(course_id=res.id)
+        res1 = db(db.chapters.course_id == auth.user.course_name)
         logger.debug("COURSECHOOSER checking for progress table %s ", res)
-        if res.count() > 0:
-            chapter_label = res.select().first().chapter_label
+        if res1.count() > 0:
+            chapter_label = res1.select().first().chapter_label
             if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
                   (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                 logger.debug("SETTING UP PROGRESS for %s %s", auth.user.username, auth.user.course_name)
@@ -337,7 +343,7 @@ def coursechooser():
                     FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
                 ''', (auth.user.id, auth.user.course_name))
 
-        redirect('/%s/static/%s/index.html' % (request.application, request.args[0]))
+        redirect(get_course_url('index.html'))
     else:
         redirect('/%s/default/user/profile?_next=/%s/default/index' % (request.application, request.application))
 
