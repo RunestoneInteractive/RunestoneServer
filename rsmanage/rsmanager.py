@@ -42,14 +42,13 @@ def cli(config, verbose, if_clean):
 
     config.conf = conf
     config.dbname = re.match(r'postgres.*//.*?@.*?/(.*)', config.dburl).group(1)
+    config.dbhost = re.match(r'postgres.*//.*?@(.*?)/(.*)', config.dburl).group(1)
 
     if verbose:
         echoEnviron(config)
 
     if if_clean:
-        eng = create_engine(config.dburl)
-        res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
-        count = res.first()[0]
+        count = check_db_for_useinfo(config)
         if count != 0:
             click.echo("The database is already inititlized Exiting")
             sys.exit()
@@ -78,9 +77,9 @@ def initdb(config, list_tables, reset, fake):
 
     if reset:
         click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
-        res = subprocess.call("dropdb {}".format(config.dbname),shell=True)
+        res = subprocess.call("dropdb --if-exists --host={} {}".format(config.dbhost,config.dbname),shell=True)
         if res == 0:
-            res = subprocess.call("createdb --echo {}".format(config.dbname),shell=True)
+            res = subprocess.call("createdb --echo --host={} {}".format(config.dbhost, config.dbname),shell=True)
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -362,10 +361,33 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             click.echo("Success")
 
 @cli.command()
+@click.option("--checkdb", help="check state of db and databases")
 @pass_config
-def env(config):
-    """Print out your configured environment"""
+def env(config, checkdb):
+    """Print out your configured environment
+    If --checkdb is used then env will exit with one of the following exit codes
+        0: no database, no database folder
+        1: no database but databases folder
+        2: database exists but no databases folder
+        3: both database and databases folder exist
+    """
+    dbinit = 0
+    dbdir = 0
+    if checkdb:
+        count = check_db_for_useinfo(config)
+        if count == 0:
+            dbinit = 0
+        else:
+            dbinit = 2
+    if os.path.exists(DBSDIR):
+        dbdir = 1
+    else:
+        dbdir = 0
+
     echoEnviron(config)
+
+    sys.exit(dbinit|dbdir)
+
 
 @cli.command()
 @click.option("--username", help="user to promote to instructor")
@@ -542,3 +564,8 @@ def fill_practice_log_missings(config):
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py", shell=True)
 
 
+def check_db_for_useinfo(config):
+    eng = create_engine(config.dburl)
+    res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
+    count = res.first()[0]
+    return count
