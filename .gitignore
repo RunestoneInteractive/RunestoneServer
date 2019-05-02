@@ -54,3 +54,4 @@ node_modules
 *.egg
 AC_scripts
 Pipfile.lock
+tests/test_book/build
