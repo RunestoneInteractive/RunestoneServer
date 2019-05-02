@@ -110,7 +110,7 @@ fi
 # Run the beast
 info "Starting the server"
 cd "$WEB2PY_PATH"
-python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X runestone  &
+python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
 
 ## Go through all books and build
 info "Building & Deploying books"

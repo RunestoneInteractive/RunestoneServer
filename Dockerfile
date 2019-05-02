@@ -19,6 +19,9 @@ ENV RUNESTONE_PATH=${WEB2PY_APPS_PATH}/runestone
 ENV BOOKS_PATH=${RUNESTONE_PATH}/books
 ENV WEB2PY_VERSION=2.18.4
 
+# Click needs these encodings for Python 3
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 
 # Expose that port on the network
 EXPOSE ${WEB2PY_PORT}
@@ -45,14 +48,13 @@ RUN apt-get update && \
         gcc \
         git \
         unzip \
-        python-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
+        python3-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
-        python-setuptools \
-        python-numpy \
-        python-dev \
-        python-wheel rsync wget nginx && \
+        python3-setuptools \
+        python3-numpy \
+        python3-dev \
+        python3-wheel rsync wget nginx && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 # The rest could be done and ran under a regular (well, staff for installing under /usr/local) user
 RUN useradd -s /bin/bash -M -g staff --home-dir ${WEB2PY_PATH} runestone && \
@@ -72,13 +74,17 @@ WORKDIR ${RUNESTONE_PATH}
 # base courses as their course when using docker to host their own courses.
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
-    pip install --system -r requirements.txt && \
-    pip install --system -r requirements-test.txt && \
+    pip3 install --system -r requirements.txt && \
+    pip3 install --system -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
+
+# Link Python 3 to 2, since Python 3 installs as python3 / pip3
+RUN ln -s /usr/bin/python3 /usr/bin/python && \
+    ln -s /usr/bin/pip3 /usr/bin/pip
 
 # All configuration will be done within entrypoint.sh upon initial run
 # of the container
