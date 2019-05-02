@@ -37,6 +37,7 @@ if __name__ == '__main__':
     assert (not empty1) and (not empty2)
     os.environ['PGPASSWORD'] = pgpassword
     os.environ['PGUSER'] = pguser
+    os.environ['DBHOST'] = pgnetloc
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
     parser.add_argument('--rebuildgrades', action='store_true',
@@ -58,9 +59,9 @@ if __name__ == '__main__':
         print('Skipping DB initialization.')
     else:
         # make sure runestone_test is nice and clean.
-        xqt('dropdb --echo --if-exists "{}"'.format(dbname),
-            'createdb --echo "{}"'.format(dbname),
-            'psql "{}" < runestone_test.sql'.format(dbname))
+        xqt('dropdb --echo --if-exists --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
+            'createdb --echo --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
+            'psql  --host={} --user={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
         # Copy the test book to the books directory.
         rmtree('../books/test_course_1', ignore_errors=True)
         # Sometimes this fails for no good reason on Windows. Retry.

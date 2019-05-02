@@ -11,12 +11,14 @@ LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 ARG WEB2PY_PATH=/srv/web2py
 ARG WEB2PY_APPS_PATH=${WEB2PY_PATH}/applications
 ARG WEB2PY_PORT=8080
+ARG DBHOST=db
 
 # And export some as env vars so they could be available at run time
 ENV WEB2PY_PATH=${WEB2PY_PATH}
 ENV RUNESTONE_PATH=${WEB2PY_APPS_PATH}/runestone
 ENV BOOKS_PATH=${RUNESTONE_PATH}/books
 ENV WEB2PY_VERSION=2.18.4
+
 
 # Expose that port on the network
 EXPOSE ${WEB2PY_PORT}
@@ -66,11 +68,15 @@ ADD . ${RUNESTONE_PATH}
 WORKDIR ${RUNESTONE_PATH}
 
 # Question: should this come from an envar?
+# Set docker_institution_mode = True so that instructors can use thinkcspy and other
+# base courses as their course when using docker to host their own courses.
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
     pip install --system -r requirements.txt && \
+    pip install --system -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
-    mv ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py
+    cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
+    cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
 

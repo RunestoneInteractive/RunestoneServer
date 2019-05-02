@@ -42,14 +42,14 @@ def cli(config, verbose, if_clean):
 
     config.conf = conf
     config.dbname = re.match(r'postgres.*//.*?@.*?/(.*)', config.dburl).group(1)
+    config.dbhost = re.match(r'postgres.*//.*?@(.*?)/(.*)', config.dburl).group(1)
+    config.dbuser = re.match(r'postgres.*//(.*?):.*?@(.*?)/(.*)', config.dburl).group(1)
 
     if verbose:
         echoEnviron(config)
 
     if if_clean:
-        eng = create_engine(config.dburl)
-        res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
-        count = res.first()[0]
+        count = check_db_for_useinfo(config)
         if count != 0:
             click.echo("The database is already inititlized Exiting")
             sys.exit()
@@ -64,8 +64,9 @@ def cli(config, verbose, if_clean):
 @click.option("--list_tables", is_flag=True, help="List all of the defined tables when done")
 @click.option("--reset", is_flag=True, help="drop database and delete all migration information")
 @click.option("--fake", is_flag=True, help="perform a fake migration")
+@click.option("--force", is_flag=True, help="answer Yes to confirm questions")
 @pass_config
-def initdb(config, list_tables, reset, fake):
+def initdb(config, list_tables, reset, fake, force):
     """Initialize and optionally reset the database"""
     os.chdir(findProjectRoot())
     if not os.path.exists(DBSDIR):
@@ -77,10 +78,11 @@ def initdb(config, list_tables, reset, fake):
         os.mkdir(PRIVATEDIR)
 
     if reset:
-        click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
-        res = subprocess.call("dropdb {}".format(config.dbname),shell=True)
+        if not force:
+            click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
+        res = subprocess.call("dropdb --if-exists --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         if res == 0:
-            res = subprocess.call("createdb --echo {}".format(config.dbname),shell=True)
+            res = subprocess.call("createdb --echo --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -362,10 +364,42 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             click.echo("Success")
 
 @cli.command()
+@click.option("--checkdb", is_flag=True, help="check state of db and databases folder")
 @pass_config
-def env(config):
-    """Print out your configured environment"""
-    echoEnviron(config)
+def env(config, checkdb):
+    """Print out your configured environment
+    If --checkdb is used then env will exit with one of the following exit codes
+        0: no database, no database folder
+        1: no database but databases folder
+        2: database exists but no databases folder
+        3: both database and databases folder exist
+    """
+    os.chdir(findProjectRoot())
+    dbinit = 0
+    dbdir = 0
+    if checkdb:
+        count = check_db_for_useinfo(config)
+        if count == 0:
+            dbinit = 0
+            print("Database not initialized")
+        else:
+            dbinit = 2
+            print("Database is initialized")
+
+        if os.path.exists(DBSDIR):
+            dbdir = 1
+            print("Database migration folder exists")
+        else:
+            dbdir = 0
+            print("No Database Migration Folder")
+
+    if not checkdb or config.verbose:
+        echoEnviron(config)
+
+    print("Exiting with result of {}".format(dbinit|dbdir))
+
+    sys.exit(dbinit|dbdir)
+
 
 @cli.command()
 @click.option("--username", help="user to promote to instructor")
@@ -542,3 +576,8 @@ def fill_practice_log_missings(config):
     subprocess.call("python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py", shell=True)
 
 
+def check_db_for_useinfo(config):
+    eng = create_engine(config.dburl)
+    res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
+    count = res.first()[0]
+    return count
