@@ -101,7 +101,7 @@ def get_course_row(*args, **kwargs):
 def get_course_url(*args):
     # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
     if os.path.exists(os.path.join(request.folder, 'static', auth.user.course_name)):
-        return URL(c='static', args=[auth.user.course_name, *args])
+        return URL(c='static', args=[auth.user.course_name] + list(args))
     else:
         course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first()
         if course:
