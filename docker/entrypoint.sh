@@ -17,10 +17,6 @@ then
     exit 1
 fi
 
-export WEB2PY_CONFIG=production
-export WEB2PY_MIGRATE=Yes
-export DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone
-export TEST_DBURL=postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test
 
 # Initialize the database
 if [ ! -f "$stamp" ]; then
@@ -86,7 +82,7 @@ until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
   sleep 2
 done
 
-# Setup students, if the file exists
+# Setup instructors, if the file exists
 if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" -a "${RUNESTONE_PATH}/configs/instructors.csv" -nt iadd.stamp ]; then
     info "Setting up instructors"
     rsmanage inituser --fromfile ${RUNESTONE_PATH}/configs/instructors.csv

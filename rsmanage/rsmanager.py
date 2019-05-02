@@ -385,14 +385,17 @@ def env(config, checkdb):
         else:
             dbinit = 2
             print("Database is initialized")
-    if os.path.exists(DBSDIR):
-        dbdir = 1
-        print("Database migration folder exists")
-    else:
-        dbdir = 0
-        print("No Database Migration Folder")
 
-    echoEnviron(config)
+        if os.path.exists(DBSDIR):
+            dbdir = 1
+            print("Database migration folder exists")
+        else:
+            dbdir = 0
+            print("No Database Migration Folder")
+
+    if not checkdb or config.verbose:
+        echoEnviron(config)
+
     print("Exiting with result of {}".format(dbinit|dbdir))
 
     sys.exit(dbinit|dbdir)
