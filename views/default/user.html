@@ -25,9 +25,9 @@
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
             {{ if (not auth.user): }}
-            <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
+                <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
             {{else: }}
-            <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel">
+                <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel">
             {{ pass }}
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
@@ -102,7 +102,7 @@
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
           {{ if not auth.user or request.args(0) == 'impersonate': }}
-            <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+              <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
           {{ pass }}
           {{ if request.args(0) == 'login' and not auth.user: }}
                 <div id="web2py_user_form" class="col-md-4">
