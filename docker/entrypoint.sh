@@ -17,6 +17,13 @@ then
     exit 1
 fi
 
+# The RUNESTONE_HOST will be used by pavement.py files of
+# runestone books to set the correct host for so that
+# Browser and Server agree on a CORS compliant host for API calls
+if [ -z "$RUNESTONE_HOST" ]; then
+    echo "Please export \${RUNESTONE_HOST} set to the hostname"
+    exit 1
+fi
 
 # Initialize the database
 if [ ! -f "$stamp" ]; then
