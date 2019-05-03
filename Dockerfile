@@ -1,4 +1,4 @@
-FROM debian:stretch-backports
+FROM library/python:3.7-stretch
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 
@@ -74,21 +74,16 @@ WORKDIR ${RUNESTONE_PATH}
 # base courses as their course when using docker to host their own courses.
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
-    pip3 install --system -r requirements.txt && \
-    pip3 install --system -r requirements-test.txt && \
+    pip3 install -r requirements.txt && \
+    pip3 install -r requirements-test.txt && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
 
-# Link Python 3 to 2, since Python 3 installs as python3 / pip3
-RUN ln -s /usr/bin/python3 /usr/bin/python && \
-    ln -s /usr/bin/pip3 /usr/bin/pip
-
 # All configuration will be done within entrypoint.sh upon initial run
 # of the container
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint.sh
 
-#RUN chown -R runestone /srv
 CMD /bin/bash /usr/local/sbin/entrypoint.sh
