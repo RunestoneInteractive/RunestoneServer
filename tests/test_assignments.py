@@ -19,7 +19,7 @@
 #            autograde       2306 5531.000         235419
 
 
-import sys
+import sys, os.path
 import unittest
 import json
 from gluon.globals import Request
@@ -109,6 +109,7 @@ class TestGradingFunction(unittest.TestCase):
         request.vars.which_to_grade = ''
         request.vars.reading_assignment = True
         request.vars.activities_required = 2
+        request.folder = os.path.join(os.path.abspath('.'), 'applications/runestone')
 
         res = add__or_update_assignment_question()
         res = json.loads(res)

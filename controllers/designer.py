@@ -125,14 +125,9 @@ def build():
         return buildvalues
 
 def build_custom():
-    # run_sphinx is defined in models/scheduler.py
-    row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
-                                                                   rvars=request.vars,
-                                                                   application=request.application,
-                                                                   http_host=request.env.http_host), immediate=True)
     uuid = row['uuid']
 
-    course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
+    course_url=path.join('/',request.application,"books/published",request.vars.projectname,"index.html")
 
     if request.vars.startdate == '':
         request.vars.startdate = datetime.date.today()

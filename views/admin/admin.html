@@ -146,61 +146,8 @@
           <input type="text" name="startdate" id="startdate" value="{{=startDate}}" />
         </div>
       </div>
-      <input type="submit" class="btn btn-default" value="Rebuild Now" />
+      <input type="submit" class="btn btn-default" value="Update course" />
     </form>
-
-
-
-
-
-
-      <form  method="post" action="/{{=request.application}}/admin/backup" style="margin-top: 16px;">
-                <input type="submit" class="btn btn-default" value="Download Backup"/>
-                </form>
-
-      <div>*This will take 15-20 seconds to complete</div>
-
-
-      {{ if confirm == False: }}
-  <h3 id="title">Rebuilding course.</h3>
-  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
-  </div>
-  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
-   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
-   your newly rebuilt course.</p>
-   <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
-        gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
-       have an automatic monitoring system that lets me know by email when things get backed up.  If you have persistent
-       problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
-       Thanks for your patience.  -- Brad</p>
-  <script type="text/javascript">
-
-        $('a[href="#rebuild"]').tab('show');
-
-
-    var iid = setInterval(function() {
-      d = { task_name:'{{ =task_name }}',
-            course_url:'{{ =course_url }}'};
-      $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
-        if (data.status == "COMPLETED"){
-          window.location.href = data.course_url;
-        }
-        if (data.status == "FAILED" || data.status == "TIMEOUT") {
-          clearInterval(iid);
-          $("#spinner_div").hide();
-          $("#title").text("An error occurred.");
-          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
-           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
-           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-           "Make sure you include the following traceback information:" +
-           "<pre>" + data.traceback + "</pre>");
-        }
-      });
-    }, 3000);
-  </script>
-{{ pass }}
-
 
   </div>
         </div>

@@ -799,27 +799,6 @@ def gettop10Answers():
     return json.dumps([res,miscdata])
 
 
-def getSphinxBuildStatus():
-    task_name = request.vars.task_name
-    course_url = request.vars.course_url
-
-    response.headers['content-type'] = 'application/json'
-    results = {'course_url': course_url}
-    row = scheduler.task_status(task_name)
-    if row:
-        if row['status'] in ['QUEUED', 'ASSIGNED','RUNNING', 'COMPLETED']:
-            results['status'] = row['status']
-        else:  # task failed
-            results['status'] = row['status']
-            tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
-            results['traceback']=tb
-    else:
-        results['status'] = 'FAILED'
-        results['info'] = 'no row'
-        results['traceback'] = 'Sorry, no more info'
-    return json.dumps(results)
-
-
 def getassignmentgrade():
     response.headers['content-type'] = 'application/json'
     if not auth.user:

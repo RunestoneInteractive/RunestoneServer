@@ -186,7 +186,7 @@
                                 </ul>
                             </li>
                         {{ elif auth.user: }}
-                            <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
+                            <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
                         {{ elif not settings.lti_only_mode: }}
                             <li><a href="/{{=request.application}}/default">Login</a></li>
                         {{ pass }}

@@ -28,7 +28,6 @@ from textwrap import dedent
 import json
 import re
 from threading import Thread
-import os
 try:
     from contextlib import ExitStack
 except:
@@ -576,6 +575,26 @@ def test_manual(runestone_db_tools, test_user):
 # Validate the HTML produced by various web2py pages.
 @pytest.mark.parametrize('url, requires_login, expected_string, expected_errors',
 [
+    # **Admin**
+    #
+    # FIXME: Flashed messages don't seem to work.
+    #('admin/index', False, 'You must be registered for a course to access this page', 1),
+    #('admin/index', True, 'You must be an instructor to access this page', 1),
+    ('admin/doc', True, 'Runestone Help and Documentation', 1),
+    # Note: ``'admin/diffviewer'`` not tested, since it only works with the ``thinkcspy`` book.
+
+    # **Assignments**
+    ('assignments/chooseAssignment', True, 'Assignments', 1),
+    ('assignments/doAssignment', True, 'Bad Assignment ID', 1),
+    ('assignments/index', True, 'Student Progress for', 1),
+    # TODO: Why 2 errors here? Was just 1.
+    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
+    ('assignments/practiceNotStartedYet', True, 'test_course_1', 2),
+
+    # **Default**
+    #
+    # *User*
+    #
     # The `authentication <http://web2py.com/books/default/chapter/29/09/access-control#Authentication>`_ section gives the URLs exposed by web2py. Check these.
     ('default/user/login', False, 'Login', 1),
     ('default/user/register', False, 'Registration', 1),
@@ -595,14 +614,13 @@ def test_manual(runestone_db_tools, test_user):
     ('default/user/not_authorized', False, 'Not authorized', 1),
     # Returns a 404.
     #('default/user/navbar'=(False, 'xxx', 1),
-
-    # Other pages in ``default``.
+    #
+    # *Other pages*
     #
     # TODO: What is this for?
     #('default/call', False, 'Not found', 0),
     # TODO: weird returned HTML. ???
     #('default/index', True, 'Course Selection', 1),
-
     ('default/about', False, 'About Us', 1),
     ('default/error', False, 'Error: the document does not exist', 1),
     ('default/ack', False, 'Acknowledgements', 1),
@@ -610,10 +628,6 @@ def test_manual(runestone_db_tools, test_user):
     ('default/bio', True, 'Tell Us About Yourself', 3),
     ('default/courses', True, 'Course Selection', 1),
     ('default/remove', True, 'Remove a Course', 1),
-    # FIXME: This produces an exception.
-    #('default/coursechooser', True, 'xxx', 1),
-    # FIXME: This produces an exception.
-    #('default/removecourse', True, 'xxx', 1),
     # Should work in both cases.
     ('default/reportabug', False, 'Report a Bug', 1),
     ('default/reportabug', True, 'Report a Bug', 1),
@@ -622,21 +636,25 @@ def test_manual(runestone_db_tools, test_user):
     ('default/terms', False, 'Terms and Conditions', 1),
     ('default/privacy', False, 'Runestone Academy Privacy Policy', 1),
     ('default/donate', False, 'Support Runestone Interactive', 1),
+    # FIXME: This produces an exception.
+    #('default/coursechooser', True, 'xxx', 1),
+    #('default/removecourse', True, 'xxx', 1),
+
 
     # Assignments
     ('assignments/index', True, 'Student Progress for', 1),
-    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 1),
+    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
     ('assignments/chooseAssignment', True, 'Assignments', 1),
 
-    # Misc
+    # **Misc**
     ('oauth/index', False, 'This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.', 1),
-    # FIXME: Not sure what's wrong here.
-    #('admin/index', False, 'You must be registered for a course to access this page', 1),
-    #('admin/index', True, 'You must be an instructor to access this page', 1),
-    ('admin/doc', True, 'Runestone Help and Documentation', 1),
-
     ('dashboard/index', True, 'Instructor Dashboard', 1),
     ('dashboard/grades', True, 'Gradebook', 1),
+    ('dashboard/studentreport', True, 'Please make sure you are in the correct course', 1),
+    # FIXME: This produces an exception.
+    #('dashboard/exercisemetrics', True, 'xxx', 1),
+    #('dashboard/questiongrades', True, 'Gradebook', 1),
+
     # TODO: Many other views!
 ])
 def test_1(url, requires_login, expected_string, expected_errors, test_client,
@@ -652,14 +670,35 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
 # Validate the HTML in instructor-only pages.
 @pytest.mark.parametrize('url, expected_string, expected_errors',
 [
+    # **Default**
+    #
     # web2py-generated stuff produces two extra errors.
     ('default/bios', 'Bios', 3),
     # FIXME: The element ``<form id="editIndexRST" action="">`` in ``views/admin/admin.html`` produces the error ``Bad value \u201c\u201d for attribute \u201caction\u201d on element \u201cform\u201d: Must be non-empty.``.
+
+    # **Admin**
     ('admin/admin', 'Manage Section', 2),
+    ('admin/course_students', '"test_user_1"', 2),
+    ('admin/getChangeLog', 'No ChangeLog for this book', 2),
     ('admin/grading', 'assignment', 1),
+    # TODO: This produces an exception.
+    #('admin/practice', 'Choose when students should start their practice.', 1),
+    ('admin/sections_list', 'db tables', 1),
+    ('admin/sections_create', 'Create New Section', 1),
+    ('admin/sections_delete', 'db tables', 1),
+    ('admin/sections_update', 'db tables', 1),
+    ('admin/showlog', 'Add Record', 1),
+    # TODO: This deletes the course, making the test framework raise an exception. Need a separate case to catch this.
+    #('admin/deletecourse', 'Manage Section', 2),
     # FIXME: these raise an exception.
+    #('admin/addinstructor', 'xxx', 1),
+    #('admin/add_practice_items', 'xxx', 1),
     #('admin/assignments', 'Assignment', 1),
+    #('admin/backup', 'xxx', 1),
+    #('admin/buildmodulelist', 'xxx', 1),
     #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
+    #('admin/removeinstructor', 'xxx', 1),
+    #('admin/removeStudents', 'xxx', 1),
 ])
 def test_2(url, expected_string, expected_errors, test_client,
            test_user, test_user_1):
@@ -865,3 +904,55 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
             with test_user_1.make_payment(token):
                 assert not did_payment()
 
+        # TODO: Test with more tokens, test failures.
+
+
+# Test dynamic book routing.
+def test_10(test_client, test_user_1):
+    test_user_1.login()
+
+    # Test error cases.
+    validate = test_user_1.test_client.validate
+    test_course_1 = test_user_1.course_name
+    course_selection = 'Course Selection'
+    # A non-existant course.
+    validate('books/published/xxx', course_selection)
+    # A non-existant page.
+    validate('books/published/{}/xxx'.format(test_course_1),
+             expected_status=404)
+    # A directory.
+    validate('books/published/{}/test_chapter_1'.format(test_course_1),
+             expected_status=404)
+    # Attempt to access files outside a course.
+    validate('books/published/{}/../conf.py'.format(test_course_1),
+             expected_status=404)
+
+    # A valid page. Check the book config as well.
+    validate('books/published/{}/index.html'.format(test_course_1), [
+        'The red car drove away.',
+        "eBookConfig.course = '{}';".format(test_course_1),
+        "eBookConfig.basecourse = '{}';".format(test_course_1),
+    ])
+
+    # Drafts shouldn't be accessible by students.
+    validate('books/draft/{}/index.html'.format(test_course_1),
+             'Insufficient privileges')
+    with test_user_1.make_instructor():
+        # But should be instructors.
+        validate('books/draft/{}/index.html'.format(test_course_1),
+                 'The red car drove away.')
+
+    # Check routing in a child book.
+    with test_user_1.runestone_db_tools.create_course('child_course_1', base_course=test_user_1.course_name) as child_course:
+        child_course_1 = child_course.course_name
+        # Routes if they do.
+        with test_user_1.update_profile(course_name=child_course_1, is_free=True):
+            validate('books/published/{}/index.html'.format(test_course_1), [
+                'The red car drove away.',
+                "eBookConfig.course = '{}';".format(child_course_1),
+                "eBookConfig.basecourse = '{}';".format(test_course_1),
+            ])
+
+    # Test static content
+    validate('books/published/{}/_static/runestone-custom-sphinx-bootstrap.css'.format(test_course_1),
+             'background-color: #fafafa;')

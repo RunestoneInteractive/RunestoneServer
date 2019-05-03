@@ -1,6 +1,6 @@
 {{ extend "admin/instructors.html"}}
 {{ block tabcontent }}
-<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/sharedb.js"></script>
+<script type="text/javascript" src="{{=get_course_url('_static/sharedb.js')}}"></script>
 
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';

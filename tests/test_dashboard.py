@@ -41,7 +41,7 @@ class TestDashboardEndpoints(unittest.TestCase):
         res = studentreport()   #todo: if this is an endoint why does it not return json?
 
         #course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades
-        self.assertEqual(res['course_id'], 'testcourse')
+        self.assertEqual(res['course']['course_name'], 'testcourse')
         self.assertEqual(res['user'].username, 'user_1674')
         self.assertEqual(res['assignments']['List Practice']['score'], 13.0)
         self.assertEqual(res['assignments']['List Practice']['class_average'], '7.82') #todo: why a string?

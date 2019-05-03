@@ -84,7 +84,7 @@ def index():
 
 @auth.requires_login()
 def doc():
-    return dict(course_id=auth.user.course_name)
+    return dict(course_id=auth.user.course_name, course=get_course_row(db.courses.ALL))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def showlog():
@@ -230,10 +230,6 @@ def diffviewer():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignments():
-    sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
-    courseid = sidQuery[0].id
-
-
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
     for row in cur_assignments:
@@ -246,8 +242,8 @@ def assignments():
 
     course_url = path.join('/',request.application, 'static', auth.user.course_name, 'index.html')
 
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    base_course = row.base_course
+    course = get_course_row(db.courses.ALL)
+    base_course = course.base_course
     chapter_labels = []
     chapters_query = db(db.chapters.course_id == base_course).select(db.chapters.chapter_label)
     for row in chapters_query:
@@ -260,12 +256,13 @@ def assignments():
                 tags=tags,
                 chapters=chapter_labels,
                 toc=_get_toc_and_questions(),
+                course=course,
                 )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def practice():
-    course = db(db.courses.course_name == auth.user.course_name).select().first()
+    course = db(db.courses.id == auth.user.course_id).select().first()
     course_start_date = course.term_start_date
 
     start_date = course_start_date + datetime.timedelta(days=13)
@@ -340,7 +337,7 @@ def practice():
         practice_settings = db((db.course_practice.auth_user_id == auth.user.id) &
                                (db.course_practice.course_name == course.course_name))
 
-    toc = ""
+    toc = "''"
     if flashcard_creation_method == 2:
         toc = _get_toc_and_questions()
 
@@ -355,8 +352,7 @@ def practice():
             'flashcardsCreationType' in request.vars or
             'question_points' in request.vars or
             'graded' in request.vars):
-        return dict(course_id=course.course_name,
-                    course_start_date=course_start_date,
+        return dict(course_start_date=course_start_date,
                     start_date=start_date,
                     end_date=end_date,
                     max_practice_days=max_practice_days,
@@ -378,7 +374,8 @@ def practice():
                     error_questions_to_complete_day=error_questions_to_complete_day,
                     error_flashcard_creation_method=error_flashcard_creation_method,
                     error_graded=error_graded,
-                    complete=already_exists
+                    complete=already_exists,
+                    course=course,
                     )
     else:
         try:
@@ -452,7 +449,7 @@ def practice():
                                      interleaving=interleaving
                                      )
 
-        toc = ""
+        toc = "''"
         if flashcard_creation_method == 2:
             toc = _get_toc_and_questions()
         return dict(course_id=auth.user.course_name,
@@ -478,7 +475,8 @@ def practice():
                     error_question_points=error_question_points,
                     error_questions_to_complete_day=error_questions_to_complete_day,
                     error_flashcard_creation_method=error_flashcard_creation_method,
-                    complete=no_error
+                    complete=no_error,
+                    course=course,
                     )
 
 
@@ -505,7 +503,7 @@ def add_practice_items():
 
     students = db((db.auth_user.course_name == auth.user.course_name)) \
         .select()
-    chapters = db((db.chapters.course_id == auth.user.course_name)) \
+    chapters = db((db.chapters.course_id == course.base_course)) \
         .select()
     for chapter in chapters:
         subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
@@ -593,20 +591,6 @@ def admin():
     my_vers = 0
     mst_vers = 0
     bugfix = False
-    rebuild_notice = path.join('applications',request.application,'REBUILD')
-    if os.path.exists(rebuild_notice):
-        rebuild_post = os.path.getmtime(rebuild_notice)
-        if rebuild_post > last_build:
-            response.flash = "Bug Fixes Available \n Rebuild is Recommended"
-            bugfix = True
-    if master_build and my_build and not bugfix:
-        mst_vers,mst_bld,mst_hsh = master_build.split('-')
-        my_vers,my_bld,my_hsh = my_build.split('-')
-        if my_vers != mst_vers:
-            response.flash = "Updates available, consider rebuilding"
-
-#    return dict(, course_name=auth.user.course_name)
-
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(db.course_instructor.instructor)
     instructordict = {}
@@ -633,7 +617,8 @@ def admin():
                     instructors=instructordict, students=studentdict,
                     curr_start_date=curr_start_date, confirm=True,
                     build_info=my_build, master_build=master_build, my_vers=my_vers,
-                    mst_vers=mst_vers
+                    mst_vers=mst_vers,
+                    course=sidQuery,
                     )
 
     #Rebuilding now
@@ -648,21 +633,17 @@ def admin():
         except:
             logger.error("Bad date format, not updating start date")
 
-        # run_sphinx in defined in models/scheduler.py
-        row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
-                                                                       rvars=request.vars,
-                                                                       base_course=course.base_course,
-                                                                       application=request.application,
-                                                                       http_host=request.env.http_host), immediate=True)
         uuid = row['uuid']
 
 
-        course_url=path.join('/',request.application,'static', request.vars.projectname, 'index.html')
+        course_url=path.join('/',request.application,'books/published', request.vars.projectname, 'index.html')
 
 
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url, course_id=auth.user.course_name)
+                task_name=uuid, course_url=course_url, course_id=auth.user.course_name,
+                course=sidQuery,
+)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -715,8 +696,8 @@ def grading():
                 searchdict[str(username)] = name
 
 
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    base_course = row.base_course
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    base_course = course.base_course
     chapter_labels = {}
     chapters_query = db(db.chapters.course_id == base_course).select()
     for row in chapters_query:
@@ -737,7 +718,8 @@ def grading():
                 course_id = auth.user.course_name,
                 assignmentids=json.dumps(assignmentids),
                 assignment_deadlines=json.dumps(assignment_deadlines),
-                question_points=json.dumps(question_points)
+                question_points=json.dumps(question_points),
+                course=course,
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -752,27 +734,6 @@ def getChangeLog():
         return str(logFile)
     except:
         return "No ChangeLog for this book\n\n\n"
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def backup():
-    #Begin the process of zipping up a backup file
-    #This function will put the backup book in runestone/static/bookname/backup.zip
-    import zipfile
-    bookQuery = db(db.courses.course_name == auth.user.course_name).select()
-    base_course = bookQuery[0].base_course
-    toBeZippedPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup')
-    tobeZippedDirectory = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/'+base_course)
-
-    zip = zipfile.ZipFile("%s.zip" % (toBeZippedPath), "w", zipfile.ZIP_DEFLATED)
-    abs_src = os.path.abspath(tobeZippedDirectory)
-    for dirname, subdirs, files in os.walk(tobeZippedDirectory):
-        for filename in files:
-            absname = os.path.abspath(os.path.join(dirname, filename))
-            arcname = absname[len(abs_src) + 1:]
-            zip.write(absname, arcname)
-    zip.close()
-    directoryPath = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'static/' + base_course + '/backup.zip')
-    return response.stream(directoryPath, attachment=True)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
@@ -866,7 +827,7 @@ def removeassign():
         assignment_id = int(request.args[0])
     except:
         session.flash = "Cannot remove assignment with id of {}".format(request.args[0])
-        return;
+        return
     db(db.assignments.id == assignment_id).delete()
 
 # Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
@@ -1180,8 +1141,9 @@ def gettemplate():
 
     returndict['template'] = base + cmap.get(template,'').__doc__
 
+    base_course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first().base_course
     chapters = []
-    chaptersrow = db(db.chapters.course_id == auth.user.course_name).select(db.chapters.chapter_name, db.chapters.chapter_label)
+    chaptersrow = db(db.chapters.course_id == base_course).select(db.chapters.chapter_name, db.chapters.chapter_label)
     for row in chaptersrow:
         chapters.append((row['chapter_label'], row['chapter_name']))
     logger.debug(chapters)
@@ -1345,6 +1307,9 @@ def _get_toc_and_questions():
     # Format is documented at https://www.jstree.com/docs/json/
 
     #try:
+        course_row = get_course_row()
+        base_course = course_row.base_course
+
         # First get the chapters associated with the current course, and insert them into the tree
         # Recurse, with each chapter:
         #   -- get the subchapters associated with it, and insert into the subdictionary
@@ -1357,7 +1322,7 @@ def _get_toc_and_questions():
         # This one is similar to reading_picker, but does not include sub-chapters with no practice question.
         practice_picker = []
         subchapters_taught_query = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
-                                      (db.chapters.course_id == auth.user.course_name) &
+                                      (db.chapters.course_id == base_course) &
                                       (db.chapters.chapter_label == db.sub_chapter_taught.chapter_label) &
                                       (db.sub_chapters.chapter_id == db.chapters.id) &
                                       (db.sub_chapters.sub_chapter_label == db.sub_chapter_taught.sub_chapter_label)
@@ -1386,7 +1351,7 @@ def _get_toc_and_questions():
                     logger.info("Bad Topic: {}".format(q.topic))
                     topic_not_found = True
                 try:
-                    chapter = db((db.chapters.course_id == auth.user.course_name) &
+                    chapter = db((db.chapters.course_id == base_course) &
                                   (db.chapters.chapter_label == chap)) \
                                   .select()[0]
 
@@ -1403,7 +1368,7 @@ def _get_toc_and_questions():
                 chap = q.chapter
                 subch = q.subchapter
                 try:
-                    chapter = db((db.chapters.course_id == auth.user.course_name) &
+                    chapter = db((db.chapters.course_id == base_course) &
                                  (db.chapters.chapter_label == chap)) \
                         .select()[0]
 
@@ -1438,8 +1403,8 @@ def _get_toc_and_questions():
                     p_sub_ch_info['state'] = {'checked':
                                               (chapter_name, sub_chapter_name) in chapters_and_subchapters_taught}
 
-        # chapters are associated with courses, not with base_courses
-        chapters_query = db((db.chapters.course_id == auth.user.course_name)).select(orderby=db.chapters.id)
+        # chapters are associated base_course.
+        chapters_query = db((db.chapters.course_id == base_course)).select(orderby=db.chapters.id)
         ids = {row.chapter_name: row.id for row in chapters_query}
         practice_picker.sort(key=lambda d: ids[d['text']])
 
