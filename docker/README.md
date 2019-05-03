@@ -62,6 +62,7 @@ uwsgi and db images:
       POSTGRES_PASSWORD: 'runestone'
       POSTGRES_USER: 'runestone'
       POSTGRES_DB: 'runestone'
+      RUNESTONE_HOST: 'hostname of the host running docker'
 ```
 
 These will be provided to the containers that are created to initialize the postgres
@@ -73,7 +74,8 @@ environment variable file on your host, here is `.env`:
 POSTGRES_PASSWORD=topsecret
 POSTGRES_USER=mrcheese
 POSTGRES_DB=quesodb
-export POSTGRES_PASSWORD POSTGRES_USER POSTGRES_DB
+RUNESTONE_HOST=`hostname`
+export POSTGRES_PASSWORD POSTGRES_USER POSTGRES_DB RUNESTONE_HOST
 ```
 
 and then in your docker-compose file, remove the `environment` section from each
@@ -91,7 +93,7 @@ defaults), use docker-compose to bring the containers up.
 $ docker-compose up -d
 ```
 
-And go to [http://0.0.0.0:8080](http://0.0.0.0:8080) to see the application.
+And go to [http://$RUNESTONE_HOST:8080](http://0.0.0.0:8080) to see the application.
 
 ## Development Tips
 
@@ -156,7 +158,7 @@ sudo rm -rf databases
 
 The message tells you to remove the databases folder. Since the container is restarting
 on its own, you should be able to remove it, and then wait, and it will start cleanly.
-As an alternative, you can stop and rebuild the container, changing the `WEB2PY_MIGRATE` 
+As an alternative, you can stop and rebuild the container, changing the `WEB2PY_MIGRATE`
 variable to be Fake in [entrypoint.sh](entrypoint.sh) and try again:
 
 ```bash
