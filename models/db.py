@@ -105,7 +105,7 @@ def get_course_url(*args):
     else:
         course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first()
         if course:
-            return URL(c='books', f='published', args=args)
+            return URL(c='books', f='published', args=[course.base_course] + list(args))
         else:
             return URL(c='default')
 

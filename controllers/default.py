@@ -225,13 +225,7 @@ def index():
         num_courses = db(db.user_courses.user_id == auth.user.id).count()
         # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
         if num_courses == 1 and os.environ.get('WEB2PY_CONFIG') != 'test':
-            # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
-            static_path = 'static/%s/index.html' % course.course_name
-            if os.path.exists(os.path.join(request.folder, static_path)):
-                redirect('/%s/%s' % (request.application, static_path))
-            else:
-                redirect(URL(c='books', f='published', args=[course.base_course, 'index.html']))
-
+            redirect(get_course_url('index.html'))
         redirect(URL(c='default', f='courses'))
 
 
