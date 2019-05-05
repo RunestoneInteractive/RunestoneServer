@@ -71,9 +71,9 @@ if __name__ == '__main__':
         print('Skipping DB initialization.')
     else:
         # make sure runestone_test is nice and clean.
-        xqt('dropdb --echo --if-exists --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
-            'createdb --echo --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
-            'psql  --host={} --user={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
+        xqt('dropdb --echo --if-exists --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
+            'createdb --echo --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
+            'psql  --host={} --username={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
         # Let web2py recreate certain tables not in the test database.
         for path in glob.glob('../databases/test_runestone_*.table'):
             os.remove(path)
