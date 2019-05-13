@@ -48,6 +48,7 @@ RUN apt-get update && \
         gcc \
         git \
         unzip \
+        emacs-nox \
         python3-pip libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
         python3-setuptools \
@@ -76,6 +77,7 @@ RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
     pip3 install -r requirements.txt && \
     pip3 install -r requirements-test.txt && \
+    pip3 install uwsgi && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
