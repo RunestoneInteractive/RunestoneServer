@@ -88,4 +88,11 @@ WORKDIR ${WEB2PY_PATH}
 # of the container
 COPY docker/entrypoint.sh /usr/local/sbin/entrypoint.sh
 
+# Copy configuration files to get nginx and uwsgi up and running
+RUN mkdir -p /etc/nginx/sites-enabled
+COPY docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone
+COPY docker/uwsgi/sites/runestone.ini /etc/uwsgi/sites/runestone.ini
+COPY docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service
+COPY docker/wsgihandler.py /srv/web2py/wsgihandler.py
+
 CMD /bin/bash /usr/local/sbin/entrypoint.sh
