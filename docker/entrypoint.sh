@@ -17,6 +17,13 @@ then
     exit 1
 fi
 
+# The RUNESTONE_HOST will be used by pavement.py files of
+# runestone books to set the correct host for so that
+# Browser and Server agree on a CORS compliant host for API calls
+if [ -z "$RUNESTONE_HOST" ]; then
+    echo "Please export \${RUNESTONE_HOST} set to the hostname"
+    exit 1
+fi
 
 # Initialize the database
 if [ ! -f "$stamp" ]; then
@@ -75,6 +82,10 @@ case $dbstate in
 
 esac
 
+chown -R www-data /srv/web2py
+mkdir -p /run/uwsgi
+chown -R www-data /run/uwsgi
+
 RETRIES=5
 
 until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
@@ -110,7 +121,15 @@ fi
 # Run the beast
 info "Starting the server"
 cd "$WEB2PY_PATH"
-python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X runestone  &
+
+# To just run the development server Do this:
+# python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
+
+# To start in a mode more consistent with deployment Do this:
+service nginx start
+
+/usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
+
 
 ## Go through all books and build
 info "Building & Deploying books"

@@ -17,7 +17,7 @@ services:
     links:
       - db
     ports:
-      - "8080:8080"
+      - "80:80"
     environment:
       POSTGRES_PASSWORD: 'runestone'
       POSTGRES_USER: 'runestone'
@@ -26,3 +26,4 @@ services:
       WEB2PY_MIGRATE: 'Yes'
       DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
       TEST_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test'
+      RUNESTONE_HOST: '${RUNESTONE_HOST}'
