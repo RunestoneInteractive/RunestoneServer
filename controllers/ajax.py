@@ -44,7 +44,7 @@ def hsblog():
                             # log entries that come from auth timing out even but the user hasn't reloaded
                             # the page.
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
@@ -165,7 +165,7 @@ def runlog():    # Log errors and runs with code
         sid = auth.user.username
         setCookie = True
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
@@ -593,7 +593,7 @@ def _getCorrectStats(miscdata,event):
     if auth.user:
         sid = auth.user.username
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
 
     if sid:
