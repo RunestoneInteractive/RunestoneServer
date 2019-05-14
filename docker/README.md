@@ -18,6 +18,8 @@ cd books
 git clone https://github.com/RunestoneInteractive/thinkcspy.git
 ```
 
+After cloning the book edit the pavement.py file.  It is **critical** that the `master_url` variable in that file is set correctly.  If you are running docker and doing your development on the same machine then `http://localhost` will work. If you are running docker on a remote host then make sure to set it to the name of the remote host. `master_url` is the URL that the API calls in the browser will use to connect to the server running in the docker container.
+
 ### 2. Add Users
 
 If you have an instructors.csv or students.csv that you want to add to the database,
