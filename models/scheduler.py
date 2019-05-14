@@ -2,7 +2,7 @@ from gluon.scheduler import Scheduler
 import stat
 import shutil
 from os import path
-import os
+import os, os.path
 import sys
 import re
 from paver.easy import sh
@@ -88,7 +88,11 @@ def run_sphinx(rvars=None, folder=None, application=None, http_host=None, base_c
     #
     # move the sourcedir/build/projectname folder into static
     #
-    shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
+    # todo check if dest is a symlink and remove it instead of calling rmtree
+    if os.path.islink(os.path.join(workingdir,'static',rvars['projectname'])):
+        os.remove(os.path.join(workingdir,'static',rvars['projectname']))
+    else:
+        shutil.rmtree(os.path.join(workingdir,'static',rvars['projectname']),ignore_errors=True)
     shutil.move(os.path.join(sourcedir,'build',rvars['projectname']),
                 os.path.join(workingdir,'static',rvars['projectname']) )
     #
@@ -119,7 +123,7 @@ def makePavement(http_host, rvars, sourcedir, base_course):
             'basecourse': base_course,
             'default_ac_lang': rvars.get('default_ac_lang') if rvars.get('default_ac_lang',False) else 'python',
             'downloads_enabled': rvars.get('downloads_enabled','false'),
-            'enable_chatcodes': 'false'
+            'enable_chatcodes': 'false',
             }
     if 'loginreq' in rvars:
         opts['login_req'] = 'true'
@@ -129,6 +133,14 @@ def makePavement(http_host, rvars, sourcedir, base_course):
         opts['python3'] = 'true'
     else:
         opts['python3'] = 'false'
+    if 'allowpairs' in rvars:
+        opts['allow_pairs'] = 'true'
+    else:
+        opts['allow_pairs'] = 'false'
+    if 'short_name' in rvars:
+        opts['short_name'] = short_name.replace(' ','\\ ')
+    else:
+        opts['short_name'] = rvars['projectname']
 
     opts['dest'] = '../../static'
 
@@ -136,4 +148,5 @@ def makePavement(http_host, rvars, sourcedir, base_course):
     with open(path.join(sourcedir, 'pavement.py'), 'w') as fp:
         fp.write(paver_stuff)
 
-scheduler = Scheduler(db, migrate='runestone_')
+if settings.academy_mode:
+   scheduler = Scheduler(db, migrate='runestone_')

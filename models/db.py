@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import os
 import random
+
+from gluon import current
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -21,7 +22,7 @@ if not request.env.web2py_runtime_gae:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
         db = DAL(settings.database_uri, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
                  migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
-    session.connect(request, response, masterapp='runestone', db=db, migrate='runestone_web2py_sessions.table')
+    session.connect(request, response, db, masterapp=None, migrate='runestone_web2py_sessions.table')
 
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
@@ -32,6 +33,10 @@ else:
     ## from gluon.contrib.memdb import MEMDB
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
+
+# Make the settings and database available in modules.
+current.db = db
+current.settings = settings
 
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
@@ -79,6 +84,8 @@ db.define_table('courses',
   Field('base_course', 'string'),
   Field('python3', type='boolean', default=True),
   Field('login_required', type='boolean', default=True),
+  Field('allow_pairs', type='boolean', default=False),
+  Field('student_price', type='integer'),
   migrate='runestone_courses.table'
 )
 
@@ -103,8 +110,8 @@ db.define_table('cohort_master',
 def getCourseNameFromId(courseid):
     ''' used to compute auth.user.course_name field '''
     q = db.courses.id == courseid
-    course_name = db(q).select()[0].course_name
-    return course_name
+    row = db(q).select().first()
+    return row.course_name if row else ''
 
 
 def verifyInstructorStatus(course, instructor):
@@ -148,7 +155,7 @@ db.define_table('auth_user',
     Field('last_name', type='string',
           label=T('Last Name')),
     Field('email', type='string',
-          requires=IS_EMAIL(banned='^.*shoeonlineblog\.com$'),
+          requires=IS_EMAIL(banned='^.*shoeonlineblog\\.com$'),
           label=T('Email')),
     Field('password', type='password',
           readable=False,
@@ -174,7 +181,7 @@ db.define_table('auth_user',
     Field('active',type='boolean',writable=False,readable=False,default=True),
     Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
-    format=lambda u: u.first_name + " " + u.last_name,
+    format=lambda u: (u.first_name or "") + " " + (u.last_name or ''),
     migrate='runestone_auth_user.table')
 
 

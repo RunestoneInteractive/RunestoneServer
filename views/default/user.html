@@ -17,13 +17,18 @@
 
 <div class="container rscontainer">
 
-    {{if request.args(0) != 'register':}}
+    {{if (request.args(0) != 'register'):}}
 
         <div class="row">
+          {{ if settings.academy_mode: }}
             <!-- Carousel
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
-            <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
+            {{ if (not auth.user): }}
+                <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
+            {{else: }}
+                <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel">
+            {{ pass }}
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
                     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -39,7 +44,7 @@
                             <div class="carousel-caption">
                                 <h3>Welcome to Runestone Academy</h3>
                                 <p>We host a growing number of open source, interactive textbooks, written by award winning authors. Used by hundreds of schools</p>
-                                <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/library.html" role="button">See the List</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take a Tour</a></p>
+                                <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/pages/library.html" role="button">See the List</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take a Tour</a></p>
                             </div>
                         </div>
                     </div>
@@ -57,7 +62,7 @@
                             <div class="carousel-caption">
                                 <h2>New Instructors</h2>
                                 <p>Here is a Video that will help you get started. Or, take a tour of the unique interactive features of our books!</p>
-                                <p><a class="btn btn-lg btn-primary" href="https://youtu.be/IGg_SUWEnGU" role="button">Watch Video</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/overview/overview.html" role="button">Take Tour</a></p>
+                                <p><a class="btn btn-lg btn-primary" href="https://youtu.be/IGg_SUWEnGU" role="button">Watch Video</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/static/instructorguide/index.html" role="button">Instructors Guide</a></p>
                             </div>
                         </div>
                     </div>
@@ -90,13 +95,16 @@
                     </div>
                 </div><a class="left carousel-control" data-slide="prev" href="#myCarousel"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" data-slide="next" href="#myCarousel"><span class="glyphicon glyphicon-chevron-right"></span></a>
             </div><!-- /.carousel -->
-            <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
             {{pass}}
-
+          {{pass}}
             <!--  LOGIN -->
-            {{ if request.args(0) == 'login': }}
+          {{if not settings.lti_only_mode:}}
+          {{ if not auth.user or request.args(0) == 'impersonate': }}
+              <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+          {{ pass }}
+          {{ if request.args(0) == 'login' and not auth.user: }}
                 <div id="web2py_user_form" class="col-md-4">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
@@ -146,12 +154,12 @@
                         {{pass}}
                     {{=form.custom.end}}
                     <!-- Must use this to get all the good defaults for the form -->
-                    <div id='auth-actions' class="col-md-4">
+                    <div id='auth-actions' style="margin-left: 20px;">
                         {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
                             <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
                                 role="button">{{=T('Lost Password')}}</a>
                             <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
-                                role="button">{{=T('email my username')}}</a>
+                                role="button">{{=T('Forgot Username')}}</a>
                         {{pass}}
                     </div>
                 </div>
@@ -166,12 +174,19 @@
                     {{pass}}
                 </div>
             {{pass}}
+          {{else:}}
+            Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+            {{if settings.coursera_mode:}}
+               <p>At the beginning of each study session, you will need to first use one of the links at the top of a lesson that says something like, "Single Sign On: Interactive Textbook and Practice Opportunities." Once you've done that, you'll be able to use the textbook for the duration of your learning sessions, including the links to individual textbook pages in Coursera.</p>
+            {{pass}}
+          {{pass}}
         </div>
     {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
 
     <div class="content row">
         <!-- REGISTRATION -->
-        {{if request.args(0) == 'register': }}
+        {{if (request.args(0) == 'register'): }} <!-- register page -->
+          {{if not settings.lti_only_mode:}}
             <div id="registration_div">
                 <div class="col-md-6 col-md-offset-3">
                     <h2>Runestone Registration</h2>
@@ -238,17 +253,6 @@
                                     </td>
                                     <td class="w2p_fc"></td>
                                 </tr>
-                                <tr id="donation_row">
-                                    <td class="w2p_fc">
-                                        Donate:
-                                    </td>
-                                    <td>
-                                        <input type="radio" name="donate" value="0" id="donate_0" checked> <label for="donate_0">None</label>
-                                        <input type="radio" name="donate" value="10" id="donate_10"> <label for="donate_10">$10</label>
-                                        <input type="radio" name="donate" value="20" id="donate_20"> <label for="donate_20">$20</label>
-                                        <input type="radio" name="donate" value="50" id="donate_50"> <label for="donate_50">$50</label>
-                                    </td>
-                                </tr>
                                 <tr id="create_course_row">
                                     <td class="w2p_fl"><label for="ccn_checkbox">Create Course:</label></td>
                                     <td class="w2p_fw ui-widget"><input type="checkbox" id="ccn_checkbox" name="ccn_checkbox"> <label for="ccn_checkbox" style="font-weight: initial; display: inline;">Make course after registering (instructors only)</label></td>
@@ -300,39 +304,35 @@
                         {{pass}}
                     </div> <!-- end form div -->
                 </div>
-                <div class="col-md-6">
-                    <h2>Please Support Runestone</h2>
-                    <p>The College Board puts the annual cost of textbooks and materials at $1,168!
-                        Our mission is to provide you with high quality textbooks at no charge!</p>
-                    <p>Would you please consider a donation of $10 to support our work?  If you are an instructor could your department make a contribution?
-                        We allow you to use Runestone for free, but it definitely is not free. Runestone takes lots of work and server resources.</p>
-                </div>
             </div> <!-- end register div -->
-        {{pass}}
-
-        {{if request.args(0) == 'register':}}
-            <div class="col-md-6">
+             <div class="col-md-6">
                 <h4>Registration Hints</h4>
                 <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
                 <ul>
                     <li><strong>thinkcspy</strong> for How to Think Like a Computer Scientist</li>
+                    <li><strong>fopp</strong> for Foundations of Python Programming</li>
                     <li><strong>pythonds</strong> for Problem Solving with Algorithms and data structures</li>
                     <li><strong>StudentCSP</strong> for the AP CS Principles</li>
                     <li><strong>JavaReview</strong> for the AP Java Review</li>
-                    <li><strong>pip2</strong> for Programs, Information, People</li>
+                    <li><strong>httlads</strong> for How to Think like a Data Scientist</li>
+                    <li><strong>cppds</strong> for Problem Solving with Algorithms and Data Structures using C++</li>
+                    <li><strong>pythoned</strong>Spanish Language Edition of <strong>pythonds</strong></li>
                 </ul>
             </div>
-        {{pass}}
+          {{else:}} <!-- lti_only_mode -->
+            Registration is disabled. Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
+          {{pass}}
+        {{pass}} <!-- end register page -->
 
-        {{if request.args(0) != 'register':}}
+        {{if (request.args(0) != 'register') and settings.academy_mode:}}
             <div class="row">
                 <div class='col-md-6'>
                     <h2>About Runestone</h2>
                     <p>The mission of Runestone Interactive is to democratize textbooks for the 21st century.  Textbook prices are too high, and paper textbooks are too old fashioned.  We are changing that.</p>
                     <ul>
                         <li>Freely available open source books</li>
-                        <li>Easy to use Authoring Tools to create Runestone books</li>
-                        <li>Hosting services for your course</li>
+                        <li>Easy to use authoring tools to create Runestone books</li>
+                        <li>Hosting services for your course - See our <a href="https://runestone.academy/runestone/static/instructorguide/index.html">Instructor Guide</a></li>
                     </ul>
                     <p>To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
                 </div>
@@ -346,24 +346,28 @@
                         working on this all the time.</p>
                     <p>If these books have helped you, if you liked them,
                         please consider making a small donation.</p>
-                    <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
+                        <a href="https://www.patreon.com/bePatron?u=19581921" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+                        <p style="margin-top: 15px;">Or...</p>
+                        Make a one-time donation <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
                 </div>
             </div>
         {{pass}}
-        <div class="col-md-6">
-            <h2>Your Privacy</h2>
-            <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                of our educational mission we do collect usage data to help us better understand how you learn and how you
-                use our
-                books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                this data to publish
-                academic papers. We would never publish anything that revealed your identity. We may share this data with
-                fellow
-                educational researchers, but rest assured that all personally identifying information will be anonymized
-                before we do.
-                If you have questions about this please feel free to <a
-                        href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
-        </div>
+        {{if settings.academy_mode:}}
+            <div class="col-md-6">
+                <h2>Your Privacy</h2>
+                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+                    of our educational mission we do collect usage data to help us better understand how you learn and how you
+                    use our
+                    books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+                    this data to publish
+                    academic papers. We would never publish anything that revealed your identity. We may share this data with
+                    fellow
+                    educational researchers, but rest assured that all personally identifying information will be anonymized
+                    before we do.
+                    If you have questions about this please feel free to <a
+                            href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+            </div>
+        {{pass}}
     </div>
 </div>
 

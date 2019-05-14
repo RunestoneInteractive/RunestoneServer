@@ -7,6 +7,9 @@ from datetime import date, timedelta, datetime
 from operator import itemgetter
 from collections import OrderedDict
 from paver.easy import sh
+import six
+import pandas as pd
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -29,9 +32,10 @@ def index():
     questions = []
     sections = []
 
-    if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
-        session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
-        return redirect(URL('admin','admin'))
+    if settings.academy_mode and not settings.docker_institution_mode:
+        if auth.user.course_name in ['thinkcspy','pythonds','JavaReview','JavaReview-RU', 'StudentCSP']:
+            session.flash = "Student Progress page not available for {}".format(auth.user.course_name)
+            return redirect(URL('admin','admin'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
@@ -55,7 +59,7 @@ def index():
     progress_metrics = data_analyzer.progress_metrics
 
     logger.debug("starting problem_id, metric loop")
-    for problem_id, metric in problem_metrics.problems.iteritems():
+    for problem_id, metric in six.iteritems(problem_metrics.problems):
         stats = metric.user_response_stats()
 
         if data_analyzer.questions[problem_id]:
@@ -91,7 +95,7 @@ def index():
     logger.debug("getting questsions")
     questions = sorted(questions, key=itemgetter("chapter"))
     logger.debug("starting sub_chapter loop")
-    for sub_chapter, metric in progress_metrics.sub_chapters.iteritems():
+    for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
         sections.append({
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
@@ -106,7 +110,7 @@ def index():
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
-    for user, activity in user_activity.user_activities.iteritems():
+    for user, activity in six.iteritems(user_activity.user_activities):
         read_data.append({
             "student":activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
             "sid":activity.username,
@@ -153,7 +157,7 @@ def studentreport():
     data_analyzer.load_assignment_metrics(request.vars.id)
 
     chapters = []
-    for chapter_label, chapter in data_analyzer.chapter_progress.chapters.iteritems():
+    for chapter_label, chapter in six.iteritems(data_analyzer.chapter_progress.chapters):
         chapters.append({
             "label": chapter.chapter_label,
             "status": chapter.status_text(),
@@ -294,7 +298,7 @@ def exercisemetrics():
     problem_metric = problem_metrics.problems[prob_id]
     response_frequency = problem_metric.aggregate_responses
 
-    for username, user_responses in problem_metric.user_responses.iteritems():
+    for username, user_responses in six.iteritems(problem_metric.user_responses):
         responses = user_responses.responses[:4]
         responses += [''] * (4 - len(responses))
         answers.append({
@@ -303,10 +307,66 @@ def exercisemetrics():
             "answers":responses
             })
 
-    for attempts, count in problem_metric.user_number_responses().iteritems():
+    for attempts, count in six.iteritems(problem_metric.user_number_responses()):
         attempt_histogram.append({
             "attempts": attempts,
             "frequency": count
             })
 
     return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+
+
+@auth.requires_login()
+def subchapoverview():
+    #course = db(db.courses.id == auth.user.course_id).select().first()
+    course = auth.user.course_name
+
+    is_instructor = verifyInstructorStatus(course, auth.user.id)
+    if not is_instructor:
+        session.flash = "Not Authorized for this page"
+        return redirect(URL('default','user'))
+
+    data = pd.read_sql_query("""
+    select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
+    join questions on div_id = name
+    where course_id = '{}'""".format(course), settings.database_uri)
+    data = data[~data.sid.str.contains('@')]
+    if 'tablekind' not in request.vars:
+        request.vars.tablekind = 'sccount'
+
+    values = "timestamp"
+    idxlist = ['chapter', 'subchapter', 'div_id']
+
+    if request.vars.tablekind == "sccount":
+        values = "div_id"
+        afunc = "nunique"
+        idxlist = ['chapter', 'subchapter']
+    elif request.vars.tablekind == "dividmin":
+        afunc = "min"
+    elif request.vars.tablekind == "dividmax":
+        afunc = "max"
+    else:
+        afunc = "count"
+
+    pt = data.pivot_table(index=idxlist, values=values, columns='sid', aggfunc=afunc)
+
+    cmap = pd.read_sql_query("""select chapter_num, sub_chapter_num, chapter_label, sub_chapter_label
+        from sub_chapters join chapters on chapters.id = sub_chapters.chapter_id
+        where chapters.course_id = '{}'
+        order by chapter_num, sub_chapter_num;
+        """.format(course), settings.database_uri )
+
+    if request.vars.tablekind != "sccount":
+        pt = pt.reset_index(2)
+
+    l = pt.merge(cmap, left_index=True, right_on=['chapter_label', 'sub_chapter_label'], how='outer')
+    l = l.set_index(['chapter_num','sub_chapter_num']).sort_index()
+
+
+    if request.vars.action == "tocsv":
+        response.headers['Content-Type']='application/vnd.ms-excel'
+        response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
+        return l.to_csv(na_rep=" ")
+    else:
+        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
+            summary=l.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))

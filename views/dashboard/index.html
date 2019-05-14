@@ -10,7 +10,10 @@
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
-	<h1>{{=course_name}} <span class="dash-title-description">Instructor Dashboard</span></h1>
+	<h1>{{=course_name}}
+		<span class="dash-title-description">Instructor Dashboard</span>
+		<a href="{{=URL('dashboard','subchapoverview')}}" style="font-size: small">Overview Reports</a>
+	</h1>
 	<h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
 	<div style="float: right"><b>Select Chapter</b>
 					<select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">

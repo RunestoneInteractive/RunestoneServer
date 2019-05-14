@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
+import six
 
 rslogger = logging.getLogger(settings.logger)
 rslogger.setLevel(settings.log_level)
@@ -60,7 +61,7 @@ class ProblemMetrics(object):
         not_attempted = 0
         incomplete = 0
 
-        for sid, user_response in self.user_responses.iteritems():
+        for sid, user_response in six.iteritems(self.user_responses):
             if user_response.status == UserResponse.NOT_ATTEMPTED:
                 not_attempted = not_attempted + 1
             if user_response.status == UserResponse.INCOMPLETE:
@@ -74,7 +75,7 @@ class ProblemMetrics(object):
 
     def user_number_responses(self):
         histogram = {}
-        for username, user_response in self.user_responses.iteritems():
+        for username, user_response in six.iteritems(self.user_responses):
             attempts = len(user_response.responses)
             if attempts >= 5:
                 attempts = "5+"
@@ -223,7 +224,7 @@ class UserActivitySubChapterProgress(object):
         subchapters = []
         subchapter_res = db(db.sub_chapters.chapter_id == self.chapter_id).select()
         sub_chapter_label_to_text = {sc.sub_chapter_label : sc.sub_chapter_name for sc in subchapter_res}
-        for subchapter_label, status in self.sub_chapters.iteritems():
+        for subchapter_label, status in six.iteritems(self.sub_chapters):
             subchapters.append({
                 "label": sub_chapter_label_to_text.get(subchapter_label,subchapter_label),
                 "status": UserActivitySubChapterProgress.completion_status_to_text(status)
@@ -353,6 +354,7 @@ class DashboardDataAnalyzer(object):
         inums = [x.instructor for x in self.instructors]
         self.users.exclude(lambda x: x.id in inums)
         self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
+        # todo:  Yikes!  Loading all of the log data for a large or even medium class is a LOT
         self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
             (db.auth_user.course_id == auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
             (db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status,db.auth_user.id)
@@ -426,15 +428,20 @@ class DashboardDataAnalyzer(object):
                     self.grades[assign["name"]] = {}
                     for userEntry in rl:
                         rslogger.debug("GETTING USER SCORES %s",userEntry)
-                        s += userEntry["grades"]["score"]   # Calculating average
-                        count += 1
-                        if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
-                            self.grades[assign["name"]]["score"] = userEntry["grades"]["score"]
+                        this_score = userEntry["grades"]["score"]
+                        if this_score != None:
+                            s += this_score   # Calculating average
+                            count += 1
+                            if userEntry["auth_user"]["username"] == username:      # If this is the student we are looking for
+                                self.grades[assign["name"]]["score"] = this_score
 
                     if 'score' not in self.grades[assign["name"]]:
                             self.grades[assign["name"]]["score"] = "N/A"        # This is redundant as a failsafe
                     rslogger.debug("COUNT = %s", count)
-                    average = s/count
+                    try:
+                        average = s/count
+                    except:
+                        average = 0
                     self.grades[assign["name"]]["class_average"] = "{:.02f}".format(average)
                     self.grades[assign["name"]]["due_date"] = assign["duedate"].date().strftime("%m-%d-%Y")
 

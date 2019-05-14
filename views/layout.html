@@ -35,6 +35,7 @@
     <body>
         {{ block navbar }}
         <!-- needed for Facebook button -->
+    {{ if settings.academy_mode: }}
         <div id="fb-root"></div>
         <script>
             (function(d, s, id) {
@@ -45,6 +46,7 @@
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         </script>
+     {{ pass }}
         <!-- Begin navbar -->
         <div id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
             {{ if response.flash: }}
@@ -59,13 +61,19 @@
                     <span class="icon-bar"></span>
                     </button>
                     <div>
-                        <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                       {{ if settings.lti_only_mode: }}
+                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;'">&nbsp;</a>
+                        {{ else: }}
+                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                        {{ pass }}
                     </div>
                 </div>
                 <div class="navbar-collapse collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="divider-vertical"></li>
                         <!-- social media dropdown -->
+                     {{ if settings.academy_mode: }}
+
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
@@ -89,6 +97,7 @@
                                 </li>
                             </ul>
                         </li>
+                        {{ pass }}
                         <!-- end social media dropdown -->
                         <li class="divider-vertical"></li>
                         <!-- user account dropdown -->
@@ -98,7 +107,7 @@
                             </a>
                             <ul class="dropdown-menu user-menu">
                                 {{ if auth.user: }}
-                                    <li><span class='loggedinuser'>{{=auth.user.email}}</span></li>
+                                    <li><span class='loggedinuser'>{{=auth.user.username}}</span></li>
                                 {{ else: }}
                                     <li><span class='loggedinuser'>Not logged in</span></li>
                                 {{ pass }}
@@ -106,16 +115,21 @@
                                     <li class="divider"></li>
                                     <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
                                     <li class="divider"></li>
+                                    {{ if settings.academy_mode: }}
                                     <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
+                                    {{ pass }}
                                 {{ pass }}
                                 <!---
                                     <li class="divider"></li>
                                     <li><a href='/{{=request.application}}/mygroup/schedule'>Group Schedule</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
+                                {{ if not settings.lti_only_mode: }}
                                 <li class="divider"></li>
                                 <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
                                 <li class="divider"></li>
+                                {{ pass }}
+                                {{ if not settings.lti_only_mode: }}
                                 {{ if auth.user: }}
                                     <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
                                     <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
@@ -125,27 +139,32 @@
                                     <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
                                     <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
                                 {{ pass }}
+                                {{ else: }}
+                                    <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
+                                {{ pass }}
                             </ul>
                         </li>
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
+                        {{ if settings.academy_mode: }}
                         <!-- help menu dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
                             </a>
                             <ul class="dropdown-menu user-menu">
-                                <li><a href='http://runestoneinteractive.org/customcourse.html'>Help for Instructors</a></li>
+                                <li><a href='https://runestone.academy/runestone/static/instructorguide/index.html'>Help for Instructors</a></li>
                                 <li class="divider"></li>
-                                <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+                                <li><a href='http://www.runestoneinteractive.org/pages/about.html'>About Runestone</a></li>
                                 <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
                             </ul>
                         </li>
                         <li class="divider-vertical"></li>
+                        {{pass}}
                     </ul>
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
-                        {{ if request.controller == "default":}}
+                        {{ if request.controller == "default" and settings.academy_mode:}}
                             <!-- open library dropdown -->
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
@@ -159,13 +178,16 @@
                                     <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
                                     <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
                                     <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
+                                    <li><a href="/{{=request.application}}/static/cpp4python/index.html">C++ for Python Programmers <strong>New</strong></a></li>
+                                    <li><a href="/{{=request.application}}/static/httlads/index.html">How to Think like a Data Scientist <strong>Beta</strong></a></li>
                                     <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>
                                     <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
+                                    <li><a href="/{{=request.application}}/static/instructorguide/index.html">Runestone Instructor Guide</a></li>
                                 </ul>
                             </li>
                         {{ elif auth.user: }}
                             <li><a href="/{{=request.application}}/static/{{=auth.user.course_name}}/index.html">Back to {{=auth.user.course_name}}</a></li>
-                        {{ else: }}
+                        {{ elif not settings.lti_only_mode: }}
                             <li><a href="/{{=request.application}}/default">Login</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
@@ -173,18 +195,19 @@
                             {{if 'auth' in globals() and auth.user:}}
                                 <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
                             {{pass}}
-                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login':}}
+                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login' and not settings.lti_only_mode:}}
                                 <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
                             {{pass}}
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if request.args(0) == 'login':}}
+                    {{if request.args(0) == 'login' and settings.academy_mode:}}
                         <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                     {{pass}}
                 </div>
             </div>
         </div>
+
         <!-- End navbar -->
         {{ end }}
         <!-- begin body content -->
@@ -213,6 +236,8 @@
         </footer>
         <!-- end footer -->
         {{ end }}
+
+        {{ if settings.academy_mode: }}
         <script type="text/javascript" id="cookieinfo"
             src="//cookieinfoscript.com/js/cookieinfo.min.js"
             data-bg="#645862"
@@ -223,6 +248,7 @@
             data-moreinfo="https://runestone.academy/runestone/default/privacy"
             data-text-align="left"
             data-close-text="Got it!"></script>
+        {{ pass }}
         <script type='text/javascript'>
             // do some styling of the web2py login and registration form
             // this is done here because web2py doesn't have an easy way

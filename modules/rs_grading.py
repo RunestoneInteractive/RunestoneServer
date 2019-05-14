@@ -2,28 +2,27 @@ import datetime
 import logging
 from math import ceil
 from psycopg2 import IntegrityError
+from decimal import Decimal, ROUND_HALF_UP
+
+from gluon import current
 from outcome_request import OutcomeRequest
 
-# When testing, the ``settings`` object isn't defined. Import it in this case.
-try:
-    logger
-except:
-    execfile('applications/runestone/models/0.py', globals())
-logger = logging.getLogger(settings.logger)
-logger.setLevel(settings.log_level)
+logger = logging.getLogger(current.settings.logger)
+logger.setLevel(current.settings.log_level)
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
     print("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
 
-
+D1 = Decimal('1')
 def _score_from_pct_correct(pct_correct, points, autograde):
     # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
     if autograde == 'interact' or autograde == 'visited':
         return points
     elif autograde == 'pct_correct':
         # prorate credit based on percentage correct
-        return int(round((pct_correct * points)/100.0))
+        # 2.x result return int(((pct_correct * points)/100.0))
+        return int(Decimal((pct_correct * points)/100.0).quantize(D1, ROUND_HALF_UP)  )
     elif autograde == 'all_or_nothing' or autograde == 'unittest':
         # 'unittest' is legacy, now deprecated
         # have to get *all* tests to pass in order to get any credit
@@ -418,7 +417,7 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
 
 def _get_students(course_id, sid = None, db=None):
     if sid:
-        # sid which is passed in is a username, not a row id
+        # sid which is passed in is a row id, not a username; get the username
         student_rows = db((db.user_courses.course_id == course_id) &
                           (db.user_courses.user_id == db.auth_user.id) &
                           (db.auth_user.username == sid)
@@ -431,7 +430,7 @@ def _get_students(course_id, sid = None, db=None):
     return student_rows
 
 def send_lti_grade(assignment_points, score, consumer, secret, outcome_url, result_sourcedid):
-    pct = score / float(assignment_points) if assignment_points else 0.0
+    pct = score / float(assignment_points) if score and assignment_points else 0.0
     # print "pct", pct
 
     # send it back to the LMS
@@ -613,11 +612,16 @@ def do_check_answer(sid, course_name, qid, username, q, db, settings, now, timez
                    (db.user_topic_practice.sub_chapter_label == sub_chapter_label) &
                    (db.user_topic_practice.question_name == lastQuestion.name)).select().first()
 
+    if not flashcard:
+        # the flashcard for this question has been deleted since the practice page was loaded, probably
+        # because the user marked the corresponding page as unread. In that case, don't try to update the flashcard.
+        return
+
     # Retrieve all the falshcards created for this user in the current course and order them by their order of creation.
     flashcards = db((db.user_topic_practice.course_name == course_name) &
                     (db.user_topic_practice.user_id == sid)).select()
     # Select only those where enough time has passed since last presentation.
-    presentable_flashcards = [f for f in flashcards if now_local.date() >= flashcard.next_eligible_date]
+    presentable_flashcards = [f for f in flashcards if now_local.date() >= f.next_eligible_date]
 
     if q:
         # User clicked one of the self-evaluated answer buttons.

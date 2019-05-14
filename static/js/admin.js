@@ -21,7 +21,7 @@ function gradeIndividualItem() {
         var s_column = document.getElementById("gradingcolumn1");
         if (s_column.selectedIndex != -1) {
             //make sure they've selected a student from column 1
-            var student = s_column.options[s_column.selectedIndex].value;
+            var student = s_column.options[s_column.selectedIndex].value; // TODO .value should be sid not name
             var student_dict = students;
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
@@ -138,7 +138,7 @@ function autoGrade() {
     var question = getSelectedItem("question")
     var studentID = getSelectedItem("student")
     var enforceDeadline = $('#enforceDeadline').is(':checked')
-    jQuery.ajax({
+    var params = {
         url: eBookConfig.autogradingURL,
         type: "POST",
         dataType: "JSON",
@@ -150,12 +150,32 @@ function autoGrade() {
         },
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
-            calculateTotals();
-            alert(retdata.message);
+            //alert(retdata.message);
         }
-    }).always(function () {
-        $("#autogradesubmit").prop("disabled", false);
-    });
+    }
+
+    if (assignment != null && question === null && studentID == null) {
+        (async function(students, ajax_params) {
+            // Grade each student provided.
+            let student_array = Object.keys(students);
+            for (let index = 0; index < student_array.length; ++index) {
+                let student = student_array[index];
+                ajax_params.data.sid = student;
+                res = await jQuery.ajax(ajax_params);
+                $("#autogradingprogress").html(`Student ${index + 1} of ${student_array.length}: ${res.message} for ${student}`);
+            }
+            // Clear the graing progress.
+            $("#autogradingprogress").html('');
+            calculateTotals();
+            $("#autogradesubmit").prop("disabled", false);
+        })(students, params);
+    } else {
+        jQuery.ajax(params).always(function () {
+            calculateTotals();
+            $("#autogradesubmit").prop("disabled", false);
+        });
+    }
+
 }
 
 function calculateTotals(sid) {
@@ -554,7 +574,7 @@ function pickedStudents(column) {
         var key = keys[i];
         var option = document.createElement("option");
         option.text = studentslist[key];
-        option.value = studentslist[key];
+        option.value = studentslist[key]; // TODO: just store key here
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
 
@@ -1323,7 +1343,7 @@ function assignmentInfo() {
             // Put the qeustion in the table.
             let name = question['name'];
             allQuestions.push(createQuestionObject(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']));
-            // Check this question in the question tree picker.  
+            // Check this question in the question tree picker.
             // Assumes that the picker tree is built before we do this loop.
             tqp.check_node(tqp.get_node(name));
         }

@@ -1,6 +1,12 @@
 Runestone ChangeLog
 ===================
 
+3.5.x August 2015 - X 2019
+-----------------
+
+* Addition of Dockerfile for container deployment
+* Conversion to Python 3
+
 3.1.1 September 1, 2014
 -----------------------
 

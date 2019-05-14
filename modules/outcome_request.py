@@ -54,7 +54,7 @@ class OutcomeRequest():
             setattr(self, accessor, None)
 
         # Store specified options in our accessors
-        for (key, val) in opts.iteritems():
+        for (key, val) in six.iteritems(opts):
             setattr(self, key, val)
 
     @staticmethod

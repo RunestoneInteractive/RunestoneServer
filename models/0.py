@@ -1,3 +1,10 @@
+# Uncomment this to enable `auto-reloading
+# <http://web2py.com/books/default/chapter/29/04/the-core?search=import+module#Sharing-the-global-scope-with-modules-using-the-current-object>`_
+# of code in the ``modules/`` subdirectory. This is helpful when doing
+# development; otherwise, the web2py server must be restarted to reload any
+# changes made to ``modules/``.
+#from gluon.custom_import import track_changes; track_changes(True)
+
 from gluon.storage import Storage
 import logging
 from os import environ
@@ -22,16 +29,26 @@ settings.login_config = ''
 settings.course_id = 'devcourse'
 settings.plugins = []
 settings.server_type = "http://"
+settings.academy_mode = True
+settings.lti_only_mode = False
+settings.coursera_mode = False
 
 # Do not control this with hostnames
 config = environ.get("WEB2PY_CONFIG", "NOT SET")
 
 if config == "production":
     settings.database_uri = environ["DBURL"]
+    # Set these
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_SECRET_KEY')
 elif config == "development":
     settings.database_uri = environ.get("DEV_DBURL")
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_DEV_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_DEV_SECRET_KEY')
 elif config == "test":
     settings.database_uri = environ.get("TEST_DBURL")
+    settings.STRIPE_PUBLISHABLE_KEY = environ.get('STRIPE_TEST_PUBLISHABLE_KEY')
+    settings.STRIPE_SECRET_KEY = environ.get('STRIPE_TEST_SECRET_KEY')
 else:
     print("To configure web2py you should set up both WEB2PY_CONFIG and")
     print("XXX_DBURL values in your environment -- See README for more detail")

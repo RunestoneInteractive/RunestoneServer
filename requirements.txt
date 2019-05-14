@@ -2,7 +2,7 @@ diff-match-patch>=20110725.1
 lxml>=3.3.5
 numpy>=1.9.2
 Paver>=1.2.4
-psycopg2>=2.6.2
+psycopg2-binary
 pylint>=1.2.1
 python-dateutil>=2.4.2
 pytz>=2016.6.1
@@ -10,9 +10,14 @@ requests>=2.10.0
 runestone>=3.0.7
 selenium>=2.53.6
 six>=1.10.0
-Sphinx>=1.7.1
+Sphinx<2.0
 sphinxcontrib-paverutils>=1.17
 SQLAlchemy>=1.0.14
 cssselect>=1.0
 oauth2>=1.9
+bleach>=3.0
+pathlib2
+stripe
+pandas
+urllib3==1.21.1
 -e rsmanage/

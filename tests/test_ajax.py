@@ -71,7 +71,7 @@ class Web2pyTestCase(unittest.TestCase):
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         # bring in the ajax controllers
-        execfile("applications/runestone/controllers/ajax.py", globals())
+        exec(compile(open("applications/runestone/controllers/ajax.py").read(), "applications/runestone/controllers/ajax.py", 'exec'), globals())
 
         # Create a default user and course.
         self.course_name_1 = 'test_course_1'
@@ -223,19 +223,118 @@ class TestAjaxEndpoints(Web2pyTestCase):
     def testGetFITBAnswerResults(self):
         auth.login_user(db.auth_user(self.user_id_1))
 
-        # Test client-side grading.
+        # Test old format, server-side grading
+        ## -----------------------------------
+        # A correct answer.
         request.vars.course = self.course_name_1
         request.vars.sid = self.user_name_1
         request.vars.event = 'fillb'
+        request.vars.answer = 'red,away'
+        request.vars.act = request.vars.answer
         request.vars.div_id = 'test_fitb_1'
         request.client = "foobar"
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], request.vars.answer)
+        self.assertTrue(res['correct'])
+
+        # An incorrect answer.
+        request.vars.answer = 'blue,away'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], request.vars.answer)
+        self.assertFalse(res['correct'])
+
+        # Test new format, server-side grading
+        ## -----------------------------------
+        # A correct answer. Add spaces to verify these are ignored.
+        request.vars.answer = '[" red ","away"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], request.vars.answer)
+        self.assertTrue(res['correct'])
+
+        # An incorrect answer.
+        request.vars.answer = '["blue","away"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertEqual(res['answer'], request.vars.answer)
+
+        # Test server-side grading of a regex
+        request.vars.div_id = 'test_fitb_regex'
+        request.vars.answer = '["mARy"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertTrue(res['correct'])
+
+        request.vars.answer = '["mairI"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertTrue(res['correct'])
+
+        request.vars.answer = '["mairy"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertFalse(res['correct'])
+
+        # Test server-side grading of a range of numbers, using various bases.
+        request.vars.div_id = 'test_fitb_numeric'
+        request.vars.answer = '["10"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertTrue(res['correct'])
+        # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
+        self.assertIn(res['displayFeed'], (['Correct.'], ['<p>Correct.</p>\n']))
+
+        request.vars.answer = '["0b1010"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertTrue(res['correct'])
+
+        request.vars.answer = '["0xA"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertTrue(res['correct'])
+
+        request.vars.answer = '["9"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertFalse(res['correct'])
+        # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
+        self.assertIn(res['displayFeed'], (['Close.'], ['<p>Close.</p>\n']))
+
+        request.vars.answer = '["11"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertFalse(res['correct'])
+        self.assertIn(res['displayFeed'], (['Close.'], ['<p>Close.</p>\n']))
+
+        request.vars.answer = '["8"]'
+        request.vars.act = request.vars.answer
+        sleep_hsblog()
+        res = json.loads(getAssessResults())
+        self.assertFalse(res['correct'])
+        self.assertIn(res['displayFeed'], (['Nope.'], ['<p>Nope.</p>\n']))
+
+        # Test client-side grading.
+        db(db.courses.course_name == self.course_name_1).update(login_required=False)
         request.vars.answer = '["blue","away"]'
         request.vars.act = request.vars.answer
         request.vars.correct = 'F'
         sleep_hsblog()
         res = json.loads(getAssessResults())
         self.assertEqual(res['answer'], request.vars.answer)
-        self.assertFalse(res['correct'])
 
     @mock_utcnow
     def testGetDragNDropResults(self):

@@ -1,16 +1,11 @@
 Runestone Interactive Server and API
 ====================================
 
-.. image:: https://badge.waffle.io/RunestoneInteractive/RunestoneServer.png?label=ready&title=Ready
-   :target: https://waffle.io/RunestoneInteractive/RunestoneServer
-   :alt: 'Stories in Ready'
-
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :alt: Join the chat at https://gitter.im/bnmnetp/runestone
    :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-
-.. image:: http://bnmnetp.me:8088/buildStatus/icon?job=RunestoneServer
+.. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
    :alt: Build Status
 
 
@@ -22,12 +17,20 @@ If you just want to use Runestone's capabilities to build pre-existing books or 
 This repository has the extra materials needed for running a web2py server with extra features for running courses using Runestone books and tools.
 
 
+Docker Installation
+-------------------
+
+The easiest way to deploy or develop Runestone Server is to use Docker, and a `Dockerfile <Dockerfile>`_ is provided for that.
+You can simply build the container, and run it, providing the database password sourced from an environment variable (or similar).
+Please see complete instructions in the `docker <docker>`_ folder included here.
+
+
 Installation
 ------------
 
 #. Install python.
 
-   First, make sure you have Python 2.7 installed.  Web2py has not yet been ported to Python3.  Even if you don't care about the web2py part of the install, the version of paverutils on pypi is still a Python 2.x package, although the development version is now at 3.x.
+   First, make sure you have Python installed.  Web2py has  been ported to Python3, but we have not finished all of our Python 3 testing yet. If you are a developer feel free to jump in with Python 3.
 
 #. Install and make a Python virtualenv
 
@@ -252,7 +255,7 @@ The Harder Way
 Documentation
 -------------
 
-Documentation for the project is on our official `documentation site <http://runestoneinteractive.org/build/html/index.html>`_  This includes
+Links to documentation for the project are on our official `home page <http://runestoneinteractive.org/index.html>`_  This includes
 the list of dependencies you need to install in order to build the books included in the repository, or to set up
 a complete server environment.
 
@@ -297,7 +300,7 @@ donation using `gittip <https://www.gittip.com/bnmnetp/>`_
 More Documentation
 ------------------
 
-I have begun a project to document the `Runestone Interactive <http://docs.runestoneinteractive.org/build/html/index.html>`_ tools
+I have begun a project to document the `Runestone Interactive <https://runestone.academy/runestone/static/authorguide/index.html>`_ tools
 
 * All of the Runestone Interactive extensions to sphinx:
 

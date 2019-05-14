@@ -36,13 +36,15 @@ if __name__ == '__main__':
     assert (not empty1) and (not empty2)
     os.environ['PGPASSWORD'] = pgpassword
     os.environ['PGUSER'] = pguser
+    os.environ['DBHOST'] = pgnetloc
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
     parser.add_argument('--rebuildgrades', action='store_true',
         help='Reset the unit test based on current grading code.')
     parser.add_argument('--skipdbinit', action='store_true',
         help='Skip initialization of the test database.')
-    parsed_args = parser.parse_args()
+    # Per https://docs.python.org/2/library/argparse.html#partial-parsing, gather any known args. These will be passed to pytest.
+    parsed_args, extra_args = parser.parse_known_args()
 
     if parsed_args.rebuildgrades:
         with pushd('../../..'):
@@ -56,19 +58,23 @@ if __name__ == '__main__':
         print('Skipping DB initialization.')
     else:
         # make sure runestone_test is nice and clean.
-        xqt('dropdb --echo --if-exists "{}"'.format(dbname),
-            'createdb --echo "{}"'.format(dbname),
-            'psql "{}" < runestone_test.sql'.format(dbname))
+        xqt('dropdb --echo --if-exists --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
+            'createdb --echo --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
+            'psql  --host={} --user={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
         # Build the test book to add in db fields needed.
         with pushd('test_book'):
             # The runestone build process only looks at ``DBURL``.
             os.environ['DBURL'] = os.environ['TEST_DBURL']
-            xqt('{} -m runestone build --all'.format(sys.executable))
+            xqt('{} -m runestone build --all'.format(sys.executable),
+                '{} -m runestone deploy'.format(sys.executable))
 
     with pushd('../../..'):
+        if extra_args:
+            print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
         xqt('{} -m coverage erase'.format(sys.executable),
-            '{} -m pytest -v applications/runestone/tests/test_server.py'.format(sys.executable),
+            '{} -m pytest -v applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
             *['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']])
+              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']]
+            )
         xqt('{} -m coverage report'.format(sys.executable))

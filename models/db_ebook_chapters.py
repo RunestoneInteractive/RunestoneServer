@@ -5,6 +5,7 @@ db.define_table('chapters',
   Field('chapter_name','string'), # can have spaces in it, for human consumption
   Field('course_id','string'), # references courses(course_name)
   Field('chapter_label','string'), #no spaces, actual filename path
+  Field('chapter_num', 'integer'), # optional but nice to have for books that are numbered
   migrate='runestone_chapters.table'
 )
 
@@ -15,6 +16,7 @@ db.define_table('sub_chapters',
   Field('sub_chapter_length','integer'),
   Field('sub_chapter_label','string'), # no spaces, actual filename path
   Field('skipreading', 'boolean'), # If true do not include this subchapter in the readings picker
+  Field('sub_chapter_num', 'integer'),
   migrate='runestone_sub_chapters.table'
 )
 

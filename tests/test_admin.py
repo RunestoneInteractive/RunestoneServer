@@ -1,5 +1,6 @@
 import unittest
 import json
+import sys
 from gluon.globals import Request, Session
 from gluon.tools import Auth
 
@@ -43,7 +44,7 @@ class TestAdminEndpoints(unittest.TestCase):
         request = Request(globals()) # Use a clean Request object
         session = Session()
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
-        execfile("applications/runestone/controllers/admin.py", globals())
+        exec(compile(open("applications/runestone/controllers/admin.py").read(), "applications/runestone/controllers/admin.py", 'exec'), globals())
 
     def test_getChangeLog(self):
         # Set up the request object

@@ -1,7 +1,9 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
-<script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
 
+    {{ if settings.academy_mode: }}
+    <script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
+    {{ pass }}
 {{block statusbar}}
 {{end}}
 
@@ -15,7 +17,10 @@
             students every day!</p>
         <p>If I get enough support through donations I can devote full time to this
             project.  Your support goes directly to Runestone Interactive LLC to
-            support hosting and ongoing development efforts</p>
+            support hosting and ongoing development efforts.  Although we would truly
+            appreciate your support it is not required, and you still have full access
+            to all features.
+        </p>
         <p>Thank You! <br/>
             Brad Miller, Founder and Chief Developer -- Runestone Interactive LLC</p>
 
@@ -25,7 +30,8 @@
                 <input type="radio" name="donate" id="donate10" value="10.00"> <label for="donate10">$10</label><br>
                 <input type="radio" name="donate" id="donate20" value="20.00"> <label for="donate20">$20</label><br>
                 <input type="radio" name="donate" id="donate50" value="50.00"> <label for="donate50">$50</label><br>
-                Other: <input type="text" name="donate" id="donateother" value=""/>
+                Other: <input type="text" name="donate" id="donateother" value=""/><br>
+                <a class="btn btn-primary" href="{{=URL('index')}}" role="button">Sorry, not Today</a>
             </div>
         </div>
     </div>

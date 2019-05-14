@@ -19,7 +19,7 @@
 #            autograde       2306 5531.000         235419
 
 
-
+import sys
 import unittest
 import json
 from gluon.globals import Request
@@ -32,7 +32,7 @@ class TestGradingFunction(unittest.TestCase):
     def setUp(self):
         global request
         request = Request(globals()) # Use a clean Request object
-        execfile("applications/runestone/controllers/assignments.py", globals())
+        exec(compile(open("applications/runestone/controllers/assignments.py").read(), "applications/runestone/controllers/assignments.py", 'exec'), globals())
 
     def test_reproduce_scores(self):
         # fetch all of the autograded questions_grades
@@ -58,6 +58,7 @@ class TestGradingFunction(unittest.TestCase):
                         db.question_grades.score)
 
         # for each one, see if the computed score matches the recorded one
+        bad_count = 0
         for g in graded:
             sc = _autograde_one_q(course_name=g.question_grades.course_name,
                                               sid=g.question_grades.sid,
@@ -68,13 +69,20 @@ class TestGradingFunction(unittest.TestCase):
                                               autograde=g.assignment_questions.autograde,
                                               which_to_grade=g.assignment_questions.which_to_grade,
                                               save_score=False, db=db)
-            self.assertEqual(sc,
-                             g.question_grades.score,
-                             "Failed for graded question {} got a score of {}".format(g,sc))
+            if sc != g.question_grades.score:
+                print("got {} expected {}".format(sc, g.question_grades.score), g)
+                bad_count += 1
+            #     self.assertEqual(sc,
+            #                  g.question_grades.score,
+            #                  "Failed for graded question {} got a score of {}".format(g,sc))
+            # except:
+            #     bad_count += 1
+
+        self.assertEqual(bad_count, 0)
 
 
     def testASlashInSubchapter(self):
-        execfile("applications/runestone/controllers/admin.py", globals())
+        exec(compile(open("applications/runestone/controllers/admin.py").read(), "applications/runestone/controllers/admin.py", 'exec'), globals())
         auth.login_user(db.auth_user(11))
         bad_name = 'Exceptions/When to use try/except'
 

@@ -2,9 +2,6 @@
 
 {{block tabcontent}}
 
-<link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/lib/prettify.css" type="text/css" />
-
-
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/prettify.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/js_lib/hammer.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.idle-timer.js"></script>
@@ -31,7 +28,7 @@
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.jsPlumb-1.3.10-all-min.js"></script>
 <script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/d3.v2.min.js"></script>
-
+<script type="text/javascript" src="{{=URL('static', 'js/selfgrade.js')}}"></script>
 
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/pytutor.css" type="text/css" />
 <link rel="stylesheet" href="/{{=request.application}}/static/{{=course_id}}/_static/parsons.css" type="text/css" />
@@ -63,6 +60,10 @@
   eBookConfig.isLoggedIn = false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
+  {{ if settings.coursera_mode: }}
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+  {{ pass }}
 </script>
 
 <style>
@@ -79,7 +80,11 @@
     <h1 style='text-align:center'>{{=assignment['name']}}</h1>
     <h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}</h2>
     <span style="float:right; margin-right:1cm;">
-        Score: {{=questions_score+readings_score}} of {{=assignment['points']}}
+        {{if assignment['points'] > 0:}}
+            {{='Score: {} of {} = {:2.1f}%'.format(questions_score + readings_score, assignment['points'], 100*(questions_score + readings_score)/assignment['points'])}}
+        {{else:}}
+            This assignment is ungraded
+        {{pass}}
     </span>
     <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
@@ -93,11 +98,13 @@
                     <li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
                     <ul>
                     {{for r in readings[reading]['subchapters']:}}
-                        <li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter']}}</a>
-                        {{if r['comment'] != 'ungraded':}}
-                            </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
-                        {{else:}}
-                            </br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
+                        <li class='{{=r['status']}}'><a href="/{{=request.application}}/static/{{=course_id}}/{{=r['chapter']}}/{{=r['subchapter']}}.html">{{=r['subchapter_name']}}</a>
+                        {{if r['points'] > 0:}}
+                            {{if r['comment'] != 'ungraded':}}
+                                </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
+                            {{else:}}
+                                </br>not graded yet: {{=r['points']}} points; minimum {{=r['activities_required']}} activities required
+                            {{pass}}
                         {{pass}}
                     </li>
 
@@ -109,31 +116,41 @@
     {{pass}}
 
     {{if len(questioninfo) > 0:}}
-        <div id='questions' style='margin-left:15%;'>
-        <h3>Questions</h3>
-            {{count=0}}
-            {{for q in questioninfo:}}
-                    {{ if q['comment'] != 'ungraded':}}
-                        <div style='float:right; width:30%;'>
-                        <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-                        <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+        <div id='questions'>
+            <style>
+                .ac_section > * {
+                    max-width: 100%;
+                }
+            </style>
+            <h3>Questions</h3>
+                {{count=0}}
+                {{for q in questioninfo:}}
+                        {{ if q['comment'] != 'ungraded':}}
+                            <div style='float:right; width:30%;'>
+                            <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+                            <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+                            </div>
+                        {{ else: }}
+                            <div style='float:right; width:10%;'>
+                            <h5 style='text-align:center;'>Not yet graded</h5>
+                            </div>
+                        {{pass}}
+                        <div class='oneq full-width' id='{{=count}}'>
+                            <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
                         </div>
-                    {{ else: }}
-                        <div style='float:right; width:10%;'>
-                        <h5 style='text-align:center;'>Not yet graded</h5>
-                        </div>
-                    {{pass}}
-                    <span><div class='oneq' id='{{=count}}' style='width:90%;'>
-                        <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
-                    </div></span>
 
-                {{count += 1}}
-            {{pass}}
+                    {{count += 1}}
+                {{pass}}
 
         </div>
     {{pass}}
 </div>
-
+{{ if settings.coursera_mode: }}
+<div style="text-align:center">
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton"> Grade Me</button>
+</div>
+{{ pass }}
+</div>
 <script>
     //console.log(document.getElementsByClassName('nav nav-tabs'))
     // This script renders the html into elements in the DOM
@@ -164,6 +181,13 @@
         let change = $.parseHTML(unescapedhtml, keepScripts=true);
         $div.append(change);
     }
+{{ if settings.coursera_mode: }}
+
+    $("#gradeMeButton").on("click", function(){
+        $('#gradeMeButton').css('visibility', 'hidden');
+        selfGrade({{=assignment['id']}}, {{=student_id}})});
+{{ pass }}
+
 
 
 </script>

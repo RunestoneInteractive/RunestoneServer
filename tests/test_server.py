@@ -3,6 +3,11 @@
 # *****************************************
 # These tests start the web2py server then submit requests to it.
 #
+# The overall testing approach is functional: rather than test a function, this file primarily tests endpoints on the web server. To accomplish this:
+#
+# - This file includes the `web2py_server` fixture to start a web2py server, and a fixture (`test_client`) to make requests of it. To make debug easier, the `test_client` class saves the HTML of a failing test to a file, and also saves any web2py tracebacks in the HTML form to a file.
+# - The `runestone_db` and related classes provide the ability to access the web2py database directory, in order to set up and tear down test. In order to leave the database unchanged after a test, almost all routines that modify the database are wrapped in a context manager; on exit, then delete any modifications.
+#
 # .. contents::
 #
 # Imports
@@ -13,6 +18,7 @@
 # Standard library
 # ----------------
 import sys
+import os
 import time
 import subprocess
 from pprint import pprint
@@ -20,6 +26,13 @@ from contextlib import contextmanager
 from io import open
 from textwrap import dedent
 import json
+import re
+from threading import Thread
+import os
+try:
+    from contextlib import ExitStack
+except:
+    from contextlib2 import ExitStack
 
 # Third-party imports
 # -------------------
@@ -27,29 +40,62 @@ import pytest
 from gluon.contrib.webclient import WebClient
 import gluon.shell
 from py_w3c.validators.html.validator import HTMLValidator
-from contextlib2 import ExitStack
+import six
+from six.moves.urllib.error import HTTPError
 
 # Local imports
 # -------------
+sys.path.append(os.path.dirname(__file__))
 from run_tests import COVER_DIRS
 
 
 # Utilities
 # =========
+# Invoke the debugger.
+##import pdb; pdb.set_trace()
+# Put this in web2py code, then use the web-based debugger.
+##from gluon.debug import dbg; dbg.set_trace()
+
+
+# A simple data-struct object.
+class _object(object):
+    pass
+
+
 # Given a dictionary, convert it to an object. For example, if ``d['one'] == 1``, then after ``do = DictToObject(d)``, ``do.one == 1``.
 class DictToObject(object):
     def __init__(self, _dict):
         self.__dict__.update(_dict)
 
 
-# Create a web2py controller environment. This is taken from pieces of ``gluon.shell.run``. Given ``ctl_env = web2py_controller('app_name')``, then  ``ctl_env.db`` refers to the usual DAL object for database access, ``ctl_env.request`` is an (empty) Request object, etc.
-def web2py_controller(
-        # The name of the aLpplication to run in, as a string.
+# Create a web2py controller environment. This is taken from pieces of ``gluon.shell.run``. It returns a ``dict`` containing the environment.
+def web2py_controller_env(
+        # _`application`: The name of the application to run in, as a string.
         application):
 
-    _env = gluon.shell.env(application, import_models=True)
-    _env.update(gluon.shell.exec_pythonrc())
-    return DictToObject(_env)
+    env = gluon.shell.env(application, import_models=True)
+    env.update(gluon.shell.exec_pythonrc())
+    return env
+
+
+# Import from a web2py controller. It returns a object of imported names, which also included standard web2py names (``request``, etc.). For example, ``d = web2py_controller_import('application', 'controller')`` then allows ``d.foo()``, assuming ``controller`` defined a ``foo()`` function.
+def web2py_controller_import(
+        # _`env`: A web2py environment returned by ``web2py_controller_env``. **This will be modified** by adding imported names to it.
+        env,
+        # The controller, as a string.
+        controller):
+
+    exec_file = 'applications/{}/controllers/{}.py'.format(env['request'].application, controller)
+    exec(compile(open(exec_file, 'r' if six.PY3 else 'rb').read(), exec_file, 'exec'), env)
+    return DictToObject(env)
+
+
+# Create a web2py controller environment. Given ``ctl_env = web2py_controller('app_name')``, then  ``ctl_env.db`` refers to the usual DAL object for database access, ``ctl_env.request`` is an (empty) Request object, etc.
+def web2py_controller(
+        # See env_.
+        env):
+
+    return DictToObject(env)
 
 
 # Fixtures
@@ -59,11 +105,34 @@ def web2py_controller(
 # Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `module <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
 @pytest.fixture(scope='module')
 def web2py_server():
+    password = 'pass'
+
+    # For debug, uncomment the next two lines, then run web2py manually to see all debug messages.
+    ##yield DictToObject(dict(password=password))
+    ##return
+
     # Start the web2py server.
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
-         '--source=' + COVER_DIRS, 'web2py.py', '-a', 'junk_password',
-         '--nogui'])
+         '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
+         '--nogui'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    # Start a thread to read web2py output and echo it.
+    def echo():
+        stdout, stderr = web2py_server.communicate()
+        print('\n'
+              'web2py server stdout\n'
+              '--------------------\n')
+        print(stdout)
+        print('\n'
+              'web2py server stderr\n'
+              '--------------------\n')
+        print(stderr)
+    echo_thread = Thread(target=echo)
+    echo_thread.start()
+
+    # Save the password used.
+    web2py_server.password = password
     # Wait for the server to come up. The delay varies; this is a guess.
     time.sleep(1)
 
@@ -72,12 +141,21 @@ def web2py_server():
 
     # Terminate the server to give web2py time to shut down gracefully.
     web2py_server.terminate()
+    echo_thread.join()
+
+
+# The name of the Runestone controller.
+RUNESTONE_CONTROLLER = 'runestone'
+
+
+# The environment of a web2py controller.
+RUNESTONE_ENV = web2py_controller_env(RUNESTONE_CONTROLLER)
 
 
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller():
-    return web2py_controller('runestone')
+    return web2py_controller(RUNESTONE_ENV)
 
 
 # Provide acess the the Runestone database through a fixture.
@@ -96,7 +174,7 @@ class _RunestoneDbTools(object):
     def __init__(self, runestone_db):
         self.db = runestone_db
 
-    # Create a new course. It returns the course_id of the created course.
+    # Create a new course. It returns an object with information about the created course.
     @contextmanager
     def create_course(self,
         # The name of the course to create, as a string.
@@ -104,29 +182,37 @@ class _RunestoneDbTools(object):
         # The start date of the course, as a string.
         term_start_date='2000-01-01',
         # The value of the ``login_required`` flag for the course.
-        login_required=True):
+        login_required=True,
+        # The base course for this course. If ``None``, it will use ``course_name``.
+        base_course=None,
+        # The student price for this course.
+        student_price=None):
 
+        # Sanity check: this class shouldn't exist.
+        assert not self.db(self.db.courses.course_name == course_name).select().first()
+
+        # Store these values in an object for convenient access.
+        obj = _object()
+        obj.course_name = course_name
+        obj.term_start_date = term_start_date
+        obj.login_required = login_required
+        obj.base_course = base_course or course_name
+        obj.student_price = student_price
+
+        # Keep this in a local variable, in case the test bench changes the value stored in this object. This guarantees the deletion will work.
         course_id = self.db.courses.insert(
-            course_name=course_name, base_course=course_name,
+            course_name=course_name, base_course=obj.base_course,
             term_start_date=term_start_date,
             login_required=login_required,
+            student_price=student_price,
         )
+        obj.course_id = course_id
         self.db.commit()
         try:
-            yield course_id
+            yield obj
         finally:
             # Remove this from the database.
             del self.db.courses[course_id]
-            self.db.commit()
-
-    @contextmanager
-    def add_user_to_course(self, user_id, course_id):
-        user_courses_id = self.db.user_courses.insert(course_id=course_id, user_id=user_id)
-        self.db.commit()
-        try:
-            yield user_courses_id
-        finally:
-            del self.db.user_courses[user_courses_id]
             self.db.commit()
 
 
@@ -140,9 +226,6 @@ class _RunestoneDbTools(object):
         course_instructor_id =  self.db.course_instructor.insert(course=course_id, instructor=user_id)
         self.db.commit()
         db = self.db
-        print(db((db.course_instructor.course == course_id) &
-             (db.course_instructor.instructor == user_id)
-            ).count())
         try:
             yield course_instructor_id
         finally:
@@ -157,32 +240,52 @@ def runestone_db_tools(runestone_db):
     return _RunestoneDbTools(runestone_db)
 
 
+# Given the ``test_client.text``, prepare to write it to a file.
+def _html_prep(text_str):
+    _str = text_str.replace('\r\n', '\n')
+    # Deal with fun Python 2 encoding quirk.
+    return _str if six.PY2 else _str.encode('utf-8')
+
+
 # Create a client for accessing the Runestone server.
 class _TestClient(WebClient):
-    def __init__(self):
-        super(_TestClient, self).__init__('http://127.0.0.1:8000/runestone/',
+    def __init__(self, web2py_server):
+        self.web2py_server = web2py_server
+        super(_TestClient, self).__init__('http://127.0.0.1:8000/{}/'.format(RUNESTONE_CONTROLLER),
                                           postbacks=True)
 
     # Use the W3C validator to check the HTML at the given URL.
     def validate(self,
         # The relative URL to validate.
         url,
-        # An optional string that, if provided, must be in the text returned by the server
+        # An optional string that, if provided, must be in the text returned by the server. If this is a list of strings, at least one of the provided strings but be in the text returned by the server.
         expected_string='',
         # The number of validation errors expected. If None, no validation is performed.
         expected_errors=None,
-        # An optional dictionary of query parameters.
-        params=None,
         # The expected status code from the request.
         expected_status=200,
         # All additional keyword arguments are passed to the ``post`` method.
         **kwargs):
 
         try:
-            self.post(url, **kwargs)
+            try:
+                self.post(url, **kwargs)
+            except HTTPError as e:
+                # If this was the expected result, return.
+                if e.code == expected_status:
+                    # Since this is an error of some type, these paramets must be empty, since they can't be checked.
+                    assert not expected_string
+                    assert not expected_errors
+                    return ''
+                else:
+                    raise
             assert self.status == expected_status
             if expected_string:
-                assert expected_string in self.text
+                if isinstance(expected_string, str):
+                    assert expected_string in self.text
+                else:
+                    # Assume ``expected_string`` is a list of strings.
+                    assert all(string in self.text for string in expected_string)
 
             if expected_errors is not None:
                 vld = HTMLValidator()
@@ -195,11 +298,36 @@ class _TestClient(WebClient):
                     print('Warnings for {}: {}'.format(url, len(vld.warnings)))
                     pprint(vld.warnings)
 
+            return self.text if six.PY3 else self.text.decode('utf-8')
+
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
-            print(self.text[:200])
-            with open(url.replace('/', '-') + '.html', 'wb') as f:
-                f.write(self.text.replace('\r\n', '\n'))
+            validation_file = url.replace('/', '-') + '.html'
+            with open(validation_file, 'wb') as f:
+                f.write(_html_prep(self.text))
+            print('Validation failure saved to {}.'.format(validation_file))
+            raise
+
+        except RuntimeError as e:
+            # Provide special handling for web2py exceptions by saving the
+            # resulting traceback.
+            if e.args[0].startswith('ticket '):
+                # Create a client to access the admin interface.
+                admin_client = WebClient('http://127.0.0.1:8000/admin/',
+                                         postbacks=True)
+                # Log in.
+                admin_client.post('', data={'password':
+                                            self.web2py_server.password})
+                assert admin_client.status == 200
+                # Get the error.
+                error_code = e.args[0][len('ticket '):]
+                admin_client.get('default/ticket/' + error_code)
+                assert admin_client.status == 200
+                # Save it to a file.
+                traceback_file = url.replace('/', '-') + '_traceback.html'
+                with open(traceback_file, 'wb') as f:
+                    f.write(_html_prep(admin_client.text))
+                print('Traceback saved to {}.'.format(traceback_file))
             raise
 
     def logout(self):
@@ -213,14 +341,17 @@ class _TestClient(WebClient):
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
 def test_client(web2py_server):
-    tc = _TestClient()
+    tc = _TestClient(web2py_server)
     yield tc
     tc.tearDown()
 
 
 # This class allows creating a user inside a context manager.
 class _TestUser(object):
-    def __init__(self, test_client, runestone_db_tools, username, password, course_name):
+    def __init__(self, test_client, runestone_db_tools, username, password, course_name,
+        # True if the course is free (no payment required); False otherwise.
+        is_free=True):
+
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.username = username
@@ -229,26 +360,30 @@ class _TestUser(object):
         self.email = self.username + '@foo.com'
         self.password = password
         self.course_name = course_name
+        self.is_free = is_free
 
     def __enter__(self):
         # Registration doesn't work unless we're logged out.
         self.test_client.logout()
         # Now, post the registration.
-        self.test_client.validate('default/user/register', 'Course Selection', data=dict(
-            username=self.username,
-            first_name=self.first_name,
-            last_name=self.last_name,
-            # The e-mail address must be unique.
-            email=self.email,
-            password=self.password,
-            password_two=self.password,
-            # Note that ``course_id`` is (on the form) actually a course name.
-            course_id=self.course_name,
-            accept_tcp='on',
-            donate='0',
-            _next='/runestone/default/index',
-            _formname='register',
-        ))
+        self.test_client.validate('default/user/register',
+            'Support Runestone Interactive' if self.is_free else 'Payment Amount',
+            data=dict(
+                username=self.username,
+                first_name=self.first_name,
+                last_name=self.last_name,
+                # The e-mail address must be unique.
+                email=self.email,
+                password=self.password,
+                password_two=self.password,
+                # Note that ``course_id`` is (on the form) actually a course name.
+                course_id=self.course_name,
+                accept_tcp='on',
+                donate='0',
+                _next='/runestone/default/index',
+                _formname='register',
+            )
+        )
 
         # Schedule this user for deletion.
         self.exit_stack_object = ExitStack()
@@ -262,10 +397,11 @@ class _TestUser(object):
 
         return self
 
+    # Clean up on exit by invoking all ``__exit__`` methods.
     def __exit__(self, exc_type, exc_value, traceback):
         self.exit_stack_object.__exit__(exc_type, exc_value, traceback)
 
-    # Delete the user created by entering this context manager.
+    # Delete the user created by entering this context manager. TODO: This doesn't delete all the chapter progress tracking stuff.
     def _delete_user(self):
         db = self.runestone_db_tools.db
         # Delete the course this user registered for.
@@ -286,10 +422,127 @@ class _TestUser(object):
         course_id = course_id or self.course_id
         return self.runestone_db_tools.make_instructor(self.user_id, course_id)
 
-    def add_user_to_course(self, course_id=None):
-        # If ``course_id`` isn't specified, use this user's ``course_id``.
+    # A context manager to update this user's profile. If a course was added, it returns that course's ID; otherwise, it returns None.
+    @contextmanager
+    def update_profile(self,
+        # This parameter is passed to ``test_client.validate``.
+        expected_string=None,
+        # An updated username, or ``None`` to use ``self.username``.
+        username=None,
+        # An updated first name, or ``None`` to use ``self.first_name``.
+        first_name=None,
+        # An updated last name, or ``None`` to use ``self.last_name``.
+        last_name=None,
+        # An updated email, or ``None`` to use ``self.email``.
+        email=None,
+        # An updated last name, or ``None`` to use ``self.course_name``.
+        course_name=None,
+        section='',
+        # A shortcut for specifying the ``expected_string``, which only applies if ``expected_string`` is not set. Use ``None`` if a course will not be added, ``True`` if the added course is free, or ``False`` if the added course is paid.
+        is_free=None,
+        # The value of the ``accept_tcp`` checkbox; provide an empty string to leave unchecked. The default value leaves it checked.
+        accept_tcp='on'):
+
+        if expected_string is None:
+            if is_free is None:
+                expected_string = 'Course Selection'
+            else:
+                expected_string = 'Support Runestone Interactive' \
+                    if is_free else 'Payment Amount'
+        username = username or self.username
+        first_name = first_name or self.first_name
+        last_name = last_name or self.last_name
+        email = email or self.email
+        course_name = course_name or self.course_name
+
+        db = self.runestone_db_tools.db
+        # Determine if we're adding a course. If so, delete it at the end of the test. To determine if a course is being added, the course must exist, but not be in the user's list of courses.
+        course = db(db.courses.course_name == course_name).select(db.courses.id).first()
+        delete_at_end = course and not db((db.user_courses.user_id == self.user_id) & (db.user_courses.course_id == course.id)).select(db.user_courses.id).first()
+
+        # Perform the update.
+        try:
+            self.test_client.validate('default/user/profile',
+                expected_string,
+                data=dict(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    # Though the field is ``course_id``, it's really the course name.
+                    course_id=course_name,
+                    accept_tcp=accept_tcp,
+                    section=section,
+                    _next='/runestone/default/index',
+                    id=str(self.user_id),
+                    _formname='auth_user/' + str(self.user_id),
+                )
+            )
+
+            yield course.id if delete_at_end else None
+        finally:
+            if delete_at_end:
+                db = self.runestone_db_tools.db
+                db((db.user_courses.user_id == self.user_id) & (db.user_courses.course_id == course.id)).delete()
+                db.commit()
+
+    # Call this after registering for a new course or adding a new course via ``update_profile`` to pay for the course.
+    @contextmanager
+    def make_payment(self,
+        # The `Stripe test tokens <https://stripe.com/docs/testing#cards>`_ to use for payment.
+        stripe_token,
+        # The course ID of the course to pay for. None specifies ``self.course_id``.
+        course_id=None):
+
         course_id = course_id or self.course_id
-        return self.runestone_db_tools.add_user_to_course(self.user_id, course_id)
+
+        # Get the signature from the HTML of the payment page.
+        self.test_client.validate('default/payment')
+        match = re.search('<input type="hidden" name="signature" value="([^ ]*)" />',
+                          self.test_client.text)
+        signature = match.group(1)
+
+        try:
+            html = self.test_client.validate('default/payment',
+                data=dict(stripeToken=stripe_token, signature=signature)
+            )
+            assert ('Thank you for your payment' in html) or ('Payment failed' in html)
+
+            yield None
+
+        finally:
+            db = self.runestone_db_tools.db
+            db((db.user_courses.course_id == course_id) &
+               (db.user_courses.user_id == self.user_id) ).delete()
+            # Try to delete the payment
+            try:
+                db((db.user_courses.user_id == self.user_id) &
+                   (db.user_courses.course_id == course_id) &
+                   (db.user_courses.id == db.payments.user_courses_id)) \
+                   .delete()
+            except:
+                pass
+            db.commit()
+
+    @contextmanager
+    def hsblog(self, **kwargs):
+        try:
+            yield json.loads(self.test_client.validate('ajax/hsblog',
+                                                       data=kwargs))
+        finally:
+            # Try to remove this hsblog entry.
+            event = kwargs.get('event')
+            div_id = kwargs.get('div_id')
+            course = kwargs.get('course')
+            db = self.runestone_db_tools.db
+            criteria = ((db.useinfo.sid == self.username) &
+                        (db.useinfo.act == kwargs.get('act', '')) &
+                        (db.useinfo.div_id == div_id) &
+                        (db.useinfo.event == event) &
+                        (db.useinfo.course_id == course) )
+            useinfo_row = db(criteria).select(db.useinfo.id, orderby=db.useinfo.id).last()
+            if useinfo_row:
+                del db.useinfo[useinfo_row.id]
 
 
 # Present ``_TestUser`` as a fixture.
@@ -309,6 +562,17 @@ def test_user_1(runestone_db_tools, test_user):
 
 # Tests
 # =====
+# Use for easy manual testing of the server, by setting up a user and class automatically. Comment out the line below to enable it.
+@pytest.mark.skip(reason='Only needed for manual testing.')
+def test_manual(runestone_db_tools, test_user):
+    # Modify this as desired to create courses, users, etc. for manual testing.
+    with runestone_db_tools.create_course() as course_1, \
+         test_user('bob', 'bob', course_1.course_name) as test_user_1:
+
+        # Pause in the debugginer until manual testing is done.
+        import pdb; pdb.set_trace()
+
+
 # Validate the HTML produced by various web2py pages.
 @pytest.mark.parametrize('url, requires_login, expected_string, expected_errors',
 [
@@ -445,69 +709,159 @@ def test_4(test_client, test_user_1):
     test_user_1.login()
     runestone_db_tools = test_user_1.runestone_db_tools
     course_name = 'test_course_2'
-    with runestone_db_tools.create_course(course_name) as test_course_2_id:
+    with runestone_db_tools.create_course(course_name) as test_course_2:
         # Test a non-existant course.
-        test_client.validate('default/user/profile', 'Errors in form', data=dict(
-            username=test_user_1.username,
-            first_name=test_user_1.first_name,
-            last_name=test_user_1.last_name,
-            email=test_user_1.email,
-            # Though the field is ``course_id``, it's really the course name.
-            course_id='does_not_exist',
-            accept_tcp='on',
-            section='x',
-            _next='/runestone/default/index',
-            id=str(test_user_1.user_id),
-            _formname='auth_user/' + str(test_user_1.user_id),
-        ))
+        with test_user_1.update_profile(expected_string='Errors in form',
+                                   course_name='does_not_exist'):
+            pass
 
         # Test an invalid e-mail address. TODO: This doesn't produce an error message.
-        #test_client.validate('default/user/profile', 'Errors in form', data=dict(
-        #    username=test_user_1.username,
-        #    first_name=test_user_1.first_name,
-        #    last_name=test_user_1.last_name,
-        #    email='not a valid e-mail address',
-        #    # Though the field is ``course_id``, it's really the course name.
-        #    course_id=test_user_1.course_name,
-        #    accept_tcp='on',
-        #    section='x',
-        #    _next='/runestone/default/index',
-        #    id=str(test_user_1.user_id),
-        #    _formname='auth_user/' + str(test_user_1.user_id),
-        #))
+        ##test_user_1.update_profile(expected_string='Errors in form',
+        ##                           email='not a valid e-mail address')
 
-        # Change the user's profile data.
+        # Change the user's profile data; add a new course.
         username = 'a_different_username'
         first_name = 'a different first'
         last_name = 'a different last'
         email = 'a_different_email@foo.com'
         section = 'a_different_section'
-        test_client.validate('default/user/profile', 'Course Selection', data=dict(
+        with test_user_1.update_profile(username=username, first_name=first_name,
+           last_name=last_name, email=email, section=section,
+           course_name=course_name, accept_tcp='', is_free=True):
+
+            # Check the values.
+            db = runestone_db_tools.db
+            user = db(db.auth_user.id == test_user_1.user_id).select().first()
+            # The username shouldn't be changable.
+            assert user.username == test_user_1.username
+            assert user.first_name == first_name
+            assert user.last_name == last_name
+            # TODO: The e-mail address isn't updated.
+            #assert user.email == email
+            assert user.course_id == test_course_2.course_id
+            assert user.accept_tcp == False
+            # TODO: I'm not sure where the section is stored.
+            #assert user.section == section
+
+
+# Test that the course name is correctly preserved across registrations if other fields are invalid.
+def test_5(test_client, runestone_db_tools):
+    # Registration doesn't work unless we're logged out.
+    test_client.logout()
+    course_name = 'a_course_name'
+    with runestone_db_tools.create_course(course_name):
+        # Now, post the registration.
+        username = 'username'
+        first_name = 'first'
+        last_name = 'last'
+        email = 'e@mail.com'
+        password = 'password'
+        test_client.validate('default/user/register', 'Please fix the following errors in your registration', data=dict(
             username=username,
             first_name=first_name,
             last_name=last_name,
+            # The e-mail address must be unique.
             email=email,
-            # Though the field is ``course_id``, it's really the course name.
+            password=password,
+            password_two=password + 'oops',
+            # Note that ``course_id`` is (on the form) actually a course name.
             course_id=course_name,
-            # Omit the checkbox, meaning it's not checked.
-            #accept_tcp='on',
-            section=section,
+            accept_tcp='on',
+            donate='0',
             _next='/runestone/default/index',
-            id=str(test_user_1.user_id),
-            _formname='auth_user/' + str(test_user_1.user_id),
+            _formname='register',
         ))
-        # Check the values.
-        db = runestone_db_tools.db
-        user = db(db.auth_user.id == test_user_1.user_id).select().first()
-        # The username shouldn't be changable.
-        assert user.username == test_user_1.username
-        assert user.first_name == first_name
-        assert user.last_name == last_name
-        # TODO: The e-mail address isn't updated.
-        #assert user.email == email
-        assert user.course_id == test_course_2_id
-        assert user.accept_tcp == False
-        # TODO: I'm not sure where the section is stored.
-        #assert user.section == section
 
-        # TODO: Test for an error if ``email`` is invalid.
+
+# Check that the pricing system works correctly.
+def test_6(runestone_db_tools):
+    # Check the pricing.
+    default_controller = web2py_controller_import(RUNESTONE_ENV, 'default')
+    db = runestone_db_tools.db
+
+    with runestone_db_tools.create_course() as base_course, \
+        runestone_db_tools.create_course('test_child_course', base_course=base_course.course_name) as child_course:
+        # First, test on a base course.
+        for expected_price, actual_price in [(0, None), (0, -100), (0, 0), (15, 15)]:
+            db(db.courses.id == base_course.course_id).update(student_price=actual_price)
+            assert default_controller._course_price(base_course.course_id) == expected_price
+
+        # Test in a child course as well. Create a matrix of all base course prices by all child course prices.
+        for expected_price, actual_base_price, actual_child_price in [
+            (0, None, None), (0, None, 0), (0, None, -1), (2, None, 2),
+            (0,    0, None), (0,    0, 0), (0,    0, -1), (2,    0, 2),
+            (0,   -2, None), (0,   -2, 0), (0,   -2, -1), (2,   -2, 2),
+            (3,    3, None), (0,    3, 0), (0,    3, -1), (2,    3, 2)]:
+
+            db(db.courses.id == base_course.course_id).update(student_price=actual_base_price)
+            db(db.courses.id == child_course.course_id).update(student_price=actual_child_price)
+            assert default_controller._course_price(child_course.course_id) == expected_price
+
+
+# Check that setting the price causes redirects to the correct location (payment vs. donation) when registering for a course or adding a new course.
+def test_7(runestone_db_tools, test_user):
+    db = runestone_db_tools.db
+    with runestone_db_tools.create_course(student_price=0) as course_1, \
+        runestone_db_tools.create_course('test_course_2', student_price=0) as course_2:
+
+        # Check registering for a free course.
+        with test_user('test_user_1', 'password_1', course_1.course_name,
+                       is_free=True) as test_user_1:
+            # Verify the user was added to the ``user_courses`` table.
+            assert db(( db.user_courses.course_id == test_user_1.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+
+            # Check adding a free course.
+            with test_user_1.update_profile(course_name=course_2.course_name,
+                                            is_free=True):
+                # Same as above.
+                assert db(( db.user_courses.course_id == course_2.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+
+    # Check registering for a paid course.
+    with runestone_db_tools.create_course(student_price=1) as course_1, \
+        runestone_db_tools.create_course('test_course_2', student_price=1) as course_2:
+        # Check registering for a paid course.
+        with test_user('test_user_1', 'password_1', course_1.course_name,
+                       is_free=False) as test_user_1:
+
+            # Until payment is provided, the user shouldn't be added to the ``user_courses`` table. Ensure that refresh, login/logout, profile changes, adding another class, etc. don't allow access.
+            test_user_1.test_client.logout()
+            test_user_1.login()
+            test_user_1.test_client.validate('default/index')
+
+            # Check adding a paid course.
+            with test_user_1.update_profile(course_name=course_2.course_name,
+                                            is_free=False):
+
+                # Verify no access without payment.
+                assert not db(( db.user_courses.course_id == course_1.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+                assert not db(( db.user_courses.course_id == course_2.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+
+
+# Check that payments are handled correctly.
+def test_8(runestone_controller, runestone_db_tools, test_user):
+    if not runestone_controller.settings.STRIPE_SECRET_KEY:
+        pytest.skip('No Stripe keys provided.')
+
+    db = runestone_db_tools.db
+    with runestone_db_tools.create_course(student_price=100) as course_1, \
+         test_user('test_user_1', 'password_1', course_1.course_name,
+                   is_free=False) as test_user_1:
+
+        def did_payment():
+            return db(( db.user_courses.course_id == course_1.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+        assert not did_payment()
+
+        with test_user_1.make_payment('tok_visa'):
+            assert did_payment()
+            # Check that the payment record is correct.
+            payment = db((db.user_courses.user_id == test_user_1.user_id) &
+                         (db.user_courses.course_id == course_1.course_id) &
+                         (db.user_courses.id == db.payments.user_courses_id)) \
+                         .select(db.payments.charge_id).first()
+            assert payment.charge_id
+
+        # Test some failing tokens.
+        for token in ['tok_chargeCustomerFail', 'tok_chargeDeclined']:
+            with test_user_1.make_payment(token):
+                assert not did_payment()
+
