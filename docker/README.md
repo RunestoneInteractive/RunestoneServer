@@ -105,7 +105,7 @@ defaults), use docker-compose to bring the containers up.
 $ docker-compose up -d
 ```
 
-And go to [http://$RUNESTONE_HOST:8080](http://0.0.0.0:8080) to see the application.
+And go to [http://$RUNESTONE_HOST](http://localhost/runestone) to see the application.
 
 ## Development Tips
 
