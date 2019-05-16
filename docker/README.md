@@ -53,8 +53,14 @@ using the docker-compose file.
 ### 4. Environment
 
 For a development deployment (meaning on your local machine to test and develop)
-you can use the docker-compose file as is, **no changes are necessary**.  You can skip
-to step 5 at this point.
+you can use the docker-compose file as is, **no changes are necessary**. You will need to set 2 Environment variables.
+
+```bash
+export RUNESTONE_HOST=localhost
+export POSTGRES_PASSWORD=runestone
+```
+
+If you are doing development work You can **skip to step 5** at this point.
 
 If you want to deploy a production Runestone Server, you will need
 to change the default usernames and passwords. Notice how there are environment
