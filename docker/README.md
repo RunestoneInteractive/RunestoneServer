@@ -149,7 +149,7 @@ $ docker-compose up -d
 You can run the unit tests in the container using the following command.
 
 ```
-docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
+docker exec -it runestone_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
 ```
 
 ### 3. Removing Containers
@@ -216,7 +216,7 @@ Bring up the containers:
 $ docker-compose up -d
 ```
 
-And then when the container is running, find it's id by doing:
+And then when the container is running, find its id by doing:
 
 ```bash
 CONTAINER_ID=$(echo `docker-compose ps -q runestone` |  cut -c1-12)
