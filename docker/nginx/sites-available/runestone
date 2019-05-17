@@ -1,0 +1,25 @@
+server {
+    listen  80 default_server;
+    include /etc/nginx/default.d/*.conf;
+
+    # Rewrite the path to static files.
+    # root supplies the uptree path the match gets appended to the path specified
+    # by the root directive
+    location ~* /(\w+)/static/ {
+        root /srv/web2py/applications/;
+    }
+
+    # alias allows us to completely rewrite the static path
+    location ~* /(\w+)/books/published/(\w+)/_static/(.*)$ {
+        alias /srv/web2py/applications/$1/books/$2/published/$2/_static/$3;
+    }
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/run/uwsgi/web2py.sock;
+        uwsgi_param	DBURL	postgresql://runestone:passworda@localhost/runestone;
+        uwsgi_param     WEB2PY_CONFIG production;
+    }
+}
+
+

@@ -46,19 +46,11 @@ def build():
             db.auth_membership.insert(user_id=auth.user.id,group_id=gid)
 
         if request.vars.coursetype != 'custom':
-            # run_sphinx is defined in models/scheduler.py
             # todo:  Here we can add some processing to check for an A/B testing course
             if path.exists(path.join(request.folder,'books',request.vars.coursetype+"_A")):
                 base_course = request.vars.coursetype + "_" + random.sample("AB",1)[0]
             else:
                 base_course = request.vars.coursetype
-
-            row = scheduler.queue_task(run_sphinx, timeout=1200, pvars=dict(folder=request.folder,
-                                                                           rvars=request.vars,
-                                                                           base_course=base_course,
-                                                                           application=request.application,
-                                                                           http_host=request.env.http_host), immediate=True)
-            uuid = row['uuid']
 
             if request.vars.startdate == '':
                 request.vars.startdate = datetime.date.today()
