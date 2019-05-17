@@ -7,3 +7,4 @@ contextlib2
 https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
 # Beautiful soup
 beautifulsoup4
+locustio

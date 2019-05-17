@@ -52,8 +52,6 @@ def build():
             else:
                 base_course = request.vars.coursetype
 
-            uuid = row['uuid']
-
             if request.vars.startdate == '':
                 request.vars.startdate = datetime.date.today()
             else:
