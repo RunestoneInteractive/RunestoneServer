@@ -97,11 +97,8 @@ def build():
 
             course_url=path.join('/',request.application,"static",request.vars.projectname,"index.html")
 
-            return(dict(success=False,
-                        building=True,
-                        task_name=uuid,
-                        mess='Building your course.',
-                        course_url=course_url))
+            session.flash = "Course Created Successfully"
+            redirect(URL('books', 'published', args=[request.vars.projectname, 'index.html']))
 
         else:
             moddata = {}
@@ -116,30 +113,6 @@ def build():
 
         return buildvalues
 
-def build_custom():
-    uuid = row['uuid']
-
-    course_url=path.join('/',request.application,"books/published",request.vars.projectname,"index.html")
-
-    if request.vars.startdate == '':
-        request.vars.startdate = datetime.date.today()
-    else:
-        date = request.vars.startdate.split('/')
-        request.vars.startdate = datetime.date(int(date[2]), int(date[0]), int(date[1]))
-
-    cid = db.courses.update_or_insert(course_name=request.vars.projectname, term_start_date=request.vars.startdate)
-
-    # enrol the user in their new course
-    db(db.auth_user.id == auth.user.id).update(course_id = cid)
-    db.course_instructor.insert(instructor=auth.user.id, course=cid)
-    auth.user.course_id = cid
-    auth.user.course_name = request.vars.projectname
-
-    return(dict(success=False,
-                building=True,
-                task_name=uuid,
-                mess='Building your course.',
-                course_url=course_url))
 
 @auth.requires_membership('instructor')
 def delete_course():
@@ -168,7 +141,7 @@ def delete_course():
                         deleted = True
                         session.clear()
                     except:
-                        response.flash = 'Error, %s does not appear to exist' % course_name
+                        response.flash = '%s does not appear to have static content' % course_name
                 else:
                     response.flash = 'You are not the instructor of %s' % course_name
             else:
