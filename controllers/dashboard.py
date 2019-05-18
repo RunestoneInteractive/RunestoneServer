@@ -318,7 +318,7 @@ def exercisemetrics():
 
 @auth.requires_login()
 def subchapoverview():
-    #course = db(db.courses.id == auth.user.course_id).select().first()
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
     course = auth.user.course_name
 
     is_instructor = verifyInstructorStatus(course, auth.user.id)
@@ -368,5 +368,5 @@ def subchapoverview():
         response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
         return l.to_csv(na_rep=" ")
     else:
-        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
+        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, course=thecourse,
             summary=l.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))
