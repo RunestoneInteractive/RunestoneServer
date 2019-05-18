@@ -17,7 +17,7 @@ services:
     links:
       - db
     ports:
-      - "80:80"
+      - "81:80"
     environment:
       POSTGRES_PASSWORD: 'runestone'
       POSTGRES_USER: 'runestone'
