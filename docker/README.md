@@ -18,6 +18,8 @@ cd books
 git clone https://github.com/RunestoneInteractive/thinkcspy.git
 ```
 
+After cloning the book edit the pavement.py file.  It is **critical** that the `master_url` variable in that file is set correctly.  If you are running docker and doing your development on the same machine then `http://localhost` will work. If you are running docker on a remote host then make sure to set it to the name of the remote host. `master_url` is the URL that the API calls in the browser will use to connect to the server running in the docker container.
+
 ### 2. Add Users
 
 If you have an instructors.csv or students.csv that you want to add to the database,
@@ -51,8 +53,16 @@ using the docker-compose file.
 ### 4. Environment
 
 For a development deployment (meaning on your local machine to test and develop)
-you can use the docker-compose file as is, **no changes are necessary**.
-However, if you want to deploy a production Runestone Server, you will need
+you can use the docker-compose file as is, **no changes are necessary**. You will need to set 2 Environment variables.
+
+```bash
+export RUNESTONE_HOST=localhost
+export POSTGRES_PASSWORD=runestone
+```
+
+If you are doing development work You can **skip to step 5** at this point.
+
+If you want to deploy a production Runestone Server, you will need
 to change the default usernames and passwords. Notice how there are environment
 variables for the database (POSTGRES_*) in the `environment` section of the
 uwsgi and db images:
@@ -86,6 +96,8 @@ of the `db` and `uwsgi` images and replace with:
      - .env
 ```
 
+### 5. Start Everything
+
 Once your environment is ready to go (again, for development you can leave the
 defaults), use docker-compose to bring the containers up.
 
@@ -93,13 +105,13 @@ defaults), use docker-compose to bring the containers up.
 $ docker-compose up -d
 ```
 
-And go to [http://$RUNESTONE_HOST:8080](http://0.0.0.0:8080) to see the application.
+And go to [http://$RUNESTONE_HOST](http://localhost/runestone) to see the application.
 
 ## Development Tips
 
 ### 1. Updating Books or Runestone
 
-If you look at the docker-compose file, you'll notice that the root of the respository
+If you look at the docker-compose file, you'll notice that the root of the repository
 is bound as a volume to the container:
 
 ```bash
@@ -132,8 +144,15 @@ or to stop them, and then bring them up again (this should not erase data from t
 $ docker-compose stop
 $ docker-compose up -d
 ```
+### 2. Running the Runestone Server Unit Tests
 
-### 2. Removing Containers
+You can run the unit tests in the container using the following command.
+
+```
+docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
+```
+
+### 3. Removing Containers
 
 If you really want to remove all containers and start over (hey, it happens) then
 you can stop and remove:
@@ -143,7 +162,9 @@ $ docker-compose stop
 $ docker-compose rm
 ```
 
-### 3. Previous Database
+This is probably only necessary if you are making changes to the Dockerfile or files that are used to create the container.
+
+### 4. Previous Database
 
 Once you create the containers, you'll notice a "databases" subfolder is generated
 on the host. This happens after the initialization, as the runestone folder
@@ -175,7 +196,7 @@ For now, it's recommended to remove the folder. Hopefully we will
 develop a cleaner solution to handle migrations.
 
 
-### 4. Testing the Entrypoint
+### 5. Testing the Entrypoint
 
 If you want to test the [entrypoint.sh](entrypoint.sh) script, the easiest thing
 to do is add a command to the docker-compose to disable it, and then run commands
@@ -205,7 +226,7 @@ And then shell inside (see next section). Once inside, you can then issue comman
 to test the entrypoint - since the others were started
 with docker-compose (postgres) everything is ready to go.
 
-### 5. Shelling Inside
+### 6. Shelling Inside
 
 You can shell into the container to look around, or otherwise test. When you enter,
 you'll be in the web2py folder, where runstone is an application under applications:

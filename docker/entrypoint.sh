@@ -82,6 +82,10 @@ case $dbstate in
 
 esac
 
+chown -R www-data /srv/web2py
+mkdir -p /run/uwsgi
+chown -R www-data /run/uwsgi
+
 RETRIES=5
 
 until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
@@ -117,7 +121,15 @@ fi
 # Run the beast
 info "Starting the server"
 cd "$WEB2PY_PATH"
-python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
+
+# To just run the development server Do this:
+# python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
+
+# To start in a mode more consistent with deployment Do this:
+service nginx start
+
+/usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
+
 
 ## Go through all books and build
 info "Building & Deploying books"

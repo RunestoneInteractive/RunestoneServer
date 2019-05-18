@@ -1,0 +1,17 @@
+server {
+    listen  80 default_server;
+    include /etc/nginx/default.d/*.conf;
+
+    location ~* /(\w+)/static/ {
+            root /srv/web2py/applications/;
+    }
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/run/uwsgi/web2py.sock;
+        uwsgi_param	DBURL	postgresql://runestone:passworda@localhost/runestone;
+        uwsgi_param     WEB2PY_CONFIG production;
+    }
+}
+
+
