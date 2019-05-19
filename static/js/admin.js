@@ -409,7 +409,36 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 }
 
-
+function makeOption(text,value,disabledQ){
+    var option = document.createElement("option");
+    option.text = text;
+    option.value = value;
+    if(disabledQ != undefined) {
+        $(option).attr("disabled",true);
+    }
+    return option;
+   
+}
+function populateQuestions(select,question_names){
+    question_names.sort()
+    $(select).empty();
+    var chapter="";
+    for (i = 0; i < question_names.length; i++) {
+        var q = question_names[i];
+        var questiontext="";
+        if (q.includes("/")) {//if the question has a / in it, assume it is chapter/subchapter
+            var qL = q.split("/");  
+            if(chapter!=qL[0]){ //if the chapter changes, show it greyed out on a separate line
+                chapter=qL[0];
+                select.add(makeOption(chapter,"",true));
+            }
+            questiontext="   "+qL[1];
+        } else {
+            questiontext=qL[0];
+        };
+            select.add(makeOption(questiontext,question_names[i]));
+    }
+}
 function updateColumn2() {
     var SEL1 = document.getElementById("gradingoption1");
     var VAL1 = SEL1.options[SEL1.selectedIndex].value;
@@ -430,17 +459,7 @@ function updateColumn2() {
         }
     }
     if (VAL1 == 'assignment' && VAL2 == 'question') {
-        $(COL2).empty();
-        var question_names = assignmentinfo[COL1VAL];
-        question_names.sort()
-        for (i = 0; i < question_names.length; i++) {
-            var q = question_names[i];
-            var option = document.createElement("option");
-            option.text = q;
-            option.value = q;
-            COL2.add(option);
-
-        }
+        populateQuestions(COL2,assignmentinfo[COL1VAL]);
     }
 
     else if (VAL1 == 'chapter' && VAL2 == 'question') {
@@ -468,14 +487,14 @@ function updateColumn2() {
 }
 
 function updateColumn3() {
-    var select1 = document.getElementById("gradingoption2");
-    var val = select1.options[select1.selectedIndex].value;
-    var select = document.getElementById("gradingoption3");
-    var val2 = select.options[select.selectedIndex].value;
-    var select2 = document.getElementById("gradingcolumn2");
-    var column3 = document.getElementById("gradingcolumn3");
-    var selectedval = select2.options[select2.selectedIndex].value;
-    if (val == 'assignment') {
+    var SEL2 = document.getElementById("gradingoption2");
+    var VAL2 = SEL2.options[SEL2.selectedIndex].value;
+    var SEL3 = document.getElementById("gradingoption3");
+    var VAL3 = SEL3.options[SEL3.selectedIndex].value;
+    var COL2 = document.getElementById("gradingcolumn2");
+    var COL3 = document.getElementById("gradingcolumn3");
+    var COL2VAL = COL2.options[COL2.selectedIndex].value;
+    if (VAL2 == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
@@ -483,36 +502,26 @@ function updateColumn3() {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
     }
-    if (val == 'chapter' && val2 == 'question') {
+    if (VAL2 == 'chapter' && VAL3 == 'question') {
         $("#gradingcolumn3").empty();
-        for (i = 0; i < chapters[selectedval].length; i++) {
+        for (i = 0; i < chapters[COL2VAL].length; i++) {
             var option = document.createElement("option");
-            option.text = chapters[selectedval][i];
-            option.value = chapters[selectedval][i];
-            column3.add(option);
+            option.text = chapters[COL2VAL][i];
+            option.value = chapters[COL2VAL][i];
+            COL3.add(option);
         }
     }
 
-    else if (val == 'assignment' && val2 == 'question') {
-        $("#gradingcolumn3").empty();
-        var assignments = assignmentinfo;
-        for (i = 0; i < assignments[selectedval].length; i++) {
-            var q = assignments[selectedval][i];
-            var option = document.createElement("option");
-            option.text = q;
-            option.value = q;
-            column3.add(option);
-
-        }
-
+    else if (VAL2 == 'assignment' && VAL3 == 'question') {
+        populateQuestions(COL3,assignmentinfo[COL2VAL]);
     }
 
-    if (val2 != "") {
-        var lastcolval = column3.selectedIndex;
+    if (VAL3 != "") {
+        var lastcolval = COL3.selectedIndex;
         if (lastcolval != -1) {
             gradeIndividualItem();
         }
-        column3.style.visibility = 'visible';
+        COL3.style.visibility = 'visible';
     }
 
 }
@@ -527,7 +536,26 @@ function pickedAssignments(column) {
     autograde_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
-    keys.sort();
+
+    //NEW CODE: Sort the readings and problems separately, depending on whether the first question has a "/" in it
+    //(which is kludgy; better if assignments contained more metadata)
+    var problems=[]; //keys from all assignments consisting of problems
+    var readings=[]; //keys from all assignments consisting of readings
+    for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var assignment = assignments[key];
+        if (assignment.length > 0) {//don't show empty assignments
+            if (assignment[0].includes("/")) {
+                readings.push(key);
+            } else {
+                problems.push(key);
+            }
+        }
+    }
+    readings.sort();
+    problems.sort();
+    keys = readings.concat(problems);
+
     for (var i = 0; i < keys.length; i++) {
         var option = document.createElement("option");
         var key = keys[i];
@@ -611,7 +639,6 @@ function pickedChapters(column) {
 function makeOptions(select,texts){
     $(select).children().each(
         function(i,option){
-            console.log(option.value,texts)
             if(texts.includes(option.value)){
                 $(option).show();
             } else {
@@ -1053,7 +1080,8 @@ function createAssignment(form) {
 
     var obj = new XMLHttpRequest();
     $('#assign_visible').prop('checked', true);
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
+    var url = '/runestone/admin/createAssignment/?name=' + name;
+    obj.open('POST', url , true);
     obj.send(JSON.stringify({ name: name }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
@@ -1067,7 +1095,7 @@ function createAssignment(form) {
                 select.selectedIndex = newopt.index;
                 assignmentInfo();
             } else {
-                alert('Error in creating new assignment.')
+                alert('Error in creating new assignment')
             }
         }
     }
