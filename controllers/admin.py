@@ -621,24 +621,6 @@ def admin():
                     course=sidQuery,
                     )
 
-    #Rebuilding now
-    else:
-        # update the start date
-        course = db(db.courses.id == auth.user.course_id).select().first()
-        due = request.vars.startdate
-        format_str = "%m/%d/%Y"
-        try:
-            date = parse(due).date()
-            course.update_record(term_start_date=date)
-        except:
-            logger.error("Bad date format, not updating start date")
-
-        uuid = row['uuid']
-
-
-        course_url=path.join('/',request.application,'books/published', request.vars.projectname, 'index.html')
-
-
     return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
                 instructors=instructordict, students=studentdict, confirm=False,
                 task_name=uuid, course_url=course_url, course_id=auth.user.course_name,
@@ -1248,19 +1230,6 @@ def indexrst():
         logger.error(ex)
         filetxt = "Sorry, no index.rst file could be found"
     return json.dumps(filetxt)
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def editindexrst():
-    try:
-        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-        course_name = row.course_name
-        newtext = request.vars['newtext']
-        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'),'w')
-        file.write(newtext)
-        file.close()
-        return 'ok'
-    except Exception as ex:
-        logger.error(ex)
 
 def _get_assignment(assignment_id):
     return db(db.assignments.id == assignment_id).select().first()

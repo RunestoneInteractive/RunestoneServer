@@ -639,7 +639,7 @@ def runTests(cls_to_test):
     suite.addTest(unittest.makeSuite(cls_to_test))
     res = unittest.TextTestRunner(verbosity=2).run(suite)
     if len(res.errors) == 0 and len(res.failures) == 0:
-        sys.exit(0)
+        print("All tests Passed OK")
     else:
         sys.exit(1)
 

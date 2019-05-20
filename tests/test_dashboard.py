@@ -83,7 +83,7 @@ suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestDashboardEndpoints))
 res = unittest.TextTestRunner(verbosity=2).run(suite)
 if len(res.errors) == 0 and len(res.failures) == 0:
-    sys.exit(0)
+    print("All tests Passed OK")
 else:
     print("nonzero errors exiting with 1", res.errors, res.failures)
     sys.exit(1)
