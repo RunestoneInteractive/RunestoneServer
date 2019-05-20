@@ -53,8 +53,14 @@ else
     info "Already initialized"
 fi
 
-info "Checking the State of Database and Migration Info"
+RETRIES=5
 set +e
+until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
+  sleep 2
+done
+
+info "Checking the State of Database and Migration Info"
 rsmanage env --checkdb
 dbstate="$?"
 info "Got result of $dbstate"
@@ -86,12 +92,6 @@ chown -R www-data /srv/web2py
 mkdir -p /run/uwsgi
 chown -R www-data /run/uwsgi
 
-RETRIES=5
-
-until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
-  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
-  sleep 2
-done
 
 # Setup instructors, if the file exists
 if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" -a "${RUNESTONE_PATH}/configs/instructors.csv" -nt iadd.stamp ]; then
