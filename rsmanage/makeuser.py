@@ -2,6 +2,7 @@
 import json
 import sys
 from psycopg2 import IntegrityError
+import click
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
@@ -37,12 +38,13 @@ else:
                 userinfo['last_name'], userinfo['email'], userinfo['course'],
                 userinfo['instructor'])
     except ValueError as e:
-        print('Value Error: ', e)
+        click.echo('Value Error: ', e)
         sys.exit(1)
     except IntegrityError as e:
-        print('Caught an integrity error: ', e)
-        sys.exit(1)
+        click.echo('Caught an integrity error: ', e)
+        sys.exit(2)
     except Exception as e:
-        print('Unexpected Error: ', e)
-        sys.exit(1)
-    
+        click.echo('Unexpected Error: ', e)
+        sys.exit(3)
+
+    click.echo("Exiting normally")
