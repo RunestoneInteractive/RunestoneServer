@@ -30,7 +30,7 @@ import posixpath
 #
 # Supporting functions
 # ====================
-def _route_book(is_published=True):
+def _route_book(is_published=True, is_open=False):
     # Get the base course for this book.
     try:
         base_course = request.args[0]
@@ -41,15 +41,20 @@ def _route_book(is_published=True):
     cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
 
     # Ensure the user has access to this book.
-    if is_published and not db((db.user_courses.user_id == auth.user.id) &
+    if is_open == False and is_published and not db((db.user_courses.user_id == auth.user.id) &
         (db.user_courses.course_id == auth.user.course_id)).select(
         db.user_courses.id, **cache_kwargs).first():
 
         redirect(URL(c='default', f='courses'))
 
     # Look up the course name.
-    course = db(db.courses.id == auth.user.course_id).select(
-        db.courses.course_name, db.courses.base_course, **cache_kwargs).first()
+    if is_open == False:
+        course = db(db.courses.id == auth.user.course_id).select(
+            db.courses.course_name, db.courses.base_course, **cache_kwargs).first()
+    else:
+        course = db(db.courses.course_name == base_course).select(
+            db.courses.course_name, db.courses.base_course, **cache_kwargs).first()
+
     # Make sure this actually refers to the provided base course.
     if course.base_course != base_course:
         redirect(URL(c='default', f='courses'))
@@ -72,8 +77,15 @@ def _route_book(is_published=True):
         if not os.path.isfile(book_path):
             raise HTTP(404)
         response.view = book_path
+
+        if auth.user:
+            user_id = auth.user.username
+            email = auth.user.email
+        else:
+            user_id = 'Anonymous'
+            email = ''
         return dict(course_name=course.course_name, base_course=base_course,
-                    user_id=auth.user.username, email=auth.user.email)
+                    user_id=user_id, email=email)
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
@@ -111,7 +123,17 @@ def draft():
     return _route_book(False)
 
 
-@auth.requires_login()
 # Serve from the ``published`` directory, instead of the ``build`` directory.
 def published():
-    return _route_book()
+    if auth.user:
+        return _route_book()
+    else:
+        base_course = request.args[0]
+        course = db(db.courses.course_name == base_course).select(cache=(cache.ram, 3600), cacheable=True).first()
+        if course.login_required == 'T':
+            if auth.user:
+                return _route_book()
+            else:
+                redirect(URL(c='default', f='user'))
+        else:
+            return _route_book(is_open=True)
