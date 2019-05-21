@@ -815,17 +815,19 @@ def removeassign():
 # Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createAssignment():
+    response.headers['content-type'] = 'application/json'
+    due = None
+    logger.debug(type(request.vars['name']))
+
     try:
-        d_str = request.vars['due']
-        if d_str:
-            format_str = "%Y/%m/%d %H:%M"
-            due = datetime.datetime.strptime(d_str, format_str)
-        else:
-            due = None
+        logger.debug("Adding new assignment {} for course".format(request.vars['name'], auth.user.course_id))
         newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
+    try:
         returndict = {request.vars['name']: newassignID}
         return json.dumps(returndict)
-
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')
@@ -1075,7 +1077,7 @@ def question_text():
     if q_text[0:2] == '\\x':  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
         q_text = q_text[2:].decode('hex')
     logger.debug(q_text)
-    return json.dumps(unicode(q_text, encoding="utf8"))
+    return json.dumps(q_text)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -1182,7 +1184,7 @@ def htmlsrc():
         htmlsrc = "<p>No preview Available</p>"
     if htmlsrc and htmlsrc[0:2] == '\\x':    # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode('hex')
-    return json.dumps(unicode(htmlsrc, encoding='utf8', errors='ignore'))
+    return json.dumps(htmlsrc)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
