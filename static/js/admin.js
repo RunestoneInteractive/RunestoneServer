@@ -1179,15 +1179,13 @@ function createAssignment(form) {
 
     var obj = new XMLHttpRequest();
     $('#assign_visible').prop('checked', true);
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
-    obj.send(JSON.stringify({ name: name }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            added = JSON.parse(obj.responseText);
-            if (added != 'ERROR') {
+    data = {'name': name}
+    url = '/runestone/admin/createAssignment';
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
+        if (iserror != 'ERROR') {
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');
-                newopt.value = added[name];
+                newopt.value = iserror[name];
                 newopt.innerHTML = name;
                 select.appendChild(newopt);
                 select.selectedIndex = newopt.index;
@@ -1195,8 +1193,7 @@ function createAssignment(form) {
             } else {
                 alert('Error in creating new assignment.')
             }
-        }
-    }
+        }, 'json')
 }
 
 // Triggered by the ``-`` button on the assignments tab.
