@@ -25,6 +25,11 @@ if [ -z "$RUNESTONE_HOST" ]; then
     exit 1
 fi
 
+# For development make sure we are up to date with the latest from github.
+if [ $WEB2PY_CONFIG == "development" ]; then
+    pip install --upgrade git+git://github.com/RunestoneInteractive/RunestoneComponents.git
+fi
+
 # Initialize the database
 if [ ! -f "$stamp" ]; then
 
@@ -52,6 +57,13 @@ if [ ! -f "$stamp" ]; then
 else
     info "Already initialized"
 fi
+
+RETRIES=10
+set +e
+until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
+  sleep 2
+done
 
 info "Checking the State of Database and Migration Info"
 set +e

@@ -10,8 +10,6 @@ server {
         include uwsgi_params;
         uwsgi_pass unix:/run/uwsgi/web2py.sock;
         uwsgi_param	DBURL	postgresql://runestone:passworda@localhost/runestone;
-        uwsgi_param     WEB2PY_CONFIG production;
+        uwsgi_param     WEB2PY_CONFIG development;
     }
 }
-
-
