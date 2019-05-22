@@ -1476,9 +1476,6 @@ function preview_question(form, preview_div) {
     var data = { 'code': JSON.stringify(code) };
     $.post('/runestone/ajax/preview_question', data, function (result, status) {
         let code = JSON.parse(result);
-        console.log("HILL");
-        console.log(result);
-        console.log(status);
         $(form.qrawhtml).val(code); // store the un-rendered html for submission
         renderRunestoneComponent(code, preview_div)
     }
