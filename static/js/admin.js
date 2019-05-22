@@ -1177,7 +1177,6 @@ function menu_from_editable(
 function createAssignment(form) {
     var name = form.name.value;
 
-    var obj = new XMLHttpRequest();
     $('#assign_visible').prop('checked', true);
     data = {'name': name}
     url = '/runestone/admin/createAssignment';
