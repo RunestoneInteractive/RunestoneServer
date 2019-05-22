@@ -174,6 +174,7 @@ def studentprogress():
 
 @auth.requires_login()
 def grades():
+    response.title="Gradebook"
     course = db(db.courses.id == auth.user.course_id).select().first()
 
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL,

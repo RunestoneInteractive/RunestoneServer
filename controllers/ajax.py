@@ -976,7 +976,7 @@ def preview_question():
         stdout, stderr = popen_obj.communicate()
         # If there was an error, return stdout and stderr from the build.
         if popen_obj.returncode != 0:
-            return json.dumps('Error: Runestone build failed:\n\n' +
+            return json.dumps('Error: Runestone build failed:\n\n' + sys.executable + '\n' + request.application + '\n' + 
                               str(stdout) + '\n' + str(stderr))
         with open('applications/{}/build/preview/build/preview/index.html'.format(request.application), 'r', encoding='utf-8') as ixf:
             src = ixf.read()

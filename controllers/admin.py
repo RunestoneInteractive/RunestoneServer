@@ -68,6 +68,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
 
 @auth.requires_login()
 def index():
+    response.title="Dashboard"
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     # get current build info
     # read build info from application/custom_courses/course/build_info
@@ -84,10 +85,12 @@ def index():
 
 @auth.requires_login()
 def doc():
+    response.title="Documentation"
     return dict(course_id=auth.user.course_name)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def showlog():
+    response.title="Log"
     course = db(db.courses.id == auth.user.course_id).select().first()
     grid = SQLFORM.grid(
         (db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date),
@@ -230,9 +233,10 @@ def diffviewer():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignments():
+    response.title="Assignments"
+
     sidQuery = db(db.courses.course_name == auth.user.course_name).select() #Querying to find the course_id
     courseid = sidQuery[0].id
-
 
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
@@ -265,6 +269,7 @@ def assignments():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def practice():
+    response.title="Practice"
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     course_start_date = course.term_start_date
 
@@ -495,6 +500,7 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add_practice_items():
+    response.title="Add Practice Items"
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     data = json.loads(request.vars.data)
 
@@ -558,6 +564,7 @@ def add_practice_items():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
+    response.title="Admin"
     sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
     courseid = sidQuery.id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
@@ -680,7 +687,7 @@ def course_students():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
-
+    response.title="Grading"
     assignments = {}
     assignments_query = db(db.assignments.course == auth.user.course_id).select()
 
