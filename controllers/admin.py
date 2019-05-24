@@ -730,12 +730,20 @@ def deletecourse():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeassign():
+    response.headers['content-type'] = 'application/json'
     try:
-        assignment_id = int(request.args[0])
+        assignment_id = int(request.vars['assignid'])
     except:
-        session.flash = "Cannot remove assignment with id of {}".format(request.args[0])
-        return
-    db(db.assignments.id == assignment_id).delete()
+        session.flash = "Cannot remove assignment with id of {}".format(request.vars['assignid'])
+        logger.error("Cannot Remove Assignment {}".format(request.args(0)))
+        return "Error"
+
+    ct = db(db.assignments.id == assignment_id).delete()
+
+    if ct == 1:
+        return "Success"
+    else:
+        return "Error"
 
 #
 # This is only called by the create button in the popup where you give the assignment
