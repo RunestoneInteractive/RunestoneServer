@@ -581,7 +581,6 @@ def test_manual(runestone_db_tools, test_user):
     #('admin/index', False, 'You must be registered for a course to access this page', 1),
     #('admin/index', True, 'You must be an instructor to access this page', 1),
     ('admin/doc', True, 'Runestone Help and Documentation', 1),
-    # Note: ``'admin/diffviewer'`` not tested, since it only works with the ``thinkcspy`` book.
 
     # **Assignments**
     ('assignments/chooseAssignment', True, 'Assignments', 1),
@@ -674,12 +673,10 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
     #
     # web2py-generated stuff produces two extra errors.
     ('default/bios', 'Bios', 3),
-    # FIXME: The element ``<form id="editIndexRST" action="">`` in ``views/admin/admin.html`` produces the error ``Bad value \u201c\u201d for attribute \u201caction\u201d on element \u201cform\u201d: Must be non-empty.``.
 
     # **Admin**
-    ('admin/admin', 'Manage Section', 2),
+    ('admin/admin', 'Manage Section', 1),
     ('admin/course_students', '"test_user_1"', 2),
-    ('admin/getChangeLog', 'No ChangeLog for this book', 2),
     ('admin/grading', 'assignment', 1),
     # TODO: This produces an exception.
     #('admin/practice', 'Choose when students should start their practice.', 1),
@@ -687,15 +684,13 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
     ('admin/sections_create', 'Create New Section', 1),
     ('admin/sections_delete', 'db tables', 1),
     ('admin/sections_update', 'db tables', 1),
-    ('admin/showlog', 'Add Record', 1),
     # TODO: This deletes the course, making the test framework raise an exception. Need a separate case to catch this.
     #('admin/deletecourse', 'Manage Section', 2),
     # FIXME: these raise an exception.
-    #('admin/addinstructor', 'xxx', 1),
-    #('admin/add_practice_items', 'xxx', 1),
+    #('admin/addinstructor', 'Trying to add non-user', 1), -- this is an api call
+    #('admin/add_practice_items', 'xxx', 1), -- this is an api call
     #('admin/assignments', 'Assignment', 1),
     #('admin/backup', 'xxx', 1),
-    #('admin/buildmodulelist', 'xxx', 1),
     #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
     #('admin/removeinstructor', 'xxx', 1),
     #('admin/removeStudents', 'xxx', 1),

@@ -68,74 +68,11 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
 
 @auth.requires_login()
 def index():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    # get current build info
-    # read build info from application/custom_courses/course/build_info
-    if not row:
-        session.flash = "You must be registered for a course to access this page"
-        redirect(URL(c="default"))
-
-    if row.course_name not in ['thinkcspy','pythonds','webfundamentals','apcsareview', 'JavaReview', 'pip2', 'StudentCSP']:
-        if not verifyInstructorStatus(auth.user.course_name, auth.user):
-            session.flash = "You must be an instructor to access this page"
-            redirect(URL(c="default"))
-
     redirect(URL("admin","admin"))
 
 @auth.requires_login()
 def doc():
     return dict(course_id=auth.user.course_name, course=get_course_row(db.courses.ALL))
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def showlog():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    grid = SQLFORM.grid(
-        (db.useinfo.course_id==course.course_name) & (db.useinfo.timestamp >= course.term_start_date),
-        fields=[db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id],
-        editable=False,
-        deletable=False,
-        details=False,
-        orderby=~db.useinfo.timestamp,
-        paginate=40,
-        formstyle='divs')
-    return dict(grid=grid,course_id=course.course_name)
-
-
-#@auth.requires_membership('instructor')
-def buildmodulelist():
-    import os.path
-    import re
-    db.modules.truncate()
-
-    def procrst(arg, dirname, names):
-        rstfiles = [x for x in names if '.rst' in x]
-
-        for rf in rstfiles:
-            found = 0
-            openrf = open(os.path.abspath(os.path.join(dirname,rf)))
-            for line in openrf:
-                if 'shortname::' in line:
-                    first,shortname = line.split('::')
-                    found += 1
-                if 'description::' in line:
-                    first,description = line.split('::')
-                    found += 1
-                if found > 1:
-                    break
-            if found > 1:
-                dirs = dirname.split('/')
-                db.modules.insert(shortname=shortname.strip(),
-                                  description=description.strip(),
-                                  pathtofile=os.path.join(dirs[-1],rf))
-
-
-
-
-    os.path.walk(os.path.join(request.folder,'source'),procrst,None)
-
-    session.flash = 'Module Database Rebuild Finished'
-    redirect('/%s/admin'%request.application)
-
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def sections_list():
@@ -216,16 +153,6 @@ def sections_update():
         users = section.get_users(),
         bulk_email_form = bulk_email_form,
         )
-
-
-def diffviewer():
-    sid = ""
-    div_id = request.vars.divid
-    course_name = "thinkcspy"
-    if auth.user:
-        sid = auth.user.username
-        course_name = auth.user.course_name
-    return dict(course_id=course_name, sid=sid, divid=div_id)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -554,6 +481,7 @@ def add_practice_items():
     return json.dumps(dict(complete=True))
 
 
+# This is the primary controller when the instructor goes to the admin page.
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
     sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
@@ -627,9 +555,11 @@ def admin():
                 course=sidQuery,
 )
 
-
+# Called in admin.js from courseStudents to populate  the list of students
+# eBookConfig.getCourseStudentsURL
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def course_students():
+    response.headers['content-type'] = 'application/json'
     cur_students = db(
         (db.user_courses.course_id == auth.user.course_id) &
         (db.auth_user.id == db.user_courses.user_id)
@@ -641,6 +571,7 @@ def course_students():
         searchdict[str(username)] = name
     return json.dumps(searchdict)
 
+# Called when an instructor clicks on the grading tab
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
 
@@ -705,19 +636,6 @@ def grading():
                 )
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def getChangeLog():
-    bookQuery = db(db.courses.course_name == auth.user.course_name).select()
-    base_course = bookQuery[0].base_course
-    #The stuff below looks messy but it's necessary because the ChangeLog.rst will not be located in the same directory as this Python file
-    #so we have to move up to find the correct log file
-    try:
-        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'books/' + base_course + '/ChangeLog.rst'))
-        logFile = file.read()
-        return str(logFile)
-    except:
-        return "No ChangeLog for this book\n\n\n"
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
@@ -769,10 +687,17 @@ def removeinstructor():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addinstructor():
-    db.executesql('''
-        INSERT INTO course_instructor(course, instructor)
-        SELECT %s, %s
-        ''' % (auth.user.course_id, request.args[0]))
+    response.headers['content-type'] = 'application/json'
+    instructor = request.args(0)
+    res = db(db.auth_user.id == instructor).select().first()
+    if res:
+        db.course_instructor.insert(course=auth.user.course_id , instructor=instructor)
+        retval = "Success"
+    else:
+        retval = "Cannot add non-existent user as instructor"
+        logger.error("Trying to add non-user {} as instructor".format(instructor))
+
+    return json.dumps(retval)
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -812,7 +737,9 @@ def removeassign():
         return
     db(db.assignments.id == assignment_id).delete()
 
-# Deprecated; replaced with new endpoint save_assignment, which handles insert or update, and saves more fields
+#
+# This is only called by the create button in the popup where you give the assignment
+# its initial name.  We might be able to refactor save_assignment to work in all cases.
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createAssignment():
     response.headers['content-type'] = 'application/json'
@@ -832,52 +759,6 @@ def createAssignment():
         logger.error(ex)
         return json.dumps('ERROR')
 
-# Deprecated
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def assignmentInfo():
-    assignment_id = request.vars['assignmentid']
-    assignment_points = db(db.assignments.id == assignment_id).select(db.assignments.points).first().points
-    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
-    allquestion_info = {}
-    allquestion_info['assignment_points'] = assignment_points
-    date = db(db.assignments.id == assignment_id).select(db.assignments.duedate).first().duedate
-    try:
-        due = date.strftime("%Y/%m/%d %H:%M")
-    except Exception as ex:
-        logger.error(ex)
-        due = 'No due date set for this assignment'
-    allquestion_info['due_date'] = due
-    description = db(db.assignments.id == assignment_id).select(db.assignments.description).first().description
-    if description == None:
-        allquestion_info['description'] = 'No description available for this assignment'
-    else:
-        allquestion_info['description'] = description
-
-
-    try:
-        for row in assignment_questions:
-            timed = row.timed
-            try:
-                question_points = int(row.points)
-            except:
-                question_points = 0
-            question_info_query = db(db.questions.id == int(row.question_id)).select()
-            for row in question_info_query:
-                question_dict = {}
-                #question_dict['base course'] = row.base_course
-                #question_dict['chapter'] = row.chapter
-                #question_dict['author'] = row.author
-                #question_dict['difficulty'] = int(row.difficulty)
-                #question_dict['question'] = row.question
-                question_id = int(row.id)
-                question_dict['name'] = row.name
-                question_dict['timed'] = timed
-                question_dict['points'] = question_points
-                allquestion_info[int(row.id)] = question_dict
-    except Exception as ex:
-        logger.error(ex)
-
-    return json.dumps(allquestion_info)
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getQuestions():
@@ -893,11 +774,13 @@ def getQuestions():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
+    response.headers['content-type'] = 'application/json'
+    logger.error("in questionbank")
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
 
     tags = False
-    if request.vars['tags'] != "null":
+    if request.vars['tags'] != "":
         tags = True
     term = False
     if request.vars['term'] != "":
@@ -907,7 +790,7 @@ def questionBank():
         chapter_label = db(db.chapters.chapter_label == request.vars['chapter']).select(db.chapters.chapter_label).first().chapter_label
         chapterQ =  db.questions.chapter == chapter_label
     difficulty = False
-    if request.vars['difficulty'] != "null":
+    if request.vars['difficulty'] != "":
         difficulty = True
     authorQ = None
     if request.vars['author'] != "":
@@ -931,11 +814,11 @@ def questionBank():
             questions_query = db(chapterQ & base_courseQ).select()
 
         else:
-
             questions_query = db(base_courseQ).select()
 
         for question in questions_query: #Initially add all questions that we can to the list, and then remove the rows that don't match search criteria
             rows.append(question)
+
         for row in questions_query:
             removed_row = False
             if term:
@@ -945,7 +828,6 @@ def questionBank():
                         removed_row = True
                     except Exception as err:
                         ex = err
-
             if removed_row == False:
                 if difficulty:
                     if int(request.vars['difficulty']) != row.difficulty:
@@ -977,7 +859,8 @@ def questionBank():
 
     except Exception as ex:
         logger.error(ex)
-        return 'Error'
+        return json.dumps('Error ' + str(ex))
+
     return json.dumps(questions)
 
 
@@ -1221,17 +1104,6 @@ def coursename():
     return json.dumps(row.course_name)
 
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def indexrst():
-    try:
-        row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-        course_name = row.course_name
-        file = open(os.path.join(os.path.split(os.path.dirname(__file__))[0], 'custom_courses/' + course_name + '/index.rst'))
-        filetxt = file.read()
-    except Exception as ex:
-        logger.error(ex)
-        filetxt = "Sorry, no index.rst file could be found"
-    return json.dumps(filetxt)
 
 def _get_assignment(assignment_id):
     return db(db.assignments.id == assignment_id).select().first()

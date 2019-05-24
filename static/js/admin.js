@@ -1649,7 +1649,7 @@ function questionBank(form) {
     var author = form.author.value;
     var tags = $("#tags").select2("val");
     var term = form.term.value;
-    var difficulty = null;
+    var difficulty = "";
     var difficulty_options = ['rating1', 'rating2', 'rating3', 'rating4', 'rating5'];
     var inputs = document.getElementById('qbankform').getElementsByTagName('input');
     for (var i = 0, length = inputs.length; i < length; i++) {
@@ -1659,36 +1659,43 @@ function questionBank(form) {
     }
 
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term + '&qtype=' + 'formative', true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var resp = JSON.parse(obj.responseText);
-            var select = document.getElementById('qbankselect');
-            select.onchange = getQuestionInfo;
-            var questionform = document.getElementById('questionform');
-            $("#qbankselect").empty();
-            for (i = 0; i < resp.length; i++) {
-                var option = document.createElement("option");
-                option.text = resp[i];
-                option.value = resp[i];
-                option.onclick = getQuestionInfo;
-                select.add(option);
-            }
-            if (resp.length == 0) {
-                select.style.visibility = 'hidden';
-                questionform.style.visibility = 'hidden';
-                var q_info = document.getElementById('questionInfo');
-                q_info.style.visibility = 'hidden';
-                alert("Sorry, no questions matched your search criteria.");
-
-            }
-            if (resp.length > 0) {
-                select.style.visibility = 'visible';
-                questionform.style.visibility = 'visible';
-            }
+    url = '/runestone/admin/questionBank'
+    data = { variable: 'variable',
+        chapter: chapter,
+        difficulty: difficulty,
+        author: author,
+        tags: tags,
+        term: term
+        };
+    jQuery.post(url, data, function (resp, textStatus, whatever) {
+        resp = JSON.parse(resp)
+        if (resp == 'Error') {
+            alert("An error occured while searching")
+        };
+        var select = document.getElementById('qbankselect');
+        select.onchange = getQuestionInfo;
+        var questionform = document.getElementById('questionform');
+        $("#qbankselect").empty();
+        for (i = 0; i < resp.length; i++) {
+            var option = document.createElement("option");
+            option.text = resp[i];
+            option.value = resp[i];
+            option.onclick = getQuestionInfo;
+            select.add(option);
         }
-    }
+        if (resp.length == 0) {
+            select.style.visibility = 'hidden';
+            questionform.style.visibility = 'hidden';
+            var q_info = document.getElementById('questionInfo');
+            q_info.style.visibility = 'hidden';
+            alert("Sorry, no questions matched your search criteria.");
+
+        }
+        if (resp.length > 0) {
+            select.style.visibility = 'visible';
+            questionform.style.visibility = 'visible';
+        }
+    });
 }
 
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
