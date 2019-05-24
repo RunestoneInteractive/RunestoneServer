@@ -1205,16 +1205,18 @@ function remove_assignment() {
         return;
     }
 
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/removeassign/' + assignmentid, true);
-    obj.send(JSON.stringify({ assignid: 'assignmentid' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
+    var url = '/runestone/admin/removeassign';
+    var data = {assignid: assignmentid }
+    jQuery.post(url, data, function (res, status, whatever) {
+        if (res != 'Error') {
             select.remove(select.selectedIndex);
             assignmentInfo();
+        } else {
+            alert("Could not remove assignment " + assignmentname);
         }
-    }
+    });
 }
+
 
 
 // Update an assignment.
