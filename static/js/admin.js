@@ -1628,7 +1628,6 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         let editButton = document.createElement("button")
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
-        //data-target="#editModal" data-toggle="modal" onclick="getQuestionText();"
         $(editButton).attr("data-target", "#editModal");
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
@@ -1659,8 +1658,8 @@ function questionBank(form) {
     }
 
     var obj = new XMLHttpRequest();
-    url = '/runestone/admin/questionBank'
-    data = { variable: 'variable',
+    var url = '/runestone/admin/questionBank'
+    var data = { variable: 'variable',
         chapter: chapter,
         difficulty: difficulty,
         author: author,
@@ -1713,12 +1712,14 @@ function getQuestionInfo() {
     var question_name = select.options[select.selectedIndex].text;
     var assignlist = document.getElementById('assignlist');
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getQuestionInfo/?question=' + question_name + '&assignment=' + assignmentid, true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var question_info = obj.responseText;
+
+    var url = '/runestone/admin/getQuestionInfo';
+    var data = {
+        variable: 'variable',
+        question: question_name,
+        assignment: assignmentid
+    };
+    jQuery.post(url, data, function (question_info, status, whatever) {
             var res = JSON.parse(question_info);
             var data = {};
             var i;
@@ -1754,8 +1755,7 @@ function getQuestionInfo() {
             var q_info = document.getElementById('questionInfo');
             q_info.style.visibility = 'visible';
 
-        }
-    }
+        });
 }
 
 
@@ -1795,23 +1795,6 @@ function edit_question(form) {
         }
     });
 }
-
-
-// More preview panel functionality I don't understand.
-function getQuestionText() {
-    var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/question_text?question_name=' + question_name, true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var textarea = document.getElementById('editRST');
-            textarea.innerHTML = JSON.parse(obj.responseText);
-        }
-    }
-}
-
 
 
 // ***********
