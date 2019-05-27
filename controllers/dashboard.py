@@ -40,7 +40,7 @@ def index():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     logger.debug("getting chapters for {}".format(auth.user.course_name))
-    chapters = db(db.chapters.course_id == auth.user.course_name).select()
+    chapters = db(db.chapters.course_id == course.base_course).select()
     chap_map = {}
     for chapter in chapters:
         chap_map[chapter.chapter_label] = chapter.chapter_name
@@ -265,8 +265,14 @@ def grades():
                 assignments=assignments, students=students, gradetable=gradetable,
                 averagerow=averagerow, practice_average=practice_average)
 
+# This is meant to be called from a form submission, not as a bare controller endpoint
 @auth.requires_login()
 def questiongrades():
+    if 'sid' not in request.vars:
+        logger.error("It Appears questiongrades was called without any request vars")
+        session.flash = "Cannot call questiongrades directly"
+        redirect(URL('dashboard','index'))
+
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db((db.assignments.id == request.vars.assignment_id) & (db.assignments.course == course.id)).select().first()
     sid = request.vars.sid
@@ -283,8 +289,13 @@ def questiongrades():
 
     return dict(assignment=assignment, student=student, rows=rows, total=0, course=course)
 
+# Note this is meant to be called from a form submission not as a bare endpoint
 @auth.requires_login()
 def exercisemetrics():
+    if 'chapter' not in request.vars:
+        logger.error("It Appears exercisemetrics was called without any request vars")
+        session.flash = "Cannot call exercisemetrics directly"
+        redirect(URL('dashboard','index'))
     chapter = request.get_vars['chapter']
     chapter = db((db.chapters.course_id == auth.user.course_name) & (db.chapters.chapter_label == chapter)).select().first()
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id,chapter)
