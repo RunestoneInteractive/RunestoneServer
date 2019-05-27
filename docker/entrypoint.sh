@@ -93,6 +93,7 @@ case $dbstate in
 
 esac
 
+info "Updating file ownership"
 chown -R www-data /srv/web2py
 mkdir -p /run/uwsgi
 chown -R www-data /run/uwsgi
@@ -131,8 +132,10 @@ cd "$WEB2PY_PATH"
 # python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
 
 # To start in a mode more consistent with deployment Do this:
+info "starting nginx"
 service nginx start
 
+info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
 
@@ -144,9 +147,12 @@ cd "${BOOKS_PATH}"
         cd $book;
         if [ ! -f NOBUILD ]; then
             runestone build && runestone deploy
+        else
+            info "skipping $book due to NOBUILD file"
         fi
     );
 done
 
-info "Starting the scheduler"
-python ${WEB2PY_PATH}/run_scheduler.py runestone
+
+tail -F ${WEB2PY_PATH}/logs/uwsgi.log
+
