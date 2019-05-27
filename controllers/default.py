@@ -317,6 +317,9 @@ def remove():
 
 @auth.requires_login()
 def coursechooser():
+    if not request.args(0):
+        redirect(URL('default', 'courses'))
+
     res = db(db.courses.course_name == request.args[0]).select(db.courses.id, db.courses.base_course).first()
 
     if res:
@@ -345,6 +348,9 @@ def coursechooser():
 @auth.requires_login()
 def removecourse():
     if settings.academy_mode:
+      if not request.args(0):
+          redirect(URL('default', 'courses'))
+
       course_id_query = db(db.courses.course_name == request.args[0]).select(db.courses.id)
       # todo: properly encode course_names to handle courses with special characters
       # Check if they're about to remove their currently active course
