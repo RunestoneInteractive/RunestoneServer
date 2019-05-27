@@ -719,11 +719,11 @@ def deletecourse():
                 shutil.rmtree(path.join('applications', request.application, 'custom_courses', course_name))
                 session.clear()
             except:
-                response.flash = 'Error, %s does not appear to exist' % course_name
+                session.flash = 'Error, %s does not appear to exist' % course_name
         else:
-            response.flash = 'You are not the instructor of %s' % course_name
+            session.flash = 'You are not the instructor of %s' % course_name
     else:
-        response.flash = 'course, %s, not found' % course_name
+        session.flash = 'course, %s, not found' % course_name
 
     redirect(URL('default','index'))
 

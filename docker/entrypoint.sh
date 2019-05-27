@@ -142,7 +142,9 @@ cd "${BOOKS_PATH}"
 /bin/ls | while read book; do
     (
         cd $book;
-        runestone build && runestone deploy
+        if [ ! -f NOBUILD ]; then
+            runestone build && runestone deploy
+        fi
     );
 done
 

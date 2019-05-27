@@ -55,3 +55,4 @@ node_modules
 AC_scripts
 Pipfile.lock
 tests/test_book/build
+instructors.csv
