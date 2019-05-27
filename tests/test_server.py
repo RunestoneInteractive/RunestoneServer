@@ -573,6 +573,7 @@ def test_manual(runestone_db_tools, test_user):
 
 
 # Validate the HTML produced by various web2py pages.
+# NOTE -- this is the start of a really really long decorator for test_1
 @pytest.mark.parametrize('url, requires_login, expected_string, expected_errors',
 [
     # **Admin**
@@ -635,9 +636,9 @@ def test_manual(runestone_db_tools, test_user):
     ('default/terms', False, 'Terms and Conditions', 1),
     ('default/privacy', False, 'Runestone Academy Privacy Policy', 1),
     ('default/donate', False, 'Support Runestone Interactive', 1),
-    # FIXME: This produces an exception.
-    #('default/coursechooser', True, 'xxx', 1),
-    #('default/removecourse', True, 'xxx', 1),
+    # TODO: This soesn't really test the body of either of these
+    ('default/coursechooser', True, 'Course Selection', 1),
+    ('default/removecourse', True, 'Course Selection', 1),
 
 
     # Assignments
@@ -650,9 +651,10 @@ def test_manual(runestone_db_tools, test_user):
     ('dashboard/index', True, 'Instructor Dashboard', 1),
     ('dashboard/grades', True, 'Gradebook', 1),
     ('dashboard/studentreport', True, 'Please make sure you are in the correct course', 1),
-    # FIXME: This produces an exception.
-    #('dashboard/exercisemetrics', True, 'xxx', 1),
-    #('dashboard/questiongrades', True, 'Gradebook', 1),
+    # TODO: This produces an exception. -- note, this doesn't really test anything about either
+    # exercisemetrics or questiongrades other than properly handling a call with no information
+    ('dashboard/exercisemetrics', True, 'Instructor Dashboard', 1),
+    ('dashboard/questiongrades', True, 'Instructor Dashboard', 1),
 
     # TODO: Many other views!
 ])
@@ -667,6 +669,7 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
 
 
 # Validate the HTML in instructor-only pages.
+# NOTE -- this is the start of a really really long decorator for test_2
 @pytest.mark.parametrize('url, expected_string, expected_errors',
 [
     # **Default**
