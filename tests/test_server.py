@@ -651,7 +651,7 @@ def test_manual(runestone_db_tools, test_user):
     ('dashboard/index', True, 'Instructor Dashboard', 1),
     ('dashboard/grades', True, 'Gradebook', 1),
     ('dashboard/studentreport', True, 'Please make sure you are in the correct course', 1),
-    # TODO: This produces an exception. -- note, this doesn't really test anything about either
+    # TODO: This doesn't really test anything about either
     # exercisemetrics or questiongrades other than properly handling a call with no information
     ('dashboard/exercisemetrics', True, 'Instructor Dashboard', 1),
     ('dashboard/questiongrades', True, 'Instructor Dashboard', 1),
@@ -956,28 +956,29 @@ def test_10(test_client, test_user_1):
              'background-color: #fafafa;')
 
 
-def test_11(test_client, runestone_db_tools, test_user, test_user_1):
-    with test_user_1.make_instructor():
+def test_11(test_client, runestone_db_tools, test_user):
+    with runestone_db_tools.create_course('test_course_3') as course_3:
+        with test_user('test_instructor_1', 'password_1', course_3.course_name) as test_instructor_1, \
+            test_instructor_1.make_instructor():
 
-        #test_client.logout()
-        #test_user_1.login()
-        db = runestone_db_tools.db
+            test_instructor_1.login()
+            db = runestone_db_tools.db
 
-        # Create an assignment -- using createAssignment
-        test_client.post('admin/createAssignment',
-            data=dict(name='test_assignment_1'))
+            # Create an assignment -- using createAssignment
+            test_client.post('admin/createAssignment',
+                data=dict(name='test_assignment_1'))
 
-        assign = db((db.assignments.name == 'test_assignment_1') &
-                    (db.assignments.course == test_user_1.course_id)).select().first()
+            assign = db((db.assignments.name == 'test_assignment_1') &
+                        (db.assignments.course == test_instructor_1.course_id)).select().first()
 
-        assert assign
+            assert assign
 
-        # Delete an assignment -- using removeassignment
-        test_client.post('admin/removeassign', data=dict(assignid=assign.id))
-        assert not db(db.assignments.name == 'test_assignment_1').select().first()
+            # Delete an assignment -- using removeassignment
+            test_client.post('admin/removeassign', data=dict(assignid=assign.id))
+            assert not db(db.assignments.name == 'test_assignment_1').select().first()
 
-        test_client.post('admin/removeassign', data=dict(assignid=9999999))
-        assert "Error" in test_client.text
+            test_client.post('admin/removeassign', data=dict(assignid=9999999))
+            assert "Error" in test_client.text
 
-        test_client.post('admin/removeassign', data=dict(assignid=""))
-        assert "Error" in test_client.text
+            test_client.post('admin/removeassign', data=dict(assignid=""))
+            assert "Error" in test_client.text

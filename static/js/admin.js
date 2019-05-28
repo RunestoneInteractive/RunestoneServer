@@ -1206,7 +1206,7 @@ function remove_assignment() {
     }
 
     var url = '/runestone/admin/removeassign';
-    var data = {assignid: assignmentid }
+    var data = {assignid: assignmentid };
     jQuery.post(url, data, function (res, status, whatever) {
         if (res != 'Error') {
             select.remove(select.selectedIndex);
