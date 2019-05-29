@@ -112,6 +112,12 @@ def _score_one_codelens(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
+def _score_one_lp(row, points, autograde):
+    # row is from lp_answers.
+    # If row.correct is None, score this as a 0.
+    return _score_from_pct_correct(row.correct or 0, points, autograde)
+
+
 def _scorable_mchoice_answers(course_name, sid, question_name, points, deadline, practice_start_time=None, db=None,
                               now=None):
     query = ((db.mchoice_answers.course_name == course_name) & \
@@ -229,6 +235,22 @@ def _scorable_codelens_answers(course_name, sid, question_name, points, deadline
     return db(query).select(orderby=db.codelens_answers.timestamp)
 
 
+def _scorable_lp_answers(course_name, sid, question_name, points, deadline,
+    practice_start_time=None, db=None, now=None):
+    query = ((db.lp_answers.course_name == course_name) & \
+            (db.lp_answers.sid == sid) & \
+            (db.lp_answers.div_id == question_name) \
+            )
+    if deadline:
+        query = query & (db.lp_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.codelens_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.codelens_answers.timestamp <= now)
+
+    return db(query).select(orderby=db.lp_answers.timestamp)
+
+
 def _autograde_one_q(course_name, sid, question_name, points, question_type,
                      deadline=None, autograde=None, which_to_grade=None, save_score=True,
                      practice_start_time=None, db=None, now=None):
@@ -302,6 +324,10 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
                                      practice_start_time=practice_start_time, db=db, now=now)
         scoring_fn = _score_one_interaction
+    elif question_type == 'lp_build':
+        results = _scorable_lp_answers(course_name, sid, question_name, points,
+            deadline, practice_start_time=practice_start_time, db=db, now=now)
+        scoring_fn = _score_one_lp
 
     else:
         logger.debug("skipping; question_type = {}".format(question_type))

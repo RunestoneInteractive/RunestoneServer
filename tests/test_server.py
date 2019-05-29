@@ -111,11 +111,17 @@ def web2py_server():
     ##yield DictToObject(dict(password=password))
     ##return
 
-    # Start the web2py server.
+    # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+         '--nogui'],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
+    web2py_scheduler = subprocess.Popen(
+        [sys.executable, '-m', 'coverage', 'run', '--append',
+         '--source=' + COVER_DIRS, 'web2py.py', '-K', RUNESTONE_CONTROLLER],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     tries = 5
     done = False
@@ -151,8 +157,9 @@ def web2py_server():
     # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
     yield web2py_server
 
-    # Terminate the server to give web2py time to shut down gracefully.
+    # Terminate the server and schedulers to give web2py time to shut down gracefully.
     web2py_server.terminate()
+    web2py_scheduler.terminate()
     echo_thread.join()
 
 
@@ -556,6 +563,14 @@ class _TestUser(object):
             if useinfo_row:
                 del db.useinfo[useinfo_row.id]
 
+            # TODO: Add more cleanup for other question types.
+            if event == 'lp_build':
+                lp_answers_row = db((db.lp_answers.sid == self.username) &
+                                    (db.lp_answers.div_id == div_id) &
+                                    (db.lp_answers.course_name == course)).select(db.lp_answers.id, orderby=db.lp_answers.id).last()
+                if lp_answers_row:
+                    del db.lp_answers[lp_answers_row.id]
+
 
 # Present ``_TestUser`` as a fixture.
 @pytest.fixture
@@ -916,6 +931,49 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
                 assert not did_payment()
 
         # TODO: Test with more tokens, test failures.
+
+
+# Test the LP endpoint.
+@pytest.mark.skipif(six.PY2, reason='Requires Python 3.')
+def test_lp_1(test_user_1):
+    test_user_1.login()
+
+    # Check that omitting parameters produces an error.
+    with test_user_1.hsblog(event='lp_build') as ret:
+        assert 'No feedback provided' in ret['errors'][0]
+
+    # Check that database entries are validated.
+    with test_user_1.hsblog(
+        event='lp_build',
+        div_id='X'*1000,
+        course=test_user_1.course_name,
+        path='static/test_course_1/lp_demo.py.html',
+        builder='unsafe-python',
+        answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
+    ) as ret:
+        assert 'div_id' in ret['errors'][0]
+
+    # Check a passing case
+    def assert_passing():
+        with test_user_1.hsblog(
+            event='lp_build',
+            div_id='lp_demo_1',
+            course=test_user_1.course_name,
+            path='static/test_course_1/lp_demo.py.html',
+            builder='unsafe-python',
+            answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
+        ) as ret:
+            assert 'errors' not in ret
+            assert ret['correct'] == 100
+    assert_passing()
+
+    # Send lots of jobs to test out the queue. Skip this for now -- not all the useinfo entries get deleted, which causes ``test_getNumOnline`` to fail.
+    if False:
+        threads = [Thread(target=assert_passing) for x in range(5)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
 
 
 # Test dynamic book routing.
