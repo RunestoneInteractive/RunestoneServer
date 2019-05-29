@@ -29,6 +29,17 @@ COVER_DIRS = 'applications/runestone/modules,applications/runestone/controllers,
 
 # Assume we are running with working directory in tests
 
+# Functions
+# =========
+# Let web2py recreate certain tables not in the test database by removing their
+# migration metadata.
+def remove_web2py_tables():
+    for path in glob.glob('../databases/test_runestone_*.table'):
+        os.remove(path)
+
+
+# main
+# ====
 if __name__ == '__main__':
     os.environ['WEB2PY_CONFIG'] = 'test'
     # HINT: make sure that ``0.py`` has something like the following, that reads this environment variable:
@@ -70,18 +81,23 @@ if __name__ == '__main__':
     if parsed_args.skipdbinit:
         print('Skipping DB initialization.')
     else:
-        # make sure runestone_test is nice and clean.
+        # Make sure runestone_test is nice and clean -- this will remove many
+        # tables that web2py will then re-create.
         xqt('dropdb --echo --if-exists --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
             'createdb --echo --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
             'psql  --host={} --username={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
-        # Let web2py recreate certain tables not in the test database.
-        for path in glob.glob('../databases/test_runestone_*.table'):
-            os.remove(path)
+        # Tell web2py that tables have been removed from the database so that
+        # its migration algorithm will re-create them.
+        remove_web2py_tables()
 
         if parsed_args.rebuildgrades:
+            # Paranoia: if the existing ``runestone_test.sql`` database contains
+            # broken tables, remove all tables that web2py can re-create to
+            # return the databased to a fixed state.
+            xqt('psql "{}" < runestone_clean.sql'.format(dbname))
             with pushd('../../..'):
                 print("recalculating grades tables")
-                # TODO: Running this causes the tests to fail.
+                # TODO: This causes test failures when run.
                 #xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
 
             # Copy the test book to the books directory.
@@ -102,8 +118,12 @@ if __name__ == '__main__':
                     '{} -m runestone deploy'.format(sys.executable))
 
             print("dumping the data")
+            # Remove all tables that web2py will re-create before saving the
+            # database. This is the second database clean (the first happens
+            # before recalculating the grades tables), since the recalculation
+            # re-creates the tables.
+            remove_web2py_tables()
             xqt(
-                # Remove all tables that web2py auto-creates before saving the table.
                 'psql "{}" < runestone_clean.sql'.format(dbname),
                 'pg_dump --no-owner "{}" > runestone_test.sql'.format(dbname),
             )
