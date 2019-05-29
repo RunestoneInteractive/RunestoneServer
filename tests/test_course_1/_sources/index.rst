@@ -7,6 +7,8 @@ This book generates data for use with the test suite.
    :maxdepth: 2
 
    test_chapter_1/toctree
+   lp_demo.py
+   lp_demo-test.py
 
 
 ActiveCode

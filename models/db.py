@@ -34,10 +34,6 @@ else:
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
 
-# Make the settings and database available in modules.
-current.db = db
-current.settings = settings
-
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
@@ -58,6 +54,11 @@ response.generic_patterns = ['*'] if request.is_local else []
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
+
+# Make the settings and database available in modules.
+current.db = db
+current.settings = settings
+current.auth = auth
 
 if settings.enable_captchas:
     ## Enable captcha's :-(

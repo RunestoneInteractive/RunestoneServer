@@ -34,6 +34,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     poll=['interact'],
     page=['interact'],
     showeval=['interact'],
+    lp_build=ALL_AUTOGRADE_OPTIONS,
     reveal = []
 )
 
@@ -54,7 +55,8 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     poll=[],
     reveal=[],
     showeval=ALL_WHICH_OPTIONS,
-    page=ALL_WHICH_OPTIONS
+    page=ALL_WHICH_OPTIONS,
+    lp_build=ALL_WHICH_OPTIONS,
 )
 
 # create a simple index to provide a page of links

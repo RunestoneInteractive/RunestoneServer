@@ -29,6 +29,7 @@ options(
         confdir=".",
         template_args={'login_required':'true',
                        'loglevel': 10,
+                       'course_title': project_name,
                        'python3': 'false',
                        'dburl': 'postgresql://user:password@localhost/runestone',
                        'default_ac_lang': 'python',
@@ -38,7 +39,7 @@ options(
                        'downloads_enabled': 'false',
                        'enable_chatcodes': 'False',
                        'allow_pairs': 'False',
-
+                       'dynamic_pages': 'True',
                        'use_services': use_services,
                        'basecourse': project_name,
                        # If ``use_services`` is 'true', then the following values are ignored, since they're provided by the server.
