@@ -32,7 +32,7 @@ EVENT_TABLE = {'mChoice':'mchoice_answers',
 
 
 def compareAndUpdateCookieData(sid):
-    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid:
+    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid and request.cookies['ipuser'].value.endswith("@"+request.client):
         db.useinfo.update_or_insert(db.useinfo.sid == request.cookies['ipuser'].value, sid=sid)
 
 def hsblog():
