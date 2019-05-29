@@ -20,6 +20,7 @@
 import sys
 import os
 import time
+import socket
 import subprocess
 from pprint import pprint
 from contextlib import contextmanager
@@ -115,6 +116,18 @@ def web2py_server():
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
          '--nogui'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    tries = 5
+    done = False
+    while tries > 0 and not done:
+        try:
+            socket.create_connection(('127.0.0.1', '8000'))
+            done = True
+        except:
+            time.sleep(2)
+            tries -= 1
+    if tries == 0:
+        raise Exception("Server not ready")
 
     # Start a thread to read web2py output and echo it.
     def echo():
