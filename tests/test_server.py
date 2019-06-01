@@ -317,7 +317,7 @@ class _TestClient(WebClient):
                     print('Warnings for {}: {}'.format(url, len(vld.warnings)))
                     pprint(vld.warnings)
 
-            return self.text if six.PY3 else self.text.decode('utf-8')
+            return self.text
 
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
@@ -430,7 +430,7 @@ class _TestUser(object):
         db.commit()
 
     def login(self):
-        self.test_client.post('default/user/login', data=dict(
+        self.test_client.validate('default/user/login', data=dict(
             username=self.username,
             password=self.password,
             _formname='login',
@@ -605,13 +605,14 @@ def test_manual(runestone_db_tools, test_user):
 @pytest.mark.parametrize('url, requires_login, expected_string, expected_errors',
 [
     # **Admin**
-    #
+    #----------
     # FIXME: Flashed messages don't seem to work.
     #('admin/index', False, 'You must be registered for a course to access this page', 1),
     #('admin/index', True, 'You must be an instructor to access this page', 1),
     ('admin/doc', True, 'Runestone Help and Documentation', 1),
 
     # **Assignments**
+    #----------------
     ('assignments/chooseAssignment', True, 'Assignments', 1),
     ('assignments/doAssignment', True, 'Bad Assignment ID', 1),
     ('assignments/index', True, 'Student Progress for', 1),
@@ -620,7 +621,7 @@ def test_manual(runestone_db_tools, test_user):
     ('assignments/practiceNotStartedYet', True, 'test_course_1', 2),
 
     # **Default**
-    #
+    #------------
     # *User*
     #
     # The `authentication <http://web2py.com/books/default/chapter/29/09/access-control#Authentication>`_ section gives the URLs exposed by web2py. Check these.
@@ -642,7 +643,7 @@ def test_manual(runestone_db_tools, test_user):
     ('default/user/not_authorized', False, 'Not authorized', 1),
     # Returns a 404.
     #('default/user/navbar'=(False, 'xxx', 1),
-    #
+
     # *Other pages*
     #
     # TODO: What is this for?
@@ -668,14 +669,8 @@ def test_manual(runestone_db_tools, test_user):
     ('default/coursechooser', True, 'Course Selection', 1),
     ('default/removecourse', True, 'Course Selection', 1),
 
-
-    # Assignments
-    ('assignments/index', True, 'Student Progress for', 1),
-    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
-    ('assignments/chooseAssignment', True, 'Assignments', 1),
-
-    # **Misc**
-    ('oauth/index', False, 'This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.', 1),
+    # **Dashboard**
+    #--------------
     ('dashboard/index', True, 'Instructor Dashboard', 1),
     ('dashboard/grades', True, 'Gradebook', 1),
     ('dashboard/studentreport', True, 'Please make sure you are in the correct course', 1),
@@ -684,10 +679,18 @@ def test_manual(runestone_db_tools, test_user):
     ('dashboard/exercisemetrics', True, 'Instructor Dashboard', 1),
     ('dashboard/questiongrades', True, 'Instructor Dashboard', 1),
 
+    # **Designer**
+    #-------------
+    ('designer/index', True, 'This page allows you to select a book for your own class.', 1),
+
+    # **OAuth**
+    #----------
+    ('oauth/index', False, 'This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.', 1),
+
     # TODO: Many other views!
 ])
-def test_1(url, requires_login, expected_string, expected_errors, test_client,
-           test_user_1):
+def test_validate_user_pages(url, requires_login, expected_string,
+                             expected_errors, test_client, test_user_1):
     if requires_login:
         test_user_1.login()
     else:
@@ -701,13 +704,17 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
 @pytest.mark.parametrize('url, expected_string, expected_errors',
 [
     # **Default**
-    #
+    #------------
     # web2py-generated stuff produces two extra errors.
     ('default/bios', 'Bios', 3),
-
+    # FIXME: The element ``<form id="editIndexRST" action="">`` in ``views/admin/admin.html`` produces the error ``Bad value \u201c\u201d for attribute \u201caction\u201d on element \u201cform\u201d: Must be non-empty.``.
+    #
     # **Admin**
+    #----------
     ('admin/admin', 'Manage Section', 1),
     ('admin/course_students', '"test_user_1"', 2),
+    # TODO: A response of ``null`` is obviously wrong.
+    ('admin/createAssignment', 'null', None),
     ('admin/grading', 'assignment', 1),
     # TODO: This produces an exception.
     #('admin/practice', 'Choose when students should start their practice.', 1),
@@ -723,11 +730,13 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
     #('admin/assignments', 'Assignment', 1),
     #('admin/backup', 'xxx', 1),
     #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
+    #('admin/removeassign', 'Cannot remove assignment with id of', 1),
     #('admin/removeinstructor', 'xxx', 1),
     #('admin/removeStudents', 'xxx', 1),
+    # TODO: added to the ``createAssignment`` endpoint so far.
 ])
-def test_2(url, expected_string, expected_errors, test_client,
-           test_user, test_user_1):
+def test_validate_instructor_pages(url, expected_string, expected_errors,
+                                   test_client, test_user, test_user_1):
     with test_user('test_instructor_1', 'password_1', 'test_course_1') as test_instructor_1, \
         test_instructor_1.make_instructor():
 
@@ -945,9 +954,9 @@ def test_lp_1(test_user_1):
     # Check that database entries are validated.
     with test_user_1.hsblog(
         event='lp_build',
+        # This div_id is too long. Everything else is OK.
         div_id='X'*1000,
         course=test_user_1.course_name,
-        path='static/test_course_1/lp_demo.py.html',
         builder='unsafe-python',
         answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
     ) as ret:
@@ -959,7 +968,6 @@ def test_lp_1(test_user_1):
             event='lp_build',
             div_id='lp_demo_1',
             course=test_user_1.course_name,
-            path='static/test_course_1/lp_demo.py.html',
             builder='unsafe-python',
             answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
         ) as ret:
