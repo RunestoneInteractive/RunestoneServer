@@ -1,11 +1,31 @@
+# ***********************
+# |docname| - Test runner
+# ***********************
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import os
 import sys
 import argparse
 import re
 from shutil import rmtree, copytree
+import glob
+
+# Third-party imports
+# -------------------
+# None.
+#
+#
+# Local imports
+# -------------
 from ci_utils import xqt, pushd
 
-COVER_DIRS = 'applications/runestone/tests,applications/runestone/controllers,applications/runestone/models'
+COVER_DIRS = 'applications/runestone/modules,applications/runestone/controllers,applications/runestone/models'
 
 # Assume we are running with working directory in tests
 
@@ -51,6 +71,7 @@ if __name__ == '__main__':
         with pushd('../../..'):
             print("recalculating grades tables")
             xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
+            # TODO: Need a sql script to drop a bunch of tables which web2py auto-creates. Anything named ``table_migrate_prefix + 'table_name'``, plus anything else that's empty. Also, move the execution of the runestone build here.
             print("dumping the data")
             xqt('pg_dump --no-owner runestone_test > applications/runestone/tests/runestone_test.sql')
         sys.exit(0)
@@ -62,6 +83,9 @@ if __name__ == '__main__':
         xqt('dropdb --echo --if-exists --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
             'createdb --echo --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
             'psql  --host={} --user={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
+        # Let web2py recreate certain tables not in the test database.
+        for path in glob.glob('../databases/test_runestone_*.table'):
+            os.remove(path)
         # Copy the test book to the books directory.
         rmtree('../books/test_course_1', ignore_errors=True)
         # Sometimes this fails for no good reason on Windows. Retry.
