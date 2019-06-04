@@ -28,6 +28,9 @@ script:
 - cd books
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
 - cd ..
+# This directory doesn't exist; its lack causes test failures when web2py tries to append to
+# `databases/sql.log`.
+- mkdir databases
 - cd tests
 # Now actually run the tests, rebuilding the database first.
 - python run_tests.py --rebuildgrades
