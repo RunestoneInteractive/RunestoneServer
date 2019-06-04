@@ -34,10 +34,6 @@ else:
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
 
-# Make the settings and database available in modules.
-current.db = db
-current.settings = settings
-
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
@@ -58,6 +54,11 @@ response.generic_patterns = ['*'] if request.is_local else []
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
+
+# Make the settings and database available in modules.
+current.db = db
+current.settings = settings
+current.auth = auth
 
 if settings.enable_captchas:
     ## Enable captcha's :-(
@@ -88,6 +89,26 @@ db.define_table('courses',
   Field('student_price', type='integer'),
   migrate='runestone_courses.table'
 )
+
+
+# Provide a common query. Pass ``db.courses.ALL`` to retrieve all fields; otherwise, only the ``course_name`` and ``base_course`` are selected.
+def get_course_row(*args, **kwargs):
+    if not args:
+        args = db.courses.course_name, db.courses.base_course
+    return db(db.courses.id == auth.user.course_id).select(*args).first()
+
+
+# Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
+def get_course_url(*args):
+    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
+    if os.path.exists(os.path.join(request.folder, 'static', auth.user.course_name)):
+        return URL('static', '/'.join( (auth.user.course_name, ) + args))
+    else:
+        course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first()
+        if course:
+            return URL(c='books', f='published', args=(course.base_course, ) + args)
+        else:
+            return URL(c='default')
 
 ## create cohort_master table
 db.define_table('cohort_master',

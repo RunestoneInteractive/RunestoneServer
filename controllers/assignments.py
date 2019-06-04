@@ -11,6 +11,7 @@ from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
 import six
 import bleach
+import six
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -514,7 +515,7 @@ def doAssignment():
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
                    (db.assignment_questions.question_id == db.questions.id) & \
                    (db.chapters.chapter_label == db.questions.chapter) & \
-                   (db.chapters.course_id == course.course_name) & \
+                   ((db.chapters.course_id == course.course_name) | (db.chapters.course_id == course.base_course)) & \
                    (db.sub_chapters.chapter_id == db.chapters.id) & \
                    (db.sub_chapters.sub_chapter_label == db.questions.subchapter)) \
         .select(db.questions.name,
@@ -553,9 +554,9 @@ def doAssignment():
                 bts = bytes(q.questions.htmlsrc).decode('utf8')
 
             htmlsrc = bts.replace('src="../_static/',
-                'src="../static/' + course['course_name'] + '/_static/')
-            htmlsrc = htmlsrc.replace("../_images",
-                                      "/{}/static/{}/_images".format(request.application, course.course_name))
+                                  'src="' + get_course_url('_static/'))
+            htmlsrc = htmlsrc.replace("../_images/",
+                                      get_course_url('_images/'))
         else:
             htmlsrc = None
         if assignment['released']:
@@ -717,13 +718,13 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
 
 # Gets invoked from lti to set timezone and then redirect to practice()
 def settz_then_practice():
-    return dict(course_name=request.vars.get('course_name', settings.default_course))
+    return dict(course=get_course_row(), course_name=request.vars.get('course_name', settings.default_course))
 
 
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
 def practiceNotStartedYet():
-    return dict(course_id=auth.user.course_name,
-                message1=bleach.clean(request.vars.message1), message2=bleach.clean(request.vars.message2))
+    return dict(course=get_course_row(db.courses.ALL), course_id=auth.user.course_name,
+                message1=bleach.clean(request.vars.message1 or ''), message2=bleach.clean(request.vars.message2 or ''))
 
 
 # Gets invoked when the student requests practicing topics.
@@ -898,8 +899,7 @@ def practice():
                                        outcome_url=practice_grade.lis_outcome_url,
                                        result_sourcedid=practice_grade.lis_result_sourcedid)
 
-    return dict(course=course, course_name=auth.user.course_name,
-                course_id=auth.user.course_name,
+    return dict(course=course,
                 q=questioninfo, all_flashcards=all_flashcards,
                 flashcard_count=available_flashcards_num,
                 # The number of days the student has completed their practice.

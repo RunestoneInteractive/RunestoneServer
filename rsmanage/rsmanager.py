@@ -311,10 +311,6 @@ def build(config, course, repo, skipclone):
 def inituser(config, instructor, fromfile, username, password, first_name, last_name, email, course):
     """Add a user (or users from a csv file)"""
     os.chdir(findProjectRoot())
-    if config.verbose:
-        quiet = ""
-    else:
-        quiet = "-Q"
 
     if fromfile:
         # if fromfile then be sure to get the full path name NOW.
@@ -337,9 +333,9 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             userinfo['course'] = line[5]
             userinfo['instructor'] = False
             os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-            res = subprocess.call("python web2py.py {} --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py".format(quiet), shell=True)
+            res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
             if res != 0:
-                click.echo("Failed to create user {} fix your data and try again".format(line[0]))
+                click.echo("Failed to create user {} error {} fix your data and try again".format(line[0], res))
                 exit(1)
     else:
         userinfo = {}
@@ -356,9 +352,9 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
                 userinfo['instructor'] = click.confirm("Make this user an instructor", default=False)
 
         os.environ['RSM_USERINFO'] = json.dumps(userinfo)
-        res = subprocess.call("python web2py.py {} --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py".format(quiet), shell=True)
+        res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py", shell=True)
         if res != 0:
-            click.echo("Failed to create user {} fix your data and try again. Use --verbose for more detail".format(username))
+            click.echo("Failed to create user {} error {} fix your data and try again. Use --verbose for more detail".format(userinfo['username'], res))
             exit(1)
         else:
             click.echo("Success")

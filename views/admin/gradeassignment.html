@@ -1,19 +1,8 @@
 {{extend 'layout.html'}}
 
-<script type="text/javascript">
-  eBookConfig.course = '{{=course_id}}'
-</script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt.min.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/skulpt-stdlib.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/runestonebase.js" type="text/javascript"></script>
-<script src="/{{=request.application}}/static/{{=course_id}}/_static/activecode.js" type="text/javascript"></script>
-<script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
-<script type="text/javascript" src="/{{=request.application}}/static/{{=course_id}}/_static/jquery.tablesorter.js"></script>
+{{include '_sphinx_static_files.html'}}
 
-<link href="/{{=request.application}}/static/{{=course_id}}/_static/codemirror.css" rel="stylesheet" type="text/css"/>
-<link href="/{{=request.application}}/static/{{=course_id}}/_static/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+
 <style type="text/css" media="screen">
   #content {
     width: 900px;
@@ -90,6 +79,6 @@ function sendComment(comment, sid, acid, id) {
   $(document).ready(function() {
       $("#studentlist").tablesorter();
   }
-); 
+);
 </script>
 

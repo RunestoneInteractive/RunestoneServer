@@ -10,7 +10,7 @@ import os
 import sys
 from io import open
 from lxml import html
-from feedback import is_server_feedback, fitb_feedback
+from feedback import is_server_feedback, fitb_feedback, lp_feedback
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -32,7 +32,7 @@ EVENT_TABLE = {'mChoice':'mchoice_answers',
 
 
 def compareAndUpdateCookieData(sid):
-    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid:
+    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid and request.cookies['ipuser'].value.endswith("@"+request.client):
         db.useinfo.update_or_insert(db.useinfo.sid == request.cookies['ipuser'].value, sid=sid)
 
 def hsblog():
@@ -44,13 +44,13 @@ def hsblog():
                             # log entries that come from auth timing out even but the user hasn't reloaded
                             # the page.
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
             sid = str(uuid.uuid1().int)+"@"+request.client
             setCookie = True
-    act = request.vars.act
+    act = request.vars.get('act', '')
     div_id = request.vars.div_id
     event = request.vars.event
     course = request.vars.course
@@ -151,6 +151,34 @@ def hsblog():
         db.shortanswer_answers.update_or_insert((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course),
             sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course)
 
+    elif event == "lp_build" and auth.user:
+        ret, new_fields = db.lp_answers._validate_fields(dict(
+            sid=sid, timestamp=ts, div_id=div_id, course_name=course
+        ))
+        if not ret.errors:
+            do_server_feedback, feedback = is_server_feedback(div_id, course)
+            if do_server_feedback:
+                try:
+                    code_snippets = json.loads(request.vars.answer)['code_snippets']
+                except:
+                    code_snippets = []
+                result = lp_feedback(code_snippets, feedback)
+                # If an error occurred or we're not testing, pass the answer through.
+                res.update(result)
+
+                # Record the results in the database.
+                correct = result.get('correct')
+                answer = result.get('answer', {})
+                answer['code_snippets'] = code_snippets
+                ret = db.lp_answers.validate_and_insert(sid=sid, timestamp=ts, div_id=div_id,
+                    answer=json.dumps(answer), correct=correct, course_name=course)
+                if ret.errors:
+                    res.setdefault('errors', []).append(ret.errors.as_dict())
+            else:
+                res['errors'] = ['No feedback provided.']
+        else:
+            res.setdefault('errors', []).append(ret.errors.as_dict())
+
     response.headers['content-type'] = 'application/json'
     if setCookie:
         response.cookies['ipuser'] = sid
@@ -165,7 +193,7 @@ def runlog():    # Log errors and runs with code
         sid = auth.user.username
         setCookie = True
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
@@ -593,7 +621,7 @@ def _getCorrectStats(miscdata,event):
     if auth.user:
         sid = auth.user.username
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
 
     if sid:
@@ -799,27 +827,6 @@ def gettop10Answers():
     return json.dumps([res,miscdata])
 
 
-def getSphinxBuildStatus():
-    task_name = request.vars.task_name
-    course_url = request.vars.course_url
-
-    response.headers['content-type'] = 'application/json'
-    results = {'course_url': course_url}
-    row = scheduler.task_status(task_name)
-    if row:
-        if row['status'] in ['QUEUED', 'ASSIGNED','RUNNING', 'COMPLETED']:
-            results['status'] = row['status']
-        else:  # task failed
-            results['status'] = row['status']
-            tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
-            results['traceback']=tb
-    else:
-        results['status'] = 'FAILED'
-        results['info'] = 'no row'
-        results['traceback'] = 'Sorry, no more info'
-    return json.dumps(results)
-
-
 def getassignmentgrade():
     response.headers['content-type'] = 'application/json'
     if not auth.user:
@@ -932,6 +939,22 @@ def getAssessResults():
             return ""
         res = {'answer': row.answer, 'timestamp': str(row.timestamp)}
         return json.dumps(res)
+    elif event == "lp_build":
+        rows = db(
+            (db.lp_answers.div_id == div_id) &
+            (db.lp_answers.course_name == course) &
+            (db.lp_answers.sid == sid)
+        ).select(db.lp_answers.answer, db.lp_answers.timestamp, db.lp_answers.correct, orderby=~db.lp_answers.timestamp).first()
+        if not rows:
+            return ""   # server doesn't have it so we load from local storage instead
+        answer = json.loads(rows.answer)
+        correct = rows.correct
+        return json.dumps({
+            'answer': answer,
+            'timestamp': str(rows.timestamp),
+            'correct': correct
+        })
+
 
 
 def checkTimedReset():

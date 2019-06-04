@@ -132,7 +132,7 @@
 
         <li class="divider-vertical"></li>
 
-        {% if use_services == 'true' %}
+        {% if use_services %}
         <!-- user account dropdown -->
         <li class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -223,17 +223,28 @@
 
 <script type="text/javascript">
   eBookConfig = {};
-  eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';
-  eBookConfig.app = eBookConfig.host+'/{{appname}}';
+  {% if use_services %}
+    {% raw %}
+      eBookConfig.useRunestoneServices = true;
+      eBookConfig.host = '{{= "{}://{}".format(request.env.wsgi_url_scheme,
+                                               request.env.http_host) }}';
+      eBookConfig.app = eBookConfig.host + '/' + '{{= request.application }}';
+      eBookConfig.course = '{{= course_name }}';
+      eBookConfig.basecourse = '{{= base_course }}';
+    {% endraw %}
+  {% else %}
+    eBookConfig.useRunestoneServices = false;
+    eBookConfig.host = '{{course_url}}' ? '{{course_url}}' : 'http://127.0.0.1:8000';
+    eBookConfig.app = eBookConfig.host+'/{{appname}}';
+    eBookConfig.course = '{{course_id}}';
+    eBookConfig.basecourse = '{{ basecourse }}';
+  {% endif %}
   eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
-  eBookConfig.course = '{{course_id}}';
   eBookConfig.logLevel = {{loglevel}};
   eBookConfig.loginRequired = {{login_required}};
   eBookConfig.build_info = "{{build_info}}";
   eBookConfig.isLoggedIn = false;
-  eBookConfig.useRunestoneServices = {{ use_services }};
   eBookConfig.python3 = {{ python3 }};
-  eBookConfig.basecourse = '{{ basecourse }}';
   eBookConfig.acDefaultLanguage = '{{ default_ac_lang }}' ? '{{ default_ac_lang }}' : 'python'
   eBookConfig.runestone_version = '{{ runestone_version }}';
   eBookConfig.jobehost = '{{jobe_server}}';
@@ -282,7 +293,7 @@
 <footer class="footer">
   <div class="container">
     <p class="pull-right">
-      {% if use_services == 'true' %}
+      {% if use_services %}
       <span id='numuserspan'></span> readers online now | <span class='loggedinuser'></span>
       {% endif %}
       | <a href="#">Back to top</a>

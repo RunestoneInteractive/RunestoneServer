@@ -14,17 +14,11 @@
         <a id="studentsTab" data-toggle="tab" href="#manageStudents" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Manage Students</h4>
         </a>
-        <a id="rebuildTab" data-toggle="tab" href="#rebuild" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Rebuild</h4>
-        </a>
         <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
         </a>
         <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
-        </a>
-        <a id="changeIndexTab" data-toggle="tab" href="#changeIndex" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Edit Index</h4>
         </a>
 
         <div style="margin-top: 125px; border-top: dashed">
@@ -146,61 +140,8 @@
           <input type="text" name="startdate" id="startdate" value="{{=startDate}}" />
         </div>
       </div>
-      <input type="submit" class="btn btn-default" value="Rebuild Now" />
+      <input type="submit" class="btn btn-default" value="Update course" />
     </form>
-
-
-
-
-
-
-      <form  method="post" action="/{{=request.application}}/admin/backup" style="margin-top: 16px;">
-                <input type="submit" class="btn btn-default" value="Download Backup"/>
-                </form>
-
-      <div>*This will take 15-20 seconds to complete</div>
-
-
-      {{ if confirm == False: }}
-  <h3 id="title">Rebuilding course.</h3>
-  <div id="spinner_div" class='pull-left' style="align: center; margin-right: 20px;">
-	  <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
-  </div>
-  <p id="message">Your course is being rebuilt. This may take several minutes to complete.
-   <b>Please do not refresh the page.</b> When the rebuild is finished, you will be redirected to
-   your newly rebuilt course.</p>
-   <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
-        gets backed up or even temporarily stuck.  I will get things going again as quick as I can. I do
-       have an automatic monitoring system that lets me know by email when things get backed up.  If you have persistent
-       problems contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
-       Thanks for your patience.  -- Brad</p>
-  <script type="text/javascript">
-
-        $('a[href="#rebuild"]').tab('show');
-
-
-    var iid = setInterval(function() {
-      d = { task_name:'{{ =task_name }}',
-            course_url:'{{ =course_url }}'};
-      $.post("{{ =URL('ajax','getSphinxBuildStatus.json') }}", d, function(data) {
-        if (data.status == "COMPLETED"){
-          window.location.href = data.course_url;
-        }
-        if (data.status == "FAILED" || data.status == "TIMEOUT") {
-          clearInterval(iid);
-          $("#spinner_div").hide();
-          $("#title").text("An error occurred.");
-          $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
-           "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
-           "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-           "Make sure you include the following traceback information:" +
-           "<pre>" + data.traceback + "</pre>");
-        }
-      });
-    }, 3000);
-  </script>
-{{ pass }}
-
 
   </div>
         </div>
@@ -257,51 +198,19 @@
                 <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
             </div>
             </div>
-
-                      <div id="changeIndex" class="tab-pane fade">
-            <div class="col-md-3">
-                                <form id="editIndexRST" action="">
-                    <div class="form-group">
-                        <label for="editIndex">Edit index.rst</label>
-              <textarea style="white-space: pre; overflow-x: auto;" id="editIndex" cols="100" name="editIndex" placeholder="" rows="20"></textarea>
-
-                    </div>
-                  <input type="button" class="btn btn-default" Value="Submit" data-dismiss="modal" onClick="edit_indexrst(this.form);">
-
-</form>
-
-                </div>
-
-
-</div>
           </div>
 
 <script>
     $(".dashboardnav").removeClass("active");
     $("#admintab").addClass("active");
-        $('#startdate').datepicker();
+    $('#startdate').datepicker();
 
 
-    $(document).ready(function(){
-  getLog();
-});
     $('#sectionsTab').click(function(){
     $('#sectionsTab').css('background-color', 'gainsboro');
     $('#studentsTab').css('background-color','transparent');
-    $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-    $('#changeIndexTab').css('background-color','transparent');
-
-});
-
-    $('#rebuildTab').click(function(){
-    $('#rebuildTab').css('background-color', 'gainsboro');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#studentsTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
-    $('#DeleteTab').css('background-color','transparent');
-        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -309,9 +218,7 @@
     $('#AddInstructorTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
-    $('#rebuildTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -319,9 +226,7 @@
     $('#DeleteTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
-    $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
-        $('#changeIndexTab').css('background-color','transparent');
 
 });
 
@@ -329,51 +234,10 @@
     $('#studentsTab').css('background-color', 'gainsboro');
     $('#sectionsTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-    $('#rebuildTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
-    $('#changeIndexTab').css('background-color','transparent');
-
-});
-
-        $('#changeIndexTab').click(function(){
-    $('#changeIndexTab').css('background-color', 'gainsboro');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#studentsTab').css('background-color','transparent');
-    $('#rebuildTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
-        $('#DeleteTab').css('background-color','transparent');
-            var obj = new XMLHttpRequest();
-        obj.open('GET','/{{=request.application}}/admin/indexrst/', true);
-        obj.send(JSON.stringify({avariable: 'avariable'}));
-        obj.onreadystatechange = function() {
-            if (obj.readyState == 4 && obj.status == 200) {
-                filetext = JSON.parse(obj.responseText);
-                 var textarea = document.getElementById('editIndex');
-                   textarea.innerHTML = filetext;
-            }}
 
 });
 
 </script>
 
-
-<script>
-        function getLog() {
-
-
-        var obj = new XMLHttpRequest();
-        obj.open("GET", "/{{=request.application}}/admin/getChangeLog", true);
-        obj.send(JSON.stringify({variable: 'variable'}));
-        obj.onreadystatechange = function () {
-
-            if (obj.readyState == 4 && obj.status == 200) {
-                changeLog = document.getElementById("changelog");
-                changeLog.innerHTML = obj.responseText;
-    }}}
-
-    $(document).ready(function() {
-        getLog();
-    });
-
-</script>
 {{ end }}

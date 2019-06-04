@@ -158,7 +158,7 @@ Installation
 
    ::
 
-       export WEB2PY_CONFIG=production
+       export WEB2PY_CONFIG=production # or development or test
        export WEB2PY_MIGRATE=Yes
        export DBURL=postgresql://username:pw@host/database
        export TEST_DBURL=postgresql://username:pw@host/database

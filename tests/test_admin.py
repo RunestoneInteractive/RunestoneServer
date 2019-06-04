@@ -6,7 +6,6 @@ from gluon.tools import Auth
 
 #     getGradeComments      24180 273.000    6281
 # add__or_update_assignment_question        14059 678.000    7232
-#         getChangeLog       6522 363.000    6399
 #                index       6152 466.000    8119
 #                admin       3924 442.000    5944
 #       get_assignment       2751 356.000    4780
@@ -46,12 +45,6 @@ class TestAdminEndpoints(unittest.TestCase):
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         exec(compile(open("applications/runestone/controllers/admin.py").read(), "applications/runestone/controllers/admin.py", 'exec'), globals())
 
-    def test_getChangeLog(self):
-        # Set up the request object
-        auth.login_user(db.auth_user(11))
-        res = getChangeLog()
-        self.assertTrue("August 19 2016" in res)
-
     def test_getGradeComments(self):
         # Set up the request object
         auth.login_user(db.auth_user(11))
@@ -88,7 +81,7 @@ suite = unittest.TestSuite()
 suite.addTest(unittest.makeSuite(TestAdminEndpoints))
 res = unittest.TextTestRunner(verbosity=2).run(suite)
 if len(res.errors) == 0 and len(res.failures) == 0:
-    sys.exit(0)
+    print("All tests Passed OK")
 else:
     print("nonzero errors exiting with 1", res.errors, res.failures)
     sys.exit(1)

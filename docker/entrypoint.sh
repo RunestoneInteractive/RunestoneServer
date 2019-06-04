@@ -25,6 +25,11 @@ if [ -z "$RUNESTONE_HOST" ]; then
     exit 1
 fi
 
+# For development make sure we are up to date with the latest from github.
+if [ $WEB2PY_CONFIG == "development" ]; then
+    pip install --upgrade git+git://github.com/RunestoneInteractive/RunestoneComponents.git
+fi
+
 # Initialize the database
 if [ ! -f "$stamp" ]; then
 
@@ -53,8 +58,14 @@ else
     info "Already initialized"
 fi
 
-info "Checking the State of Database and Migration Info"
+RETRIES=10
 set +e
+until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
+  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
+  sleep 2
+done
+
+info "Checking the State of Database and Migration Info"
 rsmanage env --checkdb
 dbstate="$?"
 info "Got result of $dbstate"
@@ -82,12 +93,11 @@ case $dbstate in
 
 esac
 
-RETRIES=5
+info "Updating file ownership"
+chown -R www-data /srv/web2py
+mkdir -p /run/uwsgi
+chown -R www-data /run/uwsgi
 
-until psql $DBURL -c "select 1" > /dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
-  echo "Waiting for postgres server, $((RETRIES--)) remaining attempts..."
-  sleep 2
-done
 
 # Setup instructors, if the file exists
 if [ -f "${RUNESTONE_PATH}/configs/instructors.csv" -a "${RUNESTONE_PATH}/configs/instructors.csv" -nt iadd.stamp ]; then
@@ -117,7 +127,17 @@ fi
 # Run the beast
 info "Starting the server"
 cd "$WEB2PY_PATH"
-python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
+
+# To just run the development server Do this:
+# python web2py.py --ip=0.0.0.0 --port=8080 --password="${POSTGRES_PASSWORD}" -K runestone --nogui -X  &
+
+# To start in a mode more consistent with deployment Do this:
+info "starting nginx"
+service nginx start
+
+info "starting uwsgi"
+/usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
+
 
 ## Go through all books and build
 info "Building & Deploying books"
@@ -125,9 +145,14 @@ cd "${BOOKS_PATH}"
 /bin/ls | while read book; do
     (
         cd $book;
-        runestone build && runestone deploy
+        if [ ! -f NOBUILD ]; then
+            runestone build && runestone deploy
+        else
+            info "skipping $book due to NOBUILD file"
+        fi
     );
 done
 
-info "Starting the scheduler"
-python ${WEB2PY_PATH}/run_scheduler.py runestone
+
+tail -F ${WEB2PY_PATH}/logs/uwsgi.log
+

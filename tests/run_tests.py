@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 import re
+from shutil import rmtree, copytree
 from ci_utils import xqt, pushd
 
 COVER_DIRS = 'applications/runestone/tests,applications/runestone/controllers,applications/runestone/models'
@@ -61,8 +62,18 @@ if __name__ == '__main__':
         xqt('dropdb --echo --if-exists --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
             'createdb --echo --host={} --user={} "{}"'.format(pgnetloc, pguser, dbname),
             'psql  --host={} --user={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
+        # Copy the test book to the books directory.
+        rmtree('../books/test_course_1', ignore_errors=True)
+        # Sometimes this fails for no good reason on Windows. Retry.
+        for retry in range(100):
+            try:
+                copytree('test_course_1', '../books/test_course_1')
+                break
+            except WindowsError:
+                if retry == 99:
+                    raise
         # Build the test book to add in db fields needed.
-        with pushd('test_book'):
+        with pushd('../books/test_course_1'):
             # The runestone build process only looks at ``DBURL``.
             os.environ['DBURL'] = os.environ['TEST_DBURL']
             xqt('{} -m runestone build --all'.format(sys.executable),

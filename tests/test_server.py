@@ -20,6 +20,7 @@
 import sys
 import os
 import time
+import socket
 import subprocess
 from pprint import pprint
 from contextlib import contextmanager
@@ -28,7 +29,6 @@ from textwrap import dedent
 import json
 import re
 from threading import Thread
-import os
 try:
     from contextlib import ExitStack
 except:
@@ -111,11 +111,29 @@ def web2py_server():
     ##yield DictToObject(dict(password=password))
     ##return
 
-    # Start the web2py server.
+    # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+         '--nogui'],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
+    web2py_scheduler = subprocess.Popen(
+        [sys.executable, '-m', 'coverage', 'run', '--append',
+         '--source=' + COVER_DIRS, 'web2py.py', '-K', RUNESTONE_CONTROLLER],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    tries = 5
+    done = False
+    while tries > 0 and not done:
+        try:
+            socket.create_connection(('127.0.0.1', '8000'))
+            done = True
+        except:
+            time.sleep(2)
+            tries -= 1
+    if tries == 0:
+        raise Exception("Server not ready")
 
     # Start a thread to read web2py output and echo it.
     def echo():
@@ -139,8 +157,9 @@ def web2py_server():
     # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
     yield web2py_server
 
-    # Terminate the server to give web2py time to shut down gracefully.
+    # Terminate the server and schedulers to give web2py time to shut down gracefully.
     web2py_server.terminate()
+    web2py_scheduler.terminate()
     echo_thread.join()
 
 
@@ -544,6 +563,14 @@ class _TestUser(object):
             if useinfo_row:
                 del db.useinfo[useinfo_row.id]
 
+            # TODO: Add more cleanup for other question types.
+            if event == 'lp_build':
+                lp_answers_row = db((db.lp_answers.sid == self.username) &
+                                    (db.lp_answers.div_id == div_id) &
+                                    (db.lp_answers.course_name == course)).select(db.lp_answers.id, orderby=db.lp_answers.id).last()
+                if lp_answers_row:
+                    del db.lp_answers[lp_answers_row.id]
+
 
 # Present ``_TestUser`` as a fixture.
 @pytest.fixture
@@ -574,8 +601,28 @@ def test_manual(runestone_db_tools, test_user):
 
 
 # Validate the HTML produced by various web2py pages.
+# NOTE -- this is the start of a really really long decorator for test_1
 @pytest.mark.parametrize('url, requires_login, expected_string, expected_errors',
 [
+    # **Admin**
+    #
+    # FIXME: Flashed messages don't seem to work.
+    #('admin/index', False, 'You must be registered for a course to access this page', 1),
+    #('admin/index', True, 'You must be an instructor to access this page', 1),
+    ('admin/doc', True, 'Runestone Help and Documentation', 1),
+
+    # **Assignments**
+    ('assignments/chooseAssignment', True, 'Assignments', 1),
+    ('assignments/doAssignment', True, 'Bad Assignment ID', 1),
+    ('assignments/index', True, 'Student Progress for', 1),
+    # TODO: Why 2 errors here? Was just 1.
+    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
+    ('assignments/practiceNotStartedYet', True, 'test_course_1', 2),
+
+    # **Default**
+    #
+    # *User*
+    #
     # The `authentication <http://web2py.com/books/default/chapter/29/09/access-control#Authentication>`_ section gives the URLs exposed by web2py. Check these.
     ('default/user/login', False, 'Login', 1),
     ('default/user/register', False, 'Registration', 1),
@@ -595,14 +642,13 @@ def test_manual(runestone_db_tools, test_user):
     ('default/user/not_authorized', False, 'Not authorized', 1),
     # Returns a 404.
     #('default/user/navbar'=(False, 'xxx', 1),
-
-    # Other pages in ``default``.
+    #
+    # *Other pages*
     #
     # TODO: What is this for?
     #('default/call', False, 'Not found', 0),
     # TODO: weird returned HTML. ???
     #('default/index', True, 'Course Selection', 1),
-
     ('default/about', False, 'About Us', 1),
     ('default/error', False, 'Error: the document does not exist', 1),
     ('default/ack', False, 'Acknowledgements', 1),
@@ -610,10 +656,6 @@ def test_manual(runestone_db_tools, test_user):
     ('default/bio', True, 'Tell Us About Yourself', 3),
     ('default/courses', True, 'Course Selection', 1),
     ('default/remove', True, 'Remove a Course', 1),
-    # FIXME: This produces an exception.
-    #('default/coursechooser', True, 'xxx', 1),
-    # FIXME: This produces an exception.
-    #('default/removecourse', True, 'xxx', 1),
     # Should work in both cases.
     ('default/reportabug', False, 'Report a Bug', 1),
     ('default/reportabug', True, 'Report a Bug', 1),
@@ -622,21 +664,26 @@ def test_manual(runestone_db_tools, test_user):
     ('default/terms', False, 'Terms and Conditions', 1),
     ('default/privacy', False, 'Runestone Academy Privacy Policy', 1),
     ('default/donate', False, 'Support Runestone Interactive', 1),
+    # TODO: This soesn't really test the body of either of these
+    ('default/coursechooser', True, 'Course Selection', 1),
+    ('default/removecourse', True, 'Course Selection', 1),
+
 
     # Assignments
     ('assignments/index', True, 'Student Progress for', 1),
-    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 1),
+    ('assignments/practice', True, 'Practice tool is not set up for this course yet.', 2),
     ('assignments/chooseAssignment', True, 'Assignments', 1),
 
-    # Misc
+    # **Misc**
     ('oauth/index', False, 'This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.', 1),
-    # FIXME: Not sure what's wrong here.
-    #('admin/index', False, 'You must be registered for a course to access this page', 1),
-    #('admin/index', True, 'You must be an instructor to access this page', 1),
-    ('admin/doc', True, 'Runestone Help and Documentation', 1),
-
     ('dashboard/index', True, 'Instructor Dashboard', 1),
     ('dashboard/grades', True, 'Gradebook', 1),
+    ('dashboard/studentreport', True, 'Please make sure you are in the correct course', 1),
+    # TODO: This doesn't really test anything about either
+    # exercisemetrics or questiongrades other than properly handling a call with no information
+    ('dashboard/exercisemetrics', True, 'Instructor Dashboard', 1),
+    ('dashboard/questiongrades', True, 'Instructor Dashboard', 1),
+
     # TODO: Many other views!
 ])
 def test_1(url, requires_login, expected_string, expected_errors, test_client,
@@ -650,16 +697,34 @@ def test_1(url, requires_login, expected_string, expected_errors, test_client,
 
 
 # Validate the HTML in instructor-only pages.
+# NOTE -- this is the start of a really really long decorator for test_2
 @pytest.mark.parametrize('url, expected_string, expected_errors',
 [
+    # **Default**
+    #
     # web2py-generated stuff produces two extra errors.
     ('default/bios', 'Bios', 3),
-    # FIXME: The element ``<form id="editIndexRST" action="">`` in ``views/admin/admin.html`` produces the error ``Bad value \u201c\u201d for attribute \u201caction\u201d on element \u201cform\u201d: Must be non-empty.``.
-    ('admin/admin', 'Manage Section', 2),
+
+    # **Admin**
+    ('admin/admin', 'Manage Section', 1),
+    ('admin/course_students', '"test_user_1"', 2),
     ('admin/grading', 'assignment', 1),
+    # TODO: This produces an exception.
+    #('admin/practice', 'Choose when students should start their practice.', 1),
+    ('admin/sections_list', 'db tables', 1),
+    ('admin/sections_create', 'Create New Section', 1),
+    ('admin/sections_delete', 'db tables', 1),
+    ('admin/sections_update', 'db tables', 1),
+    # TODO: This deletes the course, making the test framework raise an exception. Need a separate case to catch this.
+    #('admin/deletecourse', 'Manage Section', 2),
     # FIXME: these raise an exception.
+    #('admin/addinstructor', 'Trying to add non-user', 1), -- this is an api call
+    #('admin/add_practice_items', 'xxx', 1), -- this is an api call
     #('admin/assignments', 'Assignment', 1),
+    #('admin/backup', 'xxx', 1),
     #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
+    #('admin/removeinstructor', 'xxx', 1),
+    #('admin/removeStudents', 'xxx', 1),
 ])
 def test_2(url, expected_string, expected_errors, test_client,
            test_user, test_user_1):
@@ -865,3 +930,126 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
             with test_user_1.make_payment(token):
                 assert not did_payment()
 
+        # TODO: Test with more tokens, test failures.
+
+
+# Test the LP endpoint.
+@pytest.mark.skipif(six.PY2, reason='Requires Python 3.')
+def test_lp_1(test_user_1):
+    test_user_1.login()
+
+    # Check that omitting parameters produces an error.
+    with test_user_1.hsblog(event='lp_build') as ret:
+        assert 'No feedback provided' in ret['errors'][0]
+
+    # Check that database entries are validated.
+    with test_user_1.hsblog(
+        event='lp_build',
+        div_id='X'*1000,
+        course=test_user_1.course_name,
+        path='static/test_course_1/lp_demo.py.html',
+        builder='unsafe-python',
+        answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
+    ) as ret:
+        assert 'div_id' in ret['errors'][0]
+
+    # Check a passing case
+    def assert_passing():
+        with test_user_1.hsblog(
+            event='lp_build',
+            div_id='lp_demo_1',
+            course=test_user_1.course_name,
+            path='static/test_course_1/lp_demo.py.html',
+            builder='unsafe-python',
+            answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
+        ) as ret:
+            assert 'errors' not in ret
+            assert ret['correct'] == 100
+    assert_passing()
+
+    # Send lots of jobs to test out the queue. Skip this for now -- not all the useinfo entries get deleted, which causes ``test_getNumOnline`` to fail.
+    if False:
+        threads = [Thread(target=assert_passing) for x in range(5)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+
+# Test dynamic book routing.
+def test_10(test_client, test_user_1):
+    test_user_1.login()
+
+    # Test error cases.
+    validate = test_user_1.test_client.validate
+    test_course_1 = test_user_1.course_name
+    course_selection = 'Course Selection'
+    # A non-existant course.
+    validate('books/published/xxx', course_selection)
+    # A non-existant page.
+    validate('books/published/{}/xxx'.format(test_course_1),
+             expected_status=404)
+    # A directory.
+    validate('books/published/{}/test_chapter_1'.format(test_course_1),
+             expected_status=404)
+    # Attempt to access files outside a course.
+    validate('books/published/{}/../conf.py'.format(test_course_1),
+             expected_status=404)
+
+    # A valid page. Check the book config as well.
+    validate('books/published/{}/index.html'.format(test_course_1), [
+        'The red car drove away.',
+        "eBookConfig.course = '{}';".format(test_course_1),
+        "eBookConfig.basecourse = '{}';".format(test_course_1),
+    ])
+
+    # Drafts shouldn't be accessible by students.
+    validate('books/draft/{}/index.html'.format(test_course_1),
+             'Insufficient privileges')
+    with test_user_1.make_instructor():
+        # But should be instructors.
+        validate('books/draft/{}/index.html'.format(test_course_1),
+                 'The red car drove away.')
+
+    # Check routing in a child book.
+    with test_user_1.runestone_db_tools.create_course('child_course_1', base_course=test_user_1.course_name) as child_course:
+        child_course_1 = child_course.course_name
+        # Routes if they do.
+        with test_user_1.update_profile(course_name=child_course_1, is_free=True):
+            validate('books/published/{}/index.html'.format(test_course_1), [
+                'The red car drove away.',
+                "eBookConfig.course = '{}';".format(child_course_1),
+                "eBookConfig.basecourse = '{}';".format(test_course_1),
+            ])
+
+    # Test static content
+    validate('books/published/{}/_static/runestone-custom-sphinx-bootstrap.css'.format(test_course_1),
+             'background-color: #fafafa;')
+
+
+def test_11(test_client, runestone_db_tools, test_user):
+    with runestone_db_tools.create_course('test_course_3') as course_3:
+        with test_user('test_instructor_1', 'password_1', course_3.course_name) as test_instructor_1, \
+            test_instructor_1.make_instructor():
+
+            test_instructor_1.login()
+            db = runestone_db_tools.db
+
+            # Create an assignment -- using createAssignment
+            test_client.post('admin/createAssignment',
+                data=dict(name='test_assignment_1'))
+
+            assign = db((db.assignments.name == 'test_assignment_1') &
+                        (db.assignments.course == test_instructor_1.course_id)).select().first()
+
+            assert assign
+
+            # Delete an assignment -- using removeassignment
+            test_client.post('admin/removeassign', data=dict(assignid=assign.id))
+            assert not db(db.assignments.name == 'test_assignment_1').select().first()
+
+            test_client.post('admin/removeassign', data=dict(assignid=9999999))
+            assert "Error" in test_client.text
+
+            test_client.post('admin/removeassign', data=dict(assignid=""))
+            assert "Error" in test_client.text
