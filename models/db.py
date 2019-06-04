@@ -14,15 +14,19 @@ from gluon import current
 ## be redirected to HTTPS, uncomment the line below:
 # request.requires_htps()
 
+table_migrate_prefix = 'runestone_'
+table_migrate_prefix_test = ''
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     if os.environ.get("WEB2PY_CONFIG","") == 'test':
-        db = DAL(settings.database_uri,migrate=False,migrate_enabled=False)
+        db = DAL(settings.database_uri, migrate=True)
+        table_migrate_prefix = 'test_runestone_'
+        table_migrate_prefix_test = table_migrate_prefix
     else:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
         db = DAL(settings.database_uri, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
                  migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
-    session.connect(request, response, db, masterapp=None, migrate='runestone_web2py_sessions.table')
+    session.connect(request, response, db, masterapp=None, migrate=table_migrate_prefix + 'web2py_sessions.table')
 
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')

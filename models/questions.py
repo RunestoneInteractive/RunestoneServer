@@ -19,12 +19,12 @@ db.define_table('questions',
 
 db.define_table('tags',
                 Field('tag_name', type='string', unique=True),
-                migrate='runestone_tags.table')
+                migrate=table_migrate_prefix + 'tags.table')
 
 db.define_table('question_tags',
                 Field('question_id', db.questions),
                 Field('tag_id', db.tags),
-                migrate='runestone_question_tags.table')
+                migrate=table_migrate_prefix + 'question_tags.table')
 
 ## assignment <--> questions is a many-to-many relation. This table associates them
 ## points and how it's autograded are properties of a particular use of a question in an assignment,
