@@ -170,42 +170,46 @@ def shutdown(config):
 @cli.command()
 @click.option("--course-name", help="The name of a course to create")
 @click.option("--basecourse", help="The name of the basecourse")
-@click.option("--start-date", help="Start Date for the course in YYYY-MM-DD")
-@click.option("--python3", is_flag=True, help="Use python3 style syntax")
-@click.option("--login-required", is_flag=True, help="Only registered users can access this course?")
-@click.option("--institution", help="Your institution")
+@click.option("--start-date", default='2001-01-01', help="Start Date for the course in YYYY-MM-DD")
+@click.option("--python3", is_flag=True, default=True, help="Use python3 style syntax")
+@click.option("--login-required", is_flag=True, default=True, help="Only registered users can access this course?")
+@click.option("--institution", default='Anonymous', help="Your institution")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
 @click.option("--allow_pairs", is_flag=True, default=False, help="enable experimental pair programming support")
 @pass_config
-def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution, language, host, allow_pairs):
+def addcourse(config, course_name, basecourse, start_date, python3, login_required,
+     institution, language, host, allow_pairs):
     """Create a course in the database"""
 
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
     done = False
+    if course_name:
+        use_defaults = True
+    else:
+        use_defaults = False
     while not done:
         if not course_name:
             course_name = click.prompt("Course Name")
-        if not python3:
+        if not python3 and not use_defaults:
             python3 = 'T' if click.confirm("Use Python3 style syntax?", default='T') else 'F'
         else:
-            python3 = 'T'
-        if not basecourse:
+            python3 = 'T' if python3 else 'F'
+        if not basecourse and not use_defaults:
             basecourse = click.prompt("Base Course")
-        if not start_date:
+        if not start_date and not use_defaults:
             start_date = click.prompt("Start Date YYYY-MM-DD")
-        if not institution:
+        if not institution and not use_defaults:
             institution = click.prompt("Your institution")
-        if not login_required:
+        if not login_required and not use_defaults:
             login_required = 'T' if click.confirm("Require users to log in", default='T') else 'F'
         else:
-            login_required = 'T'
-
-        if not allow_pairs:
+            login_required = 'T' if login_required else 'F'
+        if not allow_pairs and not use_defaults:
             allow_pairs = 'T' if click.confirm("Enable pair programming support", default=False) else 'F'
         else:
-            allow_pairs = 'F'
+            allow_pairs = 'T' if allow_pairs else 'F'
 
         res = eng.execute("select id from courses where course_name = '{}'".format(course_name)).first()
         if not res:
@@ -219,7 +223,6 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
 
     click.echo("Course added to DB successfully")
 
-    makePavement(host, python3, login_required, course_name, basecourse, language, allow_pairs)
 
 #
 #    build
@@ -532,32 +535,6 @@ def findProjectRoot():
         start = os.path.dirname(start)
     raise IOError("You must be in a web2py application to run rsmanage")
 
-
-def makePavement(http_host, python3, login_required, course_name, base_course, language, allow_pairs):
-    paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
-    opts = {'master_url': 'https://' + http_host,
-            'project_name': course_name,
-            'build_dir': 'build',
-            'log_level': 10,
-            'use_services': 'true',
-            'dburl': os.environ.get("DBURL"),
-            'basecourse': base_course,
-            'default_ac_lang': language,
-            'downloads_enabled': 'false',
-            'enable_chatcodes': 'false',
-            'login_req': 'true' if login_required else 'false',
-            'python3': 'true' if python3 else 'false',
-            'dest': '../../static',
-            'allow_pairs': 'true' if allow_pairs else 'false',
-            'short_name': course_name
-            }
-
-    paver_stuff = paver_stuff % opts
-    if not os.path.exists(os.path.join(CUSTOMDIR,course_name)):
-        os.mkdir(os.path.join(CUSTOMDIR,course_name))
-
-    with open(os.path.join(CUSTOMDIR, course_name, 'pavement.py'), 'w') as fp:
-        fp.write(paver_stuff)
 
 #
 #    fill_practice_log_missings
