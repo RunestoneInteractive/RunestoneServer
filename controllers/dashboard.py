@@ -1,12 +1,8 @@
 # pylint: good-names=auth, settings, db
 
-from os import path
-import os
 import logging
-from datetime import date, timedelta, datetime
 from operator import itemgetter
 from collections import OrderedDict
-from paver.easy import sh
 import six
 import pandas as pd
 
