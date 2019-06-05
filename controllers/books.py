@@ -59,6 +59,8 @@ def _route_book(is_published=True, is_open=False):
     if course.base_course != base_course:
         redirect(URL(c='default', f='courses'))
 
+    user_is_instructor = 'true' if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user) else 'false'
+
     # Make this an absolute path.
     book_path = safe_join(os.path.join(request.folder, 'books', base_course,
         'published' if is_published else 'build', base_course),
@@ -85,7 +87,7 @@ def _route_book(is_published=True, is_open=False):
             user_id = 'Anonymous'
             email = ''
         return dict(course_name=course.course_name, base_course=base_course,
-                    user_id=user_id, email=email)
+                    user_id=user_id, email=email, is_instructor=user_is_instructor)
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
