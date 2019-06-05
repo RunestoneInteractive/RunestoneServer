@@ -515,7 +515,7 @@ def checkEnvironment():
             if var not in os.environ:
                 stop = True
                 click.echo("Missing definition for {} environment variable".format(var))
-    elif config == 'test'
+    elif config == 'test':
         if 'TEST_DBURL' not in os.environ:
             stop = True
             click.echo("Missing definition for TEST_DBURL environment variable"
