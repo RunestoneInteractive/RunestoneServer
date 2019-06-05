@@ -29,11 +29,13 @@ put them in a folder called "configs" in the root of the repository:  The format
 username,email,first_name,last_name,pw,course
 ```
 
-This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.
+This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.  From the $RUNESTONE_PATH directory (top level of runestone) you can exectue the following commands:
 
 
 ```bash
-$ mkdir -p
+$ mkdir -p configs
+$ cp instructors.csv configs
+$ cp students.csv configs
 ```
 
 ### 3. Build
