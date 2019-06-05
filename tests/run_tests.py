@@ -29,11 +29,13 @@ COVER_DIRS = 'applications/runestone/modules,applications/runestone/controllers,
 
 # Assume we are running with working directory in tests
 
+
 # Functions
 # =========
 # Let web2py recreate certain tables not in the test database by removing their
 # migration metadata.
 def remove_web2py_tables():
+    print('Removing web2py test database migration information (.table files).')
     for path in glob.glob('../databases/test_runestone_*.table'):
         os.remove(path)
 
@@ -136,6 +138,7 @@ if __name__ == '__main__':
     with pushd('../../..'):
         if extra_args:
             print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
+        xqt('ls -la applications/runestone/databases')
         # Now run tests.
         xqt('{} -m coverage erase'.format(sys.executable),
             '{} -m pytest -v applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
