@@ -518,7 +518,11 @@ def checkEnvironment():
     elif config == 'test':
         if 'TEST_DBURL' not in os.environ:
             stop = True
-            click.echo("Missing definition for TEST_DBURL environment variable"
+            click.echo("Missing definition for TEST_DBURL environment variable")
+    elif config == 'development':
+        if 'DEV_DBURL' not in os.environ:
+            stop = True
+            click.echo("Missing definition for DEV_DBURL environment variable")
 
     for var in OPT_ENV:
         if var not in os.environ:
