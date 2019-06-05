@@ -83,50 +83,33 @@ if __name__ == '__main__':
     else:
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt('dropdb --echo --if-exists --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
-            'createdb --echo --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
-            'psql  --host={} --username={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
-        # Tell web2py that tables have been removed from the database so that
-        # its migration algorithm will re-create them.
-        remove_web2py_tables()
+        xqt('rsmanage --verbose initdb --reset --force',
+            'psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
 
         if parsed_args.rebuildgrades:
-            # Paranoia: if the existing ``runestone_test.sql`` database contains
-            # broken tables, remove all tables that web2py can re-create to
-            # return the databased to a fixed state.
-            xqt('psql "{}" < runestone_clean.sql'.format(dbname))
             with pushd('../../..'):
                 print("recalculating grades tables")
                 # TODO: This causes test failures when run.
-                #xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
+                xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))
 
-            # Copy the test book to the books directory.
-            rmtree('../books/test_course_1', ignore_errors=True)
-            # Sometimes this fails for no good reason on Windows. Retry.
-            for retry in range(100):
-                try:
-                    copytree('test_course_1', '../books/test_course_1')
-                    break
-                except WindowsError:
-                    if retry == 99:
-                        raise
-            # Build the test book to add in db fields needed.
-            with pushd('../books/test_course_1'):
-                # The runestone build process only looks at ``DBURL``.
-                os.environ['DBURL'] = os.environ['TEST_DBURL']
-                xqt('{} -m runestone build --all'.format(sys.executable),
-                    '{} -m runestone deploy'.format(sys.executable))
+        # Copy the test book to the books directory.
+        rmtree('../books/test_course_1', ignore_errors=True)
+        # Sometimes this fails for no good reason on Windows. Retry.
+        for retry in range(100):
+            try:
+                copytree('test_course_1', '../books/test_course_1')
+                break
+            except WindowsError:
+                if retry == 99:
+                    raise
+        # Build the test book to add in db fields needed.
+        #xqt('rsmanage addcourse --course-name=test_course_1 --basecourse=test_course_1')
+        with pushd('../books/test_course_1'):
+            # The runestone build process only looks at ``DBURL``.
+            os.environ['DBURL'] = os.environ['TEST_DBURL']
+            xqt('{} -m runestone build --all'.format(sys.executable),
+                '{} -m runestone deploy'.format(sys.executable))
 
-            print("dumping the data")
-            # Remove all tables that web2py will re-create before saving the
-            # database. This is the second database clean (the first happens
-            # before recalculating the grades tables), since the recalculation
-            # re-creates the tables.
-            remove_web2py_tables()
-            xqt(
-                'psql "{}" < runestone_clean.sql'.format(dbname),
-                'pg_dump --no-owner "{}" > runestone_test.sql'.format(dbname),
-            )
 
     with pushd('../../..'):
         if extra_args:
