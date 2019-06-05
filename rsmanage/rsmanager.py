@@ -12,7 +12,7 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 
 # configuration
 REQ_ENV = ['WEB2PY_CONFIG', 'DBURL']
-OPT_ENV = ['TEST_DBURL','WEB2PY_MIGRATE']
+OPT_ENV = ['WEB2PY_MIGRATE']
 APP = 'runestone'
 APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
@@ -507,10 +507,18 @@ def checkEnvironment():
     Check the list of required and optional environment variables to be sure they are defined.
     """
     stop = False
-    for var in REQ_ENV:
-        if var not in os.environ:
+    assert os.environ['WEB2PY_CONFIG']
+    config = os.environ['WEB2PY_CONFIG']
+
+    if config  == 'production':
+        for var in REQ_ENV:
+            if var not in os.environ:
+                stop = True
+                click.echo("Missing definition for {} environment variable".format(var))
+    elif config == 'test'
+        if 'TEST_DBURL' not in os.environ:
             stop = True
-            click.echo("Missing definition for {} environment variable".format(var))
+            click.echo("Missing definition for TEST_DBURL environment variable"
 
     for var in OPT_ENV:
         if var not in os.environ:
