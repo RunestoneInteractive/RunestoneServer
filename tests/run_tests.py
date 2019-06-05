@@ -78,14 +78,21 @@ if __name__ == '__main__':
     # Per https://docs.python.org/2/library/argparse.html#partial-parsing, gather any known args. These will be passed to pytest.
     parsed_args, extra_args = parser.parse_known_args()
 
+    # Load a database using psql.
+    def psql_load(db_name):
+        xqt('psql --host={} --username={} "{}" < {}'.format(pgnetloc, pguser,
+                                                            dbname, db_name))
+
     if parsed_args.skipdbinit:
         print('Skipping DB initialization.')
     else:
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt('dropdb --echo --if-exists --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
-            'createdb --echo --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
-            'psql  --host={} --username={} "{}" < runestone_test.sql'.format(pgnetloc, pguser, dbname))
+        xqt(
+            'dropdb --echo --if-exists --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname),
+            'createdb --echo --host={} --username={} "{}"'.format(pgnetloc, pguser, dbname)
+        )
+        psql_load('runestone_test.sql')
         # Tell web2py that tables have been removed from the database so that
         # its migration algorithm will re-create them.
         remove_web2py_tables()
@@ -94,7 +101,7 @@ if __name__ == '__main__':
             # Paranoia: if the existing ``runestone_test.sql`` database contains
             # broken tables, remove all tables that web2py can re-create to
             # return the databased to a fixed state.
-            xqt('psql "{}" < runestone_clean.sql'.format(dbname))
+            psql_load('runestone_clean.sql')
             with pushd('../../..'):
                 print("recalculating grades tables")
                 # TODO: This causes test failures when run.
@@ -123,10 +130,8 @@ if __name__ == '__main__':
             # before recalculating the grades tables), since the recalculation
             # re-creates the tables.
             remove_web2py_tables()
-            xqt(
-                'psql "{}" < runestone_clean.sql'.format(dbname),
-                'pg_dump --no-owner "{}" > runestone_test.sql'.format(dbname),
-            )
+            psql_load('runestone_clean.sql')
+            xqt('pg_dump --no-owner "{}" > runestone_test.sql'.format(dbname))
 
     with pushd('../../..'):
         if extra_args:
