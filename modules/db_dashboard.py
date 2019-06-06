@@ -2,11 +2,12 @@ from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
 import six
+from gluon import current
 
-rslogger = logging.getLogger(settings.logger)
-rslogger.setLevel(settings.log_level)
+rslogger = logging.getLogger(current.settings.logger)
+rslogger.setLevel(current.settings.log_level)
 
-#db.define_table('dash_problem_answers',
+#current.db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
 #  Field('sid','string'),
 #  Field('event','string'),
@@ -17,7 +18,7 @@ rslogger.setLevel(settings.log_level)
 #)
 
 
-#db.define_table('dash_problem_user_metrics',
+#current.db.define_table('dash_problem_user_metrics',
 #  Field('timestamp','datetime'),
 #  Field('sid','string'),
 #  Field('event','string'),
@@ -30,6 +31,8 @@ rslogger.setLevel(settings.log_level)
 # it would be good at some point to save these to a table and
 # periodicly update them with new log entries instead of having
 # to regenerate the entire collection of metrics everytime.
+
+
 class ProblemMetrics(object):
     def __init__(self, course_id, problem_id, users):
         self.course_id = course_id
@@ -119,19 +122,19 @@ class CourseProblemMetrics(object):
         rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
         rslogger.debug("doing chapter {}".format(self.chapter))
         # todo:  Join this with questions so that we can limit the questions to the selected chapter
-        mcans = db((db.mchoice_answers.course_name==course_name) &
-                   (db.mchoice_answers.div_id == db.questions.name) &
-                   (db.questions.chapter == self.chapter.chapter_label)
-                    ).select(orderby=db.mchoice_answers.timestamp)
+        mcans = current.db((current.db.mchoice_answers.course_name==course_name) &
+                   (current.db.mchoice_answers.div_id == current.db.questions.name) &
+                   (current.db.questions.chapter == self.chapter.chapter_label)
+                    ).select(orderby=current.db.mchoice_answers.timestamp)
         rslogger.debug("Found {} exercises")
-        fbans = db((db.fitb_answers.course_name==course_name) &
-                   (db.fitb_answers.div_id == db.questions.name) &
-                   (db.questions.chapter == self.chapter.chapter_label)
-                   ).select(orderby=db.fitb_answers.timestamp)
-        psans = db((db.parsons_answers.course_name==course_name) &
-                   (db.parsons_answers.div_id == db.questions.name) &
-                   (db.questions.chapter == self.chapter.chapter_label)
-                   ).select(orderby=db.parsons_answers.timestamp)
+        fbans = current.db((current.db.fitb_answers.course_name==course_name) &
+                   (current.db.fitb_answers.div_id == current.db.questions.name) &
+                   (current.db.questions.chapter == self.chapter.chapter_label)
+                   ).select(orderby=current.db.fitb_answers.timestamp)
+        psans = current.db((current.db.parsons_answers.course_name==course_name) &
+                   (current.db.parsons_answers.div_id == current.db.questions.name) &
+                   (current.db.questions.chapter == self.chapter.chapter_label)
+                   ).select(orderby=current.db.parsons_answers.timestamp)
 
         # convert the numeric answer to letter answers to match the questions easier.
         to_letter = dict(zip("0123456789", "ABCDEFGHIJ"))
@@ -222,7 +225,7 @@ class UserActivitySubChapterProgress(object):
 
     def get_sub_chapter_progress(self):
         subchapters = []
-        subchapter_res = db(db.sub_chapters.chapter_id == self.chapter_id).select()
+        subchapter_res = current.db(current.db.sub_chapters.chapter_id == self.chapter_id).select()
         sub_chapter_label_to_text = {sc.sub_chapter_label : sc.sub_chapter_name for sc in subchapter_res}
         for subchapter_label, status in six.iteritems(self.sub_chapters):
             subchapters.append({
@@ -263,7 +266,7 @@ class ProgressMetrics(object):
             try:
                 self.sub_chapters[row.user_sub_chapter_progress.sub_chapter_id].add_activity(row)
             except KeyError as  e:
-                rslogger.debug("Key error for {} user is {}".format(row.user_sub_chapter_progress.sub_chapter_id, auth.user.username))
+                rslogger.debug("Key error for {} user is {}".format(row.user_sub_chapter_progress.sub_chapter_id, current.auth.user.username))
 
 
 
@@ -347,19 +350,19 @@ class DashboardDataAnalyzer(object):
         self.db_chapter = chapter
         #go get all the course data... in the future the post processing
         #should probably be stored and only new data appended.
-        self.course = db(db.courses.id == self.course_id).select().first()
+        self.course = current.db(current.db.courses.id == self.course_id).select().first()
         rslogger.debug("COURSE QUERY GOT %s", self.course)
-        self.users = db((db.auth_user.course_id == auth.user.course_id) & (db.auth_user.active == 'T') ).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name, db.auth_user.id)
-        self.instructors = db((db.course_instructor.course == auth.user.course_id)).select(db.course_instructor.instructor)
+        self.users = current.db((current.db.auth_user.course_id == current.auth.user.course_id) & (current.db.auth_user.active == 'T') ).select(current.db.auth_user.username, current.db.auth_user.first_name,current.db.auth_user.last_name, current.db.auth_user.id)
+        self.instructors = current.db((current.db.course_instructor.course == current.auth.user.course_id)).select(current.db.course_instructor.instructor)
         inums = [x.instructor for x in self.instructors]
         self.users.exclude(lambda x: x.id in inums)
-        self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
+        self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) & (current.db.useinfo.timestamp >= self.course.term_start_date)).select(current.db.useinfo.timestamp,current.db.useinfo.sid, current.db.useinfo.event,current.db.useinfo.act,current.db.useinfo.div_id, orderby=current.db.useinfo.timestamp)
         # todo:  Yikes!  Loading all of the log data for a large or even medium class is a LOT
-        self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == db.auth_user.id) &
-            (db.auth_user.course_id == auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
-            (db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(db.auth_user.username,db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status,db.auth_user.id)
+        self.db_chapter_progress = current.db((current.db.user_sub_chapter_progress.user_id == current.db.auth_user.id) &
+            (current.db.auth_user.course_id == current.auth.user.course_id) &  # todo: missing link from course_id to chapter/sub_chapter progress
+            (current.db.user_sub_chapter_progress.chapter_id == chapter.chapter_label)).select(current.db.auth_user.username,current.db.user_sub_chapter_progress.chapter_id,current.db.user_sub_chapter_progress.sub_chapter_id,current.db.user_sub_chapter_progress.status,current.db.auth_user.id)
         self.db_chapter_progress.exclude(lambda x: x.auth_user.id in inums)
-        self.db_sub_chapters = db((db.sub_chapters.chapter_id == chapter.id)).select(db.sub_chapters.ALL,orderby=db.sub_chapters.id)
+        self.db_sub_chapters = current.db((current.db.sub_chapters.chapter_id == chapter.id)).select(current.db.sub_chapters.ALL,orderby=current.db.sub_chapters.id)
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
@@ -369,41 +372,41 @@ class DashboardDataAnalyzer(object):
         self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
         self.questions = {}
         for i in self.problem_metrics.problems.keys():
-            self.questions[i] = db(db.questions.name == i).select(db.questions.chapter, db.questions.subchapter).first()
+            self.questions[i] = current.db(current.db.questions.name == i).select(current.db.questions.chapter, current.db.questions.subchapter).first()
 
     def load_user_metrics(self, username):
         self.username = username
-        self.course = db(db.courses.id == self.course_id).select().first()
+        self.course = current.db(current.db.courses.id == self.course_id).select().first()
         if not self.course:
             rslogger.debug("ERROR - NO COURSE course_id = {}".format(self.course_id))
 
-        self.chapters = db(db.chapters.course_id == auth.user.course_name).select()
-        self.user = db((db.auth_user.username == username) &
-                       (db.auth_user.course_id == self.course_id)).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email, db.auth_user.username).first()
+        self.chapters = current.db(current.db.chapters.course_id == current.auth.user.course_name).select()
+        self.user = current.db((current.db.auth_user.username == username) &
+                       (current.db.auth_user.course_id == self.course_id)).select(current.db.auth_user.id, current.db.auth_user.first_name, current.db.auth_user.last_name, current.db.auth_user.email, current.db.auth_user.username).first()
         if not self.user:
             rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
             session.flash = 'Please make sure you are in the correct course'
             redirect('/runestone/default/courses')
 
-        self.logs = db((db.useinfo.course_id==self.course.course_name) &
-                       (db.useinfo.sid == username) &
-                       (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=~db.useinfo.timestamp)
-        self.db_chapter_progress = db((db.user_sub_chapter_progress.user_id == self.user.id)).select(db.user_sub_chapter_progress.chapter_id,db.user_sub_chapter_progress.sub_chapter_id,db.user_sub_chapter_progress.status)
+        self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) &
+                       (current.db.useinfo.sid == username) &
+                       (current.db.useinfo.timestamp >= self.course.term_start_date)).select(current.db.useinfo.timestamp,current.db.useinfo.sid, current.db.useinfo.event,current.db.useinfo.act,current.db.useinfo.div_id, orderby=~current.db.useinfo.timestamp)
+        self.db_chapter_progress = current.db((current.db.user_sub_chapter_progress.user_id == self.user.id)).select(current.db.user_sub_chapter_progress.chapter_id,current.db.user_sub_chapter_progress.sub_chapter_id,current.db.user_sub_chapter_progress.status)
         self.formatted_activity = UserLogCategorizer(self.logs)
         self.chapter_progress = UserActivityChapterProgress(self.chapters, self.db_chapter_progress)
 
     def load_exercise_metrics(self, exercise):
-        self.course = db(db.courses.id == self.course_id).select().first()
-        self.users = db(db.auth_user.course_id == auth.user.course_id).select(db.auth_user.username, db.auth_user.first_name,db.auth_user.last_name)
-        self.logs = db((db.useinfo.course_id==self.course.course_name) & (db.useinfo.timestamp >= self.course.term_start_date)).select(db.useinfo.timestamp,db.useinfo.sid, db.useinfo.event,db.useinfo.act,db.useinfo.div_id, orderby=db.useinfo.timestamp)
+        self.course = current.db(current.db.courses.id == self.course_id).select().first()
+        self.users = current.db(current.db.auth_user.course_id == current.auth.user.course_id).select(current.db.auth_user.username, current.db.auth_user.first_name,current.db.auth_user.last_name)
+        self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) & (current.db.useinfo.timestamp >= self.course.term_start_date)).select(current.db.useinfo.timestamp,current.db.useinfo.sid, current.db.useinfo.event,current.db.useinfo.act,current.db.useinfo.div_id, orderby=current.db.useinfo.timestamp)
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users,self.db_chapter)
         self.problem_metrics.update_metrics(self.course.course_name)
 
     def load_assignment_metrics(self, username, studentView=False):
         self.assignments = []
 
-        res = db(db.assignments.course == self.course_id)\
-                .select(db.assignments.id, db.assignments.name, db.assignments.points, db.assignments.duedate, db.assignments.released)
+        res = current.db(current.db.assignments.course == self.course_id)\
+                .select(current.db.assignments.id, current.db.assignments.name, current.db.assignments.points, current.db.assignments.duedate, current.db.assignments.released)
                 # ^ Get assignments from DB
         for aRow in res:
             self.assignments.append(aRow.as_dict())
@@ -411,8 +414,8 @@ class DashboardDataAnalyzer(object):
         self.grades = {}
         for assign in self.assignments:
             rslogger.debug("Processing assignment %s",assign)
-            row = db((db.grades.assignment == assign["id"]) & (db.grades.auth_user == db.auth_user.id))\
-                    .select(db.auth_user.username, db.grades.auth_user, db.grades.score, db.grades.assignment)
+            row = current.db((current.db.grades.assignment == assign["id"]) & (current.db.grades.auth_user == current.db.auth_user.id))\
+                    .select(current.db.auth_user.username, current.db.grades.auth_user, current.db.grades.score, current.db.grades.assignment)
                     # ^ Get grades for assignment
 
             if row.records:             # If the row has a result
@@ -451,7 +454,7 @@ class DashboardDataAnalyzer(object):
                                                "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
 
 # This whole object is a workaround because these strings
-# are not generated and stored in the db. This needs automating
+# are not generated and stored in the current.db. This needs automating
 # to support all books.
 class IdConverter(object):
     problem_id_map = {

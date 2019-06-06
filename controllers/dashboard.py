@@ -5,6 +5,7 @@ from operator import itemgetter
 from collections import OrderedDict
 import six
 import pandas as pd
+from db_dashboard import DashboardDataAnalyzer
 
 
 logger = logging.getLogger(settings.logger)

@@ -19,6 +19,7 @@ from collections import OrderedDict
 # -------------------
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+from db_dashboard import DashboardDataAnalyzer
 import six
 import bleach
 
