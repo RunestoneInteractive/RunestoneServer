@@ -153,7 +153,7 @@ db.define_table('assignment_types',
     Field('assignments_count', default=0),
     Field('assignments_dropped', default=0),
     format='%(names)s',
-    migrate='runestone_assignment_types.table',
+    migrate=table_migrate_prefix + 'assignment_types.table',
     )
 
 
@@ -171,7 +171,7 @@ db.define_table('assignments',
     Field('duedate','datetime'),
     Field('visible','boolean'),
     format='%(name)s',
-    migrate='runestone_assignments.table'
+    migrate=table_migrate_prefix + 'assignments.table'
     )
 
 class score(object):
@@ -638,7 +638,7 @@ db.define_table('grades',
     Field('projected', 'double'),
     Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the external gradebook
     Field('lis_outcome_url', 'string'), #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
-    migrate='runestone_grades.table',
+    migrate=table_migrate_prefix + 'grades.table',
     )
 
 db.define_table('practice_grades',
@@ -649,7 +649,7 @@ db.define_table('practice_grades',
                 # guid for the student x assignment cell in the external gradebook
                 Field('lis_outcome_url', 'string'),
                 # web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
-                migrate='runestone_practice_grades.table',
+                migrate=table_migrate_prefix + 'practice_grades.table',
                 )
 
 # deprecated; now storing deadlines directly in assignments table, so no separate deadlines for different sections
@@ -669,5 +669,5 @@ db.define_table('question_grades',
     Field('deadline', 'datetime'),
     Field('score', type='double'),
     Field('comment', type ='text'),
-    migrate='runestone_question_grades.table',
+    migrate=table_migrate_prefix + 'question_grades.table',
     )

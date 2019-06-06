@@ -14,7 +14,7 @@ db.define_table('questions',
                 Field('autograde', type='string'),
                 Field('topic', type='string'),
                 Field('feedback', type='text'),
-                migrate='runestone_questions.table')
+                migrate=table_migrate_prefix + 'questions.table')
 
 
 db.define_table('tags',
@@ -40,4 +40,4 @@ db.define_table('assignment_questions',
                                                              # Also use this when it's an mchoice or parsons that's within a subchapter, not to be embeddedon the assignment page
                 Field('sorting_priority', type='integer'), #determines sort order of questions when displaying
                 Field('activities_required', type='integer'), # specifies how many activities in a sub chapter a student must perform in order to receive credit
-                migrate='runestone_assignment_questions.table')
+                migrate=table_migrate_prefix + 'assignment_questions.table')

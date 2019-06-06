@@ -6,7 +6,7 @@ db.define_table('chapters',
   Field('course_id','string'), # references courses(course_name)
   Field('chapter_label','string'), #no spaces, actual filename path
   Field('chapter_num', 'integer'), # optional but nice to have for books that are numbered
-  migrate='runestone_chapters.table'
+  migrate=table_migrate_prefix + 'chapters.table'
 )
 
 # table of sub chapters
@@ -17,7 +17,7 @@ db.define_table('sub_chapters',
   Field('sub_chapter_label','string'), # no spaces, actual filename path
   Field('skipreading', 'boolean'), # If true do not include this subchapter in the readings picker
   Field('sub_chapter_num', 'integer'),
-  migrate='runestone_sub_chapters.table'
+  migrate=table_migrate_prefix + 'sub_chapters.table'
 )
 
 db.define_table('user_chapter_progress',
@@ -26,7 +26,7 @@ db.define_table('user_chapter_progress',
   Field('start_date','datetime', default=datetime.datetime.utcnow()),
   Field('end_date','datetime'),
   Field('status','integer'), #-1  - not started. 0 - active. 1 - completed
-  migrate='runestone_user_chapter_progress.table'
+  migrate=table_migrate_prefix + 'user_chapter_progress.table'
 )
 
 db.define_table('user_sub_chapter_progress',
@@ -36,7 +36,7 @@ db.define_table('user_sub_chapter_progress',
   Field('start_date','datetime', default=datetime.datetime.utcnow()),
   Field('end_date','datetime'),
   Field('status','integer'), #-1  - not started. 0 - active. 1 - completed
-  migrate='runestone_user_sub_chapter_progress.table'
+  migrate=table_migrate_prefix + 'user_sub_chapter_progress.table'
 )
 
 db.define_table('sub_chapter_taught',

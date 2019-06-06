@@ -8,7 +8,7 @@ db.define_table('sections',
     label=('Course ID'),
     required=True
     ),
-  migrate='runestone_sections.table'
+  migrate=table_migrate_prefix + 'sections.table'
   )
 class ExtendedSection(object):
   def get_users(self):

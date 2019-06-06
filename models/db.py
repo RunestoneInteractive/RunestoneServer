@@ -19,7 +19,7 @@ table_migrate_prefix_test = ''
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     if os.environ.get("WEB2PY_CONFIG","") == 'test':
-        db = DAL(settings.database_uri, migrate=True)
+        db = DAL(settings.database_uri, migrate=True, adapter_args=dict(logfile='test_runestone_migrate.log'))
         table_migrate_prefix = 'test_runestone_'
         table_migrate_prefix_test = table_migrate_prefix
     else:
@@ -91,7 +91,7 @@ db.define_table('courses',
   Field('login_required', type='boolean', default=True),
   Field('allow_pairs', type='boolean', default=False),
   Field('student_price', type='integer'),
-  migrate='runestone_courses.table'
+  migrate=table_migrate_prefix + 'courses.table'
 )
 
 
@@ -127,7 +127,7 @@ db.define_table('cohort_master',
   Field('is_active','integer', #0 - deleted / inactive. 1 - active
   writable=False,readable=False),
   Field('course_name', 'string'),
-  migrate='runestone_cohort_master.table'
+  migrate=table_migrate_prefix + 'cohort_master.table'
   )
 
 ########################################
@@ -207,7 +207,7 @@ db.define_table('auth_user',
     Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ''),
-    migrate='runestone_auth_user.table')
+    migrate=table_migrate_prefix + 'auth_user.table')
 
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -219,7 +219,7 @@ db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_emai
                                IS_NOT_IN_DB(db, db.auth_user.email))
 db.auth_user.course_id.requires = IS_COURSE_ID()
 
-auth.define_tables(username=True, signature=False, migrate='runestone_')
+auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + '')
 
 
 ## configure email
@@ -257,7 +257,7 @@ db.define_table('user_courses',
                 Field('course_id', db.courses, ondelete='CASCADE'),
                 Field('user_id', db.auth_user),
                 Field('course_id', db.courses),
-                migrate='runestone_user_courses.table')
+                migrate=table_migrate_prefix + 'user_courses.table')
 # For whatever reason the automatic migration of this table failed.  Need the following manual statements
 # alter table user_courses alter column user_id type integer using user_id::integer;
 # alter table user_courses alter column course_id type integer using course_id::integer;

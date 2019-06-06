@@ -13,7 +13,7 @@ rslogger.setLevel(settings.log_level)
 #  Field('act','string'),
 #  Field('div_id','string'),
 #  Field('course_id','string'),
-#  migrate='runestone_useinfo.table'
+#  migrate=table_migrate_prefix + 'useinfo.table'
 #)
 
 
@@ -24,7 +24,7 @@ rslogger.setLevel(settings.log_level)
 #  Field('act','string'),
 #  Field('div_id','string'),
 #  Field('course_id','string'),
-#  migrate='runestone_useinfo.table'
+#  migrate=table_migrate_prefix + 'useinfo.table'
 #)
 
 # it would be good at some point to save these to a table and
