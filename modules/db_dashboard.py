@@ -188,7 +188,7 @@ class UserActivity(object):
         # returns page views for the last 7 days
         recentViewCount = 0
         current = len(self.rows) - 1
-        while current >= 0 and self.rows[current]['timestamp'] >= datetime.datetime.utcnow() - timedelta(days=7):
+        while current >= 0 and self.rows[current]['timestamp'] >= datetime.utcnow() - timedelta(days=7):
             recentViewCount += 1
             current = current - 1
         return recentViewCount
@@ -386,7 +386,7 @@ class DashboardDataAnalyzer(object):
         if not self.user:
             rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
             current.session.flash = 'Please make sure you are in the correct course'
-            current.redirect('/runestone/default/courses')
+            current.redirect(URL('default', 'courses'))
             # TODO: calling redirect here is kind of a hacky way to handle this.
 
         self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) &
@@ -455,7 +455,7 @@ class DashboardDataAnalyzer(object):
                                                "due_date":assign["duedate"].date().strftime("%m-%d-%Y")}
 
 # This whole object is a workaround because these strings
-# are not generated and stored in the current.db. This needs automating
+# are not generated and stored in the db. This needs automating
 # to support all books.
 class IdConverter(object):
     problem_id_map = {
@@ -479,4 +479,4 @@ class IdConverter(object):
 
     @staticmethod
     def problem_id_to_text(problem_id):
-        return IdConverter.problem_id_map.get(problem_id, problem_id)
+        return IdConverter.problem_id_map.get(problem_id, "DEFUALT NAME USED WHERE??")
