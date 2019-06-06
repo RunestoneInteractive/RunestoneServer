@@ -344,7 +344,7 @@ class DashboardDataAnalyzer(object):
     def load_chapter_metrics(self, chapter):
         if not chapter:
             rslogger.error("chapter not set, abort!")
-            session.flash = "Error No Course Data in DB"
+            current.session.flash = "Error No Course Data in DB"
             return
 
         self.db_chapter = chapter
@@ -385,8 +385,9 @@ class DashboardDataAnalyzer(object):
                        (current.db.auth_user.course_id == self.course_id)).select(current.db.auth_user.id, current.db.auth_user.first_name, current.db.auth_user.last_name, current.db.auth_user.email, current.db.auth_user.username).first()
         if not self.user:
             rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
-            session.flash = 'Please make sure you are in the correct course'
-            redirect('/runestone/default/courses')
+            current.session.flash = 'Please make sure you are in the correct course'
+            current.redirect('/runestone/default/courses')
+            # TODO: calling redirect here is kind of a hacky way to handle this.
 
         self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) &
                        (current.db.useinfo.sid == username) &

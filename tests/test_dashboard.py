@@ -28,15 +28,21 @@ class TestDashboardEndpoints(unittest.TestCase):
     def setUp(self):
         global request, session, auth
         request = Request(globals()) # Use a clean Request object
+        request.folder = "/srv/web2py/applications/runestone/"
         session = Session()
+        Auth.expiration = 3600
         auth = Auth(db, hmac_key=Auth.get_or_create_key())
         exec(compile(open("applications/runestone/controllers/dashboard.py").read(), "applications/runestone/controllers/dashboard.py", 'exec'), globals())
 
 
     def testStudentReport(self):
+        from gluon import current
         auth.login_user(db.auth_user(1674))
         session.auth = auth
         request.vars.id=auth.user.username
+        current.request = request
+        current.session = session
+        current.auth = auth
 
         res = studentreport()   #todo: if this is an endoint why does it not return json?
 
@@ -52,6 +58,9 @@ class TestDashboardEndpoints(unittest.TestCase):
         auth.login_user(db.auth_user(11))
         session.auth = auth
         request.vars.tablekind = 'sccount'
+        current.request = request
+        current.session = session
+        current.auth = auth
 
         res = subchapoverview()
         self.assertIsNotNone(res)

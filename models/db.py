@@ -63,6 +63,7 @@ crud, service, plugins = Crud(db), Service(), PluginManager()
 current.db = db
 current.settings = settings
 current.auth = auth
+current.redirect = redirect
 
 if settings.enable_captchas:
     ## Enable captcha's :-(
