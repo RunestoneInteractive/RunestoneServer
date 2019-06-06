@@ -1,10 +1,15 @@
 # Docker Deployment
 
-Using [docker-compose](https://docs.docker.com/compose/install/) and [Docker](https://docs.docker.com/install/)
+Using Docker,
 we can easily bring up the server without needing to install dependencies
-on the host. If you haven't yet, visit the links to install both docker-compose and docker.
+on the host.
 
 ## Setup
+
+### 0. Install Docker
+
+1. Follow the [Docker installation guide](https://docs.docker.com/install/#supported-platforms). On Linux, make sure to also perform the [post-installation steps](https://docs.docker.com/install/linux/linux-postinstall/).
+2. [Install Docker Compose](https://docs.docker.com/compose/install/).
 
 ### 1. Add Books
 
@@ -22,14 +27,14 @@ After cloning the book edit the pavement.py file.  It is **critical** that the `
 
 ### 2. Add Users
 
-If you have an instructors.csv or students.csv that you want to add to the database,
-put them in a folder called "configs" in the root of the repository:  The format of the csv files is to have one person per line with the format of each line as follows:
+If you have an `instructors.csv` or `students.csv` that you want to add to the database,
+put them in a folder called `configs` in the root of the repository. The format of the csv files is to have one person per line with the format of each line as follows:
 
 ```
 username,email,first_name,last_name,pw,course
 ```
 
-This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.  From the $RUNESTONE_PATH directory (top level of runestone) you can exectue the following commands:
+This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.  From the `$RUNESTONE_PATH` directory (top level of runestone) you can exectue the following commands:
 
 
 ```bash
@@ -43,7 +48,7 @@ $ cp students.csv configs
 First, build the application container.
 
 ```bash
-$ docker build -t runstone/server .
+$ docker build -t runestone/server .
 ```
 
 This build step *only needs to be done once* and only again if you need
