@@ -7,7 +7,7 @@ db.define_table('useinfo',
   Field('act','string'),
   Field('div_id','string'),
   Field('course_id','string'),
-  migrate='runestone_useinfo.table'
+  migrate=table_migrate_prefix + 'useinfo.table'
 )
 
 # stores student's saved code and, unfortunately, comments and grades, which really should be their own table linked to this
@@ -21,7 +21,7 @@ db.define_table('code',
   Field('timestamp','datetime'),
   Field('comment','text'),
   Field('language','text', default='python'),
-  migrate='runestone_code.table'
+  migrate=table_migrate_prefix + 'code.table'
 )
 
 # Stores the source code for activecodes, including prefix and suffix code, so that prefixes and suffixes can be run when grading
@@ -33,7 +33,7 @@ db.define_table('source_code',
   Field('available_files', 'string'), # comma-separated string of file_names to make available as divs when running this source_code
   Field('main_code','text'),
   Field('suffix_code', 'text'), # hidden suffix code
-  migrate='runestone_source_code.table'
+  migrate=table_migrate_prefix + 'source_code.table'
 )
 
 db.define_table('acerror_log',
@@ -63,7 +63,7 @@ db.define_table('user_state',
 db.define_table('course_instructor',
     Field('course', db.courses ),
     Field('instructor', db.auth_user),
-    migrate='runestone_course_instructor.table'
+    migrate=table_migrate_prefix + 'course_instructor.table'
 )
 
 db.define_table('coach_hints',
@@ -98,7 +98,7 @@ db.define_table('mchoice_answers',
     Field('course_name','string'),
     Field('answer','string', length=50),
     Field('correct','boolean'),
-    migrate='runestone_mchoice_answers.table'
+    migrate=table_migrate_prefix + 'mchoice_answers.table'
     )
 
 db.define_table('fitb_answers',
@@ -108,7 +108,7 @@ db.define_table('fitb_answers',
     Field('course_name','string'),
     Field('answer','string'),
     Field('correct','boolean'),
-    migrate='runestone_fitb_answers.table'
+    migrate=table_migrate_prefix + 'fitb_answers.table'
     )
 db.define_table('dragndrop_answers',
     Field('timestamp','datetime'),
@@ -118,7 +118,7 @@ db.define_table('dragndrop_answers',
     Field('answer','string'),
     Field('correct','boolean'),
     Field('minHeight','string'),
-    migrate='runestone_dragndrop_answers.table'
+    migrate=table_migrate_prefix + 'dragndrop_answers.table'
     )
 db.define_table('clickablearea_answers',
     Field('timestamp','datetime'),
@@ -127,7 +127,7 @@ db.define_table('clickablearea_answers',
     Field('course_name','string'),
     Field('answer','string'),
     Field('correct','boolean'),
-    migrate='runestone_clickablearea_answers.table'
+    migrate=table_migrate_prefix + 'clickablearea_answers.table'
     )
 db.define_table('parsons_answers',
     Field('timestamp','datetime'),
@@ -137,7 +137,7 @@ db.define_table('parsons_answers',
     Field('answer','string'),
     Field('source','string'),
     Field('correct','boolean'),
-    migrate='runestone_parsons_answers.table'
+    migrate=table_migrate_prefix + 'parsons_answers.table'
     )
 db.define_table('codelens_answers',
     Field('timestamp','datetime'),
@@ -147,7 +147,7 @@ db.define_table('codelens_answers',
     Field('answer','string'),
     Field('source','string'),
     Field('correct','boolean'),
-    migrate='runestone_codelens_answers.table'
+    migrate=table_migrate_prefix + 'codelens_answers.table'
     )
 
 db.define_table('shortanswer_answers',
@@ -156,7 +156,7 @@ db.define_table('shortanswer_answers',
     Field('sid','string'),
     Field('course_name','string'),
     Field('answer','text'),
-    migrate='runestone_shortanswer_answers.table'
+    migrate=table_migrate_prefix + 'shortanswer_answers.table'
     )
 
 db.define_table('payments',

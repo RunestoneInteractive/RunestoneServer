@@ -88,16 +88,20 @@ def initdb(config, list_tables, reset, fake, force):
             sys.exit(1)
 
         click.echo("Removing all files in databases/")
+        table_migrate_prefix = 'runestone_'
+        if config.conf == 'test':
+            table_migrate_prefix = 'test_runestone_'
         for the_file in os.listdir(DBSDIR):
             file_path = os.path.join(DBSDIR, the_file)
             try:
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path) and file_path.startswith(os.path.join(DBSDIR,table_migrate_prefix)):
+                    print("removing ", file_path)
                     os.unlink(file_path)
             except Exception as e:
                 print(e)
 
 
-    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake:
+    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake and not force:
         click.confirm("It appears you already have database migration information do you want to proceed?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
 
     click.echo(message='Initializing the database', file=None, nl=True, err=False, color=None)
