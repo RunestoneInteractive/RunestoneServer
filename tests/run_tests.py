@@ -118,6 +118,6 @@ if __name__ == '__main__':
         xqt('{} -m coverage erase'.format(sys.executable),
             '{} -m pytest -v applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
             *['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-              for x in ['test_ajax.py', 'test_dashboard.py', 'test_admin.py', 'test_assignments.py']]
+              for x in ['test_ajax.py', 'test_admin.py', 'test_assignments.py']]
         )
         xqt('{} -m coverage report'.format(sys.executable))

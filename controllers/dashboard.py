@@ -163,7 +163,7 @@ def studentreport():
     activity = data_analyzer.formatted_activity.activities
 
     logger.debug("GRADES = %s",data_analyzer.grades)
-    return dict(course=get_course_row(), user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(course=get_course_row(db.courses.ALL), user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 @auth.requires_login()
 def studentprogress():
@@ -321,7 +321,7 @@ def exercisemetrics():
             "frequency": count
             })
 
-    return dict(course=get_course_row(), answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+    return dict(course=get_course_row(db.courses.ALL), answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
 
 
 @auth.requires_login()
