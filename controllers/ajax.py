@@ -387,7 +387,6 @@ def getuser():
                 clist.append(row.course_name)
             res = {'email': auth.user.email,
                    'nick': auth.user.username,
-                   'cohortId': auth.user.cohort_id,
                    'donated': auth.user.donated,
                    'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id),
                    'course_list': clist

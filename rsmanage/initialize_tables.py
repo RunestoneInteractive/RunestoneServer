@@ -30,10 +30,6 @@ else:
 if not db(db.auth_group.role == 'instructor').select().first():
     db.auth_group.insert(role='instructor')
 
-## DEPRECATED
-if db(db.cohort_master.id > 0).isempty():
-    db.cohort_master.insert(cohort_name='Default Group', is_active = 1)
-
 # In SQL we can manually add the constraint
 # alter table questions add constraint name_bc_unique UNIQUE(name, base_course);
 

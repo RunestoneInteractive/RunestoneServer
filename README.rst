@@ -241,7 +241,6 @@ The Harder Way
 * create an account for yourself
 
   * insert new auth_user
-  * cohort id should be "id"
   * Course name should be the course name from above (not a number)
   * Do *not* make up a registration key or a reset password key; leave them blank
 

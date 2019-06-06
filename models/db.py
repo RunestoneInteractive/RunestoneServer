@@ -114,21 +114,6 @@ def get_course_url(*args):
         else:
             return URL(c='default')
 
-## create cohort_master table
-db.define_table('cohort_master',
-  Field('cohort_name','string',
-  writable=False,readable=False),
-  Field('created_on','datetime',default=request.now,
-  writable=False,readable=False),
-  Field('invitation_id','string',
-  writable=False,readable=False),
-  Field('average_time','integer', #Average Time it takes people to complete a unit chapter, calculated based on previous chapters
-  writable=False,readable=False),
-  Field('is_active','integer', #0 - deleted / inactive. 1 - active
-  writable=False,readable=False),
-  Field('course_name', 'string'),
-  migrate=table_migrate_prefix + 'cohort_master.table'
-  )
 
 ########################################
 
@@ -195,8 +180,6 @@ db.define_table('auth_user',
     Field('reset_password_key',default='',
           writable=False,readable=False),
     Field('registration_id',default='',
-          writable=False,readable=False),
-    Field('cohort_id','reference cohort_master', requires=IS_IN_DB(db, 'cohort_master.id', 'id'),
           writable=False,readable=False),
     Field('course_id','reference courses',label=T('Course Name'),
           required=True,
