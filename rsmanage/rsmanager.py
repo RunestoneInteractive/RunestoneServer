@@ -80,9 +80,9 @@ def initdb(config, list_tables, reset, fake, force):
     if reset:
         if not force:
             click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
-        res = subprocess.call("dropdb --if-exists --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
+        res = subprocess.call("dropdb --if-exists --host={} --username={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         if res == 0:
-            res = subprocess.call("createdb --echo --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
+            res = subprocess.call("createdb --echo --host={} --username={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
