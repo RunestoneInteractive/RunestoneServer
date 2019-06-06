@@ -1,17 +1,26 @@
-from os import path
-import os
-import shutil
-import sys
+# *********************************************
+# |docname| - Endpoints relating to assignments
+# *********************************************
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import json
 import logging
 import datetime
 from random import shuffle
 from collections import OrderedDict
+
+# Third-party imports
+# -------------------
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
 import six
 import bleach
-import six
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
