@@ -27,17 +27,6 @@ from ci_utils import xqt, pushd
 from utils import COVER_DIRS
 
 
-# Assume we are running with working directory in tests
-
-# Functions
-# =========
-# Let web2py recreate certain tables not in the test database by removing their
-# migration metadata.
-def remove_web2py_tables():
-    for path in glob.glob('../databases/test_runestone_*.table'):
-        os.remove(path)
-
-
 # main
 # ====
 if __name__ == '__main__':
@@ -84,7 +73,7 @@ if __name__ == '__main__':
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
         xqt('rsmanage --verbose initdb --reset --force',
-            'psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
+            'psql --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
 
         if parsed_args.rebuildgrades:
             with pushd('../../..'):
