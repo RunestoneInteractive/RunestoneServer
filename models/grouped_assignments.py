@@ -622,13 +622,6 @@ def assignment_release_grades(assignment, released=True):
 db.assignments.release_grades = Field.Method(lambda row, released=True: assignment_release_grades(row.assignments, released))
 
 
-# now deprecated; use the new questions table in questions.py
-db.define_table('problems',
-    Field('assignment', db.assignments),
-    Field('acid', 'string'),
-    migrate=table_migrate_prefix_test + 'runestones_problems.table',
-    )
-
 db.define_table('grades',
     # This table records grades on whole assignments, not individual questions
     Field('auth_user', db.auth_user),
