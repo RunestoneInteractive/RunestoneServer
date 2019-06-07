@@ -1,26 +1,18 @@
 #
-# Unit Tests for AJAX API endpoints
+# Unit Tests for DASHBOARD API endpoints
 # Set up the environment variables
 # WEB2PY_CONFIG=test
 # TEST_DBURL=postgres://user:pw@host:port/dbname
 #
 #
 # Run these from the main web2py directory with the command:
-# python web2py.py -S runestone -M -R applications/runestone/tests/test_dashboard.py
+#
 #
 
-import unittest
 import sys
-from bs4 import BeautifulSoup
-
-from gluon.globals import Request, Session
-from gluon.tools import Auth
-from six import StringIO
 
 import pytest
 import six
-
-from .utils import web2py_controller_import
 
 
 def test_student_report(test_client, runestone_db_tools, test_user, test_user_1):
@@ -61,3 +53,10 @@ def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_use
                 test_client.validate('dashboard/subchapoverview','subc_b_1', data=dict(tablekind='dividnum'))
                 test_client.validate('dashboard/subchapoverview','div_id', data=dict(tablekind='dividmin'))
                 test_client.validate('dashboard/subchapoverview','div_id', data=dict(tablekind='dividmax'))
+
+
+# TODO:
+# grades
+# questiongrades
+# exercisemetrics
+# better testing of index conten
