@@ -6,3 +6,4 @@ Test chapter 1
    :maxdepth: 2
 
    subchapter_a
+   subchapter_b

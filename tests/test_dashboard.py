@@ -17,84 +17,47 @@ from gluon.globals import Request, Session
 from gluon.tools import Auth
 from six import StringIO
 
-# bring in the ajax controllers
+import pytest
+import six
+
+from .utils import web2py_controller_import
 
 
-# clean up the database
-db(db.useinfo.div_id == 'unit_test_1').delete()
-db.commit()
+def test_student_report(test_client, runestone_db_tools, test_user, test_user_1):
+    with runestone_db_tools.create_course('test_course_3') as course_3:
+        with test_user('test_instructor_1', 'password_1', course_3.course_name) as test_instructor_1, \
+            test_instructor_1.make_instructor():
 
-class TestDashboardEndpoints(unittest.TestCase):
-    def setUp(self):
-        global request, session, auth
-        request = Request(globals()) # Use a clean Request object
-        session = Session()
-        auth = Auth(db, hmac_key=Auth.get_or_create_key())
-        exec(compile(open("applications/runestone/controllers/dashboard.py").read(), "applications/runestone/controllers/dashboard.py", 'exec'), globals())
+            test_instructor_1.login()
+            db = runestone_db_tools.db
 
-    ## TODO -rewrite these tests in the style of test_server...
-    # As it stands we can run one of the tests in this file which then
-    # messes up the Auth object for any other tests.  It seems better
-    # to spend time redoing the tests a better way than patching these.
-    def XXtestStudentReport(self):
-        from gluon import current
-        auth.login_user(db.auth_user(1674))
-        session.auth = auth
-        request.vars.id=auth.user.username
-        current.request = request
-        current.session = session
-        current.auth = auth
+            # Create an assignment -- using createAssignment
+            #test_client.post('dashboard/studentreport',
+            #     data=dict(id='test_user_1'))
 
-        res = studentreport()   #todo: if this is an endoint why does it not return json?
+            test_client.validate('dashboard/studentreport','Recent Activity', data=dict(id='test_instructor_1'))
 
-        #course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades
-        self.assertEqual(res['course']['course_name'], 'testcourse')
-        self.assertEqual(res['user'].username, 'user_1674')
-        self.assertEqual(res['assignments']['List Practice']['score'], 13.0)
-        self.assertEqual(res['assignments']['List Practice']['class_average'], '7.82') #todo: why a string?
+            with test_instructor_1.hsblog(event="mChoice",
+                    act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
+                    course="test_course_3"):
 
+                test_client.validate('dashboard/studentreport','subc_b_1', data=dict(id='test_instructor_1'))
 
+def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_user_1):
+    with runestone_db_tools.create_course('test_course_3') as course_3:
+        with test_user('test_instructor_1', 'password_1', course_3.course_name) as test_instructor_1, \
+            test_instructor_1.make_instructor():
 
-    def test_subchapoverview(self):
-        from gluon import current
-        auth.login_user(db.auth_user(11))
-        session.auth = auth
-        request.vars.tablekind = 'sccount'
-        current.request = request
-        current.session = session
-        current.auth = auth
+            test_instructor_1.login()
+            db = runestone_db_tools.db
 
-        res = subchapoverview()
-        self.assertIsNotNone(res)
-        soup = BeautifulSoup(res['summary'])
-        thlist = soup.select('th')
-        self.assertEqual(thlist[11].text, 'user_1671')
-        rl = soup.select('tr')
-        cl = rl[10].select('td')
-        self.assertEqual(cl[5].text, '4.0')
-        self.assertEqual(cl[17].text, '6.0')
-        request.vars.action = 'tocsv'
-        request.vars.tablekind = 'dividmin'
-        res = subchapoverview()
-        csvf = StringIO(res)
-        rows = csvf.readlines()
-        cols = rows[18].split(',')
-        print(cols)
-        self.assertEqual(cols[0], ' ')
-        self.assertEqual(cols[2], 'ch12_dict11')
-        self.assertEqual(cols[-3].strip(), '2017-10-26 22:25:38')
-        self.assertEqual(cols[-1].strip(), 'Aliasingandcopying')
-        cols = rows[122].split(',')
-        print(cols)
-        self.assertEqual(cols[0], ' ')
-        self.assertEqual(cols[3], '2017-08-30 22:29:30')
+            test_client.validate('dashboard/subchapoverview','chapter_num')
+            test_client.validate('dashboard/subchapoverview','div_id', data=dict(tablekind='dividnum'))
 
+            with test_instructor_1.hsblog(event="mChoice",
+                    act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
+                    course="test_course_3"):
 
-suite = unittest.TestSuite()
-suite.addTest(unittest.makeSuite(TestDashboardEndpoints))
-res = unittest.TextTestRunner(verbosity=2).run(suite)
-if len(res.errors) == 0 and len(res.failures) == 0:
-    print("All tests Passed OK")
-else:
-    print("nonzero errors exiting with 1", res.errors, res.failures)
-    sys.exit(1)
+                test_client.validate('dashboard/subchapoverview','subc_b_1', data=dict(tablekind='dividnum'))
+                test_client.validate('dashboard/subchapoverview','div_id', data=dict(tablekind='dividmin'))
+                test_client.validate('dashboard/subchapoverview','div_id', data=dict(tablekind='dividmax'))
