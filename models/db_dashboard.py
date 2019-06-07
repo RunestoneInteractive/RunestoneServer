@@ -116,14 +116,14 @@ class CourseProblemMetrics(object):
         self.chapter = chapter
 
     def update_metrics(self, course_name):
-        rslogger.debug("Updating CourseProblemMetrics for {}".format(self.chapter))
+        rslogger.debug("Updating CourseProblemMetrics for {} of {}".format(self.chapter, course_name))
         rslogger.debug("doing chapter {}".format(self.chapter))
         # todo:  Join this with questions so that we can limit the questions to the selected chapter
         mcans = db((db.mchoice_answers.course_name==course_name) &
                    (db.mchoice_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
                     ).select(orderby=db.mchoice_answers.timestamp)
-        rslogger.debug("Found {} exercises")
+        rslogger.debug("Found {} exercises".format(len(mcans)))
         fbans = db((db.fitb_answers.course_name==course_name) &
                    (db.fitb_answers.div_id == db.questions.name) &
                    (db.questions.chapter == self.chapter.chapter_label)
