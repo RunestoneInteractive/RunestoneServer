@@ -457,6 +457,11 @@ class DashboardDataAnalyzer(object):
 # This whole object is a workaround because these strings
 # are not generated and stored in the db. This needs automating
 # to support all books.
+# TODO:  more user friendly naming for problems.
+# The idea here is to provide a more user friendly name for each question beyond its divid This
+# name appears on the donut charts and in the details....
+# We are most of the way there in the questions table.  But we really don't have a more friendly
+# way to identify it.  We could use its chapter-subchapter-position...
 class IdConverter(object):
     problem_id_map = {
         "pre_1":"Pretest-1: What will be the values in x, y, and z after the following lines of code execute?",
@@ -479,4 +484,4 @@ class IdConverter(object):
 
     @staticmethod
     def problem_id_to_text(problem_id):
-        return IdConverter.problem_id_map.get(problem_id, "DEFUALT NAME USED WHERE??")
+        return IdConverter.problem_id_map.get(problem_id, problem_id)
