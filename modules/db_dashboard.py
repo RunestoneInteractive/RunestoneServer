@@ -2,7 +2,7 @@ from collections import OrderedDict
 import logging
 from datetime import datetime, timedelta
 import six
-from gluon import current
+from gluon import current, URL, redirect
 
 rslogger = logging.getLogger(current.settings.logger)
 rslogger.setLevel(current.settings.log_level)
@@ -386,7 +386,7 @@ class DashboardDataAnalyzer(object):
         if not self.user:
             rslogger.debug("ERROR - NO USER username={} course_id={}".format(username, self.course_id))
             current.session.flash = 'Please make sure you are in the correct course'
-            current.redirect(URL('default', 'courses'))
+            redirect(URL('default', 'courses'))
             # TODO: calling redirect here is kind of a hacky way to handle this.
 
         self.logs = current.db((current.db.useinfo.course_id==self.course.course_name) &
