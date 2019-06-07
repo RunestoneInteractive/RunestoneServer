@@ -113,12 +113,14 @@ if __name__ == '__main__':
 
     with pushd('../../..'):
         if extra_args:
+            print(extra_args)
             print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
         xqt('{} -m coverage erase'.format(sys.executable),
-            '{} -m pytest -v applications/runestone/tests/test_dashboard.py {}'.format(sys.executable, ' '.join(extra_args)),
-            '{} -m pytest -v applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
-            *['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-              for x in ['test_ajax.py', 'test_admin.py', 'test_assignments.py']]
+            '{} -m pytest -v applications/runestone/tests/test_dashboard.py applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
         )
+        if '-k' not in extra_args:
+            xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
+                for x in ['test_ajax.py', 'test_admin.py', 'test_assignments.py']]
+            )
         xqt('{} -m coverage report'.format(sys.executable))
