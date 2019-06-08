@@ -7,3 +7,5 @@ Test chapter 1
 
    subchapter_a
    subchapter_b
+   team_evaluation_1
+   team_report_1

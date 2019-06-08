@@ -9,19 +9,27 @@
 #
 # Standard library
 # ----------------
+import os
+import shutil
 import json
 import logging
 import datetime
 from random import shuffle
+import tempfile
 from collections import OrderedDict
 
 # Third-party imports
 # -------------------
 from psycopg2 import IntegrityError
-from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
-from db_dashboard import DashboardDataAnalyzer
 import six
 import bleach
+import xlsxwriter
+from xlsxwriter.utility import xl_rowcol_to_cell
+
+# Local application imports
+# -------------------------
+from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+from db_dashboard import DashboardDataAnalyzer
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -944,3 +952,189 @@ def practice_feedback():
         redirect(URL('practice', vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."
     redirect(URL('practice'))
+
+
+# Assignment reports
+# ==================
+# Execute ``_query_questions`` , selecting all div_ids in a given assignment.
+def _query_assignment(
+    # The name of the course.
+    course_name,
+    # The name of the assignment.
+    assignment_name=None,
+    # The due date, as an instance of ``datetime``: the last avaiable answer and correct fields before or on this date will be reported. If falsey, the due date for the assignment will be used.
+    due_date=None,
+):
+
+    # Verify the course and assignment are valid.
+    assert db(db.courses.course_name == course_name).select(db.courses.id).first(), 'Unknown course name {}'.format(course_name)
+    assert db(db.assignments.name == assignment_name).select(db.assignments.id).first(), 'Unknown assignment {}'.format(assignment_name)
+
+    # Get the due date if it wasn't specified.
+    if not due_date:
+        due_date = db (
+            # Select the desired assignment.
+            (db.assignments.name == assignment_name) &
+            # Join to ``course`` so we can restrict the query to a specific course.
+            (db.assignments.course == db.courses.id) &
+            # Select the desired course.
+            (db.courses.course_name == course_name)
+        ).select(db.assignments.duedate).first().duedate
+    # Correct for the time zone, since the due date is specified in local time. YUCK!!!
+    time_zone_delta = timedelta(hours=float(session.get('timezoneoffset', 0)))
+    due_date += time_zone_delta
+
+    # Define the questions of interest, given an assignment and course.
+    query_questions = (
+        # Select the desired assignment.
+        (db.assignments.name == assignment_name) &
+        # Join to ``course`` so we can restrict the query to a question in a specific course.
+        (db.assignments.course == db.courses.id) &
+        # Select the desired course.
+        (db.courses.course_name == course_name) &
+        # Join to ``assignment_questions`` and from there to ``questions``.
+        (db.assignments.id == db.assignment_questions.assignment_id) &
+        (db.assignment_questions.question_id == db.questions.id)
+    )
+
+    return _query_questions(course_name, query_questions, due_date), time_zone_delta
+
+
+# The XlsxWriter library returns 0 on success for many functions.
+def _assert_0(value, string=''):
+    assert value == 0, string
+
+
+# Transform the ``grades`` struct into an Excel spreadsheet.
+def _grades_to_xlsx(
+    # The ``grades`` data structure returned from ``query_assignment``.
+    grades,
+    # The time zone delta to use to translate date to the local time.
+    time_zone_delta,
+    # The output file must end in ``.xlsx``, or Excel won't like it.
+    output_file
+):
+
+    assert grades[None], 'No supported question types in this assignment.'
+
+    # Save the grades as a worksheet.
+    with xlsxwriter.Workbook(output_file, {
+        # Student data (such as some answers) might look like a formula or URL, but it's not.
+        'strings_to_formulas': False,
+        'strings_to_urls': False
+    }) as workbook:
+        timestamp_sheet = workbook.add_worksheet('timestamps')
+        score_sheet = workbook.add_worksheet('scores')
+        answer_sheet = workbook.add_worksheet('answers')
+        correct_sheet = workbook.add_worksheet('correct')
+        attempts_sheet = workbook.add_worksheet('attempts')
+        # Create formats for use in the export.
+        date_format = workbook.add_format({'num_format': 'm/d/yy h:mm AM/PM'})
+        percent_format = workbook.add_format({'num_format': '0%'})
+        # Increase the column width of the timestamp sheet so the timestamps display.
+        _assert_0(timestamp_sheet.set_column(4, 3 + len(grades[None]), 17))
+
+        # Offsets to leave room for row and column headings.
+        row_offset = 5
+        col_offset = 5
+        div_id_index_dict = {}
+        # Add in titles for everything
+        for sheet in workbook.worksheets():
+            _assert_0(sheet.write(row_offset, 0, 'Last name'))
+            _assert_0(sheet.write(row_offset, 1, 'First name'))
+            _assert_0(sheet.write(row_offset, 2, 'E-mail'))
+            _assert_0(sheet.write(row_offset, 3, 'User ID'))
+            _assert_0(sheet.write(0, col_offset - 1, 'div_id'))
+            _assert_0(sheet.write(1, col_offset - 1, 'chapter'))
+            _assert_0(sheet.write(2, col_offset - 1, 'subchapter'))
+            _assert_0(sheet.write(3, col_offset - 1, 'htmlsrc'))
+
+            # Write out div_ids and create an index for it.
+            for index, (div_id, question_info) in enumerate(six.iteritems(grades[None])):
+                _assert_0(sheet.write(0, col_offset + index, div_id if six.PY3 else div_id.decode('utf-8')))
+                _assert_0(sheet.write(1, col_offset + index, question_info.chapter if six.PY3 else question_info.chapter.decode('utf-8')))
+                _assert_0(sheet.write(2, col_offset + index, question_info.subchapter if six.PY3 else question_info.subchapter.decode('utf-8')))
+                _assert_0(sheet.write(3, col_offset + index, question_info.htmlsrc if six.PY3 else question_info.htmlsrc.decode('utf-8')))
+                if sheet == score_sheet:
+                    # This form of avergae counts blank cells as 0.
+                    _assert_0(sheet.write_formula(4, col_offset + index, '{{=average(0 + {}:{})/{}}}'.format(xl_rowcol_to_cell(6, col_offset + index), xl_rowcol_to_cell(len(grades) + 4, col_offset + index), xl_rowcol_to_cell(5, col_offset + index)), percent_format))
+                    # Record the index of this div_id.
+                    div_id_index_dict[div_id] = col_offset + index
+                    _assert_0(sheet.write(5, col_offset + index, question_info.points))
+                if sheet == attempts_sheet:
+                    _assert_0(sheet.write_formula(4, col_offset + index, '=average({}:{})'.format(xl_rowcol_to_cell(6, col_offset + index), xl_rowcol_to_cell(len(grades) + 4, col_offset + index))))
+
+            # TODO: Compute the grade for each student on the score sheet.
+
+            # Write out user info
+            for index, (sid, div_id_dict) in enumerate(six.iteritems(grades)):
+                if sid is None:
+                    continue
+                user_info = div_id_dict[None]
+                _assert_0(sheet.write_string(row_offset + index, 0, user_info.last_name if six.PY3 else user_info.last_name.decode('utf-8')))
+                _assert_0(sheet.write_string(row_offset + index, 1, user_info.first_name if six.PY3 else user_info.first_name.decode('utf-8')))
+                _assert_0(sheet.write_string(row_offset + index, 2, user_info.email if six.PY3 else user_info.email.decode('utf-8')))
+                _assert_0(sheet.write_string(row_offset + index, 3, sid if six.PY3 else sid.decode('utf-8')))
+
+        _assert_0(score_sheet.write_string(4, col_offset - 1, 'Percent correct'))
+        _assert_0(score_sheet.write_string(5, col_offset - 1, 'Max points'))
+        _assert_0(attempts_sheet.write_string(4, col_offset - 1, 'Average attempts'))
+
+        for sid_index, (sid, div_id_dict) in enumerate(six.iteritems(grades)):
+            for div_id, grade_info in six.iteritems(div_id_dict):
+                # Skip header info.
+                if sid is None or div_id is None:
+                    continue
+                # It's safe to unpack the grade info after skipping headers (``None`` entries).
+                timestamp, score, answer, correct, attempts = grade_info
+                div_id_index = div_id_index_dict[div_id]
+                # Make answers printable as necessary.
+                answer = str(answer)
+                # Provide local time in timestamps.
+                if timestamp:
+                    timestamp -= time_zone_delta
+                row = row_offset + sid_index
+                _assert_0(timestamp_sheet.write(row, div_id_index, timestamp, date_format))
+                _assert_0(score_sheet.write(row, div_id_index, score))
+                _assert_0(answer_sheet.write(row, div_id_index, answer))
+                _assert_0(correct_sheet.write(row, div_id_index, correct))
+                _assert_0(attempts_sheet.write(row, div_id_index, attempts))
+
+
+# Return an error.
+def _error_formatter(e):
+    response.headers['content-type'] = 'application/json'
+    import traceback
+    return json.dumps({'errors': [traceback.format_exc()]})
+
+
+# Produce an Excel spreadsheet with information about an assignment.
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def grades_report():
+    try:
+        grades, timezoneoffset = _query_assignment(auth.user.course_name, request.vars.assignment)
+    except Exception as e:
+        return _error_formatter(e)
+
+    temp_path = tempfile.mkdtemp()
+    try:
+        xlsx_path = os.path.join(temp_path, 'grades.xlsx')
+        try:
+            _grades_to_xlsx(grades, timezoneoffset, xlsx_path)
+        except Exception as e:
+            return _error_formatter(e)
+        response.headers['content-type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        return response.stream(xlsx_path, 2**20, request=request)
+    finally:
+        shutil.rmtree(temp_path, True)
+
+
+# Produce an Excel spreadsheet with information about an assignment.
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def team_report():
+    try:
+        grades, timezoneoffset = _query_assignment(auth.user.course_name, request.vars.assignment)
+        return grades_to_report(auth.user.course_name, request.vars.assignment, 1)
+    except Exception as e:
+        return _error_formatter(e)
+
