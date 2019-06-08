@@ -98,7 +98,7 @@ def web2py_server(runestone_name, web2py_server_address):
          '--nogui'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
-    for tries in range(5):
+    for tries in range(50):
         try:
             urlopen(web2py_server_address, timeout=2)
         except URLError:
