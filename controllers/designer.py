@@ -134,11 +134,11 @@ def delete_course():
                     students = db(db.auth_user.course_id == courseid)
                     students.update(course_id=1)
                     db(db.courses.id == courseid).delete()
+                    deleted = True
+                    session.clear()
                     try:
                         shutil.rmtree(path.join('applications',request.application,'static', course_name))
                         shutil.rmtree(path.join('applications',request.application,'custom_courses', course_name))
-                        deleted = True
-                        session.clear()
                     except:
                         response.flash = '%s does not appear to have static content' % course_name
                 else:
