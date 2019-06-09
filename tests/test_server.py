@@ -515,7 +515,15 @@ def test_11(test_client, runestone_db_tools, test_user):
 def test_deleteaccount(test_client, runestone_db_tools, test_user):
     user = test_user('user_to_delete', 'password_1', 'test_course_1')
     user.login()
+    user.hsblog(event="mChoice",
+            act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
+            course="test_course_1")
     test_client.validate('default/delete', 'About Runestone', data=dict(deleteacccount='checked'))
     db = runestone_db_tools.db
-    res = db(db.auth_user.username == 'user_to_delete').select().first()
-    assert not res
+    assert not db(db.auth_user.username == 'user_to_delete').select().first()
+    assert not db(db.useinfo.sid == 'user_to_delete').select().first()
+    assert not db(db.code.sid == 'user_to_delete').select().first()
+    assert not db(db.acerror_log.sid == 'user_to_delete').select().first()
+    for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
+        assert not db(db['{}_answers'.format(t)].sid == 'user_to_delete').select().first()
+

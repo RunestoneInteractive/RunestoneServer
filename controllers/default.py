@@ -460,6 +460,11 @@ def delete():
         session.flash = "Account Deleted"
         db(db.auth_user.id == auth.user.id).delete()
         db(db.useinfo.sid == auth.user.username).delete()
+        db(db.code.sid == auth.user.username).delete()
+        db(db.acerror_log.sid == auth.user.username).delete()
+        for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
+            db(db['{}_answers'.format(t)].sid == auth.user.username).delete()
+
         auth.logout() #logout user and redirect to home page
     else:
         redirect(URL('default','user/profile'))
