@@ -112,7 +112,7 @@ if __name__ == '__main__':
             xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
                 for x in ['test_ajax.py', 'test_admin.py', 'test_assignments.py']]
             )
-            xqt('{} -m coverage report'.format(sys.executable))
+            xqt('{} -m coverage report --omit=applications/runestone/controllers/appadmin.py'.format(sys.executable))
 
         # This pushes this back to the old way that justs makes sure the
         # rebuilding the grades works... IWe could move this up a few lines if

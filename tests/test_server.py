@@ -493,7 +493,7 @@ def test_11(test_client, runestone_db_tools, test_user):
             test_instructor_1.login()
             db = runestone_db_tools.db
 
-            # Create an assignment -- using createAssignment
+            # Create an assifgnment -- using createAssignment
             test_client.post('admin/createAssignment',
                 data=dict(name='test_assignment_1'))
 
@@ -511,3 +511,11 @@ def test_11(test_client, runestone_db_tools, test_user):
 
             test_client.post('admin/removeassign', data=dict(assignid=""))
             assert "Error" in test_client.text
+
+def test_deleteaccount(test_client, runestone_db_tools, test_user):
+    user = test_user('user_to_delete', 'password_1', 'test_course_1')
+    user.login()
+    test_client.validate('default/delete', 'About Runestone', data=dict(deleteacccount='checked'))
+    db = runestone_db_tools.db
+    res = db(db.auth_user.username == 'user_to_delete').select().first()
+    assert not res
