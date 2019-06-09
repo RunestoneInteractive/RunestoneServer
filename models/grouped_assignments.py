@@ -15,21 +15,6 @@ db.define_table('assignments',
     )
 
 
-def partition(L, f):
-    # make a new list when f(item) changes
-    cur_list = []
-    prev_item = None
-    Ls = [cur_list]
-    for cur_item in L:
-        if (not prev_item) or (f(prev_item) == f(cur_item)):
-            cur_list.append(cur_item)
-        else:
-            cur_list = [cur_item]
-            Ls.append(cur_list)
-        prev_item = cur_item
-    return Ls
-
-
 db.define_table('grades',
     # This table records grades on whole assignments, not individual questions
     Field('auth_user', db.auth_user),
