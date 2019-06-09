@@ -38,14 +38,6 @@ db.define_table('section_users',
 
 section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
 
-db.define_table('pipactex_deadline',
-  Field('acid_prefix', 'string'),  # acid = actice code id
-  Field('deadline', 'datetime'),
-  Field('section', db.sections, label="Section ID"),
-  migrate=table_migrate_prefix + 'pipactex_deadline.table')
-
-db.pipactex_deadline.section.requires = IS_IN_DB(db, 'sections.id', '%(name)s',
-                                 zero=T('choose one'))
 
 #
 # when a user registers for a course, add them to the default section.
