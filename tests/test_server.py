@@ -509,12 +509,13 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
     the_user.hsblog(event="mChoice",
             act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
             course="test_course_3")
-    validate('default/delete', 'About Runestone', data=dict(deleteacccount='checked'))
+    validate('default/delete', 'About Runestone', data=dict(deleteaccount='checked'))
     db = runestone_db_tools.db
-    # assert not db(db.auth_user.username == 'user_to_delete').select().first()
-    # assert not db(db.useinfo.sid == 'user_to_delete').select().first()
-    # assert not db(db.code.sid == 'user_to_delete').select().first()
-    # assert not db(db.acerror_log.sid == 'user_to_delete').select().first()
-    # for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
-    #     assert not db(db['{}_answers'.format(t)].sid == 'user_to_delete').select().first()
+    res = db(db.auth_user.username == 'user_to_delete').select().first()
+    print(res)
+    assert not db(db.useinfo.sid == 'user_to_delete').select().first()
+    assert not db(db.code.sid == 'user_to_delete').select().first()
+    assert not db(db.acerror_log.sid == 'user_to_delete').select().first()
+    for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
+        assert not db(db['{}_answers'.format(t)].sid == 'user_to_delete').select().first()
 
