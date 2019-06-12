@@ -90,7 +90,7 @@ def web2py_server(runestone_name, web2py_server_address):
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'],
+         '--no_gui'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
     for tries in range(50):

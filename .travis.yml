@@ -32,6 +32,7 @@ script:
 - cd tests
 # Now actually run the tests
 - python run_tests.py
+- coveralls
 notifications:
   slack:
     secure: OfeZ/+YHpSl7GNFkzEKu0uObuMdymKmDEeDyfB++RaglalcgkDQAqrCPx+YVw6brXOHGeC6BkGJe/Fs143Ai8/yf38nMmZg/dej5nLgZNST67jWaapIydx5QeuCrsRKvUP+z6yEYoBkYXTsYPyTiKGGsyzvX6dimZRT4nD8qrv0=

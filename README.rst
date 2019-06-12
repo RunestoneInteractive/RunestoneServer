@@ -8,6 +8,8 @@ Runestone Interactive Server and API
 .. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
    :alt: Build Status
 
+.. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.svg?branch=master
+   :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
 
 Relationship to other Runestone components
 ------------------------------------------
