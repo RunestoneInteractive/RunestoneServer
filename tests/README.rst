@@ -3,7 +3,20 @@ Testing The Runestone Server
 
 Testing the Runestone Server is a daunting task, especially since we did not write unit tests for the first several years of our development!  Recently (meaning 2019) we have begun to develop a decent test infrastructure that allows you to write tests with relatively little pain!  And thats what it needs to be in order to make it possible to write tests in an environment where we just want to get that new feature added!
 
-Lets start with an example test:
+If you just want to run the tests:
+
+.. code-block::
+
+    python run_tests.py
+
+
+Or if you have a docker container set up:
+
+.. code-block::
+
+    docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
+
+But we really hope you will write some tests, so lets take a look at a sample of a test that simulates a user submitting a response to a poll.  We'll then check to see that their answer made it into the database, and then make sure that the api call to retrieve poll results works as expected
 
 .. code-block:: python
 
@@ -52,15 +65,18 @@ Lets start with an example test:
         assert res[-1] == "1"
 
 
-The test above can be run as part of the entire suite of tests by running `scripts/dtest -k test_poll` from the Runestone main directory.  This assumes that you have a Docker environment set up for your developent work. If you are not using docker then from the tests folder run `python run_tests.py -k test_poll` The `-k` option matches any part of the test names, so you don't have to give it the full test name.  `-k poll` would run any test that has poll in its name.
+The test above can be run as part of the entire suite of tests by running ``scripts/dtest -k test_poll`` from the Runestone main directory.  This assumes that you have a Docker environment set up for your developent work. If you are not using docker then from the tests folder run ``python run_tests.py -k test_poll`` The ``-k`` option matches any part of the test names, so you don't have to give it the full test name.  ``-k poll`` would run any test that has poll in its name.
 
-The `run_tests.py` script ensures that the database is initialized, a test book/course is created (called test_course_1) and all of the testing framework is in place.  The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment.  The fixtures include:
+The ``run_tests.py`` script ensures that the database is initialized, a test book/course is created (called test_course_1) and all of the testing framework is in place.  The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment.  The fixtures include:
 
 * test_client - A client for interacting with the web2py Server
+
   * logout
   * validate - get a page, validate it and check for an expected string
   * logout
+
 * test_user_1 - A pre-made user registered for test_course_1 . Every user supports the following methods:
+
   * login
   * logout
   * hsblog
@@ -68,10 +84,23 @@ The `run_tests.py` script ensures that the database is initialized, a test book/
   * update_profile
   * make_payment
   * test_client -- an attribute that gets the client the user is using (think of the client liket the browser)
+
 * test_user - A function to create a test user
 * runestone_db_tools - An object that allows you to get the db object
 * web2py_server
 
-When you want to make sure that a variable has a value all you need to do is use an `assert` statment.  If the assert fails the test fails.  Its that easy.
+When you want to make sure that a variable has a value all you need to do is use an ``assert`` statment.  If the assert fails the test fails.  Its that easy.
 
 In the future we'll add new fixtures, such as an assignment, and we'll add more capabilities to the user and client as we learn what will help write tests more quickly and efficiently.
+
+
+Load Testing
+============
+
+From the scripts folder, run the command:
+
+```
+locust -f locustfile.py
+```
+
+Then in your browser go to `http://127.0.0.1:8089` You an set up how many users you want and how fast they will come online.  The webpage will update every couple of seconds to show you statistics on load times for various kinds of pages.
