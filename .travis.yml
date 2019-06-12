@@ -32,6 +32,7 @@ script:
 - cd tests
 # Now actually run the tests
 - python run_tests.py
+- cd ../../..
 - coveralls
 notifications:
   slack:
