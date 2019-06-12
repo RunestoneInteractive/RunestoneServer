@@ -444,6 +444,9 @@ class _TestUser(object):
             _formname='login',
         ))
 
+    def logout(self):
+        self.test_client.logout()
+
     def make_instructor(self, course_id=None):
         # If ``course_id`` isn't specified, use this user's ``course_id``.
         course_id = course_id or self.course_id
