@@ -124,7 +124,7 @@ First, there is a block that shows you the test that failed, and the code of tha
 
 .. code-block::
 
-_________________________________________ test_poll __________________________________________
+    _________________________________________ test_poll __________________________________________
 
     test_client = <applications.runestone.tests.conftest._TestClient object at 0x7f5f062b0f60>
     test_user_1 = <applications.runestone.tests.conftest._TestUser object at 0x7f5f0738eb38>
@@ -234,8 +234,9 @@ Load Testing
 
 From the scripts folder, run the command:
 
-```
-locust -f locustfile.py
-```
+::
+
+    locust -f locustfile.py
+
 
 Then in your browser go to `http://127.0.0.1:8089` You an set up how many users you want and how fast they will come online.  The webpage will update every couple of seconds to show you statistics on load times for various kinds of pages.
