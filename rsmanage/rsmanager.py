@@ -371,6 +371,7 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
 @click.option("--password", help="password - plaintext -- sorry")
 @pass_config
 def resetpw(config, username, password):
+    """Utility to change a users password. Useful If they can't do it through the normal mechanism"""
     userinfo = {}
     userinfo['username'] = username or click.prompt("Username")
     userinfo['password'] = password or click.prompt("Password", hide_input=True)
