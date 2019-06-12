@@ -1,12 +1,8 @@
 Runestone Interactive Server and API
 ====================================
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/bnmnetp/runestone
-   :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-
-.. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
-   :alt: Build Status
+.. image:: https://travis-ci.org/RunestoneInteractive/RunestoneServer.svg?branch=master
+    :target: https://travis-ci.org/RunestoneInteractive/RunestoneServer
 
 .. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.svg?branch=master
    :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
