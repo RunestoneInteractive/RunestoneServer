@@ -12,3 +12,11 @@ Lets add one activity to this Subchapter!
    :feedback_b: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.
 
    True or False:  Reading a program is like reading other kinds of text.
+
+
+.. poll:: LearningZone_poll
+    :option_1: Comfort Zone
+    :option_2: Learning Zone
+    :option_3: Panic Zone
+
+    During this project I was primarily in my...

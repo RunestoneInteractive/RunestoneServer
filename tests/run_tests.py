@@ -101,8 +101,10 @@ if __name__ == '__main__':
             print(extra_args)
             print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
+        test_files = ["test_dashboard.py", "test_ajax2.py", "test_server.py"]
+        testf_string = " ".join(['applications/runestone/tests/{}'.format(i) for i in test_files])
         xqt('{} -m coverage erase'.format(sys.executable),
-            '{} -m pytest -v applications/runestone/tests/test_dashboard.py applications/runestone/tests/test_server.py {}'.format(sys.executable, ' '.join(extra_args)),
+            '{} -m pytest -v {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
         )
 
     if '-k' not in extra_args or parsed_args.runold:
