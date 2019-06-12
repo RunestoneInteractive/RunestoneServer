@@ -27,12 +27,24 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
 
     db.commit()
 
+def resetpw(username, password):
+    pw = CRYPT(auth.settings.hmac_key)(password)[0]
+    db(db.auth_user.username == username).update(password=pw)
+
+### Main ###
+
 if '--userfile' in sys.argv:
     # find the file (.csv) iterate over each line and call createUser
     pass
+
+userinfo = json.loads(os.environ['RSM_USERINFO'])
+
+if '--resetpw' in sys.argv:
+    try:
+        resetpw(userinfo['username'], userinfo['password'])
+    except:
+        click.echo("Password reset failed for user {}".format(userinfo['username']))
 else:
-    # user info will come in as a json object
-    userinfo = json.loads(os.environ['RSM_USERINFO'])
     try:
         createUser(userinfo['username'], userinfo['password'], userinfo['first_name'],
                 userinfo['last_name'], userinfo['email'], userinfo['course'],

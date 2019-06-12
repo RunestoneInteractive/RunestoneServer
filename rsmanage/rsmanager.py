@@ -367,6 +367,28 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             click.echo("Success")
 
 @cli.command()
+@click.option("--username", help="Username, must be unique")
+@click.option("--password", help="password - plaintext -- sorry")
+@pass_config
+def resetpw(config, username, password):
+    userinfo = {}
+    userinfo['username'] = username or click.prompt("Username")
+    userinfo['password'] = password or click.prompt("Password", hide_input=True)
+    eng = create_engine(config.dburl)
+    res = eng.execute("select * from auth_user where username = %s", userinfo['username']).first()
+    if not res:
+        click.echo("ERROR - User: {} does not exist.".format(userinfo['username']))
+        exit(1)
+
+    os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+    res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw", shell=True)
+    if res != 0:
+        click.echo("Failed to create user {} error {} fix your data and try again. Use --verbose for more detail".format(userinfo['username'], res))
+        exit(1)
+    else:
+        click.echo("Success")
+
+@cli.command()
 @click.option("--checkdb", is_flag=True, help="check state of db and databases folder")
 @pass_config
 def env(config, checkdb):
