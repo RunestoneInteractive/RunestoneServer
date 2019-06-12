@@ -49,6 +49,7 @@ RUN apt-get update && \
         git \
         unzip \
         emacs-nox \
+        less \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
         rsync wget nginx && \
