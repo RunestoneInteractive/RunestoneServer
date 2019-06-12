@@ -93,6 +93,21 @@ When you want to make sure that a variable has a value all you need to do is use
 
 In the future we'll add new fixtures, such as an assignment, and we'll add more capabilities to the user and client as we learn what will help write tests more quickly and efficiently.
 
+We can enhance the test above by adding the following code to simulate a second user responding:
+
+.. code-block:: python
+
+    # Now lets have a second user respond to the poll.
+    user2 = test_user('test_user_2', 'password', 'test_course_1')
+    test_user_1.logout()
+    user2.login()
+    user2.hsblog(event='poll', act='2', div_id="LearningZone_poll", course='test_course_1')
+    test_client.post('ajax/getpollresults', data=dict(course='test_course_1', div_id='LearningZone_poll'))
+    res = json.loads(test_client.text)
+    assert res[1] == [0, 1, 2]
+    assert res[2] == [0, 1, 1]
+    assert res[-1] == "2"
+    assert res[0] == 2
 
 Load Testing
 ============

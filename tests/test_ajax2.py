@@ -42,3 +42,14 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     assert res[0] == 1
     assert res[-1] == "1"
 
+    # Now lets have a second user respond to the poll.
+    user2 = test_user('test_user_2', 'password', 'test_course_1')
+    test_user_1.logout()
+    user2.login()
+    user2.hsblog(event='poll', act='2', div_id="LearningZone_poll", course='test_course_1')
+    test_client.post('ajax/getpollresults', data=dict(course='test_course_1', div_id='LearningZone_poll'))
+    res = json.loads(test_client.text)
+    assert res[0] == 2
+    assert res[1] == [0, 1, 2]
+    assert res[2] == [0, 1, 1]
+    assert res[-1] == "2"
