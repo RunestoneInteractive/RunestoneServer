@@ -47,7 +47,7 @@
     <fieldset>
       <legend>Assignment properties</legend>
       <span id="totalPoints"></span><br>
-      <form action="" id="assignment-form">
+      <form id="assignment-form">
         <label for="datetimepicker">Due Date: </label>
         <input id="datetimepicker" name="due" type="text"><br>
         <label for="assign_visible">Visible to Students</label>
@@ -72,7 +72,7 @@
         <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
       </div><!-- Modal Body -->
       <div class="modal-body">
-        <form action="" role="form">
+        <form role="form">
           <div class="form-group">
             <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
@@ -134,14 +134,14 @@
                 <!-- Search tab -->
                 <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
                   <h5 style="text-align: center">Search Question Bank</h5>
-                  <form action="" id="qbankform" name="qbankform" role="form">
+                  <form id="qbankform" name="qbankform" role="form">
                     <div class="form-group">
                       <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
                     </div>
                     <div class="form-group">
                       <label for="chapter">Chapter</label>
                       <select class="form-control" id="chapter">
-                        <option selected="selected" value=""></option>
+                        <option selected="selected" label="select chapter" value=""></option>
                         {{ for chapter in chapters: }}
                         <option value="{{=chapter}}">{{=chapter}}</option>
                         {{ pass }}
@@ -269,7 +269,8 @@
               <div id="component-preview" class="col-md-6">
               </div>
               <!-- General purpose dialog for editing a question -->
-              <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
+              <!-- aria-labelledby="EditQuestion" -->
+              <div aria-hidden="true"  class="modal fade" id="editModal" role="dialog" tabindex="-1">
                           <div class="modal-dialog">
                             <div class="modal-content">
                               <!-- Modal Header -->
@@ -279,9 +280,9 @@
                               </div><!-- Modal Body -->
                               <div class="modal-body">
                                 <p>If you are not the original author of this question you must change the id on the first line of the directive.</p>
-                                <form action="" id="editForm" name="editForm">
+                                <form id="editForm" name="editForm">
                                   <div class="form-group">
-                                    <label for="difficultyselector">Change Difficulty</label>
+                                    <label for="change_difficulty">Change Difficulty</label>
                                     <div id="change_difficulty">
                                       <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
                                     </div>

@@ -158,6 +158,9 @@ def sections_update():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignments():
+    """
+    This is called for the assignments tab on the instructor interface
+    """
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
     for row in cur_assignments:
