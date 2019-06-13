@@ -90,7 +90,7 @@ def web2py_server(runestone_name, web2py_server_address):
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'],
+         '--nogui', '-e'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
     for tries in range(50):
@@ -570,9 +570,10 @@ class _TestAssignment(object):
         if 'points' not in kwargs:
             kwargs['points'] = 1
         kwargs['assignment'] = self.assignment_id
-        assert self.test_client.validate(
-            'admin/add__or_update_assignment_question', data=kwargs
-        ) != json.dumps('Error')
+        res = self.test_client.validate(
+            'admin/add__or_update_assignment_question', data=kwargs)
+        res = json.loads(res)
+        assert res['status'] == 'success'
 
 
     def autograde(self):
@@ -624,7 +625,7 @@ class _TestAssignment(object):
             data=dict(assignment_id=self.assignment_id,
                       visible='T' if self.is_visible else 'F',
                       description=self.description,
-                      due=str(self.due)))) != "ERROR"
+                      due=str(self.due))))['status'] == 'success'
 
 
     def release_grades(self):
