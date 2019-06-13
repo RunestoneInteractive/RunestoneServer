@@ -619,11 +619,12 @@ class _TestAssignment(object):
         self.save_assignment()
 
     def save_assignment(self):
-        self.test_client.validate('admin/save_assignment',
+        assert json.loads(
+            self.test_client.validate('admin/save_assignment',
             data=dict(assignment_id=self.assignment_id,
-                      visible='T',
+                      visible='T' if self.is_visible else 'F',
                       description=self.description,
-                      due=str(self.due)))
+                      due=str(self.due)))) != "ERROR"
 
 @pytest.fixture
 def test_assignment(test_client, test_user, runestone_db_tools):
