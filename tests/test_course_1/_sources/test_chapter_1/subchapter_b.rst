@@ -20,3 +20,19 @@ Lets add one activity to this Subchapter!
     :option_3: Panic Zone
 
     During this project I was primarily in my...
+
+
+.. fillintheblank:: subc_b_fitb
+
+   Mary had a |blank| lamb.
+
+   - :little: Is the correct answer
+     :big: Is feedback on a specific incorrect
+     :x: catchall feedback
+
+.. dragndrop:: subc_b_dd
+   :feedback: Feedback that is displayed if things are incorrectly matched--is optional
+   :match_1: Drag to Answer A|||Answer A
+   :match_2: Drag to Answer B|||Answer B
+   :match_3: Drag to Answer C|||Answer C
+

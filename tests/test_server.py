@@ -175,7 +175,7 @@ def test_validate_user_pages(url, requires_login, expected_string,
     #('admin/add_practice_items', 'xxx', 1), -- this is an api call
     ('admin/assignments', 'Assignment', 3), # labels for hidden elements
     #('admin/backup', 'xxx', 1),
-    #('admin/practice', 'Choose the sections taught, so that students can practice them.', 1),
+    ('admin/practice', 'Choose when students should start', 1),
     #('admin/removeassign', 'Cannot remove assignment with id of', 1),
     #('admin/removeinstructor', 'xxx', 1),
     #('admin/removeStudents', 'xxx', 1),

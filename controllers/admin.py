@@ -1427,7 +1427,8 @@ def save_assignment():
             duedate=due,
             visible=request.vars['visible']
         )
-        return json.dumps({request.vars['name']: assignment_id})
+        return json.dumps({request.vars['name']: assignment_id,
+                           'status': 'success'})
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')
@@ -1518,7 +1519,8 @@ def add__or_update_assignment_question():
             activity_count=activity_count,
             activities_required=activities_required,
             autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
-            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type],
+            status = 'success'
         ))
     except Exception as ex:
         logger.error(ex)
