@@ -626,6 +626,13 @@ class _TestAssignment(object):
                       description=self.description,
                       due=str(self.due)))) != "ERROR"
 
+
+    def release_grades(self):
+        self.test_client.post('admin/releasegrades',
+            data=dict(assignmentid=self.assignment_id,
+                      released='yes'))
+        assert self.test_client.text == 'Success'
+
 @pytest.fixture
 def test_assignment(test_client, test_user, runestone_db_tools):
     return lambda *args, **kwargs: _TestAssignment(test_client, test_user, runestone_db_tools, *args, **kwargs)

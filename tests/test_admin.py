@@ -18,6 +18,9 @@ def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_
     assert str(res.duedate.date()) == str(my_ass.due.date())
     my_ass.autograde()
     my_ass.calculate_totals()
+    my_ass.release_grades()
+    res = db(db.assignments.id == my_ass.assignment_id).select().first()
+    assert res.released == True
 
 
 def test_choose_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
