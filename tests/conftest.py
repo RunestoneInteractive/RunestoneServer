@@ -542,3 +542,92 @@ def test_user(test_client, runestone_db_tools):
 def test_user_1(runestone_db_tools, test_user):
     runestone_db_tools.create_course('test_course_1')
     return test_user('test_user_1', 'password_1', 'test_course_1')
+
+
+class _TestAssignment(object):
+    assignment_count = 0
+    def __init__(self, test_client, test_user, runestone_db_tools, aname, course_name):
+        self.test_client = test_client
+        self.runestone_db_tools = runestone_db_tools
+        self.assignment_name = aname
+        self.course_name = course_name
+        self.description = "default description"
+        self.is_visible = False
+        self.due = datetime.datetime.utcnow() + datetime.timedelta(days=7)
+        self.assignment_instructor = test_user('assign_instructor_{}'.format(_TestAssignment.assignment_count),
+            'password', course_name)
+        self.assignment_instructor.make_instructor()
+        self.assignment_instructor.login()
+        self.assignment_id = json.loads(
+            self.test_client.validate('admin/createAssignment',
+                                    data={'name': self.assignment_name})
+        )[self.assignment_name]
+        assert self.assignment_id
+        _TestAssignment.assignment_count += 1
+
+
+    def addq_to_assignment(self, **kwargs):
+        if 'points' not in kwargs:
+            kwargs['points'] = 1
+        kwargs['assignment'] = self.assignment_id
+        assert self.test_client.validate(
+            'admin/add__or_update_assignment_question', data=kwargs
+        ) != json.dumps('Error')
+
+
+    def autograde(self):
+        print('autograding', self.assignment_name)
+        assert json.loads(
+            self.test_client.validate('assignments/autograde',
+                                data=dict(assignment=self.assignment_name))
+            )['message'].startswith('autograded')
+
+
+    def questions(self):
+        """
+        Return a list of all (id, name) values for each question
+        in an assignment
+        """
+
+        db = self.runestone_db_tools.db
+        a_q_rows = db((db.assignment_questions.assignment_id == self.assignment_id) &
+                  (db.assignment_questions.question_id == db.questions.id)
+                  ).select(orderby=db.assignment_questions.sorting_priority)
+        res = []
+        for row in a_q_rows:
+            res.append(tuple([row.questions.id, row.questions.name]))
+
+        return res
+
+
+    def calculate_totals(self):
+        assert json.loads(
+        self.test_client.validate('assignments/calculate_totals',
+                                data=dict(assignment=self.assignment_name))
+        )['success']
+
+
+    def make_visible(self):
+        self.is_visible = True
+        self.save_assignment()
+
+    def set_duedate(self, newdeadline):
+        """
+        the newdeadline should be a datetime object
+        """
+        self.due = newdeadline
+        self.save_assignment()
+
+    def save_assignment(self):
+        self.test_client.validate('admin/save_assignment',
+            data=dict(assignment_id=self.assignment_id,
+                      visible='T',
+                      description=self.description,
+                      due=str(self.due)))
+
+@pytest.fixture
+def test_assignment(test_client, test_user, runestone_db_tools):
+    return lambda *args, **kwargs: _TestAssignment(test_client, test_user, runestone_db_tools, *args, **kwargs)
+
+
+

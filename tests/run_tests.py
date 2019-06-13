@@ -101,7 +101,7 @@ if __name__ == '__main__':
             print(extra_args)
             print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
-        test_files = ["test_dashboard.py", "test_ajax2.py", "test_server.py"]
+        test_files = ["test_admin.py", "test_dashboard.py", "test_ajax2.py", "test_server.py"]
         testf_string = " ".join(['applications/runestone/tests/{}'.format(i) for i in test_files])
         xqt('{} -m coverage erase'.format(sys.executable),
             '{} -m pytest -v {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         xqt('psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
         with pushd('../../..'):
             xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-                for x in ['test_ajax.py', 'test_admin.py', 'test_assignments.py']]
+                for x in ['test_ajax.py', 'test_assignments.py']]
             )
             xqt('{} -m coverage report --omit=applications/runestone/controllers/appadmin.py'.format(sys.executable))
 
