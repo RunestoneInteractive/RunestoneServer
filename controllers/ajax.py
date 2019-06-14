@@ -373,6 +373,9 @@ def savegrade():
 
 
 #@auth.requires_login()
+# This function is deprecated as of June 2019
+# We need to keep it in place as long as we continue to serve books
+# from runestone/static/  When that period is over we can eliminate
 def getuser():
     response.headers['content-type'] = 'application/json'
 

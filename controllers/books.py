@@ -18,6 +18,10 @@
 # ----------------
 import os
 import posixpath
+import logging
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 # Third-party imports
 # -------------------
@@ -44,7 +48,7 @@ def _route_book(is_published=True, is_open=False):
     if is_open == False and is_published and not db((db.user_courses.user_id == auth.user.id) &
         (db.user_courses.course_id == auth.user.course_id)).select(
         db.user_courses.id, **cache_kwargs).first():
-
+        session.flash = "Sorry you are not registered for this course.  You can view most Open courses if you log out"
         redirect(URL(c='default', f='courses'))
 
     # Look up the course name.
@@ -83,11 +87,27 @@ def _route_book(is_published=True, is_open=False):
         if auth.user:
             user_id = auth.user.username
             email = auth.user.email
+            is_logged_in = 'true'
         else:
             user_id = 'Anonymous'
             email = ''
-        return dict(course_name=course.course_name, base_course=base_course,
-                    user_id=user_id, email=email, is_instructor=user_is_instructor)
+            is_logged_in = 'false'
+
+        if session.readings:
+            reading_list = session.readings
+        else:
+            reading_list = 'null'
+
+        # TODO: - Add log entry for page view
+        try:
+            db.useinfo.insert(sid=user_id, act='view', div_id=book_path,
+                event='page', timestamp=datetime.datetime.utcnow(),
+                course_id=course.course_name)
+        except:
+            logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
+
+        return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
+                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=reading_list)
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
