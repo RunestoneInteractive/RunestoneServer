@@ -3,6 +3,7 @@ import json
 import sys
 from psycopg2 import IntegrityError
 import click
+import datetime
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()

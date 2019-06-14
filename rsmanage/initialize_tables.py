@@ -1,6 +1,7 @@
 import click
 import sys
 from os import environ
+import datetime
 
 # this script is meant to be run from the initdb subcommand of rsmange, which
 # simply spawns python web2py.py -S runestone -M applications/runestone/initialize_tables.py
