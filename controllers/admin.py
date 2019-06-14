@@ -1608,3 +1608,8 @@ def checkQType():
             answer = useinfoquery.act
 
     return json.dumps(answer)
+
+def killer():
+    print(routes_onerror)
+    x = 5 / 0
+    return 'ERROR'

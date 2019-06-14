@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import os
 
 # default_application, default_controller, default_function
 # are used when the respective element is missing from the
@@ -67,8 +68,11 @@ logging = 'debug'
 #
 routes_onerror = [
   ('runestone/static/404', '/runestone/static/fail.html'),
-  ('runestone/500', '/runestone/default/reportabug.html'),
 ]
+
+if os.environ['WEB2PY_CONFIG'] == 'production':
+    routes_onerror.append(  ('runestone/500', '/runestone/default/reportabug.html') )
+
 
 # routes_onerror = [
 #     (r'init/400', r'/init/default/login')

@@ -45,6 +45,20 @@ def test_manual(runestone_db_tools, test_user):
     # Pause in the debugginer until manual testing is done.
     import pdb; pdb.set_trace()
 
+def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
+    """
+    This test ensures that we have the routing set up for testing properly.
+    This test will fail if routes.py is set up as follows.
+    routes_onerror = [
+        ('runestone/static/404', '/runestone/static/fail.html'),
+        ('runestone/500', '/runestone/default/reportabug.html'),
+        ]
+    for testing purposes we don't want web2py to capture 500 errors.
+    """
+    with pytest.raises(RuntimeError) as excinfo:
+        test_client.post('admin/killer')
+        assert test_client.text == ""
+    assert "ticket" in str(excinfo.value)
 
 # Validate the HTML produced by various web2py pages.
 # NOTE -- this is the start of a really really long decorator for test_1
