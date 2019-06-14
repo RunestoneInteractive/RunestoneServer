@@ -41,3 +41,11 @@ def test_do_assignment(test_assignment, test_client, test_user_1, runestone_db_t
     test_client.validate('assignments/doAssignment.html', 'Mary had a',
         data=dict(assignment_id=my_ass.assignment_id))
 
+def test_question_text(test_assignment, test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    test_client.validate('admin/question_text', 'Mary had a',
+            data=dict(question_name='subc_b_fitb'))
+    test_client.validate('admin/question_text', 'Error: ',
+            data=dict(question_name='non_existant_question'))
+
