@@ -1,3 +1,4 @@
+import json
 
 
 def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
@@ -48,4 +49,17 @@ def test_question_text(test_assignment, test_client, test_user_1, runestone_db_t
             data=dict(question_name='subc_b_fitb'))
     test_client.validate('admin/question_text', 'Error: ',
             data=dict(question_name='non_existant_question'))
+
+def test_removeinstructor(test_user, test_client, test_user_1, runestone_db_tools):
+    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+    my_inst.make_instructor()
+    my_inst.login()
+    res = test_client.validate('admin/addinstructor/{}'.format(test_user_1.user_id))
+    assert json.loads(res) == 'Success'
+    res = test_client.validate('admin/removeinstructor/{}'.format(test_user_1.user_id))
+    assert json.loads(res) == [True]
+    res = test_client.validate('admin/removeinstructor/{}'.format(my_inst.user_id))
+    assert json.loads(res) == [False]
+    res = test_client.validate('admin/addinstructor/{}'.format(9999999))
+    assert 'Cannot add non-existent user ' in json.loads(res)
 

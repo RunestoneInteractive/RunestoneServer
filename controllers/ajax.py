@@ -363,14 +363,6 @@ def getprog():
     return json.dumps([res])
 
 
-@auth.requires_membership('instructor')
-def savegrade():
-    res = db(db.code.id == request.vars.id)
-    if request.vars.grade:
-        res.update(grade = float(request.vars.grade))
-    else:
-        res.update(comment = request.vars.comment)
-
 
 #@auth.requires_login()
 # This function is deprecated as of June 2019

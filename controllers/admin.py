@@ -679,6 +679,10 @@ def removeStudents():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeinstructor():
+    """
+    admin/removeinstructor/<int>
+
+    """
     removed = []
     if request.args[0] != str(auth.user.id):
         db((db.course_instructor.instructor == request.args[0]) & (db.course_instructor.course == auth.user.course_id)).delete()
@@ -691,6 +695,10 @@ def removeinstructor():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addinstructor():
+    """
+    admin/addinstructor/<int>
+
+    """
     response.headers['content-type'] = 'application/json'
     instructor = request.args(0)
     res = db(db.auth_user.id == instructor).select().first()
