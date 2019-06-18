@@ -641,13 +641,22 @@ def grading():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
+    """
+    Remove one or more students from the current course
+    The query string should contain the key studentList which can be either
+    a single id from auth_user or it could be a list of ids.
+
+    This does not remove a student from the database but rather marks them as inactive in
+    the database and moves them to the basecourse.
+    """
+
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
     answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers',
                      'dragndrop_answers', 'fitb_answers','parsons_answers',
                      'shortanswer_answers']
 
-    if not isinstance(request.vars["studentList"], basestring):
+    if not isinstance(request.vars["studentList"], str):
         # Multiple ids selected
         studentList = request.vars["studentList"]
     elif request.vars["studentList"] == "None":

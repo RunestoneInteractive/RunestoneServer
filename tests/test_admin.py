@@ -63,3 +63,13 @@ def test_removeinstructor(test_user, test_client, test_user_1, runestone_db_tool
     res = test_client.validate('admin/addinstructor/{}'.format(9999999))
     assert 'Cannot add non-existent user ' in json.loads(res)
 
+def test_removestudents(test_user, test_client, test_user_1, runestone_db_tools):
+    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+    my_inst.make_instructor()
+    my_inst.login()
+    res = test_client.validate('admin/removeStudents', 'Assignments',
+        data=dict(studentList=test_user_1.user_id))
+
+    db = runestone_db_tools.db
+    res = db(db.auth_user.id == test_user_1.user_id).select().first()
+    assert res.active == False
