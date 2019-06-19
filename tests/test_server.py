@@ -533,3 +533,18 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
     for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
         assert not db(db['{}_answers'.format(t)].sid == 'user_to_delete').select().first()
 
+def test_pageprogress(test_client, runestone_db_tools, test_user_1):
+    test_user_1.login()
+    test_user_1.hsblog(event="mChoice",
+            act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
+            course="test_course_1")
+    # Since the user has answered the question the count for subc_b_1 should be 1
+    # cannot test the totals on the client without javascript but that is covered in the
+    # selenium tests on the components side.
+    test_user_1.test_client.validate('books/published/test_course_1/test_chapter_1/subchapter_b.html',
+        '"subc_b_1": 1')
+    assert '"LearningZone_poll": 0' in test_user_1.test_client.text
+    assert '"subc_b_fitb": 0' in test_user_1.test_client.text
+
+
+

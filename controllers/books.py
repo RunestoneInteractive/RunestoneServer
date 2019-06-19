@@ -18,6 +18,7 @@
 # ----------------
 import os
 import posixpath
+import json
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -83,11 +84,23 @@ def _route_book(is_published=True, is_open=False):
         if not os.path.isfile(book_path):
             raise HTTP(404)
         response.view = book_path
+        subchapter = os.path.basename(os.path.splitext(book_path)[0])
 
         if auth.user:
             user_id = auth.user.username
             email = auth.user.email
             is_logged_in = 'true'
+            # Get the necessary information to update subchapter progress on the page
+            page_divids = db((db.questions.subchapter == subchapter) &
+                             (db.questions.base_course == base_course)).select(db.questions.name)
+            div_counts = {q.name:0 for q in page_divids}
+            sid_counts = db((db.questions.subchapter == subchapter) &
+                            (db.questions.base_course == base_course) &
+                            (db.questions.name == db.useinfo.div_id) &
+                            (db.useinfo.course_id == auth.user.course_name) &
+                            (db.useinfo.sid == auth.user.username)).select(db.useinfo.div_id, distinct=True)
+            for row in sid_counts:
+                div_counts[row.div_id] = 1
         else:
             user_id = 'Anonymous'
             email = ''
@@ -107,7 +120,8 @@ def _route_book(is_published=True, is_open=False):
             logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
         return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
-                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=reading_list)
+                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=reading_list,
+                    activity_info=json.dumps(div_counts))
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
