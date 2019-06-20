@@ -73,3 +73,12 @@ def test_removestudents(test_user, test_client, test_user_1, runestone_db_tools)
     db = runestone_db_tools.db
     res = db(db.auth_user.id == test_user_1.user_id).select().first()
     assert res.active == False
+
+
+def test_htmlsrc(test_assignment, test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    test_client.validate('admin/htmlsrc', 'Mary had a',
+            data=dict(acid='subc_b_fitb'))
+    test_client.validate('admin/htmlsrc', 'No preview Available',
+            data=dict(acid='non_existant_question'))

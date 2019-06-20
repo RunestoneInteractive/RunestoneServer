@@ -726,13 +726,16 @@ def deletecourse():
     course_name = auth.user.course_name
     cset = db(db.courses.course_name == course_name)
     if not cset.isempty():
-        courseid = cset.select(db.courses.id).first()
+        res = cset.select(db.courses.id, db.courses.base_course).first()
+        courseid = res.id
+        basecourse = res.base_course
+        bcid = db(db.courses.course_name == basecourse).select(db.courses.id).first()
         qset = db((db.course_instructor.course == courseid) & (db.course_instructor.instructor == auth.user.id))
         if not qset.isempty():
             qset.delete()
             students = db(db.auth_user.course_id == courseid)
-            students.update(course_id=1)
-            uset=db(db.user_courses.course_id == courseid.id)
+            students.update(course_id=bcid)
+            uset=db(db.user_courses.course_id == courseid)
             uset.delete()
             db(db.courses.id == courseid).delete()
             try:
@@ -1614,17 +1617,6 @@ def reorder_assignment_questions():
 
     return json.dumps("Reordered in DB")
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def checkQType():
-    acid = request.vars['acid']
-    sid = request.vars['sid']
-    answer = None
-    useinfoquery = db((db.useinfo.div_id == acid) & (db.useinfo.sid == sid)).select(db.useinfo.event, db.useinfo.act).first()
-    if useinfoquery != None:
-        if useinfoquery.event == 'shortanswer':
-            answer = useinfoquery.act
-
-    return json.dumps(answer)
 
 def killer():
     print(routes_onerror)
