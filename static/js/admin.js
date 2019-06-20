@@ -1177,17 +1177,14 @@ function menu_from_editable(
 function createAssignment(form) {
     var name = form.name.value;
 
-    var obj = new XMLHttpRequest();
     $('#assign_visible').prop('checked', true);
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
-    obj.send(JSON.stringify({ name: name }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            added = JSON.parse(obj.responseText);
-            if (added != 'ERROR') {
+    data = {'name': name}
+    url = '/runestone/admin/createAssignment';
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
+        if (iserror != 'ERROR') {
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');
-                newopt.value = added[name];
+                newopt.value = iserror[name];
                 newopt.innerHTML = name;
                 select.appendChild(newopt);
                 select.selectedIndex = newopt.index;
@@ -1195,8 +1192,7 @@ function createAssignment(form) {
             } else {
                 alert('Error in creating new assignment.')
             }
-        }
-    }
+        }, 'json')
 }
 
 // Triggered by the ``-`` button on the assignments tab.
@@ -1209,16 +1205,18 @@ function remove_assignment() {
         return;
     }
 
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/removeassign/' + assignmentid, true);
-    obj.send(JSON.stringify({ assignid: 'assignmentid' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
+    var url = '/runestone/admin/removeassign';
+    var data = {assignid: assignmentid };
+    jQuery.post(url, data, function (res, status, whatever) {
+        if (res != 'Error') {
             select.remove(select.selectedIndex);
             assignmentInfo();
+        } else {
+            alert("Could not remove assignment " + assignmentname);
         }
-    }
+    });
 }
+
 
 
 // Update an assignment.
@@ -1632,7 +1630,6 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         let editButton = document.createElement("button")
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
-        //data-target="#editModal" data-toggle="modal" onclick="getQuestionText();"
         $(editButton).attr("data-target", "#editModal");
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
@@ -1653,7 +1650,7 @@ function questionBank(form) {
     var author = form.author.value;
     var tags = $("#tags").select2("val");
     var term = form.term.value;
-    var difficulty = null;
+    var difficulty = "";
     var difficulty_options = ['rating1', 'rating2', 'rating3', 'rating4', 'rating5'];
     var inputs = document.getElementById('qbankform').getElementsByTagName('input');
     for (var i = 0, length = inputs.length; i < length; i++) {
@@ -1663,36 +1660,43 @@ function questionBank(form) {
     }
 
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term + '&qtype=' + 'formative', true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var resp = JSON.parse(obj.responseText);
-            var select = document.getElementById('qbankselect');
-            select.onchange = getQuestionInfo;
-            var questionform = document.getElementById('questionform');
-            $("#qbankselect").empty();
-            for (i = 0; i < resp.length; i++) {
-                var option = document.createElement("option");
-                option.text = resp[i];
-                option.value = resp[i];
-                option.onclick = getQuestionInfo;
-                select.add(option);
-            }
-            if (resp.length == 0) {
-                select.style.visibility = 'hidden';
-                questionform.style.visibility = 'hidden';
-                var q_info = document.getElementById('questionInfo');
-                q_info.style.visibility = 'hidden';
-                alert("Sorry, no questions matched your search criteria.");
-
-            }
-            if (resp.length > 0) {
-                select.style.visibility = 'visible';
-                questionform.style.visibility = 'visible';
-            }
+    var url = '/runestone/admin/questionBank'
+    var data = { variable: 'variable',
+        chapter: chapter,
+        difficulty: difficulty,
+        author: author,
+        tags: tags,
+        term: term
+        };
+    jQuery.post(url, data, function (resp, textStatus, whatever) {
+        resp = JSON.parse(resp)
+        if (resp == 'Error') {
+            alert("An error occured while searching")
+        };
+        var select = document.getElementById('qbankselect');
+        select.onchange = getQuestionInfo;
+        var questionform = document.getElementById('questionform');
+        $("#qbankselect").empty();
+        for (i = 0; i < resp.length; i++) {
+            var option = document.createElement("option");
+            option.text = resp[i];
+            option.value = resp[i];
+            option.onclick = getQuestionInfo;
+            select.add(option);
         }
-    }
+        if (resp.length == 0) {
+            select.style.visibility = 'hidden';
+            questionform.style.visibility = 'hidden';
+            var q_info = document.getElementById('questionInfo');
+            q_info.style.visibility = 'hidden';
+            alert("Sorry, no questions matched your search criteria.");
+
+        }
+        if (resp.length > 0) {
+            select.style.visibility = 'visible';
+            questionform.style.visibility = 'visible';
+        }
+    });
 }
 
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
@@ -1710,12 +1714,14 @@ function getQuestionInfo() {
     var question_name = select.options[select.selectedIndex].text;
     var assignlist = document.getElementById('assignlist');
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getQuestionInfo/?question=' + question_name + '&assignment=' + assignmentid, true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var question_info = obj.responseText;
+
+    var url = '/runestone/admin/getQuestionInfo';
+    var data = {
+        variable: 'variable',
+        question: question_name,
+        assignment: assignmentid
+    };
+    jQuery.post(url, data, function (question_info, status, whatever) {
             var res = JSON.parse(question_info);
             var data = {};
             var i;
@@ -1751,8 +1757,7 @@ function getQuestionInfo() {
             var q_info = document.getElementById('questionInfo');
             q_info.style.visibility = 'visible';
 
-        }
-    }
+        });
 }
 
 
@@ -1792,23 +1797,6 @@ function edit_question(form) {
         }
     });
 }
-
-
-// More preview panel functionality I don't understand.
-function getQuestionText() {
-    var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/question_text?question_name=' + question_name, true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var textarea = document.getElementById('editRST');
-            textarea.innerHTML = JSON.parse(obj.responseText);
-        }
-    }
-}
-
 
 
 // ***********

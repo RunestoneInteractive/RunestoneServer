@@ -1,14 +1,11 @@
 # pylint: good-names=auth, settings, db
 
-from os import path
-import os
 import logging
-from datetime import date, timedelta, datetime
 from operator import itemgetter
 from collections import OrderedDict
-from paver.easy import sh
 import six
 import pandas as pd
+from db_dashboard import DashboardDataAnalyzer
 
 
 logger = logging.getLogger(settings.logger)
@@ -40,7 +37,7 @@ def index():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     logger.debug("getting chapters for {}".format(auth.user.course_name))
-    chapters = db(db.chapters.course_id == auth.user.course_name).select()
+    chapters = db(db.chapters.course_id == course.base_course).select()
     chap_map = {}
     for chapter in chapters:
         chap_map[chapter.chapter_label] = chapter.chapter_name
@@ -146,7 +143,7 @@ def index():
     "name":"Exercises Missed"
     }]
 
-    return dict(assignments=assignments, course_name=auth.user.course_name, course_id=auth.user.course_name, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
+    return dict(assignments=assignments, course=course, questions=questions, sections=sections, chapters=chapters, selected_chapter=selected_chapter, studentactivity=studentactivity, recentactivity=recentactivity)
 
 @auth.requires_login()
 def studentreport():
@@ -166,7 +163,7 @@ def studentreport():
     activity = data_analyzer.formatted_activity.activities
 
     logger.debug("GRADES = %s",data_analyzer.grades)
-    return dict(course_id=auth.user.course_name,  user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
+    return dict(course=get_course_row(db.courses.ALL), user=data_analyzer.user, chapters=chapters, activity=activity, assignments=data_analyzer.grades)
 
 @auth.requires_login()
 def studentprogress():
@@ -261,12 +258,18 @@ def grades():
             averagerow.append('n/a')
 
 
-    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name,
+    return dict(course=course,
                 assignments=assignments, students=students, gradetable=gradetable,
                 averagerow=averagerow, practice_average=practice_average)
 
+# This is meant to be called from a form submission, not as a bare controller endpoint
 @auth.requires_login()
 def questiongrades():
+    if 'sid' not in request.vars:
+        logger.error("It Appears questiongrades was called without any request vars")
+        session.flash = "Cannot call questiongrades directly"
+        redirect(URL('dashboard','index'))
+
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment = db((db.assignments.id == request.vars.assignment_id) & (db.assignments.course == course.id)).select().first()
     sid = request.vars.sid
@@ -281,10 +284,15 @@ def questiongrades():
         session.flash = "Student {} not found for course {}".format(sid, course.course_name)
         return redirect(URL('dashboard','grades'))
 
-    return dict(course_id=auth.user.course_name, course_name=auth.user.course_name, assignment=assignment, student=student, rows=rows, total=0)
+    return dict(assignment=assignment, student=student, rows=rows, total=0, course=course)
 
+# Note this is meant to be called from a form submission not as a bare endpoint
 @auth.requires_login()
 def exercisemetrics():
+    if 'chapter' not in request.vars:
+        logger.error("It Appears exercisemetrics was called without any request vars")
+        session.flash = "Cannot call exercisemetrics directly"
+        redirect(URL('dashboard','index'))
     chapter = request.get_vars['chapter']
     chapter = db((db.chapters.course_id == auth.user.course_name) & (db.chapters.chapter_label == chapter)).select().first()
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id,chapter)
@@ -313,12 +321,12 @@ def exercisemetrics():
             "frequency": count
             })
 
-    return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
+    return dict(course=get_course_row(db.courses.ALL), answers=answers, response_frequency=response_frequency, attempt_histogram=attempt_histogram, exercise_label=problem_metric.problem_text)
 
 
 @auth.requires_login()
 def subchapoverview():
-    #course = db(db.courses.id == auth.user.course_id).select().first()
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
     course = auth.user.course_name
 
     is_instructor = verifyInstructorStatus(course, auth.user.id)
@@ -368,5 +376,5 @@ def subchapoverview():
         response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
         return l.to_csv(na_rep=" ")
     else:
-        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name,
+        return dict(course_name=auth.user.course_name, course_id=auth.user.course_name, course=thecourse,
             summary=l.to_html(classes="table table-striped table-bordered table-lg", na_rep=" ", table_id="scsummary").replace("NaT",""))

@@ -16,6 +16,8 @@ from lxml import etree, objectify
 
 import oauth2
 
+import six
+
 from outcome_response import OutcomeResponse
 from pytsugi_utils import InvalidLTIConfigError
 

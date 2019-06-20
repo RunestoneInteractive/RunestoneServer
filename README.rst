@@ -1,13 +1,11 @@
 Runestone Interactive Server and API
 ====================================
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/bnmnetp/runestone
-   :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: https://travis-ci.org/RunestoneInteractive/RunestoneServer.svg?branch=master
+    :target: https://travis-ci.org/RunestoneInteractive/RunestoneServer
 
-.. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
-   :alt: Build Status
-
+.. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.png?branch=master
+   :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
 
 Relationship to other Runestone components
 ------------------------------------------
@@ -158,7 +156,7 @@ Installation
 
    ::
 
-       export WEB2PY_CONFIG=production
+       export WEB2PY_CONFIG=production # or development or test
        export WEB2PY_MIGRATE=Yes
        export DBURL=postgresql://username:pw@host/database
        export TEST_DBURL=postgresql://username:pw@host/database
@@ -241,7 +239,6 @@ The Harder Way
 * create an account for yourself
 
   * insert new auth_user
-  * cohort id should be "id"
   * Course name should be the course name from above (not a number)
   * Do *not* make up a registration key or a reset password key; leave them blank
 

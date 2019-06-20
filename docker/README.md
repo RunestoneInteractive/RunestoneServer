@@ -1,10 +1,15 @@
 # Docker Deployment
 
-Using [docker-compose](https://docs.docker.com/compose/install/) and [Docker](https://docs.docker.com/install/)
+Using Docker,
 we can easily bring up the server without needing to install dependencies
-on the host. If you haven't yet, visit the links to install both docker-compose and docker.
+on the host.
 
 ## Setup
+
+### 0. Install Docker
+
+1. Follow the [Docker installation guide](https://docs.docker.com/install/#supported-platforms). On Linux, make sure to also perform the [post-installation steps](https://docs.docker.com/install/linux/linux-postinstall/).
+2. [Install Docker Compose](https://docs.docker.com/compose/install/).
 
 ### 1. Add Books
 
@@ -22,18 +27,20 @@ After cloning the book edit the pavement.py file.  It is **critical** that the `
 
 ### 2. Add Users
 
-If you have an instructors.csv or students.csv that you want to add to the database,
-put them in a folder called "configs" in the root of the repository:  The format of the csv files is to have one person per line with the format of each line as follows:
+If you have an `instructors.csv` or `students.csv` that you want to add to the database,
+put them in a folder called `configs` in the root of the repository. The format of the csv files is to have one person per line with the format of each line as follows:
 
 ```
 username,email,first_name,last_name,pw,course
 ```
 
-This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.
+This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.  From the `$RUNESTONE_PATH` directory (top level of runestone) you can exectue the following commands:
 
 
 ```bash
-$ mkdir -p
+$ mkdir -p configs
+$ cp instructors.csv configs
+$ cp students.csv configs
 ```
 
 ### 3. Build
@@ -41,7 +48,7 @@ $ mkdir -p
 First, build the application container.
 
 ```bash
-$ docker build -t runstone/server .
+$ docker build -t runestone/server .
 ```
 
 This build step *only needs to be done once* and only again if you need
@@ -152,6 +159,8 @@ You can run the unit tests in the container using the following command.
 docker exec -it runestone_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
 ```
 
+The `scripts` folder has a nice utility called `dtest` that does this for you and also supports the `-k` option for you to run a single test.
+
 ### 3. Removing Containers
 
 If you really want to remove all containers and start over (hey, it happens) then
@@ -237,5 +246,22 @@ root@60e279f00b2e:/srv/web2py#
 ```
 
 Remember that the folder under web2py applications/runestone is bound to your host,
-so **do not edit files from inside the container** otherwise they will have a change in
-permissions on the host.
+so **do not edit files from inside the container** otherwise they will have a change in permissions on the host.
+
+### 7. Restarting uwsgi/web2py
+
+Controllers are reloaded automatically every time they are used.  However if you are making changes to code in the `modules` folder you will need to restart web2py or else it is likely that a cached version of that code will be used.  You can restart web2py easily by first shelling into the container and then running the command `touch /srv/web2py/reload_server`
+
+### 8. File Permissions (especially on Linux)
+
+File permissions can seem a little strange when you start this container on linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The best thing to do is to make sure that the files are in your group `chgrp -R <username> RunestoneServer` should allw both you and the container enough privileges to do your work.
+
+## Debugging
+
+There are a couple of ways to get at the logger output:
+
+1.  Shell into the container and then look at `/srv/web2py/logs/uwsgi.log`
+2.  Run `docker-compose logs --follow` This will give you the continuous stream of log information coming out of the container including the uwsgi/web2py log.
+
+
+

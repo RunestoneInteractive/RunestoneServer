@@ -1,14 +1,25 @@
-from os import path
-import os
-import shutil
-import sys
+# *********************************************
+# |docname| - Endpoints relating to assignments
+# *********************************************
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import json
 import logging
 import datetime
 from random import shuffle
 from collections import OrderedDict
+
+# Third-party imports
+# -------------------
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+from db_dashboard import DashboardDataAnalyzer
 import six
 import bleach
 
@@ -318,36 +329,6 @@ def record_assignment_score():
             manual_total=True
         )
 
-# download a CSV with the student's performance on all assignments so far
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def download_time_spent():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    students = db(db.auth_user.course_id == course.id).select()
-    assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type == db.assignment_types.id
-                                                         ).select(orderby=db.assignments.assignment_type)
-    grades = db(db.grades).select()
-
-    field_names = ['Lastname','Firstname','Email','Total']
-    type_names = []
-    assignment_names = []
-
-    # datestr should be in format "05-20-13"
-    datestr = request.vars.as_of
-    try:
-        as_of_timestamp = datetime.datetime.strptime(datestr, '%m-%d-%y')
-    except:
-        return dict(error="Please enter ?as_of=03-24-16")
-    # probably broken now; assignment_types is deprecated and maybe not filled in correctly
-    # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    rows = [CourseGrade(user=student,
-                        course=course,
-                        assignment_types=[]).csv(type_names,
-                                                 assignment_names,
-                                                 as_of_timestamp=as_of_timestamp
-                                                 ) for student in students]
-    response.view='generic.csv'
-    return dict(filename='grades_download.csv', csvdata=rows, field_names=field_names+type_names+assignment_names)
-
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
@@ -514,7 +495,7 @@ def doAssignment():
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
                    (db.assignment_questions.question_id == db.questions.id) & \
                    (db.chapters.chapter_label == db.questions.chapter) & \
-                   (db.chapters.course_id == course.course_name) & \
+                   ((db.chapters.course_id == course.course_name) | (db.chapters.course_id == course.base_course)) & \
                    (db.sub_chapters.chapter_id == db.chapters.id) & \
                    (db.sub_chapters.sub_chapter_label == db.questions.subchapter)) \
         .select(db.questions.name,
@@ -553,9 +534,9 @@ def doAssignment():
                 bts = bytes(q.questions.htmlsrc).decode('utf8')
 
             htmlsrc = bts.replace('src="../_static/',
-                'src="../static/' + course['course_name'] + '/_static/')
-            htmlsrc = htmlsrc.replace("../_images",
-                                      "/{}/static/{}/_images".format(request.application, course.course_name))
+                                  'src="' + get_course_url('_static/'))
+            htmlsrc = htmlsrc.replace("../_images/",
+                                      get_course_url('_images/'))
         else:
             htmlsrc = None
         if assignment['released']:
@@ -717,13 +698,13 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
 
 # Gets invoked from lti to set timezone and then redirect to practice()
 def settz_then_practice():
-    return dict(course_name=request.vars.get('course_name', settings.default_course))
+    return dict(course=get_course_row(), course_name=request.vars.get('course_name', settings.default_course))
 
 
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
 def practiceNotStartedYet():
-    return dict(course_id=auth.user.course_name,
-                message1=bleach.clean(request.vars.message1), message2=bleach.clean(request.vars.message2))
+    return dict(course=get_course_row(db.courses.ALL), course_id=auth.user.course_name,
+                message1=bleach.clean(request.vars.message1 or ''), message2=bleach.clean(request.vars.message2 or ''))
 
 
 # Gets invoked when the student requests practicing topics.
@@ -898,8 +879,7 @@ def practice():
                                        outcome_url=practice_grade.lis_outcome_url,
                                        result_sourcedid=practice_grade.lis_result_sourcedid)
 
-    return dict(course=course, course_name=auth.user.course_name,
-                course_id=auth.user.course_name,
+    return dict(course=course,
                 q=questioninfo, all_flashcards=all_flashcards,
                 flashcard_count=available_flashcards_num,
                 # The number of days the student has completed their practice.

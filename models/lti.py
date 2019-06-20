@@ -1,8 +1,8 @@
-db.define_table('lti_keys', 
-                Field('consumer'), 
-                Field('secret'), 
+db.define_table('lti_keys',
+                Field('consumer'),
+                Field('secret'),
                 Field('application'),
-                migrate = 'runestone_lti_keys.table'
+                migrate=table_migrate_prefix + 'lti_keys.table'
                 )
 
 

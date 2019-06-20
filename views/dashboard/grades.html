@@ -14,7 +14,7 @@
 
 
 <div id="dashboard">
-	<h1>{{=course_name}}</h1>
+	<h1>{{=course.course_name}}</h1>
 	<h2>Gradebook</h2>
 	<div>
 		<label for="studentsearch">Filter by Student</label>
@@ -28,7 +28,7 @@
 		<table id="gradebook" class="sortable">
 
 			<!-- Jquery plugin uses the caption of a table to name the downloaded file -->
-			<caption style="display:none;">{{=course_name}}_Gradebook</caption>
+			<caption style="display:none;">{{=course.course_name}}_Gradebook</caption>
 
 			<thead style="cursor: pointer;">
 				<tr id = "head">

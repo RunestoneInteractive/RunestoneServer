@@ -147,4 +147,4 @@ def index():
                                                 course_name=getCourseNameFromId(course_id))
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
-    redirect('/%s/static/%s/index.html' % (request.application, getCourseNameFromId(course_id)))
+    redirect(get_course_url('index.html'))
