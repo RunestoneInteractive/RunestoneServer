@@ -4,7 +4,7 @@ Runestone Interactive Server and API
 .. image:: https://travis-ci.org/RunestoneInteractive/RunestoneServer.svg?branch=master
     :target: https://travis-ci.org/RunestoneInteractive/RunestoneServer
 
-.. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.svg?branch=master
+.. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.png?branch=master
    :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
 
 Relationship to other Runestone components
