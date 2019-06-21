@@ -793,18 +793,6 @@ def createAssignment():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def getQuestions():
-    assignment_id = request.vars['assignmentid']
-    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
-    questions = []
-    for row in assignment_questions:
-        question_info_query = db(db.questions.id == int(row.question_id)).select()
-        for q in question_info_query:
-            questions.append(q.name)
-    return json.dumps(questions)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
     response.headers['content-type'] = 'application/json'
     logger.error("in questionbank")
@@ -996,43 +984,6 @@ def question_text():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def searchstudents():
-    if request.args[0] == "_":
-        #seperate the students from instructors in a hopefully more efficient way
-        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
-        searchdict = {}
-        for row in cur_students:
-            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (db.course_instructor.instructor == row.user_id)).select()
-            instructorlist = []
-            for line in isinstructor:
-                instructorlist.append(line.instructor)
-            if row.user_id not in instructorlist:
-                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name,
-                                                               db.auth_user.last_name)
-                for identity in person:
-                    name = identity.first_name + " " + identity.last_name
-                    searchdict[row.user_id] = name
-
-    else:
-        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
-        searchdict = {}
-        for row in cur_students:
-            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (
-            db.course_instructor.instructor == row.user_id)).select()
-            instructorlist = []
-            for line in isinstructor:
-                instructorlist.append(line.instructor)
-            if row.user_id not in instructorlist:
-                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name)
-                for identity in person:
-                    if request.args[0] in identity.first_name or request.args[0] in identity.last_name:
-                        name = identity.first_name + " " + identity.last_name
-                        searchdict[row.user_id] = name
-
-    return json.dumps(searchdict)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def gettemplate():
     template = request.args[0]
     returndict = {}
@@ -1103,17 +1054,6 @@ def htmlsrc():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def getStudentCode():
-    try:
-        acid = request.vars['acid']
-        sid = request.vars['sid']
-        c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
-        return json.dumps(c.code)
-    except Exception as ex:
-        logger.error(ex)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getGradeComments():
 
     acid = request.vars['acid']
@@ -1127,15 +1067,6 @@ def getGradeComments():
         return json.dumps({'grade':c.score, 'comments':c.comment})
     else:
         return json.dumps("Error")
-
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def coursename():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    return json.dumps(row.course_name)
-
-
 
 def _get_assignment(assignment_id):
     return db(db.assignments.id == assignment_id).select().first()
