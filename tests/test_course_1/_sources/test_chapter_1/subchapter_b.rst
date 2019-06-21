@@ -5,6 +5,7 @@ Subchapter B
 Lets add one activity to this Subchapter!
 
 .. mchoice:: subc_b_1
+   :author: test_author
    :answer_a: True
    :answer_b: False
    :correct: b
@@ -23,6 +24,7 @@ Lets add one activity to this Subchapter!
 
 
 .. fillintheblank:: subc_b_fitb
+   :author: test_author
 
    Mary had a |blank| lamb.
 

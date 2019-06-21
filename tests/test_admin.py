@@ -82,3 +82,37 @@ def test_htmlsrc(test_assignment, test_client, test_user_1, runestone_db_tools):
             data=dict(acid='subc_b_fitb'))
     test_client.validate('admin/htmlsrc', 'No preview Available',
             data=dict(acid='non_existant_question'))
+
+
+def test_qbank(test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    qname = 'subc_b_fitb'
+    res = test_client.validate('admin/questionBank',
+            data=dict(term=qname
+            ))
+    res = json.loads(res)
+    assert qname in res
+    res = test_client.validate('admin/questionBank',
+            data=dict(chapter='test_chapter_1'
+            ))
+    res = json.loads(res)
+    assert qname in res
+    assert len(res) >= 4
+    res = test_client.validate('admin/questionBank',
+            data=dict(author='test_author'
+            ))
+    res = json.loads(res)
+    assert qname in res
+    assert len(res) == 2
+
+
+def test_gettemplate(test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    dirlist = ['activecode', 'mchoice', 'fillintheblank']
+    for d in dirlist:
+        res = test_client.validate('admin/gettemplate/{}'.format(d))
+        res = json.loads(res)
+        assert res
+        assert d in res['template']
