@@ -812,20 +812,20 @@ def questionBank():
     base_course = row.base_course
 
     tags = False
-    if request.vars['tags'] != "":
+    if request.vars['tags']:
         tags = True
     term = False
-    if request.vars['term'] != "":
+    if request.vars['term']:
         term = True
     chapterQ = None
-    if request.vars['chapter'] != "":
+    if request.vars['chapter']:
         chapter_label = db(db.chapters.chapter_label == request.vars['chapter']).select(db.chapters.chapter_label).first().chapter_label
         chapterQ =  db.questions.chapter == chapter_label
     difficulty = False
-    if request.vars['difficulty'] != "":
+    if request.vars['difficulty']:
         difficulty = True
     authorQ = None
-    if request.vars['author'] != "":
+    if request.vars['author'] :
         authorQ = db.questions.author == request.vars['author']
     rows = []
     questions = []
