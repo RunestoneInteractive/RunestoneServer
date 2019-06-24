@@ -104,7 +104,7 @@ if __name__ == '__main__':
         test_files = ["test_server.py", "test_admin.py", "test_dashboard.py", "test_ajax2.py", "test_designer.py", "test_autograder.py"]
         testf_string = " ".join(['applications/runestone/tests/{}'.format(i) for i in test_files])
         xqt('{} -m coverage erase'.format(sys.executable),
-            '{} -m pytest -v --pdb {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
+            '{} -m pytest -v {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
         )
 
     if '-k' not in extra_args or parsed_args.runold:
