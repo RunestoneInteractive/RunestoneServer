@@ -319,7 +319,7 @@ def _autograde_one_q(course_name, sid, question_name, points, question_type,
             results = _scorable_codelens_answers(course_name, sid, question_name, points, deadline, practice_start_time,
                                                  db=db, now=now)
             scoring_fn = _score_one_codelens
-    elif question_type in ['video', 'showeval', 'youtube']:
+    elif question_type in ['video', 'showeval', 'youtube', 'shortanswer', 'poll']:
         # question_name does not help us
         results = _scorable_useinfos(course_name, sid, question_name, points, deadline, question_type='video',
                                      practice_start_time=practice_start_time, db=db, now=now)
