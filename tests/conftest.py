@@ -95,7 +95,7 @@ def web2py_server(runestone_name, web2py_server_address):
     # Wait for the webserver to come up.
     for tries in range(50):
         try:
-            urlopen(web2py_server_address, timeout=2)
+            urlopen(web2py_server_address, timeout=10)
         except URLError:
             # Wait for the server to come up.
             time.sleep(0.1)
@@ -578,10 +578,11 @@ class _TestAssignment(object):
 
     def autograde(self):
         print('autograding', self.assignment_name)
-        assert json.loads(
-            self.test_client.validate('assignments/autograde',
-                                data=dict(assignment=self.assignment_name))
-            )['message'].startswith('autograded')
+
+        res = json.loads(self.test_client.validate('assignments/autograde',
+                                data=dict(assignment=self.assignment_name)))
+        assert res['message'].startswith('autograded')
+        return res
 
 
     def questions(self):
