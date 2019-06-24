@@ -47,6 +47,7 @@ def test_grade_one_student(test_assignment, test_user_1, test_user, runestone_db
             assert up == 1
             mess = my_ass.autograde()
             print(mess)
+            my_ass.calculate_totals()
 
             res = db( (db.question_grades.sid == student1.username) &
                     (db.question_grades.div_id == 'test_fitb_1') &
@@ -54,6 +55,15 @@ def test_grade_one_student(test_assignment, test_user_1, test_user, runestone_db
                     ).select().first()
 
             assert res
+            if gt != 'interact':
+                assert res['score'] == correct_scores[ix]
+            else:
+                assert res['score'] == 10
+
+            totres = db( (db.grades.assignment == my_ass.assignment_id) &
+                         (db.grades.auth_user == student1.user_id)
+            ).select().first()
+            assert totres
             if gt != 'interact':
                 assert res['score'] == correct_scores[ix]
             else:
