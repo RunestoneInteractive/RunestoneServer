@@ -104,8 +104,7 @@ Lets add one activity to this Subchapter!
 
 .. shortanswer:: shorta1
 
-   You can ask your students to answer reflective questions or short essays in the box prov
-ided.
+   You can ask your students to answer reflective questions or short essays in the box provided.
 
 
 The end of subchapter b

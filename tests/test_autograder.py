@@ -162,7 +162,7 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
     student1.login()
 
     for act in act_list:
-        student1.hsblog(course='test_course_1', **act)
+        student1.hsblog(**act)
 
     student1.logout()
     test_user_1.login()
