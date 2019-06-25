@@ -106,3 +106,7 @@ Lets add one activity to this Subchapter!
 
    You can ask your students to answer reflective questions or short essays in the box prov
 ided.
+
+
+The end of subchapter b
+

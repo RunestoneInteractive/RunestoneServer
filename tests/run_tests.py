@@ -60,8 +60,6 @@ if __name__ == '__main__':
     os.environ['DBHOST'] = pgnetloc
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
-    parser.add_argument('--rebuildgrades', action='store_true',
-        help='Reset the unit test based on current grading code.')
     parser.add_argument('--skipdbinit', action='store_true',
         help='Skip initialization of the test database.')
     parser.add_argument('--runold', action='store_true',
@@ -115,12 +113,3 @@ if __name__ == '__main__':
                 for x in ['test_ajax.py']]
             )
             xqt('{} -m coverage report'.format(sys.executable))
-
-        # This pushes this back to the old way that justs makes sure the
-        # rebuilding the grades works... IWe could move this up a few lines if
-        # it turns out there is an advantage to being able to do this before running the old tests
-        if parsed_args.rebuildgrades:
-            with pushd('../../..'):
-                print("recalculating grades tables")
-                # TODO: This causes test failures when run.
-                xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))

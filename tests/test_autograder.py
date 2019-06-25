@@ -99,3 +99,80 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
                 assert totres['score'] == correct_scores[ix]
             else:
                 assert totres['score'] == 10
+
+SCA = '/srv/web2py/applications/runestone/books/test_course_1/published/test_course_1/test_chapter_1/subchapter_a.html'
+SCB = '/srv/web2py/applications/runestone/books/test_course_1/published/test_course_1/test_chapter_1/subchapter_b.html'
+
+def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+
+    my_ass = test_assignment('reading_test', 'test_course_1')
+    my_ass.addq_to_assignment(question='Test chapter 1/Subchapter A', points=10,
+        which_to_grade='best_answer',
+        autograde='interact',
+        reading_assignment=True,
+        activities_required=1
+        )
+    my_ass.addq_to_assignment(question='Test chapter 1/Subchapter B', points=10,
+        which_to_grade='best_answer',
+        autograde='interact',
+        reading_assignment=True,
+        activities_required=8
+        )
+
+    test_user_1.logout()
+
+    # Now lets do some page views
+    student1 = test_user('student1', 'password', 'test_course_1')
+    student1.login()
+    student1.hsblog(event='page', act='view',
+        div_id=SCA,
+        course='test_course_1')
+    student1.hsblog(event='page', act='view',
+        div_id=SCB,
+        course='test_course_1')
+
+
+    student1.logout()
+    test_user_1.login()
+    db = runestone_db_tools.db
+    mess = my_ass.autograde()
+    print(mess)
+    my_ass.calculate_totals()
+    totres = db( (db.grades.assignment == my_ass.assignment_id) &
+                    (db.grades.auth_user == student1.user_id)
+    ).select().first()
+
+    assert totres
+    assert totres['score'] == 10
+
+    # todo: expand this to include all question types and make all of the required
+    act_list = [
+        dict(event='fillb', act=json.dumps(['Mary']), div_id='subc_b_fitb'),
+        dict(event='mChoice', act='answer:1:correct', div_id='subc_b_1'),
+        dict(event='dragNdrop', act='1;2;3', div_id='subc_b_dd'),
+        dict(event='parsons', act='correct|-|1_1-2_1-3_3', div_id='parsons_ag1'),
+        dict(event='video',  act='play', div_id='yt_vid_ex1'),
+        dict(event='showeval', act='next', div_id='showEval_0'),
+        dict(event='clickableArea', act='1;2;3', div_id='click1'),
+    ]
+
+    test_user_1.logout()
+    student1.login()
+
+    for act in act_list:
+        student1.hsblog(course='test_course_1', **act)
+
+    student1.logout()
+    test_user_1.login()
+
+    mess = my_ass.autograde()
+    print(mess)
+    my_ass.calculate_totals()
+    totres = db( (db.grades.assignment == my_ass.assignment_id) &
+                    (db.grades.auth_user == student1.user_id)
+    ).select().first()
+
+    assert totres
+    assert totres['score'] == 20

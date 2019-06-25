@@ -527,6 +527,11 @@ class _TestUser(object):
         ts = datetime.datetime.utcnow()
         ts -= datetime.timedelta(microseconds=ts.microsecond)
 
+        if 'course' not in kwargs:
+            kwargs['course'] = self.course_name
+
+        if 'answer' not in kwargs and 'act' in kwargs:
+            kwargs['answer'] = kwargs['act']
         # Post to the server.
         return json.loads(self.test_client.validate('ajax/hsblog', data=kwargs))
 
