@@ -150,7 +150,10 @@ def runestone_env(runestone_name):
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller(runestone_env):
-    return web2py_controller(runestone_env)
+    env = web2py_controller(runestone_env)
+    yield env
+    # Close the database connection after the test completes.
+    env.db.close()
 
 
 # Provide acess the the Runestone database through a fixture. After a test runs,
@@ -226,7 +229,7 @@ def runestone_db(runestone_controller):
  public.web2py_session_runestone CASCADE;
  """)
     db.commit()
-    db.close()
+
 
 # Provide context managers for manipulating the Runestone database.
 class _RunestoneDbTools(object):
