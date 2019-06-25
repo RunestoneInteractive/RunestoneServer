@@ -72,7 +72,7 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
                     (db.assignment_questions.question_id == qid)).update(which_to_grade=grun, autograde=gt)
             db.commit()
             assert up == 1
-            mess = my_ass.autograde()
+            mess = my_ass.autograde(sid='student1')
             print(mess)
             my_ass.calculate_totals()
 

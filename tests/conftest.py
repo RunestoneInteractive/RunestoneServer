@@ -90,7 +90,7 @@ def web2py_server(runestone_name, web2py_server_address):
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'],
+         '--nogui', '--minthreads=10', '--maxthreads=20'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
     for tries in range(50):
@@ -581,11 +581,13 @@ class _TestAssignment(object):
         assert res['status'] == 'success'
 
 
-    def autograde(self):
+    def autograde(self,sid=None):
         print('autograding', self.assignment_name)
-
+        vars = dict(assignment=self.assignment_name)
+        if sid:
+            vars['sid'] = sid
         res = json.loads(self.test_client.validate('assignments/autograde',
-                                data=dict(assignment=self.assignment_name)))
+                                data=vars))
         assert res['message'].startswith('autograded')
         return res
 
