@@ -112,7 +112,7 @@ if __name__ == '__main__':
         xqt('psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
         with pushd('../../..'):
             xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-                for x in ['test_ajax.py', 'test_assignments.py']]
+                for x in ['test_ajax.py']]
             )
             xqt('{} -m coverage report'.format(sys.executable))
 

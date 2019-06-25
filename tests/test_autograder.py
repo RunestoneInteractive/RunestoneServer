@@ -50,12 +50,12 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
         answer=bad_answer,
         div_id=div_id,
         course='test_course_1')
-    time.sleep(1.5)
+    time.sleep(1)
     student1.hsblog(event=event, act=good_answer, correct='T',
         answer=good_answer,
         div_id=div_id,
         course='test_course_1')
-    time.sleep(1.5)
+    time.sleep(1)
     student1.hsblog(event=event, act=bad_answer, correct='F',
         answer=bad_answer,
         div_id=div_id,

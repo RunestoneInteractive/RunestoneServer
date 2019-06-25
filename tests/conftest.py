@@ -95,7 +95,7 @@ def web2py_server(runestone_name, web2py_server_address):
     # Wait for the webserver to come up.
     for tries in range(50):
         try:
-            urlopen(web2py_server_address, timeout=10)
+            urlopen(web2py_server_address, timeout=5)
         except URLError:
             # Wait for the server to come up.
             time.sleep(0.1)
@@ -226,7 +226,7 @@ def runestone_db(runestone_controller):
  public.web2py_session_runestone CASCADE;
  """)
     db.commit()
-
+    db.close()
 
 # Provide context managers for manipulating the Runestone database.
 class _RunestoneDbTools(object):

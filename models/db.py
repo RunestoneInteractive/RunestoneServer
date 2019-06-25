@@ -19,7 +19,8 @@ table_migrate_prefix_test = ''
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     if os.environ.get("WEB2PY_CONFIG","") == 'test':
-        db = DAL(settings.database_uri, migrate=True, adapter_args=dict(logfile='test_runestone_migrate.log'))
+        db = DAL(settings.database_uri, migrate=False, pool_size=5,
+            adapter_args=dict(logfile='test_runestone_migrate.log'))
         table_migrate_prefix = 'test_runestone_'
         table_migrate_prefix_test = table_migrate_prefix
     else:
