@@ -88,9 +88,8 @@ def web2py_server(runestone_name, web2py_server_address):
 
     # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
     web2py_server = subprocess.Popen(
-        [sys.executable, '-m', 'coverage', 'run', '--append',
-         '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'],
+        [sys.executable,
+         'web2py.py', '-a', password, '--nogui', '--profiler=web2py_profiles'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
     for tries in range(50):
