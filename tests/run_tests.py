@@ -14,7 +14,6 @@ import sys
 import argparse
 import re
 from shutil import rmtree, copytree
-import glob
 
 # Third-party imports
 # -------------------
