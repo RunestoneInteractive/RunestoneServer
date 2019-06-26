@@ -69,15 +69,15 @@ def web2py_controller(
 
 # Fixtures
 # ========
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def web2py_server_address():
     return 'http://127.0.0.1:8000'
 
 
 # This fixture starts and shuts down the web2py server.
 #
-# Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `module <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
-@pytest.fixture(scope='module')
+# Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `session <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
+@pytest.fixture(scope='session')
 def web2py_server(runestone_name, web2py_server_address):
     password = 'pass'
 
@@ -136,7 +136,7 @@ def web2py_server(runestone_name, web2py_server_address):
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def runestone_name():
     return 'runestone'
 
@@ -150,7 +150,10 @@ def runestone_env(runestone_name):
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller(runestone_env):
-    return web2py_controller(runestone_env)
+    env = web2py_controller(runestone_env)
+    yield env
+    # Close the database connection after the test completes.
+    env.db.close()
 
 
 # Provide acess the the Runestone database through a fixture. After a test runs,
@@ -226,7 +229,7 @@ def runestone_db(runestone_controller):
  public.web2py_session_runestone CASCADE;
  """)
     db.commit()
-    db.close()
+
 
 # Provide context managers for manipulating the Runestone database.
 class _RunestoneDbTools(object):
