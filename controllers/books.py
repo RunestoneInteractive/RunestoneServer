@@ -128,6 +128,16 @@ def _route_book(is_published=True, is_open=False):
 _os_alt_seps = list(sep for sep in [os.path.sep, os.path.altsep]
                     if sep not in (None, '/'))
 
+def _subchaptoc(course, chap):
+    res = db( (db.chapter.id == db.sub_chapters.course_id) &
+            (db.chapters.course_id == course ) &
+            (db.chapters.chapter_label == chap) ).select(db.chapters.chapter_num,
+                    db.sub_chapters.sub_chapter_num,
+                    db.chapters.chapter_label,
+                    sb.sub_chapters.sub_chapter_label,
+                    db.chapters.sub_chapter_name)
+    toclist = []
+
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L216.
 def safe_join(directory, *pathnames):
