@@ -84,6 +84,7 @@ def _route_book(is_published=True, is_open=False):
         if not os.path.isfile(book_path):
             raise HTTP(404)
         response.view = book_path
+        chapter = os.path.split(os.path.split(book_path)[0])[1]
         subchapter = os.path.basename(os.path.splitext(book_path)[0])
 
         if auth.user:
@@ -121,7 +122,7 @@ def _route_book(is_published=True, is_open=False):
 
         return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
                     user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=reading_list,
-                    activity_info=json.dumps(div_counts))
+                    activity_info=json.dumps(div_counts), subchapter_list=_subchaptoc(base_course, chapter))
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
@@ -129,14 +130,23 @@ _os_alt_seps = list(sep for sep in [os.path.sep, os.path.altsep]
                     if sep not in (None, '/'))
 
 def _subchaptoc(course, chap):
-    res = db( (db.chapter.id == db.sub_chapters.course_id) &
+    res = db( (db.chapters.id == db.sub_chapters.chapter_id) &
             (db.chapters.course_id == course ) &
             (db.chapters.chapter_label == chap) ).select(db.chapters.chapter_num,
                     db.sub_chapters.sub_chapter_num,
                     db.chapters.chapter_label,
-                    sb.sub_chapters.sub_chapter_label,
-                    db.chapters.sub_chapter_name)
+                    db.sub_chapters.sub_chapter_label,
+                    db.sub_chapters.sub_chapter_name, orderby=db.sub_chapters.sub_chapter_num,
+                    cache=(cache.ram, 3600), cacheable=True)
     toclist = []
+    for row in res:
+        sc_url = "{}.html".format(row.sub_chapters.sub_chapter_label)
+        title = "{}.{} {}".format(row.chapters.chapter_num,
+                                 row.sub_chapters.sub_chapter_num,
+                                 row.sub_chapters.sub_chapter_name)
+        toclist.append(dict(subchap_uri=sc_url, title=title))
+
+    return toclist
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L216.
