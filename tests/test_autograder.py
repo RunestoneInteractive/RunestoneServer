@@ -176,3 +176,69 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
 
     assert totres
     assert totres['score'] == 20
+
+
+def test_record_grade(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+    student1 = test_user('student1', 'password', 'test_course_1')
+    student1.logout()
+    test_user_1.make_instructor()
+    test_user_1.login()
+
+    # put this in a loop because we want to make sure update_or_insert is correct, so we are testing
+    # the initial grade plus updates to the grade
+    for g in [10, 9, 1]:
+        res = test_client.validate('assignments/record_grade',
+            data=dict(sid=student1.username,
+                acid='shorta1',
+                grade=g,
+                comment='very good test'))
+
+        res = json.loads(res)
+        assert res['response'] == 'replaced'
+
+        res = test_client.validate('admin/getGradeComments',
+            data=dict(acid='shorta1', sid=student1.username))
+
+        res = json.loads(res)
+        assert res
+        assert res['grade'] == g
+        assert res['comments'] == 'very good test'
+
+
+
+def test_getproblem(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    # Should test all combinations of
+    # which_to_grade = first_answer, last_answer, best_answer
+    # autograde = all_or_nothing, manual, pct_correct, interact
+    code = """
+    print("Hello World!")
+    """
+    student1 = test_user('student1', 'password', 'test_course_1')
+    student1.login()
+    res = test_client.validate('ajax/runlog',
+            data={'div_id': 'units1',
+            'code': code,
+            'lang': 'python',
+            'errinfo': 'success',
+            'to_save': 'true',
+            'prefix': "",
+            'suffix': "",
+            'course': 'test_course_1'})
+
+    assert res
+    student1.logout()
+    test_user_1.login()
+    res = test_client.validate('assignments/get_problem',
+        data=dict(sid=student1.username,
+            acid='units1'))
+
+    assert res
+    res = json.loads(res)
+    assert res['acid'] == 'units1'
+    assert res['code'] == code
+
+    # todo: add the question to an assignment and retest - test case where code is after the deadline
+
+

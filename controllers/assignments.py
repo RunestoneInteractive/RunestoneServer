@@ -364,6 +364,9 @@ def autograde():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():
+    """
+    Called from the grading interface when the instructor manually records a grade.
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
@@ -398,6 +401,9 @@ def record_grade():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_problem():
+    """
+    Called from the instructors grading interface
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
