@@ -86,7 +86,7 @@ def _route_book(is_published=True, is_open=False):
         response.view = book_path
         chapter = os.path.split(os.path.split(book_path)[0])[1]
         subchapter = os.path.basename(os.path.splitext(book_path)[0])
-
+        div_counts = {}
         if auth.user:
             user_id = auth.user.username
             email = auth.user.email
