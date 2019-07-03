@@ -552,7 +552,7 @@ def getCompletionStatus():
             db.user_sub_chapter_progress.insert(user_id=auth.user.id,
                                                 chapter_id = lastPageChapter,
                                                 sub_chapter_id = lastPageSubchapter,
-                                                status = -1)
+                                                status = -1, start_date=datetime.datetime.utcnow())
             # the chapter might exist without the subchapter
             result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
             if not result:
