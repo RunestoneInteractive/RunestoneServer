@@ -2,7 +2,7 @@
 {{ block tabcontent }}
 
 <script type="text/javascript">
-  <!-- Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_. -->
+  // Avoid problems with quoting single quotes via `XML <http://web2py.com/books/default/chapter/29/05/the-views#XML>`_.
   eBookConfig.toc = {{=XML(toc)}};
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">
@@ -47,16 +47,17 @@
     <fieldset>
       <legend>Assignment properties</legend>
       <span id="totalPoints"></span><br>
-      <form action="" id="assignment-form">
+      <form id="assignment-form">
         <label for="datetimepicker">Due Date: </label>
         <input id="datetimepicker" name="due" type="text"><br>
-
+        <label for="assign_visible">Visible to Students</label>
+        <input id="assign_visible" type="checkbox" name="visible" value="T"><br>
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
 
         <input class="btn btn-default" onclick="update_assignment(this.form)" type="button" value="Save">
       </form>
-    <fieldset>
+    </fieldset>
   </div>
   <div class="col-md-2"></div>
 </div>
@@ -71,7 +72,7 @@
         <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
       </div><!-- Modal Body -->
       <div class="modal-body">
-        <form action="" role="form">
+        <form role="form">
           <div class="form-group">
             <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
@@ -117,10 +118,12 @@
             <p>Select the problems which compose this assignment.</p>
             <table id="questionTable" style="width:100%;"></table>
             <div class="container">
+              <div class="col-md-12">
               <a class="btn btn-default" data-toggle="tab" href="#qbrowse" id="browse-button">Browse</a>
               <a class="btn btn-default" data-toggle="tab" href="#qbank">Search</a>
               <a class="btn btn-default" data-toggle="tab" href="#qwrite">Write</a>
-              <div class="tab-content">
+              </div>
+              <div class="tab-content col-md-6">
 
                 <!-- Browse tab -->
                 <div class="form-group tab-pane fade" id="qbrowse" style="margin-bottom: 30px">
@@ -131,14 +134,14 @@
                 <!-- Search tab -->
                 <div class="form-group tab-pane fade" id="qbank" style="margin-bottom: 30px">
                   <h5 style="text-align: center">Search Question Bank</h5>
-                  <form action="" id="qbankform" name="qbankform" role="form">
+                  <form id="qbankform" name="qbankform" role="form">
                     <div class="form-group">
                       <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
                     </div>
                     <div class="form-group">
                       <label for="chapter">Chapter</label>
                       <select class="form-control" id="chapter">
-                        <option selected="selected" value=""></option>
+                        <option selected="selected" label="select chapter" value=""></option>
                         {{ for chapter in chapters: }}
                         <option value="{{=chapter}}">{{=chapter}}</option>
                         {{ pass }}
@@ -181,50 +184,6 @@
                           <div id="q_difficulty"></div>
                           <div id="q_tags"></div>
                         </div>
-                        <div class="form-group">
-                          <button class="btn" data-target="#editModal" data-toggle="modal" onclick="getQuestionText();" style="margin-top: 12px;">Edit</button>
-                        </div>
-                        <div aria-hidden="true" aria-labelledby="EditQuestion" class="modal fade" id="editModal" role="dialog" tabindex="-1">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <!-- Modal Header -->
-                              <div class="modal-header">
-                                <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
-                              </div><!-- Modal Body -->
-                              <div class="modal-body">
-                                <p>*In order to edit the question, you must come up with a new name for your version of the question. This name cannot be an already existing question name.</p>
-                                <form action="" id="editForm" name="editForm">
-                                  <div class="form-group">
-                                    <label for="changename">Change Name</label> <input id="changename" required="" style="width: 100%;" type="text">
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="difficultyselector">Change Difficulty</label>
-                                    <div id="change_difficulty">
-                                      <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="addTags">Add Tags</label>
-                                    <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
-                                      {{ for tag in tags: }}
-                                      <option value="{{=tag}}">{{ =tag }}</option>
-                                      {{ pass }}
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="editRST">Edit Question</label>
-                                    <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
-                                  </div>
-                                  <input class="btn btn-default" data-dismiss="modal" onclick="edit_question(this.form);" type="button" value="Edit Question">
-                                </form>
-                              </div><!-- Modal Footer -->
-                              <div class="modal-footer">
-                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -250,8 +209,8 @@
                         <option value="dragndrop">
                           drag and drop
                         </option>
-                        <option value="parsons">
-                          pasons
+                        <option value="parsonsprob">
+                          parsons
                         </option>
                         <option value="fillintheblank">
                           fill in the blank
@@ -273,7 +232,7 @@
                     <div id="hiddenwrite" style="visibility: hidden">
                       <div class="col-md-12">
                         <label for="qcode"></label>
-                        <textarea cols="65" form="newqform" id="qcode" rows="12"></textarea>
+                        <textarea cols="65" form="newqform" id="qcode" name="editRST" rows="12"></textarea>
                       </div>
                       <div class="col-md-12">
                         <p id="qnameerror" style="color: red"></p>
@@ -295,19 +254,68 @@
                         <label for="isprivate">Private</label><input id="isprivate" type="checkbox">
                       </div>
                       <div class="col-md-12">
-                        <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
+                        <label for="createpoints">Points</label> <input id="createpoints" name="points" type="number" value="1"> <label for="createtimed">Timed</label> <input id="createtimed" name="timed" type="checkbox" value="true">
                       </div>
                         <input type="hidden" id="qrawhtml" name="qrawhtml" value="">
                       <div class="col-md-12">
-                        <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Preview">
-                        <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Done">
+                        <input class="btn btn-default" onclick="preview_question(this.form);" type="button" value="Generate/View HTML">
+                        <input class="btn btn-default" onclick="create_question(this.form);" type="button" value="Save and Add">
                       </div>
                     </div>
                   </form>
                 </div>
 
               </div>
-              <div id="component-preview"></div>
+              <div id="component-preview" class="col-md-6">
+              </div>
+              <!-- General purpose dialog for editing a question -->
+              <!-- aria-labelledby="EditQuestion" -->
+              <div aria-hidden="true"  class="modal fade" id="editModal" role="dialog" tabindex="-1">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <!-- Modal Header -->
+                              <div class="modal-header">
+                                <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
+                              </div><!-- Modal Body -->
+                              <div class="modal-body">
+                                <p>If you are not the original author of this question you must change the id on the first line of the directive.</p>
+                                <form id="editForm" name="editForm">
+                                  <div class="form-group">
+                                    <label for="change_difficulty">Change Difficulty</label>
+                                    <div id="change_difficulty">
+                                      <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="addTags">Add Tags</label>
+                                    <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
+                                      {{ for tag in tags: }}
+                                      <option value="{{=tag}}">{{ =tag }}</option>
+                                      {{ pass }}
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
+                                    <div id="modal-preview"></div>
+                                  </div>
+                                  <input type="hidden" id="qrawhtmlmodal" name="qrawhtml" value="">
+                                  <input class="btn btn-default" onclick="edit_question(this.form);" type="button" value="Save Edits">
+                                  <input class="btn btn-default" onclick="preview_question(this.form,'modal-preview');" type="button" value="Generate/View HTML">
+                                </form>
+                              </div><!-- Modal Footer -->
+                              <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <script type="text/javascript">
+                          // clean out the preview when the modal is hidden
+                          $("#editModal").on("hidden.bs.modal", function() {
+                            $("#modal-preview").html("")
+                          });
+                        </script>
             </div>
           </div>
         </div>
@@ -337,7 +345,7 @@ $(function () {
         // Called when a node is checked.
         function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'best_answer'); },
         // Called when a node is unchecked.
-        function (node) { remove_question(node.id); },
+        function (node) { remove_question(node.id); }
     );
     question_picker.on('ready.jstree', function(event, data) {
         // Display the first assignment and the browser after the tree is ready. If triggered before, the tree can't find nodes, check boxes, etc.
@@ -348,10 +356,7 @@ $(function () {
     question_picker.on('select_node.jstree', function(event, data) {
         // If this is a question (a leaf node), then preview it.
         if (jstree_node_depth(data.instance, data.node) == 3) {
-            // Request the preview HTML from the server.
-            $.getJSON('htmlsrc', {"acid" : data.node.id}).done(function(html_src) {
-                renderRunestoneComponent(html_src, "component-preview")
-            });
+            preview_question_id(data.node.id);
         }
     });
 
@@ -359,14 +364,14 @@ $(function () {
         // Called when a node is checked.
         function (node) { updateReading(node.id, -1, 1, 'interact', 'best_answer'); },
         // Called when a node is unchecked.
-        function (node) { remove_reading(node.id); },
+        function (node) { remove_reading(node.id); }
     );
 
 
     // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
     question_table.bootstrapTable({
         // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
-        uniqueId: 'question',
+        uniqueId: 'question_id',
         // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
         reorderableRows: true,
         // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
@@ -374,6 +379,9 @@ $(function () {
             {
                 field: 'question',
                 title: 'Question',
+            }, {
+                field: 'question_id',
+                visible: false,
             }, {
                 field: 'points',
                 title: 'Points',
@@ -423,7 +431,7 @@ $(function () {
                      // Copied from ``operateEvents`` in an example_.
                     'click .question_table_remove': function (e, value, row, index) {
                         // Unchecking the question in the tree picker also deletes it from the database and table.
-                        question_picker.jstree(true).uncheck_node(row['question']);
+                        question_picker.jstree(true).uncheck_node(row['question_id']);
                     },
                 },
            },
@@ -431,7 +439,7 @@ $(function () {
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
         onEditableSave : function(field, row, oldValue, html_element) {
-            updateAssignmentRaw(row['question'], row['points'], row['autograde'], row['which_to_grade']);
+            updateAssignmentRaw(row['question_id'], row['points'], row['autograde'], row['which_to_grade']);
         },
          // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
         ///onReorderRow : function(rows) {
@@ -443,14 +451,14 @@ $(function () {
         // This will be called multiple times. Record the beginning row of the drag.
         onReorderRowsDrag: function(table, row) {
             table.dragRowIndex = $(row).attr('data-index');
-            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question'];
+            table.dragRowId = $(table).bootstrapTable('getData')[table.dragRowIndex]['question_id'];
         },
         onReorderRowsDrop: function(table, row) {
             dropRowIndex = $(row).attr('data-index');
             // Create an array of question names in the order they appear in the table.
             var question_array = [];
             for (let value of $(table).bootstrapTable('getData')) {
-                question_array.push(value['question']);
+                question_array.push(value['question_id']);
             }
             // Send it to the server.
             $.getJSON('reorder_assignment_questions', {

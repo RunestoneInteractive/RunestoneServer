@@ -2,6 +2,9 @@
 # naming conventions, which will allow for camel case naming as found
 # in Java code or several libraries such as PyQt, etc.
 
+[MASTER]
+load-plugins=pylint_web2py2
+
 [BASIC]
 # Regular expression which should only match correct module names
 module-rgx=(([a-z][a-z0-9]*)|([A-Z][a-zA-Z0-9]+))$

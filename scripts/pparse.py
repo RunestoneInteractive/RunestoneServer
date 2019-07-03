@@ -37,7 +37,6 @@ print y
 
 z = PTest()
 zzz = z.parse_multiline_parsons(tt.split('\n'))
-print type(zzz)
-print zzz.split('\n')
-print zzz
-
+print(type(zzz))
+print(zzz.split('\n'))
+print(zzz)

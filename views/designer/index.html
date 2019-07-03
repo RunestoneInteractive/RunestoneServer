@@ -23,6 +23,11 @@
         return false;
     }
 
+    if (! /^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(x)) {
+        alert("Error: Your project name can only contain ASCII letters digits and - or _");
+        return false;
+    }
+
     if (basecourse == "") {
         alert('Error: You must select a book for your course')
         return false;
@@ -62,6 +67,14 @@
         <label>
           Choose one of our ready-made books for your course:
         </label>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="coursetype" value="fopp" />
+            Foundations of Python Programming
+          </label>
+        </div>
+
         <div class="radio">
           <label>
             <input type="radio" name="coursetype" value="thinkcspy" checked="checked" />
@@ -71,22 +84,23 @@
 
         <div class="radio">
           <label>
-            <input type="radio" name="coursetype" value="pythonds" /> 
-            Problem Solving with Algorithms and Data Structures, Brad Miller and David Ranum
+            <input type="radio" name="coursetype" value="pythonds" />
+            Problem Solving with Algorithms and Data Structures using Python, Brad Miller and David Ranum
           </label>
         </div>
+
+        <div class="radio">
+          <label>
+            <input type="radio" name="coursetype" value="cppds" />
+            Problem Solving with Algorithms and Data Structures using C++, Jan Pearce, Brad Miller and David Ranum
+          </label>
+        </div>
+
 
          <div class="radio">
             <label>
               <input type="radio" name="coursetype" value="apcsareview" />
               AP CS A Java Review, by Barbara Ericson
-            </label>
-          </div>
-
-          <div class="radio">
-            <label>
-              <input type="radio" name="coursetype" value="pip2" />
-              Programs, Information, People, by Paul Resnick
             </label>
           </div>
 
@@ -104,18 +118,39 @@
             </label>
           </div>
 
+        <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="java4python" />
+              Java for Python Programmers, by Bradley Miller
+            </label>
+          </div>
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="cpp4python" />
+              C++ for Python Programmers, by Jan Pearce and Bradley Miller
+            </label>
+          </div>
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="coursetype" value="httlads" />
+              How to Think Like a Data Scientist <strong>Beta</strong>
+            </label>
+          </div>
+
         <!-- <label>
           OR
         </label>
 
         <div class="radio">
           <label>
-            <input type="radio" name="coursetype" value="custom" /> 
+            <input type="radio" name="coursetype" value="custom" />
             Build a Custom Course
           </label>
         </div>  -->
       </div>
-      
+
       <br />
 
       <div class='form-group'>
@@ -135,6 +170,13 @@
 
         <div class="checkbox">
           <label>
+            <input type="checkbox" name="allowpairs" value="false" id="allowpairs"  />
+            Enable <strong>experimental</strong> pair programming features.
+         </label>
+        </div>
+
+        <div class="checkbox">
+          <label>
             <input type="checkbox" name="instructor" value="yes" checked="checked"/>
             Make me the Instructor of this course.
           </label>
@@ -148,7 +190,7 @@
         </div>
       </div>
 
-      <input type="submit" class="btn btn-default" value="Submit" /> Your course will be queued for building. This may take a while, please be patient.
+      <input type="submit" class="btn btn-default" value="Submit" />
     </form>
   </div>
 

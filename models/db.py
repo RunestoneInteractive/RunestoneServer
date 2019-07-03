@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import datetime
+import os
+import random
+
+from gluon import current
 
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
@@ -11,10 +14,20 @@ import datetime
 ## be redirected to HTTPS, uncomment the line below:
 # request.requires_htps()
 
+table_migrate_prefix = 'runestone_'
+table_migrate_prefix_test = ''
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL(settings.database_uri,fake_migrate_all=False)
-    session.connect(request, response, masterapp='runestone', db=db)
+    if os.environ.get("WEB2PY_CONFIG","") == 'test':
+        db = DAL(settings.database_uri, migrate=False, pool_size=5,
+            adapter_args=dict(logfile='test_runestone_migrate.log'))
+        table_migrate_prefix = 'test_runestone_'
+        table_migrate_prefix_test = table_migrate_prefix
+    else:
+        # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
+        db = DAL(settings.database_uri, pool_size=30, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
+                 migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
+    session.connect(request, response, db, masterapp=None, migrate=table_migrate_prefix + 'web2py_sessions.table')
 
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
@@ -47,6 +60,11 @@ from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
+# Make the settings and database available in modules.
+current.db = db
+current.settings = settings
+current.auth = auth
+
 if settings.enable_captchas:
     ## Enable captcha's :-(
     from gluon.tools import Recaptcha
@@ -57,7 +75,11 @@ if settings.enable_captchas:
 
 auth.settings.login_captcha = False
 auth.settings.retrieve_password_captcha	= False
-#auth.settings.retrieve_username_captcha	= False
+auth.settings.retrieve_username_captcha	= False
+
+# Set up for `two-factor authentication <http://web2py.com/books/default/chapter/29/09/access-control#Two-step-verification>`_.
+#auth.settings.auth_two_factor_enabled = True
+#auth.settings.two_factor_methods = [lambda user, auth_two_factor: 'password_here']
 
 
 ## create all tables needed by auth if not custom tables
@@ -68,43 +90,39 @@ db.define_table('courses',
   Field('base_course', 'string'),
   Field('python3', type='boolean', default=True),
   Field('login_required', type='boolean', default=True),
-  migrate='runestone_courses.table'
+  Field('allow_pairs', type='boolean', default=False),
+  Field('student_price', type='integer'),
+  migrate=table_migrate_prefix + 'courses.table'
 )
 
-if db(db.courses.id > 0).isempty():
-    db.courses.insert(course_name='boguscourse', term_start_date=datetime.date(2000, 1, 1)) # should be id 1
-    db.courses.insert(course_name='thinkcspy', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='pythonds', term_start_date=datetime.date(2000, 1, 1))
-    db.courses.insert(course_name='overview', term_start_date=datetime.date(2000, 1, 1))
 
-## create cohort_master table
-db.define_table('cohort_master',
-  Field('cohort_name','string',
-  writable=False,readable=False),
-  Field('created_on','datetime',default=request.now,
-  writable=False,readable=False),
-  Field('invitation_id','string',
-  writable=False,readable=False),
-  Field('average_time','integer', #Average Time it takes people to complete a unit chapter, calculated based on previous chapters
-  writable=False,readable=False),
-  Field('is_active','integer', #0 - deleted / inactive. 1 - active
-  writable=False,readable=False),
-  Field('course_name', 'string'),
-  migrate='runestone_cohort_master.table'
-  )
-if db(db.cohort_master.id > 0).isempty():
-    db.cohort_master.insert(cohort_name='Default Group', is_active = 1)
+# Provide a common query. Pass ``db.courses.ALL`` to retrieve all fields; otherwise, only the ``course_name`` and ``base_course`` are selected.
+def get_course_row(*args, **kwargs):
+    if not args:
+        args = db.courses.course_name, db.courses.base_course
+    return db(db.courses.id == auth.user.course_id).select(*args).first()
+
+
+# Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
+def get_course_url(*args):
+    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
+    if os.path.exists(os.path.join(request.folder, 'static', auth.user.course_name)):
+        return URL('static', '/'.join( (auth.user.course_name, ) + args))
+    else:
+        course = db(db.courses.id == auth.user.course_id).select(db.courses.base_course).first()
+        if course:
+            return URL(c='books', f='published', args=(course.base_course, ) + args)
+        else:
+            return URL(c='default')
+
 
 ########################################
 
 def getCourseNameFromId(courseid):
     ''' used to compute auth.user.course_name field '''
-    if courseid == 1: # boguscourse
-        return ''
-    else:
-        q = db.courses.id == courseid
-        course_name = db(q).select()[0].course_name
-        return course_name
+    q = db.courses.id == courseid
+    row = db(q).select().first()
+    return row.course_name if row else ''
 
 
 def verifyInstructorStatus(course, instructor):
@@ -148,7 +166,7 @@ db.define_table('auth_user',
     Field('last_name', type='string',
           label=T('Last Name')),
     Field('email', type='string',
-          requires=IS_EMAIL(banned='^.*shoeonlineblog\.com$'),
+          requires=IS_EMAIL(banned='^.*shoeonlineblog\\.com$'),
           label=T('Email')),
     Field('password', type='password',
           readable=False,
@@ -164,16 +182,16 @@ db.define_table('auth_user',
           writable=False,readable=False),
     Field('registration_id',default='',
           writable=False,readable=False),
-    Field('cohort_id','reference cohort_master', requires=IS_IN_DB(db, 'cohort_master.id', 'id'),
-          writable=False,readable=False),
     Field('course_id','reference courses',label=T('Course Name'),
           required=True,
           default=1),
     Field('course_name',compute=lambda row: getCourseNameFromId(row.course_id),readable=False, writable=False),
+    Field('accept_tcp', required=True, type='boolean', default=True, label=T('I Accept')),
     Field('active',type='boolean',writable=False,readable=False,default=True),
+    Field('donated', type='boolean', writable=False, readable=False, default=False),
 #    format='%(username)s',
-    format=lambda u: u.first_name + " " + u.last_name,
-    migrate='runestone_auth_user.table')
+    format=lambda u: (u.first_name or "") + " " + (u.last_name or ''),
+    migrate=table_migrate_prefix + 'auth_user.table')
 
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -185,11 +203,8 @@ db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_emai
                                IS_NOT_IN_DB(db, db.auth_user.email))
 db.auth_user.course_id.requires = IS_COURSE_ID()
 
-auth.define_tables(username=True, signature=False, migrate='runestone_')
+auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + '')
 
-# create the instructor group if it doesn't already exist
-if not db(db.auth_group.role == 'instructor').select().first():
-    db.auth_group.insert(role='instructor')
 
 ## configure email
 mail=auth.settings.mailer
@@ -214,28 +229,19 @@ auth.settings.expiration = 3600*24
 try:
     from gluon.contrib.login_methods.janrain_account import RPXAccount
 except:
-    print "Warning you should upgrade to a newer web2py for better janrain support"
+    print("Warning you should upgrade to a newer web2py for better janrain support")
     from gluon.contrib.login_methods.rpx_account import RPXAccount
 from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
 janrain_url = 'http://%s/%s/default/user/login' % (request.env.http_host,
                                                    request.application)
 
-janrain_form = RPXAccount(request,
-                          api_key=settings.janrain_api_key, # set in 1.py
-                          domain=settings.janrain_domain, # set in 1.py
-                          url=janrain_url)
-auth.settings.login_form = ExtendedLoginForm(auth, janrain_form) # uncomment this to use both Janrain and web2py auth
-#auth.settings.login_form = auth # uncomment this to just use web2py integrated authentication
-
-request.janrain_form = janrain_form # save the form so that it can be added to the user/register controller
-
 db.define_table('user_courses',
                 Field('user_id', db.auth_user, ondelete='CASCADE'),
                 Field('course_id', db.courses, ondelete='CASCADE'),
                 Field('user_id', db.auth_user),
                 Field('course_id', db.courses),
-                migrate='runestone_user_courses.table')
+                migrate=table_migrate_prefix + 'user_courses.table')
 # For whatever reason the automatic migration of this table failed.  Need the following manual statements
 # alter table user_courses alter column user_id type integer using user_id::integer;
 # alter table user_courses alter column course_id type integer using course_id::integer;
@@ -254,10 +260,29 @@ db.define_table('user_courses',
 ##
 ## >>> db.mytable.insert(myfield='value')
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
+## >>> for row in rows: print(row.id, row.myfield)
 #########################################################################
 
 
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
 mail.settings.login = settings.email_login
+
+# Make sure the latest version of admin is always loaded.
+adminjs =  os.path.join('applications',request.application,'static','js','admin.js')
+try:
+    mtime = int(os.path.getmtime(adminjs))
+except:
+    mtime = random.randrange(10000)
+
+request.admin_mtime = str(mtime)
+
+def check_for_donate_or_build(field_dict,id_of_insert):
+    if 'donate' in request.vars:
+        session.donate = request.vars.donate
+
+    if 'ccn_checkbox' in request.vars:
+        session.build_course = True
+
+if 'auth_user' in db:
+    db.auth_user._after_insert.append(check_for_donate_or_build)

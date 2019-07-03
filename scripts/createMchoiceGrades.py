@@ -42,7 +42,7 @@ for row in result:
             if not correctSeen:
                 correctSeen = insertAnswer(None,currentSid, currentDiv, row['act'], row['timestamp'], row['course_id'])
             else:
-                print "ignoring all answers after first correct for ", currentDiv, currentSid
+                print("ignoring all answers after first correct for ", currentDiv, currentSid)
         else:
             currentSid = row['sid']
             correctSeen = insertAnswer(None,currentSid, currentDiv, row['act'], row['timestamp'], row['course_id'])

@@ -1,0 +1,13 @@
+coverage
+mock
+py_w3c
+pytest
+contextlib2
+# CodeChat is Python 3 only.
+CodeChat; python_version != '2.7'
+# Install the development version of the Runstone Components, rather than the released version.
+https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
+# Beautiful soup
+beautifulsoup4
+locustio
+coveralls

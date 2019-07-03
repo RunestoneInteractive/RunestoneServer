@@ -1,0 +1,4 @@
+#!/bin/bash
+ps -u bnmnetp -o rss,pid,ppid,command
+echo "-----"
+ps -u bnmnetp -o rss,pid,ppid,command | awk '{sum += $1 }; END {print sum}' -

@@ -10,24 +10,21 @@ db.define_table('questions',
                 Field('question_type',type='string'),
                 Field('is_private', type='boolean'),
                 Field('htmlsrc', type='text'),
+                Field('practice', type='boolean'),
                 Field('autograde', type='string'),
-                migrate='runestone_questions.table')
+                Field('topic', type='string'),
+                Field('feedback', type='text'),
+                migrate=table_migrate_prefix + 'questions.table')
 
-# In SQL we can manually add the constraint
-# alter table questions add constraint name_bc_unique UNIQUE(name, base_course);
-# try:
-#     db.executesql('''alter table questions add constraint name_bc_unique UNIQUE(name, base_course)''')
-# except:
-#     pass
 
 db.define_table('tags',
                 Field('tag_name', type='string', unique=True),
-                migrate='runestone_tags.table')
+                migrate=table_migrate_prefix + 'tags.table')
 
 db.define_table('question_tags',
                 Field('question_id', db.questions),
                 Field('tag_id', db.tags),
-                migrate='runestone_question_tags.table')
+                migrate=table_migrate_prefix + 'question_tags.table')
 
 ## assignment <--> questions is a many-to-many relation. This table associates them
 ## points and how it's autograded are properties of a particular use of a question in an assignment,
@@ -43,4 +40,4 @@ db.define_table('assignment_questions',
                                                              # Also use this when it's an mchoice or parsons that's within a subchapter, not to be embeddedon the assignment page
                 Field('sorting_priority', type='integer'), #determines sort order of questions when displaying
                 Field('activities_required', type='integer'), # specifies how many activities in a sub chapter a student must perform in order to receive credit
-                migrate='runestone_assignment_questions.table')
+                migrate=table_migrate_prefix + 'assignment_questions.table')

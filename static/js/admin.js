@@ -4,10 +4,10 @@ function gradeIndividualItem() {
     var select3 = document.getElementById("gradingoption3");
     var colType = select3.options[select3.selectedIndex].value;
 
-        var col1 = document.getElementById("gradingoption1");
+    var col1 = document.getElementById("gradingoption1");
     var col1val = col1.options[col1.selectedIndex].value;
 
-        var col2 = document.getElementById("gradingoption2");
+    var col2 = document.getElementById("gradingoption2");
     var col2val = col2.options[col2.selectedIndex].value;
 
     set_release_button();
@@ -21,7 +21,7 @@ function gradeIndividualItem() {
         var s_column = document.getElementById("gradingcolumn1");
         if (s_column.selectedIndex != -1) {
             //make sure they've selected a student from column 1
-           var student = s_column.options[s_column.selectedIndex].value;
+            var student = s_column.options[s_column.selectedIndex].value; // TODO .value should be sid not name
             var student_dict = students;
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
@@ -63,7 +63,7 @@ function gradeIndividualItem() {
     }
 }
 
-function getSelectedGradingColumn(type){
+function getSelectedGradingColumn(type) {
     //gradingoption1 has contents of picker for type of stuff in column (e.g., assignment, student)
     //gradingcolumn1 has contents of column (e.g., actual assignments)
     var opt1 = document.getElementById("gradingoption1");
@@ -75,13 +75,13 @@ function getSelectedGradingColumn(type){
     var opt3 = document.getElementById("gradingoption3");
     var col3type = opt3.options[opt3.selectedIndex].value;
 
-    if (col1Type == type){
+    if (col1Type == type) {
         col = document.getElementById("gradingcolumn1");
     }
-    else if (col2Type == type){
+    else if (col2Type == type) {
         col = document.getElementById("gradingcolumn2");
     }
-    else if (col3type == type){
+    else if (col3type == type) {
         col = document.getElementById("gradingcolumn3");
     }
     else {
@@ -90,13 +90,13 @@ function getSelectedGradingColumn(type){
     return col;
 }
 
-function getSelectedItem(type){
+function getSelectedItem(type) {
     var col = getSelectedGradingColumn(type);
 
-    if (col == null){
+    if (col == null) {
         return null;
     }
-    if (type == "student"){
+    if (type == "student") {
         if (col.selectedIndex != -1) {
             // they've selected an item; get the id associated with it
             id_diction = students
@@ -113,7 +113,7 @@ function getSelectedItem(type){
             return null;
         }
     }
-    else if (type == "assignment"){
+    else if (type == "assignment") {
         if (col.selectedIndex != -1) {
             // they've selected an assignment; return that assignment name
             return col.options[col.selectedIndex].value;
@@ -122,7 +122,7 @@ function getSelectedItem(type){
             return null;
         }
     }
-    else if (type == "question"){
+    else if (type == "question") {
         if (col.selectedIndex != -1) {
             // they've selected a question; return that question name
             return col.options[col.selectedIndex].value;
@@ -133,12 +133,12 @@ function getSelectedItem(type){
     }
 }
 
-function autoGrade(){
+function autoGrade() {
     var assignment = getSelectedItem("assignment")
     var question = getSelectedItem("question")
     var studentID = getSelectedItem("student")
     var enforceDeadline = $('#enforceDeadline').is(':checked')
-    jQuery.ajax({
+    var params = {
         url: eBookConfig.autogradingURL,
         type: "POST",
         dataType: "JSON",
@@ -150,17 +150,42 @@ function autoGrade(){
         },
         success: function (retdata) {
             $('#assignmentTotalform').css('visibility', 'hidden');
-            calculateTotals();
-            alert(retdata.message);
-            calculateTotals();
+            //alert(retdata.message);
         }
-    });
+    }
+
+    if (assignment != null && question === null && studentID == null) {
+        (async function(students, ajax_params) {
+            // Grade each student provided.
+            let student_array = Object.keys(students);
+            for (let index = 0; index < student_array.length; ++index) {
+                let student = student_array[index];
+                ajax_params.data.sid = student;
+                res = await jQuery.ajax(ajax_params);
+                $("#autogradingprogress").html(`Student ${index + 1} of ${student_array.length}: ${res.message} for ${student}`);
+            }
+            // Clear the graing progress.
+            $("#autogradingprogress").html('');
+            calculateTotals();
+            $("#autogradesubmit").prop("disabled", false);
+        })(students, params);
+    } else {
+        jQuery.ajax(params).always(function () {
+            calculateTotals();
+            $("#autogradesubmit").prop("disabled", false);
+        });
+    }
+
 }
 
-function calculateTotals(){
+function calculateTotals(sid) {
     var assignment = getSelectedItem("assignment")
     var question = getSelectedItem("question")
-    var studentID = getSelectedItem("student")
+    if (!sid) {
+        var studentID = getSelectedItem("student")
+    } else {
+        studentID = sid
+    }
     $('#assignmentTotalform').css('visibility', 'hidden');
     jQuery.ajax({
         url: eBookConfig.calcTotalsURL,
@@ -179,14 +204,14 @@ function calculateTotals(){
                 $('#computed-total-score').val(retdata.computed_score);
                 $('#manual-total-score').val(retdata.manual_score);
             }
-            else{
+            else {
                 alert(retdata.message);
             }
         }
     });
 }
 
-function saveManualTotal(){
+function saveManualTotal() {
     var assignment = getSelectedItem("assignment")
     var studentID = getSelectedItem("student")
     jQuery.ajax({
@@ -199,7 +224,7 @@ function saveManualTotal(){
             score: $('#manual-total-score').val(),
         },
         success: function (retdata) {
-            if (!retdata.success){
+            if (!retdata.success) {
                 alert(retdata.message);
             }
         }
@@ -217,14 +242,14 @@ function getRightSideGradingDiv(element, acid, studentId) {
     //make an ajax call to get the htmlsrc for the given question
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
-    obj.send(JSON.stringify({acid: acid}));
+    obj.send(JSON.stringify({ acid: acid }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             //jQuery("#questiondisplay").html(htmlsrc);
             var enforceDeadline = $('#enforceDeadline').is(':checked');
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
-            renderRunestoneComponent(htmlsrc, "questiondisplay", {sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl});
+            renderRunestoneComponent(htmlsrc, "questiondisplay", { sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl });
         }
 
     };
@@ -250,6 +275,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             success: function (data) {
                 jQuery('.grade', element).html(data.grade);
                 jQuery('.comment', element).html(data.comment);
+                calculateTotals(studentId);
             }
         });
     }
@@ -267,7 +293,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         newForm.innerHTML = formstr;
         document.getElementById("outerRightDiv").appendChild(newForm);
 
-        jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em>');
+        jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em> <span>Points: ' + question_points[data.acid] + '</span>');
 
         //jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
 
@@ -298,11 +324,13 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         // outerdiv, acdiv, sid, initialcode, language
 
-
+        // Handle the save button
         jQuery('form', rightDiv).submit(save);
+        // Handle the save and next button
         jQuery('.next', rightDiv).click(function (event) {
             event.preventDefault();
             jQuery('form', rightDiv).submit();
+            // This next block should not run until save is complete.
             var col3 = document.getElementById("gradingcolumn3");
             try {
                 var ind = col3.selectedIndex + 1;
@@ -316,35 +344,46 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 
         });
-        jQuery('#' + data.id).focus();
+        try {
+            jQuery('#' + data.id).focus();
+        } catch (err) {
+            // this will happen when you try to preview a reading assignment in the manual grading interface
+            console.log(`Cannot preview ${data.id}`)
+        }
 
 
 
         var divid;
-        setTimeout(function(){
+        setTimeout(function () {
 
-//        jQuery.ajax({
-//        url: eBookConfig.gradeRecordingUrl,
-//        type: "POST",
-//        dataType: "JSON",
-//        data: {
-//            acid: acid,
-//            sid: studentId,
-//        },
-//        success: function () {
-//            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+            //        jQuery.ajax({
+            //        url: eBookConfig.gradeRecordingUrl,
+            //        type: "POST",
+            //        dataType: "JSON",
+            //        data: {
+            //            acid: acid,
+            //            sid: studentId,
+            //        },
+            //        success: function () {
+            //            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
             obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
-            obj.send(JSON.stringify({newins: 'studentid'}));
+            obj.send(JSON.stringify({ newins: 'studentid' }));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
                     var resp = obj.responseText;
                     var newdata = JSON.parse(resp);
                     if (newdata != "Error") {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
-                    jQuery('#input-comments', rightDiv).val(newdata['comments']);}
-                }}
-        },250);
+                        jQuery('#input-comments', rightDiv).val(newdata['comments']);
+                    }
+                    else {
+                        jQuery('#input-grade', rightDiv).val(null);
+                        jQuery('#input-comments', rightDiv).val(null);
+                    }
+                }
+            }
+        }, 250);
     }
 
     element.addClass("loading");
@@ -379,17 +418,17 @@ function updateColumn2() {
     var select2 = document.getElementById("gradingcolumn1");
     var column2 = document.getElementById("gradingcolumn2");
     var selectedval = select2.options[select2.selectedIndex].value;
-    if (val == 'assignment'){
+    if (val == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null) {
             calculateTotals();
         } else {
-             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
     }
     if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn2").empty();
-        var assignments = JSON.parse(assignmentinfo);
+        var assignments = assignmentinfo;
         var assignment_names = assignments[selectedval];
         assignment_names.sort()
         for (i = 0; i < assignment_names.length; i++) {
@@ -434,7 +473,7 @@ function updateColumn3() {
     var select2 = document.getElementById("gradingcolumn2");
     var column3 = document.getElementById("gradingcolumn3");
     var selectedval = select2.options[select2.selectedIndex].value;
-    if (val == 'assignment'){
+    if (val == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
@@ -454,7 +493,7 @@ function updateColumn3() {
 
     else if (val == 'assignment' && val2 == 'question') {
         $("#gradingcolumn3").empty();
-        var assignments = JSON.parse(assignmentinfo);
+        var assignments = assignmentinfo;
         for (i = 0; i < assignments[selectedval].length; i++) {
             var q = assignments[selectedval][i];
             var option = document.createElement("option");
@@ -481,13 +520,13 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
 
     $("#" + column).empty();
-    var assignments = JSON.parse(assignmentinfo);
+    var assignments = assignmentinfo;
     set_release_button();
     autograde_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
-    for (var i=0; i<keys.length; i++){
+    for (var i = 0; i < keys.length; i++) {
         var option = document.createElement("option");
         var key = keys[i];
         option.text = key;
@@ -528,12 +567,14 @@ function pickedStudents(column) {
         }
     }
 
+    // keep sort order determined by server side
+    // keys.sort();
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
         var option = document.createElement("option");
         option.text = studentslist[key];
-        option.value = studentslist[key];
+        option.value = studentslist[key]; // TODO: just store key here
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
 
@@ -873,7 +914,7 @@ function showColumn3() {
 
 }
 
-function getCourseStudents(){
+function getCourseStudents() {
     jQuery.ajax({
         url: eBookConfig.getCourseStudentsURL,
         type: "POST",
@@ -894,14 +935,20 @@ function getStudents(sectionName) {
 
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/sections/students/" + section, true);
-    obj.send(JSON.stringify({sectionName: sectionName}));
+    obj.send(JSON.stringify({ sectionName: sectionName }));
     obj.onreadystatechange = function () {
 
         if (obj.readyState == 4 && obj.status == 200) {
             var students = JSON.parse(obj.responseText);
+            var studentsNames = [];
             for (i = 0; i < students.length; i++) {
-                studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + students[i][0] + " " + students[i][1] + '</h4> </a>';
+                studentsNames.push(students[i][1] + ", " + students[i][0]);
+            }
 
+            studentsNames.sort();
+
+            for (i = 0; i < studentsNames.length; i++) {
+                studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + studentsNames[i] + '</h4> </a>';
             }
 
             var total = document.getElementById("total");
@@ -924,7 +971,7 @@ function getLog() {
 
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/getChangeLog", true);
-    obj.send(JSON.stringify({variable: 'variable'}));
+    obj.send(JSON.stringify({ variable: 'variable' }));
     obj.onreadystatechange = function () {
 
         if (obj.readyState == 4 && obj.status == 200) {
@@ -943,7 +990,7 @@ function add_instructor() {
 
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/addinstructor/' + studentid, true);
-    obj.send(JSON.stringify({newins: 'studentid'}));
+    obj.send(JSON.stringify({ newins: 'studentid' }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             studlist = document.getElementById('studentlist');
@@ -964,7 +1011,7 @@ function remove_instructor() {
     var studentname = select.options[index].text;
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/removeinstructor/' + studentid, true);
-    obj.send(JSON.stringify({newins: 'studentid'}));
+    obj.send(JSON.stringify({ newins: 'studentid' }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             gotdeleted = JSON.parse(obj.responseText);
@@ -985,10 +1032,10 @@ function remove_instructor() {
 
 
 function edit_indexrst(form) {
-    let data = {newtext: form.editIndex.value}
-    jQuery.post('/runestone/admin/editindexrst', data, function() {
-            alert("Successfully edited index.rst");
-        });
+    let data = { newtext: form.editIndex.value }
+    jQuery.post('/runestone/admin/editindexrst', data, function () {
+        alert("Successfully edited index.rst");
+    });
 }
 
 // *************************
@@ -1012,27 +1059,29 @@ function configure_tree_picker(
 
     picker.jstree({
         // Configure the checkbox plugin.
-        "checkbox" : {
+        "checkbox": {
             // This prevents the selection from including all auto-checked nodes, which I find distracting.
-            "keep_selected_style" : false,
+            "keep_selected_style": false,
             // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
-            "whole_node" : false,
+            "whole_node": false,
             // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
-            "tie_selection" : false,
+            "tie_selection": false,
         },
         // Enable `plugins <https://www.jstree.com/plugins/>`_.
-        "plugins" : [
+        "plugins": [
             "checkbox",
             "search",
         ],
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
-        "core" : {
-            "data" : picker_data,
-            "themes" : {
+        "core": {
+            "data": picker_data,
+            "themes": {
                 // Note that the CSS for the theme (`proton <https://www.orangehilldev.com/jstree-bootstrap-theme/demo/>`_) must also be loaded -- see assignments.html.
-                "name" : "proton",
-                "responsive" : true,
+                "name": "proton",
+                "responsive": true,
             },
+            // Allow modifying the tree programatically. See https://www.jstree.com/api/#/?f=$.jstree.defaults.core.check_callback.
+            "check_callback": true,
         },
     });
 
@@ -1052,9 +1101,9 @@ function configure_tree_picker(
     });
 
     // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
-    picker.on('check_node.jstree', function(event, data) {
+    picker.on('check_node.jstree', function (event, data) {
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function(instance, node) {
+            walk_jstree(data.instance, data.node, function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
                     checked_func(node);
@@ -1064,9 +1113,9 @@ function configure_tree_picker(
     });
 
     // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
-    picker.on('uncheck_node.jstree', function(event, data) {
+    picker.on('uncheck_node.jstree', function (event, data) {
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function(instance, node) {
+            walk_jstree(data.instance, data.node, function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     unchecked_func(node);
                 }
@@ -1084,7 +1133,7 @@ function jstree_node_depth(instance, node) {
 // Given a jstree node, invoke f on node and all its children.
 function walk_jstree(instance, node, f) {
     f(instance, node);
-    $(node.children).each(function(index, value) {
+    $(node.children).each(function (index, value) {
         walk_jstree(instance, instance.get_node(value), f);
     });
 }
@@ -1118,7 +1167,7 @@ function menu_from_editable(
     // Map these to the format necessary for a select control.
     var select_source = [];
     for (let val of row[row_key]) {
-        select_source.push({value: val, text: ui[val]});
+        select_source.push({ value: val, text: ui[val] });
     }
     return select_source;
 }
@@ -1128,16 +1177,14 @@ function menu_from_editable(
 function createAssignment(form) {
     var name = form.name.value;
 
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/createAssignment/?name=' + name, true);
-    obj.send(JSON.stringify({name: name}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            added = JSON.parse(obj.responseText);
-            if (added != 'ERROR') {
+    $('#assign_visible').prop('checked', true);
+    data = {'name': name}
+    url = '/runestone/admin/createAssignment';
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
+        if (iserror != 'ERROR') {
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');
-                newopt.value = added[name];
+                newopt.value = iserror[name];
                 newopt.innerHTML = name;
                 select.appendChild(newopt);
                 select.selectedIndex = newopt.index;
@@ -1145,8 +1192,7 @@ function createAssignment(form) {
             } else {
                 alert('Error in creating new assignment.')
             }
-        }
-    }
+        }, 'json')
 }
 
 // Triggered by the ``-`` button on the assignments tab.
@@ -1155,21 +1201,31 @@ function remove_assignment() {
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
 
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/removeassign/' + assignmentid, true);
-    obj.send(JSON.stringify({assignid: 'assignmentid'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
+    if (!confirm(`Are you sure you want to remove the assignment ${assignmentname}?`)) {
+        return;
+    }
+
+    var url = '/runestone/admin/removeassign';
+    var data = {assignid: assignmentid };
+    jQuery.post(url, data, function (res, status, whatever) {
+        if (res != 'Error') {
             select.remove(select.selectedIndex);
             assignmentInfo();
+        } else {
+            alert("Could not remove assignment " + assignmentname);
         }
-    }
+    });
 }
+
 
 
 // Update an assignment.
 function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
+    if (!assignmentid || assignmentid == "undefined") {
+        alert("No assignment selected");
+        return;
+    }
     $.getJSON('add__or_update_assignment_question', {
         question: question_name,
         assignment: assignmentid,
@@ -1184,15 +1240,18 @@ function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
+    }).fail(function () {
+        alert(`Your added question ${question_name} was not saved to the database for assignment ${assignmentid}, please file a bug report describing exactly what you were doing.`)
     });
 }
 
 
 // Append a row to the question table.
-function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+function createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
     var _id = 'question_table_' + name;
-    question_table.bootstrapTable('append', [{
-        question: name,
+    return {
+        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question_id: name,
         points: points,
         autograde: autograde,
         autograde_possible_values: autograde_possible_values,
@@ -1200,12 +1259,34 @@ function appendToQuestionTable(name, points, autograde, autograde_possible_value
         which_to_grade_possible_values: which_to_grade_possible_values,
         // Setting an _`ID for the row` is essential: the row reordering plugin depends on a valid row ID for the `drop message <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows#userowattrfunc>`_ to work. Setting the ``_id`` key is one way to accomplish this.
         _id: _id,
-    }]);
+    };
+}
+
+function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+    question_table.bootstrapTable('append', [createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values)]);
 }
 
 // Update the grading parameters used for an assignment.
 function update_assignment(form) {
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId());
+    if (!form.due.value) {
+        alert("You must assign a due date to your assignment.")
+        return;
+    } else {
+        try {
+            d = new Date(form.due.value);
+        } catch (e) {
+            alert("Invalid Date: " + form.due.value);
+            return;
+        }
+    }
+    if (form.visible.checked) {
+        form.visible.value = 'T';
+    } else {
+        form.visible.value = 'F';
+    }
+    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId(), function (data) {
+        alert("Assignment Saved");
+    }).error(function () { alert("huh??") });
 }
 
 // Return the assignment id based on the value selected in the ``assignlist`` item.
@@ -1231,12 +1312,18 @@ function assignmentInfo() {
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
 
-    $.getJSON('get_assignment', {'assignmentid': assignmentid}, function (data) {
+    $.getJSON('get_assignment', { 'assignmentid': assignmentid }, function (data) {
         assignmentData = data['assignment_data'];
         $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
         $('#datetimepicker').val(assignmentData['due_date']);
         $('#assignment_description').val(assignmentData['description']);
         $('#readings-threshold').val(assignmentData['threshold']);
+        $('#assign_visible').val(assignmentData['visible']);
+        if (assignmentData['visible'] === true) {
+            $('#assign_visible').prop('checked', true);
+        } else {
+            $('#assign_visible').prop('checked', false);
+        }
         $('#readings-points-to-award').val(assignmentData['points_to_award']);
         $('#readings-autograder').val(assignmentData['readings_autograder']);
 
@@ -1249,13 +1336,17 @@ function assignmentInfo() {
         // Clear all checks and the table initially.
         tqp.uncheck_all();
         question_table.bootstrapTable('removeAll');
+        let allQuestions = []
         for (let question of data['questions_data']) {
             // Put the qeustion in the table.
             let name = question['name'];
-            appendToQuestionTable(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']);
+            allQuestions.push(createQuestionObject(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']));
             // Check this question in the question tree picker.
+            // Assumes that the picker tree is built before we do this loop.
             tqp.check_node(tqp.get_node(name));
         }
+
+        question_table.bootstrapTable('load', allQuestions);
 
         // Future checks come from the user.
         tqp.ignore_check = false;
@@ -1279,8 +1370,13 @@ function assignmentInfo() {
 
 // Update a reading.
 function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+    let assignid = getAssignmentId();
+    if (!assignid || assignid == 'undefined') {
+        alert("No assignment selected");
+        return;
+    }
     $.getJSON('add__or_update_assignment_question', {
-        assignment: getAssignmentId(),
+        assignment: assignid,
         question: subchapter_id,
         activities_required: activities_required,
         points: points,
@@ -1294,6 +1390,8 @@ function updateReading(subchapter_id, activities_required, points, autograde, wh
                 response_JSON['autograde_possible_values'], which_to_grade,
                 response_JSON['which_to_grade_possible_values']);
         }
+    }).fail(function () {
+        alert(`Your added question ${subchapter_id} was not saved to the database for assignment ${assignid}, please file a bug report describing exactly what you were doing.`)
     });
 }
 
@@ -1332,43 +1430,64 @@ function remove_reading(reading_id) {
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {variable: 'variable'}).done(function (response_JSON) {
+    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, { variable: 'variable' }).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
         totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
         question_table.bootstrapTable('removeByUniqueId', question_name);
     });
 }
+var chapterMap = {}
 
 // Called when the "Write" button is clicked.
 function display_write() {
     var template = document.getElementById('template');
     var questiontype = template.options[template.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/gettemplate/' + questiontype, true);
-    obj.send();
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var returns = JSON.parse(obj.responseText);
-            tplate = returns['template'];
-            $("#qcode").text(tplate);
-        }
+    jQuery.get('/runestone/admin/gettemplate/' + questiontype, {}, function (obj) {
+        var returns = JSON.parse(obj);
+        tplate = returns['template'];
+        $("#qcode").text(tplate);
+
         $.each(returns['chapters'], function (i, item) {
+            chapterMap[item[0]] = item[1];
             $('#qchapter').append($('<option>', {
-                value: item,
-                text: item
+                value: item[0],
+                text: item[1]
             }));
         });
-    };
+    });
 
     var hiddenwrite = document.getElementById('hiddenwrite');
     hiddenwrite.style.visibility = 'visible';
 }
 
+function find_name(lines) {
+    var name = "";
+    for (var i = 0; i < lines.length; i++) {
+        if (lines[i] != "") {
+            var line = lines[i];
+            var match = line.split(/.. \w*:: /);
+            name = match[1];
+            break;
+        }
+    }
+    return name
+}
 
 // Called when the "Done" button of the "Write" dialog is clicked.
 function create_question(formdata) {
-    if (! confirm("Have you previewed your question?")) {
+    if (formdata.qchapter.value == "Chapter") {
+        alert("Please select a chapter for this question");
+        return;
+    }
+    if (formdata.createpoints.value == "") {
+        formdata.createpoints.value == "1"
+    }
+    if (!confirm("Have you generated the HTML for your question?")) {
+        return;
+    }
+    if (!formdata.qrawhtml.value) {
+        alert("No HTML for this question, please generate it.")
         return;
     }
     var activetab = 'formative';
@@ -1379,15 +1498,7 @@ function create_question(formdata) {
     var qcode = formdata.qcode.value;
     var lines = qcode.split('\n');
     var htmlsrc = formdata.qrawhtml.value;
-    for(var i = 0; i < lines.length; i++) {
-        if (lines[i] != "") {
-            var line = lines[i];
-            var match = line.split(/.. \w*:: /);
-            var name = match[1];
-            break;
-        }
-    }
-
+    var name = find_name(lines);
     var question = formdata.qcode.value;
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
@@ -1402,18 +1513,19 @@ function create_question(formdata) {
     var timed = formdata.createtimed.checked;
 
     data = {
-        'template' : template,
-        'name' : name,
-        'question' : question,
-        'difficulty' : selectedDifficulty,
-        'tags' : tags,
-        'chapter' : chapter,
-        'isprivate' : isprivate,
-        'tab' : activetab,
-        'assignmentid' : assignmentid,
-        'points' : points,
-        'timed' : timed,
-        'htmlsrc' : htmlsrc
+        'template': template,
+        'name': name,
+        'question': question,
+        'difficulty': selectedDifficulty,
+        'tags': tags,
+        'chapter': chapter,
+        'subchapter': 'Exercises',
+        'isprivate': isprivate,
+        'tab': activetab,
+        'assignmentid': assignmentid,
+        'points': points,
+        'timed': timed,
+        'htmlsrc': htmlsrc
     }
     url = '/runestone/admin/createquestion'
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
@@ -1426,22 +1538,42 @@ function create_question(formdata) {
             var q_type = activetab;
             var totalPoints = document.getElementById("totalPoints");
             totalPoints.innerHTML = 'Total points: ' + newPoints;
-            updateAssignmentRaw(name, points, 'pct_correct', 'last_answer');
+            // Add this question to the question picker and the table.
+            var tqp = question_picker.jstree(true);
+            // Find the exercises for this chapter. They have an ID set, making them easy to find.
+            chapter = chapterMap[chapter];
+            var exercises_node = tqp.get_node(chapter + ' Exercises');
+            // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
+            tqp.check_node(tqp.create_node(exercises_node, { id: name, text: name }));
         }
     }, 'json');
 }
 
+// Given a question ID, preview it.
+function preview_question_id(question_id, preview_div) {
+    if (arguments.length == 1) {
+        preview_div = "component-preview"
+    }
+    // Request the preview HTML from the server.
+    $.getJSON('/runestone/admin/htmlsrc', { "acid": question_id }).done(function (html_src) {
+        // Render it.
+        renderRunestoneComponent(html_src, preview_div)
+    });
+}
+
 
 // Called by the "Preview" button of the "Write" panel.
-function preview_question(form){
-
-    var code = $(form.qcode).val();
-    var data = {'code': JSON.stringify(code)};
-    $.post('/runestone/ajax/preview_question', data, function(result, status) {
-            let code = JSON.parse(result);
-            $(form.qrawhtml).val(code); // store the un-rendered html for submission
-            renderRunestoneComponent(code, "component-preview")
-        }
+function preview_question(form, preview_div) {
+    if (arguments.length == 1) {
+        preview_div = "component-preview"
+    }
+    var code = $(form.editRST).val();
+    var data = { 'code': JSON.stringify(code) };
+    $.post('/runestone/ajax/preview_question', data, function (result, status) {
+        let code = JSON.parse(result);
+        $(form.qrawhtml).val(code); // store the un-rendered html for submission
+        renderRunestoneComponent(code, preview_div)
+    }
     );
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
@@ -1459,6 +1591,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  source into the actual component.
      */
 
+    patt = /..\/_images/g;
+    componentSrc = componentSrc.replace(patt, `/${eBookConfig.app}/static/${eBookConfig.course}/_images`)
     jQuery(`#${whereDiv}`).html(componentSrc);
 
     edList = [];
@@ -1466,24 +1600,46 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
-    opt.lang = $(opt.orig).data('lang')
-    opt.useRunestoneServices = false;
-    opt.graderactive = false;
-    opt.python3 = true;
-    if (typeof moreOpts !== 'undefined') {
-        for (let key in moreOpts) {
-            opt[key] = moreOpts[key]
+    if (opt.orig) {
+        opt.lang = $(opt.orig).data('lang')
+        opt.useRunestoneServices = false;
+        opt.graderactive = false;
+        opt.python3 = true;
+        if (typeof moreOpts !== 'undefined') {
+            for (let key in moreOpts) {
+                opt[key] = moreOpts[key]
+            }
         }
-    }
+}
 
     if (typeof component_factory === 'undefined') {
         alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
     } else {
-        if (!component_factory[componentKind]) {
+        if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html() ) {
             jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
         } else {
-            component_factory[componentKind](opt)
+            let res = component_factory[componentKind](opt);
+            if (componentKind === 'activecode') {
+                edList[res.divid] = res;
+            }
         }
+    }
+
+    if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") {  // if we are in modal we are already editing
+        $("#modal-preview").data("orig_divid", opt.orig.id);  // save the original divid
+        let editButton = document.createElement("button")
+        $(editButton).text("Edit Source");
+        $(editButton).addClass("btn btn-normal");
+        $(editButton).attr("data-target", "#editModal");
+        $(editButton).attr("data-toggle", "modal");
+        $(editButton).click(function (event) {
+            data = { question_name: opt.orig.id }
+            jQuery.get('/runestone/admin/question_text', data,
+                function (obj) {
+                    $("#editRST").val(JSON.parse(obj));
+                });
+        });
+        $(`#${whereDiv}`).append(editButton);
     }
 }
 
@@ -1494,7 +1650,7 @@ function questionBank(form) {
     var author = form.author.value;
     var tags = $("#tags").select2("val");
     var term = form.term.value;
-    var difficulty = null;
+    var difficulty = "";
     var difficulty_options = ['rating1', 'rating2', 'rating3', 'rating4', 'rating5'];
     var inputs = document.getElementById('qbankform').getElementsByTagName('input');
     for (var i = 0, length = inputs.length; i < length; i++) {
@@ -1504,36 +1660,43 @@ function questionBank(form) {
     }
 
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/questionBank?chapter=' + chapter + '&difficulty=' + difficulty + '&author=' + author + '&tags=' + tags + '&term=' + term + '&qtype=' +'formative', true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var resp = JSON.parse(obj.responseText);
-            var select = document.getElementById('qbankselect');
-            select.onchange = getQuestionInfo;
-            var questionform = document.getElementById('questionform');
-            $("#qbankselect").empty();
-            for (i = 0; i < resp.length; i++) {
-                var option = document.createElement("option");
-                option.text = resp[i];
-                option.value = resp[i];
-                option.onclick = getQuestionInfo;
-                select.add(option);
-            }
-            if (resp.length == 0) {
-                select.style.visibility = 'hidden';
-                questionform.style.visibility = 'hidden';
-                var q_info = document.getElementById('questionInfo');
-                q_info.style.visibility = 'hidden';
-                alert("Sorry, no questions matched your search criteria.");
-
-            }
-            if (resp.length > 0) {
-                select.style.visibility = 'visible';
-                questionform.style.visibility = 'visible';
-            }
+    var url = '/runestone/admin/questionBank'
+    var data = { variable: 'variable',
+        chapter: chapter,
+        difficulty: difficulty,
+        author: author,
+        tags: tags,
+        term: term
+        };
+    jQuery.post(url, data, function (resp, textStatus, whatever) {
+        resp = JSON.parse(resp)
+        if (resp == 'Error') {
+            alert("An error occured while searching")
+        };
+        var select = document.getElementById('qbankselect');
+        select.onchange = getQuestionInfo;
+        var questionform = document.getElementById('questionform');
+        $("#qbankselect").empty();
+        for (i = 0; i < resp.length; i++) {
+            var option = document.createElement("option");
+            option.text = resp[i];
+            option.value = resp[i];
+            option.onclick = getQuestionInfo;
+            select.add(option);
         }
-    }
+        if (resp.length == 0) {
+            select.style.visibility = 'hidden';
+            questionform.style.visibility = 'hidden';
+            var q_info = document.getElementById('questionInfo');
+            q_info.style.visibility = 'hidden';
+            alert("Sorry, no questions matched your search criteria.");
+
+        }
+        if (resp.length > 0) {
+            select.style.visibility = 'visible';
+            questionform.style.visibility = 'visible';
+        }
+    });
 }
 
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
@@ -1542,7 +1705,7 @@ function addToAssignment(form) {
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, '');
+    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
@@ -1551,12 +1714,14 @@ function getQuestionInfo() {
     var question_name = select.options[select.selectedIndex].text;
     var assignlist = document.getElementById('assignlist');
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/getQuestionInfo/?question=' + question_name + '&assignment=' + assignmentid, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var question_info = obj.responseText;
+
+    var url = '/runestone/admin/getQuestionInfo';
+    var data = {
+        variable: 'variable',
+        question: question_name,
+        assignment: assignmentid
+    };
+    jQuery.post(url, data, function (question_info, status, whatever) {
             var res = JSON.parse(question_info);
             var data = {};
             var i;
@@ -1592,17 +1757,18 @@ function getQuestionInfo() {
             var q_info = document.getElementById('questionInfo');
             q_info.style.visibility = 'visible';
 
-        }
-    }
+        });
 }
 
 
-// Called inside the "Write Assignment" panel?
+// Called from the editing modal when the save button is pressed
 function edit_question(form) {
-    var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
+
+    if (!form.qrawhtml.value) {
+        alert("You must generate the HTML for your edit.");
+        return;
+    }
     var tags = $("#addTags").select2("val");
-    var name = form.changename.value;
     var difficulty = null;
     var difficulty_options = ['r1', 'r2', 'r3', 'r4', 'r5'];
     var inputs = document.getElementById('editForm').getElementsByTagName('input');
@@ -1611,56 +1777,44 @@ function edit_question(form) {
             difficulty = inputs[i].value;
         }
     }
+    let orig_divid = $("#modal-preview").data("orig_divid")
     var question_text = form.editRST.value;
-          question_text =  question_text.replace(/(\r\n|\n|\r)/gm, '%0A'); //encodes all new line characters to preserve them in query string
-
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/edit_question/?question=' + question_name + '&tags=' + tags + '&difficulty=' + difficulty + '&name=' + name + '&questiontext=' + question_text, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            if (obj.responseText == 'Success') {
-                alert('You successfully edited the selected question.');
-            }
+    var lines = form.editRST.value.split('\n');
+    var htmlsrc = form.qrawhtml.value;
+    var name = find_name(lines);
+    data = {
+        question: orig_divid,
+        name: name,
+        tags: tags,
+        difficulty: difficulty,
+        questiontext: question_text,
+        htmlsrc: htmlsrc
+    };
+    jQuery.post('/runestone/admin/edit_question', data, function (myres) {
+        alert(myres);
+        if (myres.includes("Success")) {
+            $('#editModal').modal('hide');
         }
-    }
-
+    });
 }
-
-
-// More preview panel functionality I don't understand.
-function getQuestionText() {
-    var select = document.getElementById('qbankselect');
-    var question_name = select.options[select.selectedIndex].text;
-    var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/question_text?question_name=' + question_name, true);
-    obj.send(JSON.stringify({variable: 'variable'}));
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var textarea = document.getElementById('editRST');
-            textarea.innerHTML = obj.responseText;
-        }
-    }
-}
-
 
 
 // ***********
 // Grading tab
 // ***********
 // Return whether the assignment has been released for grading.
-function get_assignment_release_states(){
-    if (assignment_release_states == null){
+function get_assignment_release_states() {
+    if (assignment_release_states == null) {
         // This has to be a synchronous call because we have to set assignment_release_states
         // before going on to later code that uses it
         jQuery.ajax({
-        url: eBookConfig.get_assignment_release_statesURL,
-        type: "POST",
-        dataType: "JSON",
-        async: false,
-        success: function (retdata) {
-            assignment_release_states = retdata;
-        }
+            url: eBookConfig.get_assignment_release_statesURL,
+            type: "POST",
+            dataType: "JSON",
+            async: false,
+            success: function (retdata) {
+                assignment_release_states = retdata;
+            }
         });
     }
 }
@@ -1698,16 +1852,16 @@ function set_release_button() {
         release_button.css('visibility', 'hidden');
     }
 
-    else{
+    else {
         release_button.css('visibility', 'visible');
         // see whether grades are currently live for this assignment
         get_assignment_release_states();
         var release_state = assignment_release_states[assignment];
         // If so, set the button text appropriately
-        if (release_state == true){
+        if (release_state == true) {
             release_button.text("Hide Grades from Students for " + assignment);
         }
-        else{
+        else {
             release_button.text("Release Grades to Students for " + assignment);
         }
     }
@@ -1751,14 +1905,14 @@ function toggle_release_grades() {
         //go release the grades now
         get_assignment_release_states()
         release_state = assignment_release_states[assignment];
-        var ids = JSON.parse(assignmentids);
+        var ids = assignmentids;
         var assignmentid = ids[assignment];
         var obj = new XMLHttpRequest();
-        if (release_state == true){
+        if (release_state == true) {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = null;
             obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=no', true);
-            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.send(JSON.stringify({ variable: 'variable' }));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
                     alert("Grades are now hidden from students for " + assignment);
@@ -1766,11 +1920,11 @@ function toggle_release_grades() {
             }
         }
 
-        else{
+        else {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = true;
             obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=yes', true);
-            obj.send(JSON.stringify({variable: 'variable'}));
+            obj.send(JSON.stringify({ variable: 'variable' }));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
                     alert("Grades are now visible to students for " + assignment);
@@ -1780,4 +1934,3 @@ function toggle_release_grades() {
         set_release_button();
     }
 }
-

@@ -6,7 +6,7 @@ def splitFiles(filename, directory):
     f = open(filename)
     lines = f.readlines()
     f.close()
-     
+
     os.unlink(filename)
 
     sectionStart = 0
@@ -14,10 +14,10 @@ def splitFiles(filename, directory):
     startCommentsTraversed = False
     topicName=''
 
-    print filename
+    print(filename)
     newFilename = filename.replace('src_original','source')
     newFilePath = newFilename.rsplit('\\',1)[0]
-    print newFilePath
+    print(newFilePath)
     for idx, val in enumerate(lines):
         if val.startswith('----') or val.startswith('~~~~~'): #a new subsection is identified by ----- or ~~~~~. Enter if when a new subsection starts
             if not startCommentsTraversed: #enters this if only for the first section, to handle the chapter comments
@@ -47,7 +47,7 @@ def splitFiles(filename, directory):
                 o.close()
                 topicName = removeChars(lines[idx-1].strip(), '\/:*?"-+`,!<>|')
                 sectionStart = idx-1
-        elif idx == (len(lines) -1): #enters for the last line, to create last file 
+        elif idx == (len(lines) -1): #enters for the last line, to create last file
             newFile = newFilePath+'\\'+topicName.replace(" ", "")+'.rst'
             ocf.writelines("   "+directory+"/"+topicName.replace(" ", "")+'.rst\n') #write new filename to file, for TOC
             o = open(newFile, 'w')
@@ -86,7 +86,7 @@ def copy(src, dest):
         else:
             print('Directory not copied. Error: %s' % e)
 
-include_directories = ['GeneralIntro', 'SimplePythonData', 'Debugging', 'PythonTurtle', 'PythonModules', 'Functions', 'Selection', 'MoreAboutIteration', 'Strings', 'Lists', 'Files', 'Dictionaries',  'Recursion', 'ClassesBasics', 'ClassesDiggingDeeper'] 
+include_directories = ['GeneralIntro', 'SimplePythonData', 'Debugging', 'PythonTurtle', 'PythonModules', 'Functions', 'Selection', 'MoreAboutIteration', 'Strings', 'Lists', 'Files', 'Dictionaries',  'Recursion', 'ClassesBasics', 'ClassesDiggingDeeper']
 
 allChapterFiles = 'allChapterFiles.txt'
 ocf = open(allChapterFiles, 'w')
@@ -95,7 +95,7 @@ os.chdir('..')
 copy("source", "source_original")
 os.chdir('source')
 
-for directory in include_directories: 
+for directory in include_directories:
     os.chdir(directory)
     fileList = dirEntries(os.getcwd(), True, 'rst')
     for file in fileList:

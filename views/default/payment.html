@@ -1,0 +1,24 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+{{block statusbar}}
+{{end}}
+
+{{if payment_success is None:}}
+    <h1>Payment</h1>
+
+    This textbook requires a fee for access.
+
+    {{# The payment form is contained in ``html``. Include it.
+        =XML(html)
+    }}
+{{elif payment_success:}}
+    <h1>Thank you for your payment</h1>
+
+    <p>Your book has been added to your <a href="/{{=request.application}}/static/{{=course.course_name}}/index.html">library</a>.</p>
+
+{{else:}}
+    <h1>Payment failed</h2>
+
+    <p>{{=form.response['error']['message']}} Please correct this error and <a href="payment">retry</a> your payment.</p>
+{{pass}}

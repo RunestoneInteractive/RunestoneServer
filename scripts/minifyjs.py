@@ -34,7 +34,7 @@ filenames = [outdir + "activecode.js",
              outdir + "js/pytutor.js"]
 
 for filename in filenames:
-    print "Minifying " + filename
+    print("Minifying " + filename)
 
     call(["mv", filename, "a.js"])
 
@@ -47,4 +47,4 @@ for filename in filenames:
           "--jscomp_off", "internetExplorerChecks"])
 
 call(["rm", "a.js"])
-print "Done."
+print("Done.")

@@ -1,23 +1,41 @@
 import json
 import datetime
 import logging
-import time
+import subprocess
 import uuid
+from bleach import clean
 from collections import Counter
 from diff_match_patch import *
-import os, sys
+import os
+import sys
+from io import open
 from lxml import html
+from feedback import is_server_feedback, fitb_feedback, lp_feedback
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
 response.headers['Access-Control-Allow-Origin'] = '*'
 
-def compareAndUpdateCookieData(sid):
-    if request.cookies.has_key('ipuser') and request.cookies['ipuser'].value != sid:
-        db.useinfo(db.useinfo.sid == request.cookies['ipuser'].value).update(sid=sid)
+EVENT_TABLE = {'mChoice':'mchoice_answers',
+               'fillb':'fitb_answers',
+               'dragNdrop':'dragndrop_answers',
+               'clickableArea':'clickablearea_answers',
+               'parsons':'parsons_answers',
+               'codelens1':'codelens_answers',
+               'shortanswer':'shortanswer_answers',
+               'fillintheblank': 'fitb_answers',
+               'mchoice': 'mchoice_answers',
+               'dragndrop': 'dragndrop_answers',
+               'clickablearea':'clickablearea_answers',
+               'parsonsprob': 'parsons_answers' }
 
-def hsblog():    # Human Subjects Board Log
+
+def compareAndUpdateCookieData(sid):
+    if 'ipuser' in request.cookies and request.cookies['ipuser'].value != sid and request.cookies['ipuser'].value.endswith("@"+request.client):
+        db.useinfo.update_or_insert(db.useinfo.sid == request.cookies['ipuser'].value, sid=sid)
+
+def hsblog():
     setCookie = False
     if auth.user:
         sid = auth.user.username
@@ -26,23 +44,25 @@ def hsblog():    # Human Subjects Board Log
                             # log entries that come from auth timing out even but the user hasn't reloaded
                             # the page.
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
             sid = str(uuid.uuid1().int)+"@"+request.client
             setCookie = True
-    act = request.vars.act
+    act = request.vars.get('act', '')
     div_id = request.vars.div_id
     event = request.vars.event
     course = request.vars.course
-    ts = datetime.datetime.now()
+    # Get the current time, rounded to the nearest second -- this is how time time will be stored in the database.
+    ts = datetime.datetime.utcnow()
+    ts -= datetime.timedelta(microseconds=ts.microsecond)
     tt = request.vars.time
     if not tt:
         tt = 0
 
     try:
-        db.useinfo.insert(sid=sid,act=act,div_id=div_id,event=event,timestamp=ts,course_id=course)
+        db.useinfo.insert(sid=sid,act=act[0:512],div_id=div_id,event=event,timestamp=ts,course_id=course)
     except:
         logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
@@ -63,42 +83,64 @@ def hsblog():    # Human Subjects Board Log
             logger.debug('correct {} incorrect {} skipped {} time {}'.format(request.vars.correct, request.vars.incorrect, request.vars.skipped, request.vars.time))
             logger.debug('Error: {}'.format(e.message))
 
+    # Produce a default result.
+    res = dict(log=True, timestamp=str(ts))
+
+    # Process this event.
     if event == 'mChoice' and auth.user:
-        # has user already submitted a correct answer for this question?
-        if db((db.mchoice_answers.sid == sid) &
-              (db.mchoice_answers.div_id == div_id) &
-              (db.mchoice_answers.correct == 'T')).count() == 0:
+        # # has user already submitted a correct answer for this question?
+        # if db((db.mchoice_answers.sid == sid) &
+        #       (db.mchoice_answers.div_id == div_id) &
+        #       (db.mchoice_answers.course_name == auth.user.course_name) &
+        #       (db.mchoice_answers.correct == 'T')).count() == 0:
             answer = request.vars.answer
             correct = request.vars.correct
             db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
     elif event == "fillb" and auth.user:
-        # Has user already submitted a correct answer for this question? If not, insert a record
-        if db((db.fitb_answers.sid == sid) & (db.fitb_answers.div_id == div_id) & (db.fitb_answers.correct == 'T')).count() == 0:
-            answer = request.vars.answer
-            correct = request.vars.correct
-            db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
+        answer_json = request.vars.answer
+        correct = request.vars.correct
+        # Grade on the server if needed.
+        do_server_feedback, feedback = is_server_feedback(div_id, course)
+        if do_server_feedback:
+            correct, res_update = fitb_feedback(answer_json, feedback)
+            res.update(res_update)
+
+        # Save this data.
+        db.fitb_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer_json, correct=correct, course_name=course)
 
     elif event == "dragNdrop" and auth.user:
-        if db((db.dragndrop_answers.sid == sid) & (db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.correct == 'T')).count() == 0:
+        # if db((db.dragndrop_answers.sid == sid) &
+        #       (db.dragndrop_answers.div_id == div_id) &
+        #       (db.dragndrop_answers.course_name == auth.user.course_name) &
+        #       (db.dragndrop_answers.correct == 'T')).count() == 0:
             answers = request.vars.answer
             minHeight = request.vars.minHeight
             correct = request.vars.correct
 
             db.dragndrop_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answers, correct=correct, course_name=course, minHeight=minHeight)
     elif event == "clickableArea" and auth.user:
-        if db((db.clickablearea_answers.sid == sid) & (db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.correct == 'T')).count() == 0:
+        # if db((db.clickablearea_answers.sid == sid) &
+        #       (db.clickablearea_answers.div_id == div_id) &
+        #       (db.clickablearea_answers.course_name == auth.user.course_name) &
+        #       (db.clickablearea_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             db.clickablearea_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=act, correct=correct, course_name=course)
 
     elif event == "parsons" and auth.user:
-        if db((db.parsons_answers.sid == sid) & (db.parsons_answers.div_id == div_id) & (db.parsons_answers.correct == 'T')).count() == 0:
+        # if db((db.parsons_answers.sid == sid) &
+        #       (db.parsons_answers.div_id == div_id) &
+        #       (db.parsons_answers.course_name == auth.user.course_name) &
+        #       (db.parsons_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
             source = request.vars.source
             db.parsons_answers.insert(sid=sid, timestamp=ts, div_id=div_id, answer=answer, source=source, correct=correct, course_name=course)
 
     elif event == "codelensq" and auth.user:
-        if db((db.codelens_answers.sid == sid) & (db.codelens_answers.div_id == div_id) & (db.codelens_answers.correct == 'T')).count() == 0:
+        # if db((db.codelens_answers.sid == sid) &
+        #       (db.codelens_answers.div_id == div_id) &
+        #       (db.codelens_answers.course_name == auth.user.course_name) &
+        #       (db.codelens_answers.correct == 'T')).count() == 0:
             correct = request.vars.correct
             answer = request.vars.answer
             source = request.vars.source
@@ -109,8 +151,35 @@ def hsblog():    # Human Subjects Board Log
         db.shortanswer_answers.update_or_insert((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course),
             sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course)
 
+    elif event == "lp_build" and auth.user:
+        ret, new_fields = db.lp_answers._validate_fields(dict(
+            sid=sid, timestamp=ts, div_id=div_id, course_name=course
+        ))
+        if not ret.errors:
+            do_server_feedback, feedback = is_server_feedback(div_id, course)
+            if do_server_feedback:
+                try:
+                    code_snippets = json.loads(request.vars.answer)['code_snippets']
+                except:
+                    code_snippets = []
+                result = lp_feedback(code_snippets, feedback)
+                # If an error occurred or we're not testing, pass the answer through.
+                res.update(result)
+
+                # Record the results in the database.
+                correct = result.get('correct')
+                answer = result.get('answer', {})
+                answer['code_snippets'] = code_snippets
+                ret = db.lp_answers.validate_and_insert(sid=sid, timestamp=ts, div_id=div_id,
+                    answer=json.dumps(answer), correct=correct, course_name=course)
+                if ret.errors:
+                    res.setdefault('errors', []).append(ret.errors.as_dict())
+            else:
+                res['errors'] = ['No feedback provided.']
+        else:
+            res.setdefault('errors', []).append(ret.errors.as_dict())
+
     response.headers['content-type'] = 'application/json'
-    res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
         response.cookies['ipuser']['expires'] = 24*3600*90
@@ -118,12 +187,13 @@ def hsblog():    # Human Subjects Board Log
     return json.dumps(res)
 
 def runlog():    # Log errors and runs with code
+    response.headers['content-type'] = 'application/json'
     setCookie = False
     if auth.user:
         sid = auth.user.username
         setCookie = True
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
             setCookie = True
         else:
@@ -132,42 +202,83 @@ def runlog():    # Log errors and runs with code
     div_id = request.vars.div_id
     course = request.vars.course
     code = request.vars.code if request.vars.code else ""
-    ts = datetime.datetime.now()
+    ts = datetime.datetime.utcnow()
     error_info = request.vars.errinfo
     pre = request.vars.prefix if request.vars.prefix else ""
     post = request.vars.suffix if request.vars.suffix else ""
     if error_info != 'success':
         event = 'ac_error'
-        act = error_info
+        act = str(error_info)[:512]
     else:
         act = 'run'
         if request.vars.event:
             event = request.vars.event
         else:
             event = 'activecode'
-    try:
-        db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
-    except Exception as e:
-        logger.debug("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={}".format(sid, act, div_id, event, ts, course))
+    num_tries = 3
+    done = False
+    while num_tries > 0 and not done:
+        try:
+            db.useinfo.insert(sid=sid, act=act, div_id=div_id, event=event, timestamp=ts, course_id=course)
+            done = True
+        except Exception as e:
+            logger.error("probable Too Long problem trying to insert sid={} act={} div_id={} event={} timestamp={} course_id={} exception={}".format(sid, act, div_id, event, ts, course, e))
+            num_tries -= 1
+    if num_tries == 0:
+        raise Exception("Runlog Failed to insert into useinfo")
 
-    dbid = db.acerror_log.insert(sid=sid,
-                                 div_id=div_id,
-                                 timestamp=ts,
-                                 course_id=course,
-                                 code=pre+code+post,
-                                 emessage=error_info)
+    num_tries = 3
+    done = False
+    while num_tries > 0 and not done:
+        try:
+            dbid = db.acerror_log.insert(sid=sid,
+                                        div_id=div_id,
+                                        timestamp=ts,
+                                        course_id=course,
+                                        code=pre+code+post,
+                                        emessage=error_info)
+            done = True
+        except:
+            logger.error("INSERT into acerror_log FAILED retrying")
+            num_tries -= 1
+    if num_tries == 0:
+        raise Exception("Runlog Failed to insert into acerror_log")
+
     #lintAfterSave(dbid, code, div_id, sid)
     if auth.user:
         if 'to_save' in request.vars and (request.vars.to_save == "True" or request.vars.to_save == "true"):
-            db.code.insert(sid=sid,
-                acid=div_id,
-                code=code,
-                emessage=error_info,
-                timestamp=ts,
-                course_id=auth.user.course_id,
-                language=request.vars.lang)
+            num_tries = 3
+            done = False
+            dbcourse = db(db.courses.course_name == course).select().first()
+            while num_tries > 0 and not done:
+                try:
+                    db.code.insert(sid=sid,
+                        acid=div_id,
+                        code=code,
+                        emessage=error_info,
+                        timestamp=ts,
+                        course_id=dbcourse,
+                        language=request.vars.lang)
+                    if request.vars.partner:
+                        if _same_class(sid, request.vars.partner):
+                            newcode = "# This code was shared by {}\n\n".format(sid) + code
+                            db.code.insert(sid=request.vars.partner,
+                                acid=div_id,
+                                code=newcode,
+                                emessage=error_info,
+                                timestamp=ts,
+                                course_id=dbcourse,
+                                language=request.vars.lang)
+                        else:
+                            res = {'message': 'You must be enrolled in the same class as your partner'}
+                            return json.dumps(res)
+                    done = True
+                except:
+                    num_tries -= 1
+                    logger.error("INSERT into code FAILED retrying")
+            if num_tries == 0:
+                raise Exception("Runlog Failed to insert into code")
 
-    response.headers['content-type'] = 'application/json'
     res = {'log':True}
     if setCookie:
         response.cookies['ipuser'] = sid
@@ -247,56 +358,49 @@ def getprog():
             if sid:
                 res['sid'] = sid
         else:
-            logging.debug("Did not find anything to load for %s"%sid)
+            logger.debug("Did not find anything to load for %s"%sid)
     response.headers['content-type'] = 'application/json'
     return json.dumps([res])
 
-def getlastanswer():
-    # get's user's last answer for multiple choice question
-    logging.debug("Hello from getlastanswer")
-    divid = request.vars.div_id
-    if  auth.user:
-        sid = auth.user.username
-        query = ((db.useinfo.sid == sid) & (db.useinfo.div_id == divid))
-        logging.debug("finding last answer for %s %s " % (sid,divid))
-    else:
-        query = None
-        logging.debug("No User, No Query")
-
-    res = {}
-    if query:
-        result = db(query)
-        if not result.isempty():
-            r = result.select(orderby=~db.useinfo.timestamp).first()
-            res['divid'] = divid
-            res['answer'] = r.act
-            res['timestamp'] = r.timestamp.isoformat()
-        else:
-            logging.debug("No saved answers for %s %s" %(sid,divid))
-    response.headers['content-type'] = 'application/json'
-    return json.dumps(res)
-
-
-
-@auth.requires_membership('instructor')
-def savegrade():
-    res = db(db.code.id == request.vars.id)
-    if request.vars.grade:
-        res.update(grade = float(request.vars.grade))
-    else:
-        res.update(comment = request.vars.comment)
 
 
 #@auth.requires_login()
+# This function is deprecated as of June 2019
+# We need to keep it in place as long as we continue to serve books
+# from runestone/static/  When that period is over we can eliminate
 def getuser():
     response.headers['content-type'] = 'application/json'
 
-    if  auth.user:
-        res = {'email':auth.user.email,'nick':auth.user.username,'cohortId':auth.user.cohort_id}
+    if auth.user:
+        try:
+            # return the list of courses that auth.user is registered for to keep them from
+            # accidentally wandering into courses they are not registered for.
+            cres = db( (db.user_courses.user_id == auth.user.id) &
+                       (db.user_courses.course_id == db.courses.id)).select(db.courses.course_name)
+            clist = []
+            for row in cres:
+                clist.append(row.course_name)
+            res = {'email': auth.user.email,
+                   'nick': auth.user.username,
+                   'donated': auth.user.donated,
+                   'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id),
+                   'course_list': clist
+                   }
+            session.timezoneoffset = request.vars.timezoneoffset
+            logger.debug("setting timezone offset in session %s hours" % session.timezoneoffset)
+        except:
+            res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url) #?_next=....
-    logging.debug("returning login info: %s",res)
+    if session.readings:
+        res['readings'] = session.readings
+    logger.debug("returning login info: %s" % res)
     return json.dumps([res])
+
+def set_tz_offset():
+    session.timezoneoffset = request.vars.timezoneoffset
+    logger.debug("setting timezone offset in session %s hours" % session.timezoneoffset)
+    return "done"
 
 
 def getnumonline():
@@ -327,69 +431,19 @@ def getnumusers():
     res = {'numusers':numusers}
     return json.dumps([res])
 
-#
-#  Ajax Handlers to save / delete and restore user highlights
-#
-def savehighlight():
-    parentClass = request.vars.parentClass
-    hrange = request.vars.range
-    method = request.vars.method
-    page = request.vars.page
-    pageSection = request.vars.pageSection
-    course = request.vars.course
 
-    if auth.user:
-        insert_id = db.user_highlights.insert(created_on=datetime.datetime.now(),
-                       user_id=auth.user.id,
-                       course_id=course,
-                       parent_class=parentClass,
-                       range=hrange,
-                       chapter_url=page,
-                       sub_chapter_url=pageSection,
-                       method = method)
-        return str(insert_id)
-
-
-def deletehighlight():
-    uniqueId = request.vars.uniqueId
-
-    if auth.user:
-        try:
-            db(db.user_highlights.id == uniqueId).update(is_active=0)
-        except:
-            logging.debug('uniqueId is not valid: {} user {}'.format(uniqueId, auth.user.username))
-            return json.dumps({'success': False, 'message':'invalid id for highlighted text'})
-
-        return json.dumps({"success":True})
-
-
-def gethighlights():
-    """
-    return all the highlights for a given user, on a given page
-    :Parameters:
-        - `page`: the page to search the highlights on
-        - `course`: the course to search the highlights in
-    :Return:
-        - json object containing a list of matching highlights
-    """
-    page = request.vars.page
-    course = request.vars.course
-    if auth.user:
-        result = db((db.user_highlights.user_id == auth.user.id) &
-                    (db.user_highlights.chapter_url == page) &
-                    (db.user_highlights.course_id == course) &
-                    (db.user_highlights.is_active == 1)).select()
-        rowarray_list = []
-        for row in result:
-            res = {'range': row.range, 'uniqueId': row.id,
-                   'parentClass': row.parent_class,
-                   'pageSection': row.sub_chapter_url, 'method': row.method}
-            rowarray_list.append(res)
-        return json.dumps(rowarray_list)
-
+# I was not sure if it's okay to import it from `assignmnets.py`.
+# Only questions that are marked for practice are eligible for the spaced practice.
+def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
+    return db((db.questions.base_course == base_course) &
+              ((db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label)) |
+               ((db.questions.chapter == chapter_label) &
+                (db.questions.topic == None) &
+                (db.questions.subchapter == sub_chapter_label))) &
+              (db.questions.practice == True)).select()
 
 #
-#  Ajax Handlers to update and retreive the last position of the user in the course
+#  Ajax Handlers to update and retrieve the last position of the user in the course
 #
 def updatelastpage():
     lastPageUrl = request.vars.lastPageUrl
@@ -399,28 +453,86 @@ def updatelastpage():
     course = request.vars.course
     completionFlag = request.vars.completionFlag
     lastPageChapter = lastPageUrl.split("/")[-2]
-    lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+    lastPageSubchapter = ".".join(lastPageUrl.split("/")[-1].split(".")[:-1])
     if auth.user:
-        db((db.user_state.user_id == auth.user.id) &
-                 (db.user_state.course_id == course)).update(
-                   last_page_url = lastPageUrl,
-                   last_page_chapter = lastPageChapter,
-                   last_page_subchapter = lastPageSubchapter,
-                   last_page_scroll_location = lastPageScrollLocation,
-                   last_page_accessed_on = datetime.datetime.now())
-        db.commit()
-        db((db.user_sub_chapter_progress.user_id == auth.user.id) &
-           (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
-           (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
-                   status = completionFlag,
-                   end_date = datetime.datetime.now())
-        db.commit()
+        done = False
+        num_tries = 3
+        while not done and num_tries > 0:
+            try:
+                db((db.user_state.user_id == auth.user.id) &
+                        (db.user_state.course_id == course)).update(
+                        last_page_url=lastPageUrl,
+                        last_page_chapter=lastPageChapter,
+                        last_page_subchapter=lastPageSubchapter,
+                        last_page_scroll_location=lastPageScrollLocation,
+                        last_page_accessed_on=datetime.datetime.utcnow())
+                done = True
+            except:
+                num_tries -= 1
+        if num_tries == 0:
+            raise Exception("Failed to save the user state in update_last_page")
+
+        done = False
+        num_tries = 3
+        while not done and num_tries > 0:
+            try:
+                db((db.user_sub_chapter_progress.user_id == auth.user.id) &
+                (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
+                (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).update(
+                        status=completionFlag,
+                        end_date=datetime.datetime.utcnow())
+                done = True
+            except:
+                num_tries -= 1
+        if num_tries == 0:
+            raise Exception("Failed to save sub chapter progress in update_last_page")
+
+        practice_settings = db(db.course_practice.course_name == auth.user.course_name)
+        if (practice_settings.count() != 0 and
+            practice_settings.select().first().flashcard_creation_method == 0):
+            # Since each authenticated user has only one active course, we retrieve the course this way.
+            course = db(db.courses.id == auth.user.course_id).select().first()
+
+            # We only retrieve questions to be used in flashcards if they are marked for practice purpose.
+            questions = _get_qualified_questions(course.base_course,
+                                                 lastPageChapter,
+                                                 lastPageSubchapter)
+            if len(questions) > 0:
+                now = datetime.datetime.utcnow()
+                now_local = now - datetime.timedelta(hours=float(session.timezoneoffset) if 'timezoneoffset' in session else 0)
+                existing_flashcards = db((db.user_topic_practice.user_id == auth.user.id) &
+                                         (db.user_topic_practice.course_name == auth.user.course_name) &
+                                         (db.user_topic_practice.chapter_label == lastPageChapter) &
+                                         (db.user_topic_practice.sub_chapter_label == lastPageSubchapter) &
+                                         (db.user_topic_practice.question_name == questions[0].name)
+                                         )
+                # There is at least one qualified question in this subchapter, so insert a flashcard for the subchapter.
+                if completionFlag == '1' and existing_flashcards.isempty():
+                    db.user_topic_practice.insert(
+                        user_id=auth.user.id,
+                        course_name=auth.user.course_name,
+                        chapter_label=lastPageChapter,
+                        sub_chapter_label=lastPageSubchapter,
+                        question_name=questions[0].name,
+                        # Treat it as if the first eligible question is the last one asked.
+                        i_interval=0,
+                        e_factor=2.5,
+                        next_eligible_date=now_local.date(),
+                        # add as if yesterday, so can practice right away
+                        last_presented=now - datetime.timedelta(1),
+                        last_completed=now - datetime.timedelta(1),
+                        creation_time=now,
+                        timezoneoffset=float(session.timezoneoffset) if 'timezoneoffset' in session else 0
+                    )
+                if completionFlag == '0' and not existing_flashcards.isempty():
+                    existing_flashcards.delete()
+
 
 def getCompletionStatus():
     if auth.user:
         lastPageUrl = request.vars.lastPageUrl
         lastPageChapter = lastPageUrl.split("/")[-2]
-        lastPageSubchapter = lastPageUrl.split("/")[-1].split(".")[0]
+        lastPageSubchapter = ".".join(lastPageUrl.split("/")[-1].split(".")[:-1])
         result = db((db.user_sub_chapter_progress.user_id == auth.user.id) &
                     (db.user_sub_chapter_progress.chapter_id == lastPageChapter) &
                     (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)).select(db.user_sub_chapter_progress.status)
@@ -429,7 +541,8 @@ def getCompletionStatus():
             for row in result:
                 res = {'completionStatus': row.status}
                 rowarray_list.append(res)
-                #question: since the javascript in user-highlights.js is going to look only at the first row, shouldn't we be returning just the *last* status? Or is there no history of status kept anyway?
+                #question: since the javascript in user-highlights.js is going to look only at the first row, shouldn't
+                # we be returning just the *last* status? Or is there no history of status kept anyway?
             return json.dumps(rowarray_list)
         else:
             # haven't seen this Chapter/Subchapter before
@@ -439,7 +552,7 @@ def getCompletionStatus():
             db.user_sub_chapter_progress.insert(user_id=auth.user.id,
                                                 chapter_id = lastPageChapter,
                                                 sub_chapter_id = lastPageSubchapter,
-                                                status = -1)
+                                                status = -1, start_date=datetime.datetime.utcnow())
             # the chapter might exist without the subchapter
             result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
             if not result:
@@ -492,73 +605,79 @@ def getlastpage():
             db.user_state.insert(user_id=auth.user.id, course_id=course)
 
 
-def getCorrectStats(miscdata,event):
+def _getCorrectStats(miscdata,event):
+    # TODO: update this to use the xxx_answer table
+    # select and count grouping by the correct column
+    # this version can suffer from division by zero error
     sid = None
+    dbtable = EVENT_TABLE[event]  # translate event to correct table
+
     if auth.user:
         sid = auth.user.username
     else:
-        if request.cookies.has_key('ipuser'):
+        if 'ipuser' in request.cookies:
             sid = request.cookies['ipuser'].value
 
     if sid:
         course = db(db.courses.course_name == miscdata['course']).select().first()
+        tbl = db[dbtable]
 
-        correctquery = '''select
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-                                               and position('correct' in act) > 0 )
-/
-(select cast(count(*) as float) from useinfo where sid='%s'
-                                               and event='%s'
-                                               and DATE(timestamp) >= DATE('%s')
-) as result;
-''' % (sid, event, course.term_start_date, sid, event, course.term_start_date)
-
-        try:
-            rows = db.executesql(correctquery)
-            pctcorr = round(rows[0][0]*100)
-        except:
-            pctcorr = 'unavailable in sqlite'
+        count_expr = tbl.correct.count()
+        rows = db((tbl.sid == sid) & (tbl.timestamp > course.term_start_date)).select(tbl.correct, count_expr, groupby=tbl.correct)
+        total = 0
+        correct = 0
+        for row in rows:
+            count = row[count_expr]
+            total += count
+            if row[dbtable].correct:
+                correct = count
+        if total > 0:
+            pctcorr = round(float(correct) / total * 100)
+        else:
+            pctcorr = 'unavailable'
     else:
         pctcorr = 'unavailable'
 
     miscdata['yourpct'] = pctcorr
 
 
-def getStudentResults(question):
-        course = db(db.courses.id == auth.user.course_id).select(db.courses.course_name).first()
+def _getStudentResults(question):
+    """
+    Internal function to collect student answers
+    """
+    cc = db(db.courses.id == auth.user.course_id).select().first()
+    course = cc.course_name
+    qst = db((db.questions.name == question) & (db.questions.base_course == cc.base_course )).select().first()
+    tbl_name = EVENT_TABLE[qst.question_type]
+    tbl = db[tbl_name]
 
-        q = db( (db.useinfo.div_id == question) &
-                (db.useinfo.course_id == course.course_name) &
-                (db.courses.course_name == course.course_name) &
-                (db.useinfo.timestamp >= db.courses.term_start_date) )
+    res = db( (tbl.div_id == question) &
+                (tbl.course_name == cc.course_name) &
+                (tbl.timestamp >= cc.term_start_date)).select(tbl.sid, tbl.answer, orderby=tbl.sid)
 
-        res = q.select(db.useinfo.sid,db.useinfo.act,orderby=db.useinfo.sid)
+    resultList = []
+    if len(res) > 0:
+        currentSid = res[0].sid
+        currentAnswers = []
 
-        resultList = []
-        if len(res) > 0:
-            currentSid = res[0].sid
-            currentAnswers = []
+        for row in res:
+            if row.answer:
+                answer = clean(row.answer)
+            else:
+                answer = None
 
-            for row in res:
-                if ':' not in row.act:
-                    continue  # skip this row
-                answer = row.act.split(':')[1]
+            if row.sid == currentSid:
+                currentAnswers.append(answer)
+            else:
+                currentAnswers.sort()
+                resultList.append((currentSid, currentAnswers))
+                currentAnswers = [answer]
+                currentSid = row.sid
 
-                if row.sid == currentSid:
-                    currentAnswers.append(answer)
-                else:
-                    currentAnswers.sort()
-                    resultList.append((currentSid, currentAnswers))
-                    currentAnswers = [row.act.split(':')[1]]
+        currentAnswers.sort()
+        resultList.append((currentSid, currentAnswers))
 
-                    currentSid = row.sid
-
-            currentAnswers.sort()
-            resultList.append((currentSid, currentAnswers))
-
-        return resultList
+    return resultList
 
 
 def getaggregateresults():
@@ -573,7 +692,7 @@ def getaggregateresults():
     is_instructor = verifyInstructorStatus(course,auth.user.id)
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     if course == 'thinkcspy' or course == 'pythonds':
-        start_date = datetime.datetime.now() - datetime.timedelta(days=90)
+        start_date = datetime.datetime.utcnow() - datetime.timedelta(days=90)
     else:
         start_date = db(db.courses.course_name == course).select(db.courses.term_start_date).first().term_start_date
     count = db.useinfo.id.count()
@@ -588,7 +707,7 @@ def getaggregateresults():
     tdata = {}
     tot = 0
     for row in result:
-        tdata[row.useinfo.act] = row[count]
+        tdata[clean(row.useinfo.act)] = row[count]
         tot += row[count]
 
     tot = float(tot)
@@ -610,17 +729,17 @@ def getaggregateresults():
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
             except:
-                logging.debug("Bad data for %s data is %s " % (question,key))
+                logger.debug("Bad data for %s data is %s " % (question,key))
 
     miscdata['correct'] = correct
     miscdata['course'] = course
 
-    getCorrectStats(miscdata, 'mChoice')
+    _getCorrectStats(miscdata, 'mChoice')
 
     returnDict = dict(answerDict=rdata, misc=miscdata)
 
-    if auth.user and is_instructor:  #auth.has_membership('instructor', auth.user.id):
-        resultList = getStudentResults(question)
+    if auth.user and is_instructor:
+        resultList = _getStudentResults(question)
         returnDict['reslist'] = resultList
 
     return json.dumps([returnDict])
@@ -632,10 +751,14 @@ def getpollresults():
 
     response.headers['content-type'] = 'application/json'
 
+
     query = '''select act from useinfo
-               where event = 'poll' and div_id = '%s' and course_id = '%s'
-               ''' % (div_id, course)
+    join (select sid,  max(id) mid
+        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T
+        on id = T.mid'''.format(div_id, course)
+
     rows = db.executesql(query)
+
 
     result_list = []
     for row in rows:
@@ -645,6 +768,10 @@ def getpollresults():
     # maps option : count
     opt_counts = Counter(result_list)
 
+    if result_list:
+        for i in range(max(result_list)):
+            if i not in opt_counts:
+                opt_counts[i] = 0
     # opt_list holds the option numbers from smallest to largest
     # count_list[i] holds the count of responses that chose option i
     opt_list = sorted(opt_counts.keys())
@@ -652,52 +779,47 @@ def getpollresults():
     for i in opt_list:
         count_list.append(opt_counts[i])
 
-    return json.dumps([len(result_list), opt_list, count_list, div_id])
+    user_res = None
+    if auth.user:
+        user_res = db((db.useinfo.sid == auth.user.username) &
+            (db.useinfo.course_id == course) &
+            (db.useinfo.div_id == div_id)).select(db.useinfo.act, orderby=~db.useinfo.id).first()
+
+    if user_res:
+        my_vote = user_res.act
+    else:
+        my_vote = -1
+
+    return json.dumps([len(result_list), opt_list, count_list, div_id, my_vote])
 
 
 def gettop10Answers():
     course = request.vars.course
     question = request.vars.div_id
-    # select act, count(*) from useinfo where div_id = 'question4_2_1' group by act;
     response.headers['content-type'] = 'application/json'
     rows = []
 
-    query = '''select act, count(*) from useinfo, courses where event = 'fillb' and div_id = '%s' and useinfo.course_id = '%s' and useinfo.course_id = courses.course_name and timestamp > courses.term_start_date  group by act order by count(*) desc limit 10''' % (question,course)
     try:
-        rows = db.executesql(query)
-        res = [{'answer':row[0][row[0].index(':')+1:row[0].rindex(':')],
-                'count':row[1]} for row in rows ]
-    except:
+        dbcourse = db(db.courses.course_name == course).select().first()
+        count_expr = db.fitb_answers.answer.count()
+        rows = db((db.fitb_answers.div_id == question) &
+                (db.fitb_answers.course_name == course) &
+                (db.fitb_answers.timestamp > dbcourse.term_start_date)).select(db.fitb_answers.answer, count_expr,
+                    groupby=db.fitb_answers.answer, orderby=~count_expr, limitby=(0, 10))
+        res = [{'answer':clean(row.fitb_answers.answer), 'count':row[count_expr]} for row in rows]
+    except Exception as e:
+        logger.debug(e)
         res = 'error in query'
 
     miscdata = {'course': course}
-    getCorrectStats(miscdata,'fillb')
+    _getCorrectStats(miscdata,'fillb')  # TODO: rewrite _getCorrectStats to use xxx_answers
 
-    if auth.user and auth.has_membership('instructor',auth.user.id):
-        resultList = getStudentResults(question)
+    if auth.user and verifyInstructorStatus(course, auth.user.id):
+        resultList = _getStudentResults(question)
         miscdata['reslist'] = resultList
 
     return json.dumps([res,miscdata])
 
-
-def getSphinxBuildStatus():
-    task_name = request.vars.task_name
-    course_url = request.vars.course_url
-
-    response.headers['content-type'] = 'application/json'
-    results = {'course_url': course_url}
-    row = scheduler.task_status(task_name)
-    if row:
-        if row['status'] in ['QUEUED', 'ASSIGNED','RUNNING', 'COMPLETED']:
-            results['status'] = row['status']
-        else:  # task failed
-            results['status'] = row['status']
-            tb = db(db.scheduler_run.task_id == row.id).select().first()['traceback']
-            results['traceback']=tb
-    else:
-        results['status'] = 'failed'
-        results['info'] = 'no row'
-    return json.dumps(results)
 
 def getassignmentgrade():
     response.headers['content-type'] = 'application/json'
@@ -722,7 +844,7 @@ def getassignmentgrade():
         (db.assignment_questions.question_id == db.questions.id) &
         (db.questions.name == divid)
     ).select(db.assignments.released, db.assignments.id, db.assignment_questions.points).first()
-    print a_q
+    logger.debug(a_q)
     if not a_q:
         return json.dumps([ret])
     # try new way that we store scores and comments
@@ -733,7 +855,7 @@ def getassignmentgrade():
         (db.question_grades.course_name == auth.user.course_name) &
         (db.question_grades.div_id == divid)
     ).select(db.question_grades.score, db.question_grades.comment).first()
-    print result
+    logger.debug(result)
     if result:
         # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
         ret['version'] = 2
@@ -742,132 +864,8 @@ def getassignmentgrade():
         if result.comment:
             ret['comment'] = result.comment
 
-    else:
-        # fall back on old way; eventually will deprecate this
-        result = db(
-            (db.code.sid == auth.user.username) &
-            (db.code.acid == db.problems.acid) &
-            (db.problems.assignment == db.assignments.id) &
-            (db.assignments.released == True) &
-            (db.code.acid == divid)
-            ).select(
-                db.code.grade,
-                db.code.comment,
-                orderby=~db.code.timestamp
-            ).first()
-
-        if result:
-            ret['grade'] = result.grade
-            if result.comment:
-                ret['comment'] = result.comment
-
-            query = '''select avg(grade), count(grade)
-                       from code where acid='%s';''' % (divid)
-
-            rows = db.executesql(query)
-            ret['avg'] = rows[0][0]
-            ret['count'] = rows[0][1]
-
     return json.dumps([ret])
 
-
-def diff_prettyHtml(self, diffs):
-    """Convert a diff array into a pretty HTML report.
-
-    Args:
-      diffs: Array of diff tuples.
-
-    Returns:
-      HTML representation.
-    """
-    html = []
-    ct = 1
-    for (op, data) in diffs:
-        text = (data.replace("&", "&amp;").replace("<", "&lt;")
-                .replace(">", "&gt;").replace("\n", "<br>"))
-        if op == self.DIFF_INSERT:
-            html.append("<ins style=\"background:#e6ffe6;\">%s</ins>" % text)
-        elif op == self.DIFF_DELETE:
-            html.append("<del style=\"background:#ffe6e6;\">%s</del>" % text)
-        elif op == self.DIFF_EQUAL:
-            html.append("<span>%s</span>" % text)
-    return "".join(html)
-
-
-def getCodeDiffs():
-    if auth.user:
-        sid = auth.user.username
-    else:
-        sid = request.vars['sid']
-
-    divid = request.vars['divid']
-    rows = []
-    if sid and divid and auth.user:
-        q = '''select timestamp, sid, div_id, code, emessage, id
-               from acerror_log
-               where sid = '%s' and course_id = '%s' and div_id='%s'
-               order by timestamp
-        ''' % (sid, auth.user.course_name, divid)
-        rows = db.executesql(q)
-    if len(rows) < 1:
-        return json.dumps(dict(timestamps=[0], code=[''],
-                               diffs=[''],
-                               mess=['No Coaching hints yet.  You need to run the example at least once and be logged in and registered for a course'],
-                               chints=['']))
-
-    differ = diff_match_patch()
-    ts = []
-    newcode = []
-    diffcode = []
-    messages = []
-    coachHints = []
-
-#    diffs = differ.diff_lineMode(rows[0][3], rows[0][3], True)
-#    diffcode.append(differ.diff_prettyHtml(diffs).replace('&para;', ''))
-    newcode.append(rows[0][3])
-    ts.append(str(rows[0][0]))
-    coachHints.append(getCoachingHints(int(rows[0][5])))
-    messages.append(rows[0][4].replace("success",""))
-
-    for i in range(1,len(rows)):
-        diffs = differ.diff_lineMode(rows[i-1][3], rows[i][3],True)
-        ts.append(str(rows[i][0]))
-        newcode.append(rows[i][3])
-        diffcode.append(diff_prettyHtml(differ,diffs).replace('&para;', ''))
-        messages.append(rows[i][4].replace("success", ""))
-        coachHints.append(getCoachingHints(int(rows[i][5])))
-    return json.dumps(dict(timestamps=ts,code=newcode,diffs=diffcode,mess=messages,chints=coachHints))
-
-
-def getCoachingHints(ecId):
-    catToTitle = {"C": "Coding Conventions", "R": "Good Practice", "W": "Minor Programming Issues",
-                  "E": "Serious Programming Error", "F": "Fatal Errors"}
-
-    rows = db.executesql("select category,symbol,line,msg from coach_hints where source=%d order by category, line" % ecId)
-    res = ''
-    catres = {'C':'', 'R':'', 'W':'', 'E':'', 'F':''}
-    for k in catres:
-        catres[k] = '<h2>%s</h2>' % catToTitle[k]
-    for row in rows:
-            cat = row[0]
-            catres[cat] += "Line: %d %s %s <br>" % (row[2], row[1], row[3])
-
-    for ch in "FEWRC":
-        res += catres[ch]
-    return res
-
-
-def lintAfterSave(dbid, code, div_id, sid):
-    #dbid = request.args.id
-    #entry = db(db.acerror_log.id == dbid).select().first()
-    pylint_stdout = get_lint(code, div_id, sid)
-
-    for line in pylint_stdout:
-        g = re.match(r"^([RCWEF]):\s(.*?):\s([RCWEF]\d+):\s+(\d+),(\d+):(.*?):\s(.*)$", line)
-        if g:
-            db.coach_hints.insert(category=g.group(1), symbol=g.group(2), msg_id=g.group(3),
-                                  line=g.group(4), col=g.group(5), obj=g.group(6),
-                                  msg=g.group(7).replace("'", ""), source=dbid)
 
 def getAssessResults():
     if not auth.user:
@@ -886,10 +884,18 @@ def getAssessResults():
 
     # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
-        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, db.fitb_answers.correct, orderby=~db.fitb_answers.timestamp).first()
+        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, orderby=~db.fitb_answers.timestamp).first()
         if not rows:
             return ""   # server doesn't have it so we load from local storage instead
-        res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
+        #
+        res = {
+            'answer': rows.answer,
+            'timestamp': str(rows.timestamp)
+        }
+        do_server_feedback, feedback = is_server_feedback(div_id, course)
+        if do_server_feedback:
+            correct, res_update = fitb_feedback(rows.answer, feedback)
+            res.update(res_update)
         return json.dumps(res)
     elif event == "mChoice":
         rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
@@ -923,10 +929,27 @@ def getAssessResults():
         return json.dumps(res)
     elif event == "shortanswer":
         row = db((db.shortanswer_answers.sid == sid) & (db.shortanswer_answers.div_id == div_id) & (db.shortanswer_answers.course_name == course)).select().first()
-        if not row or len(row) == 0:
+        if not row:
             return ""
         res = {'answer': row.answer, 'timestamp': str(row.timestamp)}
         return json.dumps(res)
+    elif event == "lp_build":
+        rows = db(
+            (db.lp_answers.div_id == div_id) &
+            (db.lp_answers.course_name == course) &
+            (db.lp_answers.sid == sid)
+        ).select(db.lp_answers.answer, db.lp_answers.timestamp, db.lp_answers.correct, orderby=~db.lp_answers.timestamp).first()
+        if not rows:
+            return ""   # server doesn't have it so we load from local storage instead
+        answer = json.loads(rows.answer)
+        correct = rows.correct
+        return json.dumps({
+            'answer': answer,
+            'timestamp': str(rows.timestamp),
+            'correct': correct
+        })
+
+
 
 def checkTimedReset():
     if auth.user:
@@ -946,28 +969,79 @@ def checkTimedReset():
     else:
         return json.dumps({"canReset":True})
 
-def preview_question():
-    code = json.loads(request.vars.code)
-    print(code)
-    with open("applications/runestone/build/preview/_sources/index.rst", "w") as ixf:
-        ixf.write(code)
 
-    res = os.system('applications/runestone/scripts/build_preview.sh')
-    if res == 0:
-        with open('applications/runestone/build/preview/build/preview/index.html','r') as ixf:
+# The request variable ``code`` must contain JSON-encoded RST to be rendered by Runestone. Only the HTML containing the actual Runestone component will be returned.
+def preview_question():
+    try:
+        code = json.loads(request.vars.code)
+        with open("applications/{}/build/preview/_sources/index.rst".format(request.application), "w", encoding="utf-8") as ixf:
+            ixf.write(code)
+
+        # Note that ``os.environ`` isn't a dict, it's an object whose setter modifies environment variables. So, modifications of a copy/deepcopy still `modify the original environment <https://stackoverflow.com/questions/13142972/using-copy-deepcopy-on-os-environ-in-python-appears-broken>`_. Therefore, convert it to a dict, where modifications will not affect the environment.
+        env = dict(os.environ)
+        # Prevent any changes to the database when building a preview question.
+        del env['DBURL']
+        # Run a runestone build.
+        popen_obj = subprocess.Popen(
+            [sys.executable, '-m', 'runestone', 'build'],
+            # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
+            cwd='applications/{}/build/preview'.format(request.application),
+            # Capture the build output in case of an error.
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            # Pass the modified environment which doesn't contain ``DBURL``.
+            env=env)
+        stdout, stderr = popen_obj.communicate()
+        # If there was an error, return stdout and stderr from the build.
+        if popen_obj.returncode != 0:
+            return json.dumps('Error: Runestone build failed:\n\n' +
+                              stdout + '\n' + stderr)
+
+        with open('applications/{}/build/preview/build/preview/index.html'.format(request.application), 'r', encoding='utf-8') as ixf:
             src = ixf.read()
             tree = html.fromstring(src)
             component = tree.cssselect(".runestone")
             if len(component) > 0:
-                ctext = html.tostring(component[0])
+                ctext = html.tostring(component[0]).decode('utf-8')
             else:
                 component = tree.cssselect(".system-message")
                 if len(component) > 0:
-                    ctext = html.tostring(component[0])
-                    print "error - ", ctext
+                    ctext = html.tostring(component[0]).decode('utf-8')
+                    logger.debug("error - ", ctext)
                 else:
-                    ctext = "Unknown error occurred"
+                    ctext = "Error: Runestone content missing."
 
             return json.dumps(ctext)
+    except Exception as ex:
+        return json.dumps('Error: {}'.format(ex))
 
-    return json.dumps(res)
+
+def save_donate():
+    if auth.user:
+        db(db.auth_user.id == auth.user.id).update(donated=True)
+
+
+def did_donate():
+    if auth.user:
+        d_status = db(db.auth_user.id == auth.user.id).select(db.auth_user.donated).first()
+
+        return json.dumps(dict(donate=d_status.donated))
+    return json.dumps(dict(donate=False))
+
+
+def get_datafile():
+    course = request.vars.course_id
+    acid = request.vars.acid
+    file_contents = db((db.source_code.acid == acid) & (db.source_code.course_id == course)).select(db.source_code.main_code).first()
+    if file_contents:
+        file_contents = file_contents.main_code
+    else:
+        file_contents = None
+
+    return json.dumps(dict(data=file_contents))
+
+
+def _same_class(user1, user2):
+    user1_course = db(db.auth_user.username == user1).select(db.auth_user.course_id).first()
+    user2_course = db(db.auth_user.username == user2).select(db.auth_user.course_id).first()
+
+    return user1_course == user2_course

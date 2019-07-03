@@ -29,7 +29,7 @@ for line in f:
            maxMem = b
            maxCmd = request
        if b > 50000000:
-           print b/1000000, request
+           print(b/1000000, request)
 
    g = re.match(r'.*(\d+) switches on core',line)
    if g:
@@ -37,5 +37,5 @@ for line in f:
        swTot += sw
 
 
-print 'Average Switches: ', float(swTot)/lc
-print 'Largest Request: ', maxMem, maxCmd
+print('Average Switches: ', float(swTot)/lc)
+print('Largest Request: ', maxMem, maxCmd)

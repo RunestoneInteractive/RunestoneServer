@@ -2,97 +2,121 @@
 <script><!--
     jQuery(document).ready(function(){
     jQuery("table.sortable tbody tr").mouseover( function() {
-    jQuery(this).addClass("highlight"); }).mouseout( function() { 
+    jQuery(this).addClass("highlight"); }).mouseout( function() {
     jQuery(this).removeClass("highlight"); });
     jQuery('table.sortable tbody tr:odd').addClass('odd');
     jQuery('table.sortable tbody tr:even').addClass('even');
 });
 //--></script>
 
-{{if request.function=='index':}}
-<h2>{{=T("Available databases and tables")}}</h2>
-  {{if not databases:}}{{=T("No databases in this application")}}{{pass}}
-  {{for db in sorted(databases):}}
-    {{for table in databases[db].tables:}}
-      {{qry='%s.%s.id>0'%(db,table)}}
-      {{tbl=databases[db][table]}}
-      {{if hasattr(tbl,'_primarykey'):}}
-        {{if tbl._primarykey:}}
-            {{firstkey=tbl[tbl._primarykey[0]]}}
-            {{if firstkey.type in ['string','text']:}}
-              {{qry='%s.%s.%s!=""'%(db,table,firstkey.name)}}
-            {{else:}}
-              {{qry='%s.%s.%s>0'%(db,table,firstkey.name)}}
-            {{pass}}
-        {{else:}}
-             {{qry=''}}
-             {{pass}}
-      {{pass}}
-      <h3>
-	{{=A("%s.%s" % (db,table),_href=URL('select',args=[db],vars=dict(query=qry)))}}
-      </h3>
-      [ {{=A(str(T('insert new'))+' '+table,_href=URL('insert',args=[db,table]))}} ]
-    <br /><br />
-    {{pass}}
-  {{pass}}
+<div class="row">
+  <div class="col-md-12">
 
+{{if request.function=='index':}}
+<h2>{{=T("Available Databases and Tables")}}</h2>
+  {{if not databases:}}{{=T("No databases in this application")}}{{pass}}
+  <ul class="nav nav-tabs" id="myTab">
+    <li class="nav-item"><a href="#alltables" data-toggle="tab" class="nav-link active">Tables</a></li>
+    <li class="nav-item"><a href="#hooks" data-toggle="tab" class="nav-link">Hooks</a></li>
+  </ul>
+  <div class="tab-content">
+      <div class="tab-pane active" id="alltables">
+        <table class="table table-striped">
+          {{for db in sorted(databases):}}
+            {{for table in databases[db].tables:}}
+              {{qry='%s.%s.id>0'%(db,table)}}
+              {{tbl=databases[db][table]}}
+              {{if hasattr(tbl,'_primarykey'):}}
+                {{if tbl._primarykey:}}
+                    {{firstkey=tbl[tbl._primarykey[0]]}}
+                    {{if firstkey.type in ['string','text']:}}
+                      {{qry='%s.%s.%s!=""'%(db,table,firstkey.name)}}
+                    {{else:}}
+                      {{qry='%s.%s.%s>0'%(db,table,firstkey.name)}}
+                    {{pass}}
+                {{else:}}
+                     {{qry=''}}
+                {{pass}}
+              {{pass}}
+          <tr>
+            <th style="font-size: 1.75em;">
+              &raquo; {{=A("%s.%s" % (db,table),_href=URL('select',args=[db],vars=dict(query=qry)))}}
+            </th>
+            <td>
+              {{=A(str(T('New Record')),_href=URL('insert',args=[db,table]),_class="btn btn-primary")}}
+            </td>
+          </tr>
+          {{pass}}
+          {{pass}}
+        </table>
+      </div>
+      <div class="tab-pane" id="hooks">
+      {{=LOAD('appadmin', 'hooks', ajax=True)}}
+      </div>
+  </div>
 {{elif request.function=='select':}}
-  <h2>{{=XML(str(T("database %s select"))%A(request.args[0],_href=URL('index'))) }}
+  <h2>{{=XML(str(T("Database %s select"))%A(request.args[0],_href=URL('index'))) }}
   </h2>
-   {{if table:}}
-  [ {{=A(str(T('insert new %s'))%table,_href=URL('insert',args=[request.args[0],table]))}} ]<br/><br/>
-    <h3>{{=T("Rows in table")}}</h3><br/>
+  {{if tb:}}
+  <h3>{{=T('Traceback')}}</h3>
+  <pre>
+    {{=tb}}
+  </pre>
+  {{pass}}
+  {{if table:}}
+  {{=A(str(T('New Record')),_href=URL('insert',args=[request.args[0],table]),_class="btn btn-primary", _role="button")}}<br/><br/>
+  <hr />
+    <h3>{{=T("Rows in Table")}}</h3><br/>
    {{else:}}
     <h3>{{=T("Rows selected")}}</h3><br/>
    {{pass}}
    {{=form}}
-   <p>{{=T('The "query" is a condition like "db.table1.field1==\'value\'". Something like "db.table1.field1==db.table2.field2" results in a SQL JOIN.')}}<br/>
+   <p class="text-muted">{{=T('The "query" is a condition like "db.table1.field1==\'value\'". Something like "db.table1.field1==db.table2.field2" results in a SQL JOIN.')}}<br/>
       {{=T('Use (...)&(...) for AND, (...)|(...) for OR, and ~(...)  for NOT to build more complex queries.')}}<br/>
       {{=T('"update" is an optional expression like "field1=\'newvalue\'". You cannot update or delete the results of a JOIN')}}</p>
     <br/><br/>
-    <h4>{{=nrows}} {{=T("selected")}}</h4>
-    {{if start>0:}}[ {{=A(T('previous 100 rows'),_href=URL('select',args=request.args[0],vars=dict(start=start-100)))}} ]{{pass}}
-    {{if stop<nrows:}}[ {{=A(T('next 100 rows'),_href=URL('select',args=request.args[0],vars=dict(start=start+100)))}} ]{{pass}}    
+    <h4>{{=T("%s selected", nrows)}}</h4>
+    {{if start>0:}}{{=A(T('previous %s rows') % step,_href=URL('select',args=request.args[0],vars=dict(start=start-step)),_class="btn btn-primary")}}{{pass}}
+    {{if stop<nrows:}}{{=A(T('next %s rows') % step,_href=URL('select',args=request.args[0],vars=dict(start=start+step)),_class="btn btn-primary")}}{{pass}}
     {{if rows:}}
-       <div style="overflow: auto;" width="80%">
-       {{linkto=URL('update',args=request.args[0])}}
-       {{upload=URL('download',args=request.args[0])}}    
-       {{=SQLTABLE(rows,linkto,upload,orderby=True,_class='sortable')}}
+       <div style="overflow:auto; width:80%;">
+       {{linkto = lambda f, t, r: URL('update', args=[request.args[0], r, f]) if f else "#"}}
+       {{upload=URL('download',args=request.args[0])}}
+       {{=SQLTABLE(rows,linkto,upload,orderby=True,_class='table table-striped table-bordered sortable')}}
        </div>
     {{pass}}
-    <br/><br/><h3>{{=T("Import/Export")}}</h3><br/>
-    [ <a href="{{=URL('csv',args=request.args[0],vars=dict(query=query))}}">{{=T("export as csv file")}}</a> ]
-  {{if table:}}
-    {{=FORM(str(T('or import from csv file'))+" ",INPUT(_type='file',_name='csvfile'),INPUT(_type='hidden',_value=table,_name='table'),INPUT(_type='submit',_value='import'))}}
-  {{pass}}
+    <br/><br/>
+    <hr />
+    <h3>{{=T("Import/Export")}}</h3><br/>
+    <a href="{{=URL('csv',args=request.args[0],vars=dict(query=query))}}" class="btn btn-primary">{{=T("export as csv file")}}</a>
+  {{=formcsv or ''}}
 
-
-{{elif request.function=='insert':}}  
-  <h2>{{=T("database")}} {{=A(request.args[0],_href=URL('index'))}}
+{{elif request.function=='insert':}}
+  <h2>{{=T("Database")}} {{=A(request.args[0],_href=URL('index'))}}
     {{if hasattr(table,'_primarykey'):}}
       {{fieldname=table._primarykey[0]}}
       {{dbname=request.args[0]}}
       {{tablename=request.args[1]}}
       {{cond = table[fieldname].type in ['string','text'] and '!=""' or '>0'}}
-      {{=T("table")}} {{=A(tablename,_href=URL('select',args=dbname,vars=dict(query='%s.%s.%s%s'%(dbname,tablename,fieldname,cond))))}}
-    {{else:}}  
-      {{=T("table")}} {{=A(request.args[1],_href=URL('select',args=request.args[0],vars=dict(query='%s.%s.id>0'%tuple(request.args[:2]))))}}
+      {{=T("Table")}} {{=A(tablename,_href=URL('select',args=dbname,vars=dict(query='%s.%s.%s%s'%(dbname,tablename,fieldname,cond))))}}
+    {{else:}}
+      {{=T("Table")}} {{=A(request.args[1],_href=URL('select',args=request.args[0],vars=dict(query='%s.%s.id>0'%tuple(request.args[:2]))))}}
     {{pass}}
   </h2>
   <h3>{{=T("New Record")}}</h3><br/>
   {{=form}}
 {{elif request.function=='update':}}
-  <h2>{{=T("database")}} {{=A(request.args[0],_href=URL('index'))}}
+  <h2>{{=T("Database")}} {{=A(request.args[0],_href=URL('index'))}}
     {{if hasattr(table,'_primarykey'):}}
       {{fieldname=request.vars.keys()[0]}}
       {{dbname=request.args[0]}}
       {{tablename=request.args[1]}}
-      {{cond = table[fieldname].type in ['string','text'] and '!=""' or '>0'}}      
-      {{=T("table")}} {{=A(tablename,_href=URL('select',args=dbname,vars=dict(query='%s.%s.%s%s'%(dbname,tablename,fieldname,cond))))}}
-      {{=T("record")}} {{=A('%s=%s'%request.vars.items()[0],_href=URL('update',args=request.args[:2],vars=request.vars))}}
+      {{cond = table[fieldname].type in ['string','text'] and '!=""' or '>0'}}
+      {{=T("Table")}} {{=A(tablename,_href=URL('select',args=dbname,vars=dict(query='%s.%s.%s%s'%(dbname,tablename,fieldname,cond))))}}
+      {{=T("Record")}} {{=A('%s=%s'%request.vars.items()[0],_href=URL('update',args=request.args[:2],vars=request.vars))}}
     {{else:}}
-      {{=T("table")}} {{=A(request.args[1],_href=URL('select',args=request.args[0],vars=dict(query='%s.%s.id>0'%tuple(request.args[:2]))))}}
-      {{=T("record id")}} {{=A(request.args[2],_href=URL('update',args=request.args[:3]))}}
+      {{=T("Table")}} {{=A(request.args[1],_href=URL('select',args=request.args[0],vars=dict(query='%s.%s.id>0'%tuple(request.args[:2]))))}}
+      {{=T("Record id")}} {{=A(request.args[2],_href=URL('update',args=request.args[:3]))}}
     {{pass}}
   </h2>
   <h3>{{=T("Edit current record")}}</h3><br/><br/>{{=form}}
@@ -108,120 +132,104 @@
 
 
 {{elif request.function == 'ccache':}}
-<h2>Cache</h2>
+<h2>{{T("Cache")}}</h2>
 <div class="list">
 
   <div class="list-header">
-    <h3>Statistics</h3>
+    <h3>{{T("Statistics")}}</h3>
   </div>
 
   <div class="content">
-    <h4>Overview</h4>
-    <p>Number of entries: <strong>{{=total['entries']}}</strong>
-      {{if total['entries'] > 0:}}
+    <h4>{{=T("Overview")}}</h4>
+    <p>{{=T.M("Number of entries: **%s**", total['entries'])}}</p>
+    {{if total['entries'] > 0:}}
+    <p>{{=T.M("Hit Ratio: **%(ratio)s%%** (**%(hits)s** %%{hit(hits)} and **%(misses)s** %%{miss(misses)})",
+             dict( ratio=total['ratio'], hits=total['hits'], misses=total['misses']))}}
     </p>
     <p>
-      Hit Ratio: 
-      <strong>{{=total['ratio']}}%</strong> 
-      (<strong>{{=total['hits']}}</strong> hits 
-      and <strong>{{=total['misses']}}</strong> misses)
-    </p>
-    <p>
-      Size of cache: 
+      {{=T("Size of cache:")}}
       {{if object_stats:}}
-      <strong>{{=total['objects']}}</strong> items, 
-      <strong>{{=total['bytes']}}</strong> bytes 
-      {{if total['bytes'] > 524287:}}
-      (<strong>{{="%.0d" % (total['bytes'] / 1048576)}} MB</strong>)
-      {{pass}}
-      {{else:}} <strong>not available</strong> (requires the Python <a href="http://pypi.python.org/pypi/guppy/" target="_blank">guppy</a> library)
+        {{=T.M("**%(items)s** %%{item(items)}, **%(bytes)s** %%{byte(bytes)}", dict(items=total['objects'], bytes=total['bytes']))}}
+        {{if total['bytes'] > 524287:}}
+          {{=T.M("(**%.0d MB**)", total['bytes'] / 1048576)}}
+        {{pass}}
+      {{else:}}
+        {{=T.M("**not available** (requires the Python [[Pympler https://pypi.python.org/pypi/Pympler popup]] library)")}}
       {{pass}}
     </p>
     <p>
-      Cache contains items up to 
-      <strong>{{="%02d" % total['oldest'][0]}}</strong> hours 
-      <strong>{{="%02d" % total['oldest'][1]}}</strong> minutes 
-      <strong>{{="%02d" % total['oldest'][2]}}</strong> seconds old.
+      {{=T.M("Cache contains items up to **%(hours)02d** %%{hour(hours)} **%(min)02d** %%{minute(min)} **%(sec)02d** %%{second(sec)} old.",
+              dict(hours=total['oldest'][0], min=total['oldest'][1], sec=total['oldest'][2]))}}
     </p>
-    {{=BUTTON(T('Cache Keys'), _onclick='jQuery("#all_keys").toggle();')}}
-    <div class="hidden" id="all_keys">
+    {{=BUTTON(T('Cache Keys'), _onclick='jQuery("#all_keys").toggle().toggleClass( "w2p_hidden" );')}}
+    <div class="w2p_hidden" id="all_keys">
       {{=total['keys']}}
     </div>
     <br />
     {{pass}}
-        
-    <h4>RAM</h4>
-    <p>Number of entries: <strong>{{=ram['entries']}}</strong>
-        {{if ram['entries'] > 0:}}</p>
-    <p>
-      Hit Ratio: 
-      <strong>{{=ram['ratio']}}%</strong> 
-      (<strong>{{=ram['hits']}}</strong> hits 
-      and <strong>{{=ram['misses']}}</strong> misses)
+
+    <h4>{{=T("RAM")}}</h4>
+    <p>{{=T.M("Number of entries: **%s**", ram['entries'])}}</p>
+    {{if ram['entries'] > 0:}}
+    <p>{{=T.M("Hit Ratio: **%(ratio)s%%** (**%(hits)s** %%{hit(hits)} and **%(misses)s** %%{miss(misses)})",
+             dict( ratio=ram['ratio'], hits=ram['hits'], misses=ram['misses']))}}
     </p>
     <p>
-      Size of cache: 
+      {{=T("Size of cache:")}}
       {{if object_stats:}}
-      <strong>{{=ram['objects']}}</strong> items, 
-      <strong>{{=ram['bytes']}}</strong> bytes 
-      {{if ram['bytes'] > 524287:}}
-      (<strong>{{=ram['bytes'] / 1048576}} MB</strong>)
-      {{pass}}
-      {{else:}} <strong>not available</strong> (requires the Python <a href="http://pypi.python.org/pypi/guppy/" target="_blank">guppy</a> library)
+        {{=T.M("**%(items)s** items, **%(bytes)s** %%{byte(bytes)}", dict(items=ram['objects'], bytes=ram['bytes']))}}
+        {{if ram['bytes'] > 524287:}}
+          {{=T.M("(**%.0d MB**)", ram['bytes'] / 10485576)}}
+        {{pass}}
+      {{else:}}
+        {{=T.M("``**not available**``:red (requires the Python [[Pympler https://pypi.python.org/pypi/Pympler popup]] library)")}}
       {{pass}}
     </p>
     <p>
-      RAM contains items up to 
-      <strong>{{="%02d" % ram['oldest'][0]}}</strong> hours 
-      <strong>{{="%02d" % ram['oldest'][1]}}</strong> minutes 
-      <strong>{{="%02d" % ram['oldest'][2]}}</strong> seconds old.
+      {{=T.M("RAM contains items up to **%(hours)02d** %%{hour(hours)} **%(min)02d** %%{minute(min)} **%(sec)02d** %%{second(sec)} old.",
+              dict(hours=ram['oldest'][0], min=ram['oldest'][1], sec=ram['oldest'][2]))}}
     </p>
-    {{=BUTTON(T('RAM Cache Keys'), _onclick='jQuery("#ram_keys").toggle();')}}
-    <div class="hidden" id="ram_keys">
+    {{=BUTTON(T('RAM Cache Keys'), _onclick='jQuery("#ram_keys").toggle().toggleClass( "w2p_hidden" );')}}
+    <div class="w2p_hidden" id="ram_keys">
       {{=ram['keys']}}
     </div>
     <br />
     {{pass}}
-    
-    <h4>DISK</h4>
-    <p>Number of entries: <strong>{{=disk['entries']}}</strong>
-      {{if disk['entries'] > 0:}}
-    </p>
-    <p>
-      Hit Ratio: 
-      <strong>{{=disk['ratio']}}%</strong> 
-      (<strong>{{=disk['hits']}}</strong> hits 
-      and <strong>{{=disk['misses']}}</strong> misses)
-    </p>
-    <p>
-      Size of cache: 
+
+    <h4>{{=T("DISK")}}</h4>
+    <p>{{=T.M("Number of entries: **%s**", disk['entries'])}}</p>
+    {{if disk['entries'] > 0:}}
+      <p>
+      {{=T.M("Hit Ratio: **%(ratio)s%%** (**%(hits)s** %%{hit(hits)} and **%(misses)s** %%{miss(misses)})",
+            dict(ratio=disk['ratio'], hits=disk['hits'], misses=disk['misses']))}}
+      </p>
+      <p>
+      {{=T("Size of cache:")}}
       {{if object_stats:}}
-      <strong>{{=disk['objects']}}</strong> items, 
-      <strong>{{=disk['bytes']}}</strong> bytes 
-      {{if disk['bytes'] > 524287:}}
-      (<strong>{{=disk['bytes'] / 1048576}} MB</strong>)
+        {{=T.M("**%(items)s** %%{item(items)}, **%(bytes)s** %%{byte(bytes)}", dict( items=disk['objects'], bytes=disk['bytes']))}}
+        {{if disk['bytes'] > 524287:}}
+          {{=T.M("(**%.0d MB**)", disk['bytes'] / 1048576)}}
+        {{pass}}
+      {{else:}}
+        {{=T.M("``**not available**``:red (requires the Python [[Pympler https://pypi.python.org/pypi/Pympler popup]] library)")}}
       {{pass}}
-      {{else:}} <strong>not available</strong> (requires the Python <a href="http://pypi.python.org/pypi/guppy/" target="_blank">guppy</a> library)
-      {{pass}}
-    </p>
-    <p>
-      DISK contains items up to 
-      <strong>{{="%02d" % disk['oldest'][0]}}</strong> hours 
-      <strong>{{="%02d" % disk['oldest'][1]}}</strong> minutes 
-      <strong>{{="%02d" % disk['oldest'][2]}}</strong> seconds old.
-    </p>
-    {{=BUTTON(T('Disk Cache Keys'), _onclick='jQuery("#disk_keys").toggle();')}}
-    <div class="hidden" id="disk_keys">
+      </p>
+      <p>
+      {{=T.M("DISK contains items up to **%(hours)02d** %%{hour(hours)} **%(min)02d** %%{minute(min)} **%(sec)02d** %%{second(sec)} old.",
+                dict(hours=disk['oldest'][0], min=disk['oldest'][1], sec=disk['oldest'][2]))}}
+      </p>
+      {{=BUTTON(T('Disk Cache Keys'), _onclick='jQuery("#disk_keys").toggle().toggleClass( "w2p_hidden" );')}}
+      <div class="w2p_hidden" id="disk_keys">
       {{=disk['keys']}}
-    </div>
-    <br />
+      </div>
+      <br />
     {{pass}}
   </div>
-    
+
   <div class="list-header">
-    <h3>Manage Cache</h3>
+    <h3>{{=T("Manage Cache")}}</h3>
   </div>
-  
+
   <div class="content">
     <p>
       {{=form}}
@@ -230,3 +238,42 @@
 </div>
 <div class="clear"></div>
 {{pass}}
+
+{{if request.function=='d3_graph_model':}}
+<h2>{{=T("Graph Model")}}</h2>
+  {{if not databases:}}  
+    {{=T("No databases in this application")}}
+  {{else:}}    
+    <div id="vis"></div>
+      <link rel="stylesheet" href="{{=URL('admin','static','css/d3_graph.css')}}"/>
+      <script>
+        // Define the d3 input data
+        {{from gluon.serializers import json }}
+        var nodes = {{=XML(json(nodes))}};
+        var links = {{=XML(json(links))}};
+        d3_graph();
+      </script>
+  {{pass}}
+{{pass}}  
+
+{{if request.function == 'manage':}}
+<h2>{{=heading}}</h2>
+<ul class="nav nav-tabs">
+  {{for k, tablename in enumerate(tablenames):}}
+  <li{{=XML(' class="active"') if k == 0 else ''}}>
+    <a href="#table-{{=tablename}}" data-toggle="tab">{{=labels[k]}}</a>
+  </li>
+  {{pass}}
+</ul>
+
+<div class="tab-content">
+  {{for k, tablename in enumerate(tablenames):}}
+  <div class="tab-pane{{=XML(' active') if k == 0 else ''}}" id="table-{{=tablename}}">
+    {{=LOAD(f='manage.load', args=[request.args(0), k], ajax=True)}}
+  </div>
+  {{pass}}
+</div>
+{{pass}}
+
+  </div>
+</div>

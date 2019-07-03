@@ -6,4 +6,5 @@ db.define_table('user_biography',
   Field('programming_experience', 'text'),
   Field('laptop_type', requires=IS_IN_SET(['Windows', 'Mac', 'Chromebook', 'Unix/Linux', 'Other', 'None'])),
   Field('image', 'upload'),
-  migrate='runestone_user_biography.table')
+  Field('confidence', 'text'),
+  migrate=table_migrate_prefix + 'user_biography.table')

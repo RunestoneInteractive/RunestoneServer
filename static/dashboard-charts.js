@@ -14,7 +14,7 @@ function DashboardCharts(){
             bottom: 24
         },
         width = 400 - margins.left - margins.right,
-        height = (20 * 24) - margins.top - margins.bottom,
+        height = (20 * 36) - margins.top - margins.bottom,
         dataset = data,
         nameMap = {},
         series = dataset.map(function (d) {
@@ -35,7 +35,7 @@ function DashboardCharts(){
             stack = d3.layout.stack();
 
         stack(dataset);
-        height = (dataset[0].length * 24) - margins.top - margins.bottom;
+        height = (dataset[0].length * 36) - margins.top - margins.bottom;
         var dataset = dataset.map(function (group) {
             return group.map(function (d) {
                 // Invert the x and y values, and y0 becomes x0

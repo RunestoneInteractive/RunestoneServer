@@ -1,0 +1,83 @@
+<script>
+    function parseBook(parent, book) {
+        for(var i = 0; i < parent.childNodes.length; i++){
+        var child = parent.childNodes[i];
+        if (child.className == "toctree-l1") {
+            var chapterName = (child.childNodes[0].textContent===undefined) ? child.childNodes[0].innerText : child.childNodes[0].textContent;
+            book.chapterNames.push(chapterName);
+            book.chapterSectionPaths.push([]);
+            book.chapterSectionNames.push([]);
+        }
+        if (child.nodeName == "A" && book.chapterSectionPaths.length != 0
+            && child.pathname != "/"
+            && child.pathname != "/genindex.html"
+            && child.pathname != "/search.html") {
+            var path = book.chapterSectionPaths.pop();
+            if (path[path.length-1] != child.pathname) {
+            path.push(child.pathname);
+            var name = book.chapterSectionNames.pop();
+            var sectionName = (child.childNodes[0].textContent===undefined) ? child.childNodes[0].innerText : child.childNodes[0].textContent;
+            name.push(sectionName);
+            book.chapterSectionNames.push(name);
+            book.bookTotal += 1;
+            }
+            book.chapterSectionPaths.push(path);
+        }
+        parseBook(child, book);
+        }
+    }
+
+    function loadProgressBar() {
+        curPath = window.location.pathname;
+        if (curPath == "/" || curPath == "/index.html") {
+            var book = {
+                chapterNames: [],
+                chapterSectionPaths: [],
+                chapterSectionNames: [],
+                curChapter: null,
+                curSection: null,
+                curChapterPercent: 0,
+                curBookPercent: 0,
+                bookTotal: 0
+            };
+            parseBook(document.getElementById("main-content"), book);
+            localStorage.setItem("book", JSON.stringify(book));
+        } else {
+            var book = JSON.parse(localStorage.getItem("book"));
+            var hasFound = false;      
+            for (var i = 0; i < book.chapterSectionPaths.length; i++) {
+                var chapter = book.chapterSectionPaths[i];
+                var chapterIndex = chapter.indexOf(curPath);
+                if (chapterIndex != -1 && !hasFound) {
+                hasFound = true;
+                book.curChapter = book.chapterNames[i];
+                book.curSection = book.chapterSectionNames[i][chapterIndex];
+                book.curChapterPercent = 100*((chapterIndex+1)/parseFloat(chapter.length));
+                var bookProgressCount = chapterIndex;
+                for (var j = 0; j < i; j++) {
+                    bookProgressCount += book.chapterSectionPaths[j].length;
+                }
+                book.curBookPercent = Math.floor(100*(bookProgressCount/parseFloat(book.bookTotal)));
+                }
+            }
+            document.getElementById("locationText").innerHTML = book.curChapter + "<br>" + book.curSection;
+            document.getElementById("bookProgress").innerHTML = "Progress in Book: " + book.curBookPercent + "%";
+            document.getElementById("progressBar").style.width = book.curChapterPercent-1 + "%";
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProgressBar();
+    }, false);
+</script>
+<div class="navbar-collapse collapse navbar-ex1-collapse">
+    <div style="width:49%; float:right">
+        <p id="locationText" style="margin-bottom:0px; margin-top:7px; float:left; width:65%"></p>   
+        <div style="width:35%; float:right;">
+            <p style="float:left; margin-bottom:0px; margin-top:7px; padding-bottom:0px;">Progress in Chapter: </p>
+            <div id="chapterProgress" style="margin-left:5px; margin-top:12px; float:left; width:25%; border:1px solid grey;">
+                <div id="progressBar" style="margin-left:0px; margin-top:1px; width:1%; height:9px; background-color:limegreen;"></div>
+            </div>
+            <p id="bookProgress" style="padding-top:0px; margin:0px; float:left;">Progress in Book: 0%</p>          
+        </div>     
+    </div>
+</div>

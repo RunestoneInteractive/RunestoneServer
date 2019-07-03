@@ -50,3 +50,10 @@ node_modules
 !/static/bootstrap*
 !/static/dashboard*
 .vscode/*
+*.egg-info/
+*.egg
+AC_scripts
+Pipfile.lock
+tests/test_book/build
+instructors.csv
+htmlcov
