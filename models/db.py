@@ -25,7 +25,7 @@ if not request.env.web2py_runtime_gae:
         table_migrate_prefix_test = table_migrate_prefix
     else:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
-        db = DAL(settings.database_uri, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
+        db = DAL(settings.database_uri, pool_size=30, fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == 'Fake'),
                  migrate=False, migrate_enabled=(os.environ.get("WEB2PY_MIGRATE", "Yes") in ['Yes', 'Fake']))
     session.connect(request, response, db, masterapp=None, migrate=table_migrate_prefix + 'web2py_sessions.table')
 
