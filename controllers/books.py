@@ -186,10 +186,13 @@ def published():
     else:
         base_course = request.args[0]
         course = db(db.courses.course_name == base_course).select(cache=(cache.ram, 3600), cacheable=True).first()
-        if course.login_required == 'T':
-            if auth.user:
-                return _route_book()
+        if course:
+            if course.login_required == 'T':
+                if auth.user:
+                    return _route_book()
+                else:
+                    redirect(URL(c='default', f='user'))
             else:
-                redirect(URL(c='default', f='user'))
+                return _route_book(is_open=True)
         else:
-            return _route_book(is_open=True)
+            redirect(URL(c='default', f='user'))
