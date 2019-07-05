@@ -601,13 +601,16 @@ def doAssignment():
                 status = 'notstarted'
             info['status'] = status
 
-            readings[ch_name]['subchapters'].append(info)
-            readings_score += info['score']
+            # Make sure we don't create duplicate entries for older courses. New style
+            # courses only have the base course in the database, but old will have both
+            if info not in readings[ch_name]['subchapters']:
+                readings[ch_name]['subchapters'].append(info)
+                readings_score += info['score']
 
         else:
-            # add to questions
-            questionslist.append(info)
-            questions_score += info['score']
+            if info not in questionslist:# add to questions
+                questionslist.append(info)
+                questions_score += info['score']
 
     # put readings into a session variable, to enable next/prev button
     readings_names = []
