@@ -495,10 +495,31 @@ def test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools
     assert misc['yourpct'] == 0
     
 
-# FIXME ?? - skip the implementation of this one for now - also, there is a test_server.py that seems to test this
-# @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.')
-# def testPreviewQuestion(self):
+# @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.') FIXME
+def testPreviewQuestion(test_client, test_user_1, test_user, runestone_db_tools):
+    src = """
+.. activecode:: preview_test1
 
+   Hello World
+   ~~~~
+   print("Hello World")
+
+"""
+    test_user_1.login()
+
+    kwargs = dict( 
+            code = json.dumps(src)
+            )
+    test_client.post('ajax/preview_question', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+
+    assert 'id="preview_test1"' in res
+    assert 'print("Hello World")' in res
+    assert 'textarea>' in res
+    assert 'textarea data-component="activecode"' in res
+    assert 'div data-childcomponent="preview_test1"' in res
+    assert False
 
 def test_GetUserLoggedIn(test_client, test_user_1, test_user, runestone_db_tools):
     test_user_1.login()
