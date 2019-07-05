@@ -396,7 +396,7 @@ def test_GetHist(test_client, test_user_1, test_user, runestone_db_tools):
     assert len(res['history']) == 10
 
     time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamps'][-1], '%Y-%m-%dT%H:%M:%S')
-    assert time_delta < datetime.timedelta(seconds=1)
+    assert time_delta < datetime.timedelta(seconds=2)
 
     test_client.post('ajax/getprog', data = kwargs)
     print(test_client.text)
@@ -519,7 +519,6 @@ def testPreviewQuestion(test_client, test_user_1, test_user, runestone_db_tools)
     assert 'textarea>' in res
     assert 'textarea data-component="activecode"' in res
     assert 'div data-childcomponent="preview_test1"' in res
-    assert False
 
 def test_GetUserLoggedIn(test_client, test_user_1, test_user, runestone_db_tools):
     test_user_1.login()
