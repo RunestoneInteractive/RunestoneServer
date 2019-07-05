@@ -10,7 +10,7 @@
 #
 def test_student_report(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course('test_course_3')
-    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3.course_name)
+    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3)
     test_instructor_1.make_instructor()
 
     test_instructor_1.login()
@@ -31,7 +31,7 @@ def test_student_report(test_client, runestone_db_tools, test_user, test_user_1)
 
 def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course('test_course_3', base_course='test_course_1')
-    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3.course_name)
+    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3)
     test_instructor_1.make_instructor()
 
     test_instructor_1.login()
@@ -50,7 +50,7 @@ def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_use
 
 def test_exercisemetrics(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course('test_course_3', base_course='test_course_1')
-    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3.course_name)
+    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3)
     test_instructor_1.make_instructor()
 
     test_instructor_1.login()

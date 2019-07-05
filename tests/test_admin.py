@@ -1,8 +1,8 @@
 import json
 
 
-def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+def test_add_assignment(test_assignment, test_user_1, runestone_db_tools):
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     # Should provide the following to addq_to_assignment
     # -- assignment (an integer)
     # -- question == div_id
@@ -24,16 +24,16 @@ def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_
     assert res.released == True
 
 
-def test_choose_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+def test_choose_assignment(test_assignment, test_client, test_user_1):
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
     my_ass.description = 'Test Assignment Description'
     my_ass.make_visible()
     test_user_1.login()
     test_client.validate('assignments/chooseAssignment.html','Test Assignment Description')
 
-def test_do_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+def test_do_assignment(test_assignment, test_client, test_user_1):
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
     my_ass.description = 'Test Assignment Description'
     my_ass.make_visible()
@@ -42,7 +42,7 @@ def test_do_assignment(test_assignment, test_client, test_user_1, runestone_db_t
     test_client.validate('assignments/doAssignment.html', 'Mary had a',
         data=dict(assignment_id=my_ass.assignment_id))
 
-def test_question_text(test_assignment, test_client, test_user_1, runestone_db_tools):
+def test_question_text(test_client, test_user_1):
     test_user_1.make_instructor()
     test_user_1.login()
     test_client.validate('admin/question_text', 'Mary had a',
@@ -50,8 +50,8 @@ def test_question_text(test_assignment, test_client, test_user_1, runestone_db_t
     test_client.validate('admin/question_text', 'Error: ',
             data=dict(question_name='non_existant_question'))
 
-def test_removeinstructor(test_user, test_client, test_user_1, runestone_db_tools):
-    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+def test_removeinstructor(test_user, test_client, test_user_1):
+    my_inst = test_user('new_instructor', 'password', test_user_1.course)
     my_inst.make_instructor()
     my_inst.login()
     res = test_client.validate('admin/addinstructor/{}'.format(test_user_1.user_id))
@@ -64,7 +64,7 @@ def test_removeinstructor(test_user, test_client, test_user_1, runestone_db_tool
     assert 'Cannot add non-existent user ' in json.loads(res)
 
 def test_removestudents(test_user, test_client, test_user_1, runestone_db_tools):
-    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+    my_inst = test_user('new_instructor', 'password', test_user_1.course)
     my_inst.make_instructor()
     my_inst.login()
     res = test_client.validate('admin/removeStudents', 'Assignments',
@@ -75,7 +75,7 @@ def test_removestudents(test_user, test_client, test_user_1, runestone_db_tools)
     assert res.active == False
 
 
-def test_htmlsrc(test_assignment, test_client, test_user_1, runestone_db_tools):
+def test_htmlsrc(test_client, test_user_1):
     test_user_1.make_instructor()
     test_user_1.login()
     test_client.validate('admin/htmlsrc', 'Mary had a',
@@ -84,7 +84,7 @@ def test_htmlsrc(test_assignment, test_client, test_user_1, runestone_db_tools):
             data=dict(acid='non_existant_question'))
 
 
-def test_qbank(test_client, test_user_1, runestone_db_tools):
+def test_qbank(test_client, test_user_1):
     test_user_1.make_instructor()
     test_user_1.login()
     qname = 'subc_b_fitb'
@@ -107,7 +107,7 @@ def test_qbank(test_client, test_user_1, runestone_db_tools):
     assert len(res) == 2
 
 
-def test_gettemplate(test_user_1, runestone_db_tools, test_client):
+def test_gettemplate(test_user_1, test_client):
     test_user_1.make_instructor()
     test_user_1.login()
     dirlist = ['activecode', 'mchoice', 'fillintheblank']
@@ -118,10 +118,10 @@ def test_gettemplate(test_user_1, runestone_db_tools, test_client):
         assert d in res['template']
 
 
-def test_question_info(test_assignment, test_user_1, runestone_db_tools, test_client):
+def test_question_info(test_assignment, test_user_1, test_client):
     test_user_1.make_instructor()
     test_user_1.login()
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
     res = test_client.validate('admin/getQuestionInfo', data=dict(
             assignment=my_ass.assignment_id,
@@ -136,7 +136,7 @@ def test_question_info(test_assignment, test_user_1, runestone_db_tools, test_cl
 def test_create_question(test_assignment, test_user_1, runestone_db_tools, test_client):
     test_user_1.make_instructor()
     test_user_1.login()
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     data = {
         'template': 'mchoice',
         'name': 'test_question_1',
@@ -162,11 +162,11 @@ def test_create_question(test_assignment, test_user_1, runestone_db_tools, test_
     assert row['question'] == "This is fake text for a fake question"
 
 
-def test_get_assignment(test_assignment, test_user_1, runestone_db_tools, test_client):
+def test_get_assignment(test_assignment, test_user_1, test_client):
     test_user_1.make_instructor()
     test_user_1.login()
-    my_ass = test_assignment('test_assignment', 'test_course_1')
-    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    my_ass = test_assignment('test_assignment', test_user_1.course)
+    my_ass.addq_to_assignment(question='subc_b_fitb', points=10)
 
     res = test_client.validate('admin/get_assignment', data=dict(
         assignmentid=my_ass.assignment_id

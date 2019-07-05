@@ -40,7 +40,7 @@ from .utils import web2py_controller_import
 def test_manual(runestone_db_tools, test_user):
     # Modify this as desired to create courses, users, etc. for manual testing.
     course_1 = runestone_db_tools.create_course()
-    test_user('bob', 'bob', course_1.course_name)
+    test_user('bob', 'bob', course_1)
 
     # Pause in the debugginer until manual testing is done.
     import pdb; pdb.set_trace()
@@ -197,7 +197,8 @@ def test_validate_user_pages(url, requires_login, expected_string,
 ])
 def test_validate_instructor_pages(url, expected_string, expected_errors,
                                    test_client, test_user, test_user_1):
-    test_instructor_1 = test_user('test_instructor_1', 'password_1', 'test_course_1')
+    test_instructor_1 = test_user('test_instructor_1', 'password_1',
+                                  test_user_1.course)
     test_instructor_1.make_instructor()
     # Make sure that non-instructors are redirected.
     test_client.logout()
@@ -337,10 +338,9 @@ def test_price_free(runestone_db_tools, test_user):
     course_2 = runestone_db_tools.create_course('test_course_2', student_price=0)
 
     # Check registering for a free course.
-    test_user_1 = test_user('test_user_1', 'password_1', course_1.course_name,
-                            is_free=True)
+    test_user_1 = test_user('test_user_1', 'password_1', course_1, is_free=True)
     # Verify the user was added to the ``user_courses`` table.
-    assert db(( db.user_courses.course_id == test_user_1.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
+    assert db(( db.user_courses.course_id == test_user_1.course.course_id) & (db.user_courses.user_id == test_user_1.user_id) ).select().first()
 
     # Check adding a free course.
     test_user_1.update_profile(course_name=course_2.course_name, is_free=True)
@@ -354,8 +354,8 @@ def test_price_paid(runestone_db_tools, test_user):
     course_1 = runestone_db_tools.create_course(student_price=1)
     course_2 = runestone_db_tools.create_course('test_course_2', student_price=1)
     # Check registering for a paid course.
-    test_user_1 = test_user('test_user_1', 'password_1', course_1.course_name,
-                           is_free=False)
+    test_user_1 = test_user('test_user_1', 'password_1', course_1,
+                            is_free=False)
 
     # Until payment is provided, the user shouldn't be added to the ``user_courses`` table. Ensure that refresh, login/logout, profile changes, adding another class, etc. don't allow access.
     test_user_1.test_client.logout()
@@ -377,7 +377,7 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
 
     db = runestone_db_tools.db
     course_1 = runestone_db_tools.create_course(student_price=100)
-    test_user_1 = test_user('test_user_1', 'password_1', course_1.course_name,
+    test_user_1 = test_user('test_user_1', 'password_1', course_1,
                             is_free=False)
 
     def did_payment():
@@ -413,7 +413,7 @@ def test_lp_1(test_user_1):
         event='lp_build',
         # This div_id is too long. Everything else is OK.
         div_id='X'*1000,
-        course=test_user_1.course_name,
+        course=test_user_1.course.course_name,
         builder='unsafe-python',
         answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
     )
@@ -424,7 +424,7 @@ def test_lp_1(test_user_1):
         ret = test_user_1.hsblog(
             event='lp_build',
             div_id='lp_demo_1',
-            course=test_user_1.course_name,
+            course=test_user_1.course.course_name,
             builder='unsafe-python',
             answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
         )
@@ -442,59 +442,84 @@ def test_lp_1(test_user_1):
 
 
 # Test dynamic book routing.
-def test_10(test_client, test_user_1):
+def test_dynamic_book_routing_1(test_client, test_user_1):
     test_user_1.login()
+    dbr_tester(test_client, test_user_1, True)
 
+    # Test that a draft is accessible only to instructors.
+    test_user_1.make_instructor()
+    test_user_1.update_profile(course_name=test_user_1.course.course_name)
+    test_client.validate('books/draft/{}/index.html'.format(test_user_1.course.base_course),
+                         'The red car drove away.')
+
+
+# Test the no-login case.
+def test_dynamic_book_routing_2(test_client, test_user_1):
+    test_client.logout()
+    # Test for a book that doesn't require a login. First, change the book to not require a login.
+    db = test_user_1.runestone_db_tools.db
+    db(db.courses.id == test_user_1.course.course_id).update(login_required=False)
+    db.commit()
+
+    dbr_tester(test_client, test_user_1, False)
+
+
+def dbr_tester(test_client, test_user_1, is_logged_in):
     # Test error cases.
-    validate = test_user_1.test_client.validate
-    test_course_1 = test_user_1.course_name
-    course_selection = 'Course Selection'
+    validate = test_client.validate
+    base_course = test_user_1.course.base_course
     # A non-existant course.
-    validate('books/published/xxx', course_selection)
+    if is_logged_in:
+        validate('books/published/xxx', 'Course Selection')
+    else:
+        validate('books/published/xxx', expected_status=404)
     # A non-existant page.
-    validate('books/published/{}/xxx'.format(test_course_1),
+    validate('books/published/{}/xxx'.format(base_course),
              expected_status=404)
     # A directory.
-    validate('books/published/{}/test_chapter_1'.format(test_course_1),
+    validate('books/published/{}/test_chapter_1'.format(base_course),
              expected_status=404)
     # Attempt to access files outside a course.
-    validate('books/published/{}/../conf.py'.format(test_course_1),
+    validate('books/published/{}/../conf.py'.format(base_course),
              expected_status=404)
+    # Attempt to access a course we're not registered for.
+    if is_logged_in:
+        runestone_db_tools = test_user_1.runestone_db_tools
+        child_course = runestone_db_tools.create_course('child_course_1', base_course=test_user_1.course.base_course)
+        validate('books/published/{}/index.html'.format(child_course.course_name), [
+            # TODO: this flashed message doesn't appear. ???
+            #'Sorry you are not registered for this course.',
+            'Choose your course',
+        ])
 
     # A valid page. Check the book config as well.
-    validate('books/published/{}/index.html'.format(test_course_1), [
+    validate('books/published/{}/index.html'.format(base_course), [
         'The red car drove away.',
-        "eBookConfig.course = '{}';".format(test_course_1),
-        "eBookConfig.basecourse = '{}';".format(test_course_1),
+        "eBookConfig.course = '{}';".format(base_course),
+        "eBookConfig.basecourse = '{}';".format(base_course),
     ])
-
     # Drafts shouldn't be accessible by students.
-    validate('books/draft/{}/index.html'.format(test_course_1),
-             'Insufficient privileges')
-    test_user_1.make_instructor()
-    # But should be instructors.
-    validate('books/draft/{}/index.html'.format(test_course_1),
-             'The red car drove away.')
+    validate('books/draft/{}/index.html'.format(base_course),
+             'Insufficient privileges' if is_logged_in else 'Username')
 
     # Check routing in a child book.
-    child_course = test_user_1.runestone_db_tools.create_course('child_course_1', base_course=test_user_1.course_name)
-    child_course_1 = child_course.course_name
-    # Routes if they do.
-    test_user_1.update_profile(course_name=child_course_1, is_free=True)
-    validate('books/published/{}/index.html'.format(test_course_1), [
-        'The red car drove away.',
-        "eBookConfig.course = '{}';".format(child_course_1),
-        "eBookConfig.basecourse = '{}';".format(test_course_1),
-    ])
+    if is_logged_in:
+        test_user_1.update_profile(course_name=child_course.course_name,
+                                   is_free=True)
+        validate('books/published/{}/index.html'.format(base_course), [
+            'The red car drove away.',
+            "eBookConfig.course = '{}';".format(child_course.course_name),
+            "eBookConfig.basecourse = '{}';".format(base_course),
+        ])
 
-    # Test static content
-    validate('books/published/{}/_static/runestone-custom-sphinx-bootstrap.css'.format(test_course_1),
+    # Test static content.
+    validate('books/published/{}/_static/runestone-custom-sphinx-bootstrap.css'.format(base_course),
              'background-color: #fafafa;')
 
 
 def test_11(test_client, runestone_db_tools, test_user):
     course_3 = runestone_db_tools.create_course('test_course_3')
-    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3.course_name)
+    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3)
     test_instructor_1.make_instructor()
     test_instructor_1.login()
     db = runestone_db_tools.db
@@ -503,8 +528,10 @@ def test_11(test_client, runestone_db_tools, test_user):
     test_client.post('admin/createAssignment',
         data=dict(name='test_assignment_1'))
 
-    assign = db((db.assignments.name == 'test_assignment_1') &
-                (db.assignments.course == test_instructor_1.course_id)).select().first()
+    assign = db(
+        (db.assignments.name == 'test_assignment_1') &
+        (db.assignments.course == test_instructor_1.course.course_id)
+    ).select().first()
     assert assign
 
     # Delete an assignment -- using removeassignment
@@ -517,7 +544,7 @@ def test_11(test_client, runestone_db_tools, test_user):
 
 def test_deleteaccount(test_client, runestone_db_tools, test_user):
     course_3 = runestone_db_tools.create_course('test_course_3')
-    the_user = test_user('user_to_delete', 'password_1', course_3.course_name)
+    the_user = test_user('user_to_delete', 'password_1', course_3)
     the_user.login()
     validate = the_user.test_client.validate
     the_user.hsblog(event="mChoice",

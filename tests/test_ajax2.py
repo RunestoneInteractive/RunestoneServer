@@ -1,6 +1,7 @@
 import json
 import datetime
 
+
 def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     """
     The parameters to test_poll are really pytest fixtures, you don't have to pass
@@ -21,7 +22,7 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     # Using hsblog have the user respond to a poll in the test_course_1 book
     # this is what you would do to simulate a user activity an any kind of runeston
     # component.
-    test_user_1.hsblog(event='poll', act='1', div_id="LearningZone_poll", course='test_course_1')
+    test_user_1.hsblog(event='poll', act='1', div_id="LearningZone_poll", course=test_user_1.course.course_name)
 
     # Now lets get a handle on the database
     db = runestone_db_tools.db
@@ -33,7 +34,7 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
 
     # Next we'll invoke the API call that returns the poll results. this is a list
     # [<num responses> [option list] [response list] divid myvote]
-    test_client.post('ajax/getpollresults', data=dict(course='test_course_1', div_id='LearningZone_poll'))
+    test_client.post('ajax/getpollresults', data=dict(course=test_user_1.course.course_name, div_id='LearningZone_poll'))
     # print statements are useful for debugging and only shown in the Captured stdout call
     # section of the output from pytest if the test fails. Otherwise print output is
     # hidden
@@ -44,11 +45,11 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     assert res[-1] == "1"
 
     # Now lets have a second user respond to the poll.
-    user2 = test_user('test_user_2', 'password', 'test_course_1')
+    user2 = test_user('test_user_2', 'password', test_user_1.course)
     test_user_1.logout()
     user2.login()
-    user2.hsblog(event='poll', act='2', div_id="LearningZone_poll", course='test_course_1')
-    test_client.post('ajax/getpollresults', data=dict(course='test_course_1', div_id='LearningZone_poll'))
+    user2.hsblog(event='poll', act='2', div_id="LearningZone_poll", course=user2.course.course_name)
+    test_client.post('ajax/getpollresults', data=dict(course=user2.course.course_name, div_id='LearningZone_poll'))
     res = json.loads(test_client.text)
     assert res[0] == 2
     assert res[1] == [0, 1, 2]
@@ -59,10 +60,10 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
 def test_hsblog(test_client, test_user_1, test_user, runestone_db_tools):
     test_user_1.login()
 
-    kwargs = dict( 
+    kwargs = dict(
             act = 'run',
             event = 'acivecode',
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             div_id = 'unit_test_1',
             )
     res = test_user_1.hsblog(**kwargs)
@@ -88,7 +89,7 @@ def ajaxCall(client, funcName, **kwargs):
     if client.text != 'None':
         return(json.loads(client.text))
 
-def genericGetAssessResults(test_client, test_user, runestone_db_tools, **kwargs):
+def genericGetAssessResults(test_client, test_user, **kwargs):
     """
     A generic function that calls the ajax/getAssessResults API for a variety of runestone events.
     It returns the result of the API call
@@ -104,7 +105,7 @@ def genericGetAssessResults(test_client, test_user, runestone_db_tools, **kwargs
     # component.
     test_user.hsblog(**kwargs)
 
-    # Next we'll invoke the API call that returns the event results. 
+    # Next we'll invoke the API call that returns the event results.
     test_client.post('ajax/getAssessResults', data=dict(course=kwargs['course'], div_id=kwargs['div_id'], event=kwargs['event']))
 
     # print statements are useful for debugging and only shown in the Captured stdout call
@@ -115,38 +116,38 @@ def genericGetAssessResults(test_client, test_user, runestone_db_tools, **kwargs
     return res
 
 # The following tests are a port from the test_ajax.py
-def test_GetMChoiceResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetMChoiceResults(test_client, test_user_1):
 
     # Generate a incorrect mChoice answer
     val = '1'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'mChoice',
                             div_id = 'test_mchoice_1',
                             answer = val,
                             act = val,
                             correct = 'F',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert not res['correct']
 
     # Generate a correct mChoice answer
     val = '3'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'mChoice',
                             div_id = 'test_mchoice_1',
                             answer = val,
                             act = val,
                             correct = 'T',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert res['correct']
 
 
-def test_GetParsonsResults(test_client, test_user_1, test_user, runestone_db_tools):
-    val = '0_0-1_2_0-3_4_0-5_1-6_1-7_0' 
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+def test_GetParsonsResults(test_client, test_user_1,):
+    val = '0_0-1_2_0-3_4_0-5_1-6_1-7_0'
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'parsons',
                             div_id = 'test_parsons_1',
                             answer = val,
@@ -157,9 +158,9 @@ def test_GetParsonsResults(test_client, test_user_1, test_user, runestone_db_too
                            )
     assert res['answer'] == val
 
-def test_GetClickableResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetClickableResults(test_client, test_user_1):
     val = '0;1'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'clickableArea',
                             div_id = 'test_clickable_1',
                             answer = val,
@@ -170,9 +171,9 @@ def test_GetClickableResults(test_client, test_user_1, test_user, runestone_db_t
     assert res['answer'] == val
     assert not res['correct']
 
-def test_GetShortAnswerResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetShortAnswerResults(test_client, test_user_1):
     val = 'hello_test'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'shortanswer',
                             div_id = 'test_short_answer_1',
                             answer = val,
@@ -182,13 +183,13 @@ def test_GetShortAnswerResults(test_client, test_user_1, test_user, runestone_db
                            )
     assert res['answer'] == val
 
-def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
 
     # Test old format, server-side grading
     ## -----------------------------------
     # A correct answer.
     val = 'red,away'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_1',
                             answer = val,
@@ -200,7 +201,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
     # An incorrect answer.
     val = 'blue,away'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_1',
                             answer = val,
@@ -215,7 +216,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     ## -----------------------------------
     # A correct answer. Add spaces to verify these are ignored.
     val = '[" red ","away"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_1',
                             answer = val,
@@ -227,7 +228,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
     # An incorrect answer.
     val = '["blue","away"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_1',
                             answer = val,
@@ -239,7 +240,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
     # Test server-side grading of a regex
     val = '["mARy"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_regex',
                             answer = val,
@@ -249,7 +250,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['correct']
 
     val = '["mairI"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_regex',
                             answer = val,
@@ -259,7 +260,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['correct']
 
     val = '["mairy"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_regex',
                             answer = val,
@@ -270,7 +271,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
     # Test server-side grading of a range of numbers, using various bases.
     val = '["10"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -282,7 +283,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['displayFeed'] in (['Correct.'], ['<p>Correct.</p>\n'])
 
     val = '["0b1010"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -292,7 +293,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['correct']
 
     val = '["0xA"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -302,7 +303,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['correct']
 
     val = '["9"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -315,7 +316,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
 
     val = '["11"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -327,7 +328,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
 
 
     val = '["8"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -338,11 +339,11 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['displayFeed'] in (['Nope.'], ['<p>Nope.</p>\n'])
 
 
-    # Test client-side grading. 
+    # Test client-side grading.
     db = runestone_db_tools.db
     db(db.courses.course_name == 'test_course_1').update(login_required=False)
     val = '["blue","away"]'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
                             div_id = 'test_fitb_numeric',
                             answer = val,
@@ -353,10 +354,10 @@ def test_GetFITBAnswerResults(test_client, test_user_1, test_user, runestone_db_
     assert res['answer'] == val
     assert not res['correct']
 
-def test_GetDragNDropResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetDragNDropResults(test_client, test_user_1):
 
     val = '0;1;2'
-    res = genericGetAssessResults(test_client, test_user_1, runestone_db_tools, 
+    res = genericGetAssessResults(test_client, test_user_1,
                             event = 'dragNdrop',
                             div_id = 'test_dnd_1',
                             answer = val,
@@ -367,11 +368,11 @@ def test_GetDragNDropResults(test_client, test_user_1, test_user, runestone_db_t
                            )
     assert res['correct']
 
-def test_GetHist(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetHist(test_client, test_user_1):
 
     test_user_1.login()
 
-    kwargs = dict( 
+    kwargs = dict(
             course = 'test_course_1',
             sid = 'test_user_1',
             div_id = 'test_activecode_1',
@@ -401,10 +402,10 @@ def test_GetHist(test_client, test_user_1, test_user, runestone_db_tools):
     test_client.post('ajax/getprog', data = kwargs)
     print(test_client.text)
     prog = json.loads(test_client.text)
-    
+
     assert res['history'][-1] == prog[0]['source']
 
-def test_RunLog(test_client, test_user_1, test_user, runestone_db_tools):
+def test_RunLog(test_client, test_user_1):
 
     """
     runlog should add an entry into the useinfo table as well as the code and acerror_log tables...
@@ -412,7 +413,7 @@ def test_RunLog(test_client, test_user_1, test_user, runestone_db_tools):
     """
     test_user_1.login()
 
-    kwargs = dict( 
+    kwargs = dict(
             course = 'test_course_1',
             sid = 'test_user_1',
             div_id = 'test_activecode_1',
@@ -434,7 +435,7 @@ def test_RunLog(test_client, test_user_1, test_user, runestone_db_tools):
     assert prog[0]['source'] == "this is a unittest"
 
 
-def test_GetLastPage(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetLastPage(test_client, test_user_1):
 
     test_user_1.login()
     kwargs = dict(
@@ -453,17 +454,17 @@ def test_GetLastPage(test_client, test_user_1, test_user, runestone_db_tools):
     assert res[0]['lastPageUrl'] == 'test_chapter_1/subchapter_a.html'
     assert res[0]['lastPageChapter'] == 'Test chapter 1'
 
-def test_GetNumOnline(test_client, test_user_1, test_user, runestone_db_tools):
-    test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools)
+def test_GetNumOnline(test_client, test_user_1, test_user):
+    test_GetTop10Answers(test_client, test_user_1, test_user)
     test_client.post('ajax/getnumonline')
     print(test_client.text)
     res = json.loads(test_client.text)
     assert res[0]['online'] == 6
 
-def test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetTop10Answers(test_client, test_user_1, test_user):
     user_ids = []
     for index in range(0, 6):
-        user = test_user('test_user_{}'.format(index+2), 'password', 'test_course_1')
+        user = test_user('test_user_{}'.format(index+2), 'password', test_user_1.course)
         user_ids.append(user)
         user.login()
 
@@ -487,16 +488,16 @@ def test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools
     test_client.post('ajax/gettop10Answers', data=kwargs)
     print(test_client.text)
     res, misc = json.loads(test_client.text)
-    
+
     assert res[0]['answer'] == '41'
     assert res[0]['count'] == 3
     assert res[1]['answer'] == '42'
     assert res[1]['count'] == 3
     assert misc['yourpct'] == 0
-    
+
 
 # @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.') FIXME
-def testPreviewQuestion(test_client, test_user_1, test_user, runestone_db_tools):
+def testPreviewQuestion(test_client, test_user_1):
     src = """
 .. activecode:: preview_test1
 
@@ -507,7 +508,7 @@ def testPreviewQuestion(test_client, test_user_1, test_user, runestone_db_tools)
 """
     test_user_1.login()
 
-    kwargs = dict( 
+    kwargs = dict(
             code = json.dumps(src)
             )
     test_client.post('ajax/preview_question', data = kwargs)
@@ -520,24 +521,24 @@ def testPreviewQuestion(test_client, test_user_1, test_user, runestone_db_tools)
     assert 'textarea data-component="activecode"' in res
     assert 'div data-childcomponent="preview_test1"' in res
 
-def test_GetUserLoggedIn(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetUserLoggedIn(test_client, test_user_1):
     test_user_1.login()
     test_client.post('ajax/getuser')
     print(test_client.text)
     res = json.loads(test_client.text)
-    
+
     assert res[0]['nick'] == test_user_1.username
 
 
-def test_GetUserNotLoggedIn(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetUserNotLoggedIn(test_client, test_user_1):
     test_user_1.logout() # make sure user is logged off...
     test_client.post('ajax/getuser')
     print(test_client.text)
     res = json.loads(test_client.text)[0]
-    
+
     assert 'redirect' in res
 
-def test_Donations(test_client, test_user_1, test_user, runestone_db_tools):
+def test_Donations(test_client, test_user_1):
     test_user_1.login()
     res = ajaxCall(test_client, 'save_donate')
     assert res == None
@@ -545,12 +546,12 @@ def test_Donations(test_client, test_user_1, test_user, runestone_db_tools):
     res = ajaxCall(test_client, 'did_donate')
     assert res['donate'] == True
 
-def test_NonDonor(test_client, test_user_1, test_user, runestone_db_tools):
+def test_NonDonor(test_client, test_user_1):
     test_user_1.login()
     res = ajaxCall(test_client, 'did_donate')
     assert not res['donate']
 
-def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetAgregateResults(test_client, test_user_1, test_user):
 
     # creat a bunch of users and have each one answer a multiple choice questions according to this table
     table = [ # sid      correct answer
@@ -577,7 +578,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_to
               ('user_1677', 'T', '1'),
               ('user_1751', 'F', '0'),
               ('user_1751', 'T', '1'),
-              ('user_2521', 'T', '1')   
+              ('user_2521', 'T', '1')
              ]
     users = {}
     for t in table:
@@ -587,7 +588,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_to
         answer = t[2]
         logAnswer = "answer:" + answer + ":" + ("correct" if (correct == "T") else "no")
         if user_name not in users.keys():
-            user = test_user(user_name, 'password', 'test_course_1')
+            user = test_user(user_name, 'password', test_user_1.course)
             users[user_name] = user
         # logon
         user = users[user_name]
@@ -597,7 +598,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_to
                      correct = correct, act = logAnswer, answer = answer)
         # logout
         user.logout()
-    
+
     # get a particular user
     user = users['user_1675']
     user.login()
@@ -611,8 +612,8 @@ def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_to
     res = json.loads(test_client.text)
     res = res[0]
     assert res['misc']['yourpct'] == 67
-    assert res['answerDict']['0'] == 29 
-    assert res['answerDict']['1'] == 71 
+    assert res['answerDict']['0'] == 29
+    assert res['answerDict']['1'] == 71
     user.logout()
 
     # Now test for the instructor:
@@ -643,7 +644,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user, runestone_db_to
     for student in res['reslist']:
         assert student[1] == expect[student[0]]
 
-def test_GetCompletionStatus(test_client, test_user_1, test_user, runestone_db_tools):
+def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     test_user_1.login()
 
     # Check an unviewed page
@@ -707,7 +708,7 @@ def test_GetCompletionStatus(test_client, test_user_1, test_user, runestone_db_t
     assert len(res) == 3
 
 
-def test_updatelastpage(test_client, test_user_1, test_user, runestone_db_tools):
+def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
     test_user_1.login()
     kwargs = dict(
             lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
@@ -729,16 +730,16 @@ def test_updatelastpage(test_client, test_user_1, test_user, runestone_db_tools)
     assert res.end_date.year == now.year
 
 
-def test_getassignmentgrade(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+def test_getassignmentgrade(test_assignment, test_user_1, test_user, test_client):
     # make a dummy student to do work
-    student1 = test_user('student1', 'password', 'test_course_1')
+    student1 = test_user('student1', 'password', test_user_1.course)
     student1.logout()
 
     test_user_1.make_instructor()
     test_user_1.login()
 
     # make dummy assignment
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
     my_ass.save_assignment()
 
@@ -769,7 +770,7 @@ def test_getassignmentgrade(test_assignment, test_user_1, test_user, runestone_d
     assert res[0]['count'] == 'None'
     student1.logout()
 
-    # release grade 
+    # release grade
     test_user_1.login()
     my_ass.release_grades()
     test_user_1.logout()
@@ -786,9 +787,9 @@ def test_getassignmentgrade(test_assignment, test_user_1, test_user, runestone_d
     assert res[0]['version'] == 2
     assert res[0]['max'] == 10
     assert res[0]['comment'] == comment
-    
 
-def test_get_datafile(test_client, test_user_1, test_user, runestone_db_tools):
+
+def test_get_datafile(test_client, test_user_1, runestone_db_tools):
 
     # Create some datafile into the db and then read it out using the ajax/get_datafile()
     db = runestone_db_tools.db
@@ -816,7 +817,3 @@ def test_get_datafile(test_client, test_user_1, test_user, runestone_db_tools):
     print(test_client.text)
     res = json.loads(test_client.text)
     assert res['data'] is None
-
-
-
-
