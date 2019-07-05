@@ -184,7 +184,7 @@ def published():
     if auth.user:
         return _route_book()
     else:
-        base_course = request.args[0]
+        base_course = request.args(0)
         course = db(db.courses.course_name == base_course).select(cache=(cache.ram, 3600), cacheable=True).first()
         if course:
             if course.login_required == 'T':
