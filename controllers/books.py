@@ -121,7 +121,7 @@ def _route_book(is_published=True, is_open=False):
             logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
 
         return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
-                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=reading_list,
+                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=XML(reading_list),
                     activity_info=json.dumps(div_counts), subchapter_list=_subchaptoc(base_course, chapter))
 
 
