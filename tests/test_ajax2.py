@@ -55,6 +55,29 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     assert res[2] == [0, 1, 1]
     assert res[-1] == "2"
 
+
+def test_hsblog(test_client, test_user_1, test_user, runestone_db_tools):
+    test_user_1.login()
+
+    kwargs = dict( 
+            act = 'run',
+            event = 'acivecode',
+            course = 'test_course_1',
+            div_id = 'unit_test_1',
+            )
+    res = test_user_1.hsblog(**kwargs)
+    print(res)
+    assert len(res.keys()) == 2
+    assert res['log'] == True
+    time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamp'], '%Y-%m-%d %H:%M:%S')
+    assert time_delta < datetime.timedelta(seconds=1)
+
+    db = runestone_db_tools.db
+    dbres = db(db.useinfo.div_id == 'unit_test_1').select(db.useinfo.ALL)
+    assert len(dbres) == 1
+    assert dbres[0].course_id == 'test_course_1'
+
+
 def ajaxCall(client, funcName, **kwargs):
     """
     Call the funcName using the client
@@ -373,7 +396,7 @@ def test_GetHist(test_client, test_user_1, test_user, runestone_db_tools):
     assert len(res['history']) == 10
 
     time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(res['timestamps'][-1], '%Y-%m-%dT%H:%M:%S')
-    # assert time_delta < datetime.timedelta(seconds=1) FIXME
+    assert time_delta < datetime.timedelta(seconds=1)
 
     test_client.post('ajax/getprog', data = kwargs)
     print(test_client.text)
@@ -430,6 +453,12 @@ def test_GetLastPage(test_client, test_user_1, test_user, runestone_db_tools):
     assert res[0]['lastPageUrl'] == 'test_chapter_1/subchapter_a.html'
     assert res[0]['lastPageChapter'] == 'Test chapter 1'
 
+def test_GetNumOnline(test_client, test_user_1, test_user, runestone_db_tools):
+    test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools)
+    test_client.post('ajax/getnumonline')
+    print(test_client.text)
+    res = json.loads(test_client.text)
+    assert res[0]['online'] == 6
 
 def test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools):
     user_ids = []
@@ -465,15 +494,8 @@ def test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools
     assert res[1]['count'] == 3
     assert misc['yourpct'] == 0
     
-def test_GetNumOnline(test_client, test_user_1, test_user, runestone_db_tools):
-    test_GetTop10Answers(test_client, test_user_1, test_user, runestone_db_tools)
-    test_client.post('ajax/getnumonline')
-    print(test_client.text)
-    res = json.loads(test_client.text)
-    assert res[0]['online'] == 6
 
-
-# FIXME - skip the implementation of this one for now
+# FIXME ?? - skip the implementation of this one for now - also, there is a test_server.py that seems to test this
 # @unittest.skipIf(not is_linux, 'preview_question only runs under Linux.')
 # def testPreviewQuestion(self):
 
@@ -485,8 +507,6 @@ def test_GetUserLoggedIn(test_client, test_user_1, test_user, runestone_db_tools
     res = json.loads(test_client.text)
     
     assert res[0]['nick'] == test_user_1.username
-
-    test_user_1.logout()
 
 
 def test_GetUserNotLoggedIn(test_client, test_user_1, test_user, runestone_db_tools):
@@ -665,6 +685,117 @@ def test_GetCompletionStatus(test_client, test_user_1, test_user, runestone_db_t
     res = json.loads(test_client.text)
     print(res)
     assert len(res) == 3
+
+
+def test_updatelastpage(test_client, test_user_1, test_user, runestone_db_tools):
+    test_user_1.login()
+    kwargs = dict(
+            lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
+            lastPageScrollLocation = 0,
+            course = 'test_course_1',
+            completionFlag = 1
+            )
+    test_client.validate('ajax/updatelastpage', data = kwargs)
+    db = runestone_db_tools.db
+    res = db((db.user_sub_chapter_progress.user_id == test_user_1.user_id) &
+            (db.user_sub_chapter_progress.sub_chapter_id == 'subchapter_a')).select().first()
+    print(res)
+
+    now = datetime.datetime.utcnow()
+
+    assert res.status == 1
+    assert res.end_date.month == now.month
+    assert res.end_date.day == now.day
+    assert res.end_date.year == now.year
+
+
+def test_getassignmentgrade(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+    # make a dummy student to do work
+    student1 = test_user('student1', 'password', 'test_course_1')
+    student1.logout()
+
+    test_user_1.make_instructor()
+    test_user_1.login()
+
+    # make dummy assignment
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    my_ass.save_assignment()
+
+    # record a grade for that student on an assignment
+    sid = student1.username
+    acid = 'subc_b_fitb'
+    grade = 5
+    comment = 'OK job'
+    res = test_client.validate('assignments/record_grade',
+            data=dict(sid=sid,
+                      acid = acid,
+                      grade = grade,
+                      comment = comment))
+
+    test_user_1.logout()
+
+    # check unreleased assignment grade
+    student1.login()
+    kwargs = dict(
+            div_id = acid
+            )
+    test_client.validate('ajax/getassignmentgrade', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+    assert res[0]['grade'] == 'Not graded yet'
+    assert res[0]['comment'] == 'No Comments'
+    assert res[0]['avg'] == 'None'
+    assert res[0]['count'] == 'None'
+    student1.logout()
+
+    # release grade 
+    test_user_1.login()
+    my_ass.release_grades()
+    test_user_1.logout()
+
+    # check grade again
+    student1.login()
+    kwargs = dict(
+            div_id = acid
+            )
+    test_client.validate('ajax/getassignmentgrade', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+    assert res[0]['grade'] == 5
+    assert res[0]['version'] == 2
+    assert res[0]['max'] == 10
+    assert res[0]['comment'] == comment
+    
+
+def test_get_datafile(test_client, test_user_1, test_user, runestone_db_tools):
+
+    # Create some datafile into the db and then read it out using the ajax/get_datafile()
+    db = runestone_db_tools.db
+    db.source_code.insert(course_id='test_course_1',
+        acid='mystery.txt',
+        main_code = 'hello world')
+
+    test_user_1.make_instructor()
+    test_user_1.login()
+    kwargs = dict(
+            course_id = 'test_course_1',
+            acid = 'mystery.txt'
+            )
+    test_client.validate('ajax/get_datafile', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+    assert res['data'] == 'hello world'
+
+    # non-existant datafile
+    kwargs = dict(
+            course_id = 'test_course_1',
+            acid = 'thisWillNotBeThere.txt'
+            )
+    test_client.validate('ajax/get_datafile', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+    assert res['data'] is None
 
 
 
