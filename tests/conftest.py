@@ -278,9 +278,9 @@ class _RunestoneDbTools(object):
         # The ID of the course in which the user will be an instructor.
         course_id):
 
-        course_instructor_id =  self.db.course_instructor.insert(course=course_id, instructor=user_id)
-        self.db.commit()
         db = self.db
+        course_instructor_id = db.course_instructor.insert(course=course_id, instructor=user_id)
+        db.commit()
         return course_instructor_id
 
 
@@ -309,7 +309,7 @@ class _TestClient(WebClient):
     def validate(self,
         # The relative URL to validate.
         url,
-        # An optional string that, if provided, must be in the text returned by the server. If this is a list of strings, at least one of the provided strings but be in the text returned by the server.
+        # An optional string that, if provided, must be in the text returned by the server. If this is a sequence of strings, all of the provided strings must be in the text returned by the server.
         expected_string='',
         # The number of validation errors expected. If None, no validation is performed.
         expected_errors=None,
@@ -335,7 +335,7 @@ class _TestClient(WebClient):
                 if isinstance(expected_string, str):
                     assert expected_string in self.text
                 else:
-                    # Assume ``expected_string`` is a list of strings.
+                    # Assume ``expected_string`` is a sequence of strings.
                     assert all(string in self.text for string in expected_string)
 
             if expected_errors is not None:
@@ -656,9 +656,7 @@ class _TestAssignment(object):
                       released='yes'))
         assert self.test_client.text == 'Success'
 
+
 @pytest.fixture
 def test_assignment(test_client, test_user, runestone_db_tools):
     return lambda *args, **kwargs: _TestAssignment(test_client, test_user, runestone_db_tools, *args, **kwargs)
-
-
-
