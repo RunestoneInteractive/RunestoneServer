@@ -1109,6 +1109,7 @@ def releasegrades():
 
     except Exception as ex:
         logger.error(ex)
+        return "ERROR"
 
     if released:
         # send lti grades
