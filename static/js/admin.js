@@ -1907,29 +1907,25 @@ function toggle_release_grades() {
         release_state = assignment_release_states[assignment];
         var ids = assignmentids;
         var assignmentid = ids[assignment];
-        var obj = new XMLHttpRequest();
         if (release_state == true) {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = null;
-            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=no', true);
-            obj.send(JSON.stringify({ variable: 'variable' }));
-            obj.onreadystatechange = function () {
-                if (obj.readyState == 4 && obj.status == 200) {
-                    alert("Grades are now hidden from students for " + assignment);
-                }
-            }
-        }
+            let data = {assignmentid: assignmentid,
+                        released: 'no'};
 
+            jQuery.post('/runestone/admin/releasegrades', data, function(mess,stat,w) {
+                alert(`${mess} Grades are now hidden from students for ${assignment}`);
+            });
+        }
         else {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = true;
-            obj.open('POST', '/runestone/admin/releasegrades?assignmentid=' + assignmentid + '&released=yes', true);
-            obj.send(JSON.stringify({ variable: 'variable' }));
-            obj.onreadystatechange = function () {
-                if (obj.readyState == 4 && obj.status == 200) {
-                    alert("Grades are now visible to students for " + assignment);
-                }
-            }
+            let data = {assignmentid: assignmentid,
+                released: 'yes'};
+
+            jQuery.post('/runestone/admin/releasegrades', data, function(mess,stat,w) {
+                alert(`${mess}: Grades are now visible to students for ${assignment}`);
+            });
         }
         set_release_button();
     }
