@@ -102,13 +102,5 @@ if __name__ == '__main__':
         testf_string = " ".join(['applications/runestone/tests/{}'.format(i) for i in test_files])
         xqt('{} -m coverage erase'.format(sys.executable),
             '{} -m pytest -v {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
+            '{} -m coverage report'.format(sys.executable)
         )
-
-    if '-k' not in extra_args or parsed_args.runold:
-        xqt('rsmanage initdb --reset --force')
-        xqt('psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
-        with pushd('../../..'):
-            xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-                for x in ['test_ajax.py']]
-            )
-            xqt('{} -m coverage report'.format(sys.executable))
