@@ -8,7 +8,7 @@ db.define_table('sections',
     label=('Course ID'),
     required=True
     ),
-  migrate='runestone_sections.table'
+  migrate=table_migrate_prefix + 'sections.table'
   )
 class ExtendedSection(object):
   def get_users(self):
@@ -33,19 +33,11 @@ db.sections.virtualfields.append(ExtendedSection())
 db.define_table('section_users',
   Field('auth_user',db.auth_user, required=True),
   Field('section',db.sections, label="Section ID", required=True),
-  migrate= 'runestone_section_users.table',
+  migrate=table_migrate_prefix + 'section_users.table',
   )
 
 section_users = db((db.sections.id==db.section_users.section) & (db.auth_user.id==db.section_users.auth_user))
 
-db.define_table('pipactex_deadline',
-  Field('acid_prefix', 'string'),  # acid = actice code id
-  Field('deadline', 'datetime'),
-  Field('section', db.sections, label="Section ID"),
-  migrate='runestone_pipactex_deadline.table')
-
-db.pipactex_deadline.section.requires = IS_IN_DB(db, 'sections.id', '%(name)s',
-                                 zero=T('choose one'))
 
 #
 # when a user registers for a course, add them to the default section.

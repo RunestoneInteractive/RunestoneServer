@@ -1,13 +1,11 @@
 Runestone Interactive Server and API
 ====================================
 
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :alt: Join the chat at https://gitter.im/bnmnetp/runestone
-   :target: https://gitter.im/bnmnetp/runestone?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: https://travis-ci.org/RunestoneInteractive/RunestoneServer.svg?branch=master
+    :target: https://travis-ci.org/RunestoneInteractive/RunestoneServer
 
-.. image:: https://travis-ci.com/RunestoneInteractive/RunestoneComponents.svg?branch=master
-   :alt: Build Status
-
+.. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.png?branch=master
+   :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
 
 Relationship to other Runestone components
 ------------------------------------------
@@ -241,7 +239,6 @@ The Harder Way
 * create an account for yourself
 
   * insert new auth_user
-  * cohort id should be "id"
   * Course name should be the course name from above (not a number)
   * Do *not* make up a registration key or a reset password key; leave them blank
 
@@ -332,3 +329,30 @@ Note, because this interactive edition makes use of lots of HTML 5 and Javascrip
 I highly recommend either Chrome, or Safari.  Firefox 6+ works too, but has
 proven to be less reliable than the first two.  I have no idea whether this works
 at all under later versions of Internet Explorer.
+
+
+Researchers
+-----------
+
+If you use Runestone in your Research or write about it, please reference ``https://runestone.academy`` and cite this paper:
+
+::
+
+   @inproceedings{Miller:2012:BPE:2325296.2325335,
+    author = {Miller, Bradley N. and Ranum, David L.},
+    title = {Beyond PDF and ePub: Toward an Interactive Textbook},
+    booktitle = {Proceedings of the 17th ACM Annual Conference on Innovation and Technology in Computer Science Education},
+    series = {ITiCSE '12},
+    year = {2012},
+    isbn = {978-1-4503-1246-2},
+    location = {Haifa, Israel},
+    pages = {150--155},
+    numpages = {6},
+    url = {http://doi.acm.org/10.1145/2325296.2325335},
+    doi = {10.1145/2325296.2325335},
+    acmid = {2325335},
+    publisher = {ACM},
+    address = {New York, NY, USA},
+    keywords = {cs1, ebook, sphinx},
+   } 
+

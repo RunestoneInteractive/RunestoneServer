@@ -363,16 +363,11 @@ def getprog():
     return json.dumps([res])
 
 
-@auth.requires_membership('instructor')
-def savegrade():
-    res = db(db.code.id == request.vars.id)
-    if request.vars.grade:
-        res.update(grade = float(request.vars.grade))
-    else:
-        res.update(comment = request.vars.comment)
-
 
 #@auth.requires_login()
+# This function is deprecated as of June 2019
+# We need to keep it in place as long as we continue to serve books
+# from runestone/static/  When that period is over we can eliminate
 def getuser():
     response.headers['content-type'] = 'application/json'
 
@@ -387,7 +382,6 @@ def getuser():
                 clist.append(row.course_name)
             res = {'email': auth.user.email,
                    'nick': auth.user.username,
-                   'cohortId': auth.user.cohort_id,
                    'donated': auth.user.donated,
                    'isInstructor': verifyInstructorStatus(auth.user.course_name, auth.user.id),
                    'course_list': clist
@@ -558,7 +552,7 @@ def getCompletionStatus():
             db.user_sub_chapter_progress.insert(user_id=auth.user.id,
                                                 chapter_id = lastPageChapter,
                                                 sub_chapter_id = lastPageSubchapter,
-                                                status = -1)
+                                                status = -1, start_date=datetime.datetime.utcnow())
             # the chapter might exist without the subchapter
             result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
             if not result:

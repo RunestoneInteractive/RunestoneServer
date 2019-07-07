@@ -1,8 +1,7 @@
+import signal
 from os import path
 import os
-from datetime import date, timedelta
 import datetime
-import re
 from random import randint
 from collections import OrderedDict
 from paver.easy import sh
@@ -159,6 +158,9 @@ def sections_update():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def assignments():
+    """
+    This is called for the assignments tab on the instructor interface
+    """
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
     for row in cur_assignments:
@@ -639,13 +641,22 @@ def grading():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeStudents():
+    """
+    Remove one or more students from the current course
+    The query string should contain the key studentList which can be either
+    a single id from auth_user or it could be a list of ids.
+
+    This does not remove a student from the database but rather marks them as inactive in
+    the database and moves them to the basecourse.
+    """
+
     baseCourseName = db(db.courses.course_name == auth.user.course_name).select(db.courses.base_course)[0].base_course
     baseCourseID = db(db.courses.course_name == baseCourseName).select(db.courses.id)[0].id
     answer_tables = ['mchoice_answers', 'clickablearea_answers', 'codelens_answers',
                      'dragndrop_answers', 'fitb_answers','parsons_answers',
                      'shortanswer_answers']
 
-    if not isinstance(request.vars["studentList"], basestring):
+    if not isinstance(request.vars["studentList"], str):
         # Multiple ids selected
         studentList = request.vars["studentList"]
     elif request.vars["studentList"] == "None":
@@ -677,6 +688,10 @@ def removeStudents():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeinstructor():
+    """
+    admin/removeinstructor/<int>
+
+    """
     removed = []
     if request.args[0] != str(auth.user.id):
         db((db.course_instructor.instructor == request.args[0]) & (db.course_instructor.course == auth.user.course_id)).delete()
@@ -689,6 +704,10 @@ def removeinstructor():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def addinstructor():
+    """
+    admin/addinstructor/<int>
+
+    """
     response.headers['content-type'] = 'application/json'
     instructor = request.args(0)
     res = db(db.auth_user.id == instructor).select().first()
@@ -707,13 +726,16 @@ def deletecourse():
     course_name = auth.user.course_name
     cset = db(db.courses.course_name == course_name)
     if not cset.isempty():
-        courseid = cset.select(db.courses.id).first()
+        res = cset.select(db.courses.id, db.courses.base_course).first()
+        courseid = res.id
+        basecourse = res.base_course
+        bcid = db(db.courses.course_name == basecourse).select(db.courses.id).first()
         qset = db((db.course_instructor.course == courseid) & (db.course_instructor.instructor == auth.user.id))
         if not qset.isempty():
             qset.delete()
             students = db(db.auth_user.course_id == courseid)
-            students.update(course_id=1)
-            uset=db(db.user_courses.course_id == courseid.id)
+            students.update(course_id=bcid)
+            uset=db(db.user_courses.course_id == courseid)
             uset.delete()
             db(db.courses.id == courseid).delete()
             try:
@@ -771,18 +793,6 @@ def createAssignment():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def getQuestions():
-    assignment_id = request.vars['assignmentid']
-    assignment_questions = db(db.assignment_questions.assignment_id == assignment_id).select()
-    questions = []
-    for row in assignment_questions:
-        question_info_query = db(db.questions.id == int(row.question_id)).select()
-        for q in question_info_query:
-            questions.append(q.name)
-    return json.dumps(questions)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
     response.headers['content-type'] = 'application/json'
     logger.error("in questionbank")
@@ -790,20 +800,20 @@ def questionBank():
     base_course = row.base_course
 
     tags = False
-    if request.vars['tags'] != "":
+    if request.vars['tags']:
         tags = True
     term = False
-    if request.vars['term'] != "":
+    if request.vars['term']:
         term = True
     chapterQ = None
-    if request.vars['chapter'] != "":
+    if request.vars['chapter']:
         chapter_label = db(db.chapters.chapter_label == request.vars['chapter']).select(db.chapters.chapter_label).first().chapter_label
         chapterQ =  db.questions.chapter == chapter_label
     difficulty = False
-    if request.vars['difficulty'] != "":
+    if request.vars['difficulty']:
         difficulty = True
     authorQ = None
-    if request.vars['author'] != "":
+    if request.vars['author'] :
         authorQ = db.questions.author == request.vars['author']
     rows = []
     questions = []
@@ -882,6 +892,12 @@ def addToAssignment():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getQuestionInfo():
+    """
+    called by the questionBank search  interface
+    Request Vars required:
+    * assignment -- integer assignment id
+    * question -- the name of the question
+    """
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
     base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
@@ -974,43 +990,6 @@ def question_text():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def searchstudents():
-    if request.args[0] == "_":
-        #seperate the students from instructors in a hopefully more efficient way
-        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
-        searchdict = {}
-        for row in cur_students:
-            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (db.course_instructor.instructor == row.user_id)).select()
-            instructorlist = []
-            for line in isinstructor:
-                instructorlist.append(line.instructor)
-            if row.user_id not in instructorlist:
-                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name,
-                                                               db.auth_user.last_name)
-                for identity in person:
-                    name = identity.first_name + " " + identity.last_name
-                    searchdict[row.user_id] = name
-
-    else:
-        cur_students = db(db.user_courses.course_id == auth.user.course_id).select(db.user_courses.user_id)
-        searchdict = {}
-        for row in cur_students:
-            isinstructor = db((db.course_instructor.course == auth.user.course_id) & (
-            db.course_instructor.instructor == row.user_id)).select()
-            instructorlist = []
-            for line in isinstructor:
-                instructorlist.append(line.instructor)
-            if row.user_id not in instructorlist:
-                person = db(db.auth_user.id == row.user_id).select(db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name)
-                for identity in person:
-                    if request.args[0] in identity.first_name or request.args[0] in identity.last_name:
-                        name = identity.first_name + " " + identity.last_name
-                        searchdict[row.user_id] = name
-
-    return json.dumps(searchdict)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def gettemplate():
     template = request.args[0]
     returndict = {}
@@ -1031,6 +1010,24 @@ def gettemplate():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createquestion():
+    """
+    called from the questionBank interface when an instructor adds a new question to
+    an assignment by writing it themselves
+    request.vars parameters include
+    * template - The kind  of question
+    * name - the unique identifier
+    * question - rst source for the question
+    * difficulty 0-5
+    * tags
+    * chapter
+    * subchapter  'Exercises' by default
+    * isprivate is this question shared with everyone?
+    * tab
+    * assignmentid': assignmentid
+    * points integer number of points
+    * timed- is this part of a timed exam
+    * htmlsrc htmlsrc from the previewer
+    """
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
@@ -1081,17 +1078,6 @@ def htmlsrc():
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def getStudentCode():
-    try:
-        acid = request.vars['acid']
-        sid = request.vars['sid']
-        c = db((db.code.acid == acid) & (db.code.sid == sid)).select(orderby = db.code.id).last()
-        return json.dumps(c.code)
-    except Exception as ex:
-        logger.error(ex)
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getGradeComments():
 
     acid = request.vars['acid']
@@ -1105,15 +1091,6 @@ def getGradeComments():
         return json.dumps({'grade':c.score, 'comments':c.comment})
     else:
         return json.dumps("Error")
-
-
-
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def coursename():
-    row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
-    return json.dumps(row.course_name)
-
-
 
 def _get_assignment(assignment_id):
     return db(db.assignments.id == assignment_id).select().first()
@@ -1132,6 +1109,7 @@ def releasegrades():
 
     except Exception as ex:
         logger.error(ex)
+        return "ERROR"
 
     if released:
         # send lti grades
@@ -1425,7 +1403,8 @@ def save_assignment():
             duedate=due,
             visible=request.vars['visible']
         )
-        return json.dumps({request.vars['name']: assignment_id})
+        return json.dumps({request.vars['name']: assignment_id,
+                           'status': 'success'})
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')
@@ -1516,7 +1495,8 @@ def add__or_update_assignment_question():
             activity_count=activity_count,
             activities_required=activities_required,
             autograde_possible_values=AUTOGRADE_POSSIBLE_VALUES[question_type],
-            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type]
+            which_to_grade_possible_values=WHICH_TO_GRADE_POSSIBLE_VALUES[question_type],
+            status = 'success'
         ))
     except Exception as ex:
         logger.error(ex)
@@ -1593,14 +1573,8 @@ def reorder_assignment_questions():
 
     return json.dumps("Reordered in DB")
 
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def checkQType():
-    acid = request.vars['acid']
-    sid = request.vars['sid']
-    answer = None
-    useinfoquery = db((db.useinfo.div_id == acid) & (db.useinfo.sid == sid)).select(db.useinfo.event, db.useinfo.act).first()
-    if useinfoquery != None:
-        if useinfoquery.event == 'shortanswer':
-            answer = useinfoquery.act
 
-    return json.dumps(answer)
+def killer():
+    print(routes_onerror)
+    x = 5 / 0
+    return 'ERROR'

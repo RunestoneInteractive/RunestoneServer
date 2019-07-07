@@ -12,6 +12,7 @@
 # https://github.com/tophatmonocle/ims_lti_py
 
 from lxml import etree, objectify
+import six
 
 CODE_MAJOR_CODES = [
     'success',

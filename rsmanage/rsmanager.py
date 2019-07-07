@@ -12,7 +12,7 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
 
 # configuration
 REQ_ENV = ['WEB2PY_CONFIG', 'DBURL']
-OPT_ENV = ['TEST_DBURL','WEB2PY_MIGRATE']
+OPT_ENV = ['WEB2PY_MIGRATE']
 APP = 'runestone'
 APP_PATH = 'applications/{}'.format(APP)
 DBSDIR = '{}/databases'.format(APP_PATH)
@@ -80,24 +80,28 @@ def initdb(config, list_tables, reset, fake, force):
     if reset:
         if not force:
             click.confirm("Resetting the database will delete the database and the contents of the databases folder.  Are you sure?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
-        res = subprocess.call("dropdb --if-exists --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
+        res = subprocess.call("dropdb --if-exists --host={} --username={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         if res == 0:
-            res = subprocess.call("createdb --echo --host={} --user={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
+            res = subprocess.call("createdb --echo --host={} --username={} {}".format(config.dbhost, config.dbuser, config.dbname),shell=True)
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
 
         click.echo("Removing all files in databases/")
+        table_migrate_prefix = 'runestone_'
+        if config.conf == 'test':
+            table_migrate_prefix = 'test_runestone_'
         for the_file in os.listdir(DBSDIR):
             file_path = os.path.join(DBSDIR, the_file)
             try:
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path) and file_path.startswith(os.path.join(DBSDIR,table_migrate_prefix)):
+                    print("removing ", file_path)
                     os.unlink(file_path)
             except Exception as e:
                 print(e)
 
 
-    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake:
+    if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake and not force:
         click.confirm("It appears you already have database migration information do you want to proceed?", default=False, abort=True, prompt_suffix=': ', show_default=True, err=False)
 
     click.echo(message='Initializing the database', file=None, nl=True, err=False, color=None)
@@ -170,42 +174,46 @@ def shutdown(config):
 @cli.command()
 @click.option("--course-name", help="The name of a course to create")
 @click.option("--basecourse", help="The name of the basecourse")
-@click.option("--start-date", help="Start Date for the course in YYYY-MM-DD")
-@click.option("--python3", is_flag=True, help="Use python3 style syntax")
-@click.option("--login-required", is_flag=True, help="Only registered users can access this course?")
-@click.option("--institution", help="Your institution")
+@click.option("--start-date", default='2001-01-01', help="Start Date for the course in YYYY-MM-DD")
+@click.option("--python3", is_flag=True, default=True, help="Use python3 style syntax")
+@click.option("--login-required", is_flag=True, default=True, help="Only registered users can access this course?")
+@click.option("--institution", default='Anonymous', help="Your institution")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
 @click.option("--allow_pairs", is_flag=True, default=False, help="enable experimental pair programming support")
 @pass_config
-def addcourse(config, course_name, basecourse, start_date, python3, login_required, institution, language, host, allow_pairs):
+def addcourse(config, course_name, basecourse, start_date, python3, login_required,
+     institution, language, host, allow_pairs):
     """Create a course in the database"""
 
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
     done = False
+    if course_name:
+        use_defaults = True
+    else:
+        use_defaults = False
     while not done:
         if not course_name:
             course_name = click.prompt("Course Name")
-        if not python3:
+        if not python3 and not use_defaults:
             python3 = 'T' if click.confirm("Use Python3 style syntax?", default='T') else 'F'
         else:
-            python3 = 'T'
-        if not basecourse:
+            python3 = 'T' if python3 else 'F'
+        if not basecourse and not use_defaults:
             basecourse = click.prompt("Base Course")
-        if not start_date:
+        if not start_date and not use_defaults:
             start_date = click.prompt("Start Date YYYY-MM-DD")
-        if not institution:
+        if not institution and not use_defaults:
             institution = click.prompt("Your institution")
-        if not login_required:
+        if not login_required and not use_defaults:
             login_required = 'T' if click.confirm("Require users to log in", default='T') else 'F'
         else:
-            login_required = 'T'
-
-        if not allow_pairs:
+            login_required = 'T' if login_required else 'F'
+        if not allow_pairs and not use_defaults:
             allow_pairs = 'T' if click.confirm("Enable pair programming support", default=False) else 'F'
         else:
-            allow_pairs = 'F'
+            allow_pairs = 'T' if allow_pairs else 'F'
 
         res = eng.execute("select id from courses where course_name = '{}'".format(course_name)).first()
         if not res:
@@ -219,7 +227,6 @@ def addcourse(config, course_name, basecourse, start_date, python3, login_requir
 
     click.echo("Course added to DB successfully")
 
-    makePavement(host, python3, login_required, course_name, basecourse, language, allow_pairs)
 
 #
 #    build
@@ -358,6 +365,29 @@ def inituser(config, instructor, fromfile, username, password, first_name, last_
             exit(1)
         else:
             click.echo("Success")
+
+@cli.command()
+@click.option("--username", help="Username, must be unique")
+@click.option("--password", help="password - plaintext -- sorry")
+@pass_config
+def resetpw(config, username, password):
+    """Utility to change a users password. Useful If they can't do it through the normal mechanism"""
+    userinfo = {}
+    userinfo['username'] = username or click.prompt("Username")
+    userinfo['password'] = password or click.prompt("Password", hide_input=True)
+    eng = create_engine(config.dburl)
+    res = eng.execute("select * from auth_user where username = %s", userinfo['username']).first()
+    if not res:
+        click.echo("ERROR - User: {} does not exist.".format(userinfo['username']))
+        exit(1)
+
+    os.environ['RSM_USERINFO'] = json.dumps(userinfo)
+    res = subprocess.call("python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw", shell=True)
+    if res != 0:
+        click.echo("Failed to create user {} error {} fix your data and try again. Use --verbose for more detail".format(userinfo['username'], res))
+        exit(1)
+    else:
+        click.echo("Success")
 
 @cli.command()
 @click.option("--checkdb", is_flag=True, help="check state of db and databases folder")
@@ -504,10 +534,22 @@ def checkEnvironment():
     Check the list of required and optional environment variables to be sure they are defined.
     """
     stop = False
-    for var in REQ_ENV:
-        if var not in os.environ:
+    assert os.environ['WEB2PY_CONFIG']
+    config = os.environ['WEB2PY_CONFIG']
+
+    if config  == 'production':
+        for var in REQ_ENV:
+            if var not in os.environ:
+                stop = True
+                click.echo("Missing definition for {} environment variable".format(var))
+    elif config == 'test':
+        if 'TEST_DBURL' not in os.environ:
             stop = True
-            click.echo("Missing definition for {} environment variable".format(var))
+            click.echo("Missing definition for TEST_DBURL environment variable")
+    elif config == 'development':
+        if 'DEV_DBURL' not in os.environ:
+            stop = True
+            click.echo("Missing definition for DEV_DBURL environment variable")
 
     for var in OPT_ENV:
         if var not in os.environ:
@@ -532,32 +574,6 @@ def findProjectRoot():
         start = os.path.dirname(start)
     raise IOError("You must be in a web2py application to run rsmanage")
 
-
-def makePavement(http_host, python3, login_required, course_name, base_course, language, allow_pairs):
-    paver_stuff = resource_string('runestone', 'common/project_template/pavement.tmpl')
-    opts = {'master_url': 'https://' + http_host,
-            'project_name': course_name,
-            'build_dir': 'build',
-            'log_level': 10,
-            'use_services': 'true',
-            'dburl': os.environ.get("DBURL"),
-            'basecourse': base_course,
-            'default_ac_lang': language,
-            'downloads_enabled': 'false',
-            'enable_chatcodes': 'false',
-            'login_req': 'true' if login_required else 'false',
-            'python3': 'true' if python3 else 'false',
-            'dest': '../../static',
-            'allow_pairs': 'true' if allow_pairs else 'false',
-            'short_name': course_name
-            }
-
-    paver_stuff = paver_stuff % opts
-    if not os.path.exists(os.path.join(CUSTOMDIR,course_name)):
-        os.mkdir(os.path.join(CUSTOMDIR,course_name))
-
-    with open(os.path.join(CUSTOMDIR, course_name, 'pavement.py'), 'w') as fp:
-        fp.write(paver_stuff)
 
 #
 #    fill_practice_log_missings

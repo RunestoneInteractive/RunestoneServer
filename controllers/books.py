@@ -18,6 +18,11 @@
 # ----------------
 import os
 import posixpath
+import json
+import logging
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 # Third-party imports
 # -------------------
@@ -44,7 +49,7 @@ def _route_book(is_published=True, is_open=False):
     if is_open == False and is_published and not db((db.user_courses.user_id == auth.user.id) &
         (db.user_courses.course_id == auth.user.course_id)).select(
         db.user_courses.id, **cache_kwargs).first():
-
+        session.flash = "Sorry you are not registered for this course.  You can view most Open courses if you log out"
         redirect(URL(c='default', f='courses'))
 
     # Look up the course name.
@@ -79,20 +84,69 @@ def _route_book(is_published=True, is_open=False):
         if not os.path.isfile(book_path):
             raise HTTP(404)
         response.view = book_path
-
+        chapter = os.path.split(os.path.split(book_path)[0])[1]
+        subchapter = os.path.basename(os.path.splitext(book_path)[0])
+        div_counts = {}
         if auth.user:
             user_id = auth.user.username
             email = auth.user.email
+            is_logged_in = 'true'
+            # Get the necessary information to update subchapter progress on the page
+            page_divids = db((db.questions.subchapter == subchapter) &
+                             (db.questions.base_course == base_course)).select(db.questions.name)
+            div_counts = {q.name:0 for q in page_divids}
+            sid_counts = db((db.questions.subchapter == subchapter) &
+                            (db.questions.base_course == base_course) &
+                            (db.questions.name == db.useinfo.div_id) &
+                            (db.useinfo.course_id == auth.user.course_name) &
+                            (db.useinfo.sid == auth.user.username)).select(db.useinfo.div_id, distinct=True)
+            for row in sid_counts:
+                div_counts[row.div_id] = 1
         else:
             user_id = 'Anonymous'
             email = ''
-        return dict(course_name=course.course_name, base_course=base_course,
-                    user_id=user_id, email=email, is_instructor=user_is_instructor)
+            is_logged_in = 'false'
+
+        if session.readings:
+            reading_list = session.readings
+        else:
+            reading_list = 'null'
+
+        # TODO: - Add log entry for page view
+        try:
+            db.useinfo.insert(sid=user_id, act='view', div_id=book_path,
+                event='page', timestamp=datetime.datetime.utcnow(),
+                course_id=course.course_name)
+        except:
+            logger.debug('failed to insert log record for {} in {} : {} {} {}'.format(sid, course, div_id, event, act))
+
+        return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
+                    user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=XML(reading_list),
+                    activity_info=json.dumps(div_counts), subchapter_list=_subchaptoc(base_course, chapter))
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
 _os_alt_seps = list(sep for sep in [os.path.sep, os.path.altsep]
                     if sep not in (None, '/'))
+
+def _subchaptoc(course, chap):
+    res = db( (db.chapters.id == db.sub_chapters.chapter_id) &
+            (db.chapters.course_id == course ) &
+            (db.chapters.chapter_label == chap) ).select(db.chapters.chapter_num,
+                    db.sub_chapters.sub_chapter_num,
+                    db.chapters.chapter_label,
+                    db.sub_chapters.sub_chapter_label,
+                    db.sub_chapters.sub_chapter_name, orderby=db.sub_chapters.sub_chapter_num,
+                    cache=(cache.ram, 3600), cacheable=True)
+    toclist = []
+    for row in res:
+        sc_url = "{}.html".format(row.sub_chapters.sub_chapter_label)
+        title = "{}.{} {}".format(row.chapters.chapter_num,
+                                 row.sub_chapters.sub_chapter_num,
+                                 row.sub_chapters.sub_chapter_name)
+        toclist.append(dict(subchap_uri=sc_url, title=title))
+
+    return toclist
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L216.
@@ -130,12 +184,15 @@ def published():
     if auth.user:
         return _route_book()
     else:
-        base_course = request.args[0]
+        base_course = request.args(0)
         course = db(db.courses.course_name == base_course).select(cache=(cache.ram, 3600), cacheable=True).first()
-        if course.login_required == 'T':
-            if auth.user:
-                return _route_book()
+        if course:
+            if course.login_required == 'T':
+                if auth.user:
+                    return _route_book()
+                else:
+                    redirect(URL(c='default', f='user'))
             else:
-                redirect(URL(c='default', f='user'))
+                return _route_book(is_open=True)
         else:
-            return _route_book(is_open=True)
+            redirect(URL(c='default', f='user'))

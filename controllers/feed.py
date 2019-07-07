@@ -25,7 +25,7 @@ def everyday():
                                  sort_time=stime
                                  ))
     entry_list = []
-    os.path.walk("applications/%s/everyday/2013"%request.application,get_posts,entry_list)
+    os.walk("applications/%s/everyday/2013"%request.application,get_posts,entry_list)
     entry_list.sort(key=lambda x: x['sort_time'])
     return dict(title="Everyday Python",
                 link = "http://interactivepython.org/courselib/feed/everyday.rss",

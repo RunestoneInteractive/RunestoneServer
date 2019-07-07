@@ -1,0 +1,8 @@
+#!/bin/bash
+# bash -c "clear && docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'"
+
+echo "$@"
+basecomm="cd applications/runestone/tests; cp .coveragerc ../../../ ; python run_tests.py"
+dcomm="$basecomm $@"
+docker exec -it runestoneserver_runestone_1 bash -c "$dcomm"
+

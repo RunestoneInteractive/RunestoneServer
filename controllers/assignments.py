@@ -1,17 +1,27 @@
-from os import path
-import os
-import shutil
-import sys
+# *********************************************
+# |docname| - Endpoints relating to assignments
+# *********************************************
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import json
 import logging
 import datetime
 from random import shuffle
 from collections import OrderedDict
+
+# Third-party imports
+# -------------------
 from psycopg2 import IntegrityError
 from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+from db_dashboard import DashboardDataAnalyzer
 import six
 import bleach
-import six
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -319,36 +329,6 @@ def record_assignment_score():
             manual_total=True
         )
 
-# download a CSV with the student's performance on all assignments so far
-@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
-def download_time_spent():
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    students = db(db.auth_user.course_id == course.id).select()
-    assignments = db(db.assignments.course == course.id)(db.assignments.assignment_type == db.assignment_types.id
-                                                         ).select(orderby=db.assignments.assignment_type)
-    grades = db(db.grades).select()
-
-    field_names = ['Lastname','Firstname','Email','Total']
-    type_names = []
-    assignment_names = []
-
-    # datestr should be in format "05-20-13"
-    datestr = request.vars.as_of
-    try:
-        as_of_timestamp = datetime.datetime.strptime(datestr, '%m-%d-%y')
-    except:
-        return dict(error="Please enter ?as_of=03-24-16")
-    # probably broken now; assignment_types is deprecated and maybe not filled in correctly
-    # assignment_types = db(db.assignment_types).select(db.assignment_types.ALL, orderby=db.assignment_types.name)
-    rows = [CourseGrade(user=student,
-                        course=course,
-                        assignment_types=[]).csv(type_names,
-                                                 assignment_names,
-                                                 as_of_timestamp=as_of_timestamp
-                                                 ) for student in students]
-    response.view='generic.csv'
-    return dict(filename='grades_download.csv', csvdata=rows, field_names=field_names+type_names+assignment_names)
-
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
@@ -384,6 +364,9 @@ def autograde():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():
+    """
+    Called from the grading interface when the instructor manually records a grade.
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
@@ -418,6 +401,9 @@ def record_grade():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_problem():
+    """
+    Called from the instructors grading interface
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
@@ -615,13 +601,16 @@ def doAssignment():
                 status = 'notstarted'
             info['status'] = status
 
-            readings[ch_name]['subchapters'].append(info)
-            readings_score += info['score']
+            # Make sure we don't create duplicate entries for older courses. New style
+            # courses only have the base course in the database, but old will have both
+            if info not in readings[ch_name]['subchapters']:
+                readings[ch_name]['subchapters'].append(info)
+                readings_score += info['score']
 
         else:
-            # add to questions
-            questionslist.append(info)
-            questions_score += info['score']
+            if info not in questionslist:# add to questions
+                questionslist.append(info)
+                questions_score += info['score']
 
     # put readings into a session variable, to enable next/prev button
     readings_names = []

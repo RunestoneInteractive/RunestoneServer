@@ -71,14 +71,23 @@ dbstate="$?"
 info "Got result of $dbstate"
 set -e
 
+# since this is a dev environment a rebuild of the container does not necessarily
+# mean that the book you want will be totally clean, and so a build of an already built
+# book in a fresh container will result in a database that is missing the questions.
+# setting buildargs to --all when we have a clean db will ensure that does not happen
+
+buildargs=""
+
 case $dbstate in
     0)
         info "Initializing DB and databases"
         rsmanage initdb
+        buildargs="--all"
         ;;
     1)
         info "Removing databases folder and initializing"
         rsmanage initdb --reset --force
+        buildargs="--all"
         ;;
     2)
         info "Warning -- Database initialized but missing databases/ Trying a fake migration"
@@ -146,7 +155,7 @@ cd "${BOOKS_PATH}"
     (
         cd $book;
         if [ ! -f NOBUILD ]; then
-            runestone build && runestone deploy
+            runestone build $buildargs deploy
         else
             info "skipping $book due to NOBUILD file"
         fi

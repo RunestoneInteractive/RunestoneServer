@@ -1,89 +1,177 @@
-import unittest
 import json
-import sys
-from gluon.globals import Request, Session
-from gluon.tools import Auth
-
-#     getGradeComments      24180 273.000    6281
-# add__or_update_assignment_question        14059 678.000    7232
-#                index       6152 466.000    8119
-#                admin       3924 442.000    5944
-#       get_assignment       2751 356.000    4780
-#      save_assignment       1127 297.000    4363
-#              htmlsrc       1984 308.000    4456
-#      course_students       1816 355.000    4155
-#              grading       2096 620.000    9410
-#          assignments       1954 1401.000          11919
-#      sections_create        132 288.000    2924
-#            startdate         10 309.000     877
-# get_assignment_release_states      1170 312.000    4611
-#        sections_list          5 319.000     591
-#        rebuildcourse         18 213.000    1436
-#       createquestion        153 320.000    3433
-# reorder_assignment_questions        321 321.000    5279
-#                  doc        297 326.000    2765
-#        question_text        394 359.000    3480
-#        edit_question        157 400.000    3448
-#       removeStudents         96 411.000    2922
-#         editindexrst         36 487.000    2960
-#        releasegrades        173 508.000    4220
-# delete_assignment_question          617 540.000    2724
-#         questionBank         21 820.000    4890
-#         deletecourse          5 1221.000           4476
-#               backup          7 40584.000        101069
 
 
-# clean up the database
-db(db.useinfo.div_id == 'unit_test_1').delete()
-db.commit()
-
-class TestAdminEndpoints(unittest.TestCase):
-    def setUp(self):
-        global request, session, auth
-        request = Request(globals()) # Use a clean Request object
-        session = Session()
-        auth = Auth(db, hmac_key=Auth.get_or_create_key())
-        exec(compile(open("applications/runestone/controllers/admin.py").read(), "applications/runestone/controllers/admin.py", 'exec'), globals())
-
-    def test_getGradeComments(self):
-        # Set up the request object
-        auth.login_user(db.auth_user(11))
-        request.vars.acid = 'ex_7_11'
-        request.vars.sid = 'user_1675'
-        res = json.loads(getGradeComments())
-        self.assertEqual(5, res['grade'])
-        self.assertEqual('autograded', res['comments'])
-
-    def test_addinstructor(self):
-        auth.login_user(db.auth_user(11))
-        request.args.append('1675')
-        res = addinstructor()
-        res = db(db.course_instructor.course == 65).select()
-        self.assertEqual(2,len(res))
-        for row in res:
-            self.assertTrue(row.instructor in [11, 1675])
-
-    def test_get_question_id(self):
-        qid = _get_question_id('test-name-incorrect', 65)
-        self.assertEqual(qid, None)
-        qid = _get_question_id('lsh_comphist_1', 65)
-        self.assertEqual(qid, 2093)
-
-    def test_sections_list(self):
-        auth.login_user(db.auth_user(11))
-        sec_list = sections_list()
-        # self.assertEqual(len(sec_list), 2)
-        self.assertEqual(len(sec_list['sections']), 1)
+def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    # Should provide the following to addq_to_assignment
+    # -- assignment (an integer)
+    # -- question == div_id
+    # -- points
+    # -- autograde  one of ['manual', 'all_or_nothing', 'pct_correct', 'interact']
+    # -- which_to_grade one of ['first_answer', 'last_answer', 'best_answer']
+    # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    print(my_ass.questions())
+    db = runestone_db_tools.db
+    my_ass.save_assignment()
+    res = db(db.assignments.name == 'test_assignment').select().first()
+    assert res.description == my_ass.description
+    assert str(res.duedate.date()) == str(my_ass.due.date())
+    my_ass.autograde()
+    my_ass.calculate_totals()
+    my_ass.release_grades()
+    res = db(db.assignments.id == my_ass.assignment_id).select().first()
+    assert res.released == True
 
 
+def test_choose_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    my_ass.description = 'Test Assignment Description'
+    my_ass.make_visible()
+    test_user_1.login()
+    test_client.validate('assignments/chooseAssignment.html','Test Assignment Description')
 
-suite = unittest.TestSuite()
-suite.addTest(unittest.makeSuite(TestAdminEndpoints))
-res = unittest.TextTestRunner(verbosity=2).run(suite)
-if len(res.errors) == 0 and len(res.failures) == 0:
-    print("All tests Passed OK")
-else:
-    print("nonzero errors exiting with 1", res.errors, res.failures)
-    sys.exit(1)
+def test_do_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    my_ass.description = 'Test Assignment Description'
+    my_ass.make_visible()
+    test_user_1.login()
+    # This assignment has the fill in the blank for may had a |blank| lamb
+    test_client.validate('assignments/doAssignment.html', 'Mary had a',
+        data=dict(assignment_id=my_ass.assignment_id))
+
+def test_question_text(test_assignment, test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    test_client.validate('admin/question_text', 'Mary had a',
+            data=dict(question_name='subc_b_fitb'))
+    test_client.validate('admin/question_text', 'Error: ',
+            data=dict(question_name='non_existant_question'))
+
+def test_removeinstructor(test_user, test_client, test_user_1, runestone_db_tools):
+    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+    my_inst.make_instructor()
+    my_inst.login()
+    res = test_client.validate('admin/addinstructor/{}'.format(test_user_1.user_id))
+    assert json.loads(res) == 'Success'
+    res = test_client.validate('admin/removeinstructor/{}'.format(test_user_1.user_id))
+    assert json.loads(res) == [True]
+    res = test_client.validate('admin/removeinstructor/{}'.format(my_inst.user_id))
+    assert json.loads(res) == [False]
+    res = test_client.validate('admin/addinstructor/{}'.format(9999999))
+    assert 'Cannot add non-existent user ' in json.loads(res)
+
+def test_removestudents(test_user, test_client, test_user_1, runestone_db_tools):
+    my_inst = test_user('new_instructor', 'password', 'test_course_1')
+    my_inst.make_instructor()
+    my_inst.login()
+    res = test_client.validate('admin/removeStudents', 'Assignments',
+        data=dict(studentList=test_user_1.user_id))
+
+    db = runestone_db_tools.db
+    res = db(db.auth_user.id == test_user_1.user_id).select().first()
+    assert res.active == False
 
 
+def test_htmlsrc(test_assignment, test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    test_client.validate('admin/htmlsrc', 'Mary had a',
+            data=dict(acid='subc_b_fitb'))
+    test_client.validate('admin/htmlsrc', 'No preview Available',
+            data=dict(acid='non_existant_question'))
+
+
+def test_qbank(test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    qname = 'subc_b_fitb'
+    res = test_client.validate('admin/questionBank',
+            data=dict(term=qname
+            ))
+    res = json.loads(res)
+    assert qname in res
+    res = test_client.validate('admin/questionBank',
+            data=dict(chapter='test_chapter_1'
+            ))
+    res = json.loads(res)
+    assert qname in res
+    assert len(res) >= 4
+    res = test_client.validate('admin/questionBank',
+            data=dict(author='test_author'
+            ))
+    res = json.loads(res)
+    assert qname in res
+    assert len(res) == 2
+
+
+def test_gettemplate(test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    dirlist = ['activecode', 'mchoice', 'fillintheblank']
+    for d in dirlist:
+        res = test_client.validate('admin/gettemplate/{}'.format(d))
+        res = json.loads(res)
+        assert res
+        assert d in res['template']
+
+
+def test_question_info(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    res = test_client.validate('admin/getQuestionInfo', data=dict(
+            assignment=my_ass.assignment_id,
+            question='subc_b_fitb',
+    ))
+    res = json.loads(res)
+    assert res
+    assert res['code']
+    assert res['htmlsrc']
+
+
+def test_create_question(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    data = {
+        'template': 'mchoice',
+        'name': 'test_question_1',
+        'question': "This is fake text for a fake question",
+        'difficulty': 0,
+        'tags': None,
+        'chapter': 'test_chapter_1',
+        'subchapter': 'Exercises',
+        'isprivate': False,
+        'assignmentid': my_ass.assignment_id,
+        'points': 10,
+        'timed': False,
+        'htmlsrc': "<p>Hello World</p>"
+    }
+    res = test_client.validate('admin/createquestion', data=data)
+    res = json.loads(res)
+    assert res
+    assert res['test_question_1']
+
+    db = runestone_db_tools.db
+    row = db(db.questions.id == res['test_question_1']).select().first()
+
+    assert row['question'] == "This is fake text for a fake question"
+
+
+def test_get_assignment(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+
+    res = test_client.validate('admin/get_assignment', data=dict(
+        assignmentid=my_ass.assignment_id
+    ))
+
+    res = json.loads(res)
+    assert res
+    assert res['questions_data']
