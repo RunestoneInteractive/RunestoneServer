@@ -816,9 +816,9 @@ def practice():
         question = questions[(qIndex + 1) % len(questions)]
 
         # This replacement is to render images
-        question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
-                                                                          'src="../static/' + course[
-                                                                              'course_name'] + '/_static/')
+        question.htmlsrc = question.htmlsrc.replace('src="../_static/',
+                                                    'src="../static/' + course[
+                                                    'course_name'] + '/_static/')
         question.htmlsrc = question.htmlsrc.replace("../_images",
                                                     "/{}/static/{}/_images".format(request.application,
                                                                                    course.course_name))
