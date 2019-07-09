@@ -1,61 +1,61 @@
 #lists {background-color: #aaaaaa;}
 
 #boxdiv {width:400px;height:30px;padding:10px;border:3px solid #aaaaaa; margin-bottom:30px; background-color:#FFCC99}
-     
-#boxAxxx, #boxBxxx { 
-	float:left;
-	width:200px; 
-	height:200px; 
-	padding:10px; 
-	margin-right:30px;
-	border:1px solid #000;
-	background-color:#aaa;
+
+#boxAxxx, #boxBxxx {
+    float:left;
+    width:200px;
+    height:200px;
+    padding:10px;
+    margin-right:30px;
+    border:1px solid #000;
+    background-color:#aaa;
 }
 
-#output {        
-        font-size: 14px;
-        font-family: "verdana", Serif;
-        background-color: #ffffff;
-        color: #330033;}
-        
+#output {
+    font-size: 14px;
+    font-family: "verdana", Serif;
+    background-color: #ffffff;
+    color: #330033;}
 
-.homeboxclass { 
-	float:left;
-	width:260px; 
-	height:1500px; 
-	padding:10px; 
-	margin-right:30px;
-	border:3px solid #000;
-	background-color:#dddddd;
+
+.homeboxclass {
+    float:left;
+    width:260px;
+    height:1500px;
+    padding:10px;
+    margin-right:30px;
+    border:3px solid #000;
+    background-color:#dddddd;
 }
 
-.boxclass { 
-	float:left;
-	width:260px; 
-	height:200px; 
-	padding:10px; 
-	margin-right:30px;
-	border:3px solid #000;
-	background-color:#dddddd;
+.boxclass {
+    float:left;
+    width:260px;
+    height:200px;
+    padding:10px;
+    margin-right:30px;
+    border:3px solid #000;
+    background-color:#dddddd;
 }
 
-.contentdiv { 
-	float:left;
-	width:300px; 
-	height:400px; 
-	padding:10px; 
-	margin-right:30px;
-	border:3px solid #000000;
-/*	background-color:#ff6598;*/
+.contentdiv {
+    float:left;
+    width:300px;
+    height:400px;
+    padding:10px;
+    margin-right:30px;
+    border:3px solid #000000;
+/*    background-color:#ff6598;*/
     background-color:#dddddd
 }
-     
+
 .sectionlabel {
     border:1px solid #000000;
 }
-     
+
 .word {
-	width:225px;
+    width:225px;
     height:20px;
     padding:1px;
     margin:5px;
@@ -63,33 +63,35 @@
     font-weight:bold;
     font-size:14px;
     border:1px solid #ff0000;
-	background-color:#fff;
-	display:inline-block;
+    background-color:#fff;
+    display:inline-block;
 }
 
-.clearit{
+.clearit {
     clear:both;
 }
-     
-.hidden{
+
+.hidden {
     display:none;
 }
 
-.nothidden{
+.nothidden {
     display:inline;
 }
 
-.homeboxclass td  {color:#ff0000;}
-
-
-.course-btn{
-	font-size: 16pt;
-	width: 25%;
-	background-color: #909090;
+.homeboxclass td  {
+    color:#ff0000;
 }
 
-.book-btn{
-	font-size: 16pt;
-	width: 25%;
-	background-color: #00cc99;
+
+button.course-btn {
+    font-size: 16pt;
+    width: 50%;
+    background-color: #909090;
+}
+
+button.book-btn {
+    font-size: 16pt;
+    width: 50%;
+    background-color: #00cc99;
 }
