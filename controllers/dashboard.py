@@ -41,7 +41,7 @@ def index():
     chap_map = {}
     for chapter in chapters:
         chap_map[chapter.chapter_label] = chapter.chapter_name
-    for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.get_vars['chapter']):
+    for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
         selected_chapter = chapters.first()
@@ -293,13 +293,21 @@ def exercisemetrics():
         logger.error("It Appears exercisemetrics was called without any request vars")
         session.flash = "Cannot call exercisemetrics directly"
         redirect(URL('dashboard','index'))
-    chapter = request.get_vars['chapter']
-    chapter = db((db.chapters.course_id == auth.user.course_name) & (db.chapters.chapter_label == chapter)).select().first()
+    chapter = request.vars['chapter']
+    base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
+    chapter = db(((db.chapters.course_id == auth.user.course_name) | (db.chapters.course_id == base_course))  &
+        (db.chapters.chapter_label == chapter)).select().first()
+    if not chapter:
+        logger.error("Error -- No Chapter information for {} and {}".format(auth.user.course_name, request.vars['chapter']))
+        session.flash = "No Chapter information for {} and {}".format(auth.user.course_name, request.vars['chapter'])
+        redirect(URL('dashboard','index'))
+
+    # TODO: When all old style courses were gone this can be just a base course
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id,chapter)
-    data_analyzer.load_exercise_metrics(request.get_vars["id"])
+    data_analyzer.load_exercise_metrics(request.vars["id"])
     problem_metrics = data_analyzer.problem_metrics
 
-    prob_id = request.get_vars["id"]
+    prob_id = request.vars["id"]
     answers = []
     attempt_histogram = []
     logger.debug(problem_metrics.problems)
