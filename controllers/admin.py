@@ -1573,6 +1573,49 @@ def reorder_assignment_questions():
 
     return json.dumps("Reordered in DB")
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def copy_assignment():
+    """
+    vars:
+      - oldassignment id or  todo (-1 for all assignments)
+      - course
+    """
+
+    if not verifyInstructorStatus(request.vars['course'], auth.user):
+        return "Error: Not Authorized"
+    else:
+        if request.vars.oldassignment == '-1':
+            assignments = db((db.assignments.course == db.courses.id) &
+                             (db.courses.course_name == request.vars['course'])).select()
+            for a in assignments:
+                print("A = {}".format(a))
+                res = _copy_one_assignment(request.vars['course'], a.assignments['id'])
+                if res != "success":
+                    break
+        else:
+            res = _copy_one_assignment(request.vars['course'], request.vars['oldassignment'])
+    return res
+
+def _copy_one_assignment(course, oldid):
+        old_course = db(db.courses.course_name == course).select().first()
+        this_course = db(db.courses.course_name == auth.user.course_name).select().first()
+        old_assignment = db(db.assignments.id == int(oldid)).select().first()
+        due_delta = old_assignment.duedate.date() - old_course.term_start_date
+        due_date = this_course.term_start_date + due_delta
+        newassign_id = db.assignments.insert(course=auth.user.course_id, name=old_assignment.name,
+            duedate=due_date, description=old_assignment.description,
+            threshold_pct=old_assignment.threshold_pct)
+
+        old_questions = db(db.assignment_questions.assignment_id == old_assignment.id).select()
+        for q in old_questions:
+            dq = q.as_dict()
+            dq['assignment_id'] = newassign_id
+            del dq['id']
+            db.assignment_questions.insert(**dq)
+
+        return "success"
+
+
 
 def killer():
     print(routes_onerror)

@@ -1,5 +1,5 @@
 import json
-
+import pytest
 
 def test_add_assignment(test_assignment, test_client, test_user_1, runestone_db_tools):
     my_ass = test_assignment('test_assignment', 'test_course_1')
@@ -175,3 +175,42 @@ def test_get_assignment(test_assignment, test_user_1, runestone_db_tools, test_c
     res = json.loads(res)
     assert res
     assert res['questions_data']
+
+@pytest.mark.parametrize('assign_id',[ (-1), (0) ])
+def test_copy_assignment(assign_id, test_assignment, test_client, test_user_1, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    course1_id = test_user_1.course_id
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    # Should provide the following to addq_to_assignment
+    # -- assignment (an integer)
+    # -- question == div_id
+    # -- points
+    # -- autograde  one of ['manual', 'all_or_nothing', 'pct_correct', 'interact']
+    # -- which_to_grade one of ['first_answer', 'last_answer', 'best_answer']
+    # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    print(my_ass.questions())
+    db = runestone_db_tools.db
+    my_ass.save_assignment()
+
+    course_3 = runestone_db_tools.create_course('test_course_3', base_course='test_course_1')
+    test_user_1.make_instructor(course_3.course_id)
+    db(db.auth_user.id == test_user_1.user_id).update(course_id=course_3.course_id, course_name='test_course_3')
+    db.commit()
+    test_user_1.logout()
+    test_user_1.login()
+    if assign_id == 0:
+        assign_id = my_ass.assignment_id
+    res = test_client.validate('admin/copy_assignment', data=dict(
+            oldassignment=assign_id,
+            course='test_course_1'
+    ))
+    assert res == "success"
+
+    rows = db(db.assignments.name == 'test_assignment').count()
+    assert rows == 2
+
+    row = db(db.assignments.name == 'test_assignment').select(orderby=~db.assignments.id).first()
+    rows = db(db.assignment_questions.assignment_id == row.id).count()
+    assert rows == 1
