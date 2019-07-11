@@ -1293,7 +1293,7 @@ def _get_toc_and_questions():
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
                 for question in questions_query:
                     q_info = dict(
-                        text=question.questions.name,
+                        text=question.questions.name + _add_q_meta_info(question),
                         id=question.questions.name,
                     )
                     q_sub_ch_info['children'].append(q_info)
@@ -1303,6 +1303,34 @@ def _get_toc_and_questions():
     # except Exception as ex:
     #     print(ex)
     #     return json.dumps({})
+
+def _add_q_meta_info(qrow):
+    res = ""
+    qt = {
+        'mchoice': 'Mchoice ✓',
+        'clickablearea':'Clickable ✓',
+        'youtube': 'Video',
+        'activecode': 'ActiveCode',
+        'poll': 'Poll',
+        'showeval': 'ShowEval',
+        'video': 'Video',
+        'dragndrop': 'Matching ✓',
+        'parsonsprob': 'Parsons ✓',
+        'codelens': 'CodeLens',
+        'lp_build': 'LP',
+        'shortanswer': 'ShortAns',
+        'actex': 'ActiveCode',
+        'fillintheblank': 'FillB ✓'
+    }
+    res += qt.get(qrow.questions.question_type,"")
+
+    if qrow.questions.autograde:
+        res += ' ✓'
+
+    if res != "":
+        res = """ <span style="color: green">[{}] </span>""".format(res)
+
+    return res
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment():
