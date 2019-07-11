@@ -214,7 +214,7 @@ def test_validate_instructor_pages(url, expected_string, expected_errors,
 
 
 # Test the ``ajax/preview_question`` endpoint.
-def test_3(test_client, test_user_1):
+def test_preview_question(test_client, test_user_1):
     preview_question = 'ajax/preview_question'
     # Passing no parameters should raise an error.
     test_client.validate(preview_question, 'Error: ')
@@ -239,7 +239,7 @@ def test_3(test_client, test_user_1):
 
 
 # Test the ``default/user/profile`` endpoint.
-def test_4(test_client, test_user_1):
+def test_user_profile(test_client, test_user_1):
     test_user_1.login()
     runestone_db_tools = test_user_1.runestone_db_tools
     course_name = 'test_course_2'
@@ -278,7 +278,7 @@ def test_4(test_client, test_user_1):
 
 
 # Test that the course name is correctly preserved across registrations if other fields are invalid.
-def test_5(test_client, runestone_db_tools):
+def test_registration(test_client, runestone_db_tools):
     # Registration doesn't work unless we're logged out.
     test_client.logout()
     course_name = 'a_course_name'
@@ -307,7 +307,7 @@ def test_5(test_client, runestone_db_tools):
 
 
 # Check that the pricing system works correctly.
-def test_6(runestone_db_tools, runestone_env):
+def test_pricing(runestone_db_tools, runestone_env):
     # Check the pricing.
     default_controller = web2py_controller_import(runestone_env, 'default')
     db = runestone_db_tools.db
@@ -371,7 +371,7 @@ def test_price_paid(runestone_db_tools, test_user):
 
 
 # Check that payments are handled correctly.
-def test_8(runestone_controller, runestone_db_tools, test_user):
+def test_payments(runestone_controller, runestone_db_tools, test_user):
     if not runestone_controller.settings.STRIPE_SECRET_KEY:
         pytest.skip('No Stripe keys provided.')
 
@@ -401,7 +401,7 @@ def test_8(runestone_controller, runestone_db_tools, test_user):
 
 # Test the LP endpoint.
 @pytest.mark.skipif(six.PY2, reason='Requires Python 3.')
-def test_lp_1(test_user_1):
+def test_lp(test_user_1):
     test_user_1.login()
 
     # Check that omitting parameters produces an error.
@@ -517,7 +517,7 @@ def dbr_tester(test_client, test_user_1, is_logged_in):
              'background-color: #fafafa;')
 
 
-def test_11(test_client, runestone_db_tools, test_user):
+def test_assignments(test_client, runestone_db_tools, test_user):
     course_3 = runestone_db_tools.create_course('test_course_3')
     test_instructor_1 = test_user('test_instructor_1', 'password_1', course_3)
     test_instructor_1.make_instructor()
@@ -572,6 +572,3 @@ def test_pageprogress(test_client, runestone_db_tools, test_user_1):
         '"subc_b_1": 1')
     assert '"LearningZone_poll": 0' in test_user_1.test_client.text
     assert '"subc_b_fitb": 0' in test_user_1.test_client.text
-
-
-

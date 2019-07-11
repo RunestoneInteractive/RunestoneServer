@@ -13,7 +13,7 @@
   <div style="text-align: center">
   {{for course in courses:}}
     <form action="/{{=request.application}}/default/removecourse/{{=course}}" class="course-form" method="post" onsubmit="return confirm('Are you sure you want to delete this course? (Courses can be added back in the user profile)')">
-      <button class="ac_opt btn btn-default book-btn" name="course" type="submit" value={{=course}} style="font-size: 16pt;">{{=course}}</button>
+      <button class="ac_opt btn btn-default book-btn" name="course" type="submit" value={{=course}}>{{=course}}</button>
     </form>
   {{pass}}
   <form action="/{{=request.application}}/default/courses" class="course-form" method="post">
