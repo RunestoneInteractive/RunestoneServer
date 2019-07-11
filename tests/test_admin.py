@@ -116,3 +116,62 @@ def test_gettemplate(test_user_1, runestone_db_tools, test_client):
         res = json.loads(res)
         assert res
         assert d in res['template']
+
+
+def test_question_info(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+    res = test_client.validate('admin/getQuestionInfo', data=dict(
+            assignment=my_ass.assignment_id,
+            question='subc_b_fitb',
+    ))
+    res = json.loads(res)
+    assert res
+    assert res['code']
+    assert res['htmlsrc']
+
+
+def test_create_question(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    data = {
+        'template': 'mchoice',
+        'name': 'test_question_1',
+        'question': "This is fake text for a fake question",
+        'difficulty': 0,
+        'tags': None,
+        'chapter': 'test_chapter_1',
+        'subchapter': 'Exercises',
+        'isprivate': False,
+        'assignmentid': my_ass.assignment_id,
+        'points': 10,
+        'timed': False,
+        'htmlsrc': "<p>Hello World</p>"
+    }
+    res = test_client.validate('admin/createquestion', data=data)
+    res = json.loads(res)
+    assert res
+    assert res['test_question_1']
+
+    db = runestone_db_tools.db
+    row = db(db.questions.id == res['test_question_1']).select().first()
+
+    assert row['question'] == "This is fake text for a fake question"
+
+
+def test_get_assignment(test_assignment, test_user_1, runestone_db_tools, test_client):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass.addq_to_assignment(question='subc_b_fitb',points=10)
+
+    res = test_client.validate('admin/get_assignment', data=dict(
+        assignmentid=my_ass.assignment_id
+    ))
+
+    res = json.loads(res)
+    assert res
+    assert res['questions_data']

@@ -364,6 +364,9 @@ def autograde():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():
+    """
+    Called from the grading interface when the instructor manually records a grade.
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
@@ -398,6 +401,9 @@ def record_grade():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_problem():
+    """
+    Called from the instructors grading interface
+    """
     if 'acid' not in request.vars or 'sid' not in request.vars:
         return json.dumps({'success': False, 'message': "Need problem and user."})
 
@@ -595,13 +601,16 @@ def doAssignment():
                 status = 'notstarted'
             info['status'] = status
 
-            readings[ch_name]['subchapters'].append(info)
-            readings_score += info['score']
+            # Make sure we don't create duplicate entries for older courses. New style
+            # courses only have the base course in the database, but old will have both
+            if info not in readings[ch_name]['subchapters']:
+                readings[ch_name]['subchapters'].append(info)
+                readings_score += info['score']
 
         else:
-            # add to questions
-            questionslist.append(info)
-            questions_score += info['score']
+            if info not in questionslist:# add to questions
+                questionslist.append(info)
+                questions_score += info['score']
 
     # put readings into a session variable, to enable next/prev button
     readings_names = []
@@ -807,9 +816,9 @@ def practice():
         question = questions[(qIndex + 1) % len(questions)]
 
         # This replacement is to render images
-        question.htmlsrc = bytes(question.htmlsrc).decode('utf8').replace('src="../_static/',
-                                                                          'src="../static/' + course[
-                                                                              'course_name'] + '/_static/')
+        question.htmlsrc = question.htmlsrc.replace('src="../_static/',
+                                                    'src="../static/' + course[
+                                                    'course_name'] + '/_static/')
         question.htmlsrc = question.htmlsrc.replace("../_images",
                                                     "/{}/static/{}/_images".format(request.application,
                                                                                    course.course_name))

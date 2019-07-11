@@ -892,6 +892,12 @@ def addToAssignment():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def getQuestionInfo():
+    """
+    called by the questionBank search  interface
+    Request Vars required:
+    * assignment -- integer assignment id
+    * question -- the name of the question
+    """
     assignment_id = int(request.vars['assignment'])
     question_name = request.vars['question']
     base_course = db(db.courses.course_name == auth.user.course_name).select().first().base_course
@@ -1004,6 +1010,24 @@ def gettemplate():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def createquestion():
+    """
+    called from the questionBank interface when an instructor adds a new question to
+    an assignment by writing it themselves
+    request.vars parameters include
+    * template - The kind  of question
+    * name - the unique identifier
+    * question - rst source for the question
+    * difficulty 0-5
+    * tags
+    * chapter
+    * subchapter  'Exercises' by default
+    * isprivate is this question shared with everyone?
+    * tab
+    * assignmentid': assignmentid
+    * points integer number of points
+    * timed- is this part of a timed exam
+    * htmlsrc htmlsrc from the previewer
+    """
     row = db(db.courses.id == auth.user.course_id).select(db.courses.course_name, db.courses.base_course).first()
     base_course = row.base_course
     tab = request.vars['tab']
@@ -1085,6 +1109,7 @@ def releasegrades():
 
     except Exception as ex:
         logger.error(ex)
+        return "ERROR"
 
     if released:
         # send lti grades

@@ -14,7 +14,6 @@ import sys
 import argparse
 import re
 from shutil import rmtree, copytree
-import glob
 
 # Third-party imports
 # -------------------
@@ -60,8 +59,6 @@ if __name__ == '__main__':
     os.environ['DBHOST'] = pgnetloc
 
     parser = argparse.ArgumentParser(description='Run tests on the Web2Py Runestone server.')
-    parser.add_argument('--rebuildgrades', action='store_true',
-        help='Reset the unit test based on current grading code.')
     parser.add_argument('--skipdbinit', action='store_true',
         help='Skip initialization of the test database.')
     parser.add_argument('--runold', action='store_true',
@@ -101,26 +98,9 @@ if __name__ == '__main__':
             print(extra_args)
             print('Passing the additional arguments {} to pytest.'.format(' '.join(extra_args)))
         # Now run tests.
-        test_files = ["test_server.py", "test_admin.py", "test_dashboard.py", "test_ajax2.py", "test_designer.py"]
+        test_files = ["test_server.py", "test_admin.py", "test_dashboard.py", "test_ajax2.py", "test_designer.py", "test_autograder.py"]
         testf_string = " ".join(['applications/runestone/tests/{}'.format(i) for i in test_files])
         xqt('{} -m coverage erase'.format(sys.executable),
             '{} -m pytest -v {} {}'.format(sys.executable, testf_string, ' '.join(extra_args)),
+            '{} -m coverage report'.format(sys.executable)
         )
-
-    if '-k' not in extra_args or parsed_args.runold:
-        xqt('rsmanage initdb --reset --force')
-        xqt('psql  --host={} --username={} {} < rtdata.sql'.format(pgnetloc, pguser, dbname))
-        with pushd('../../..'):
-            xqt(*['{} -m coverage run --append --source={} web2py.py -S runestone -M -R applications/runestone/tests/{}'.format(sys.executable, COVER_DIRS, x)
-                for x in ['test_ajax.py', 'test_assignments.py']]
-            )
-            xqt('{} -m coverage report'.format(sys.executable))
-
-        # This pushes this back to the old way that justs makes sure the
-        # rebuilding the grades works... IWe could move this up a few lines if
-        # it turns out there is an advantage to being able to do this before running the old tests
-        if parsed_args.rebuildgrades:
-            with pushd('../../..'):
-                print("recalculating grades tables")
-                # TODO: This causes test failures when run.
-                xqt('{} web2py.py -S runestone -M -R applications/runestone/tests/make_clean_db_with_grades.py'.format(sys.executable))

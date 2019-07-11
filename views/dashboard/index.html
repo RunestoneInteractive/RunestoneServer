@@ -101,7 +101,7 @@
 						<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
 						<div class="question-info" style="">
                             {{ if "chapter" in question.keys(): }}
-							<a style="color: #333;" href="{{=get_course_url( question['chapter'], question['sub_chapter'])}}"><b>{{=question["text"]}}</b></a>
+							<a style="color: #333;" href="{{=get_course_url( question['chapter'], question['sub_chapter'])}}.html"><b>{{=question["text"]}}</b></a>
                             {{ else: }}
                             <b>{{=question["text"]}}</b>
                             {{ pass }}

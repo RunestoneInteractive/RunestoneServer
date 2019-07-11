@@ -54,11 +54,9 @@ node_modules
 *.egg
 AC_scripts
 Pipfile.lock
-<<<<<<< HEAD
 config
 .gitignore
-=======
+rsmanage/build
 tests/test_book/build
 instructors.csv
 htmlcov
->>>>>>> upstream

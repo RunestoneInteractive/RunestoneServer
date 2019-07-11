@@ -552,7 +552,7 @@ def getCompletionStatus():
             db.user_sub_chapter_progress.insert(user_id=auth.user.id,
                                                 chapter_id = lastPageChapter,
                                                 sub_chapter_id = lastPageSubchapter,
-                                                status = -1)
+                                                status = -1, start_date=datetime.datetime.utcnow())
             # the chapter might exist without the subchapter
             result = db((db.user_chapter_progress.user_id == auth.user.id) & (db.user_chapter_progress.chapter_id == lastPageChapter)).select()
             if not result:
@@ -884,7 +884,7 @@ def getAssessResults():
 
     # Identify the correct event and query the database so we can load it from the server
     if event == "fillb":
-        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, orderby=~db.fitb_answers.timestamp).first()
+        rows = db((db.fitb_answers.div_id == div_id) & (db.fitb_answers.course_name == course) & (db.fitb_answers.sid == sid)).select(db.fitb_answers.answer, db.fitb_answers.timestamp, orderby=~db.fitb_answers.id).first()
         if not rows:
             return ""   # server doesn't have it so we load from local storage instead
         #
@@ -898,31 +898,31 @@ def getAssessResults():
             res.update(res_update)
         return json.dumps(res)
     elif event == "mChoice":
-        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.timestamp).first()
+        rows = db((db.mchoice_answers.div_id == div_id) & (db.mchoice_answers.course_name == course) & (db.mchoice_answers.sid == sid)).select(db.mchoice_answers.answer, db.mchoice_answers.timestamp, db.mchoice_answers.correct, orderby=~db.mchoice_answers.id).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "dragNdrop":
-        rows = db((db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.course_name == course) & (db.dragndrop_answers.sid == sid)).select(db.dragndrop_answers.answer, db.dragndrop_answers.timestamp, db.dragndrop_answers.correct, db.dragndrop_answers.minHeight, orderby=~db.dragndrop_answers.timestamp).first()
+        rows = db((db.dragndrop_answers.div_id == div_id) & (db.dragndrop_answers.course_name == course) & (db.dragndrop_answers.sid == sid)).select(db.dragndrop_answers.answer, db.dragndrop_answers.timestamp, db.dragndrop_answers.correct, db.dragndrop_answers.minHeight, orderby=~db.dragndrop_answers.id).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct, 'minHeight': str(rows.minHeight)}
         return json.dumps(res)
     elif event == "clickableArea":
-        rows = db((db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.course_name == course) & (db.clickablearea_answers.sid == sid)).select(db.clickablearea_answers.answer, db.clickablearea_answers.timestamp, db.clickablearea_answers.correct, orderby=~db.clickablearea_answers.timestamp).first()
+        rows = db((db.clickablearea_answers.div_id == div_id) & (db.clickablearea_answers.course_name == course) & (db.clickablearea_answers.sid == sid)).select(db.clickablearea_answers.answer, db.clickablearea_answers.timestamp, db.clickablearea_answers.correct, orderby=~db.clickablearea_answers.id).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'timestamp': str(rows.timestamp), 'correct': rows.correct}
         return json.dumps(res)
     elif event == "timedExam":
-        rows = db((db.timed_exam.reset == None) & (db.timed_exam.div_id == div_id) & (db.timed_exam.course_name == course) & (db.timed_exam.sid == sid)).select(db.timed_exam.correct, db.timed_exam.incorrect, db.timed_exam.skipped, db.timed_exam.time_taken, db.timed_exam.timestamp, db.timed_exam.reset, orderby=~db.timed_exam.timestamp).first()
+        rows = db((db.timed_exam.reset == None) & (db.timed_exam.div_id == div_id) & (db.timed_exam.course_name == course) & (db.timed_exam.sid == sid)).select(db.timed_exam.correct, db.timed_exam.incorrect, db.timed_exam.skipped, db.timed_exam.time_taken, db.timed_exam.timestamp, db.timed_exam.reset, orderby=~db.timed_exam.id).first()
         if not rows:
             return ""
         res = {'correct': rows.correct, 'incorrect': rows.incorrect, 'skipped': str(rows.skipped), 'timeTaken': str(rows.time_taken), 'timestamp': str(rows.timestamp), 'reset': str(rows.reset)}
         return json.dumps(res)
     elif event == "parsons":
-        rows = db((db.parsons_answers.div_id == div_id) & (db.parsons_answers.course_name == course) & (db.parsons_answers.sid == sid)).select(db.parsons_answers.answer, db.parsons_answers.source, db.parsons_answers.timestamp, orderby=~db.parsons_answers.timestamp).first()
+        rows = db((db.parsons_answers.div_id == div_id) & (db.parsons_answers.course_name == course) & (db.parsons_answers.sid == sid)).select(db.parsons_answers.answer, db.parsons_answers.source, db.parsons_answers.timestamp, orderby=~db.parsons_answers.id).first()
         if not rows:
             return ""
         res = {'answer': rows.answer, 'source': rows.source, 'timestamp': str(rows.timestamp)}
@@ -938,7 +938,7 @@ def getAssessResults():
             (db.lp_answers.div_id == div_id) &
             (db.lp_answers.course_name == course) &
             (db.lp_answers.sid == sid)
-        ).select(db.lp_answers.answer, db.lp_answers.timestamp, db.lp_answers.correct, orderby=~db.lp_answers.timestamp).first()
+        ).select(db.lp_answers.answer, db.lp_answers.timestamp, db.lp_answers.correct, orderby=~db.lp_answers.id).first()
         if not rows:
             return ""   # server doesn't have it so we load from local storage instead
         answer = json.loads(rows.answer)
@@ -959,7 +959,7 @@ def checkTimedReset():
 
     divId = request.vars.div_id
     course = request.vars.course
-    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select(orderby=~db.timed_exam.timestamp).first()
+    rows = db((db.timed_exam.div_id == divId) & (db.timed_exam.sid == user) & (db.timed_exam.course_name == course)).select(orderby=~db.timed_exam.id).first()
 
     if rows:        # If there was a scored exam
         if rows.reset == True:

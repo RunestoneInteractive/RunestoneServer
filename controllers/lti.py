@@ -82,9 +82,14 @@ def index():
     # Time to create / update / login the user
     if userinfo and (consumer is not None):
         userinfo['username'] = email
-        # Only assign a password if we're creating the user.
+        # Only assign a password if we're creating the user. The
+        # ``get_or_create_user`` method checks for an existing user using both
+        # the username and the email.
         update_fields = ['email', 'first_name', 'last_name']
-        if not db(db.auth_user.username == userinfo['username']).select(db.auth_user.id).first():
+        if not db(
+            (db.auth_user.username == userinfo['username']) |
+            (db.auth_user.email == userinfo['email'])
+        ).select(db.auth_user.id).first():
             pw = db.auth_user.password.validate(str(uuid.uuid4()))[0]
             userinfo['password'] = pw
             update_fields.append('password')

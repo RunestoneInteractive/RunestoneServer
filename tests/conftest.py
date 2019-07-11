@@ -69,15 +69,15 @@ def web2py_controller(
 
 # Fixtures
 # ========
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def web2py_server_address():
     return 'http://127.0.0.1:8000'
 
 
 # This fixture starts and shuts down the web2py server.
 #
-# Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `module <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
-@pytest.fixture(scope='module')
+# Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `session <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
+@pytest.fixture(scope='session')
 def web2py_server(runestone_name, web2py_server_address):
     password = 'pass'
 
@@ -90,12 +90,12 @@ def web2py_server(runestone_name, web2py_server_address):
     web2py_server = subprocess.Popen(
         [sys.executable, '-m', 'coverage', 'run', '--append',
          '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui'],
+         '--nogui', '--minthreads=10', '--maxthreads=20'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Wait for the webserver to come up.
     for tries in range(50):
         try:
-            urlopen(web2py_server_address, timeout=2)
+            urlopen(web2py_server_address, timeout=5)
         except URLError:
             # Wait for the server to come up.
             time.sleep(0.1)
@@ -136,7 +136,7 @@ def web2py_server(runestone_name, web2py_server_address):
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def runestone_name():
     return 'runestone'
 
@@ -150,7 +150,10 @@ def runestone_env(runestone_name):
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller(runestone_env):
-    return web2py_controller(runestone_env)
+    env = web2py_controller(runestone_env)
+    yield env
+    # Close the database connection after the test completes.
+    env.db.close()
 
 
 # Provide acess the the Runestone database through a fixture. After a test runs,
@@ -527,6 +530,11 @@ class _TestUser(object):
         ts = datetime.datetime.utcnow()
         ts -= datetime.timedelta(microseconds=ts.microsecond)
 
+        if 'course' not in kwargs:
+            kwargs['course'] = self.course_name
+
+        if 'answer' not in kwargs and 'act' in kwargs:
+            kwargs['answer'] = kwargs['act']
         # Post to the server.
         return json.loads(self.test_client.validate('ajax/hsblog', data=kwargs))
 
@@ -576,12 +584,15 @@ class _TestAssignment(object):
         assert res['status'] == 'success'
 
 
-    def autograde(self):
+    def autograde(self,sid=None):
         print('autograding', self.assignment_name)
-        assert json.loads(
-            self.test_client.validate('assignments/autograde',
-                                data=dict(assignment=self.assignment_name))
-            )['message'].startswith('autograded')
+        vars = dict(assignment=self.assignment_name)
+        if sid:
+            vars['sid'] = sid
+        res = json.loads(self.test_client.validate('assignments/autograde',
+                                data=vars))
+        assert res['message'].startswith('autograded')
+        return res
 
 
     def questions(self):
