@@ -25,15 +25,15 @@ function gradeIndividualItem() {
     }
 
     else if (VAL3 == 'student') {
-        if (VAL1 == 'assignment' && getSelectedItem('assignment') != null) {
+        var q_column = document.getElementById("gradingcolumn2");
+        sstudents=COL3.selectedOptions;
+        questions=q_column.selectedOptions;
+        if (sstudents.length==1 && (VAL1 == 'assignment' && getSelectedItem('assignment') != null)) {
             calculateTotals()
         } else {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
         //we know the question must come from column 2 now
-        var q_column = document.getElementById("gradingcolumn2");
-        sstudents=COL3.selectedOptions;
-        questions=q_column.selectedOptions;
     }
 
     $(rightSideDiv)[0].style.visibility = 'visible';
