@@ -103,6 +103,10 @@ def get_course_row(*args, **kwargs):
     return db(db.courses.id == auth.user.course_id).select(*args).first()
 
 
+# Make this available to modules.
+current.get_course_row = get_course_row
+
+
 # Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
 def get_course_url(*args):
     # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.

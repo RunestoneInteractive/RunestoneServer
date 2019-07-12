@@ -79,3 +79,10 @@ Fill in the Blank
    -   :mary|Mair[a|e|i]: Correct.
        :Sue: Is wrong.
        :x: Nope.
+
+
+Short answers
+-------------
+.. shortanswer:: test_short_answer_1
+
+    Do you like interactive textbooks?

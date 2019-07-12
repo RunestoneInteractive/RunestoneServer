@@ -30,7 +30,9 @@ import datetime
 # Third-party imports
 # -------------------
 import pytest
-from gluon.contrib.webclient import WebClient
+# PENDING: Use the local, fixed version until https://github.com/web2py/web2py/pull/2230 is incorporated. See ``test_server.test_grades_1``.
+#from gluon.contrib.webclient import WebClient
+from .webclient import WebClient
 import gluon.shell
 from py_w3c.validators.html.validator import HTMLValidator
 import six

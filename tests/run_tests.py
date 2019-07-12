@@ -67,6 +67,7 @@ if __name__ == '__main__':
     # Per https://docs.python.org/2/library/argparse.html#partial-parsing, gather any known args. These will be passed to pytest.
     parsed_args, extra_args = parser.parse_known_args()
 
+    # Assume we are running with working directory in tests.
     if parsed_args.skipdbinit:
         print('Skipping DB initialization.')
     else:

@@ -12,14 +12,17 @@
 #
 # Standard library
 # ----------------
+from io import open
 from textwrap import dedent
 import json
 from threading import Thread
+import datetime
 
 # Third-party imports
 # -------------------
 import pytest
 import six
+import openpyxl
 
 # Local imports
 # -------------
@@ -559,6 +562,179 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
     assert not db(db.acerror_log.sid == 'user_to_delete').select().first()
     for t in ['clickablearea','codelens','dragndrop','fitb','lp','mchoice','parsons','shortanswer']:
         assert not db(db['{}_answers'.format(t)].sid == 'user_to_delete').select().first()
+
+
+# Test the grades report.
+def test_grades_1(runestone_db_tools, test_user, tmp_path):
+    course_name = 'test_course_1'
+
+    # Create test users.
+    course = runestone_db_tools.create_course(course_name)
+
+    # **Create test data**
+    #=====================
+    # Create test users.
+    test_user_array = [
+        test_user('test_user_{}'.format(index), 'x', course, last_name='user_{}'.format(index))
+        for index in range(3)
+    ]
+
+    def assert_passing(index, *args, **kwargs):
+        res = test_user_array[index].hsblog(*args, **kwargs)
+        assert 'errors' not in res
+
+    # Prepare common arguments for each question type.
+    shortanswer_kwargs = dict(
+        event='shortanswer',
+        div_id='test_short_answer_1',
+        course=course_name,
+    )
+    fitb_kwargs = dict(event='fillb', div_id='test_fitb_1', course=course_name)
+    mchoice_kwargs = dict(event='mChoice', div_id='test_mchoice_1', course=course_name)
+    lp_kwargs = dict(event='lp_build', div_id='lp_demo_1',
+                     course=course_name, builder='unsafe-python')
+
+    # *User 0*: no data supplied
+    #---------------------------
+
+    # *User 1*: correct answers
+    #--------------------------
+    # It doesn't matter which user logs out, since all three users share the same client.
+    logout = test_user_array[2].test_client.logout
+    logout()
+    test_user_array[1].login()
+    assert_passing(1, act=json.dumps(test_user_array[1].username), **shortanswer_kwargs)
+    assert_passing(1, answer=json.dumps(['red', 'away']), **fitb_kwargs)
+    assert_passing(1, answer='0', correct='T', **mchoice_kwargs)
+    # LP tests only work on Python 3.
+    if six.PY3:
+        assert_passing(1,
+            answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
+            **lp_kwargs
+        )
+
+    # *User 2*: incorrect answers
+    #----------------------------
+    logout()
+    test_user_array[2].login()
+    # Add three shortanswer answers, to make sure the number of attempts is correctly recorded.
+    for x in range(3):
+        assert_passing(2, act=json.dumps(test_user_array[2].username), **shortanswer_kwargs)
+    assert_passing(2, answer=json.dumps(['xxx', 'xxxx']), **fitb_kwargs)
+    assert_passing(2, answer='1', correct='F', **mchoice_kwargs)
+    if six.PY3:
+        assert_passing(2,
+            answer=json.dumps({"code_snippets": ["def one(): return 2"]}),
+            **lp_kwargs
+        )
+
+    # **Test the grades_report endpoint**
+    #====================================
+    tu = test_user_array[2]
+    def grades_report(assignment, *args, **kwargs):
+        return tu.test_client.validate(
+            'assignments/grades_report', *args,
+            data={'assignment': assignment}, charset=None, **kwargs
+        )
+
+    # Test not being an instructor.
+    grades_report('', b'About Runestone')
+    tu.make_instructor()
+    # Test an invalid assignment.
+    grades_report('', b'Unknown assignment')
+
+    # Create an assignment.
+    assignment_name = 'test_assignment'
+    assignment_id = json.loads(
+        tu.test_client.validate('admin/createAssignment',
+                                data={'name': assignment_name})
+    )[assignment_name]
+    assignment_kwargs = dict(
+        assignment=assignment_id,
+        autograde='pct_correct',
+        which_to_grade='first_answer',
+    )
+
+    # Add questions to the assignment.
+    def add_to_assignment(question_kwargs, points):
+        assert tu.test_client.validate(
+            'admin/add__or_update_assignment_question', data=dict(
+                question=question_kwargs['div_id'],
+                points=points,
+                **assignment_kwargs
+            )
+        ) != json.dumps('Error')
+    add_to_assignment(shortanswer_kwargs, 0)
+    add_to_assignment(fitb_kwargs, 1)
+    add_to_assignment(mchoice_kwargs, 2)
+    add_to_assignment(lp_kwargs, 3)
+
+    # Autograde the assignment.
+    assignment_kwargs = dict(data={'assignment': assignment_name})
+    assert json.loads(
+        tu.test_client.validate('assignments/autograde',
+                                **assignment_kwargs)
+    )['message'].startswith('autograded')
+    assert json.loads(
+        tu.test_client.validate('assignments/calculate_totals',
+                                **assignment_kwargs)
+    )['success']
+
+    # **Test this assignment.**
+    #==========================
+    # Note: this fails on Python 3 due to encoding problems in `webclient.py`, part of the web2py test framework. Therefore, these tests rely on a local copy of `webclient.py` patched with https://github.com/web2py/web2py/pull/2230.
+    #
+    # It's not worth fixing this on Python 2 -- the LP tests can't run, so there's a lot of rearrange needed to work around it.
+    if six.PY2:
+        return
+    xlsx_path = str(tmp_path / 'grades.xlsx')
+    with open(xlsx_path, 'wb') as f:
+        text = grades_report(assignment_name)
+        f.write(text)
+        # If an error occurred, print it.
+        try:
+            print(json.loads(text)['errors'][0])
+        except:
+            pass
+
+    # Debug: uncomment this on Windows to manually inspect the resulting file.
+    ##import os
+    ##os.system(xlsx_path)
+
+    # Open and check a few values.
+    wb = openpyxl.load_workbook(xlsx_path)
+
+    # Check timestamps.
+    timestamps_sheet = wb['timestamps']
+    # The time in the Excel spreadsheet is based on the local time, not UTC time. So, just check that the times are within 1 day of each other.
+    def check_datetime(row, col):
+        assert (
+            timestamps_sheet.cell(row=row, column=col).value -
+            datetime.datetime.now() < datetime.timedelta(days=1)
+        )
+    for row in range(8, 10):
+        for col in range(6, 10):
+            check_datetime(row, col)
+
+    # Check the scores of test_user_1 and _2.
+    scores_sheet = wb['scores']
+    assert [scores_sheet.cell(row=8, column=col).value for col in range(7, 10)] == [1.0, 2.0, 3.0]
+    assert [scores_sheet.cell(row=9, column=col).value for col in range(7, 10)] == [0.0, 0.0, 0.0]
+
+    # Check the answers.
+    answers_sheet = wb['answers']
+    assert [answers_sheet.cell(row=8, column=col).value for col in range(6, 10)] == [u'test_user_1', "['red', 'away']", u'0', "{'code_snippets': ['def one(): return 1'], 'resultString': ''}"]
+    assert [answers_sheet.cell(row=9, column=col).value for col in range(6, 9)] == [u'test_user_2', "['xxx', 'xxxx']", u'1']
+
+    # Check the attempts.
+    attempts_sheet = wb['attempts']
+    assert [attempts_sheet.cell(row=8, column=col).value for col in range(6, 10)] == [1, 1, 1, 1]
+    assert [attempts_sheet.cell(row=9, column=col).value for col in range(6, 10)] == [3, 1, 1, 1]
+
+    logout()
+    # Test with no login.
+    grades_report('', b'About Runestone')
+
 
 def test_pageprogress(test_client, runestone_db_tools, test_user_1):
     test_user_1.login()

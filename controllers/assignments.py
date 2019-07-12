@@ -9,22 +9,30 @@
 #
 # Standard library
 # ----------------
+import os
+import shutil
 import json
 import logging
 import datetime
 from random import shuffle
+import tempfile
 from collections import OrderedDict
 
 # Third-party imports
 # -------------------
 from psycopg2 import IntegrityError
-from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
-from db_dashboard import DashboardDataAnalyzer
 import six
 import bleach
 
+# Local application imports
+# -------------------------
+from rs_grading import do_autograde, do_calculate_totals, do_check_answer, send_lti_grade
+from db_dashboard import DashboardDataAnalyzer
+from questions_report import _query_assignment, _grades_to_xlsx
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
+
 
 # todo: This is a strange place for this function or at least a strange name.
 # index is called to show the student progress page from the user menu -- its redundant with studentreport in dashboard
@@ -953,3 +961,33 @@ def practice_feedback():
         redirect(URL('practice', vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."
     redirect(URL('practice'))
+
+
+# Assignment report
+# =================
+# Return an error.
+def _error_formatter(e):
+    response.headers['content-type'] = 'application/json'
+    import traceback
+    return json.dumps({'errors': [traceback.format_exc()]})
+
+
+# Produce an Excel spreadsheet with information about an assignment.
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def grades_report():
+    try:
+        grades, timezoneoffset = _query_assignment(auth.user.course_name, request.vars.assignment)
+    except Exception as e:
+        return _error_formatter(e)
+
+    temp_path = tempfile.mkdtemp()
+    try:
+        xlsx_path = os.path.join(temp_path, 'grades.xlsx')
+        try:
+            _grades_to_xlsx(grades, timezoneoffset, xlsx_path)
+        except Exception as e:
+            return _error_formatter(e)
+        response.headers['content-type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        return response.stream(xlsx_path, 2**20, request=request)
+    finally:
+        shutil.rmtree(temp_path, True)
