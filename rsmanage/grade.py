@@ -1,5 +1,5 @@
 from rs_grading import do_autograde, do_calculate_totals
-import json, datetime, sys
+import json
 
 userinfo = json.loads(os.environ['RSM_USERINFO'])
 # print(userinfo['course'], userinfo['pset'])

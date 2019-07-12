@@ -20,7 +20,7 @@ except:
 import json
 import itertools
 from pprint import pformat
-from datetime import timedelta
+import datetime
 
 # Third-party imports
 # -------------------
@@ -303,7 +303,7 @@ def _query_assignment(
             (db.courses.course_name == course_name)
         ).select(db.assignments.duedate).first().duedate
     # Correct for the time zone, since the due date is specified in local time. YUCK!!!
-    time_zone_delta = timedelta(hours=float(current.session.get('timezoneoffset', 0)))
+    time_zone_delta = datetime.timedelta(hours=float(current.session.get('timezoneoffset', 0)))
     due_date += time_zone_delta
 
     # Define the questions of interest, given an assignment and course.
