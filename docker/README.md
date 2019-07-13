@@ -254,7 +254,7 @@ Controllers are reloaded automatically every time they are used.  However if you
 
 ### 8. File Permissions (especially on Linux)
 
-File permissions can seem a little strange when you start this container on linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The best thing to do is to make sure that the files are in your group `chgrp -R <username> RunestoneServer` should allw both you and the container enough privileges to do your work.
+File permissions can seem a little strange when you start this container on Linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The container's entrypoint script updates permissions to allow both you and the container enough privileges to do your work.
 
 ## Debugging
 
