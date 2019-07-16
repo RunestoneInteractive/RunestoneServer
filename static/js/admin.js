@@ -431,6 +431,8 @@ function populateQuestions(select,question_names){
     for (i = 0; i < question_names.length; i++) {
         var q = question_names[i];
         var questiontext="";
+        //THE FOLLOWING IS EXPERIMENTAL AND CAN BE IGNORED FOR NOW.
+        /*
         if (q.includes("/")) {//if the question has a / in it, assume it is chapter/subchapter
             var qL = q.split("/");  
             if(chapter!=qL[0]){ //if the chapter changes, show it greyed out on a separate line
@@ -439,9 +441,11 @@ function populateQuestions(select,question_names){
             }
             questiontext="   "+qL[1];
         } else {
-            questiontext=q;
-        };
-            select.add(makeOption(questiontext,question_names[i]));
+*/
+        questiontext=q;
+        /*
+        };*/
+        select.add(makeOption(questiontext,question_names[i]));
     }
 }
 function updateColumn2() {
@@ -468,6 +472,9 @@ function updateColumn2() {
     }
 
     else if (VAL1 == 'chapter' && VAL2 == 'question') {
+        //FIX: This is where we should get a list of all questions from the chapter
+        //chapters[label] should store a list of all question names
+        //populateQuestions should be a model for this.
         $(COL2).empty();
         for (i = 0; i < chapters[COL1VAL].length; i++) {
             var option = document.createElement("option");
