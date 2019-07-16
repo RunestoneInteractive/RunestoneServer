@@ -475,14 +475,7 @@ function updateColumn2() {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
-        $(COL2).empty();
-        for (i = 0; i < chapters[COL1VAL].length; i++) {
-            var option = document.createElement("option");
-            option.text = chapters[COL1VAL][i];
-            option.value = chapters[COL1VAL][i];
-            COL2.add(option);
-        }
-
+        populateQuestions(COL2,chapters[COL1VAL]);
     }
 
     else if (VAL1 == 'student') {
@@ -515,13 +508,7 @@ function updateColumn3() {
         }
     }
     if (VAL2 == 'chapter' && VAL3 == 'question') {
-        $("#gradingcolumn3").empty();
-        for (i = 0; i < chapters[COL2VAL].length; i++) {
-            var option = document.createElement("option");
-            option.text = chapters[COL2VAL][i];
-            option.value = chapters[COL2VAL][i];
-            COL3.add(option);
-        }
+        populateQuestions(COL3,chapters[COL2VAL]);
     }
 
     else if (VAL2 == 'assignment' && VAL3 == 'question') {

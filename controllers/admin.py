@@ -619,7 +619,7 @@ def grading():
     chapters_query = db(db.chapters.course_id == base_course).select()
     for row in chapters_query:
         q_list = []
-        chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type == 'question')).select()
+        chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type != 'page')).select()
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
