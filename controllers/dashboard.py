@@ -23,6 +23,55 @@ logger.setLevel(settings.log_level)
 
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
+class Get:
+#    chapnum_map={}
+#    sub_chapters={}
+#    subchap_map={}
+#    subchapnum_map={}
+#    subchapNum_map={}
+    def __init__(self,chapters):
+
+        self.Cmap={}
+        self.Smap={} #dictionary organized by chapter and section labels
+        self.SAmap={} #organized just by section label
+        for chapter in chapters:
+            label=chapter.chapter_label
+            self.Cmap[label]=chapter
+            sub_chapters=db(db.sub_chapters.chapter_id==chapter.id).select(db.sub_chapters.ALL) #FIX: get right course_id, too
+            #NOTE: sub_chapters table doesn't have a course name column in it, kind of a problem
+            self.Smap[label]={}
+            
+            for sub_chapter in sub_chapters:
+                self.Smap[label][sub_chapter.sub_chapter_label]=sub_chapter
+                self.SAmap[sub_chapter.sub_chapter_label]=sub_chapter
+    def ChapterNumber(self,label):
+        """Given the label of a chapter, return its number"""
+        try:
+            return self.Cmap[label].id
+        except ValueError:
+            return ""
+    def ChapterName(self,label):
+        try:
+            return self.Cmap[label].chapter_name
+        except ValueError:
+            return label
+    def SectionName(self,chapter,section):
+        try:
+            return self.Smap[chapter][section].sub_chapter_name
+        except ValueError:
+            return section
+    def SectionNumber(self,chapter,section=None):
+        try:
+            if section==None:
+                lookup=self.SAmap
+                section=chapter
+            else:
+                lookup=self.Smap[chapter]
+        
+            return lookup[section].sub_chapter_num
+        except ValueError:
+            return ""
+    
 @auth.requires_login()
 def index():
     selected_chapter = None
@@ -36,26 +85,10 @@ def index():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
-    logger.debug("getting chapters for {}".format(auth.user.course_name))
     chapters = db(db.chapters.course_id == course.base_course).select(orderby=db.chapters.chapter_num)
-    chap_map = {}
-    chapnum_map = {}
-    sub_chapters={}
-    subchap_map={}
-    subchapnum_map={}
-    subchapNum_map={} #Not divided by chapter
-    for chapter in chapters:
-        chap_map[chapter.chapter_label] = chapter.chapter_name
-        chapnum_map[chapter.chapter_label] = chapter.id
-        sub_chapters=db(db.sub_chapters.chapter_id==chapter.id).select(db.sub_chapters.ALL) 
 
-        subchap_map[chapter.chapter_label] = {}
-        subchapnum_map[chapter.chapter_label] = {}
-        subchapnum_map[chapter.id] = {}
-        for sub_chapter in sub_chapters:
-            subchap_map[chapter.chapter_label][sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_name
-#            subchapnum_map[chapter.chapter_label][sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_num
-            subchapNum_map[sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_num #need both?
+    logger.debug("getting chapters for {}".format(auth.user.course_name))
+    get = Get(chapters) #yes this is a dumb name
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
@@ -81,11 +114,11 @@ def index():
                 "id": problem_id,
                 "text": metric.problem_text,
                 "chapter": chtmp,
-                "chapter_title": chap_map.get(chtmp,chtmp),
-                "chapter_number": chapnum_map.get(chtmp,""),
+                "chapter_title": get.ChapterName(chtmp), 
+                "chapter_number": get.ChapterNumber(chtmp), 
                 "sub_chapter": schtmp,
-                "sub_chapter_number": subchapNum_map.get(schtmp,""),
-                "sub_chapter_title": subchap_map[chtmp].get(schtmp,schtmp),
+                "sub_chapter_number": get.SectionNumber(chtmp,schtmp), 
+                "sub_chapter_title": get.SectionName(chtmp,schtmp), 
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
@@ -118,9 +151,9 @@ def index():
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
             "name": metric.sub_chapter_name,
-            "number": subchapNum_map.get(metric.sub_chapter_label,""),
-            #FIX: Above doesn't work for Glossary & other sections that appear in multiple chapters
-            #Need to index subchapNum by chapter number of label or something
+            "number": get.SectionNumber(selected_chapter.chapter_label,metric.sub_chapter_label),
+            #FIX: Using selected_chapter here might be a kludge
+            #Better if metric contained chapter numbers associated with sub_chapters
             "readPercent": metric.get_completed_percent(),
             "startedPercent": metric.get_started_percent(),
             "unreadPercent": metric.get_not_started_percent()
