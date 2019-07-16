@@ -37,10 +37,25 @@ def index():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
     logger.debug("getting chapters for {}".format(auth.user.course_name))
-    chapters = db(db.chapters.course_id == course.base_course).select()
+    chapters = db(db.chapters.course_id == course.base_course).select(orderby=db.chapters.chapter_num)
     chap_map = {}
+    chapnum_map = {}
+    sub_chapters={}
+    subchap_map={}
+    subchapnum_map={}
+    subchapNum_map={} #Not divided by chapter
     for chapter in chapters:
         chap_map[chapter.chapter_label] = chapter.chapter_name
+        chapnum_map[chapter.chapter_label] = chapter.id
+        sub_chapters=db(db.sub_chapters.chapter_id==chapter.id).select(db.sub_chapters.ALL) 
+
+        subchap_map[chapter.chapter_label] = {}
+        subchapnum_map[chapter.chapter_label] = {}
+        subchapnum_map[chapter.id] = {}
+        for sub_chapter in sub_chapters:
+            subchap_map[chapter.chapter_label][sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_name
+#            subchapnum_map[chapter.chapter_label][sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_num
+            subchapNum_map[sub_chapter.sub_chapter_label] = sub_chapter.sub_chapter_num #need both?
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
@@ -61,12 +76,16 @@ def index():
 
         if data_analyzer.questions[problem_id]:
             chtmp = data_analyzer.questions[problem_id].chapter
+            schtmp = data_analyzer.questions[problem_id].subchapter
             entry = {
                 "id": problem_id,
                 "text": metric.problem_text,
                 "chapter": chtmp,
                 "chapter_title": chap_map.get(chtmp,chtmp),
-                "sub_chapter": data_analyzer.questions[problem_id].subchapter,
+                "chapter_number": chapnum_map.get(chtmp,""),
+                "sub_chapter": schtmp,
+                "sub_chapter_number": subchapNum_map.get(schtmp,""),
+                "sub_chapter_title": subchap_map[chtmp].get(schtmp,schtmp),
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
@@ -79,6 +98,8 @@ def index():
                 "text": metric.problem_text,
                 "chapter": "unknown",
                 "sub_chapter": "unknown",
+                "sub_chapter_number": 0,
+                "sub_chapter_title":"unknown",
                 "chapter_title": "unknown",
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
@@ -89,14 +110,17 @@ def index():
         questions.append(entry)
         logger.debug("ADDING QUESTION %s ", entry["chapter"])
 
-    logger.debug("getting questsions")
-    questions = sorted(questions, key=itemgetter("chapter"))
+    logger.debug("getting questions")
+    questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number")) 
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
-        sections.append({
+        sections.append({ 
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
             "name": metric.sub_chapter_name,
+            "number": subchapNum_map.get(metric.sub_chapter_label,""),
+            #FIX: Above doesn't work for Glossary & other sections that appear in multiple chapters
+            #Need to index subchapNum by chapter number of label or something
             "readPercent": metric.get_completed_percent(),
             "startedPercent": metric.get_started_percent(),
             "unreadPercent": metric.get_not_started_percent()

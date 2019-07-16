@@ -16,12 +16,12 @@
 	</h1>
 	<h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
 	<div style="float: right"><b>Select Chapter</b>
-					<select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
+	  <select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
 					  {{for chapter in chapters:}}
 					  {{if chapter['chapter_label'] == selected_chapter['chapter_label']: }}
-					  	<option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  	<option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_num']}}. {{=chapter['chapter_name']}}</option>
 					  {{else:}}
-					  	<option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
+					  	<option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_num']}}. {{=chapter['chapter_name']}}</option>
 					  {{pass}}
 					  {{pass}}
 					</select>
@@ -45,8 +45,9 @@
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				{{ for section in sections: }}
+                                {{ sectionnumber=section["number"] }}
 				<div style="height: 30px;">
-					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="{{=get_course_url(selected_chapter['chapter_label'], section['text'])}}">{{=section["name"]}}</a></div>
+					<div style="font-size:1.0em; font-weight: bold; margin-top: 0.5em;"><a style="color:black;" href="{{=get_course_url(selected_chapter['chapter_label'], section['text'])}}">{{=selected_chapter['chapter_num']}}.{{=sectionnumber}}. {{=section["name"]}}</a></div>
 					<div style="" class="dash-bar-container">
 						<div class="dash-bar dash-bar-correct" style="width: {{=section['readPercent']}};"> {{=section["readPercent"]}}&nbsp;</div>
 						<div class="dash-bar dash-bar-attempts" style=" width: {{=section['startedPercent']}};"> {{=section["startedPercent"]}}&nbsp;</div>
@@ -88,13 +89,17 @@
 				</div>
 				<div style="clear:both; margin-bottom: 1em;"></div>
 				<div id="question-metrics">
-				{{ chapterName = "" }}
+				  {{ chapterName = "" }}
+                                  {{ subchapterName = "" }}
 				{{ for question in questions:}}
-					{{ if question["chapter_title"] != chapterName: }}
-						<div style="clear:both; font-size:1.2em; font-weight: bold; margin: .5em;">
-							{{ =question["chapter_title"] }}:
+					{{ if question["chapter_title"] != chapterName or question["sub_chapter"] != subchapterName: }}
+				  <div style="clear:both; font-size:1.2em; font-weight: bold; margin: .5em;">
+                                    {{ printchapter="" }}
+                                    {{ if question["chapter_title"] != chapterName: printchapter=question["chapter_title"]}}
+					{{ =printchapter}}<BR> {{ =question["chapter_number"]}}.{{=question["sub_chapter_number"]}}. {{ =question["sub_chapter_title"] }}
 						</div>
-						{{ chapterName = question["chapter_title"] }}
+				  {{ chapterName = question["chapter_title"] }}
+                                  {{ subchapterName=question["sub_chapter"]}}
 					{{ pass }}
 					<div class="question-metric">
 						<div id="chart-question-{{=question['id']}}" class="donut-chart"></div>
