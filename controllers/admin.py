@@ -73,6 +73,7 @@ def index():
 
 @auth.requires_login()
 def doc():
+    response.title = "Documentation"
     return dict(course_id=auth.user.course_name, course=get_course_row(db.courses.ALL))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -161,6 +162,7 @@ def assignments():
     """
     This is called for the assignments tab on the instructor interface
     """
+    response.title = "Assignments"
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
     for row in cur_assignments:
@@ -193,6 +195,7 @@ def assignments():
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def practice():
+    response.title = "Practice"
     course = db(db.courses.id == auth.user.course_id).select().first()
     course_start_date = course.term_start_date
 
@@ -424,6 +427,7 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add_practice_items():
+    response.title = "Add Practice Items"
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     data = json.loads(request.vars.data)
 
@@ -488,6 +492,7 @@ def add_practice_items():
 # This is the primary controller when the instructor goes to the admin page.
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
+    response.title = "Admin"
     sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
     courseid = sidQuery.id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
@@ -578,7 +583,7 @@ def course_students():
 # Called when an instructor clicks on the grading tab
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
-
+    response.title = "Grading"
     assignments = {}
     assignments_query = db(db.assignments.course == auth.user.course_id).select()
 
