@@ -777,10 +777,14 @@ def createAssignment():
     response.headers['content-type'] = 'application/json'
     due = None
     logger.debug(type(request.vars['name']))
-
     try:
-        logger.debug("Adding new assignment {} for course".format(request.vars['name'], auth.user.course_id))
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+        name=request.vars['name']
+        course=auth.user.course_id
+        logger.debug("Adding new assignment {} for course".format(request.vars['name'], course))
+        name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
+        if name_existsQ>0:
+            return json.dumps("EXISTS")
+        newassignID = db.assignments.insert(course=course, name=name, duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')
@@ -791,6 +795,27 @@ def createAssignment():
         logger.error(ex)
         return json.dumps('ERROR')
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def renameAssignment():
+    response.headers['content-type'] = 'application/json'
+    try:
+        logger.debug("Renaming {} to {} for course {}.".format(request.vars['original'],request.vars['name'],auth.user.course_id))
+        assignment_id=request.vars['original']
+        name=request.vars['name']
+        course=auth.user.course_id
+        name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
+        if name_existsQ>0:
+            return json.dumps("EXISTS")
+        db(db.assignments.id == assignment_id).update(name=name)
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
+    try:
+        returndict={name: assignment_id}
+        return json.dumps(returndict)
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():

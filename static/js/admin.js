@@ -1174,6 +1174,22 @@ function menu_from_editable(
 
 
 // Invoked by the "Create" button of the "Create Assignment" dialog.
+function renameAssignment(id,form) {
+    var name = form.name.value;
+    data={'name':name,'original':id}
+    url='/runestone/admin/renameAssignment';
+    jQuery.post(url,data,function(iserror,textStatus,whatever){
+        if (iserror=="EXISTS"){
+            alert('There already is an assignment called "'+name+'".') //FIX: can I reopen the dialog box maybe? 
+        } else if (iserror!='ERROR'){
+            //find the assignment
+            select=document.getElementById('assignlist');
+            select.options[select.selectedIndex].innerHTML=name //FIX? make sure select.selectedIndex==original?
+        } else {
+            alert('Error in renaming assignment '+id)
+        }
+    },'json')
+}
 function createAssignment(form) {
     var name = form.name.value;
 
@@ -1181,7 +1197,9 @@ function createAssignment(form) {
     data = {'name': name}
     url = '/runestone/admin/createAssignment';
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror != 'ERROR') {
+        if (iserror=="EXISTS"){
+            alert('There already is an assignment called "'+name+'".') //FIX: can I reopen the dialog box maybe? 
+        } else if (iserror!='ERROR'){
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');
                 newopt.value = iserror[name];
