@@ -105,7 +105,14 @@ esac
 info "Updating file ownership"
 chown -R www-data /srv/web2py
 mkdir -p /run/uwsgi
+mkdir -p ${RUNESTONE_PATH}/databases
+chown www-data ${RUNESTONE_PATH}/databases
 chown -R www-data /run/uwsgi
+
+# For development, make all files group-writeable.
+if [ $WEB2PY_CONFIG == "development" ]; then
+    chmod -R g+w ${RUNESTONE_PATH}
+fi
 
 
 # Setup instructors, if the file exists
