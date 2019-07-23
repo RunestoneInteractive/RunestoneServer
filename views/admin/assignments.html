@@ -63,13 +63,13 @@
 </div>
 
 <!-- Modal: Add -->
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="addAssignment" role="dialog" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="myAddModalLabel" class="modal fade" id="addAssignment" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
         <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
+        <h4 class="modal-title" id="myAddModalLabel">Create Assignment</h4>
       </div><!-- Modal Body -->
       <div class="modal-body">
         <form role="form">
@@ -87,18 +87,18 @@
 </div>
 
 <!-- Modal: Rename -->
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="renameAssignment" role="dialog" tabindex="-1">
+<div aria-hidden="true" aria-labelledby="myRenameModalLabel" class="modal fade" id="renameAssignment" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
         <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Rename Assignment</h4>
+        <h4 class="modal-title" id="myRenameModalLabel">Rename Assignment</h4>
       </div><!-- Modal Body -->
       <div class="modal-body">
         <form role="form">
           <div class="form-group">
-            <label for="name">Enter the new name for assignment "<span id="renameName"></span>"</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
+            <label for="rename-name">Enter the new name for assignment "<span id="renameName"></span>"</label> <input class="form-control" id="rename-name" placeholder="Enter assignment name" type="text">
           </div>
           <input class="btn btn-default" data-dismiss="modal" onclick="renameAssignment(this.form)" type="button" value="Rename">
         </form>
