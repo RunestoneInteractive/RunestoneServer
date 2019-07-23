@@ -2,33 +2,33 @@ var assignment_release_states = null;
 
 function gradeIndividualItem() {
     //This function figures out the parameters to feed to getRightSideGradingDiv, which does most of the work
-    var SEL1 = document.getElementById("gradingoption1");
-    var VAL1 = SEL1.options[SEL1.selectedIndex].value;
-    var SEL2 = document.getElementById("gradingoption2");
-    var VAL2 = SEL2.options[SEL2.selectedIndex].value;
-    var SEL3 = document.getElementById("gradingoption3");
-    var VAL3 = SEL3.options[SEL3.selectedIndex].value;
+    var sel1 = document.getElementById("gradingoption1");
+    var val1 = sel1.options[sel1.selectedIndex].value;
+    var sel2 = document.getElementById("gradingoption2");
+    var val2 = sel2.options[sel2.selectedIndex].value;
+    var sel3 = document.getElementById("gradingoption3");
+    var val3 = sel3.options[sel3.selectedIndex].value;
 
     set_release_button();
 
-    var COL3 = document.getElementById("gradingcolumn3");
-    var COL3VAL = COL3.options[COL3.selectedIndex].value;
+    var col3 = document.getElementById("gradingcolumn3");
+    var col3val = col3.options[col3.selectedIndex].value;
     
     var rightSideDiv = $('#rightsideGradingTab');
     var student_dict=students;
     var question,sid,student;
     var questions,sstudents;
-    if (VAL3 == 'question') {
+    if (val3 == 'question') {
         var s_column = document.getElementById("gradingcolumn1");
         sstudents=s_column.selectedOptions;
-        questions=COL3.selectedOptions;
+        questions=col3.selectedOptions;
     }
 
-    else if (VAL3 == 'student') {
+    else if (val3 == 'student') {
         var q_column = document.getElementById("gradingcolumn2");
-        sstudents=COL3.selectedOptions;
+        sstudents=col3.selectedOptions;
         questions=q_column.selectedOptions;
-        if (sstudents.length==1 && (VAL1 == 'assignment' && getSelectedItem('assignment') != null)) {
+        if (sstudents.length==1 && (val1 == 'assignment' && getSelectedItem('assignment') != null)) {
             calculateTotals()
         } else {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
@@ -448,17 +448,17 @@ function populateQuestions(select,question_names){
     }
 }
 function updateColumn2() {
-    var SEL1 = document.getElementById("gradingoption1");
-    var VAL1 = SEL1.options[SEL1.selectedIndex].value;
-    var SEL2 = document.getElementById("gradingoption2");
-    var VAL2 = SEL2.options[SEL2.selectedIndex].value;
-    var COL1 = document.getElementById("gradingcolumn1");
-    var COL2 = document.getElementById("gradingcolumn2");
-    var COL1VAL="";
-    if (COL1.selectedIndex>-1){
-        var COL1VAL = COL1.options[COL1.selectedIndex].value;
+    var sel1 = document.getElementById("gradingoption1");
+    var val1 = sel1.options[sel1.selectedIndex].value;
+    var sel2 = document.getElementById("gradingoption2");
+    var val2 = sel2.options[sel2.selectedIndex].value;
+    var col1 = document.getElementById("gradingcolumn1");
+    var col2 = document.getElementById("gradingcolumn2");
+    var col1val="";
+    if (col1.selectedIndex>-1){
+        var col1val = col1.options[col1.selectedIndex].value;
     }
-    if (VAL1 == 'assignment') {
+    if (val1 == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null) {
             calculateTotals();
@@ -466,15 +466,15 @@ function updateColumn2() {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
     }
-    if (VAL1 == 'assignment' && VAL2 == 'question') {
-        populateQuestions(COL2,assignmentinfo[COL1VAL]);
+    if (val1 == 'assignment' && val2 == 'question') {
+        populateQuestions(col2,assignmentinfo[col1val]);
     }
 
-    else if (VAL1 == 'chapter' && VAL2 == 'question') {
+    else if (val1 == 'chapter' && val2 == 'question') {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
-        populateQuestions(COL2,chapters[COL1VAL]);
+        populateQuestions(col2,chapters[col1val]);
     }
 
     else if (VAL1 == 'student') {
@@ -486,18 +486,18 @@ function updateColumn2() {
     }
 
     if (VAL2 != "") {
-        COL2.style.visibility = 'visible';
+        col2.style.visibility = 'visible';
     }
 }
 
 function updateColumn3() {
-    var SEL2 = document.getElementById("gradingoption2");
-    var VAL2 = SEL2.options[SEL2.selectedIndex].value;
-    var SEL3 = document.getElementById("gradingoption3");
-    var VAL3 = SEL3.options[SEL3.selectedIndex].value;
-    var COL2 = document.getElementById("gradingcolumn2");
-    var COL3 = document.getElementById("gradingcolumn3");
-    var COL2VAL = COL2.options[COL2.selectedIndex].value;
+    var sel2 = document.getElementById("gradingoption2");
+    var VAL2 = sel2.options[sel2.selectedIndex].value;
+    var sel3 = document.getElementById("gradingoption3");
+    var VAL3 = sel3.options[sel3.selectedIndex].value;
+    var col2 = document.getElementById("gradingcolumn2");
+    var col3 = document.getElementById("gradingcolumn3");
+    var col2VAL = col2.options[col2.selectedIndex].value;
     if (VAL2 == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
@@ -507,19 +507,19 @@ function updateColumn3() {
         }
     }
     if (VAL2 == 'chapter' && VAL3 == 'question') {
-        populateQuestions(COL3,chapters[COL2VAL]);
+        populateQuestions(col3,chapters[col2VAL]);
     }
 
     else if (VAL2 == 'assignment' && VAL3 == 'question') {
-        populateQuestions(COL3,assignmentinfo[COL2VAL]);
+        populateQuestions(col3,assignmentinfo[col2VAL]);
     }
 
     if (VAL3 != "") {
-        var lastcolval = COL3.selectedIndex;
+        var lastcolval = col3.selectedIndex;
         if (lastcolval != -1) {
             gradeIndividualItem();
         }
-        COL3.style.visibility = 'visible';
+        col3.style.visibility = 'visible';
     }
 
 }
