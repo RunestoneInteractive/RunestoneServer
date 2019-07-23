@@ -14,6 +14,7 @@ db.define_table('questions',
                 Field('autograde', type='string'),
                 Field('topic', type='string'),
                 Field('feedback', type='text'),
+                Field('from_source', type='boolean'),
                 migrate=table_migrate_prefix + 'questions.table')
 
 
