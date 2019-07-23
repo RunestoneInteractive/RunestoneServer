@@ -23,7 +23,7 @@ logger.setLevel(settings.log_level)
 
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
-class Get:
+class ChapterGet:
 #    chapnum_map={}
 #    sub_chapters={}
 #    subchap_map={}
@@ -40,7 +40,7 @@ class Get:
             sub_chapters=db(db.sub_chapters.chapter_id==chapter.id).select(db.sub_chapters.ALL) #FIX: get right course_id, too
             #NOTE: sub_chapters table doesn't have a course name column in it, kind of a problem
             self.Smap[label]={}
-            
+
             for sub_chapter in sub_chapters:
                 self.Smap[label][sub_chapter.sub_chapter_label]=sub_chapter
                 self.SAmap[sub_chapter.sub_chapter_label]=sub_chapter
@@ -67,11 +67,11 @@ class Get:
                 section=chapter
             else:
                 lookup=self.Smap[chapter]
-        
+
             return lookup[section].sub_chapter_num
         except ValueError:
             return ""
-    
+
 @auth.requires_login()
 def index():
     selected_chapter = None
@@ -88,7 +88,7 @@ def index():
     chapters = db(db.chapters.course_id == course.base_course).select(orderby=db.chapters.chapter_num)
 
     logger.debug("getting chapters for {}".format(auth.user.course_name))
-    get = Get(chapters) #yes this is a dumb name
+    chapget = ChapterGet(chapters)
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
@@ -114,11 +114,11 @@ def index():
                 "id": problem_id,
                 "text": metric.problem_text,
                 "chapter": chtmp,
-                "chapter_title": get.ChapterName(chtmp), 
-                "chapter_number": get.ChapterNumber(chtmp), 
+                "chapter_title": chapget.ChapterName(chtmp),
+                "chapter_number": chapget.ChapterNumber(chtmp),
                 "sub_chapter": schtmp,
-                "sub_chapter_number": get.SectionNumber(chtmp,schtmp), 
-                "sub_chapter_title": get.SectionName(chtmp,schtmp), 
+                "sub_chapter_number": chapget.SectionNumber(chtmp,schtmp),
+                "sub_chapter_title": chapget.SectionName(chtmp,schtmp),
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
@@ -144,14 +144,14 @@ def index():
         logger.debug("ADDING QUESTION %s ", entry["chapter"])
 
     logger.debug("getting questions")
-    questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number")) 
+    questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number"))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
-        sections.append({ 
+        sections.append({
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
             "name": metric.sub_chapter_name,
-            "number": get.SectionNumber(selected_chapter.chapter_label,metric.sub_chapter_label),
+            "number": chapget.SectionNumber(selected_chapter.chapter_label,metric.sub_chapter_label),
             #FIX: Using selected_chapter here might be a kludge
             #Better if metric contained chapter numbers associated with sub_chapters
             "readPercent": metric.get_completed_percent(),
