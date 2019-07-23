@@ -204,7 +204,7 @@ function calculateTotals(sid) {
         },
         success: function (retdata) {
             if (retdata.computed_score != null) {
-                // show the form for setting it manually
+                //show the form for setting it manually
                 $('#assignmentTotalform').css('visibility', 'visible');
                 // populate it with data from retdata
                 $('#computed-total-score').val(retdata.computed_score);
@@ -300,7 +300,6 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em> <span>Points: ' + question_points[data.acid] + '</span>');
 
-        //jQuery('.activecode-target',rightDiv).attr('id',data.acid+"_"+data.username);
 
         if (data.file_includes) {
             // create divids for any files they might need
