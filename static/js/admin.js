@@ -1173,23 +1173,32 @@ function menu_from_editable(
 }
 
 
-// Invoked by the "Create" button of the "Create Assignment" dialog.
-function renameAssignment(id,form) {
+function fillinAssignmentName(target){
+    //On the assignments tab, fill in the target with the name of the current assignment
+    //Only used by the rename assignment button for now
+    select=$("#assignlist")[0]
+    $("#"+target).html(select.options[select.selectedIndex].innerHTML)
+}
+//Invoked by the "Rename" button of the "Rename Assignment" dialog
+function renameAssignment(form) {
+    var select=$("#assignlist")[0]
+    var id=select[select.selectedIndex].value
     var name = form.name.value;
     data={'name':name,'original':id}
     url='/runestone/admin/renameAssignment';
     jQuery.post(url,data,function(iserror,textStatus,whatever){
         if (iserror=="EXISTS"){
-            alert('There already is an assignment called "'+name+'".') //FIX: can I reopen the dialog box maybe? 
+            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
         } else if (iserror!='ERROR'){
             //find the assignment
-            select=document.getElementById('assignlist');
-            select.options[select.selectedIndex].innerHTML=name //FIX? make sure select.selectedIndex==original?
+            select=$('#assignlist')[0];
+            select.options[select.selectedIndex].innerHTML=name
         } else {
             alert('Error in renaming assignment '+id)
         }
     },'json')
 }
+// Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
 
@@ -1198,7 +1207,7 @@ function createAssignment(form) {
     url = '/runestone/admin/createAssignment';
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
         if (iserror=="EXISTS"){
-            alert('There already is an assignment called "'+name+'".') //FIX: can I reopen the dialog box maybe? 
+            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
         } else if (iserror!='ERROR'){
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');

@@ -32,7 +32,6 @@
 </script>
 <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.js')}}">
 </script>
-
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
@@ -44,7 +43,7 @@
     </select>
     <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">Add</button>
     <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">Delete</button>
-    <button class="btn" data-target="#renameAssignment" data-toggle="modal" style="margin-top: 12px;">Rename</button>
+    <button class="btn" data-target="#renameAssignment" data-toggle="modal" onclick="fillinAssignmentName('renameName');" style="margin-top: 12px;">Rename</button>
     <fieldset>
       <legend>Assignment properties</legend>
       <span id="totalPoints"></span><br>
@@ -99,9 +98,9 @@
       <div class="modal-body">
         <form role="form">
           <div class="form-group">
-            <label for="name">Enter the new name for assignment "{{=assignments[assignmentid]}}"</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
+            <label for="name">Enter the new name for assignment "<span id="renameName"></span>"</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
-          <input class="btn btn-default" data-dismiss="modal" onclick="renameAssignment({{=assignmentid}},this.form)" type="button" value="Rename">
+          <input class="btn btn-default" data-dismiss="modal" onclick="renameAssignment(this.form)" type="button" value="Rename">
         </form>
       </div><!-- Modal Footer -->
       <div class="modal-footer">
