@@ -326,10 +326,12 @@ Browser Notes
 -------------
 
 Note, because this interactive edition makes use of lots of HTML 5 and Javascript
-I highly recommend either Chrome, or Safari.  Firefox 6+ works too, but has
-proven to be less reliable than the first two.  I have no idea whether this works
-at all under later versions of Internet Explorer.
+I highly recommend either Chrome, or Safari.  Firefox 67+ works too.  Reportedly Edge works fine as well.
 
+Python Notes
+------------
+
+Python 2.7 will reach the end of its life on January 1st, 2020. All of our development is now on Python 3.7.  With the release of docutils 0.15 sphinx no longer runs on 2.7 unless you install docutils 0.14. Sphinx 2.x only supports Python 3.x.  In July 2019 I removed testing for Python 2.7 as it is too much work to try to keep track of dependencies for 2.x and 3.x.  Please upgrade to Python 3.
 
 Researchers
 -----------
@@ -354,5 +356,5 @@ If you use Runestone in your Research or write about it, please reference ``http
     publisher = {ACM},
     address = {New York, NY, USA},
     keywords = {cs1, ebook, sphinx},
-   } 
+   }
 
