@@ -343,7 +343,15 @@ $(function () {
     configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
         // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
         // Called when a node is checked.
-        function (node) { updateAssignmentRaw(node.id, 1, 'pct_correct', 'best_answer'); },
+        function (node) {
+          let autograde = 'pct_correct';
+          let whichto = 'best_answer';
+          if (node.text.indexOf("✓") === -1) {
+            autograde = 'manual';
+            whichto = '';
+          }
+          updateAssignmentRaw(node.id, 1, autograde, whichto);
+        },
         // Called when a node is unchecked.
         function (node) { remove_question(node.id); }
     );

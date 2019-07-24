@@ -1474,6 +1474,7 @@ def add__or_update_assignment_question():
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
     subchapter = db.questions[question_id].subchapter
+    auto_grade = db.questions[question_id].autograde
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
     if tmpSp != None:
         sp = 1 + tmpSp
@@ -1510,6 +1511,10 @@ def add__or_update_assignment_question():
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
+    if question_type in ('activecode', 'actex'):
+        if auto_grade != 'unittest':
+            autograde = 'manual'
+            which_to_grade = ""
     try:
         # save the assignment_question
         db.assignment_questions.update_or_insert(
