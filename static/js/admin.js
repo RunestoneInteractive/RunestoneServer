@@ -13,7 +13,7 @@ function gradeIndividualItem() {
 
     var col3 = document.getElementById("gradingcolumn3");
     var col3val = col3.options[col3.selectedIndex].value;
-    
+
     var rightSideDiv = $('#rightsideGradingTab');
     var student_dict=students;
     var question,sid,student;
@@ -50,7 +50,7 @@ function gradeIndividualItem() {
             }
             if(!sid){continue}
             var newid="Q"+question+"S"+sid;
-            
+
             //This creates the equivalent of outerRightDiv for each question and student
             var divstring='<div style="border:1px solid;padding:5px;margin:5px;" id="'+newid+'">';
             divstring+='<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
@@ -421,7 +421,7 @@ function makeOption(text,value,disabledQ){
         $(option).attr("disabled",true);
     }
     return option;
-   
+
 }
 function populateQuestions(select,question_names){
     question_names.sort()
@@ -433,7 +433,7 @@ function populateQuestions(select,question_names){
         //THE FOLLOWING IS EXPERIMENTAL AND CAN BE IGNORED FOR NOW.
         /*
         if (q.includes("/")) {//if the question has a / in it, assume it is chapter/subchapter
-            var qL = q.split("/");  
+            var qL = q.split("/");
             if(chapter!=qL[0]){ //if the chapter changes, show it greyed out on a separate line
                 chapter=qL[0];
                 select.add(makeOption(chapter,"",true));
@@ -477,7 +477,7 @@ function updateColumn2() {
         populateQuestions(col2,chapters[col1val]);
     }
 
-    else if (VAL1 == 'student') {
+    else if (val1 == 'student') {
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
         } else {
@@ -485,20 +485,20 @@ function updateColumn2() {
         }
     }
 
-    if (VAL2 != "") {
+    if (val2 != "") {
         col2.style.visibility = 'visible';
     }
 }
 
 function updateColumn3() {
     var sel2 = document.getElementById("gradingoption2");
-    var VAL2 = sel2.options[sel2.selectedIndex].value;
+    var val2 = sel2.options[sel2.selectedIndex].value;
     var sel3 = document.getElementById("gradingoption3");
-    var VAL3 = sel3.options[sel3.selectedIndex].value;
+    var val3 = sel3.options[sel3.selectedIndex].value;
     var col2 = document.getElementById("gradingcolumn2");
     var col3 = document.getElementById("gradingcolumn3");
     var col2VAL = col2.options[col2.selectedIndex].value;
-    if (VAL2 == 'assignment') {
+    if (val2 == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
@@ -506,15 +506,15 @@ function updateColumn3() {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
     }
-    if (VAL2 == 'chapter' && VAL3 == 'question') {
+    if (val2 == 'chapter' && val3 == 'question') {
         populateQuestions(col3,chapters[col2VAL]);
     }
 
-    else if (VAL2 == 'assignment' && VAL3 == 'question') {
+    else if (val2 == 'assignment' && val3 == 'question') {
         populateQuestions(col3,assignmentinfo[col2VAL]);
     }
 
-    if (VAL3 != "") {
+    if (val3 != "") {
         var lastcolval = col3.selectedIndex;
         if (lastcolval != -1) {
             gradeIndividualItem();
