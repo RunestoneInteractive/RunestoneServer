@@ -47,7 +47,7 @@ class ChapterGet:
     def ChapterNumber(self,label):
         """Given the label of a chapter, return its number"""
         try:
-            return self.Cmap[label].id
+            return self.Cmap[label].chapter_num
         except ValueError:
             return ""
     def ChapterName(self,label):
