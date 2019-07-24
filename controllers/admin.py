@@ -1484,8 +1484,9 @@ def add__or_update_assignment_question():
     if question_type == 'page':
         reading_assignment = 'T'
         # get the count of 'things to do' in this chap/subchap
-        activity_count = db((db.questions.chapter==chapter) &
-                   (db.questions.subchapter==subchapter) &
+        activity_count = db((db.questions.chapter == chapter) &
+                   (db.questions.subchapter == subchapter) &
+                   (db.questions.from_source == 'T') &
                    (db.questions.base_course == base_course)).count()
         try:
             activities_required = int(request.vars.get('activities_required'))
