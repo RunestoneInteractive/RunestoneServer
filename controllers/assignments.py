@@ -342,6 +342,14 @@ def calculate_totals():
     else:
         return json.dumps({'success': False, 'message': "Select an assignment before trying to calculate totals."})
 
+@auth.requires_login()
+def student_autograde():
+    """
+    This is a safe endpoint that students can call from the assignment page
+    to get a preliminary grade on their assignment.
+    """
+    pass
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
