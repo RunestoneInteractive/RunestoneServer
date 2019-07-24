@@ -72,9 +72,14 @@
         </div>
     {{pass}}
 </div>
-{{ if settings.coursera_mode: }}
+
+{{ if not released: }}
 <div style="text-align:center">
-    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton"> Grade Me</button>
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+    <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
+        Some problems will need to be manually graded, and your instructor may have requirements that cannot be autograded.
+        No deadlines are enforced when self grading, but your instructor may penalize you
+        for late work.</p>
 </div>
 {{ pass }}
 </div>
@@ -108,15 +113,16 @@
         let change = $.parseHTML(unescapedhtml, keepScripts=true);
         $div.append(change);
     }
-{{ if settings.coursera_mode: }}
+
 
     $("#gradeMeButton").on("click", function(){
         $('#gradeMeButton').css('visibility', 'hidden');
-        selfGrade({{=assignment['id']}}, {{=student_id}})});
-{{ pass }}
+        selfGrade({{=assignment['id']}}, '{{=student_id}}')});
+
 
 
 
 </script>
+<script src="/runestone/static/js/selfgrade.js" type="text/javascript"></script>
 {{end}}
 

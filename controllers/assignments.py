@@ -348,7 +348,15 @@ def student_autograde():
     This is a safe endpoint that students can call from the assignment page
     to get a preliminary grade on their assignment.
     """
-    pass
+    assignment_id = request.vars.assignment_id
+    timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
+    assignment = db(db.assignments.id == assignment_id).select().first()
+    if assignment:
+        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name,
+            auth.user.username, None, 'false', timezoneoffset, db, settings)
+        return json.dumps({'message': "autograded {} items".format(count)})
+    else:
+        return json.dumps({'success': False, 'message': "Could not find this assignment -- This should not happen"})
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -553,15 +561,13 @@ def doAssignment():
                                       get_course_url('_images/'))
         else:
             htmlsrc = None
-        if assignment['released']:
-            # get score and comment
-            grade = db((db.question_grades.sid == auth.user.username) &
-                       (db.question_grades.course_name == auth.user.course_name) &
-                       (db.question_grades.div_id == q.questions.name)).select().first()
-            if grade:
-                score, comment = grade.score, grade.comment
-            else:
-                score, comment = 0, 'ungraded'
+
+        # get score and comment
+        grade = db((db.question_grades.sid == auth.user.username) &
+                    (db.question_grades.course_name == auth.user.course_name) &
+                    (db.question_grades.div_id == q.questions.name)).select().first()
+        if grade:
+            score, comment = grade.score, grade.comment
         else:
             score, comment = 0, 'ungraded'
 
@@ -633,7 +639,9 @@ def doAssignment():
                 course_id=auth.user.course_name,
                 readings=readings,
                 questions_score=questions_score,
-                readings_score=readings_score)
+                readings_score=readings_score,
+                student_id=auth.user.username,
+                released=assignment['released'])
 
 
 def chooseAssignment():
