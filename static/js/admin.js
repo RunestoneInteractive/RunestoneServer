@@ -477,7 +477,7 @@ function updateColumn2() {
         populateQuestions(col2,chapters[col1val]);
     }
 
-    else if (VAL1 == 'student') {
+    else if (val1 == 'student') {
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
         } else {
@@ -485,20 +485,20 @@ function updateColumn2() {
         }
     }
 
-    if (VAL2 != "") {
+    if (val2 != "") {
         col2.style.visibility = 'visible';
     }
 }
 
 function updateColumn3() {
     var sel2 = document.getElementById("gradingoption2");
-    var VAL2 = sel2.options[sel2.selectedIndex].value;
+    var val2 = sel2.options[sel2.selectedIndex].value;
     var sel3 = document.getElementById("gradingoption3");
-    var VAL3 = sel3.options[sel3.selectedIndex].value;
+    var val3 = sel3.options[sel3.selectedIndex].value;
     var col2 = document.getElementById("gradingcolumn2");
     var col3 = document.getElementById("gradingcolumn3");
-    var col2VAL = col2.options[col2.selectedIndex].value;
-    if (VAL2 == 'assignment') {
+    var col2val = col2.options[col2.selectedIndex].value;
+    if (val2 == 'assignment') {
         set_release_button();
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
@@ -506,15 +506,15 @@ function updateColumn3() {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
         }
     }
-    if (VAL2 == 'chapter' && VAL3 == 'question') {
-        populateQuestions(col3,chapters[col2VAL]);
+    if (val2 == 'chapter' && val3 == 'question') {
+        populateQuestions(col3,chapters[col2val]);
     }
 
-    else if (VAL2 == 'assignment' && VAL3 == 'question') {
-        populateQuestions(col3,assignmentinfo[col2VAL]);
+    else if (val2 == 'assignment' && val3 == 'question') {
+        populateQuestions(col3,assignmentinfo[col2val]);
     }
 
-    if (VAL3 != "") {
+    if (val3 != "") {
         var lastcolval = col3.selectedIndex;
         if (lastcolval != -1) {
             gradeIndividualItem();
