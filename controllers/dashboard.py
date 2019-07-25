@@ -48,17 +48,17 @@ class ChapterGet:
         """Given the label of a chapter, return its number"""
         try:
             return self.Cmap[label].chapter_num
-        except ValueError:
+        except KeyError:
             return ""
     def ChapterName(self,label):
         try:
             return self.Cmap[label].chapter_name
-        except ValueError:
+        except KeyError:
             return label
     def SectionName(self,chapter,section):
         try:
             return self.Smap[chapter][section].sub_chapter_name
-        except ValueError:
+        except KeyError:
             return section
     def SectionNumber(self,chapter,section=None):
         try:
@@ -69,8 +69,8 @@ class ChapterGet:
                 lookup=self.Smap[chapter]
 
             return lookup[section].sub_chapter_num
-        except ValueError:
-            return ""
+        except KeyError:
+            return 999
 
 @auth.requires_login()
 def index():
@@ -144,7 +144,10 @@ def index():
         logger.debug("ADDING QUESTION %s ", entry["chapter"])
 
     logger.debug("getting questions")
-    questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number"))
+    try:
+        questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number"))
+    except:
+        logger.error("FAILED TO SORT {}".format(questions))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
         sections.append({
