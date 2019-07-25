@@ -1063,7 +1063,7 @@ function fillinAssignmentName(target){
 function renameAssignment(form) {
     var select=$("#assignlist")[0]
     var id=select[select.selectedIndex].value
-    var name = form.name.value;
+    var name = form['rename-name'].value;
     data={'name':name,'original':id}
     url='/runestone/admin/renameAssignment';
     jQuery.post(url,data,function(iserror,textStatus,whatever){
