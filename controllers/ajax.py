@@ -302,9 +302,13 @@ def gethist():
     codetbl = db.code
     acid = request.vars.acid
 
+    # if vars.sid then we know this is being called from the grading interface
     if request.vars.sid:
         sid = request.vars.sid
-        course_id = db(db.auth_user.username == sid).select(db.auth_user.course_id).first().course_id
+        if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user.id):
+            course_id = auth.user.course_id
+        else:
+            course_id = None
     elif auth.user:
         sid = auth.user.username
         course_id = auth.user.course_id
@@ -982,8 +986,11 @@ def preview_question():
         # Prevent any changes to the database when building a preview question.
         del env['DBURL']
         # Run a runestone build.
+        # We would like to use sys.executable But when we run web2py
+        # in uwsgi then sys.executable is uwsgi which doesn't work.
+        # Why not just run runestone?
         popen_obj = subprocess.Popen(
-            [sys.executable, '-m', 'runestone', 'build'],
+            [settings.python_interpreter, '-m', 'runestone', 'build'],
             # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
             cwd='applications/{}/build/preview'.format(request.application),
             # Capture the build output in case of an error.

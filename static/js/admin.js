@@ -49,8 +49,8 @@ function gradeIndividualItem() {
                 }
             }
             if(!sid){continue}
-            var newid="Q"+question+"S"+sid;
-
+            var newid= "Q" + question.replace(/[#@+:>~.\/ ]/g,'_') +
+            	       	  "S" + sid.replace(/[#@+:>~.\/]/g,'_');
             //This creates the equivalent of outerRightDiv for each question and student
             var divstring='<div style="border:1px solid;padding:5px;margin:5px;" id="'+newid+'">';
             divstring+='<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
@@ -1053,6 +1053,31 @@ function menu_from_editable(
 }
 
 
+function fillinAssignmentName(target){
+    //On the assignments tab, fill in the target with the name of the current assignment
+    //Only used by the rename assignment button for now
+    select=$("#assignlist")[0]
+    $("#"+target).html(select.options[select.selectedIndex].innerHTML)
+}
+//Invoked by the "Rename" button of the "Rename Assignment" dialog
+function renameAssignment(form) {
+    var select=$("#assignlist")[0]
+    var id=select[select.selectedIndex].value
+    var name = form['rename-name'].value;
+    data={'name':name,'original':id}
+    url='/runestone/admin/renameAssignment';
+    jQuery.post(url,data,function(iserror,textStatus,whatever){
+        if (iserror=="EXISTS"){
+            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
+        } else if (iserror!='ERROR'){
+            //find the assignment
+            select=$('#assignlist')[0];
+            select.options[select.selectedIndex].innerHTML=name
+        } else {
+            alert('Error in renaming assignment '+id)
+        }
+    },'json')
+}
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
@@ -1061,7 +1086,9 @@ function createAssignment(form) {
     data = {'name': name}
     url = '/runestone/admin/createAssignment';
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror != 'ERROR') {
+        if (iserror=="EXISTS"){
+            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
+        } else if (iserror!='ERROR'){
                 select = document.getElementById('assignlist');
                 newopt = document.createElement('option');
                 newopt.value = iserror[name];

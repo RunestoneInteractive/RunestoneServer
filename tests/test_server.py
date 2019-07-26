@@ -523,21 +523,50 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     test_instructor_1.make_instructor()
     test_instructor_1.login()
     db = runestone_db_tools.db
-
+    name_1 = 'test_assignment_1'
+    name_2 = 'test_assignment_2'
+    name_3 = 'test_assignment_3'
+    
     # Create an assignment -- using createAssignment
     test_client.post('admin/createAssignment',
-        data=dict(name='test_assignment_1'))
+        data=dict(name=name_1))
 
-    assign = db(
-        (db.assignments.name == 'test_assignment_1') &
+    assign1 = db(
+        (db.assignments.name == name_1) &
         (db.assignments.course == test_instructor_1.course.course_id)
     ).select().first()
-    assert assign
+    assert assign1
 
+    # Make sure you can't create two assignments with the same name
+    test_client.post('admin/createAssignment',
+                     data=dict(name=name_1))
+    assert "EXISTS" in test_client.text
+
+    # Rename assignment
+    test_client.post('admin/createAssignment',
+                     data=dict(name=name_2))
+    assign2 = db(
+        (db.assignments.name == name_2) &
+        (db.assignments.course == test_instructor_1.course.course_id)
+    ).select().first()
+    assert assign2
+    
+    test_client.post('admin/renameAssignment',
+                     data=dict(name=name_3,original=assign2.id))
+    assert db(db.assignments.name == name_3).select().first()
+    assert not db(db.assignments.name == name_2).select().first()
+
+    # Make sure you can't rename an assignment to an already used assignment
+    test_client.post('admin/renameAssignment',
+                     data=dict(name=name_3,original=assign1.id))
+    assert "EXISTS" in test_client.text
+    
     # Delete an assignment -- using removeassignment
-    test_client.post('admin/removeassign', data=dict(assignid=assign.id))
-    assert not db(db.assignments.name == 'test_assignment_1').select().first()
-
+    test_client.post('admin/removeassign', data=dict(assignid=assign1.id))
+    assert not db(db.assignments.name == name_1).select().first()
+    test_client.post('admin/removeassign', data=dict(assignid=assign2.id))
+    assert not db(db.assignments.name == name_3).select().first()
+    
     test_client.post('admin/removeassign', data=dict(assignid=9999999))
     assert "Error" in test_client.text
 
