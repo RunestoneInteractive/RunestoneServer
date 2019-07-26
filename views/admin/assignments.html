@@ -32,7 +32,6 @@
 </script>
 <script src="{{=URL('static', 'js/bootstrap-table/bootstrap-table-reorder-rows.js')}}">
 </script>
-
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
@@ -42,8 +41,9 @@
       <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
       {{ pass }}
     </select>
-    <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">+</button>
-    <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">-</button>
+    <button class="btn" data-target="#addAssignment" data-toggle="modal" style="margin-top: 12px;">Add</button>
+    <button class="btn" onclick="remove_assignment();" style="margin-top: 12px;">Delete</button>
+    <button class="btn" data-target="#renameAssignment" data-toggle="modal" onclick="fillinAssignmentName('renameName');" style="margin-top: 12px;">Rename</button>
     <fieldset>
       <legend>Assignment properties</legend>
       <span id="totalPoints"></span><br>
@@ -62,14 +62,14 @@
   <div class="col-md-2"></div>
 </div>
 
-<!-- Modal -->
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="addAssignment" role="dialog" tabindex="-1">
+<!-- Modal: Add -->
+<div aria-hidden="true" aria-labelledby="myAddModalLabel" class="modal fade" id="addAssignment" role="dialog" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
         <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Create Assignment</h4>
+        <h4 class="modal-title" id="myAddModalLabel">Create Assignment</h4>
       </div><!-- Modal Body -->
       <div class="modal-body">
         <form role="form">
@@ -80,11 +80,37 @@
         </form>
       </div><!-- Modal Footer -->
       <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+        <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal: Rename -->
+<div aria-hidden="true" aria-labelledby="myRenameModalLabel" class="modal fade" id="renameAssignment" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myRenameModalLabel">Rename Assignment</h4>
+      </div><!-- Modal Body -->
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <label for="rename-name">Enter the new name for assignment "<span id="renameName"></span>"</label> <input class="form-control" id="rename-name" placeholder="Enter assignment name" type="text">
+          </div>
+          <input class="btn btn-default" data-dismiss="modal" onclick="renameAssignment(this.form)" type="button" value="Rename">
+        </form>
+      </div><!-- Modal Footer -->
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="row">
   <div class="col-md-12" id="leftpanel2" style="visibility: hidden">
