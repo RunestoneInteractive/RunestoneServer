@@ -986,8 +986,11 @@ def preview_question():
         # Prevent any changes to the database when building a preview question.
         del env['DBURL']
         # Run a runestone build.
+        # We would like to use sys.executable But when we run web2py
+        # in uwsgi then sys.executable is uwsgi which doesn't work.
+        # Why not just run runestone?
         popen_obj = subprocess.Popen(
-            [sys.executable, '-m', 'runestone', 'build'],
+            [settings.python_interpreter, '-m', 'runestone', 'build'],
             # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
             cwd='applications/{}/build/preview'.format(request.application),
             # Capture the build output in case of an error.
