@@ -1536,6 +1536,7 @@ def add__or_update_assignment_question():
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
+    # Make sure the defaults are set correctly for activecode Qs
     if question_type in ('activecode', 'actex'):
         if auto_grade != 'unittest':
             autograde = 'manual'
