@@ -384,10 +384,20 @@ def test_GetHist(test_client, test_user_1):
         kwargs['code'] = 'test_code_{}'.format(x)
         test_client.post('ajax/runlog', data = kwargs)
 
-
     kwargs = dict(
             acid = 'test_activecode_1',
             sid = 'test_user_1'
+            )
+    test_client.post('ajax/gethist', data = kwargs)
+    print(test_client.text)
+    res = json.loads(test_client.text)
+
+    assert len(res['timestamps']) == 0
+    assert len(res['history']) == 0
+
+    kwargs = dict(
+            acid = 'test_activecode_1',
+            #sid = 'test_user_1'
             )
     test_client.post('ajax/gethist', data = kwargs)
     print(test_client.text)
