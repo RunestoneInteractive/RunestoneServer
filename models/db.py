@@ -131,11 +131,11 @@ def verifyInstructorStatus(course, instructor):
     given course.
     """
     if type(course) == str:
-        course = db(db.courses.course_name == course).select(db.courses.id).first()
+        course = db(db.courses.course_name == course).select(db.courses.id, cache=(cache.ram, 3600), cacheable=True).first()
 
     return db((db.course_instructor.course == course) &
              (db.course_instructor.instructor == instructor)
-            ).count() > 0
+            ).count(cache=(cache.ram, 3600)) > 0
 
 class IS_COURSE_ID:
     ''' used to validate that a course name entered (e.g. devcourse) corresponds to a
