@@ -23,7 +23,9 @@
         {{ block moreincludes }}
         {{ end }}
         <script type="text/javascript">
-            var eBookConfig = {};
+            if(typeof eBookConfig === "undefined") {
+                eBookConfig = {};
+            }
             var portPart = '';
             eBookConfig.host = "";
             eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
