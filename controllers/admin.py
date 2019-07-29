@@ -9,6 +9,7 @@ import json
 from runestone import cmap
 from rs_grading import send_lti_grades
 from dateutil.parser import parse
+import pandas as pd
 
 import logging
 
@@ -1638,6 +1639,24 @@ def reorder_assignment_questions():
 
     return json.dumps("Reordered in DB")
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def courselog():
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    course = auth.user.course_name
+
+    data = pd.read_sql_query("""
+    select sid, useinfo.timestamp, event, div_id, chapter, subchapter
+    from useinfo left outer join questions on div_id = name and questions.base_course = '{}'
+    where course_id = 'fopp'
+    order by useinfo.id
+    """.format(thecourse.base_course, course), settings.database_uri)
+    data = data[~data.sid.str.contains('@')]
+
+
+    response.headers['Content-Type']='application/vnd.ms-excel'
+    response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
+    return data.to_csv(na_rep=" ")
 
 def killer():
     print(routes_onerror)
