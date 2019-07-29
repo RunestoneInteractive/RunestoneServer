@@ -1036,9 +1036,18 @@ def did_donate():
 
 
 def get_datafile():
-    course = request.vars.course_id
+    """
+    course_id - string, the name of the course
+    acid -  the acid of this datafile
+    """
+    course = request.vars.course_id  # the course name
+    the_course = db(db.courses.course_name == course).select().first()
     acid = request.vars.acid
-    file_contents = db((db.source_code.acid == acid) & (db.source_code.course_id == course)).select(db.source_code.main_code).first()
+    file_contents = db((db.source_code.acid == acid) &
+        ((db.source_code.course_id == the_course.base_course) |
+         (db.source_code.course_id == course))
+        ).select(db.source_code.main_code).first()
+
     if file_contents:
         file_contents = file_contents.main_code
     else:
