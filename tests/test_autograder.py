@@ -49,17 +49,17 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
     student1.hsblog(event=event, act=bad_answer, correct='F',
         answer=bad_answer,
         div_id=div_id,
-        course='test_course_1')
+        course=student1.course.course_name)
     time.sleep(1)
     student1.hsblog(event=event, act=good_answer, correct='T',
         answer=good_answer,
         div_id=div_id,
-        course='test_course_1')
+        course=student1.course.course_name)
     time.sleep(1)
     student1.hsblog(event=event, act=bad_answer, correct='F',
         answer=bad_answer,
         div_id=div_id,
-        course='test_course_1')
+        course=student1.course.course_name)
     student1.logout()
 
     test_user_1.login()
@@ -78,7 +78,7 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
 
             res = db( (db.question_grades.sid == student1.username) &
                     (db.question_grades.div_id == div_id) &
-                    (db.question_grades.course_name == 'test_course_1')
+                    (db.question_grades.course_name == student1.course.course_name)
                     ).select().first()
 
             if gt == 'manual':
@@ -128,10 +128,10 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
     student1.login()
     student1.hsblog(event='page', act='view',
         div_id=SCA,
-        course='test_course_1')
+        course=test_user_1.course.course_name)
     student1.hsblog(event='page', act='view',
         div_id=SCB,
-        course='test_course_1')
+        course=test_user_1.course.course_name)
 
 
     student1.logout()
@@ -225,7 +225,7 @@ def test_getproblem(test_user_1, test_user, runestone_db_tools, test_client):
             'to_save': 'true',
             'prefix': "",
             'suffix': "",
-            'course': 'test_course_1'})
+            'course': student1.course.course_name})
 
     assert res
     student1.logout()

@@ -239,36 +239,40 @@ class _RunestoneDbTools(object):
     # Create a new course. It returns an object with information about the created course.
     def create_course(self,
         # The name of the course to create, as a string.
-        course_name='test_course_1',
+        course_name='test_child_course_1',
         # The start date of the course, as a string.
         term_start_date='2000-01-01',
         # The value of the ``login_required`` flag for the course.
         login_required=True,
         # The base course for this course. If ``None``, it will use ``course_name``.
-        base_course=None,
+        base_course='test_course_1',
         # The student price for this course.
         student_price=None):
 
         # Sanity check: this class shouldn't exist.
-        assert not self.db(self.db.courses.course_name == course_name).select().first()
+        db = self.db
+        assert not db(db.courses.course_name == course_name).select().first()
+
+        # Create the base course if it doesn't exist.
+        if (course_name != base_course and
+            not db(db.courses.course_name == base_course).select(db.courses.id)):
+            self.create_course(base_course, term_start_date, login_required,
+                               base_course, student_price)
 
         # Store these values in an object for convenient access.
         obj = _object()
         obj.course_name = course_name
         obj.term_start_date = term_start_date
         obj.login_required = login_required
-        obj.base_course = base_course or course_name
+        obj.base_course = base_course
         obj.student_price = student_price
-
-        # Keep this in a local variable, in case the test bench changes the value stored in this object. This guarantees the deletion will work.
-        course_id = self.db.courses.insert(
+        obj.course_id = db.courses.insert(
             course_name=course_name, base_course=obj.base_course,
             term_start_date=term_start_date,
             login_required=login_required,
             student_price=student_price,
         )
-        obj.course_id = course_id
-        self.db.commit()
+        db.commit()
         return obj
 
 
@@ -559,7 +563,7 @@ def test_user(test_client, runestone_db_tools):
 # Provide easy access to a test user and course.
 @pytest.fixture
 def test_user_1(runestone_db_tools, test_user):
-    course = runestone_db_tools.create_course('test_course_1')
+    course = runestone_db_tools.create_course()
     return test_user('test_user_1', 'password_1', course)
 
 
