@@ -431,7 +431,7 @@ def subchapoverview():
         from sub_chapters join chapters on chapters.id = sub_chapters.chapter_id
         where chapters.course_id = '{}'
         order by chapter_num, sub_chapter_num;
-        """.format(course), settings.database_uri )
+        """.format(thecourse.base_course), settings.database_uri )
 
     if request.vars.tablekind != "sccount":
         pt = pt.reset_index(2)
