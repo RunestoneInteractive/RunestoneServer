@@ -23,8 +23,14 @@ db.define_table('grades',
     Field('score', 'double'),
     Field('manual_total', 'boolean'),
     Field('projected', 'double'),
-    Field('lis_result_sourcedid', 'string'), # guid for the student x assignment cell in the external gradebook
-    Field('lis_outcome_url', 'string'), #web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
+    # guid for the student x assignment cell in the external gradebook
+    #
+    # Guessing that the ``lis_outcome_url`` length is actually inteded for this field, use that as its maximum length.
+    Field('lis_result_sourcedid', 'string', length=1024),
+    # web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
+    #
+    # Per the ``LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
+    Field('lis_outcome_url', 'string', length=1024),
     migrate=table_migrate_prefix + 'grades.table',
     )
 
