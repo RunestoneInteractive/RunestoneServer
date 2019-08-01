@@ -217,16 +217,15 @@
           {{pass}}
         </div>
     {{pass}}  <!-- end of always show the carousel EXCEPT for registration -->
-
+    {{if request.args(0) != 'register': }}
     <div class="content row">
+    {{pass}}
         <!-- REGISTRATION -->
         {{if (request.args(0) == 'register'): }} <!-- register page -->
           {{if not settings.lti_only_mode:}}
             <div id="registration_div">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6 col-sm-12 col-xs-12">
                     <h2>Runestone Registration</h2>
-                </div>
-                <div class="col-md-6">
                     <div id="web2py_user_form">
                         <script type="text/javascript">
                             function checkTcp() {
@@ -340,7 +339,7 @@
                     </div> <!-- end form div -->
                 </div>
             </div> <!-- end register div -->
-             <div class="col-md-6">
+             <div class="col-md-6 col-sm-12 col-xs-12">
                 <h4>Registration Hints</h4>
                 <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you are use one of the following for our open, public courses</p>
                 <ul>
@@ -361,10 +360,9 @@
             Registration is disabled. Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
           {{pass}}
         {{pass}} <!-- end register page -->
-
+        <div class="row">
         {{if (request.args(0) != 'register') and settings.academy_mode:}}
-            <div class="row">
-                <div class='col-md-6'>
+                <div class='col-md-6 col-sm-12 col-xs-12'>
                     <h2>About Runestone</h2>
                     <p>The mission of Runestone Interactive is to democratize textbooks for the 21st century.  Textbook prices are too high, and paper textbooks are too old fashioned.  We are changing that.</p>
                     <ul>
@@ -374,7 +372,7 @@
                     </ul>
                     <p>To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-6 col-xs-6">
                     <h2>Support Us</h2>
                     <p>This project is Open Source, but it does take time and resources.
                         Especially as our popularity has grown we have server costs. We
@@ -391,7 +389,7 @@
             </div>
         {{pass}}
         {{if settings.academy_mode:}}
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-6 col-xs-6">
                 <h2>Your Privacy</h2>
                 <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
                     of our educational mission we do collect usage data to help us better understand how you learn and how you
