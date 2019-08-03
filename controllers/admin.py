@@ -189,7 +189,7 @@ def assignments():
                 assignments=assigndict,
                 tags=tags,
                 chapters=chapter_labels,
-                toc=_get_toc_and_questions(),
+                toc=_get_toc_and_questions(),   # <-- This Gets the readings and questions
                 course=course,
                 )
 
@@ -1398,6 +1398,7 @@ def get_assignment():
             # get the count of 'things to do' in this chap/subchap
             activity_count = db((db.questions.chapter==row.questions.chapter) &
                        (db.questions.subchapter==row.questions.subchapter) &
+                       (db.questions.from_source == 'T') &
                        (db.questions.base_course == base_course)).count()
 
         pages_data.append(dict(
