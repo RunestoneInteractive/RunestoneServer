@@ -142,8 +142,10 @@
 				Class Activity
 				<button id="allTime" onclick="getActivity(false)" disabled>All Time</button>
 				<button id="lastWeek" onclick="getActivity(true);">Last 7 Days</button>
+                                <button id="hideStudent" data-target="#classactivitycontent" data-toggle="collapse"  >Hide/Show</button>
 			</div>
-			<div class="dash-section-content">
+                        <!--NOTE: If switch to Bootstrap 4.0, replace in with show-->
+			<div id="classactivitycontent" class="dash-section-content collapse in">
 				<!-- <div style="text-align: right"><b>Sort by</b>
 					<select name="activity-sortby">
 					  <option value="missed" selected>Alphabetical</option>

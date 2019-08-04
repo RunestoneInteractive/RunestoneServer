@@ -1,7 +1,12 @@
 # ***************************************
 # |docname| - pytest fixtures for testing
 # ***************************************
-# These fixtures start the web2py server then submit requests to it.
+#
+# To get started on running tests, see tests/README.rst
+#
+#  These fixtures start the web2py server then submit requests to it.
+#
+#  **NOTE:** Make sure you don't have another server running, because it will grab the requests instead of letting the test server respond to requests.
 #
 # The overall testing approach is functional: rather than test a function, this file primarily tests endpoints on the web server. To accomplish this:
 #
