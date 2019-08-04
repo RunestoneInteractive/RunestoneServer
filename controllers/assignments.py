@@ -399,7 +399,9 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
 def student_autograde():
     """
     This is a safe endpoint that students can call from the assignment page
-    to get a preliminary grade on their assignment.
+    to get a preliminary grade on their assignment. If in coursera_mode,
+    the total for the assignment is calculated and stored in the db, and
+    sent via LTI (if LTI is configured).
     """
     assignment_id = request.vars.assignment_id
     timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
@@ -421,13 +423,6 @@ def student_autograde():
             else:
                 _try_to_send_lti_grade(auth.user.id, assignment_id)
     return json.dumps(res)
-    # assignment = db(db.assignments.id == assignment_id).select().first()
-    # if assignment:
-    #     count = do_autograde(assignment, auth.user.course_id, auth.user.course_name,
-    #         auth.user.username, None, 'false', timezoneoffset, db, settings)
-    #     return json.dumps({'message': "autograded {} items".format(count)})
-    # else:
-    #     return json.dumps({'success': False, 'message': "Could not find this assignment -- This should not happen"})
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

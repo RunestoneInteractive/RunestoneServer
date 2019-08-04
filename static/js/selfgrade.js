@@ -6,7 +6,7 @@ function selfGrade(assignment_id, student_id) {
         dataType: "JSON",
         data: {
             assignment_id: assignment_id,
-            sid: student_id,
+//            sid: student_id,
             enforceDeadline: enforceDeadline
         },
         success: function (retdata) {
