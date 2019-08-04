@@ -5,6 +5,17 @@ Testing the Runestone Server is a daunting task, especially since we did not wri
 
 If you just want to run the tests:
 
+- There are some extra modules needed, so install them
+
+.. code-block::
+
+    cd runestone
+    pip install -r requirements-test.txt
+
+
+- Next, connect to this directory (`runestone/tests`)
+- **Make sure that you don't have a runestone server running.** If you do, that server will handle the web page requests that occur during the tests instead of letting the test server respond to them, and it will be accessing the wrong database.
+
 .. code-block::
 
     python run_tests.py
@@ -67,7 +78,7 @@ But we really hope you will write some tests, so lets take a look at a sample of
 
 The test above can be run as part of the entire suite of tests by running ``scripts/dtest -k test_poll`` from the Runestone main directory.  This assumes that you have a Docker environment set up for your developent work. If you are not using docker then from the tests folder run ``python run_tests.py -k test_poll`` The ``-k`` option matches any part of the test names, so you don't have to give it the full test name.  ``-k poll`` would run any test that has poll in its name.
 
-The ``run_tests.py`` script ensures that the database is initialized, a test book/course is created (called test_course_1) and all of the testing framework is in place.  The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment.  The fixtures include:
+The ``run_tests.py`` script ensures that the database is initialized, a test book/course is created (called test_course_1) and all of the testing framework is in place.  The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment. When you define a test_function that has one of these as a parameter name, when the test runner executes the function, the parameter will be bound to the fixture object.  The fixtures include:
 
 * test_client - A client for interacting with the web2py Server
 
@@ -85,7 +96,7 @@ The ``run_tests.py`` script ensures that the database is initialized, a test boo
   * make_payment
   * test_client -- an attribute that gets the client the user is using (think of the client liket the browser)
 
-* test_user - A function to create a test user
+* test_user - A function to create additional users
 * runestone_db_tools - An object that allows you to get the db object
 * web2py_server
 
