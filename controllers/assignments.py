@@ -329,18 +329,71 @@ def record_assignment_score():
             manual_total=True
         )
 
+def _calculate_totals(sid=None, student_rownum=None, assignment_name = None, assignment_id = None):
+    if assignment_id:
+        assignment = db(
+            (db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
+    else:
+        assignment = db(
+            (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        return do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name, sid, student_rownum, db, settings)
+    else:
+        return {'success': False, 'message': "Select an assignment before trying to calculate totals."}
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def calculate_totals():
     assignment_name = request.vars.assignment
     sid = request.vars.get('sid', None)
-    assignment = db(
-        (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    if assignment:
-        return json.dumps(
-            do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name, sid, db, settings))
+    return json.dumps(_calculate_totals(sid=sid, assignment_name=assignment_name))
+
+def _autograde(sid=None, student_rownum=None, question_name=None, enforce_deadline=False, assignment_name=None, assignment_id=None, timezoneoffset=None):
+    if assignment_id:
+        assignment = db(
+            (db.assignments.id == assignment_id) & (db.assignments.course == auth.user.course_id)).select().first()
     else:
-        return json.dumps({'success': False, 'message': "Select an assignment before trying to calculate totals."})
+        assignment = db(
+            (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
+    if assignment:
+        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name, sid, student_rownum, question_name,
+                             enforce_deadline, timezoneoffset, db, settings)
+        return {'success': True, 'message': "autograded {} items".format(count), 'count':count}
+    else:
+        return {'success': False, 'message': "Select an assignment before trying to autograde."}
+
+
+def _get_assignment(assignment_id):
+    return db(db.assignments.id == assignment_id).select().first()
+
+def _try_to_send_lti_grade(student_row_num, assignment_id):
+    # try to send lti grades
+    assignment = _get_assignment(assignment_id)
+    if not assignment:
+        session.flash = "Failed to find assignment object for assignment {}".format(assignment_id)
+        return False
+    else:
+        grade = db(
+            (db.grades.auth_user == student_row_num) &
+            (db.grades.assignment == assignment_id)).select().first()
+        if not grade:
+            session.flash = "Failed to find grade object for user {} and assignment {}".format(auth.user.id,
+                                                                                               assignment_id)
+            return False
+        else:
+            lti_record = _get_lti_record(session.oauth_consumer_key)
+            if (not lti_record) or (not grade.lis_result_sourcedid) or (not grade.lis_outcome_url):
+                session.flash = "Failed to send grade back to LMS (Coursera, Canvas, Blackboard...), probably because the student accessed this assignment directly rather than using a link from the LMS, or because there is an error in the assignment link in the LMS. Please report this error."
+                return False
+            else:
+                # really sending
+                # print("send_lti_grade({}, {}, {}, {}, {}, {}".format(assignment.points, grade.score, lti_record.consumer, lti_record.secret, grade.lis_outcome_url, grade.lis_result_sourcedid))
+                send_lti_grade(assignment.points,
+                               score=grade.score,
+                               consumer=lti_record.consumer,
+                               secret=lti_record.secret,
+                               outcome_url=grade.lis_outcome_url,
+                               result_sourcedid=grade.lis_result_sourcedid)
+                return True
 
 @auth.requires_login()
 def student_autograde():
@@ -350,33 +403,60 @@ def student_autograde():
     """
     assignment_id = request.vars.assignment_id
     timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
-    assignment = db(db.assignments.id == assignment_id).select().first()
-    if assignment:
-        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name,
-            auth.user.username, None, 'false', timezoneoffset, db, settings)
-        return json.dumps({'message': "autograded {} items".format(count)})
+
+
+    res = _autograde(student_rownum=auth.user.id,
+                     assignment_id=assignment_id,
+                     timezoneoffset=timezoneoffset)
+
+    if not res['success']:
+        session.flash = "Failed to autograde questions for user id {} for assignment {}".format(auth.user.id, assignment_id)
+        res = {'success':False}
     else:
-        return json.dumps({'success': False, 'message': "Could not find this assignment -- This should not happen"})
+        res2 = _calculate_totals(student_rownum=auth.user.id, assignment_id=assignment_id)
+        if not res2['success']:
+            session.flash = "Failed to compute totals for user id {} for assignment {}".format(auth.user.id, assignment_id)
+            res = {'success':False}
+        else:
+            # _try_to_send_lti_grade(auth.user.id, assignment_id)
+             pass
+    return json.dumps(res)
+    # assignment = db(db.assignments.id == assignment_id).select().first()
+    # if assignment:
+    #     count = do_autograde(assignment, auth.user.course_id, auth.user.course_name,
+    #         auth.user.username, None, 'false', timezoneoffset, db, settings)
+    #     return json.dumps({'message': "autograded {} items".format(count)})
+    # else:
+    #     return json.dumps({'success': False, 'message': "Could not find this assignment -- This should not happen"})
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
     ### This endpoint is hit to autograde one or all students or questions for an assignment
-
     sid = request.vars.get('sid', None)
     question_name = request.vars.get('question', None)
     enforce_deadline = request.vars.get('enforceDeadline', None)
     assignment_name = request.vars.assignment
     timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
 
+    return json.dumps(_autograde(sid=sid,
+                                 question_name=question_name,
+                                 enforce_deadline=enforce_deadline,
+                                 assignment_name=assignment_name,
+                                 timezoneoffset=timezoneoffset))
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def send_assignment_score_via_LTI():
+
+    assignment_name = request.vars.assignment
+    sid = request.vars.get('sid', None)
     assignment = db(
         (db.assignments.name == assignment_name) & (db.assignments.course == auth.user.course_id)).select().first()
-    if assignment:
-        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name, sid, question_name,
-                             enforce_deadline, timezoneoffset, db, settings)
-        return json.dumps({'message': "autograded {} items".format(count)})
-    else:
-        return json.dumps({'success': False, 'message': "Select an assignment before trying to autograde."})
+    student_row = db((db.auth_user.username == sid)).select(db.auth_user.id).first()
+    _try_to_send_lti_grade(student_row.id, assignment.id)
+    return json.dumps({'success': True })
+
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def record_grade():

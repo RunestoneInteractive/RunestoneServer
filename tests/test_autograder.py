@@ -240,3 +240,99 @@ def test_getproblem(test_user_1, test_user, runestone_db_tools, test_client):
     assert res['code'] == code
 
     # todo: add the question to an assignment and retest - test case where code is after the deadline
+
+
+def test_student_autograde(test_user_1, test_user, runestone_db_tools):
+
+    student1 = test_user('student1', 'password', test_user_1.course)
+    student1.logout()
+    test_user_1.make_instructor()
+    test_user_1.login()
+
+    # create an assignment
+    res = test_user_1.test_client.validate('admin/createAssignment',
+                               data=dict(name='assignment1'))
+
+    res = json.loads(res)
+    assert 'assignment1' in res
+    assignment_id = res['assignment1']
+
+    res = test_user_1.test_client.validate('admin/add__or_update_assignment_question',
+                                data=dict(assignment=assignment_id,
+                                          question='shorta1',
+                                          points=2,
+                                          autograde='null',
+                                          which_to_grade='best_answer',
+                                          reading_assignment=False
+                                          ))
+
+    res = json.loads(res)
+    assert 'total' in res
+    assert res['total'] == 2  # 2 points in the assignment overall now
+
+    test_user_1.logout()
+
+    # make the assignment visible
+    db = runestone_db_tools.db
+    assignment = db(db.assignments.id == assignment_id).select().first()
+    assignment.update_record(visible=True)
+    db.commit()
+
+    # check if score is 0% for the student
+    student1.login()
+    res = student1.test_client.validate('assignments/doAssignment'.format(assignment_id),
+                                        'Score: 0 of 2 = 0.0%',
+                                        data=dict(assignment_id=assignment_id))
+
+
+    student1.logout()
+    test_user_1.login()
+    # record grades for individual questions
+    res = test_user_1.test_client.validate('assignments/record_grade',
+        data=dict(sid=student1.username,
+            acid='shorta1',
+            grade=1,
+            comment='very good'))
+
+    res = json.loads(res)
+    assert res['response'] == 'replaced'
+
+    # # check if question grade recorded in db
+    # db = runestone_db_tools.db
+    #
+    # row = db((db.question_grades.sid == student1.username)
+    #    & (db.question_grades.div_id == 'shorta1')
+    #    & (db.question_grades.course_name == 'test_course_1')
+    #    ).select().first()
+    # print(row)
+
+
+    test_user_1.logout()
+    student1.login()
+
+    # if we run the autograder with the assignment not set to calc_totals, then the individual item should be graded,
+    # but the total should not be calculated
+
+
+    # try to have student self-grade
+    res = student1.test_client.validate('assignments/student_autograde',
+        data=dict(assignment_id=assignment_id))
+
+    print(res)
+
+
+    res = json.loads(res)
+    assert res['success']
+    print(res)
+
+
+
+    # check if score is now 50%
+    res = student1.test_client.validate('assignments/doAssignment'.format(assignment_id),
+                                        'Score: 1.0 of 2 = 50.0%',
+                                        data=dict(assignment_id=assignment_id))
+
+    # other tests to implement....
+    # no assignment_id sent
+    # user not logged in
+    # assignment flagged for lti submission

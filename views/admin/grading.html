@@ -7,6 +7,7 @@
   eBookConfig.autogradingURL = '{{=autogradingUrl}}';
   eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
   eBookConfig.setTotalURL = '{{=setTotalURL}}';
+  eBookConfig.sendLTIGradeURL = '{{=sendLTIGradeURL}}';
   eBookConfig.getCourseStudentsURL = '{{=getCourseStudentsURL}}';
   eBookConfig.get_assignment_release_statesURL = '{{=get_assignment_release_statesURL}}';
   eBookConfig.course = '{{=course_id}}';
@@ -79,6 +80,9 @@
       <input id="manual-total-score" type="text" class="form-control" value="" />
       <input type="submit" value="Save Manual Total" class="btn btn-default" style="margin-top: 5px;" />
     </form>
+    {{if settings.lti_only_mode:}}
+      <button id="send_lti_grade" style="text-align: center;" class="list-group-item btn btn-success" onclick="sendLTI_Grade();">Release Grade to LMS</button>
+    {{pass}}
   </div>
 
   <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item btn btn-success" onclick="toggle_release_grades();">Release Grades</button>
