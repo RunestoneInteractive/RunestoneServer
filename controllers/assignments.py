@@ -562,7 +562,7 @@ def get_problem():
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
     return json.dumps(res)
 
-
+@auth.requires_login()
 def doAssignment():
     if not auth.user:
         session.flash = "Please Login"
@@ -720,7 +720,7 @@ def doAssignment():
                 student_id=auth.user.username,
                 released=assignment['released'])
 
-
+@auth.requires_login()
 def chooseAssignment():
     if not auth.user:
         session.flash = "Please Login"
@@ -755,6 +755,7 @@ def _get_practice_completion(user_id, course_name, spacing):
               (db.user_topic_practice_log.q != -1)).count()
 
 # Called when user clicks "I'm done" button.
+@auth.requires_login()
 def checkanswer():
     if not auth.user:
         session.flash = "Please Login"
@@ -804,12 +805,14 @@ def settz_then_practice():
 
 
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
+@auth.requires_login()
 def practiceNotStartedYet():
     return dict(course=get_course_row(db.courses.ALL), course_id=auth.user.course_name,
                 message1=bleach.clean(request.vars.message1 or ''), message2=bleach.clean(request.vars.message2 or ''))
 
 
 # Gets invoked when the student requests practicing topics.
+@auth.requires_login()
 def practice():
     if not auth.user:
         session.flash = "Please Login"
@@ -1003,6 +1006,7 @@ def practice():
 
 
 # Called when user clicks like or dislike icons.
+@auth.requires_login()
 def like_dislike():
     if not auth.user:
         session.flash = "Please Login"
@@ -1026,6 +1030,7 @@ def like_dislike():
 
 
 # Called when user submits their feedback at the end of practicing.
+@auth.requires_login()
 def practice_feedback():
     if not auth.user:
         session.flash = "Please Login"
