@@ -5,7 +5,15 @@ Testing the Runestone Server is a daunting task, especially since we did not wri
 
 If you just want to run the tests:
 
-- First, connect to this directory (`runestone/tests`)
+- There are some extra modules needed, so install them
+
+.. code-block::
+
+    cd runestone
+    pip install -r requirements-test.txt
+
+
+- Next, connect to this directory (`runestone/tests`)
 - **Make sure that you don't have a runestone server running.** If you do, that server will handle the web page requests that occur during the tests instead of letting the test server respond to them, and it will be accessing the wrong database.
 
 .. code-block::
