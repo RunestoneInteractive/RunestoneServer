@@ -565,13 +565,13 @@ def test_user_1(runestone_db_tools, test_user):
 
 class _TestAssignment(object):
     assignment_count = 0
-    def __init__(self, test_client, test_user, runestone_db_tools, aname, course):
+    def __init__(self, test_client, test_user, runestone_db_tools, aname, course, is_visible=False):
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.assignment_name = aname
         self.course = course
         self.description = "default description"
-        self.is_visible = False
+        self.is_visible = is_visible
         self.due = datetime.datetime.utcnow() + datetime.timedelta(days=7)
         self.assignment_instructor = test_user('assign_instructor_{}'.format(_TestAssignment.assignment_count),
             'password', course)

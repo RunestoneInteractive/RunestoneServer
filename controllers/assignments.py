@@ -413,13 +413,13 @@ def student_autograde():
         session.flash = "Failed to autograde questions for user id {} for assignment {}".format(auth.user.id, assignment_id)
         res = {'success':False}
     else:
-        res2 = _calculate_totals(student_rownum=auth.user.id, assignment_id=assignment_id)
-        if not res2['success']:
-            session.flash = "Failed to compute totals for user id {} for assignment {}".format(auth.user.id, assignment_id)
-            res = {'success':False}
-        else:
-            # _try_to_send_lti_grade(auth.user.id, assignment_id)
-             pass
+        if settings.coursera_mode:
+            res2 = _calculate_totals(student_rownum=auth.user.id, assignment_id=assignment_id)
+            if not res2['success']:
+                session.flash = "Failed to compute totals for user id {} for assignment {}".format(auth.user.id, assignment_id)
+                res = {'success':False}
+            else:
+                _try_to_send_lti_grade(auth.user.id, assignment_id)
     return json.dumps(res)
     # assignment = db(db.assignments.id == assignment_id).select().first()
     # if assignment:
@@ -720,6 +720,8 @@ def doAssignment():
                 readings=readings,
                 questions_score=questions_score,
                 readings_score=readings_score,
+                # gradeRecordingUrl=URL('assignments', 'record_grade'),
+                # calcTotalsURL=URL('assignments', 'calculate_totals'),
                 student_id=auth.user.username,
                 released=assignment['released'])
 
