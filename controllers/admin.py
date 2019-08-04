@@ -432,7 +432,10 @@ def add_practice_items():
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     data = json.loads(request.vars.data)
 
-    string_data = [x.encode('UTF8') for x in data]
+    # Was for Python 2.x
+    # string_data = [x.encode('UTF8') for x in data]
+    # Is for Python 3.x
+    string_data = data
 
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=float(session.timezoneoffset))
