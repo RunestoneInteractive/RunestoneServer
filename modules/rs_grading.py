@@ -448,8 +448,7 @@ def _get_students(course_id=None, sid = None, student_rownum=None, db=None):
         student_rows = db((db.auth_user.id == student_rownum)
                           ).select(db.auth_user.username, db.auth_user.id)
     elif sid:
-        # sid is a username; get the matching rownum as well
-        # THIS IS DANGEROUS, if username is duplicated across courses. OK if username is unique server-wide
+        # fetch based on username rather db row number
         student_rows = db((db.auth_user.username == sid)
                           ).select(db.auth_user.username, db.auth_user.id)
     elif course_id:
