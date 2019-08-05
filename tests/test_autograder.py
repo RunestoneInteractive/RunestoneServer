@@ -307,10 +307,6 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
     # ******** change the settings and try again,
     # the total should be calculated and stored in db now ***********
 
-    #### Hopefully, Bryan will have an idea for how to turn the following into a fixture.
-    # with settings_fixture({'settings.coursera_mode':True})
-    #     ...the stuff inside the try except for file writing and deleting
-
     with settings_context({'settings.coursera_mode': True}):
         # try to have student self-grade
         res = student1.test_client.validate('assignments/student_autograde',
