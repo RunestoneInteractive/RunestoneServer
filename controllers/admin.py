@@ -540,24 +540,22 @@ def admin():
             if row.user_id not in instructordict:
                 studentdict[row.user_id]= name
 
-    #Not rebuilding
-    if not request.vars.projectname or not request.vars.startdate:
-        course = db(db.courses.course_name == auth.user.course_name).select().first()
-        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,
-                    coursename=auth.user.course_name, course_id=auth.user.course_name,
-                    instructors=instructordict, students=studentdict,
-                    curr_start_date=curr_start_date, confirm=True,
-                    build_info=my_build, master_build=master_build, my_vers=my_vers,
-                    mst_vers=mst_vers,
-                    course=sidQuery,
-                    )
 
-    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
-                instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url, course_id=auth.user.course_name,
+    instructor_course_list = db( (db.course_instructor.instructor == auth.user.id) &
+                                 (db.courses.id == db.course_instructor.course)).select(db.courses.course_name, db.courses.id)
+    print("ICL = ", instructor_course_list)
+    #Not rebuilding
+    course = db(db.courses.course_name == auth.user.course_name).select().first()
+    curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+    return dict(sectionInfo=sectionsList,startDate=date,
+                coursename=auth.user.course_name, course_id=auth.user.course_name,
+                instructors=instructordict, students=studentdict,
+                curr_start_date=curr_start_date, confirm=True,
+                build_info=my_build, master_build=master_build, my_vers=my_vers,
+                mst_vers=mst_vers,
                 course=sidQuery,
-)
+                instructor_course_list=instructor_course_list
+                )
 
 # Called in admin.js from courseStudents to populate  the list of students
 # eBookConfig.getCourseStudentsURL
