@@ -23,6 +23,55 @@ logger.setLevel(settings.log_level)
 
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
+class ChapterGet:
+#    chapnum_map={}
+#    sub_chapters={}
+#    subchap_map={}
+#    subchapnum_map={}
+#    subchapNum_map={}
+    def __init__(self,chapters):
+
+        self.Cmap={}
+        self.Smap={} #dictionary organized by chapter and section labels
+        self.SAmap={} #organized just by section label
+        for chapter in chapters:
+            label=chapter.chapter_label
+            self.Cmap[label]=chapter
+            sub_chapters=db(db.sub_chapters.chapter_id==chapter.id).select(db.sub_chapters.ALL) #FIX: get right course_id, too
+            #NOTE: sub_chapters table doesn't have a course name column in it, kind of a problem
+            self.Smap[label]={}
+
+            for sub_chapter in sub_chapters:
+                self.Smap[label][sub_chapter.sub_chapter_label]=sub_chapter
+                self.SAmap[sub_chapter.sub_chapter_label]=sub_chapter
+    def ChapterNumber(self,label):
+        """Given the label of a chapter, return its number"""
+        try:
+            return self.Cmap[label].chapter_num
+        except KeyError:
+            return ""
+    def ChapterName(self,label):
+        try:
+            return self.Cmap[label].chapter_name
+        except KeyError:
+            return label
+    def SectionName(self,chapter,section):
+        try:
+            return self.Smap[chapter][section].sub_chapter_name
+        except KeyError:
+            return section
+    def SectionNumber(self,chapter,section=None):
+        try:
+            if section==None:
+                lookup=self.SAmap
+                section=chapter
+            else:
+                lookup=self.Smap[chapter]
+
+            return lookup[section].sub_chapter_num
+        except KeyError:
+            return 999
+
 @auth.requires_login()
 def index():
     selected_chapter = None
@@ -36,11 +85,10 @@ def index():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL, orderby=db.assignments.name)
+    chapters = db(db.chapters.course_id == course.base_course).select(orderby=db.chapters.chapter_num)
+
     logger.debug("getting chapters for {}".format(auth.user.course_name))
-    chapters = db(db.chapters.course_id == course.base_course).select()
-    chap_map = {}
-    for chapter in chapters:
-        chap_map[chapter.chapter_label] = chapter.chapter_name
+    chapget = ChapterGet(chapters)
     for chapter in chapters.find(lambda chapter: chapter.chapter_label==request.vars['chapter']):
         selected_chapter = chapter
     if selected_chapter is None:
@@ -61,12 +109,16 @@ def index():
 
         if data_analyzer.questions[problem_id]:
             chtmp = data_analyzer.questions[problem_id].chapter
+            schtmp = data_analyzer.questions[problem_id].subchapter
             entry = {
                 "id": problem_id,
                 "text": metric.problem_text,
                 "chapter": chtmp,
-                "chapter_title": chap_map.get(chtmp,chtmp),
-                "sub_chapter": data_analyzer.questions[problem_id].subchapter,
+                "chapter_title": chapget.ChapterName(chtmp),
+                "chapter_number": chapget.ChapterNumber(chtmp),
+                "sub_chapter": schtmp,
+                "sub_chapter_number": chapget.SectionNumber(chtmp,schtmp),
+                "sub_chapter_title": chapget.SectionName(chtmp,schtmp),
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
                 "incomplete": stats[1],
@@ -79,6 +131,8 @@ def index():
                 "text": metric.problem_text,
                 "chapter": "unknown",
                 "sub_chapter": "unknown",
+                "sub_chapter_number": 0,
+                "sub_chapter_title":"unknown",
                 "chapter_title": "unknown",
                 "correct": stats[2],
                 "correct_mult_attempt": stats[3],
@@ -89,14 +143,20 @@ def index():
         questions.append(entry)
         logger.debug("ADDING QUESTION %s ", entry["chapter"])
 
-    logger.debug("getting questsions")
-    questions = sorted(questions, key=itemgetter("chapter"))
+    logger.debug("getting questions")
+    try:
+        questions = sorted(questions, key=itemgetter("chapter","sub_chapter_number"))
+    except:
+        logger.error("FAILED TO SORT {}".format(questions))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
         sections.append({
             "id": metric.sub_chapter_label,
             "text": metric.sub_chapter_text,
             "name": metric.sub_chapter_name,
+            "number": chapget.SectionNumber(selected_chapter.chapter_label,metric.sub_chapter_label),
+            #FIX: Using selected_chapter here might be a kludge
+            #Better if metric contained chapter numbers associated with sub_chapters
             "readPercent": metric.get_completed_percent(),
             "startedPercent": metric.get_started_percent(),
             "unreadPercent": metric.get_not_started_percent()
@@ -171,6 +231,7 @@ def studentprogress():
 
 @auth.requires_login()
 def grades():
+    response.title = "Gradebook"
     course = db(db.courses.id == auth.user.course_id).select().first()
 
     assignments = db(db.assignments.course == course.id).select(db.assignments.ALL,
@@ -370,7 +431,7 @@ def subchapoverview():
         from sub_chapters join chapters on chapters.id = sub_chapters.chapter_id
         where chapters.course_id = '{}'
         order by chapter_num, sub_chapter_num;
-        """.format(course), settings.database_uri )
+        """.format(thecourse.base_course), settings.database_uri )
 
     if request.vars.tablekind != "sccount":
         pt = pt.reset_index(2)

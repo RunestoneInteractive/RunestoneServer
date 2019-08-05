@@ -9,6 +9,7 @@ import json
 from runestone import cmap
 from rs_grading import send_lti_grades
 from dateutil.parser import parse
+import pandas as pd
 
 import logging
 
@@ -73,6 +74,7 @@ def index():
 
 @auth.requires_login()
 def doc():
+    response.title = "Documentation"
     return dict(course_id=auth.user.course_name, course=get_course_row(db.courses.ALL))
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
@@ -161,6 +163,7 @@ def assignments():
     """
     This is called for the assignments tab on the instructor interface
     """
+    response.title = "Assignments"
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(orderby=db.assignments.duedate)
     assigndict = OrderedDict()
     for row in cur_assignments:
@@ -186,13 +189,14 @@ def assignments():
                 assignments=assigndict,
                 tags=tags,
                 chapters=chapter_labels,
-                toc=_get_toc_and_questions(),
+                toc=_get_toc_and_questions(),   # <-- This Gets the readings and questions
                 course=course,
                 )
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def practice():
+    response.title = "Practice"
     course = db(db.courses.id == auth.user.course_id).select().first()
     course_start_date = course.term_start_date
 
@@ -424,6 +428,7 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def add_practice_items():
+    response.title = "Add Practice Items"
     course = db(db.courses.course_name == auth.user.course_name).select().first()
     data = json.loads(request.vars.data)
 
@@ -488,6 +493,7 @@ def add_practice_items():
 # This is the primary controller when the instructor goes to the admin page.
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def admin():
+    response.title = "Admin"
     sidQuery = db(db.courses.course_name == auth.user.course_name).select().first()
     courseid = sidQuery.id
     sectionsQuery = db(db.sections.course_id == courseid).select() #Querying to find all sections for that given course_id found above
@@ -576,7 +582,7 @@ def course_students():
 # Called when an instructor clicks on the grading tab
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def grading():
-
+    response.title = "Grading"
     assignments = {}
     assignments_query = db(db.assignments.course == auth.user.course_id).select()
 
@@ -617,7 +623,7 @@ def grading():
     chapters_query = db(db.chapters.course_id == base_course).select()
     for row in chapters_query:
         q_list = []
-        chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type == 'question')).select()
+        chapter_questions = db((db.questions.chapter == row.chapter_label) & (db.questions.base_course == base_course) & (db.questions.question_type != 'page')).select()
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
@@ -775,10 +781,14 @@ def createAssignment():
     response.headers['content-type'] = 'application/json'
     due = None
     logger.debug(type(request.vars['name']))
-
     try:
-        logger.debug("Adding new assignment {} for course".format(request.vars['name'], auth.user.course_id))
-        newassignID = db.assignments.insert(course=auth.user.course_id, name=request.vars['name'], duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+        name=request.vars['name']
+        course=auth.user.course_id
+        logger.debug("Adding new assignment {} for course".format(request.vars['name'], course))
+        name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
+        if name_existsQ>0:
+            return json.dumps("EXISTS")
+        newassignID = db.assignments.insert(course=course, name=name, duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
     except Exception as ex:
         logger.error(ex)
         return json.dumps('ERROR')
@@ -789,6 +799,27 @@ def createAssignment():
         logger.error(ex)
         return json.dumps('ERROR')
 
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def renameAssignment():
+    response.headers['content-type'] = 'application/json'
+    try:
+        logger.debug("Renaming {} to {} for course {}.".format(request.vars['original'],request.vars['name'],auth.user.course_id))
+        assignment_id=request.vars['original']
+        name=request.vars['name']
+        course=auth.user.course_id
+        name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
+        if name_existsQ>0:
+            return json.dumps("EXISTS")
+        db(db.assignments.id == assignment_id).update(name=name)
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
+    try:
+        returndict={name: assignment_id}
+        return json.dumps(returndict)
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps('ERROR')
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def questionBank():
@@ -1291,7 +1322,7 @@ def _get_toc_and_questions():
                                   (db.questions.subchapter == sub_ch.sub_chapter_label)).select(orderby=db.questions.id)
                 for question in questions_query:
                     q_info = dict(
-                        text=question.questions.name,
+                        text=question.questions.name + _add_q_meta_info(question),
                         id=question.questions.name,
                     )
                     q_sub_ch_info['children'].append(q_info)
@@ -1301,6 +1332,34 @@ def _get_toc_and_questions():
     # except Exception as ex:
     #     print(ex)
     #     return json.dumps({})
+
+def _add_q_meta_info(qrow):
+    res = ""
+    qt = {
+        'mchoice': 'Mchoice ✓',
+        'clickablearea':'Clickable ✓',
+        'youtube': 'Video',
+        'activecode': 'ActiveCode',
+        'poll': 'Poll',
+        'showeval': 'ShowEval',
+        'video': 'Video',
+        'dragndrop': 'Matching ✓',
+        'parsonsprob': 'Parsons ✓',
+        'codelens': 'CodeLens',
+        'lp_build': 'LP',
+        'shortanswer': 'ShortAns',
+        'actex': 'ActiveCode',
+        'fillintheblank': 'FillB ✓'
+    }
+    res += qt.get(qrow.questions.question_type,"")
+
+    if qrow.questions.autograde:
+        res += ' ✓'
+
+    if res != "":
+        res = """ <span style="color: green">[{}] </span>""".format(res)
+
+    return res
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def get_assignment():
@@ -1337,6 +1396,7 @@ def get_assignment():
             # get the count of 'things to do' in this chap/subchap
             activity_count = db((db.questions.chapter==row.questions.chapter) &
                        (db.questions.subchapter==row.questions.subchapter) &
+                       (db.questions.from_source == 'T') &
                        (db.questions.base_course == base_course)).count()
 
         pages_data.append(dict(
@@ -1439,6 +1499,7 @@ def add__or_update_assignment_question():
     question_type = db.questions[question_id].question_type
     chapter = db.questions[question_id].chapter
     subchapter = db.questions[question_id].subchapter
+    auto_grade = db.questions[question_id].autograde
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
     if tmpSp != None:
         sp = 1 + tmpSp
@@ -1449,8 +1510,9 @@ def add__or_update_assignment_question():
     if question_type == 'page':
         reading_assignment = 'T'
         # get the count of 'things to do' in this chap/subchap
-        activity_count = db((db.questions.chapter==chapter) &
-                   (db.questions.subchapter==subchapter) &
+        activity_count = db((db.questions.chapter == chapter) &
+                   (db.questions.subchapter == subchapter) &
+                   (db.questions.from_source == 'T') &
                    (db.questions.base_course == base_course)).count()
         try:
             activities_required = int(request.vars.get('activities_required'))
@@ -1474,6 +1536,11 @@ def add__or_update_assignment_question():
 
     autograde = request.vars.get('autograde')
     which_to_grade = request.vars.get('which_to_grade')
+    # Make sure the defaults are set correctly for activecode Qs
+    if question_type in ('activecode', 'actex'):
+        if auto_grade != 'unittest':
+            autograde = 'manual'
+            which_to_grade = ""
     try:
         # save the assignment_question
         db.assignment_questions.update_or_insert(
@@ -1615,6 +1682,24 @@ def _copy_one_assignment(course, oldid):
         return "success"
 
 
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def courselog():
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    course = auth.user.course_name
+
+    data = pd.read_sql_query("""
+    select sid, useinfo.timestamp, event, div_id, chapter, subchapter
+    from useinfo left outer join questions on div_id = name and questions.base_course = '{}'
+    where course_id = 'fopp'
+    order by useinfo.id
+    """.format(thecourse.base_course, course), settings.database_uri)
+    data = data[~data.sid.str.contains('@')]
+
+
+    response.headers['Content-Type']='application/vnd.ms-excel'
+    response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
+    return data.to_csv(na_rep=" ")
 
 def killer():
     print(routes_onerror)

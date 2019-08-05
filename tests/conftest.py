@@ -1,7 +1,12 @@
 # ***************************************
 # |docname| - pytest fixtures for testing
 # ***************************************
-# These fixtures start the web2py server then submit requests to it.
+#
+# To get started on running tests, see tests/README.rst
+#
+#  These fixtures start the web2py server then submit requests to it.
+#
+#  **NOTE:** Make sure you don't have another server running, because it will grab the requests instead of letting the test server respond to requests.
 #
 # The overall testing approach is functional: rather than test a function, this file primarily tests endpoints on the web server. To accomplish this:
 #
@@ -278,9 +283,9 @@ class _RunestoneDbTools(object):
         # The ID of the course in which the user will be an instructor.
         course_id):
 
-        course_instructor_id =  self.db.course_instructor.insert(course=course_id, instructor=user_id)
-        self.db.commit()
         db = self.db
+        course_instructor_id = db.course_instructor.insert(course=course_id, instructor=user_id)
+        db.commit()
         return course_instructor_id
 
 
@@ -309,7 +314,7 @@ class _TestClient(WebClient):
     def validate(self,
         # The relative URL to validate.
         url,
-        # An optional string that, if provided, must be in the text returned by the server. If this is a list of strings, at least one of the provided strings but be in the text returned by the server.
+        # An optional string that, if provided, must be in the text returned by the server. If this is a sequence of strings, all of the provided strings must be in the text returned by the server.
         expected_string='',
         # The number of validation errors expected. If None, no validation is performed.
         expected_errors=None,
@@ -335,7 +340,7 @@ class _TestClient(WebClient):
                 if isinstance(expected_string, str):
                     assert expected_string in self.text
                 else:
-                    # Assume ``expected_string`` is a list of strings.
+                    # Assume ``expected_string`` is a sequence of strings.
                     assert all(string in self.text for string in expected_string)
 
             if expected_errors is not None:
@@ -399,9 +404,21 @@ def test_client(web2py_server, web2py_server_address, runestone_name):
 
 # This class allows creating a user inside a context manager.
 class _TestUser(object):
-    def __init__(self, test_client, runestone_db_tools, username, password, course_name,
+    def __init__(self,
+        # These are fixtures.
+        test_client, runestone_db_tools,
+        # The username for this user.
+        username,
+        # The password for this user.
+        password,
+        # The course object returned by ``create_course`` this user will register for.
+        course,
         # True if the course is free (no payment required); False otherwise.
-        is_free=True, first_name='test', last_name='user'):
+        is_free=True,
+        # The first name for this user.
+        first_name='test',
+        # The last name for this user.
+        last_name='user'):
 
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
@@ -410,7 +427,7 @@ class _TestUser(object):
         self.last_name = last_name
         self.email = self.username + '@foo.com'
         self.password = password
-        self.course_name = course_name
+        self.course = course
         self.is_free = is_free
 
         # Registration doesn't work unless we're logged out.
@@ -427,7 +444,7 @@ class _TestUser(object):
                 password=self.password,
                 password_two=self.password,
                 # Note that ``course_id`` is (on the form) actually a course name.
-                course_id=self.course_name,
+                course_id=self.course.course_name,
                 accept_tcp='on',
                 donate='0',
                 _next='/runestone/default/index',
@@ -437,7 +454,6 @@ class _TestUser(object):
 
         # Record IDs
         db = self.runestone_db_tools.db
-        self.course_id = db(db.courses.course_name == self.course_name).select(db.courses.id).first().id
         self.user_id = db(db.auth_user.username == self.username).select(db.auth_user.id).first().id
 
     def login(self):
@@ -452,7 +468,7 @@ class _TestUser(object):
 
     def make_instructor(self, course_id=None):
         # If ``course_id`` isn't specified, use this user's ``course_id``.
-        course_id = course_id or self.course_id
+        course_id = course_id or self.course.course_id
         return self.runestone_db_tools.make_instructor(self.user_id, course_id)
 
     # A context manager to update this user's profile. If a course was added, it returns that course's ID; otherwise, it returns None.
@@ -467,7 +483,7 @@ class _TestUser(object):
         last_name=None,
         # An updated email, or ``None`` to use ``self.email``.
         email=None,
-        # An updated last name, or ``None`` to use ``self.course_name``.
+        # An updated last name, or ``None`` to use ``self.course.course_name``.
         course_name=None,
         section='',
         # A shortcut for specifying the ``expected_string``, which only applies if ``expected_string`` is not set. Use ``None`` if a course will not be added, ``True`` if the added course is free, or ``False`` if the added course is paid.
@@ -485,7 +501,7 @@ class _TestUser(object):
         first_name = first_name or self.first_name
         last_name = last_name or self.last_name
         email = email or self.email
-        course_name = course_name or self.course_name
+        course_name = course_name or self.course.course_name
 
         # Perform the update.
         self.test_client.validate('default/user/profile',
@@ -509,10 +525,10 @@ class _TestUser(object):
     def make_payment(self,
         # The `Stripe test tokens <https://stripe.com/docs/testing#cards>`_ to use for payment.
         stripe_token,
-        # The course ID of the course to pay for. None specifies ``self.course_id``.
+        # The course ID of the course to pay for. None specifies ``self.course.course_id``.
         course_id=None):
 
-        course_id = course_id or self.course_id
+        course_id = course_id or self.course.course_id
 
         # Get the signature from the HTML of the payment page.
         self.test_client.validate('default/payment')
@@ -531,7 +547,7 @@ class _TestUser(object):
         ts -= datetime.timedelta(microseconds=ts.microsecond)
 
         if 'course' not in kwargs:
-            kwargs['course'] = self.course_name
+            kwargs['course'] = self.course.course_name
 
         if 'answer' not in kwargs and 'act' in kwargs:
             kwargs['answer'] = kwargs['act']
@@ -548,22 +564,22 @@ def test_user(test_client, runestone_db_tools):
 # Provide easy access to a test user and course.
 @pytest.fixture
 def test_user_1(runestone_db_tools, test_user):
-    runestone_db_tools.create_course('test_course_1')
-    return test_user('test_user_1', 'password_1', 'test_course_1')
+    course = runestone_db_tools.create_course('test_course_1')
+    return test_user('test_user_1', 'password_1', course)
 
 
 class _TestAssignment(object):
     assignment_count = 0
-    def __init__(self, test_client, test_user, runestone_db_tools, aname, course_name):
+    def __init__(self, test_client, test_user, runestone_db_tools, aname, course):
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.assignment_name = aname
-        self.course_name = course_name
+        self.course = course
         self.description = "default description"
         self.is_visible = False
         self.due = datetime.datetime.utcnow() + datetime.timedelta(days=7)
         self.assignment_instructor = test_user('assign_instructor_{}'.format(_TestAssignment.assignment_count),
-            'password', course_name)
+            'password', course)
         self.assignment_instructor.make_instructor()
         self.assignment_instructor.login()
         self.assignment_id = json.loads(
@@ -645,9 +661,7 @@ class _TestAssignment(object):
                       released='yes'))
         assert self.test_client.text == 'Success'
 
+
 @pytest.fixture
 def test_assignment(test_client, test_user, runestone_db_tools):
     return lambda *args, **kwargs: _TestAssignment(test_client, test_user, runestone_db_tools, *args, **kwargs)
-
-
-

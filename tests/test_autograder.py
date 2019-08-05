@@ -33,13 +33,13 @@ def test_grade_one_student(div_id, event, good_answer, bad_answer, correct_score
     # Should test all combinations of
     # which_to_grade = first_answer, last_answer, best_answer
     # autograde = all_or_nothing, manual, pct_correct, interact
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     my_ass.addq_to_assignment(question=div_id, points=10,
         which_to_grade='best_answer',
         autograde='all_or_nothing')
     find_id = dict([reversed(i) for i in my_ass.questions()])
 
-    student1 = test_user('student1', 'password', 'test_course_1')
+    student1 = test_user('student1', 'password', test_user_1.course)
     student1.login()
     # unittest does not json encode its results
     if event != 'unittest':
@@ -107,7 +107,7 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
     test_user_1.make_instructor()
     test_user_1.login()
 
-    my_ass = test_assignment('reading_test', 'test_course_1')
+    my_ass = test_assignment('reading_test', test_user_1.course)
     my_ass.addq_to_assignment(question='Test chapter 1/Subchapter A', points=10,
         which_to_grade='best_answer',
         autograde='interact',
@@ -124,7 +124,7 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
     test_user_1.logout()
 
     # Now lets do some page views
-    student1 = test_user('student1', 'password', 'test_course_1')
+    student1 = test_user('student1', 'password', test_user_1.course)
     student1.login()
     student1.hsblog(event='page', act='view',
         div_id=SCA,
@@ -178,8 +178,8 @@ def test_reading(test_assignment, test_user_1, test_user, runestone_db_tools, te
     assert totres['score'] == 20
 
 
-def test_record_grade(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
-    student1 = test_user('student1', 'password', 'test_course_1')
+def test_record_grade(test_user_1, test_user, runestone_db_tools, test_client):
+    student1 = test_user('student1', 'password', test_user_1.course)
     student1.logout()
     test_user_1.make_instructor()
     test_user_1.login()
@@ -206,7 +206,7 @@ def test_record_grade(test_assignment, test_user_1, test_user, runestone_db_tool
 
 
 
-def test_getproblem(test_assignment, test_user_1, test_user, runestone_db_tools, test_client):
+def test_getproblem(test_user_1, test_user, runestone_db_tools, test_client):
     test_user_1.make_instructor()
     test_user_1.login()
     # Should test all combinations of
@@ -215,7 +215,7 @@ def test_getproblem(test_assignment, test_user_1, test_user, runestone_db_tools,
     code = """
     print("Hello World!")
     """
-    student1 = test_user('student1', 'password', 'test_course_1')
+    student1 = test_user('student1', 'password', test_user_1.course)
     student1.login()
     res = test_client.validate('ajax/runlog',
             data={'div_id': 'units1',
@@ -240,5 +240,3 @@ def test_getproblem(test_assignment, test_user_1, test_user, runestone_db_tools,
     assert res['code'] == code
 
     # todo: add the question to an assignment and retest - test case where code is after the deadline
-
-

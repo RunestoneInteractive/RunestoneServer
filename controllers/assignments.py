@@ -342,6 +342,22 @@ def calculate_totals():
     else:
         return json.dumps({'success': False, 'message': "Select an assignment before trying to calculate totals."})
 
+@auth.requires_login()
+def student_autograde():
+    """
+    This is a safe endpoint that students can call from the assignment page
+    to get a preliminary grade on their assignment.
+    """
+    assignment_id = request.vars.assignment_id
+    timezoneoffset = session.timezoneoffset if 'timezoneoffset' in session else None
+    assignment = db(db.assignments.id == assignment_id).select().first()
+    if assignment:
+        count = do_autograde(assignment, auth.user.course_id, auth.user.course_name,
+            auth.user.username, None, 'false', timezoneoffset, db, settings)
+        return json.dumps({'message': "autograded {} items".format(count)})
+    else:
+        return json.dumps({'success': False, 'message': "Could not find this assignment -- This should not happen"})
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def autograde():
@@ -471,11 +487,8 @@ def get_problem():
         res['file_includes'] = [{'acid': acid, 'contents': get_source(acid)} for acid in file_divs]
     return json.dumps(res)
 
-
+@auth.requires_login()
 def doAssignment():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
@@ -545,15 +558,13 @@ def doAssignment():
                                       get_course_url('_images/'))
         else:
             htmlsrc = None
-        if assignment['released']:
-            # get score and comment
-            grade = db((db.question_grades.sid == auth.user.username) &
-                       (db.question_grades.course_name == auth.user.course_name) &
-                       (db.question_grades.div_id == q.questions.name)).select().first()
-            if grade:
-                score, comment = grade.score, grade.comment
-            else:
-                score, comment = 0, 'ungraded'
+
+        # get score and comment
+        grade = db((db.question_grades.sid == auth.user.username) &
+                    (db.question_grades.course_name == auth.user.course_name) &
+                    (db.question_grades.div_id == q.questions.name)).select().first()
+        if grade:
+            score, comment = grade.score, grade.comment
         else:
             score, comment = 0, 'ungraded'
 
@@ -625,13 +636,12 @@ def doAssignment():
                 course_id=auth.user.course_name,
                 readings=readings,
                 questions_score=questions_score,
-                readings_score=readings_score)
+                readings_score=readings_score,
+                student_id=auth.user.username,
+                released=assignment['released'])
 
-
+@auth.requires_login()
 def chooseAssignment():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db((db.assignments.course == course.id) & (db.assignments.visible == 'T')).select(
@@ -662,10 +672,8 @@ def _get_practice_completion(user_id, course_name, spacing):
               (db.user_topic_practice_log.q != -1)).count()
 
 # Called when user clicks "I'm done" button.
+@auth.requires_login()
 def checkanswer():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
 
     sid = auth.user.id
     course_name = auth.user.course_name
@@ -711,17 +719,15 @@ def settz_then_practice():
 
 
 # Gets invoked from practice if there is no record in course_practice for this course or the practice is not started.
+@auth.requires_login()
 def practiceNotStartedYet():
     return dict(course=get_course_row(db.courses.ALL), course_id=auth.user.course_name,
                 message1=bleach.clean(request.vars.message1 or ''), message2=bleach.clean(request.vars.message2 or ''))
 
 
 # Gets invoked when the student requests practicing topics.
+@auth.requires_login()
 def practice():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
-
     if not session.timezoneoffset:
         session.timezoneoffset = 0
 
@@ -910,10 +916,8 @@ def practice():
 
 
 # Called when user clicks like or dislike icons.
+@auth.requires_login()
 def like_dislike():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
 
     sid = auth.user.id
     course_name = auth.user.course_name
@@ -933,10 +937,8 @@ def like_dislike():
 
 
 # Called when user submits their feedback at the end of practicing.
+@auth.requires_login()
 def practice_feedback():
-    if not auth.user:
-        session.flash = "Please Login"
-        return redirect(URL('default', 'index'))
 
     sid = auth.user.id
     course_name = auth.user.course_name

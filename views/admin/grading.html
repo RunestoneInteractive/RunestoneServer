@@ -1,7 +1,6 @@
 {{ extend "admin/instructors.html"}}
 {{ block tabcontent }}
 <script type="text/javascript" src="{{=get_course_url('_static/sharedb.js')}}"></script>
-
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
   eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
@@ -20,7 +19,7 @@
 
 
   <select required onchange="showColumn1();" id="gradingoption1" style="margin-bottom: 10px; margin-right: 5px; width:30%">
-            <option value="" disabled selected>Select your option</option>
+            <option value="" disabled selected>Select:</option>
             <option value="student">student</option>
             <option value="chapter">chapter</option>
             <option value="assignment">assignment</option>
@@ -30,7 +29,7 @@
 
 
   <select required onchange="showColumn2();" id="gradingoption2" style="margin-bottom: 10px; margin-right: 5px; width:30%">
-            <option  value="" disabled selected>Select your option</option>
+            <option  value="" disabled selected>Select:</option>
             <option  value="question">question</option>
             <option value="chapter">chapter</option>
             <option  value="assignment">assignment</option>
@@ -40,20 +39,20 @@
 
 
   <select required onchange="showColumn3();" id="gradingoption3" style="margin-bottom: 10px; margin-right: 5px; width:30%">
-            <option value="" disabled selected>Select your option</option>
+            <option value="" disabled selected>Select:</option>
             <option value="student">student</option>
             <option value="question">question</option>
         </select>
 
 
-  <select onchange="updateColumn2();" style="visibility: hidden; float:left; overflow-x: auto; margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn1">
+  <select multiple onchange="updateColumn2();" style="visibility: hidden; float:left; overflow-x: auto; margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn1">
     </select>
 
 
-  <select onchange="updateColumn3();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn2"></select>
+  <select multiple onchange="updateColumn3();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn2"></select>
 
 
-  <select onchange="gradeIndividualItem();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn3"></select>
+  <select multiple onchange="gradeIndividualItem();" style="visibility: hidden; float:left; overflow-x: auto;  margin-top: 25px; width:30%; margin-right: 5px;" size="10" id="gradingcolumn3"></select>
   <p style="visibility: hidden">This paragraph takes up some space to deal with a funky display issue of the right side lumping over onto the left</p>
 
 

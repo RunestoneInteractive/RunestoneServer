@@ -457,6 +457,7 @@ def donate():
 @auth.requires_login()
 def delete():
     if request.vars['deleteaccount']:
+        logger.error("deleting account {} for {}".format(auth.user.id, auth.user.username))
         session.flash = "Account Deleted"
         db(db.auth_user.id == auth.user.id).delete()
         db(db.useinfo.sid == auth.user.username).delete()

@@ -81,6 +81,12 @@ auth.settings.retrieve_username_captcha	= False
 #auth.settings.auth_two_factor_enabled = True
 #auth.settings.two_factor_methods = [lambda user, auth_two_factor: 'password_here']
 
+if os.environ.get("WEB2PY_CONFIG","") == 'production':
+    SELECT_CACHE = dict(cache=(cache.ram, 3600), cacheable=True)
+    COUNT_CACHE = dict(cache=(cache.ram, 3600))
+else:
+    SELECT_CACHE = {}
+    COUNT_CACHE = {}
 
 ## create all tables needed by auth if not custom tables
 db.define_table('courses',
@@ -131,11 +137,11 @@ def verifyInstructorStatus(course, instructor):
     given course.
     """
     if type(course) == str:
-        course = db(db.courses.course_name == course).select(db.courses.id).first()
+        course = db(db.courses.course_name == course).select(db.courses.id, **SELECT_CACHE).first()
 
     return db((db.course_instructor.course == course) &
              (db.course_instructor.instructor == instructor)
-            ).count() > 0
+            ).count(**COUNT_CACHE) > 0
 
 class IS_COURSE_ID:
     ''' used to validate that a course name entered (e.g. devcourse) corresponds to a

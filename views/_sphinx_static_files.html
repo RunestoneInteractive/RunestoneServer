@@ -101,7 +101,10 @@
   eBookConfig.logLevel = 10;
   eBookConfig.loginRequired = true;
   eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
-  eBookConfig.isLoggedIn = false;
+  {{ if 'auth' in globals() and auth.user: }}
+  eBookConfig.username = "{{=auth.user.username}}"
+  {{pass}}
+  eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
   {{ if settings.coursera_mode: }}
