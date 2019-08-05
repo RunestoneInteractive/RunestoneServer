@@ -540,12 +540,12 @@ def admin():
             if row.user_id not in instructordict:
                 studentdict[row.user_id]= name
 
-
-    instructor_course_list = db( (db.course_instructor.instructor == auth.user.id) &
-                                 (db.courses.id == db.course_instructor.course)).select(db.courses.course_name, db.courses.id)
-    print("ICL = ", instructor_course_list)
-    #Not rebuilding
     course = db(db.courses.course_name == auth.user.course_name).select().first()
+    instructor_course_list = db( (db.course_instructor.instructor == auth.user.id) &
+                                 (db.courses.id == db.course_instructor.course) &
+                                 (db.courses.base_course == course.base_course) &
+                                 (db.courses.course_name != course.course_name)).select(db.courses.course_name, db.courses.id)
+
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     return dict(sectionInfo=sectionsList,startDate=date,
                 coursename=auth.user.course_name, course_id=auth.user.course_name,
@@ -1602,6 +1602,7 @@ def _copy_one_assignment(course, oldid):
         due_date = this_course.term_start_date + due_delta
         newassign_id = db.assignments.insert(course=auth.user.course_id, name=old_assignment.name,
             duedate=due_date, description=old_assignment.description,
+            points=old_assignment.points,
             threshold_pct=old_assignment.threshold_pct)
 
         old_questions = db(db.assignment_questions.assignment_id == old_assignment.id).select()
