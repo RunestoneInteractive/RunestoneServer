@@ -1,6 +1,7 @@
 import json
 import time
 import pytest
+from .utils import settings_context
 
 # parameters:
 # 1. question name
@@ -310,13 +311,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
     # with settings_fixture({'settings.coursera_mode':True})
     #     ...the stuff inside the try except for file writing and deleting
 
-    import os
-    try:
-        # write new testsuite_settings.py into models folder
-        models_fname = "applications/runestone/models/testsuite_settings.py"
-        with open(models_fname, 'w') as f:
-            f.write("settings.coursera_mode = True")
-
+    with settings_context({'settings.coursera_mode': True}):
         # try to have student self-grade
         res = student1.test_client.validate('assignments/student_autograde',
                                             data=dict(assignment_id=assignment_id))
@@ -330,12 +325,6 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
         grade = db((db.grades.auth_user == student1.user_id)
                    & (db.grades.assignment == assignment_id)).select().first()
         assert grade.score == 1.0
-
-        os.remove(models_fname)
-
-    except Exception as e:
-        os.remove(models_fname)
-        raise e
 
 
 
