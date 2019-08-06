@@ -1,6 +1,7 @@
 import json
 import time
 import pytest
+from .utils import settings_context
 
 # parameters:
 # 1. question name
@@ -240,3 +241,89 @@ def test_getproblem(test_user_1, test_user, runestone_db_tools, test_client):
     assert res['code'] == code
 
     # todo: add the question to an assignment and retest - test case where code is after the deadline
+
+
+def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assignment):
+
+    test_user_1.make_instructor()
+    test_user_1.logout()
+    student1 = test_user('student1', 'password', test_user_1.course)
+
+
+    my_a = test_assignment('assignment1', test_user_1.course, is_visible='True')
+    my_a.addq_to_assignment(question='shorta1',
+                              points=2,
+                              autograde='null',
+                              which_to_grade='best_answer',
+                              reading_assignment=False)
+    my_a.save_assignment()
+    assignment_id = my_a.assignment_id
+
+    # check if score is 0% for the student
+    student1.login()
+    res = student1.test_client.validate('assignments/doAssignment'.format(assignment_id),
+                                        'Score: 0 of 2 = 0.0%',
+                                        data=dict(assignment_id=assignment_id))
+
+    student1.logout()
+    test_user_1.login()
+    # record grades for individual questions
+    res = test_user_1.test_client.validate('assignments/record_grade',
+        data=dict(sid=student1.username,
+            acid='shorta1',
+            grade=1,
+            comment='very good'))
+
+    res = json.loads(res)
+    assert res['response'] == 'replaced'
+
+    test_user_1.logout()
+    student1.login()
+
+    # try to have student self-grade
+    res = student1.test_client.validate('assignments/student_autograde',
+        data=dict(assignment_id=assignment_id))
+
+    # but make sure that the grade has *not* been written into the db
+    db = runestone_db_tools.db
+    grade = db((db.grades.auth_user == student1.user_id)
+               & (db.grades.assignment == assignment_id)).select().first()
+    assert not grade
+
+    res = json.loads(res)
+    assert res['success']
+    print(res)
+
+    # check if score is now 50%
+    res = student1.test_client.validate('assignments/doAssignment'.format(assignment_id),
+                                        'Score: 1.0 of 2 = 50.0%',
+                                        data=dict(assignment_id=assignment_id))
+    # and that the grade has still *not* been written into the db
+    grade = db((db.grades.auth_user == student1.user_id)
+               & (db.grades.assignment == assignment_id)).select().first()
+    assert not grade
+
+
+    # ******** change the settings and try again,
+    # the total should be calculated and stored in db now ***********
+
+    with settings_context({'settings.coursera_mode': True}):
+        # try to have student self-grade
+        res = student1.test_client.validate('assignments/student_autograde',
+                                            data=dict(assignment_id=assignment_id))
+        res = json.loads(res)
+        assert res['success']
+        # check if score is still 50%
+        res = student1.test_client.validate('assignments/doAssignment'.format(assignment_id),
+                                            'Score: 1.0 of 2 = 50.0%',
+                                            data=dict(assignment_id=assignment_id))
+        # and that the grade **has** been written into the db
+        grade = db((db.grades.auth_user == student1.user_id)
+                   & (db.grades.assignment == assignment_id)).select().first()
+        assert grade.score == 1.0
+
+
+
+    # other tests to implement....
+    # no assignment_id sent;
+    # user not logged in; shouldn't do anything

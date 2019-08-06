@@ -13,6 +13,7 @@ do_autograde(assignment,
              course.id,
              course.course_name,
              sid=None,
+             student_rownum=None
              question_name=None,
              enforce_deadline=userinfo['enforce_deadline'],
              # I don't know what this is for, but if you want to set this to Michigan timezone offset, it should be 4

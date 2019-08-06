@@ -7,6 +7,7 @@ db.define_table('assignments',
     Field('points', 'integer'),  # max possible points on the assignment, cached sum of assignment_question points
     Field('threshold_pct', 'float'), # threshold required to qualify for maximum points on the assignment; null means use actual points
     Field('released', 'boolean'),
+    Field('allow_self_autograde', 'boolean'), # if True, when student clicks to autograde assignment, it calculates totals; otherwise it only scores individual questions but doesn't calculate score for the assignment
     Field('description', 'text'),
     Field('duedate','datetime'),
     Field('visible','boolean'),

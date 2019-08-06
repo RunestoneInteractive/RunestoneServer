@@ -107,8 +107,4 @@
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
-  {{ if settings.coursera_mode: }}
-    eBookConfig.autogradingURL = '{{=autogradingUrl}}';
-    eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
-  {{ pass }}
 </script>

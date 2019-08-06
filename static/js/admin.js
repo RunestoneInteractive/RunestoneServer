@@ -237,6 +237,24 @@ function saveManualTotal() {
     });
 }
 
+function sendLTI_Grade() {
+    var assignment = getSelectedItem("assignment")
+    var studentID = getSelectedItem("student")
+    jQuery.ajax({
+        url: eBookConfig.sendLTIGradeURL,
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+            sid: studentID,
+        },
+        success: function (retdata) {
+            if (!retdata.success) {
+                alert(retdata.message);
+            }
+        }
+    });
+}
 
 function getRightSideGradingDiv(element, acid, studentId) {
     if (!eBookConfig.gradingURL) {
