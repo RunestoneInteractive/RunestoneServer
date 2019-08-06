@@ -58,3 +58,4 @@ rsmanage/build
 tests/test_book/build
 instructors.csv
 htmlcov
+/languages/
