@@ -289,10 +289,15 @@ def grades():
     for k in gradebook:
         gradebook[k] = OrderedDict((assign.id,'n/a') for assign in assignments)
 
-    for row in rows:
-        gradebook[row[3]][row[2]] = '{0:.2f}'.format((100 * row[0]/row[1])) if row[1] > 0 else 'n/a'
-        avgs[row[2]]['total'] += (100 * row[0]/row[1]) if row[1] > 0 else 0
-        avgs[row[2]]['count'] += 1 if row[0] >= 0 else 0
+    for score, points, assignments_id, auth_user_id in rows:
+        if (score is not None) and (points > 0):
+            percent_grade = 100 * score / points
+            gradebook_entry = '{0:.2f}'.format(percent_grade)
+            avgs[assignments_id]['total'] += percent_grade
+            avgs[assignments_id]['count'] += 1
+        else:
+            gradebook_entry = 'n/a'
+        gradebook[auth_user_id][assignments_id] = gradebook_entry
 
     logger.debug("GRADEBOOK = {}".format(gradebook))
     # now transform the matrix into the gradetable needed by the template
