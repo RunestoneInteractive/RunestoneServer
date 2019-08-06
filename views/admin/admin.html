@@ -210,13 +210,15 @@
         <div id="CopyAssignments" class="tab-pane fade">
             <div class="col-md-8">
                 <h2 style="text-align: center">Copy Assignments</h2>
-                Select the course you want to copy assignments from.
-                <select id="courseSelection">
+                <label for="courseSelection">Select the course you want to copy assignments from.</label>
+                <div class="col-sm-3">
+                <select id="courseSelection" class="form-control">
                     {{ for course in instructor_course_list: }}
                     <option value="{{=course.course_name}}">{{=course.course_name}}</option>
                     {{ pass }}
                 </select>
-                <button onclick="copyAssignments();">Copy</button>
+                <button onclick="copyAssignments();" class="btn btn-primary">Copy</button>
+                </div>
             </div>
         </div>
 
@@ -233,7 +235,7 @@
     $('#studentsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
     $('#AddInstructorTab').click(function(){
@@ -241,7 +243,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
     $('#DeleteTab').click(function(){
@@ -249,7 +251,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
     $('#CopyAssignmentsTab').click(function(){
@@ -266,7 +268,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
 </script>
