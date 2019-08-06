@@ -636,6 +636,7 @@ def grading():
                 gradeRecordingUrl = URL('assignments', 'record_grade'),
                 calcTotalsURL = URL('assignments', 'calculate_totals'),
                 setTotalURL=URL('assignments', 'record_assignment_score'),
+                sendLTIGradeURL=URL('assignments', 'send_assignment_score_via_LTI'),
                 getCourseStudentsURL = URL('admin', 'course_students'),
                 get_assignment_release_statesURL= URL('admin', 'get_assignment_release_states'),
                 course_id = auth.user.course_name,
