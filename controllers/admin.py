@@ -546,24 +546,22 @@ def admin():
             if row.user_id not in instructordict:
                 studentdict[row.user_id]= name
 
-    #Not rebuilding
-    if not request.vars.projectname or not request.vars.startdate:
-        course = db(db.courses.course_name == auth.user.course_name).select().first()
-        curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
-        return dict(sectionInfo=sectionsList,startDate=date,
-                    coursename=auth.user.course_name, course_id=auth.user.course_name,
-                    instructors=instructordict, students=studentdict,
-                    curr_start_date=curr_start_date, confirm=True,
-                    build_info=my_build, master_build=master_build, my_vers=my_vers,
-                    mst_vers=mst_vers,
-                    course=sidQuery,
-                    )
+    course = db(db.courses.course_name == auth.user.course_name).select().first()
+    instructor_course_list = db( (db.course_instructor.instructor == auth.user.id) &
+                                 (db.courses.id == db.course_instructor.course) &
+                                 (db.courses.base_course == course.base_course) &
+                                 (db.courses.course_name != course.course_name)).select(db.courses.course_name, db.courses.id)
 
-    return dict(sectionInfo=sectionsList, startDate=date.isoformat(), coursename=auth.user.course_name,
-                instructors=instructordict, students=studentdict, confirm=False,
-                task_name=uuid, course_url=course_url, course_id=auth.user.course_name,
+    curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+    return dict(sectionInfo=sectionsList,startDate=date,
+                coursename=auth.user.course_name, course_id=auth.user.course_name,
+                instructors=instructordict, students=studentdict,
+                curr_start_date=curr_start_date, confirm=True,
+                build_info=my_build, master_build=master_build, my_vers=my_vers,
+                mst_vers=mst_vers,
                 course=sidQuery,
-)
+                instructor_course_list=instructor_course_list
+                )
 
 # Called in admin.js from courseStudents to populate  the list of students
 # eBookConfig.getCourseStudentsURL
@@ -1647,6 +1645,50 @@ def reorder_assignment_questions():
            .update(sorting_priority = i)
 
     return json.dumps("Reordered in DB")
+
+@auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
+def copy_assignment():
+    """
+    vars:
+      - oldassignment id or  todo (-1 for all assignments)
+      - course
+    """
+
+    if not verifyInstructorStatus(request.vars['course'], auth.user):
+        return "Error: Not Authorized"
+    else:
+        if request.vars.oldassignment == '-1':
+            assignments = db((db.assignments.course == db.courses.id) &
+                             (db.courses.course_name == request.vars['course'])).select()
+            for a in assignments:
+                print("A = {}".format(a))
+                res = _copy_one_assignment(request.vars['course'], a.assignments['id'])
+                if res != "success":
+                    break
+        else:
+            res = _copy_one_assignment(request.vars['course'], request.vars['oldassignment'])
+    return res
+
+def _copy_one_assignment(course, oldid):
+        old_course = db(db.courses.course_name == course).select().first()
+        this_course = db(db.courses.course_name == auth.user.course_name).select().first()
+        old_assignment = db(db.assignments.id == int(oldid)).select().first()
+        due_delta = old_assignment.duedate.date() - old_course.term_start_date
+        due_date = this_course.term_start_date + due_delta
+        newassign_id = db.assignments.insert(course=auth.user.course_id, name=old_assignment.name,
+            duedate=due_date, description=old_assignment.description,
+            points=old_assignment.points,
+            threshold_pct=old_assignment.threshold_pct)
+
+        old_questions = db(db.assignment_questions.assignment_id == old_assignment.id).select()
+        for q in old_questions:
+            dq = q.as_dict()
+            dq['assignment_id'] = newassign_id
+            del dq['id']
+            db.assignment_questions.insert(**dq)
+
+        return "success"
+
 
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)

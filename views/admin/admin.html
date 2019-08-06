@@ -20,6 +20,10 @@
         <a id="courselog" href="/{{=request.application}}/admin/courselog" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Download Log</h4>
         </a>
+
+        <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
+            <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
+        </a>
         <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
         </a>
@@ -196,12 +200,29 @@
                     <form action="/{{=request.application}}/admin/deletecourse" method="post"
                     onsubmit="return confirm('Are you sure you want to delete this course? This will remove the course for all students and all custom assignments you have made will be deleted. This cannot be undone.')">
                     <button type="submit" style="width: 33%; align-self: center;">Really Delete</button>
-                        </form>
+                    </form>
                 </div>
                 <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
             </div>
+        </div>
+
+
+        <div id="CopyAssignments" class="tab-pane fade">
+            <div class="col-md-8">
+                <h2 style="text-align: center">Copy Assignments</h2>
+                <label for="courseSelection">Select the course you want to copy assignments from.</label>
+                <div class="col-sm-3">
+                <select id="courseSelection" class="form-control">
+                    {{ for course in instructor_course_list: }}
+                    <option value="{{=course.course_name}}">{{=course.course_name}}</option>
+                    {{ pass }}
+                </select>
+                <button onclick="copyAssignments();" class="btn btn-primary">Copy</button>
+                </div>
             </div>
-          </div>
+        </div>
+
+    </div>
 
 <script>
     $(".dashboardnav").removeClass("active");
@@ -214,7 +235,7 @@
     $('#studentsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
     $('#AddInstructorTab').click(function(){
@@ -222,11 +243,20 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
     $('#DeleteTab').click(function(){
     $('#DeleteTab').css('background-color', 'gainsboro');
+    $('#sectionsTab').css('background-color','transparent');
+    $('#studentsTab').css('background-color','transparent');
+    $('#AddInstructorTab').css('background-color','transparent');
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
+});
+
+    $('#CopyAssignmentsTab').click(function(){
+    $('#CopyAssignmentsTab').css('background-color', 'gainsboro');
+    $('#DeleteTab').css('background-color', 'transparent');
     $('#sectionsTab').css('background-color','transparent');
     $('#studentsTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
@@ -238,7 +268,7 @@
     $('#sectionsTab').css('background-color','transparent');
     $('#DeleteTab').css('background-color','transparent');
     $('#AddInstructorTab').css('background-color','transparent');
-
+    $('#CopyAssignmentsTab').css('background-color', 'transparent');
 });
 
 </script>

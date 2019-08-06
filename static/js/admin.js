@@ -1857,3 +1857,18 @@ function toggle_release_grades() {
         set_release_button();
     }
 }
+
+
+function copyAssignments() {
+    let selectedCourse = document.getElementById("courseSelection").value;
+    data = {oldassignment: -1,
+            course: selectedCourse
+        };
+    $.post("/runestone/admin/copy_assignment", data, function(mess, stat, w) {
+        if(mess == "success") {
+            alert('Done')
+        } else {
+            alert('Copy Failed')
+        }
+    });
+}
