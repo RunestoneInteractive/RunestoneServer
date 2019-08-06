@@ -63,6 +63,8 @@ db.define_table('user_state',
 db.define_table('course_instructor',
     Field('course', db.courses ),
     Field('instructor', db.auth_user),
+    Field('verified', 'boolean'),   # some features we want to take the extra step of verifying an instructor - such as instructor guide
+    Field('paid', 'boolean'), # in the future some instructor features will be paid
     migrate=table_migrate_prefix + 'course_instructor.table'
 )
 
