@@ -262,6 +262,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         return false;
     }
     var elementID=$(element)[0].id; //some of this might be redundant
+    // Clear any locally-stored info, which might be from showing another student's answer.
+    // See ``runestonebase.js, localStorageKey()``.
+    localStorage.removeItem(eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given");
     //make an ajax call to get the htmlsrc for the given question
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
@@ -271,6 +274,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $('#enforceDeadline').is(':checked');
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
+
             renderRunestoneComponent(htmlsrc, elementID+">#questiondisplay", { sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl });
         }
 
@@ -442,7 +446,6 @@ function makeOption(text,value,disabledQ){
 
 }
 function populateQuestions(select,question_names){
-    question_names.sort()
     $(select).empty();
     var chapter="";
     for (i = 0; i < question_names.length; i++) {
@@ -456,7 +459,7 @@ function populateQuestions(select,question_names){
                 chapter=qL[0];
                 select.add(makeOption(chapter,"",true));
             }
-            questiontext="   "+qL[1];
+            questiontext="   "+qL[1];
         } else {
 */
         questiontext=q;

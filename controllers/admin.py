@@ -594,7 +594,14 @@ def grading():
 
     for row in assignments_query:
         assignmentids[row.name] = int(row.id)
-        assignment_questions = db(db.assignment_questions.assignment_id == int(row.id)).select()
+        # Retrieve relevant info for each question, ordering them based on their
+        # order in the assignment.
+        assignment_questions = db(
+            db.assignment_questions.assignment_id == int(row.id)
+        ).select(
+            db.assignment_questions.question_id,
+            db.assignment_questions.points,
+            orderby=db.assignment_questions.sorting_priority)
         questions = []
         for q in assignment_questions:
             question_name = db(db.questions.id == q.question_id).select(db.questions.name).first().name
