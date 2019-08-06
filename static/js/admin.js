@@ -1844,6 +1844,10 @@ function copyAssignments() {
             course: selectedCourse
         };
     $.post("/runestone/admin/copy_assignment", data, function(mess, stat, w) {
-        alert('Done')
+        if(mess == "success") {
+            alert('Done')
+        } else {
+            alert('Copy Failed')
+        }
     });
 }
