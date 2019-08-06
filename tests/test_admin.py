@@ -180,8 +180,8 @@ def test_get_assignment(test_assignment, test_user_1, test_client):
 def test_copy_assignment(assign_id, test_assignment, test_client, test_user_1, runestone_db_tools):
     test_user_1.make_instructor()
     test_user_1.login()
-    course1_id = test_user_1.course_id
-    my_ass = test_assignment('test_assignment', 'test_course_1')
+    course1_id = test_user_1.course.course_id
+    my_ass = test_assignment('test_assignment', test_user_1.course)
     # Should provide the following to addq_to_assignment
     # -- assignment (an integer)
     # -- question == div_id
