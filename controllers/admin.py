@@ -1690,7 +1690,6 @@ def _copy_one_assignment(course, oldid):
         return "success"
 
 
-
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def courselog():
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
@@ -1699,11 +1698,10 @@ def courselog():
     data = pd.read_sql_query("""
     select sid, useinfo.timestamp, event, act, div_id, chapter, subchapter
     from useinfo left outer join questions on div_id = name and questions.base_course = '{}'
-    where course_id = 'fopp'
+    where course_id = '{}'
     order by useinfo.id
     """.format(thecourse.base_course, course), settings.database_uri)
     data = data[~data.sid.str.contains('@')]
-
 
     response.headers['Content-Type']='application/vnd.ms-excel'
     response.headers['Content-Disposition']= 'attachment; filename=data_for_{}.csv'.format(auth.user.course_name)
