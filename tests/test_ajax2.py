@@ -1,5 +1,6 @@
-import json
 import datetime
+import json
+import pytest
 
 
 def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
@@ -444,7 +445,7 @@ def test_RunLog(test_client, test_user_1):
 
     assert prog[0]['source'] == "this is a unittest"
 
-
+@pytest.mark.skip(reason='reactivate with bjones PR')
 def test_GetLastPage(test_client, test_user_1):
 
     test_user_1.login()
