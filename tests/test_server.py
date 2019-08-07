@@ -15,6 +15,7 @@
 from textwrap import dedent
 import json
 from threading import Thread
+import datetime
 
 # Third-party imports
 # -------------------
@@ -569,6 +570,109 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     
     test_client.post('admin/removeassign', data=dict(assignid=9999999))
     assert "Error" in test_client.text
+
+
+def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
+    course_4 = runestone_db_tools.create_course('test_course_1')
+    test_student_1 = test_user('test_student_1', 'password_1', course_4)
+    test_student_1.logout()
+    test_instructor_1 = test_user('test_instructor_1', 'password_1', course_4)
+    test_instructor_1.make_instructor()
+    test_instructor_1.login()
+    db = runestone_db_tools.db
+    
+    course_start_date = datetime.datetime.strptime(course_4.term_start_date, '%Y-%m-%d').date()
+
+    today = datetime.datetime.today()
+    start_date = course_start_date + datetime.timedelta(days=13)
+    end_date = datetime.datetime.today().date() + datetime.timedelta(days=30)
+    max_practice_days = 40
+    max_practice_questions = 400
+    day_points = 1
+    question_points = 0.2
+    questions_to_complete_day = 5
+    graded = 0
+
+    # Test the practice tool settings for the course.
+    flashcard_creation_method = 2
+    test_client.post('admin/practice',
+        data = {"StartDate": start_date,
+                "EndDate": end_date,
+                "graded": graded,
+                'maxPracticeDays': max_practice_days,
+                'maxPracticeQuestions': max_practice_questions,
+                'pointsPerDay': day_points,
+                'pointsPerQuestion': question_points,
+                'questionsPerDay': questions_to_complete_day,
+                'flashcardsCreationType': 2,
+                'question_points': question_points})
+
+    practice_settings_1 = db(
+        (db.course_practice.auth_user_id == test_instructor_1.user_id) &
+        (db.course_practice.course_name == course_4.course_name) &
+        (db.course_practice.start_date == start_date) &
+        (db.course_practice.end_date == end_date) &
+        (db.course_practice.flashcard_creation_method == flashcard_creation_method) &
+        (db.course_practice.graded == graded)
+        ).select().first()
+    assert practice_settings_1
+    if practice_settings_1.spacing == 1:
+        assert practice_settings_1.max_practice_days == max_practice_days
+        assert practice_settings_1.day_points == day_points
+        assert practice_settings_1.questions_to_complete_day == questions_to_complete_day
+    else:
+        assert practice_settings_1.max_practice_questions == max_practice_questions
+        assert practice_settings_1.question_points == question_points
+
+    # Test instructor adding a subchapter to the practice tool for students.
+
+    f = open("demofile2.txt", "w")
+
+    course_1 = db(db.courses.id > 0) \
+        .select().first()
+    f.write("\n\n\n****course_1: " + str(course_1))
+    f.write("\n\n\n****course_4.course_name: " + course_4.course_name)
+    chapters = db((db.chapters.course_id > 0)) \
+        .select()
+    for chapter in chapters:
+        f.write("chapter: " + str(chapter) + "\n")
+        subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
+            .select()
+        for subchapter in subchapters:
+            f.write("subchapter: " + str(subchapter) + "\n")
+
+    # I need to call set_tz_offset to set timezoneoffset in the session.
+    test_client.post('ajax/set_tz_offset',
+        data = { 'timezoneoffset': 0 })
+    
+    # The reason I'm manually stringifying the list value is that test_client.post does something strange with compound objects instead of passing them to json.dumps.
+    test_client.post('admin/add_practice_items',
+        data = { 'data': '["Test chapter 1/Subchapter B"]' })
+
+    import pdb; pdb.set_trace()
+
+
+    user_topic_practices = db((db.user_topic_practice.id > 0)) \
+        .select()
+    f.write("len(user_topic_practices): " + str(len(user_topic_practices)) + "\n")
+    for user_topic_practice in user_topic_practices:
+        f.write("user_topic_practice: " + str(user_topic_practice) + "\n")
+    questions = db((db.questions.id > 0)) \
+        .select()
+    f.write("len(questions): " + str(len(questions)) + "\n")
+    # for question in questions:
+    #     f.write("question: " + str(question) + "\n")
+    practice_settings_1 = db(
+        (db.user_topic_practice.user_id == test_student_1.user_id) &
+        (db.user_topic_practice.course_name == course_4.course_name) &
+        (db.user_topic_practice.chapter_label == "test_chapter_1") &
+        (db.user_topic_practice.sub_chapter_label == "subchapter_b")
+        ).select().first()
+    assert practice_settings_1
+
+    f.close()
+    # test_client.logout()
+    # test_student_1.login()
 
 
 def test_deleteaccount(test_client, runestone_db_tools, test_user):

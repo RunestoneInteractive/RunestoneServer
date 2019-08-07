@@ -440,13 +440,10 @@ def add_practice_items():
     now = datetime.datetime.utcnow()
     now_local = now - datetime.timedelta(hours=float(session.timezoneoffset))
 
-    students = db((db.auth_user.course_name == auth.user.course_name)) \
-        .select()
-    chapters = db((db.chapters.course_id == course.base_course)) \
-        .select()
+    students = db((db.auth_user.course_name == auth.user.course_name)).select()
+    chapters = db((db.chapters.course_id == course.base_course)).select()
     for chapter in chapters:
-        subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
-            .select()
+        subchapters = db((db.sub_chapters.chapter_id == chapter.id)).select()
         for subchapter in subchapters:
             subchapterTaught = db((db.sub_chapter_taught.course_name == auth.user.course_name) &
                                (db.sub_chapter_taught.chapter_label == chapter.chapter_label) &

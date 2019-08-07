@@ -11,6 +11,7 @@ Lets add one activity to this Subchapter!
    :correct: b
    :feedback_a: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.
    :feedback_b: It usually takes longer to read a program because the structure is as important as the content and must be interpreted in smaller pieces for understanding.
+   :practice: T
 
    True or False:  Reading a program is like reading other kinds of text.
 
@@ -54,6 +55,7 @@ Lets add one activity to this Subchapter!
 
 .. activecode:: units1
     :autograde: unittest
+    :practice: T
 
     def add(a,b):
         return 4
