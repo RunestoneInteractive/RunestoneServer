@@ -1697,7 +1697,7 @@ def courselog():
     course = auth.user.course_name
 
     data = pd.read_sql_query("""
-    select sid, useinfo.timestamp, event, div_id, chapter, subchapter
+    select sid, useinfo.timestamp, event, act, div_id, chapter, subchapter
     from useinfo left outer join questions on div_id = name and questions.base_course = '{}'
     where course_id = 'fopp'
     order by useinfo.id
