@@ -204,7 +204,7 @@ def test_copy_assignment(assign_id, test_assignment, test_client, test_user_1, r
         assign_id = my_ass.assignment_id
     res = test_client.validate('admin/copy_assignment', data=dict(
             oldassignment=assign_id,
-            course='test_course_1'
+            course='test_child_course_1'
     ))
     assert res == "success"
 

@@ -659,7 +659,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
 
     # Check an unviewed page
     kwargs = dict(
-            lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/toctree.html'
+            lastPageUrl = 'https://runestone.academy/runestone/books/published/test_course_1/test_chapter_1/subchapter_a.html'
             )
 
     test_client.validate('ajax/getCompletionStatus', data = kwargs)
@@ -669,7 +669,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
 
     # check that the unviewed page gets added into the database with a start_date of today
     db = runestone_db_tools.db
-    row = db((db.user_sub_chapter_progress.chapter_id == 'test_chapter_1') & (db.user_sub_chapter_progress.sub_chapter_id == 'toctree')).select().first()
+    row = db((db.user_sub_chapter_progress.chapter_id == 'test_chapter_1') & (db.user_sub_chapter_progress.sub_chapter_id == 'subchapter_a')).select().first()
     print (row)
     assert row is not None
     assert row.end_date is None
@@ -681,7 +681,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     # Check a viewed page w/ completion status 0
     # 'View the page'
     kwargs = dict(
-            lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
+            lastPageUrl = 'https://runestone.academy/runestone/books/published/test_course_1/test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 0,
             course = test_user_1.course.course_name,
             completionFlag = 0
@@ -715,13 +715,20 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     test_client.validate('ajax/getAllCompletionStatus')
     res = json.loads(test_client.text)
     print(res)
-    assert len(res) == 3
+    assert len(res) == 1
 
 
 def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
+    # Check an unviewed page
+    kwargs = dict(
+            lastPageUrl = 'https://runestone.academy/runestone/books/published/test_course_1/test_chapter_1/subchapter_a.html'
+            )
+
+    test_client.validate('ajax/getCompletionStatus', data = kwargs)
+
     test_user_1.login()
     kwargs = dict(
-            lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
+            lastPageUrl = 'https://runestone.academy/runestone/books/published/test_course_1/test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 0,
             course = test_user_1.course.course_name,
             completionFlag = 1
