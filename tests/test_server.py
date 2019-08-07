@@ -626,21 +626,6 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
 
     # Test instructor adding a subchapter to the practice tool for students.
 
-    f = open("demofile2.txt", "w")
-
-    course_1 = db(db.courses.id > 0) \
-        .select().first()
-    f.write("\n\n\n****course_1: " + str(course_1))
-    f.write("\n\n\n****course_4.course_name: " + course_4.course_name)
-    chapters = db((db.chapters.course_id > 0)) \
-        .select()
-    for chapter in chapters:
-        f.write("chapter: " + str(chapter) + "\n")
-        subchapters = db((db.sub_chapters.chapter_id == chapter.id)) \
-            .select()
-        for subchapter in subchapters:
-            f.write("subchapter: " + str(subchapter) + "\n")
-
     # I need to call set_tz_offset to set timezoneoffset in the session.
     test_client.post('ajax/set_tz_offset',
         data = { 'timezoneoffset': 0 })
@@ -649,19 +634,7 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
     test_client.post('admin/add_practice_items',
         data = { 'data': '["Test chapter 1/Subchapter B"]' })
 
-    import pdb; pdb.set_trace()
 
-
-    user_topic_practices = db((db.user_topic_practice.id > 0)) \
-        .select()
-    f.write("len(user_topic_practices): " + str(len(user_topic_practices)) + "\n")
-    for user_topic_practice in user_topic_practices:
-        f.write("user_topic_practice: " + str(user_topic_practice) + "\n")
-    questions = db((db.questions.id > 0)) \
-        .select()
-    f.write("len(questions): " + str(len(questions)) + "\n")
-    # for question in questions:
-    #     f.write("question: " + str(question) + "\n")
     practice_settings_1 = db(
         (db.user_topic_practice.user_id == test_student_1.user_id) &
         (db.user_topic_practice.course_name == course_4.course_name) &
@@ -670,9 +643,30 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
         ).select().first()
     assert practice_settings_1
 
-    f.close()
+    # Testing whether a student can answer a practice question.
     # test_client.logout()
     # test_student_1.login()
+
+    # ts = datetime.datetime.utcnow()
+    # ts -= datetime.timedelta(microseconds=ts.microsecond)
+
+    # test_client.post('ajax/hsblog',
+    #     data = {'event': 'mChoice',
+    #             'act': 'answer:1:correct',
+    #             'answer': 1,
+    #             'correct': 'T',
+    #             'div_id': 'subc_b_1',
+    #             'course': course_4.course_name,
+    #             'timezoneoffset': 0})
+
+    # mchoice_answers_1 = db(
+    #     (db.mchoice_answers.sid == test_student_1.user_id) &
+    #     (db.mchoice_answers.course_name == course_4.course_name) &
+    #     (db.mchoice_answers.correct == "test_chapter_1") &
+    #     (db.mchoice_answers.sub_chapter_label == "subchapter_b")
+    #     ).select().first()
+    # assert practice_settings_1
+    # db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
 
 def test_deleteaccount(test_client, runestone_db_tools, test_user):
