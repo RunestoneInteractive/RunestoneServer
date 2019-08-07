@@ -10,7 +10,7 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
     shold come last.
 
     test_client -- A client that can communicate with web2py server
-    test_user_1 -- A pre-registered user for test_course_1
+    test_user_1 -- A pre-registered user
     test_user -- a function to make more users
     runestone_db_tools -- a way to get manual access to the database
 
@@ -20,7 +20,7 @@ def test_poll(test_client, test_user_1, test_user, runestone_db_tools):
 
     # Make sure the user is logged in
     test_user_1.login()
-    # Using hsblog have the user respond to a poll in the test_course_1 book
+    # Using hsblog have the user respond to a poll
     # this is what you would do to simulate a user activity an any kind of runeston
     # component.
     test_user_1.hsblog(event='poll', act='1', div_id="LearningZone_poll", course=test_user_1.course.course_name)
@@ -77,7 +77,7 @@ def test_hsblog(test_client, test_user_1, test_user, runestone_db_tools):
     db = runestone_db_tools.db
     dbres = db(db.useinfo.div_id == 'unit_test_1').select(db.useinfo.ALL)
     assert len(dbres) == 1
-    assert dbres[0].course_id == 'test_course_1'
+    assert dbres[0].course_id == test_user_1.course.course_name
 
 
 def ajaxCall(client, funcName, **kwargs):
@@ -154,7 +154,7 @@ def test_GetParsonsResults(test_client, test_user_1,):
                             answer = val,
                             act = val,
                             correct = 'F',
-                            course = 'test_course_1',
+                            course = test_user_1.course.course_name,
                             source = 'test_source_1'
                            )
     assert res['answer'] == val
@@ -167,7 +167,7 @@ def test_GetClickableResults(test_client, test_user_1):
                             answer = val,
                             act = val,
                             correct = 'F',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert not res['correct']
@@ -180,7 +180,7 @@ def test_GetShortAnswerResults(test_client, test_user_1):
                             answer = val,
                             act = val,
                             correct = 'F',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
 
@@ -195,7 +195,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_1',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert res['correct']
@@ -207,7 +207,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_1',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert not res['correct']
@@ -222,7 +222,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_1',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert res['correct']
@@ -234,7 +234,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_1',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert not res['correct']
@@ -246,7 +246,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_regex',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
 
@@ -256,7 +256,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_regex',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
 
@@ -266,7 +266,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_regex',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert not res['correct']
 
@@ -277,7 +277,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
     # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
@@ -289,7 +289,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
 
@@ -299,7 +299,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
 
@@ -309,7 +309,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert not res['correct']
     # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
@@ -322,7 +322,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert not res['correct']
     assert res['displayFeed'] in (['Close.'], ['<p>Close.</p>\n'])
@@ -334,7 +334,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             div_id = 'test_fitb_numeric',
                             answer = val,
                             act = val,
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert not res['correct']
     assert res['displayFeed'] in (['Nope.'], ['<p>Nope.</p>\n'])
@@ -342,7 +342,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
 
     # Test client-side grading.
     db = runestone_db_tools.db
-    db(db.courses.course_name == 'test_course_1').update(login_required=False)
+    db(db.courses.course_name == test_user_1.course.course_name).update(login_required=False)
     val = '["blue","away"]'
     res = genericGetAssessResults(test_client, test_user_1,
                             event = 'fillb',
@@ -350,7 +350,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
                             answer = val,
                             act = val,
                             correct = 'F',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['answer'] == val
     assert not res['correct']
@@ -365,7 +365,7 @@ def test_GetDragNDropResults(test_client, test_user_1):
                             act = val,
                             correct = 'T',
                             minHeight = '512',
-                            course = 'test_course_1'
+                            course = test_user_1.course.course_name
                            )
     assert res['correct']
 
@@ -374,7 +374,7 @@ def test_GetHist(test_client, test_user_1):
     test_user_1.login()
 
     kwargs = dict(
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             sid = 'test_user_1',
             div_id = 'test_activecode_1',
             error_info = 'success',
@@ -425,7 +425,7 @@ def test_RunLog(test_client, test_user_1):
     test_user_1.login()
 
     kwargs = dict(
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             sid = 'test_user_1',
             div_id = 'test_activecode_1',
             code = "this is a unittest",
@@ -450,7 +450,7 @@ def test_GetLastPage(test_client, test_user_1):
 
     test_user_1.login()
     kwargs = dict(
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             lastPageUrl = 'test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 100,
             completionFlag = '1'
@@ -481,7 +481,7 @@ def test_GetTop10Answers(test_client, test_user_1, test_user):
 
         kwargs = dict(
                 event = 'fillb',
-                course = 'test_course_1',
+                course = user.course.course_name,
                 div_id = 'test_fitb_1'
                )
         if index % 2 == 1:
@@ -605,7 +605,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user):
         user = users[user_name]
         user.login()
         # enter mchoice answer
-        user.hsblog(event='mChoice', div_id="test_mchoice_1", course='test_course_1',
+        user.hsblog(event='mChoice', div_id="test_mchoice_1", course=user.course.course_name,
                      correct = correct, act = logAnswer, answer = answer)
         # logout
         user.logout()
@@ -614,7 +614,7 @@ def test_GetAgregateResults(test_client, test_user_1, test_user):
     user = users['user_1675']
     user.login()
     kwargs = dict(
-            course = 'test_course_1',
+            course = user.course.course_name,
             div_id = 'test_mchoice_1'
             )
 
@@ -684,7 +684,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     kwargs = dict(
             lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 0,
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             completionFlag = 0
             )
     test_client.validate('ajax/updatelastpage', data = kwargs)
@@ -700,7 +700,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     kwargs = dict(
             lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 0,
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             completionFlag = 1
             )
     test_client.validate('ajax/updatelastpage', data = kwargs)
@@ -724,7 +724,7 @@ def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
     kwargs = dict(
             lastPageUrl = 'https://runestone.academy/runestone/static/test_course_1/test_chapter_1/subchapter_a.html',
             lastPageScrollLocation = 0,
-            course = 'test_course_1',
+            course = test_user_1.course.course_name,
             completionFlag = 1
             )
     test_client.validate('ajax/updatelastpage', data = kwargs)
@@ -804,14 +804,14 @@ def test_get_datafile(test_client, test_user_1, runestone_db_tools):
 
     # Create some datafile into the db and then read it out using the ajax/get_datafile()
     db = runestone_db_tools.db
-    db.source_code.insert(course_id='test_course_1',
+    db.source_code.insert(course_id=test_user_1.course.course_name,
         acid='mystery.txt',
         main_code = 'hello world')
 
     test_user_1.make_instructor()
     test_user_1.login()
     kwargs = dict(
-            course_id = 'test_course_1',
+            course_id = test_user_1.course.course_name,
             acid = 'mystery.txt'
             )
     test_client.validate('ajax/get_datafile', data = kwargs)
@@ -821,7 +821,7 @@ def test_get_datafile(test_client, test_user_1, runestone_db_tools):
 
     # non-existant datafile
     kwargs = dict(
-            course_id = 'test_course_1',
+            course_id = test_user_1.course.course_name,
             acid = 'thisWillNotBeThere.txt'
             )
     test_client.validate('ajax/get_datafile', data = kwargs)

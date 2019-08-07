@@ -458,7 +458,7 @@ def test_dynamic_book_routing_2(test_client, test_user_1):
     test_client.logout()
     # Test for a book that doesn't require a login. First, change the book to not require a login.
     db = test_user_1.runestone_db_tools.db
-    db(db.courses.id == test_user_1.course.course_id).update(login_required=False)
+    db(db.courses.course_name == test_user_1.course.base_course).update(login_required=False)
     db.commit()
 
     dbr_tester(test_client, test_user_1, False)
@@ -482,33 +482,29 @@ def dbr_tester(test_client, test_user_1, is_logged_in):
     # Attempt to access files outside a course.
     validate('books/published/{}/../conf.py'.format(base_course),
              expected_status=404)
-    # Attempt to access a course we're not registered for.
-    if is_logged_in:
-        runestone_db_tools = test_user_1.runestone_db_tools
-        child_course = runestone_db_tools.create_course('child_course_1', base_course=test_user_1.course.base_course)
-        validate('books/published/{}/index.html'.format(child_course.course_name), [
-            # TODO: this flashed message doesn't appear. ???
-            #'Sorry you are not registered for this course.',
-            'Choose your course',
-        ])
+    # Attempt to access a course we're not registered for. TODO: Need to create another base course for this to work.
+    ##if is_logged_in:
+    ##    #validate('books/published/{}/index.html'.format(base_course), [
+    ##        'Sorry you are not registered for this course.'
+    ##    ])
 
     # A valid page. Check the book config as well.
     validate('books/published/{}/index.html'.format(base_course), [
         'The red car drove away.',
-        "eBookConfig.course = '{}';".format(base_course),
+        "eBookConfig.course = '{}';".format(test_user_1.course.course_name if is_logged_in else base_course),
         "eBookConfig.basecourse = '{}';".format(base_course),
     ])
     # Drafts shouldn't be accessible by students.
     validate('books/draft/{}/index.html'.format(base_course),
              'Insufficient privileges' if is_logged_in else 'Username')
 
-    # Check routing in a child book.
+    # Check routing in a base course.
     if is_logged_in:
-        test_user_1.update_profile(course_name=child_course.course_name,
+        test_user_1.update_profile(course_name=test_user_1.course.base_course,
                                    is_free=True)
         validate('books/published/{}/index.html'.format(base_course), [
             'The red car drove away.',
-            "eBookConfig.course = '{}';".format(child_course.course_name),
+            "eBookConfig.course = '{}';".format(base_course),
             "eBookConfig.basecourse = '{}';".format(base_course),
         ])
 
@@ -526,7 +522,7 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     name_1 = 'test_assignment_1'
     name_2 = 'test_assignment_2'
     name_3 = 'test_assignment_3'
-    
+
     # Create an assignment -- using createAssignment
     test_client.post('admin/createAssignment',
         data=dict(name=name_1))
@@ -550,7 +546,7 @@ def test_assignments(test_client, runestone_db_tools, test_user):
         (db.assignments.course == test_instructor_1.course.course_id)
     ).select().first()
     assert assign2
-    
+
     test_client.post('admin/renameAssignment',
                      data=dict(name=name_3,original=assign2.id))
     assert db(db.assignments.name == name_3).select().first()
@@ -560,13 +556,13 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     test_client.post('admin/renameAssignment',
                      data=dict(name=name_3,original=assign1.id))
     assert "EXISTS" in test_client.text
-    
+
     # Delete an assignment -- using removeassignment
     test_client.post('admin/removeassign', data=dict(assignid=assign1.id))
     assert not db(db.assignments.name == name_1).select().first()
     test_client.post('admin/removeassign', data=dict(assignid=assign2.id))
     assert not db(db.assignments.name == name_3).select().first()
-    
+
     test_client.post('admin/removeassign', data=dict(assignid=9999999))
     assert "Error" in test_client.text
 
@@ -593,11 +589,11 @@ def test_pageprogress(test_client, runestone_db_tools, test_user_1):
     test_user_1.login()
     test_user_1.hsblog(event="mChoice",
             act="answer:1:correct",answer="1",correct="T",div_id="subc_b_1",
-            course="test_course_1")
+            course=test_user_1.course.course_name)
     # Since the user has answered the question the count for subc_b_1 should be 1
     # cannot test the totals on the client without javascript but that is covered in the
     # selenium tests on the components side.
-    test_user_1.test_client.validate('books/published/test_course_1/test_chapter_1/subchapter_b.html',
+    test_user_1.test_client.validate('books/published/{}/test_chapter_1/subchapter_b.html'.format(test_user_1.course.base_course),
         '"subc_b_1": 1')
     assert '"LearningZone_poll": 0' in test_user_1.test_client.text
     assert '"subc_b_fitb": 0' in test_user_1.test_client.text
