@@ -584,10 +584,12 @@ def getAllCompletionStatus():
 
 def getlastpage():
     course = request.vars.course
+    course = db(db.courses.course_name == course).select().first()
+
     if auth.user:
         result = db((db.user_state.user_id == auth.user.id) &
-                    (db.user_state.course_id == course) &
-                    (db.user_state.course_id == db.chapters.course_id) &
+                    (db.user_state.course_id == course.course_name) &
+                    (db.chapters.course_id == course.base_course) &
                     (db.user_state.last_page_chapter == db.chapters.chapter_label) &
                     (db.sub_chapters.chapter_id == db.chapters.id) &
                     (db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
