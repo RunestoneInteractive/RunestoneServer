@@ -1,0 +1,4 @@
+[flake8]
+ignore=F821
+builtins=settings,request,response,db,auth,redirect,XML,URL,T,HTTP,cache
+
