@@ -35,6 +35,8 @@ logger.setLevel(settings.log_level)
 #
 # Supporting functions
 # ====================
+
+
 def _route_book(is_published=True):
     # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
     base_course = request.args(0)
@@ -43,17 +45,22 @@ def _route_book(is_published=True):
 
     # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
     cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
-
+    allow_pairs = 'false'
     # Find the course to access.
     if auth.user:
         # Given a logged-in user, use ``auth.user.course_id``.
         course = db(db.courses.id == auth.user.course_id).select(
-            db.courses.course_name, db.courses.base_course, **cache_kwargs).first()
+                    db.courses.course_name,
+                    db.courses.base_course,
+                    db.courses.allow_pairs,
+                    **cache_kwargs).first()
 
         # Ensure the base course in the URL agrees with the base course in ``course``. If not, ask the user to select a course.
         if not course or course.base_course != base_course:
             session.flash = "{} is not the course your are currently in,  switch to or add it to go there".format(base_course)
             redirect(URL(c='default', f='courses'))
+
+        allow_pairs = 'true' if course.allow_pairs else 'false'
 
         # Ensure the user has access to this book.
         if is_published and not db(
@@ -87,8 +94,8 @@ def _route_book(is_published=True):
 
     # Make this an absolute path.
     book_path = safe_join(os.path.join(request.folder, 'books', base_course,
-        'published' if is_published else 'build', base_course),
-        *request.args[1:])
+                          'published' if is_published else 'build', base_course),
+                          *request.args[1:])
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))
         raise HTTP(404)
@@ -145,9 +152,16 @@ def _route_book(is_published=True):
 
     user_is_instructor = 'true' if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user) else 'false'
 
-    return dict(course_name=course.course_name, base_course=base_course, is_logged_in=is_logged_in,
-                user_id=user_id, user_email=email, is_instructor=user_is_instructor, readings=XML(reading_list),
-                activity_info=json.dumps(div_counts), subchapter_list=_subchaptoc(base_course, chapter))
+    return dict(course_name=course.course_name,
+                base_course=base_course,
+                is_logged_in=is_logged_in,
+                user_id=user_id,
+                user_email=email,
+                is_instructor=user_is_instructor,
+                allow_pairs=allow_pairs,
+                readings=XML(reading_list),
+                activity_info=json.dumps(div_counts),
+                subchapter_list=_subchaptoc(base_course, chapter))
 
 
 def _subchaptoc(course, chap):
