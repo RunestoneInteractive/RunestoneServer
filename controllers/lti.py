@@ -1,7 +1,9 @@
 import uuid
 
-from applications.runestone.modules import oauth
-from applications.runestone.modules import oauth_store
+
+from rs_grading import _try_to_send_lti_grade
+import oauth
+import oauth_store
 
 
 # For some reason, URL query parameters are being processed twice by Canvas and returned as a list, like [23, 23]. So, just take the first element in the list.
@@ -131,12 +133,26 @@ def index():
         auth.login_user(user)
 
     if assignment_id:
+        # If the assignment is released, but this is the first time a student has visited the assignment, auto-upload the grade.
+        assignment = db(db.assignments.id == assignment_id).select(
+            db.assignments.released).first()
+        grade = db(
+            (db.grades.auth_user == user.id) &
+            (db.grades.assignment == assignment_id)
+        ).select(db.grades.lis_result_sourcedid, db.grades.lis_outcome_url).first()
+        send_grade = (assignment and assignment.released and grade and
+                      not grade.lis_result_sourcedid and
+                      not grade.lis_outcome_url)
+
         # save the guid and url for reporting back the grade
         db.grades.update_or_insert((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
                                    auth_user=user.id,
                                    assignment=assignment_id,
                                    lis_result_sourcedid=result_source_did,
                                    lis_outcome_url=outcome_url)
+        if send_grade:
+            _try_to_send_lti_grade(user.id, assignment_id)
+
         redirect(URL('assignments', 'doAssignment', vars={'assignment_id':assignment_id}))
 
     elif practice:
@@ -153,3 +169,4 @@ def index():
         redirect(URL('assignments', 'settz_then_practice', vars={'course_name':user['course_name']}))
 
     redirect(get_course_url('index.html'))
+
