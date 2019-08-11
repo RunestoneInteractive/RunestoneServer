@@ -1,9 +1,9 @@
 import uuid
+import six
 
 
 from rs_grading import _try_to_send_lti_grade
-import oauth
-import oauth_store
+import oauth2
 
 
 # For some reason, URL query parameters are being processed twice by Canvas and returned as a list, like [23, 23]. So, just take the first element in the list.
@@ -63,20 +63,26 @@ def index():
             masterapp = 'welcome'
         session.connect(request, response, masterapp=masterapp, db=db)
 
-        oauth_server = oauth.OAuthServer(oauth_store.LTI_OAuthDataStore(myrecord.consumer,myrecord.secret))
-        oauth_server.add_signature_method(oauth.OAuthSignatureMethod_PLAINTEXT())
-        oauth_server.add_signature_method(oauth.OAuthSignatureMethod_HMAC_SHA1())
+        oauth_server = oauth2.Server()
+        oauth_server.add_signature_method(oauth2.SignatureMethod_PLAINTEXT())
+        oauth_server.add_signature_method(oauth2.SignatureMethod_HMAC_SHA1())
 
-        # Use ``setting.lti_uri`` if it's defined; otherwise, use the current URI (which must be built from its components). Don't include query parameters, which causes a filure in OAuth security validation.
-        full_uri = settings.get('lti_uri',
-          '{}://{}{}'.format(request.env.wsgi_url_scheme,
-                             request.env.http_host, request.url))
-        oauth_request = oauth.OAuthRequest.from_request('POST', full_uri, None,
-          dict(request.vars), query_string=request.env.query_string)
+        # Use ``setting.lti_uri`` if it's defined; otherwise, use the current URI (which must be built from its components). Don't include query parameters, which causes a failure in OAuth security validation.
+        full_uri = settings.get('lti_uri', '{}://{}{}'.format(
+            request.env.wsgi_url_scheme, request.env.http_host, request.url
+        ))
+        oauth_request = oauth2.Request.from_request(
+            'POST', full_uri, None, dict(request.vars),
+            query_string=request.env.query_string
+        )
+        # Fix encoding -- the signed keys are in bytes, but the oauth2 Request constructor translates everything to a string. Therefore, they never compare as equal. ???
+        if isinstance(oauth_request.get('oauth_signature'), six.string_types):
+            oauth_request['oauth_signature'] = oauth_request['oauth_signature'].encode('utf-8')
+        consumer = oauth2.Consumer(myrecord.consumer, myrecord.secret)
 
         try:
-            consumer, token, params = oauth_server.verify_request(oauth_request)
-        except oauth.OAuthError as err:
+            oauth_server.verify_request(oauth_request, consumer, None)
+        except oauth2.Error as err:
             return dict(logged_in=False, lti_errors=["OAuth Security Validation failed:"+err.message, request.vars],
                         masterapp=masterapp)
             consumer = None
