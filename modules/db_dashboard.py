@@ -372,7 +372,8 @@ class DashboardDataAnalyzer(object):
         self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
         self.questions = {}
         for i in self.problem_metrics.problems.keys():
-            self.questions[i] = current.db(current.db.questions.name == i).select(current.db.questions.chapter, current.db.questions.subchapter).first()
+            self.questions[i] = current.db((current.db.questions.name == i) &
+                                            (current.db.questions.base_course == self.course.base_course)).select(current.db.questions.chapter, current.db.questions.subchapter).first()
 
     def load_user_metrics(self, username):
         self.username = username
