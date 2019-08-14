@@ -349,14 +349,21 @@ class _TestClient(WebClient):
 
             if expected_errors is not None:
                 vld = HTMLValidator()
-                vld.validate_fragment(self.text)
-                if len(vld.errors) != expected_errors:
-                    print('Errors for {}: {}'.format(url, len(vld.errors)))
-                    pprint(vld.errors)
-                    assert False
-                if vld.warnings:
-                    print('Warnings for {}: {}'.format(url, len(vld.warnings)))
-                    pprint(vld.warnings)
+                done = False
+                count = 3
+                while not done and count > 0:
+                    try:
+                        vld.validate_fragment(self.text)
+                        if len(vld.errors) != expected_errors:
+                            print('Errors for {}: {}'.format(url, len(vld.errors)))
+                            pprint(vld.errors)
+                            assert False
+                        if vld.warnings:
+                            print('Warnings for {}: {}'.format(url, len(vld.warnings)))
+                            pprint(vld.warnings)
+                        done = True
+                    except HTTPError as e:
+                        count -= 1
 
             return self.text
 
