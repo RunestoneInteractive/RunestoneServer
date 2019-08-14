@@ -586,6 +586,9 @@ def doAssignment():
             session.flash = "That assignment is no longer available"
             return redirect(URL('assignments', 'chooseAssignment'))
 
+    if assignment.points is None:
+        assignment.points = 0
+
     questions = db((db.assignment_questions.assignment_id == assignment.id) & \
                    (db.assignment_questions.question_id == db.questions.id) & \
                    (db.chapters.chapter_label == db.questions.chapter) & \
@@ -893,7 +896,7 @@ def practice():
                                              flashcard.sub_chapter_label)
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.
-    if (available_flashcards_num > 0 and 
+    if (available_flashcards_num > 0 and
         len(questions) > 0 and
         (practiced_today_count != questions_to_complete_day or
             request.vars.willing_to_continue or
