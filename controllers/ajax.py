@@ -582,33 +582,34 @@ def getAllCompletionStatus():
                 rowarray_list.append(res)
             return json.dumps(rowarray_list)
 
+
+@auth.requires_login()
 def getlastpage():
     course = request.vars.course
     course = db(db.courses.course_name == course).select().first()
 
-    if auth.user:
-        result = db((db.user_state.user_id == auth.user.id) &
-                    (db.user_state.course_id == course.course_name) &
-                    (db.chapters.course_id == course.base_course) &
-                    (db.user_state.last_page_chapter == db.chapters.chapter_label) &
-                    (db.sub_chapters.chapter_id == db.chapters.id) &
-                    (db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
-                    ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
-                             db.chapters.chapter_name,
-                             db.user_state.last_page_scroll_location,
-                             db.sub_chapters.sub_chapter_name)
-        rowarray_list = []
-        if result:
-            for row in result:
-                res = {'lastPageUrl': row.user_state.last_page_url,
-                       'lastPageHash': row.user_state.last_page_hash,
-                       'lastPageChapter': row.chapters.chapter_name,
-                       'lastPageSubchapter': row.sub_chapters.sub_chapter_name,
-                       'lastPageScrollLocation': row.user_state.last_page_scroll_location}
-                rowarray_list.append(res)
-            return json.dumps(rowarray_list)
-        else:
-            db.user_state.insert(user_id=auth.user.id, course_id=course.course_name)
+    result = db((db.user_state.user_id == auth.user.id) &
+                (db.user_state.course_id == course.course_name) &
+                (db.chapters.course_id == course.base_course) &
+                (db.user_state.last_page_chapter == db.chapters.chapter_label) &
+                (db.sub_chapters.chapter_id == db.chapters.id) &
+                (db.user_state.last_page_subchapter == db.sub_chapters.sub_chapter_label)
+                ).select(db.user_state.last_page_url, db.user_state.last_page_hash,
+                            db.chapters.chapter_name,
+                            db.user_state.last_page_scroll_location,
+                            db.sub_chapters.sub_chapter_name)
+    rowarray_list = []
+    if result:
+        for row in result:
+            res = {'lastPageUrl': row.user_state.last_page_url,
+                    'lastPageHash': row.user_state.last_page_hash,
+                    'lastPageChapter': row.chapters.chapter_name,
+                    'lastPageSubchapter': row.sub_chapters.sub_chapter_name,
+                    'lastPageScrollLocation': row.user_state.last_page_scroll_location}
+            rowarray_list.append(res)
+        return json.dumps(rowarray_list)
+    else:
+        db.user_state.insert(user_id=auth.user.id, course_id=course.course_name)
 
 
 def _getCorrectStats(miscdata,event):
