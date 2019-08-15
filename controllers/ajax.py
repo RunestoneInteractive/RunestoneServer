@@ -995,8 +995,9 @@ def preview_question():
             [settings.python_interpreter, '-m', 'runestone', 'build'],
             # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
             cwd='applications/{}/build/preview'.format(request.application),
-            # Capture the build output in case of an error.
+            # Capture the build output as text in case of an error.
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            universal_newlines=True,
             # Pass the modified environment which doesn't contain ``DBURL``.
             env=env)
         stdout, stderr = popen_obj.communicate()
