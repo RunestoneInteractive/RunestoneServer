@@ -1654,6 +1654,7 @@ def copy_assignment():
       - course
     """
 
+    res = None
     if not verifyInstructorStatus(request.vars['course'], auth.user):
         return "Error: Not Authorized"
     else:
@@ -1667,7 +1668,10 @@ def copy_assignment():
                     break
         else:
             res = _copy_one_assignment(request.vars['course'], request.vars['oldassignment'])
-    return res
+    if res is None:
+        return "Error: No Assignments to copy"
+    else:
+        return res
 
 def _copy_one_assignment(course, oldid):
         old_course = db(db.courses.course_name == course).select().first()
