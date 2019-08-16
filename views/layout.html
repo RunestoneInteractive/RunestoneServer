@@ -170,8 +170,6 @@
                             <li><a href="/{{=request.application}}/books/index">Our Library</a> </li>
                         {{ elif auth.user: }}
                             <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
-                        {{ elif not settings.lti_only_mode: }}
-                            <li><a href="/{{=request.application}}/default">Login</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
                         {{if 'user_navs' in globals() and user_navs: }}
@@ -184,7 +182,7 @@
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if request.args(0) == 'login' and settings.academy_mode:}}
+                    {{if (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
                         <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                     {{pass}}
                 </div>

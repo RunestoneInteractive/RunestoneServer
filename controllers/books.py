@@ -236,7 +236,6 @@ def index():
     """
 
     book_list = os.listdir(f'applications/{request.application}/books')
-    book_list = [book for book in book_list if 'test' not in book]
     book_list = [book for book in book_list if '.git' not in book]
 
     res = []
