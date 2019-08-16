@@ -52,7 +52,7 @@
                     <td>{{=practice_average}}</td>
                     {{for average in range(len(averagerow)):}}
 
-<!--                         This if statement is to determine if a percent sign is needed in the average row. -->
+                        <!-- This if statement is to determine if a percent sign is needed in the average row. -->
                         {{if averagerow[average] == 'n/a':}}
                             <td class="{{=assignments[average]['name']}}">{{=averagerow[average]}}</td>
                         {{else:}}
