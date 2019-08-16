@@ -2,6 +2,7 @@
 import json
 import os
 import requests
+import datetime
 from six.moves.urllib.parse import unquote
 from six.moves.urllib.error import HTTPError
 import logging
@@ -197,8 +198,8 @@ def index():
             if db((db.user_sub_chapter_progress.user_id == auth.user.id) &
                   (db.user_sub_chapter_progress.chapter_id == chapter_label)).count() == 0:
                 db.executesql('''
-                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
-                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status, start_date)
+                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1, now()
                     FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
                 ''' % (auth.user.id, course.base_course))
         except:
