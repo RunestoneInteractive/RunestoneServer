@@ -56,10 +56,11 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ]
     for testing purposes we don't want web2py to capture 500 errors.
     """
-    with pytest.raises(RuntimeError) as excinfo:
+    with pytest.raises(Exception) as excinfo:
         test_client.post('admin/killer')
         assert test_client.text == ""
-    assert "ticket" in str(excinfo.value)
+    print(excinfo.value)
+    assert "ticket" in str(excinfo.value) or "INTERNAL" in str(excinfo.value)
 
 # Validate the HTML produced by various web2py pages.
 # NOTE -- this is the start of a really really long decorator for test_1
@@ -147,6 +148,9 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
     # **OAuth**
     #----------
     ('oauth/index', False, 'This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.', 1),
+
+    ('books/index', False, 'Runestone Test Book', 1),
+    ('books/published', False, 'Runestone Test Book', 1),
 
     # TODO: Many other views!
 ])
@@ -576,7 +580,7 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
     test_instructor_1.make_instructor()
     test_instructor_1.login()
     db = runestone_db_tools.db
-    
+
     course_start_date = datetime.datetime.strptime(course_4.term_start_date, '%Y-%m-%d').date()
 
     today = datetime.datetime.today()
@@ -625,7 +629,7 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
     # I need to call set_tz_offset to set timezoneoffset in the session.
     test_client.post('ajax/set_tz_offset',
         data = { 'timezoneoffset': 0 })
-    
+
     # The reason I'm manually stringifying the list value is that test_client.post does something strange with compound objects instead of passing them to json.dumps.
     test_client.post('admin/add_practice_items',
         data = { 'data': '["Test chapter 1/Subchapter B"]' })

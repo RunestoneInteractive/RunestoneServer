@@ -167,31 +167,9 @@
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
                         {{ if request.controller == "default" and settings.academy_mode:}}
-                            <!-- open library dropdown -->
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Book Links<b class="caret"></b></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="/{{=request.application}}/books/published/fopp/index.html">Foundations of Python Programming</a></li>
-                                    <li><a href="/{{=request.application}}/books/published/thinkcspy/index.html">How To Think Like a Computer Scientist: Interactive edition</a></li>
-                                    <li><a href="/{{=request.application}}/books/published/pythonds/index.html">Problem Solving With Algorithms and Data Structures using Python</a></li>
-                                    <li><a href="/{{=request.application}}/static/cppds/index.html">Problem Solving With Algorithms and Data Structures using C++</a></li>
-                                    <li><a href="/{{=request.application}}/static/java4python/index.html">Java For Python Programmers</a></li>
-                                    <li><a href="/{{=request.application}}/static/JavaReview/index.html">Java Review for AP CS A Exam</a></li>
-                                    <li><a href="/{{=request.application}}/static/StudentCSP/index.html">CS Principles: Big Ideas inProgramming</a></li>
-                                    <li><a href="/{{=request.application}}/books/published/csawesome/index.html">CS Awesome AP CS A Java Course -2019 <strong>New</strong></a></li>
-                                    <li><a href="/{{=request.application}}/static/learnwebgl2/index.html">Learn Computer Graphics using WebGL <strong>New</strong></a></li>
-                                    <li><a href="/{{=request.application}}/static/JS4Python/index.html">Javascript for Python Programmers <strong>Beta</strong></a></li>
-                                    <li><a href="/{{=request.application}}/static/cpp4python/index.html">C++ for Python Programmers <strong>New</strong></a></li>
-                                    <li><a href="/{{=request.application}}/books/published/httlads/index.html">How to Think like a Data Scientist <strong>Beta</strong></a></li>
-                                    <li><a href="/{{=request.application}}/static/overview/overview.html">Runestone Directives</a></li>
-                                    <li><a href="http://everydaypython.org">Everyday Python Blog</a></li>
-                                    <li><a href="/{{=request.application}}/static/instructorguide/index.html">Runestone Instructor Guide</a></li>
-                                </ul>
-                            </li>
+                            <li><a href="/{{=request.application}}/books/index">Our Library</a> </li>
                         {{ elif auth.user: }}
                             <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
-                        {{ elif not settings.lti_only_mode: }}
-                            <li><a href="/{{=request.application}}/default">Login</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
                         {{if 'user_navs' in globals() and user_navs: }}
@@ -204,7 +182,7 @@
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if request.args(0) == 'login' and settings.academy_mode:}}
+                    {{if (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
                         <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                     {{pass}}
                 </div>

@@ -1,0 +1,31 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <h1>Runestone Interactive Library of Books</h1>
+
+        <p>The books on Runestone.Academy are all free and open source textbooks.
+            We encourage you to browse the library and make use of these books in your courses.
+            If you are a new instructor and want to do this, please take a look at the
+            <a href="/{{=request.application}}/static/instructorguide/index.html">Help for Instructors page</a>
+            before you make a course.
+        </p>
+
+        <ul>
+            {{ for book in book_list: }}
+                <li>
+                    <a href="{{=book['url']}}" style='font-size: 2.0vh;'>{{=book['title']}}</a> Use <code>{{=book['regname']}}</code> to register for this title.
+                </li>
+            {{pass}}
+        </ul>
+        <p>
+            The books published on Runestone are all licensed under the Creative Commons CC-BY
+            license or the GNU Free Documentation license.  The source code for each book can be found on
+            <a href="https://github.com/RunestoneInteractive">Our Github Page</a> and will give you the specifics
+            of the license.  We encourage you to report any innacuracies, typos or leave us suggestions using
+            the Github issues page for each book.
+        </p>
+    </div>
+
+</div>

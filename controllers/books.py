@@ -221,4 +221,42 @@ def draft():
 
 # Serve from the ``published`` directory, instead of the ``build`` directory.
 def published():
+    if len(request.args) == 0:
+        return index()
     return _route_book()
+
+import importlib
+
+def index():
+    """
+    Called by default (and by published if no args)
+
+    Produce a list of books based on the directory structure of runestone/books
+
+    """
+
+    book_list = os.listdir(f'applications/{request.application}/books')
+    book_list = [book for book in book_list if '.git' not in book]
+
+    res = []
+    for book in sorted(book_list):
+        try:
+            config = importlib.import_module(f'applications.{request.application}.books.{book}.conf')
+        except:
+            continue
+        book_info = {}
+        if hasattr(config,'navbar_title'):
+            book_info['title'] = config.navbar_title
+        elif hasattr(config, 'html_title'):
+            book_info['title'] = config.html_title
+        elif hasattr(config, 'html_short_title'):
+            book_info['title'] = config.html_short_title
+        else:
+            book_info['title'] = 'Runestone Book'
+
+        book_info['url'] = f'/{request.application}/books/published/{book}/index.html'
+        book_info['regname'] = book
+
+        res.append(book_info)
+
+    return dict(book_list=res)
