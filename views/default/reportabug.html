@@ -11,7 +11,7 @@
 <p><strong>It is much better for everyone if you report problem the directly on our</strong>
 <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">github issues page</a>.</p>
 <p>If you report a problem on the form below, we will see the report but you <strong>should not</strong> expect a response. More often
-than not it is helpful for us to clarify the problem with you.  Github is designed for this, and allows our many volunteer coders
+than not it is helpful for us to clarify the problem with you. Github is designed for this, and allows our many volunteer coders
 to help squash bugs! If there are details provided, please copy them now and paste them on github.</p>
 
 {{ if ticket: }}
@@ -21,9 +21,10 @@ to help squash bugs! If there are details provided, please copy them now and pas
 </pre>
 {{ pass }}
 
-<button onclick="$('#bugform').show()">Show Form</button>
+<button onclick="$('#bugform').show(); $(this).hide()">Show Form</button>
 <div id="bugform" style="display: none;">
     {{if registered_user: }}
+    <p><strong>Warning:</strong> The information on this form will be posted to Github, but you will not receive any notifications or feedback about the report.</p>
     <div class="col-md-7">
         <form name="bugform" id="bugform" action="/{{=request.application}}/{{=request.controller}}/sendreport" method="post">
             <div class="form-group row">
