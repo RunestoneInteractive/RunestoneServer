@@ -21,8 +21,8 @@ to help squash bugs! If there are details provided, please copy them now and pas
 </pre>
 {{ pass }}
 
-<button onclick="$('#bugform').show(); $(this).hide()">Show Form</button>
-<div id="bugform" style="display: none;">
+<button onclick="$('#bugformwrapper').show(); $(this).hide()">Show Form</button>
+<div id="bugformwrapper" style="display: none;">
     {{if registered_user: }}
     <p><strong>Warning:</strong> The information on this form will be posted to Github, but you will not receive any notifications or feedback about the report.</p>
     <div class="col-md-7">
