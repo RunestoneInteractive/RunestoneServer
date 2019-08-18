@@ -82,42 +82,42 @@ to help squash bugs! If there are details provided, please copy them now and pas
                 </div>
         </form>
     </div>
-</div>
 
-<script>
-    function check_filled(formdata){
-        var bugtitle = formdata.bugtitle.value;
-        var coursename = formdata.coursename.value;
-        var pagename = formdata.pagename.value;
-        var username = formdata.username.value;
-        var useremail = formdata.useremail.value;
-        if (bugtitle == "" ){
-            var bugtitlediv = document.getElementById('bugtitlediv');
-            newp = document.createElement('p');
-            newp.innerHTML = 'This is a required field.';
-            newp.style = 'color: red';
-            bugtitlediv.appendChild(newp);
-        } else if (coursename == "None" || coursename == "") {
-            var coursenamediv = document.getElementById('coursenamediv');
-            newp = document.createElement('p');
-            newp.innerHTML = 'This is a required field.';
-            newp.style = 'color: red';
-            coursenamediv.appendChild(newp);
-        } else if (pagename == "None" || pagename == ""){
-            var pagenamediv = document.getElementById('pagenamediv');
-            newp = document.createElement('p');
-            newp.innerHTML = 'This is a required field.';
-            newp.style = 'color: red';
-            pagenamediv.appendChild(newp);
-        } else if (username == "" && useremail == ""){
-            var userinfodiv = document.getElementById('userinfodiv');
-            newp = document.createElement('p');
-            newp.innerHTML = 'Either a Username or an Email address is required.';
-            newp.style = 'color: red';
-            userinfodiv.appendChild(newp)
-        } else {
-            document.getElementById('bugform').submit();
+    <script>
+        function check_filled(formdata){
+            var bugtitle = formdata.bugtitle.value;
+            var coursename = formdata.coursename.value;
+            var pagename = formdata.pagename.value;
+            var username = formdata.username.value;
+            var useremail = formdata.useremail.value;
+            if (bugtitle == "" ){
+                var bugtitlediv = document.getElementById('bugtitlediv');
+                newp = document.createElement('p');
+                newp.innerHTML = 'This is a required field.';
+                newp.style = 'color: red';
+                bugtitlediv.appendChild(newp);
+            } else if (coursename == "None" || coursename == "") {
+                var coursenamediv = document.getElementById('coursenamediv');
+                newp = document.createElement('p');
+                newp.innerHTML = 'This is a required field.';
+                newp.style = 'color: red';
+                coursenamediv.appendChild(newp);
+            } else if (pagename == "None" || pagename == ""){
+                var pagenamediv = document.getElementById('pagenamediv');
+                newp = document.createElement('p');
+                newp.innerHTML = 'This is a required field.';
+                newp.style = 'color: red';
+                pagenamediv.appendChild(newp);
+            } else if (username == "" && useremail == ""){
+                var userinfodiv = document.getElementById('userinfodiv');
+                newp = document.createElement('p');
+                newp.innerHTML = 'Either a Username or an Email address is required.';
+                newp.style = 'color: red';
+                userinfodiv.appendChild(newp)
+            } else {
+                document.getElementById('bugform').submit();
+            }
         }
-    }
-</script>
-{{pass}}
+    </script>
+    {{pass}}
+</div>
