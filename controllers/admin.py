@@ -683,6 +683,12 @@ def removeStudents():
         if studentID.isdigit() and int(studentID) != auth.user.id:
             sid = db(db.auth_user.id == int(studentID)).select(db.auth_user.username).first()
             db((db.user_courses.user_id == int(studentID)) & (db.user_courses.course_id == auth.user.course_id)).delete()
+            section = db((db.sections.course_id == auth.user.course_id) &
+                         (db.section_users.auth_user == int(studentID)) &
+                         (db.section_users.section == db.sections.id)).select().first()
+            if section:
+                db(db.section_users.id == section.section_users.id).delete()
+
             db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(course_id=baseCourseID, course_name=baseCourseName, active='F')
             db( (db.useinfo.sid == sid) &
