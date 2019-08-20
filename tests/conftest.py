@@ -47,6 +47,7 @@ from html5validator.validator import Validator
 # -------------
 from .utils import COVER_DIRS, DictToObject
 
+# Set this to False if you want to turn off all web page validation.
 W3_VALIDATE = True
 
 # Utilities
