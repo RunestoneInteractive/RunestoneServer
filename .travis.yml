@@ -6,6 +6,9 @@ services:
 - postgresql
 addons:
   postgresql: '9.4'
+  apt:
+    packages:
+      - oracle-java8-set-default
 env:
 - WEB2PY_VERSION=2.18.4
 script:

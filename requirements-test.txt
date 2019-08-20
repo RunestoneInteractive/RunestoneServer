@@ -1,6 +1,6 @@
 coverage
 mock
-py_w3c
+html5validator
 pytest
 contextlib2
 # CodeChat is Python 3 only.
