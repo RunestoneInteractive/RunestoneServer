@@ -1360,7 +1360,7 @@ def _add_q_meta_info(qrow):
         'dragndrop': 'Matching ✓',
         'parsonsprob': 'Parsons ✓',
         'codelens': 'CodeLens',
-        'lp_build': 'LP',
+        'lp_build': 'LP ✓',
         'shortanswer': 'ShortAns',
         'actex': 'ActiveCode',
         'fillintheblank': 'FillB ✓'
