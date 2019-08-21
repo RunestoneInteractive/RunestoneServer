@@ -21,6 +21,8 @@ import posixpath
 import json
 import logging
 import datetime
+import importlib
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -226,8 +228,6 @@ def published():
         return index()
     return _route_book()
 
-import importlib
-
 def index():
     """
     Called by default (and by published if no args)
@@ -236,17 +236,17 @@ def index():
 
     """
 
-    book_list = os.listdir(f'applications/{request.application}/books')
+    book_list = os.listdir('applications/{}/books'.format(request.application))
     book_list = [book for book in book_list if '.git' not in book]
 
     res = []
     for book in sorted(book_list):
         try:
-            config = importlib.import_module(f'applications.{request.application}.books.{book}.conf')
+            config = importlib.import_module('applications.{}.books.{}.conf'.format(request.application, book))
         except:
             continue
         book_info = {}
-        if hasattr(config,'navbar_title'):
+        if hasattr(config, 'navbar_title'):
             book_info['title'] = config.navbar_title
         elif hasattr(config, 'html_title'):
             book_info['title'] = config.html_title
@@ -255,7 +255,7 @@ def index():
         else:
             book_info['title'] = 'Runestone Book'
 
-        book_info['url'] = f'/{request.application}/books/published/{book}/index.html'
+        book_info['url'] = '/{}/books/published/{}/index.html'.format(request.application, book)
         book_info['regname'] = book
 
         res.append(book_info)
