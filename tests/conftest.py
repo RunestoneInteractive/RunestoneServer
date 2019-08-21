@@ -310,10 +310,12 @@ def _html_prep(text_str):
 
 
 # Create a client for accessing the Runestone server.
+@pytest.mark.usefixtures("tmp_path")
 class _TestClient(WebClient):
-    def __init__(self, web2py_server, web2py_server_address, runestone_name):
+    def __init__(self, web2py_server, web2py_server_address, runestone_name, tmp_path):
         self.web2py_server = web2py_server
         self.web2py_server_address = web2py_server_address
+        self.tmp_path = tmp_path
         super(_TestClient, self).__init__('{}/{}/'.format(self.web2py_server_address, runestone_name),
                                           postbacks=True)
 
@@ -353,11 +355,10 @@ class _TestClient(WebClient):
             if expected_errors is not None and W3_VALIDATE:
                 # Redo this section using html5validate command line
                 vld = Validator(errors_only=True)
-                tmpname = 'tmphtml.html'
+                tmpname = self.tmp_path / 'tmphtml.html'
                 with open(tmpname, 'w') as f:
                     f.write(self.text)
                 errors = vld.validate([tmpname])
-                os.remove(tmpname)
 
                 assert errors == expected_errors
 
@@ -403,8 +404,8 @@ class _TestClient(WebClient):
 
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
-def test_client(web2py_server, web2py_server_address, runestone_name):
-    tc = _TestClient(web2py_server, web2py_server_address, runestone_name)
+def test_client(web2py_server, web2py_server_address, runestone_name, tmp_path):
+    tc = _TestClient(web2py_server, web2py_server_address, runestone_name, tmp_path)
     yield tc
     tc.tearDown()
 
