@@ -6,6 +6,9 @@ services:
 - postgresql
 addons:
   postgresql: '9.4'
+  apt:
+    packages:
+      - openjdk-8-jre-headless
 env:
 - WEB2PY_VERSION=2.18.4
 script:

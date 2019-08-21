@@ -28,6 +28,7 @@ import subprocess
 from pprint import pprint
 from io import open
 import json
+import os
 import re
 from threading import Thread
 import datetime
@@ -37,15 +38,17 @@ import datetime
 import pytest
 from gluon.contrib.webclient import WebClient
 import gluon.shell
-from py_w3c.validators.html.validator import HTMLValidator
 import six
 from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlopen
+from html5validator.validator import Validator
 
 # Local imports
 # -------------
 from .utils import COVER_DIRS, DictToObject
 
+# Set this to False if you want to turn off all web page validation.
+W3_VALIDATE = True
 
 # Utilities
 # =========
@@ -307,10 +310,12 @@ def _html_prep(text_str):
 
 
 # Create a client for accessing the Runestone server.
+@pytest.mark.usefixtures("tmp_path")
 class _TestClient(WebClient):
-    def __init__(self, web2py_server, web2py_server_address, runestone_name):
+    def __init__(self, web2py_server, web2py_server_address, runestone_name, tmp_path):
         self.web2py_server = web2py_server
         self.web2py_server_address = web2py_server_address
+        self.tmp_path = tmp_path
         super(_TestClient, self).__init__('{}/{}/'.format(self.web2py_server_address, runestone_name),
                                           postbacks=True)
 
@@ -347,23 +352,15 @@ class _TestClient(WebClient):
                     # Assume ``expected_string`` is a sequence of strings.
                     assert all(string in self.text for string in expected_string)
 
-            if expected_errors is not None:
-                vld = HTMLValidator()
-                done = False
-                count = 3
-                while not done and count > 0:
-                    try:
-                        vld.validate_fragment(self.text)
-                        if len(vld.errors) != expected_errors:
-                            print('Errors for {}: {}'.format(url, len(vld.errors)))
-                            pprint(vld.errors)
-                            assert False
-                        if vld.warnings:
-                            print('Warnings for {}: {}'.format(url, len(vld.warnings)))
-                            pprint(vld.warnings)
-                        done = True
-                    except HTTPError as e:
-                        count -= 1
+            if expected_errors is not None and W3_VALIDATE:
+                # Redo this section using html5validate command line
+                vld = Validator(errors_only=True)
+                tmpname = self.tmp_path / 'tmphtml.html'
+                with open(tmpname, 'w') as f:
+                    f.write(self.text)
+                errors = vld.validate([tmpname])
+
+                assert errors == expected_errors
 
             return self.text
 
@@ -407,8 +404,8 @@ class _TestClient(WebClient):
 
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
-def test_client(web2py_server, web2py_server_address, runestone_name):
-    tc = _TestClient(web2py_server, web2py_server_address, runestone_name)
+def test_client(web2py_server, web2py_server_address, runestone_name, tmp_path):
+    tc = _TestClient(web2py_server, web2py_server_address, runestone_name, tmp_path)
     yield tc
     tc.tearDown()
 
