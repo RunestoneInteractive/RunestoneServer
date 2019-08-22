@@ -242,6 +242,7 @@ def index():
     res = []
     for book in sorted(book_list):
         try:
+            # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
             config = importlib.import_module('applications.{}.books.{}.conf'.format(request.application, book))
         except:
             continue
