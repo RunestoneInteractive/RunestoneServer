@@ -1,10 +1,22 @@
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import datetime
 import logging
 from math import ceil
-from psycopg2 import IntegrityError
 from decimal import Decimal, ROUND_HALF_UP
 
+# Third-party imports
+# -------------------
+from psycopg2 import IntegrityError
 from gluon import current
+
+# Local imports
+# -------------
 from outcome_request import OutcomeRequest
 
 logger = logging.getLogger(current.settings.logger)
@@ -460,6 +472,46 @@ def _get_students(course_id=None, sid = None, student_rownum=None, db=None):
         student_rows = []
 
     return student_rows
+
+
+def _get_assignment(assignment_id):
+    return current.db(current.db.assignments.id == assignment_id).select().first()
+
+
+def _get_lti_record(oauth_consumer_key):
+    return current.db(current.db.lti_keys.consumer == oauth_consumer_key).select().first()
+
+
+def _try_to_send_lti_grade(student_row_num, assignment_id):
+    # try to send lti grades
+    assignment = _get_assignment(assignment_id)
+    if not assignment:
+        current.session.flash = "Failed to find assignment object for assignment {}".format(assignment_id)
+        return False
+    else:
+        grade = current.db(
+            (current.db.grades.auth_user == student_row_num) &
+            (current.db.grades.assignment == assignment_id)).select().first()
+        if not grade:
+            current.session.flash = "Failed to find grade object for user {} and assignment {}".format(auth.user.id,
+                                                                                               assignment_id)
+            return False
+        else:
+            lti_record = _get_lti_record(current.session.oauth_consumer_key)
+            if (not lti_record) or (not grade.lis_result_sourcedid) or (not grade.lis_outcome_url):
+                current.session.flash = "Failed to send grade back to LMS (Coursera, Canvas, Blackboard...), probably because the student accessed this assignment directly rather than using a link from the LMS, or because there is an error in the assignment link in the LMS. Please report this error."
+                return False
+            else:
+                # really sending
+                # print("send_lti_grade({}, {}, {}, {}, {}, {}".format(assignment.points, grade.score, lti_record.consumer, lti_record.secret, grade.lis_outcome_url, grade.lis_result_sourcedid))
+                send_lti_grade(assignment.points,
+                               score=grade.score,
+                               consumer=lti_record.consumer,
+                               secret=lti_record.secret,
+                               outcome_url=grade.lis_outcome_url,
+                               result_sourcedid=grade.lis_result_sourcedid)
+                return True
+
 
 def send_lti_grade(assignment_points, score, consumer, secret, outcome_url, result_sourcedid):
 
