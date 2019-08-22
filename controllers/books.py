@@ -121,10 +121,12 @@ def _route_book(is_published=True):
         is_logged_in = 'true'
         # Get the necessary information to update subchapter progress on the page
         page_divids = db((db.questions.subchapter == subchapter) &
+                         (db.questions.chapter == chapter) &
                          (db.questions.from_source == True) &
                          (db.questions.base_course == base_course)).select(db.questions.name)
         div_counts = {q.name:0 for q in page_divids}
         sid_counts = db((db.questions.subchapter == subchapter) &
+                        (db.questions.chapter == chapter) &
                         (db.questions.base_course == base_course) &
                         (db.questions.from_source == True) &
                         (db.questions.name == db.useinfo.div_id) &
