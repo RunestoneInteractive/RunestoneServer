@@ -49,8 +49,8 @@ function gradeIndividualItem() {
                 }
             }
             if(!sid){continue}
-            var newid= "Q" + question.replace(/[#@+:>~.\/ ]/g,'_') +
-            	       	  "S" + sid.replace(/[#@+:>~.\/]/g,'_');
+            var newid= "Q" + question.replace(/[#*@+:>~.\/ ]/g,'_') +
+            	       	  "S" + sid.replace(/[#*@+:>~.\/]/g,'_');
             //This creates the equivalent of outerRightDiv for each question and student
             var divstring='<div style="border:1px solid;padding:5px;margin:5px;" id="'+newid+'">';
             divstring+='<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
