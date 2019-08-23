@@ -48,7 +48,7 @@
     >
         <button id="ShowPracticeSettingsA" class="btn btn-primary mb-2">Show Practice Settings</button>
     </div>
-    <p>We're a group of researchers at the University of Michigan who have developed this practice tool. We are experimenting 
+    <p>We're a group of researchers at the University of Michigan who have developed this practice tool. We are experimenting
         with some alternative schedules for which questions to ask when, and are randomizing instructors to different experimental conditions. So, don't be alarmed if you
         see some different settings in your course in comparison with courses taught by other instructors.
     </p>
@@ -252,7 +252,7 @@
       </div>
       <input style="margin-bottom: 25px;" class="btn btn-success mb-2" type="submit" value="Save Practice Settings">
     </form>
-    {{if toc != "":}}
+    {{if toc != "''":}}
     <h4>Choose the sections taught, so that students can practice them.</h4>
     <div id="search-tree-practice-picker-container">
       <input id="search-tree-practice-picker" type="text">
@@ -305,7 +305,7 @@ $(function () {
     });
 {{ pass }}
 
-    {{if toc != "":}}
+    {{if toc != "''":}}
     var practice_picker = $('#tree-practice-picker');
 
     if (eBookConfig.toc.practice_picker.length != 0) {
