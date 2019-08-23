@@ -356,7 +356,7 @@ class _TestClient(WebClient):
                 # Redo this section using html5validate command line
                 vld = Validator(errors_only=True)
                 tmpname = self.tmp_path / 'tmphtml.html'
-                with open(tmpname, 'w') as f:
+                with open(tmpname, 'w', encoding='utf8') as f:
                     f.write(self.text)
                 errors = vld.validate([tmpname])
 
