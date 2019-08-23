@@ -7,7 +7,7 @@ from collections import OrderedDict
 from paver.easy import sh
 import json
 from runestone import cmap
-from rs_grading import send_lti_grades
+from rs_grading import send_lti_grades, _get_assignment
 from dateutil.parser import parse
 import pandas as pd
 
@@ -1134,9 +1134,6 @@ def getGradeComments():
         return json.dumps({'grade':c.score, 'comments':c.comment})
     else:
         return json.dumps("Error")
-
-def _get_assignment(assignment_id):
-    return db(db.assignments.id == assignment_id).select().first()
 
 def _get_lti_record(oauth_consumer_key):
     if oauth_consumer_key:
