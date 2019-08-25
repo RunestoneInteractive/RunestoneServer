@@ -178,8 +178,7 @@ def test_validate_user_pages(url, requires_login, expected_string,
     #----------
     ('admin/admin', 'Manage Section', 1),
     ('admin/course_students', '"test_user_1"', 2),
-    # TODO: A response of ``null`` is obviously wrong.
-    ('admin/createAssignment', 'null', None),
+    ('admin/createAssignment', 'ERROR', None),
     ('admin/grading', 'assignment', 1),
     # TODO: This produces an exception.
     #('admin/practice', 'Choose when students should start their practice.', 1),

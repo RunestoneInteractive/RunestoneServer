@@ -773,6 +773,7 @@ def deletecourse():
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def removeassign():
     response.headers['content-type'] = 'application/json'
+
     try:
         assignment_id = int(request.vars['assignid'])
     except:
@@ -780,6 +781,7 @@ def removeassign():
         logger.error("Cannot Remove Assignment {}".format(request.args(0)))
         return "Error"
 
+    logger.debug("Removing assignment {}".format(assignment_id))
     ct = db(db.assignments.id == assignment_id).delete()
 
     if ct == 1:
@@ -794,24 +796,30 @@ def removeassign():
 def createAssignment():
     response.headers['content-type'] = 'application/json'
     due = None
-    logger.debug(type(request.vars['name']))
+    name = ''
+
+    if 'name' in request.vars and len(request.vars['name']) > 0:
+        name = request.vars['name']
+    else:
+        return json.dumps('ERROR')
+
+    course=auth.user.course_id
+    logger.debug("Adding new assignment {} for course".format(name, course))
+    name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
+    if name_existsQ > 0:
+        return json.dumps("EXISTS")
+
     try:
-        name=request.vars['name']
-        course=auth.user.course_id
-        logger.debug("Adding new assignment {} for course".format(request.vars['name'], course))
-        name_existsQ = len(db((db.assignments.name == name) & (db.assignments.course == course)).select())
-        if name_existsQ>0:
-            return json.dumps("EXISTS")
         newassignID = db.assignments.insert(course=course, name=name, duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+        db.commit()
     except Exception as ex:
-        logger.error(ex)
+        logger.error("ERROR CREATING ASSIGNMENT", ex)
         return json.dumps('ERROR')
-    try:
-        returndict = {request.vars['name']: newassignID}
-        return json.dumps(returndict)
-    except Exception as ex:
-        logger.error(ex)
-        return json.dumps('ERROR')
+
+    returndict = {name: newassignID}
+    return json.dumps(returndict)
+
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def renameAssignment():
