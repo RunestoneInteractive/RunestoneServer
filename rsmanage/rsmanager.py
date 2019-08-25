@@ -481,6 +481,39 @@ def addinstructor(config, username, course):
     else:
         print("{} is already an instructor for {}".format(username, course))
 
+@cli.command()
+@click.option("--course", help="The name of a course that should already exist in the DB")
+@pass_config
+def instructors(config, course):
+    """
+    List instructor information for all courses or just for a single course
+
+    """
+    eng = create_engine(config.dburl)
+    where_clause = ""
+    if course:
+        where_clause = "where courses.course_name = '{}'".format(course)
+    
+    res = eng.execute("""select username, first_name, last_name, email, courses.course_name 
+    from auth_user 
+    join course_instructor ON course_instructor.instructor = auth_user.id 
+    join courses ON courses.id = course_instructor.course
+    {}
+    order by username;""".format(where_clause))
+    outline = ""
+    row = next(res)
+    current = row[0]
+    outline = "{:<10} {:<10} {:<10} {:<20} {}".format(*row)
+    for row in res:
+        if row[0] == current:
+            outline += " {}".format(row[-1])
+        else:
+            print(outline)
+            outline = "{:<10} {:<10} {:<10} {:<20} {}".format(*row)
+            current = row[0]
+    print(outline)
+
+
 #
 #    grade
 #
