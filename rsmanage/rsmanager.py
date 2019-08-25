@@ -481,6 +481,43 @@ def addinstructor(config, username, course):
     else:
         print("{} is already an instructor for {}".format(username, course))
 
+
+@cli.command()
+@click.option("--name",help="Name of the course")
+@pass_config
+def courseinfo(config, name):
+    """
+    List all information for a single course
+
+    """
+    eng = create_engine(config.dburl)
+    if not name:
+        name = click.prompt("What course do you want info about?")
+
+    course = eng.execute("""select id, term_start_date, institution, base_course from courses where course_name = %s""", name).first()
+    cid = course[0]
+    start_date = course[1]
+    inst = course[2]
+    bc = course[3]
+
+    s_count = eng.execute("""select count(*) from user_courses where course_id=%s""",cid).first()[0]
+
+    res = eng.execute("""select username, first_name, last_name, email, courses.course_name 
+    from auth_user 
+    join course_instructor ON course_instructor.instructor = auth_user.id 
+    join courses ON courses.id = course_instructor.course
+    where course_instructor.course = %s
+    order by username;""", cid)
+
+    print("Course Information for {} -- ({})".format(name, cid))
+    print(inst)
+    print("Base course: {}".format(bc))
+    print("Start date: {}".format(start_date))
+    print("Number of students: {}".format(s_count))
+    print("Instructors:")
+    for row in res:
+        print(" ".join(row[:-1]))
+ 
 @cli.command()
 @click.option("--course", help="The name of a course that should already exist in the DB")
 @pass_config
