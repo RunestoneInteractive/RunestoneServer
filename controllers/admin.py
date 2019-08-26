@@ -2,6 +2,7 @@ import signal
 from os import path
 import os
 import datetime
+import re
 from random import randint
 from collections import OrderedDict
 from paver.easy import sh
@@ -1093,12 +1094,23 @@ def createquestion():
     assignmentid = int(aid)
     points = int(request.vars['points']) if request.vars['points'] else 1
     timed = request.vars['timed']
+    unittest = None
+    if re.search(':autograde:\s+unittest', request.vars.question):
+        unittest = "unittest"
 
     try:
-        newqID = db.questions.insert(base_course=base_course, name=request.vars['name'], chapter=request.vars['chapter'],
-                 subchapter=request.vars['subchapter'], author=auth.user.first_name + " " + auth.user.last_name, difficulty=request.vars['difficulty'],
-                 question=request.vars['question'], timestamp=datetime.datetime.utcnow(), question_type=request.vars['template'],
-                 is_private=request.vars['isprivate'], htmlsrc=request.vars['htmlsrc'])
+        newqID = db.questions.insert(base_course=base_course, name=request.vars['name'],
+            chapter=request.vars['chapter'],
+            subchapter=request.vars['subchapter'],
+            author=auth.user.first_name + " " + auth.user.last_name,
+            autograde=unittest,
+            difficulty=request.vars['difficulty'],
+            question=request.vars['question'],
+            timestamp=datetime.datetime.utcnow(),
+            question_type=request.vars['template'],
+            is_private=request.vars['isprivate'],
+            from_source=False,
+            htmlsrc=request.vars['htmlsrc'])
 
         assignment_question = db.assignment_questions.insert(assignment_id=assignmentid, question_id=newqID, timed=timed, points=points)
 
