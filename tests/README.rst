@@ -19,7 +19,7 @@ If you just want to run the tests:
 
   .. code-block::
 
-      python run_tests.py
+      pytest
 
 
   Or if you have a docker container set up:
