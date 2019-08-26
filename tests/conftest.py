@@ -354,11 +354,11 @@ class _TestClient(WebClient):
 
             if expected_errors is not None and W3_VALIDATE:
                 # Redo this section using html5validate command line
-                vld = Validator(errors_only=True)
+                vld = Validator(errors_only=True, stack_size=2048)
                 tmpname = self.tmp_path / 'tmphtml.html'
                 with open(tmpname, 'w', encoding='utf8') as f:
                     f.write(self.text)
-                errors = vld.validate([tmpname])
+                errors = vld.validate([str(tmpname)])
 
                 assert errors == expected_errors
 
