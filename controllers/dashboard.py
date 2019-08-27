@@ -343,9 +343,10 @@ def questiongrades():
 
     query = ("""select questions.name, score, points
         from questions join assignment_questions on (questions.id = assignment_questions.question_id)
-             join question_grades on (questions.name = question_grades.div_id)
-             where assignment_id = %s and sid = %s and question_grades.course_name = %s;""")
-    rows = db.executesql(query, [assignment['id'], sid, course.course_name])
+        left outer join question_grades on (questions.name = question_grades.div_id
+            and sid = %s and question_grades.course_name = %s)
+            where assignment_id = %s ;""")
+    rows = db.executesql(query, [sid, course.course_name, assignment['id']])
     if not student or not rows:
         session.flash = "Student {} not found for course {}".format(sid, course.course_name)
         return redirect(URL('dashboard','grades'))
