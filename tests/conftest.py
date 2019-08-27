@@ -64,6 +64,14 @@ def pytest_addoption(parser):
                      help='Skip W3C validation of web pages.')
 
 
+# Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
+def pytest_terminal_summary(terminalreporter):
+    with pushd('../../..'):
+        cp = xqt('{} -m coverage report'.format(sys.executable), text=True)
+    terminalreporter.write_line(cp.stdout + cp.stderr)
+
+
+
 # Utilities
 # =========
 # A simple data-struct object.
@@ -218,8 +226,6 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
         web2py_server.terminate()
         web2py_scheduler.terminate()
         echo_thread.join()
-
-        xqt('{} -m coverage report'.format(sys.executable))
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.

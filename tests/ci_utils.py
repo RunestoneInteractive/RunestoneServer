@@ -10,7 +10,7 @@
 # Standard library
 # ----------------
 from __future__ import print_function
-from subprocess import check_call
+from subprocess import run
 import sys
 import os
 import os.path
@@ -24,19 +24,22 @@ is_darwin = sys.platform == 'darwin'
 
 # Copied from https://docs.python.org/3.5/library/platform.html#cross-platform.
 is_64bits = sys.maxsize > 2**32
-#
+
+
 # Support code
 # ============
 # xqt
 # ---
 # Pronounced "execute": provides a simple way to execute a system command.
 def xqt(
-  # Commands to run. For example, ``'foo -param firstArg secondArg', 'bar |
-  # grep alpha'``.
-  *cmds,
-  # Optional keyword arguments to pass on to `subprocess.check_call <https://docs.python.org/3/library/subprocess.html#subprocess.check_call>`_.
-  **kwargs):
+    # Commands to run. For example, ``'foo -param firstArg secondArg', 'bar |
+    # grep alpha'``.
+    *cmds,
+    # Optional keyword arguments to pass on to `subprocess.check_call <https://docs.python.org/3/library/subprocess.html#subprocess.check_call>`_.
+    **kwargs
+):
 
+    ret = []
     # Although https://docs.python.org/3/library/subprocess.html#subprocess.Popen
     # states, "The only time you need to specify ``shell=True`` on Windows is
     # when the command you wish to execute is built into the shell (e.g.
@@ -55,15 +58,21 @@ def xqt(
         # works. See https://docs.python.org/3/library/subprocess.html#subprocess.Popen.
         executable = ('/bin/bash' if is_linux or is_darwin
                       else None)
-        check_call(_, shell=True, executable=executable, **kwargs)
-#
+        ret.append(run(_, shell=True, capture_output=True,
+                       executable=executable, **kwargs))
+
+    # Return a list only if there were multiple commands to execute.
+    return ret[0] if len(ret) == 1 else ret
+
+
 # pushd
 # -----
 # A context manager for pushd.
 class pushd:
     def __init__(self,
-      # The path to change to upon entering the context manager.
-      path):
+        # The path to change to upon entering the context manager.
+        path
+    ):
 
         self.path = path
 
@@ -76,7 +85,8 @@ class pushd:
         flush_print('popd - returning to {}.'.format(self.cwd))
         os.chdir(self.cwd)
         return False
-#
+
+
 # Common tools
 # ============
 #
@@ -85,13 +95,15 @@ class pushd:
 def chdir(path):
     flush_print('cd ' + path)
     os.chdir(path)
-#
+
+
 # mkdir
 # -----
 def mkdir(path):
     flush_print('mkdir ' + path)
     os.mkdir(path)
-#
+
+
 # flush_print
 # -----------
 # Anything sent to ``print`` won't be printed until Python flushes its buffers,
@@ -102,14 +114,16 @@ def flush_print(*args, **kwargs):
     # Flush both buffers, just in case there's something in ``stdout``.
     sys.stdout.flush()
     sys.stderr.flush()
-#
+
+
 # isfile
 # ------
 def isfile(f):
     _ = os.path.isfile(f)
     flush_print('File {} {}.'.format(f, 'exists' if _ else 'does not exist'))
     return _
-#
+
+
 # isfile
 # ------
 def isdir(f):
