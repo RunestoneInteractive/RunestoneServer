@@ -1401,6 +1401,7 @@ def get_assignment():
         session.flash = 'Error assignment ID is undefined'
         return redirect(URL('assignments','index'))
 
+    _set_assignment_max_points(assignment_id)
     assignment_data = {}
     assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data['assignment_points'] = assignment_row.points
@@ -1486,9 +1487,11 @@ def save_assignment():
         logger.error("Bad Date format for assignment: {}".format(d_str))
         due = datetime.datetime.utcnow() + datetime.timedelta(7)
     try:
+        total = _set_assignment_max_points(assignment_id)
         db(db.assignments.id == assignment_id).update(
             course=auth.user.course_id,
             description=request.vars['description'],
+            points=total,
             duedate=due,
             visible=request.vars['visible']
         )
