@@ -443,6 +443,8 @@ def terms():
 def privacy():
     return dict(private={})
 
+def ct_addendum():
+    return dict(private={})
 
 def donate():
     if request.vars.donate:
