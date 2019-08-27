@@ -698,3 +698,17 @@ def test_pageprogress(test_client, runestone_db_tools, test_user_1):
         '"subc_b_1": 1')
     assert '"LearningZone_poll": 0' in test_user_1.test_client.text
     assert '"subc_b_fitb": 0' in test_user_1.test_client.text
+
+def test_lockdown(test_client, test_user_1):
+    test_user_1.login()
+    base_course = test_user_1.course.base_course
+
+    res = test_client.validate('books/published/{}/index.html'.format(base_course))
+    assert '/default/user/login">&nbsp; </a>' in res
+    assert 'Runestone in social media:' in res
+    assert '>Change Course</a></li>' in res
+    assert 'id="profilelink">Edit' in res
+    assert '<ul class="dropdown-menu user-menu">' in res
+    assert 'div id="fb-root"></div' in res
+    assert "<span id='numuserspan'></span><span class='loggedinuser'></span>" in res
+    assert '<script async src="https://hypothes.is/embed.js"></script>' in res
