@@ -24,11 +24,12 @@ import sys
 # Third-party imports
 # -------------------
 from gluon import current
+from runestone.lp.lp_common_lib import STUDENT_SOURCE_PATH, \
+    code_here_comment, read_sphinx_config, BUILD_SYSTEM_PATH, get_sim_str_sim30
 
 # Local imports
 # -------------
-from runestone.server.lp_common_lib import STUDENT_SOURCE_PATH, \
-    code_here_comment, read_sphinx_config, BUILD_SYSTEM_PATH, get_sim_str_sim30
+# None.
 
 
 # Return ``(True, feedback)`` if feedback should be computed on the server,
