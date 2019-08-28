@@ -1534,11 +1534,16 @@ def add__or_update_assignment_question():
     chapter = db.questions[question_id].chapter
     subchapter = db.questions[question_id].subchapter
     auto_grade = db.questions[question_id].autograde
+
+    # Get the current sorting priority for a question, if its there.
+    # otherwise assign it to the end of the list.
     tmpSp = _get_question_sorting_priority(assignment_id, question_id)
-    if tmpSp != None:
+
+    if tmpSp is None:
+        tmpSp = _get_max_sorting_priority(assignment_id) or 0
         sp = 1 + tmpSp
     else:
-        sp = 0
+        sp = tmpSp
 
     activity_count = 0
     if question_type == 'page':
@@ -1617,9 +1622,27 @@ def _get_question_id(question_name, course_id):
     #           (db.courses.id == course_id)
     #           ).select(db.questions.id).first().id)
 
-def _get_question_sorting_priority(assignment_id, question_id):
+def _get_max_sorting_priority(assignment_id):
     max = db.assignment_questions.sorting_priority.max()
-    return db((db.assignment_questions.assignment_id == assignment_id)).select(max).first()[max]
+    return (
+        db((db.assignment_questions.assignment_id == assignment_id))
+        .select(max)
+        .first()[max]
+    )
+
+def _get_question_sorting_priority(assignment_id, question_id):
+    res = (
+        db((db.assignment_questions.assignment_id == assignment_id)
+         & (db.assignment_questions.question_id == question_id)
+        )
+        .select(db.assignment_questions.sorting_priority)
+        .first()
+    )
+    if res is not None:
+        return res['sorting_priority']
+    else:
+        return res
+
 
 @auth.requires(lambda: verifyInstructorStatus(auth.user.course_name, auth.user), requires_login=True)
 def delete_assignment_question():
