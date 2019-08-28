@@ -10,7 +10,7 @@ addons:
     packages:
       - openjdk-8-jre-headless
 env:
-- WEB2PY_VERSION=2.18.4
+- WEB2PY_VERSION=2.18.5
 script:
 - pip install -U -r requirements-test.txt
 - mkdir runestone
