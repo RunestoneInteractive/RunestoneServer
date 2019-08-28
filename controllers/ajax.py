@@ -187,7 +187,7 @@ def hsblog():
     return json.dumps(res)
 
 def runlog():    # Log errors and runs with code
-    response.headers['content-type'] = 'application/json'
+    # response.headers['content-type'] = 'application/json'
     setCookie = False
     if auth.user:
         sid = auth.user.username
