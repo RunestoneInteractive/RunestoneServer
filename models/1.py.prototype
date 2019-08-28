@@ -20,3 +20,4 @@ settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
 settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or whatever the full URL is for making an LTI connection
 
 settings.default_course = 'fopp'
+settings.google_ga = 'UA-XXX-XX'
