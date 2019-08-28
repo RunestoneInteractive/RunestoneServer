@@ -25,13 +25,13 @@
 import sys
 import time
 import subprocess
-from pprint import pprint
 from io import open
 import json
 import os
 import re
 from threading import Thread
 import datetime
+from shutil import rmtree, copytree
 
 # Third-party imports
 # -------------------
@@ -46,9 +46,31 @@ from html5validator.validator import Validator
 # Local imports
 # -------------
 from .utils import COVER_DIRS, DictToObject
+from .ci_utils import xqt, pushd
 
 # Set this to False if you want to turn off all web page validation.
 W3_VALIDATE = True
+
+
+# Pytest setup
+# ============
+# Add `command-line options <http://doc.pytest.org/en/latest/example/parametrize.html#generating-parameters-combinations-depending-on-command-line>`_.
+def pytest_addoption(parser):
+    # Per the `API reference <http://doc.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_addoption>`,
+    # options are argparse style.
+    parser.addoption('--skipdbinit', action='store_true',
+                     help='Skip initialization of the test database.')
+    parser.addoption('--skip_w3_validate', action='store_true',
+                     help='Skip W3C validation of web pages.')
+
+
+# Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
+def pytest_terminal_summary(terminalreporter):
+    with pushd('../../..'):
+        cp = xqt('{} -m coverage report'.format(sys.executable), text=True)
+    terminalreporter.write_line(cp.stdout + cp.stderr)
+
+
 
 # Utilities
 # =========
@@ -86,61 +108,124 @@ def web2py_server_address():
 #
 # Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `session <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
 @pytest.fixture(scope='session')
-def web2py_server(runestone_name, web2py_server_address):
+def web2py_server(runestone_name, web2py_server_address, pytestconfig):
     password = 'pass'
 
-    # For debug, uncomment the next three lines, then run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass -X -K runestone,runestone &`` to also start the workers for the scheduler.
-    ##import pdb; pdb.set_trace()
-    ##yield DictToObject(dict(password=password))
-    ##return
+    os.environ['WEB2PY_CONFIG'] = 'test'
+    # HINT: make sure that ``0.py`` has something like the following, that reads this environment variable:
+    #
+    # .. code:: Python
+    #   :number-lines:
+    #
+    #   config = environ.get("WEB2PY_CONFIG","production")
+    #
+    #   if config == "production":
+    #       settings.database_uri = environ["DBURL"]
+    #   elif config == "development":
+    #       settings.database_uri = environ.get("DEV_DBURL")
+    #   elif config == "test":
+    #       settings.database_uri = environ.get("TEST_DBURL")
+    #   else:
+    #       raise ValueError("unknown value for WEB2PY_CONFIG")
 
-    # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
-    web2py_server = subprocess.Popen(
-        [sys.executable, '-m', 'coverage', 'run', '--append',
-         '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-         '--nogui', '--minthreads=10', '--maxthreads=20'],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # Wait for the webserver to come up.
-    for tries in range(50):
-        try:
-            urlopen(web2py_server_address, timeout=5)
-        except URLError:
-            # Wait for the server to come up.
-            time.sleep(0.1)
-        else:
-            # The server is up. We're done.
-            break
-    # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
-    web2py_scheduler = subprocess.Popen(
-        [sys.executable, '-m', 'coverage', 'run', '--append',
-         '--source=' + COVER_DIRS, 'web2py.py', '-K', runestone_name],
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # HINT: make sure that you export ``TEST_DBURL`` in your environment; it is
+    # not set here because it's specific to the local setup, possibly with a
+    # password, and thus can't be committed to the repo.
+    assert os.environ['TEST_DBURL']
 
-    # Start a thread to read web2py output and echo it.
-    def echo():
-        stdout, stderr = web2py_server.communicate()
-        print('\n'
-              'web2py server stdout\n'
-              '--------------------\n')
-        print(stdout)
-        print('\n'
-              'web2py server stderr\n'
-              '--------------------\n')
-        print(stderr)
-    echo_thread = Thread(target=echo)
-    echo_thread.start()
+    # Extract the components of the DBURL. The expected format is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
+    empty1, postgres_ql, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgres(ql)?://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
+    assert (not empty1) and (not empty2)
+    os.environ['PGPASSWORD'] = pgpassword
+    os.environ['PGUSER'] = pguser
+    os.environ['DBHOST'] = pgnetloc
 
-    # Save the password used.
-    web2py_server.password = password
-    # Wait for the server to come up. The delay varies; this is a guess.
+    # Assume we are running with working directory in tests.
+    if pytestconfig.getoption('skipdbinit'):
+        print('Skipping DB initialization.')
+    else:
+        # In the future, to print the output of the init/build process, see `pytest #1599 <https://github.com/pytest-dev/pytest/issues/1599>`_ for code to enable/disable output capture inside a test.
+        #
+        # Make sure runestone_test is nice and clean -- this will remove many
+        # tables that web2py will then re-create.
+        xqt('rsmanage --verbose initdb --reset --force')
 
-    # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
-    yield web2py_server
+        # Copy the test book to the books directory.
+        rmtree('../books/test_course_1', ignore_errors=True)
+        # Sometimes this fails for no good reason on Windows. Retry.
+        for retry in range(100):
+            try:
+                copytree('test_course_1', '../books/test_course_1')
+                break
+            except WindowsError:
+                if retry == 99:
+                    raise
+        # Build the test book to add in db fields needed.
+        with pushd('../books/test_course_1'):
+            # The runestone build process only looks at ``DBURL``.
+            os.environ['DBURL'] = os.environ['TEST_DBURL']
+            xqt('{} -m runestone build --all'.format(sys.executable),
+                '{} -m runestone deploy'.format(sys.executable))
 
-    # Terminate the server and schedulers to give web2py time to shut down gracefully.
-    web2py_server.terminate()
-    web2py_scheduler.terminate()
-    echo_thread.join()
+    with pushd('../../..'):
+        xqt('{} -m coverage erase'.format(sys.executable))
+
+        # For debug, uncomment the next three lines, then run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass -X -K runestone,runestone &`` to also start the workers for the scheduler.
+        ##import pdb; pdb.set_trace()
+        ##yield DictToObject(dict(password=password))
+        ##return
+
+        # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
+        web2py_server = subprocess.Popen(
+            [sys.executable, '-m', 'coverage', 'run', '--append',
+             '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
+             '--nogui', '--minthreads=10', '--maxthreads=20'],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            # Produce text (not binary) output for nice output in ``echo()`` below.
+            universal_newlines=True
+        )
+        # Wait for the webserver to come up.
+        for tries in range(50):
+            try:
+                urlopen(web2py_server_address, timeout=5)
+            except URLError:
+                # Wait for the server to come up.
+                time.sleep(0.1)
+            else:
+                # The server is up. We're done.
+                break
+        # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
+        web2py_scheduler = subprocess.Popen(
+            [sys.executable, '-m', 'coverage', 'run', '--append',
+             '--source=' + COVER_DIRS, 'web2py.py', '-K', runestone_name],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+
+        # Start a thread to read web2py output and echo it.
+        def echo():
+            stdout, stderr = web2py_server.communicate()
+            print('\n'
+                  'web2py server stdout\n'
+                  '--------------------\n')
+            print(stdout)
+            print('\n'
+                  'web2py server stderr\n'
+                  '--------------------\n')
+            print(stderr)
+        echo_thread = Thread(target=echo)
+        echo_thread.start()
+
+        # Save the password used.
+        web2py_server.password = password
+        # Wait for the server to come up. The delay varies; this is a guess.
+
+        # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
+        yield web2py_server
+
+        # Terminate the server and schedulers to give web2py time to shut down gracefully.
+        web2py_server.terminate()
+        web2py_scheduler.terminate()
+        echo_thread.join()
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.
@@ -310,12 +395,12 @@ def _html_prep(text_str):
 
 
 # Create a client for accessing the Runestone server.
-@pytest.mark.usefixtures("tmp_path")
 class _TestClient(WebClient):
-    def __init__(self, web2py_server, web2py_server_address, runestone_name, tmp_path):
+    def __init__(self, web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig):
         self.web2py_server = web2py_server
         self.web2py_server_address = web2py_server_address
         self.tmp_path = tmp_path
+        self.pytestconfig = pytestconfig
         super(_TestClient, self).__init__('{}/{}/'.format(self.web2py_server_address, runestone_name),
                                           postbacks=True)
 
@@ -352,13 +437,15 @@ class _TestClient(WebClient):
                     # Assume ``expected_string`` is a sequence of strings.
                     assert all(string in self.text for string in expected_string)
 
-            if expected_errors is not None and W3_VALIDATE:
+            if (expected_errors is not None and
+                not self.pytestconfig.getoption('skip_w3_validate')):
+
                 # Redo this section using html5validate command line
-                vld = Validator(errors_only=True)
+                vld = Validator(errors_only=True, stack_size=2048)
                 tmpname = self.tmp_path / 'tmphtml.html'
                 with open(tmpname, 'w', encoding='utf8') as f:
                     f.write(self.text)
-                errors = vld.validate([tmpname])
+                errors = vld.validate([str(tmpname)])
 
                 assert errors == expected_errors
 
@@ -404,8 +491,8 @@ class _TestClient(WebClient):
 
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
-def test_client(web2py_server, web2py_server_address, runestone_name, tmp_path):
-    tc = _TestClient(web2py_server, web2py_server_address, runestone_name, tmp_path)
+def test_client(web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig):
+    tc = _TestClient(web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig)
     yield tc
     tc.tearDown()
 

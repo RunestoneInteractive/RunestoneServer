@@ -34,7 +34,7 @@ script:
 - cd tests
 # Now actually run the tests
 - cp .coveragerc ../../../
-- python run_tests.py
+- pytest
 - cd ../../..
 - coveralls
 notifications:

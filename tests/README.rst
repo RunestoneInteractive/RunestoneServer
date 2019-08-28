@@ -7,25 +7,26 @@ If you just want to run the tests:
 
 - There are some extra modules needed, so install them
 
-.. code-block::
+  .. code-block::
 
-    cd runestone
-    pip install -r requirements-test.txt
+      cd runestone
+      pip install -r requirements-test.txt
 
 
-- Next, connect to this directory (`runestone/tests`)
+- Next, switch to the test directory (``runestone/tests``)
 - **Make sure that you don't have a runestone server running.** If you do, that server will handle the web page requests that occur during the tests instead of letting the test server respond to them, and it will be accessing the wrong database.
+- Run the tests. From the shell:
 
-.. code-block::
+  .. code-block::
 
-    python run_tests.py
+      pytest
 
 
-Or if you have a docker container set up:
+  Or if you have a docker container set up:
 
-.. code-block::
+  .. code-block::
 
-    docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
+      docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; pytest'
 
 But we really hope you will write some tests, so lets take a look at a sample of a test that simulates a user submitting a response to a poll.  We'll then check to see that their answer made it into the database, and then make sure that the api call to retrieve poll results works as expected
 
@@ -76,9 +77,9 @@ But we really hope you will write some tests, so lets take a look at a sample of
         assert res[-1] == "1"
 
 
-The test above can be run as part of the entire suite of tests by running ``scripts/dtest -k test_poll`` from the Runestone main directory.  This assumes that you have a Docker environment set up for your developent work. If you are not using docker then from the tests folder run ``python run_tests.py -k test_poll`` The ``-k`` option matches any part of the test names, so you don't have to give it the full test name.  ``-k poll`` would run any test that has poll in its name.
+The test above can be run as part of the entire suite of tests by running ``scripts/dtest -k test_poll`` from the Runestone main directory.  This assumes that you have a Docker environment set up for your developent work. If you are not using docker then from the tests folder run ``pytest -k test_poll`` The ``-k`` option matches any part of the test names, so you don't have to give it the full test name.  ``-k poll`` would run any test that has poll in its name.
 
-The ``run_tests.py`` script ensures that the database is initialized, a test book/course is created (called test_course_1) and all of the testing framework is in place.  The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment. When you define a test_function that has one of these as a parameter name, when the test runner executes the function, the parameter will be bound to the fixture object.  The fixtures include:
+The pytest framework uses "fixtures" to help with all the gory details of setting up a test environment and creating various pieces of that environment. When you define a test_function that has one of these as a parameter name, when the test runner executes the function, the parameter will be bound to the fixture object.  The fixtures include:
 
 * test_client - A client for interacting with the web2py Server
 
