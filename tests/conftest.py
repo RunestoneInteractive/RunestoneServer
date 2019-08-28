@@ -67,7 +67,8 @@ def pytest_addoption(parser):
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
     with pushd('../../..'):
-        cp = xqt('{} -m coverage report'.format(sys.executable), text=True)
+        cp = xqt('{} -m coverage report'.format(sys.executable),
+                 universal_newlines=True)
     terminalreporter.write_line(cp.stdout + cp.stderr)
 
 
