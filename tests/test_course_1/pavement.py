@@ -13,7 +13,7 @@ sys.path.append(os.getcwd())
 # The project name, for use below.
 project_name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
 # True if this project uses Runestone services.
-use_services = True
+use_services = 'true'
 # The root directory for ``runestone serve``.
 serving_dir = "./build/" + project_name
 # The destination directory for ``runestone deploy``.
