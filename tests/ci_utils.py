@@ -10,7 +10,7 @@
 # Standard library
 # ----------------
 from __future__ import print_function
-from subprocess import run
+from subprocess import run, PIPE
 import sys
 import os
 import os.path
@@ -58,7 +58,7 @@ def xqt(
         # works. See https://docs.python.org/3/library/subprocess.html#subprocess.Popen.
         executable = ('/bin/bash' if is_linux or is_darwin
                       else None)
-        ret.append(run(_, shell=True, capture_output=True,
+        ret.append(run(_, shell=True, stdout=PIPE, stderr=PIPE,
                        executable=executable, **kwargs))
 
     # Return a list only if there were multiple commands to execute.
