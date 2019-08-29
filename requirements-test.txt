@@ -11,3 +11,4 @@ https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
 beautifulsoup4
 locustio
 coveralls
+black
