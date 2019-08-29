@@ -14,16 +14,17 @@ from subprocess import run, PIPE
 import sys
 import os
 import os.path
+
 #
 # OS detection
 # ============
 # This follows the `Python recommendations <https://docs.python.org/3/library/sys.html#sys.platform>`_.
-is_win = sys.platform == 'win32'
-is_linux = sys.platform.startswith('linux')
-is_darwin = sys.platform == 'darwin'
+is_win = sys.platform == "win32"
+is_linux = sys.platform.startswith("linux")
+is_darwin = sys.platform == "darwin"
 
 # Copied from https://docs.python.org/3.5/library/platform.html#cross-platform.
-is_64bits = sys.maxsize > 2**32
+is_64bits = sys.maxsize > 2 ** 32
 
 
 # Support code
@@ -56,10 +57,12 @@ def xqt(
         flush_print(_)
         # Use bash instead of sh, so that ``source`` and other bash syntax
         # works. See https://docs.python.org/3/library/subprocess.html#subprocess.Popen.
-        executable = ('/bin/bash' if is_linux or is_darwin
-                      else None)
-        ret.append(run(_, shell=True, stdout=PIPE, stderr=PIPE,
-                       executable=executable, **kwargs))
+        executable = "/bin/bash" if is_linux or is_darwin else None
+        ret.append(
+            run(
+                _, shell=True, stdout=PIPE, stderr=PIPE, executable=executable, **kwargs
+            )
+        )
 
     # Return a list only if there were multiple commands to execute.
     return ret[0] if len(ret) == 1 else ret
@@ -69,20 +72,21 @@ def xqt(
 # -----
 # A context manager for pushd.
 class pushd:
-    def __init__(self,
+    def __init__(
+        self,
         # The path to change to upon entering the context manager.
-        path
+        path,
     ):
 
         self.path = path
 
     def __enter__(self):
-        flush_print('pushd {}'.format(self.path))
+        flush_print("pushd {}".format(self.path))
         self.cwd = os.getcwd()
         os.chdir(self.path)
 
     def __exit__(self, type_, value, traceback):
-        flush_print('popd - returning to {}.'.format(self.cwd))
+        flush_print("popd - returning to {}.".format(self.cwd))
         os.chdir(self.cwd)
         return False
 
@@ -93,14 +97,14 @@ class pushd:
 # chdir
 # -----
 def chdir(path):
-    flush_print('cd ' + path)
+    flush_print("cd " + path)
     os.chdir(path)
 
 
 # mkdir
 # -----
 def mkdir(path):
-    flush_print('mkdir ' + path)
+    flush_print("mkdir " + path)
     os.mkdir(path)
 
 
@@ -120,7 +124,7 @@ def flush_print(*args, **kwargs):
 # ------
 def isfile(f):
     _ = os.path.isfile(f)
-    flush_print('File {} {}.'.format(f, 'exists' if _ else 'does not exist'))
+    flush_print("File {} {}.".format(f, "exists" if _ else "does not exist"))
     return _
 
 
@@ -128,5 +132,5 @@ def isfile(f):
 # ------
 def isdir(f):
     _ = os.path.isdir(f)
-    flush_print('Directory {} {}.'.format(f, 'exists' if _ else 'does not exist'))
+    flush_print("Directory {} {}.".format(f, "exists" if _ else "does not exist"))
     return _

@@ -24,7 +24,7 @@ from contextlib import contextmanager
 #
 # Globals
 # =======
-COVER_DIRS = 'applications/runestone/modules,applications/runestone/controllers,applications/runestone/models'
+COVER_DIRS = "applications/runestone/modules,applications/runestone/controllers,applications/runestone/models"
 
 
 # Classes
@@ -39,13 +39,19 @@ class DictToObject(object):
 # =========
 # Import from a web2py controller. It returns a object of imported names, which also included standard web2py names (``request``, etc.). For example, ``d = web2py_controller_import('application', 'controller')`` then allows ``d.foo()``, assuming ``controller`` defined a ``foo()`` function.
 def web2py_controller_import(
-        # The ``runestone_env`` fixture.
-        runestone_env,
-        # The controller, as a string.
-        controller):
+    # The ``runestone_env`` fixture.
+    runestone_env,
+    # The controller, as a string.
+    controller,
+):
 
-    exec_file = 'applications/{}/controllers/{}.py'.format(runestone_env['request'].application, controller)
-    exec(compile(open(exec_file, 'r' if six.PY3 else 'rb').read(), exec_file, 'exec'), runestone_env)
+    exec_file = "applications/{}/controllers/{}.py".format(
+        runestone_env["request"].application, controller
+    )
+    exec(
+        compile(open(exec_file, "r" if six.PY3 else "rb").read(), exec_file, "exec"),
+        runestone_env,
+    )
     # Note: `exec_environment <http://web2py.com/books/default/chapter/29/04/the-core#Execution-environment>`_ seems like the obvious tool. However, ``exec_environment('applications/{}/controllers/{}.py'.format(runestone_controller.request.application, controller)) fails with:
     ## >   logger = logging.getLogger(settings.logger)
     ## E   NameError: name 'settings' is not defined
@@ -59,9 +65,9 @@ def settings_context(settings_dict):
     try:
         # write new testsuite_settings.py into models folder
         models_fname = "applications/runestone/models/testsuite_settings.py"
-        with open(models_fname, 'w') as f:
+        with open(models_fname, "w") as f:
             for key, value in six.iteritems(settings_dict):
-                f.write('{} = {}\n'.format(key, value))
+                f.write("{} = {}\n".format(key, value))
         yield None
     finally:
         os.remove(models_fname)

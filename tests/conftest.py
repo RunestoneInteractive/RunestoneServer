@@ -58,19 +58,25 @@ W3_VALIDATE = True
 def pytest_addoption(parser):
     # Per the `API reference <http://doc.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_addoption>`,
     # options are argparse style.
-    parser.addoption('--skipdbinit', action='store_true',
-                     help='Skip initialization of the test database.')
-    parser.addoption('--skip_w3_validate', action='store_true',
-                     help='Skip W3C validation of web pages.')
+    parser.addoption(
+        "--skipdbinit",
+        action="store_true",
+        help="Skip initialization of the test database.",
+    )
+    parser.addoption(
+        "--skip_w3_validate",
+        action="store_true",
+        help="Skip W3C validation of web pages.",
+    )
 
 
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
-    with pushd('../../..'):
-        cp = xqt('{} -m coverage report'.format(sys.executable),
-                 universal_newlines=True)
+    with pushd("../../.."):
+        cp = xqt(
+            "{} -m coverage report".format(sys.executable), universal_newlines=True
+        )
     terminalreporter.write_line(cp.stdout + cp.stderr)
-
 
 
 # Utilities
@@ -82,8 +88,9 @@ class _object(object):
 
 # Create a web2py controller environment. This is taken from pieces of ``gluon.shell.run``. It returns a ``dict`` containing the environment.
 def web2py_controller_env(
-        # _`application`: The name of the application to run in, as a string.
-        application):
+    # _`application`: The name of the application to run in, as a string.
+    application
+):
 
     env = gluon.shell.env(application, import_models=True)
     env.update(gluon.shell.exec_pythonrc())
@@ -92,27 +99,28 @@ def web2py_controller_env(
 
 # Create a web2py controller environment. Given ``ctl_env = web2py_controller('app_name')``, then  ``ctl_env.db`` refers to the usual DAL object for database access, ``ctl_env.request`` is an (empty) Request object, etc.
 def web2py_controller(
-        # See env_.
-        env):
+    # See env_.
+    env
+):
 
     return DictToObject(env)
 
 
 # Fixtures
 # ========
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def web2py_server_address():
-    return 'http://127.0.0.1:8000'
+    return "http://127.0.0.1:8000"
 
 
 # This fixture starts and shuts down the web2py server.
 #
 # Execute this `fixture <https://docs.pytest.org/en/latest/fixture.html>`_ once per `session <https://docs.pytest.org/en/latest/fixture.html#scope-sharing-a-fixture-instance-across-tests-in-a-class-module-or-session>`_.
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def web2py_server(runestone_name, web2py_server_address, pytestconfig):
-    password = 'pass'
+    password = "pass"
 
-    os.environ['WEB2PY_CONFIG'] = 'test'
+    os.environ["WEB2PY_CONFIG"] = "test"
     # HINT: make sure that ``0.py`` has something like the following, that reads this environment variable:
     #
     # .. code:: Python
@@ -132,44 +140,48 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
     # HINT: make sure that you export ``TEST_DBURL`` in your environment; it is
     # not set here because it's specific to the local setup, possibly with a
     # password, and thus can't be committed to the repo.
-    assert os.environ['TEST_DBURL']
+    assert os.environ["TEST_DBURL"]
 
     # Extract the components of the DBURL. The expected format is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
-    empty1, postgres_ql, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split('^postgres(ql)?://(.*):(.*)@(.*)/(.*)$', os.environ['TEST_DBURL'])
+    empty1, postgres_ql, pguser, pgpassword, pgnetloc, dbname, empty2 = re.split(
+        "^postgres(ql)?://(.*):(.*)@(.*)/(.*)$", os.environ["TEST_DBURL"]
+    )
     assert (not empty1) and (not empty2)
-    os.environ['PGPASSWORD'] = pgpassword
-    os.environ['PGUSER'] = pguser
-    os.environ['DBHOST'] = pgnetloc
+    os.environ["PGPASSWORD"] = pgpassword
+    os.environ["PGUSER"] = pguser
+    os.environ["DBHOST"] = pgnetloc
 
     # Assume we are running with working directory in tests.
-    if pytestconfig.getoption('skipdbinit'):
-        print('Skipping DB initialization.')
+    if pytestconfig.getoption("skipdbinit"):
+        print("Skipping DB initialization.")
     else:
         # In the future, to print the output of the init/build process, see `pytest #1599 <https://github.com/pytest-dev/pytest/issues/1599>`_ for code to enable/disable output capture inside a test.
         #
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt('rsmanage --verbose initdb --reset --force')
+        xqt("rsmanage --verbose initdb --reset --force")
 
         # Copy the test book to the books directory.
-        rmtree('../books/test_course_1', ignore_errors=True)
+        rmtree("../books/test_course_1", ignore_errors=True)
         # Sometimes this fails for no good reason on Windows. Retry.
         for retry in range(100):
             try:
-                copytree('test_course_1', '../books/test_course_1')
+                copytree("test_course_1", "../books/test_course_1")
                 break
             except WindowsError:
                 if retry == 99:
                     raise
         # Build the test book to add in db fields needed.
-        with pushd('../books/test_course_1'):
+        with pushd("../books/test_course_1"):
             # The runestone build process only looks at ``DBURL``.
-            os.environ['DBURL'] = os.environ['TEST_DBURL']
-            xqt('{} -m runestone build --all'.format(sys.executable),
-                '{} -m runestone deploy'.format(sys.executable))
+            os.environ["DBURL"] = os.environ["TEST_DBURL"]
+            xqt(
+                "{} -m runestone build --all".format(sys.executable),
+                "{} -m runestone deploy".format(sys.executable),
+            )
 
-    with pushd('../../..'):
-        xqt('{} -m coverage erase'.format(sys.executable))
+    with pushd("../../.."):
+        xqt("{} -m coverage erase".format(sys.executable))
 
         # For debug, uncomment the next three lines, then run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass -X -K runestone,runestone &`` to also start the workers for the scheduler.
         ##import pdb; pdb.set_trace()
@@ -178,12 +190,24 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
 
         # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
         web2py_server = subprocess.Popen(
-            [sys.executable, '-m', 'coverage', 'run', '--append',
-             '--source=' + COVER_DIRS, 'web2py.py', '-a', password,
-             '--nogui', '--minthreads=10', '--maxthreads=20'],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            [
+                sys.executable,
+                "-m",
+                "coverage",
+                "run",
+                "--append",
+                "--source=" + COVER_DIRS,
+                "web2py.py",
+                "-a",
+                password,
+                "--nogui",
+                "--minthreads=10",
+                "--maxthreads=20",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             # Produce text (not binary) output for nice output in ``echo()`` below.
-            universal_newlines=True
+            universal_newlines=True,
         )
         # Wait for the webserver to come up.
         for tries in range(50):
@@ -197,22 +221,29 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
                 break
         # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
         web2py_scheduler = subprocess.Popen(
-            [sys.executable, '-m', 'coverage', 'run', '--append',
-             '--source=' + COVER_DIRS, 'web2py.py', '-K', runestone_name],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            [
+                sys.executable,
+                "-m",
+                "coverage",
+                "run",
+                "--append",
+                "--source=" + COVER_DIRS,
+                "web2py.py",
+                "-K",
+                runestone_name,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
 
         # Start a thread to read web2py output and echo it.
         def echo():
             stdout, stderr = web2py_server.communicate()
-            print('\n'
-                  'web2py server stdout\n'
-                  '--------------------\n')
+            print("\n" "web2py server stdout\n" "--------------------\n")
             print(stdout)
-            print('\n'
-                  'web2py server stderr\n'
-                  '--------------------\n')
+            print("\n" "web2py server stderr\n" "--------------------\n")
             print(stderr)
+
         echo_thread = Thread(target=echo)
         echo_thread.start()
 
@@ -230,9 +261,9 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def runestone_name():
-    return 'runestone'
+    return "runestone"
 
 
 # The environment of a web2py controller.
@@ -258,7 +289,7 @@ def runestone_db(runestone_controller):
     yield db
 
     # Restore the database state after the test finishes.
-    #----------------------------------------------------
+    # ----------------------------------------------------
     # Rollback changes, which ensures that any errors in the database connection
     # will be cleared.
     db.rollback()
@@ -275,7 +306,7 @@ def runestone_db(runestone_controller):
     # The query is:
     ## SELECT input_table_name || ',' AS truncate_query FROM(SELECT table_schema || '.' || table_name AS input_table_name FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND table_name NOT IN ('questions', 'source_code', 'chapters', 'sub_chapters', 'scheduler_run', 'scheduler_task', 'scheduler_task_deps', 'scheduler_worker') AND table_schema NOT LIKE 'pg_toast%') AS information order by input_table_name;
     db.executesql(
-"""TRUNCATE
+        """TRUNCATE
  public.acerror_log,
  public.assignment_questions,
  public.assignments,
@@ -321,7 +352,8 @@ def runestone_db(runestone_controller):
  public.user_topic_practice_log,
  public.user_topic_practice_survey,
  public.web2py_session_runestone CASCADE;
- """)
+ """
+    )
     db.commit()
 
 
@@ -331,27 +363,31 @@ class _RunestoneDbTools(object):
         self.db = runestone_db
 
     # Create a new course. It returns an object with information about the created course.
-    def create_course(self,
+    def create_course(
+        self,
         # The name of the course to create, as a string.
-        course_name='test_child_course_1',
+        course_name="test_child_course_1",
         # The start date of the course, as a string.
-        term_start_date='2000-01-01',
+        term_start_date="2000-01-01",
         # The value of the ``login_required`` flag for the course.
         login_required=True,
         # The base course for this course. If ``None``, it will use ``course_name``.
-        base_course='test_course_1',
+        base_course="test_course_1",
         # The student price for this course.
-        student_price=None):
+        student_price=None,
+    ):
 
         # Sanity check: this class shouldn't exist.
         db = self.db
         assert not db(db.courses.course_name == course_name).select().first()
 
         # Create the base course if it doesn't exist.
-        if (course_name != base_course and
-            not db(db.courses.course_name == base_course).select(db.courses.id)):
-            self.create_course(base_course, term_start_date, login_required,
-                               base_course, student_price)
+        if course_name != base_course and not db(
+            db.courses.course_name == base_course
+        ).select(db.courses.id):
+            self.create_course(
+                base_course, term_start_date, login_required, base_course, student_price
+            )
 
         # Store these values in an object for convenient access.
         obj = _object()
@@ -361,7 +397,8 @@ class _RunestoneDbTools(object):
         obj.base_course = base_course
         obj.student_price = student_price
         obj.course_id = db.courses.insert(
-            course_name=course_name, base_course=obj.base_course,
+            course_name=course_name,
+            base_course=obj.base_course,
             term_start_date=term_start_date,
             login_required=login_required,
             student_price=student_price,
@@ -369,15 +406,18 @@ class _RunestoneDbTools(object):
         db.commit()
         return obj
 
-
-    def make_instructor(self,
+    def make_instructor(
+        self,
         # The ID of the user to make an instructor.
         user_id,
         # The ID of the course in which the user will be an instructor.
-        course_id):
+        course_id,
+    ):
 
         db = self.db
-        course_instructor_id = db.course_instructor.insert(course=course_id, instructor=user_id)
+        course_instructor_id = db.course_instructor.insert(
+            course=course_id, instructor=user_id
+        )
         db.commit()
         return course_instructor_id
 
@@ -390,33 +430,43 @@ def runestone_db_tools(runestone_db):
 
 # Given the ``test_client.text``, prepare to write it to a file.
 def _html_prep(text_str):
-    _str = text_str.replace('\r\n', '\n')
+    _str = text_str.replace("\r\n", "\n")
     # Deal with fun Python 2 encoding quirk.
-    return _str if six.PY2 else _str.encode('utf-8')
+    return _str if six.PY2 else _str.encode("utf-8")
 
 
 # Create a client for accessing the Runestone server.
 class _TestClient(WebClient):
-    def __init__(self, web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig):
+    def __init__(
+        self,
+        web2py_server,
+        web2py_server_address,
+        runestone_name,
+        tmp_path,
+        pytestconfig,
+    ):
         self.web2py_server = web2py_server
         self.web2py_server_address = web2py_server_address
         self.tmp_path = tmp_path
         self.pytestconfig = pytestconfig
-        super(_TestClient, self).__init__('{}/{}/'.format(self.web2py_server_address, runestone_name),
-                                          postbacks=True)
+        super(_TestClient, self).__init__(
+            "{}/{}/".format(self.web2py_server_address, runestone_name), postbacks=True
+        )
 
     # Use the W3C validator to check the HTML at the given URL.
-    def validate(self,
+    def validate(
+        self,
         # The relative URL to validate.
         url,
         # An optional string that, if provided, must be in the text returned by the server. If this is a sequence of strings, all of the provided strings must be in the text returned by the server.
-        expected_string='',
+        expected_string="",
         # The number of validation errors expected. If None, no validation is performed.
         expected_errors=None,
         # The expected status code from the request.
         expected_status=200,
         # All additional keyword arguments are passed to the ``post`` method.
-        **kwargs):
+        **kwargs
+    ):
 
         try:
             try:
@@ -427,7 +477,7 @@ class _TestClient(WebClient):
                     # Since this is an error of some type, these paramets must be empty, since they can't be checked.
                     assert not expected_string
                     assert not expected_errors
-                    return ''
+                    return ""
                 else:
                     raise
             assert self.status == expected_status
@@ -438,13 +488,14 @@ class _TestClient(WebClient):
                     # Assume ``expected_string`` is a sequence of strings.
                     assert all(string in self.text for string in expected_string)
 
-            if (expected_errors is not None and
-                not self.pytestconfig.getoption('skip_w3_validate')):
+            if expected_errors is not None and not self.pytestconfig.getoption(
+                "skip_w3_validate"
+            ):
 
                 # Redo this section using html5validate command line
                 vld = Validator(errors_only=True, stack_size=2048)
-                tmpname = self.tmp_path / 'tmphtml.html'
-                with open(tmpname, 'w', encoding='utf8') as f:
+                tmpname = self.tmp_path / "tmphtml.html"
+                with open(tmpname, "w", encoding="utf8") as f:
                     f.write(self.text)
                 errors = vld.validate([str(tmpname)])
 
@@ -454,36 +505,36 @@ class _TestClient(WebClient):
 
         except AssertionError:
             # Save the HTML to make fixing the errors easier. Note that ``self.text`` is already encoded as utf-8.
-            validation_file = url.replace('/', '-') + '.html'
-            with open(validation_file, 'wb') as f:
+            validation_file = url.replace("/", "-") + ".html"
+            with open(validation_file, "wb") as f:
                 f.write(_html_prep(self.text))
-            print('Validation failure saved to {}.'.format(validation_file))
+            print("Validation failure saved to {}.".format(validation_file))
             raise
 
         except RuntimeError as e:
             # Provide special handling for web2py exceptions by saving the
             # resulting traceback.
-            if e.args[0].startswith('ticket '):
+            if e.args[0].startswith("ticket "):
                 # Create a client to access the admin interface.
-                admin_client = WebClient('{}/admin/'.format(self.web2py_server_address),
-                                         postbacks=True)
+                admin_client = WebClient(
+                    "{}/admin/".format(self.web2py_server_address), postbacks=True
+                )
                 # Log in.
-                admin_client.post('', data={'password':
-                                            self.web2py_server.password})
+                admin_client.post("", data={"password": self.web2py_server.password})
                 assert admin_client.status == 200
                 # Get the error.
-                error_code = e.args[0][len('ticket '):]
-                admin_client.get('default/ticket/' + error_code)
+                error_code = e.args[0][len("ticket ") :]
+                admin_client.get("default/ticket/" + error_code)
                 assert admin_client.status == 200
                 # Save it to a file.
-                traceback_file = url.replace('/', '-') + '_traceback.html'
-                with open(traceback_file, 'wb') as f:
+                traceback_file = url.replace("/", "-") + "_traceback.html"
+                with open(traceback_file, "wb") as f:
                     f.write(_html_prep(admin_client.text))
-                print('Traceback saved to {}.'.format(traceback_file))
+                print("Traceback saved to {}.".format(traceback_file))
             raise
 
     def logout(self):
-        self.validate('default/user/logout', 'Logged out')
+        self.validate("default/user/logout", "Logged out")
 
     # Always logout after a test finishes.
     def tearDown(self):
@@ -492,17 +543,23 @@ class _TestClient(WebClient):
 
 # Present ``_TestClient`` as a fixure.
 @pytest.fixture
-def test_client(web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig):
-    tc = _TestClient(web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig)
+def test_client(
+    web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig
+):
+    tc = _TestClient(
+        web2py_server, web2py_server_address, runestone_name, tmp_path, pytestconfig
+    )
     yield tc
     tc.tearDown()
 
 
 # This class allows creating a user inside a context manager.
 class _TestUser(object):
-    def __init__(self,
+    def __init__(
+        self,
         # These are fixtures.
-        test_client, runestone_db_tools,
+        test_client,
+        runestone_db_tools,
         # The username for this user.
         username,
         # The password for this user.
@@ -512,16 +569,17 @@ class _TestUser(object):
         # True if the course is free (no payment required); False otherwise.
         is_free=True,
         # The first name for this user.
-        first_name='test',
+        first_name="test",
         # The last name for this user.
-        last_name='user'):
+        last_name="user",
+    ):
 
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.username = username
         self.first_name = first_name
         self.last_name = last_name
-        self.email = self.username + '@foo.com'
+        self.email = self.username + "@foo.com"
         self.password = password
         self.course = course
         self.is_free = is_free
@@ -529,8 +587,9 @@ class _TestUser(object):
         # Registration doesn't work unless we're logged out.
         self.test_client.logout()
         # Now, post the registration.
-        self.test_client.validate('default/user/register',
-            'Support Runestone Interactive' if self.is_free else 'Payment Amount',
+        self.test_client.validate(
+            "default/user/register",
+            "Support Runestone Interactive" if self.is_free else "Payment Amount",
             data=dict(
                 username=self.username,
                 first_name=self.first_name,
@@ -541,23 +600,29 @@ class _TestUser(object):
                 password_two=self.password,
                 # Note that ``course_id`` is (on the form) actually a course name.
                 course_id=self.course.course_name,
-                accept_tcp='on',
-                donate='0',
-                _next='/runestone/default/index',
-                _formname='register',
-            )
+                accept_tcp="on",
+                donate="0",
+                _next="/runestone/default/index",
+                _formname="register",
+            ),
         )
 
         # Record IDs
         db = self.runestone_db_tools.db
-        self.user_id = db(db.auth_user.username == self.username).select(db.auth_user.id).first().id
+        self.user_id = (
+            db(db.auth_user.username == self.username)
+            .select(db.auth_user.id)
+            .first()
+            .id
+        )
 
     def login(self):
-        self.test_client.validate('default/user/login', data=dict(
-            username=self.username,
-            password=self.password,
-            _formname='login',
-        ))
+        self.test_client.validate(
+            "default/user/login",
+            data=dict(
+                username=self.username, password=self.password, _formname="login"
+            ),
+        )
 
     def logout(self):
         self.test_client.logout()
@@ -568,7 +633,8 @@ class _TestUser(object):
         return self.runestone_db_tools.make_instructor(self.user_id, course_id)
 
     # A context manager to update this user's profile. If a course was added, it returns that course's ID; otherwise, it returns None.
-    def update_profile(self,
+    def update_profile(
+        self,
         # This parameter is passed to ``test_client.validate``.
         expected_string=None,
         # An updated username, or ``None`` to use ``self.username``.
@@ -581,18 +647,20 @@ class _TestUser(object):
         email=None,
         # An updated last name, or ``None`` to use ``self.course.course_name``.
         course_name=None,
-        section='',
+        section="",
         # A shortcut for specifying the ``expected_string``, which only applies if ``expected_string`` is not set. Use ``None`` if a course will not be added, ``True`` if the added course is free, or ``False`` if the added course is paid.
         is_free=None,
         # The value of the ``accept_tcp`` checkbox; provide an empty string to leave unchecked. The default value leaves it checked.
-        accept_tcp='on'):
+        accept_tcp="on",
+    ):
 
         if expected_string is None:
             if is_free is None:
-                expected_string = 'Course Selection'
+                expected_string = "Course Selection"
             else:
-                expected_string = 'Support Runestone Interactive' \
-                    if is_free else 'Payment Amount'
+                expected_string = (
+                    "Support Runestone Interactive" if is_free else "Payment Amount"
+                )
         username = username or self.username
         first_name = first_name or self.first_name
         last_name = last_name or self.last_name
@@ -600,7 +668,8 @@ class _TestUser(object):
         course_name = course_name or self.course.course_name
 
         # Perform the update.
-        self.test_client.validate('default/user/profile',
+        self.test_client.validate(
+            "default/user/profile",
             expected_string,
             data=dict(
                 username=username,
@@ -611,62 +680,77 @@ class _TestUser(object):
                 course_id=course_name,
                 accept_tcp=accept_tcp,
                 section=section,
-                _next='/runestone/default/index',
+                _next="/runestone/default/index",
                 id=str(self.user_id),
-                _formname='auth_user/' + str(self.user_id),
-            )
+                _formname="auth_user/" + str(self.user_id),
+            ),
         )
 
     # Call this after registering for a new course or adding a new course via ``update_profile`` to pay for the course.
-    def make_payment(self,
+    def make_payment(
+        self,
         # The `Stripe test tokens <https://stripe.com/docs/testing#cards>`_ to use for payment.
         stripe_token,
         # The course ID of the course to pay for. None specifies ``self.course.course_id``.
-        course_id=None):
+        course_id=None,
+    ):
 
         course_id = course_id or self.course.course_id
 
         # Get the signature from the HTML of the payment page.
-        self.test_client.validate('default/payment')
-        match = re.search('<input type="hidden" name="signature" value="([^ ]*)" />',
-                          self.test_client.text)
+        self.test_client.validate("default/payment")
+        match = re.search(
+            '<input type="hidden" name="signature" value="([^ ]*)" />',
+            self.test_client.text,
+        )
         signature = match.group(1)
 
-        html = self.test_client.validate('default/payment',
-            data=dict(stripeToken=stripe_token, signature=signature)
+        html = self.test_client.validate(
+            "default/payment", data=dict(stripeToken=stripe_token, signature=signature)
         )
-        assert ('Thank you for your payment' in html) or ('Payment failed' in html)
+        assert ("Thank you for your payment" in html) or ("Payment failed" in html)
 
     def hsblog(self, **kwargs):
         # Get the time, rounded down to a second, before posting to the server.
         ts = datetime.datetime.utcnow()
         ts -= datetime.timedelta(microseconds=ts.microsecond)
 
-        if 'course' not in kwargs:
-            kwargs['course'] = self.course.course_name
+        if "course" not in kwargs:
+            kwargs["course"] = self.course.course_name
 
-        if 'answer' not in kwargs and 'act' in kwargs:
-            kwargs['answer'] = kwargs['act']
+        if "answer" not in kwargs and "act" in kwargs:
+            kwargs["answer"] = kwargs["act"]
         # Post to the server.
-        return json.loads(self.test_client.validate('ajax/hsblog', data=kwargs))
+        return json.loads(self.test_client.validate("ajax/hsblog", data=kwargs))
 
 
 # Present ``_TestUser`` as a fixture.
 @pytest.fixture
 def test_user(test_client, runestone_db_tools):
-    return lambda *args, **kwargs: _TestUser(test_client, runestone_db_tools, *args, **kwargs)
+    return lambda *args, **kwargs: _TestUser(
+        test_client, runestone_db_tools, *args, **kwargs
+    )
 
 
 # Provide easy access to a test user and course.
 @pytest.fixture
 def test_user_1(runestone_db_tools, test_user):
     course = runestone_db_tools.create_course()
-    return test_user('test_user_1', 'password_1', course)
+    return test_user("test_user_1", "password_1", course)
 
 
 class _TestAssignment(object):
     assignment_count = 0
-    def __init__(self, test_client, test_user, runestone_db_tools, aname, course, is_visible=False):
+
+    def __init__(
+        self,
+        test_client,
+        test_user,
+        runestone_db_tools,
+        aname,
+        course,
+        is_visible=False,
+    ):
         self.test_client = test_client
         self.runestone_db_tools = runestone_db_tools
         self.assignment_name = aname
@@ -674,38 +758,39 @@ class _TestAssignment(object):
         self.description = "default description"
         self.is_visible = is_visible
         self.due = datetime.datetime.utcnow() + datetime.timedelta(days=7)
-        self.assignment_instructor = test_user('assign_instructor_{}'.format(_TestAssignment.assignment_count),
-            'password', course)
+        self.assignment_instructor = test_user(
+            "assign_instructor_{}".format(_TestAssignment.assignment_count),
+            "password",
+            course,
+        )
         self.assignment_instructor.make_instructor()
         self.assignment_instructor.login()
         self.assignment_id = json.loads(
-            self.test_client.validate('admin/createAssignment',
-                                    data={'name': self.assignment_name})
+            self.test_client.validate(
+                "admin/createAssignment", data={"name": self.assignment_name}
+            )
         )[self.assignment_name]
         assert self.assignment_id
         _TestAssignment.assignment_count += 1
 
-
     def addq_to_assignment(self, **kwargs):
-        if 'points' not in kwargs:
-            kwargs['points'] = 1
-        kwargs['assignment'] = self.assignment_id
+        if "points" not in kwargs:
+            kwargs["points"] = 1
+        kwargs["assignment"] = self.assignment_id
         res = self.test_client.validate(
-            'admin/add__or_update_assignment_question', data=kwargs)
+            "admin/add__or_update_assignment_question", data=kwargs
+        )
         res = json.loads(res)
-        assert res['status'] == 'success'
+        assert res["status"] == "success"
 
-
-    def autograde(self,sid=None):
-        print('autograding', self.assignment_name)
+    def autograde(self, sid=None):
+        print("autograding", self.assignment_name)
         vars = dict(assignment=self.assignment_name)
         if sid:
-            vars['sid'] = sid
-        res = json.loads(self.test_client.validate('assignments/autograde',
-                                data=vars))
-        assert res['message'].startswith('autograded')
+            vars["sid"] = sid
+        res = json.loads(self.test_client.validate("assignments/autograde", data=vars))
+        assert res["message"].startswith("autograded")
         return res
-
 
     def questions(self):
         """
@@ -714,22 +799,23 @@ class _TestAssignment(object):
         """
 
         db = self.runestone_db_tools.db
-        a_q_rows = db((db.assignment_questions.assignment_id == self.assignment_id) &
-                  (db.assignment_questions.question_id == db.questions.id)
-                  ).select(orderby=db.assignment_questions.sorting_priority)
+        a_q_rows = db(
+            (db.assignment_questions.assignment_id == self.assignment_id)
+            & (db.assignment_questions.question_id == db.questions.id)
+        ).select(orderby=db.assignment_questions.sorting_priority)
         res = []
         for row in a_q_rows:
             res.append(tuple([row.questions.id, row.questions.name]))
 
         return res
 
-
     def calculate_totals(self):
         assert json.loads(
-        self.test_client.validate('assignments/calculate_totals',
-                                data=dict(assignment=self.assignment_name))
-        )['success']
-
+            self.test_client.validate(
+                "assignments/calculate_totals",
+                data=dict(assignment=self.assignment_name),
+            )
+        )["success"]
 
     def make_visible(self):
         self.is_visible = True
@@ -743,21 +829,31 @@ class _TestAssignment(object):
         self.save_assignment()
 
     def save_assignment(self):
-        assert json.loads(
-            self.test_client.validate('admin/save_assignment',
-            data=dict(assignment_id=self.assignment_id,
-                      visible='T' if self.is_visible else 'F',
-                      description=self.description,
-                      due=str(self.due))))['status'] == 'success'
-
+        assert (
+            json.loads(
+                self.test_client.validate(
+                    "admin/save_assignment",
+                    data=dict(
+                        assignment_id=self.assignment_id,
+                        visible="T" if self.is_visible else "F",
+                        description=self.description,
+                        due=str(self.due),
+                    ),
+                )
+            )["status"]
+            == "success"
+        )
 
     def release_grades(self):
-        self.test_client.post('admin/releasegrades',
-            data=dict(assignmentid=self.assignment_id,
-                      released='yes'))
-        assert self.test_client.text == 'Success'
+        self.test_client.post(
+            "admin/releasegrades",
+            data=dict(assignmentid=self.assignment_id, released="yes"),
+        )
+        assert self.test_client.text == "Success"
 
 
 @pytest.fixture
 def test_assignment(test_client, test_user, runestone_db_tools):
-    return lambda *args, **kwargs: _TestAssignment(test_client, test_user, runestone_db_tools, *args, **kwargs)
+    return lambda *args, **kwargs: _TestAssignment(
+        test_client, test_user, runestone_db_tools, *args, **kwargs
+    )

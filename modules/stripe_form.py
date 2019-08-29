@@ -5,20 +5,23 @@ from hashlib import sha1
 import stripe
 
 
-
 class StripeForm(object):
-    def __init__(self,
-                 pk, sk,
-                 amount, # in cents
-                 description,
-                 currency = 'usd',
-                 currency_symbol = '$',
-                 security_notice = True,
-                 disclosure_notice = True,
-                 template = None):
+    def __init__(
+        self,
+        pk,
+        sk,
+        amount,  # in cents
+        description,
+        currency="usd",
+        currency_symbol="$",
+        security_notice=True,
+        disclosure_notice=True,
+        template=None,
+    ):
         from gluon import current, redirect, URL
+
         if not (current.request.is_local or current.request.is_https):
-            redirect(URL(args=current.request.args,scheme='https'))
+            redirect(URL(args=current.request.args, scheme="https"))
         self.pk = pk
         self.sk = sk
         self.amount = amount
@@ -30,10 +33,13 @@ class StripeForm(object):
         self.template = template or TEMPLATE
         self.accepted = None
         self.errors = None
-        self.signature = sha1(repr((self.amount, self.description)).encode('utf-8')).hexdigest()
+        self.signature = sha1(
+            repr((self.amount, self.description)).encode("utf-8")
+        ).hexdigest()
 
     def process(self):
         from gluon import current
+
         request = current.request
         if request.post_vars:
             if self.signature == request.post_vars.signature:
@@ -43,17 +49,18 @@ class StripeForm(object):
                         card=request.post_vars.stripeToken,
                         amount=self.amount,
                         description=self.description,
-                        currency=self.currency)
+                        currency=self.currency,
+                    )
                 # See https://stripe.com/docs/api/errors/handling?lang=python. Any errors will cause ``self.errors`` to be True.
                 except stripe.error.CardError as e:
                     # Since it's a decline, stripe.error.CardError will be caught.
                     body = e.json_body
-                    err = body.get('error', {})
+                    err = body.get("error", {})
                     self.response = dict(error=err, status=e.http_status)
                 except Exception as e:
-                    self.response = {'error': {'message': str(e)}}
+                    self.response = {"error": {"message": str(e)}}
                 else:
-                    if self.response.get('paid', False):
+                    if self.response.get("paid", False):
                         self.accepted = True
                         return self
             self.errors = True
@@ -61,16 +68,20 @@ class StripeForm(object):
 
     def xml(self):
         from gluon.template import render
+
         if self.accepted:
             return "Your payment was processed successfully"
         elif self.errors:
             return "There was an processing error"
         else:
-            context = dict(amount=self.amount,
-                           signature=self.signature, pk=self.pk,
-                           currency_symbol=self.currency_symbol,
-                           security_notice=self.security_notice,
-                           disclosure_notice=self.disclosure_notice)
+            context = dict(
+                amount=self.amount,
+                signature=self.signature,
+                pk=self.pk,
+                currency_symbol=self.currency_symbol,
+                security_notice=self.security_notice,
+                disclosure_notice=self.disclosure_notice,
+            )
             return render(content=self.template, context=context)
 
 
