@@ -1,4 +1,18 @@
 [flake8]
-ignore=F821
-builtins=settings,request,response,db,auth,redirect,XML,URL,T,HTTP,cache
+max-line-length=88
+ignore=F821,
+  W503,
+  E501
+builtins=settings,
+  request,
+  response,
+  db,
+  auth,
+  redirect,
+  XML,
+  URL,
+  T,
+  HTTP,
+  cache,
+  gluon
 
