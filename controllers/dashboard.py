@@ -69,7 +69,7 @@ class ChapterGet:
 
     def SectionNumber(self, chapter, section=None):
         try:
-            if section == None:
+            if section is None:
                 lookup = self.SAmap
                 section = chapter
             else:
@@ -168,8 +168,8 @@ def index():
     logger.debug("getting questions")
     try:
         questions = sorted(questions, key=itemgetter("chapter", "sub_chapter_number"))
-    except:
-        logger.error("FAILED TO SORT {}".format(questions))
+    except Exception as e:
+        logger.error("FAILED TO SORT {} Error detail: {}".format(questions, e))
     logger.debug("starting sub_chapter loop")
     for sub_chapter, metric in six.iteritems(progress_metrics.sub_chapters):
         sections.append(
@@ -313,7 +313,6 @@ def grades():
     practice_average = 0
     total_possible_points = 0
     for s in students:
-        practice_grade = 0
         if practice_setting:
             if practice_setting.spacing == 1:
                 practice_completion_count = db(
@@ -588,26 +587,26 @@ def subchapoverview():
     if request.vars.tablekind != "sccount":
         pt = pt.reset_index(2)
 
-    l = pt.merge(
+    mtbl = pt.merge(
         cmap,
         left_index=True,
         right_on=["chapter_label", "sub_chapter_label"],
         how="outer",
     )
-    l = l.set_index(["chapter_num", "sub_chapter_num"]).sort_index()
+    mtbl = mtbl.set_index(["chapter_num", "sub_chapter_num"]).sort_index()
 
     if request.vars.action == "tocsv":
         response.headers["Content-Type"] = "application/vnd.ms-excel"
         response.headers[
             "Content-Disposition"
         ] = "attachment; filename=data_for_{}.csv".format(auth.user.course_name)
-        return l.to_csv(na_rep=" ")
+        return mtbl.to_csv(na_rep=" ")
     else:
         return dict(
             course_name=auth.user.course_name,
             course_id=auth.user.course_name,
             course=thecourse,
-            summary=l.to_html(
+            summary=mtbl.to_html(
                 classes="table table-striped table-bordered table-lg",
                 na_rep=" ",
                 table_id="scsummary",

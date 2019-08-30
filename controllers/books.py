@@ -63,7 +63,8 @@ def _route_book(is_published=True):
             .first()
         )
 
-        # Ensure the base course in the URL agrees with the base course in ``course``. If not, ask the user to select a course.
+        # Ensure the base course in the URL agrees with the base course in ``course``.
+        # If not, ask the user to select a course.
         if not course or course.base_course != base_course:
             session.flash = "{} is not the course your are currently in,  switch to or add it to go there".format(
                 base_course
@@ -130,7 +131,8 @@ def _route_book(is_published=True):
 
     # See if this is static content. By default, the Sphinx static directory names are ``_static`` and ``_images``.
     if request.args(1) in ["_static", "_images"]:
-        # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_. Warning: this is slow. Configure a production server to serve this statically.
+        # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
+        # Warning: this is slow. Configure a production server to serve this statically.
         return response.stream(book_path, 2 ** 20, request=request)
 
     # It's HTML -- use the file as a template.
@@ -151,7 +153,7 @@ def _route_book(is_published=True):
         page_divids = db(
             (db.questions.subchapter == subchapter)
             & (db.questions.chapter == chapter)
-            & (db.questions.from_source == True)
+            & (db.questions.from_source == True)  # noqa: E712
             & (db.questions.base_course == base_course)
         ).select(db.questions.name)
         div_counts = {q.name: 0 for q in page_divids}
@@ -159,7 +161,7 @@ def _route_book(is_published=True):
             (db.questions.subchapter == subchapter)
             & (db.questions.chapter == chapter)
             & (db.questions.base_course == base_course)
-            & (db.questions.from_source == True)
+            & (db.questions.from_source == True)  # noqa: E712
             & (db.questions.name == db.useinfo.div_id)
             & (db.useinfo.course_id == auth.user.course_name)
             & (db.useinfo.sid == auth.user.username)
@@ -186,12 +188,13 @@ def _route_book(is_published=True):
             timestamp=datetime.datetime.utcnow(),
             course_id=course.course_name,
         )
-    except:
-        logger.debug(
+    except Exception as e:
+        logger.error(
             "failed to insert log record for {} in {} : {} {} {}".format(
                 user_id, course.course_name, book_path, "page", "view"
             )
         )
+        logger.error("Database Error Detail: {}".format(e))
 
     user_is_instructor = (
         "true"
@@ -303,7 +306,8 @@ def index():
             config = importlib.import_module(
                 "applications.{}.books.{}.conf".format(request.application, book)
             )
-        except:
+        except Exception as e:
+            logger.error("Error in book list: {}".format(e))
             continue
         book_info = {}
         if hasattr(config, "navbar_title"):

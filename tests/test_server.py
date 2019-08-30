@@ -313,7 +313,7 @@ def test_user_profile(test_client, test_user_1):
     # TODO: The e-mail address isn't updated.
     # assert user.email == email
     assert user.course_id == test_course_2.course_id
-    assert user.accept_tcp == False
+    assert user.accept_tcp is False
     # TODO: I'm not sure where the section is stored.
     # assert user.section == section
 
@@ -710,7 +710,6 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
         course_4.term_start_date, "%Y-%m-%d"
     ).date()
 
-    today = datetime.datetime.today()
     start_date = course_start_date + datetime.timedelta(days=13)
     end_date = datetime.datetime.today().date() + datetime.timedelta(days=30)
     max_practice_days = 40
@@ -785,31 +784,6 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
         .first()
     )
     assert practice_settings_1
-
-    # Testing whether a student can answer a practice question.
-    # test_client.logout()
-    # test_student_1.login()
-
-    # ts = datetime.datetime.utcnow()
-    # ts -= datetime.timedelta(microseconds=ts.microsecond)
-
-    # test_client.post('ajax/hsblog',
-    #     data = {'event': 'mChoice',
-    #             'act': 'answer:1:correct',
-    #             'answer': 1,
-    #             'correct': 'T',
-    #             'div_id': 'subc_b_1',
-    #             'course': course_4.course_name,
-    #             'timezoneoffset': 0})
-
-    # mchoice_answers_1 = db(
-    #     (db.mchoice_answers.sid == test_student_1.user_id) &
-    #     (db.mchoice_answers.course_name == course_4.course_name) &
-    #     (db.mchoice_answers.correct == "test_chapter_1") &
-    #     (db.mchoice_answers.sub_chapter_label == "subchapter_b")
-    #     ).select().first()
-    # assert practice_settings_1
-    # db.mchoice_answers.insert(sid=sid,timestamp=ts, div_id=div_id, answer=answer, correct=correct, course_name=course)
 
 
 def test_deleteaccount(test_client, runestone_db_tools, test_user):
