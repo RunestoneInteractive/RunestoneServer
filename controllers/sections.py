@@ -183,7 +183,6 @@ def changeDate():
     requires_login=True,
 )
 def getDate():
-    sectionName = request.args[0].replace("_", " ")
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     return date

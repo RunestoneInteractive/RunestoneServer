@@ -2,6 +2,7 @@
 max-line-length=88
 ignore=F821,
   W503,
+  E203,  # space before :
   E501,
   E265,
   E266   # too many #
@@ -17,5 +18,5 @@ builtins=settings,
   T,
   HTTP,
   cache,
-  gluon
-
+  gluon,
+  verifyInstructorStatus

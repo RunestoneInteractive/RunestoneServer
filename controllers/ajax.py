@@ -5,9 +5,7 @@ import subprocess
 import uuid
 from bleach import clean
 from collections import Counter
-from diff_match_patch import *
 import os
-import sys
 from io import open
 from lxml import html
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
@@ -81,12 +79,13 @@ def hsblog():
             timestamp=ts,
             course_id=course,
         )
-    except:
-        logger.debug(
+    except Exception as e:
+        logger.error(
             "failed to insert log record for {} in {} : {} {} {}".format(
                 sid, course, div_id, event, act
             )
         )
+        logger.error("Details: {}".format(e))
 
     if event == "timedExam" and (act == "finish" or act == "reset"):
         logger.debug(act)
@@ -253,7 +252,7 @@ def hsblog():
             if do_server_feedback:
                 try:
                     code_snippets = json.loads(request.vars.answer)["code_snippets"]
-                except:
+                except Exception:
                     code_snippets = []
                 result = lp_feedback(code_snippets, feedback)
                 # If an error occurred or we're not testing, pass the answer through.
@@ -342,7 +341,7 @@ def runlog():  # Log errors and runs with code
     done = False
     while num_tries > 0 and not done:
         try:
-            dbid = db.acerror_log.insert(
+            db.acerror_log.insert(
                 sid=sid,
                 div_id=div_id,
                 timestamp=ts,
@@ -351,8 +350,8 @@ def runlog():  # Log errors and runs with code
                 emessage=error_info,
             )
             done = True
-        except:
-            logger.error("INSERT into acerror_log FAILED retrying")
+        except Exception as e:
+            logger.error("INSERT into acerror_log FAILED retrying -- {}".format(e))
             num_tries -= 1
     if num_tries == 0:
         raise Exception("Runlog Failed to insert into acerror_log")
@@ -396,9 +395,9 @@ def runlog():  # Log errors and runs with code
                             }
                             return json.dumps(res)
                     done = True
-                except:
+                except Exception as e:
                     num_tries -= 1
-                    logger.error("INSERT into code FAILED retrying")
+                    logger.error("INSERT into code FAILED retrying -- {}".format(e))
             if num_tries == 0:
                 raise Exception("Runlog Failed to insert into code")
 
@@ -429,7 +428,9 @@ def gethist():
     # if vars.sid then we know this is being called from the grading interface
     if request.vars.sid:
         sid = request.vars.sid
-        if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user.id):
+        if auth.user and verifyInstructorStatus(
+            auth.user.course_name, auth.user.id
+        ):  # noqa: F405
             course_id = auth.user.course_id
         else:
             course_id = None
@@ -446,7 +447,7 @@ def gethist():
             (codetbl.sid == sid)
             & (codetbl.acid == acid)
             & (codetbl.course_id == course_id)
-            & (codetbl.timestamp != None)
+            & (codetbl.timestamp != None)  # noqa: E711
         )
         res["acid"] = acid
         res["sid"] = sid
@@ -474,14 +475,16 @@ def getprog():
 
     if sid:
         query = (
-            (codetbl.sid == sid) & (codetbl.acid == acid) & (codetbl.timestamp != None)
+            (codetbl.sid == sid)
+            & (codetbl.acid == acid)
+            & (codetbl.timestamp != None)  # noqa: E711
         )
     else:
         if auth.user:
             query = (
                 (codetbl.sid == auth.user.username)
                 & (codetbl.acid == acid)
-                & (codetbl.timestamp != None)
+                & (codetbl.timestamp != None)  # noqa: E711
             )
         else:
             query = None
@@ -524,7 +527,7 @@ def getuser():
                 "email": auth.user.email,
                 "nick": auth.user.username,
                 "donated": auth.user.donated,
-                "isInstructor": verifyInstructorStatus(
+                "isInstructor": verifyInstructorStatus(  # noqa: F405
                     auth.user.course_name, auth.user.id
                 ),
                 "course_list": clist,
@@ -533,7 +536,7 @@ def getuser():
             logger.debug(
                 "setting timezone offset in session %s hours" % session.timezoneoffset
             )
-        except:
+        except Exception:
             res = dict(redirect=auth.settings.login_url)  # ?_next=....
     else:
         res = dict(redirect=auth.settings.login_url)  # ?_next=....
@@ -555,7 +558,7 @@ def getnumonline():
     try:
         query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
         rows = db.executesql(query)
-    except:
+    except Exception:
         rows = [[21]]
 
     res = {"online": rows[0][0]}
@@ -565,7 +568,7 @@ def getnumonline():
 def getnumusers():
     response.headers["content-type"] = "application/json"
 
-    query = """select count(*) from (select distinct(sid) from useinfo) as X """
+    # query = """select count(*) from (select distinct(sid) from useinfo) as X """
     numusers = "more than 850,000"
 
     # try:
@@ -587,11 +590,11 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
             (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
             | (
                 (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)
+                & (db.questions.topic == None)  # noqa: E711
                 & (db.questions.subchapter == sub_chapter_label)
             )
         )
-        & (db.questions.practice == True)
+        & (db.questions.practice == True)  # noqa: E712
     ).select()
 
 
@@ -623,7 +626,7 @@ def updatelastpage():
                     last_page_accessed_on=datetime.datetime.utcnow(),
                 )
                 done = True
-            except:
+            except Exception:
                 num_tries -= 1
         if num_tries == 0:
             raise Exception("Failed to save the user state in update_last_page")
@@ -641,7 +644,7 @@ def updatelastpage():
                     )
                 ).update(status=completionFlag, end_date=datetime.datetime.utcnow())
                 done = True
-            except:
+            except Exception:
                 num_tries -= 1
         if num_tries == 0:
             raise Exception("Failed to save sub chapter progress in update_last_page")
@@ -750,7 +753,7 @@ def getAllCompletionStatus():
         rowarray_list = []
         if result:
             for row in result:
-                if row.end_date == None:
+                if row.end_date is None:
                     endDate = 0
                 else:
                     endDate = row.end_date.strftime("%d %b, %Y")
@@ -842,7 +845,6 @@ def _getStudentResults(question):
     Internal function to collect student answers
     """
     cc = db(db.courses.id == auth.user.course_id).select().first()
-    course = cc.course_name
     qst = (
         db(
             (db.questions.name == question)
@@ -894,7 +896,7 @@ def getaggregateresults():
     if not auth.user:
         return json.dumps([dict(answerDict={}, misc={}, emess="You must be logged in")])
 
-    is_instructor = verifyInstructorStatus(course, auth.user.id)
+    is_instructor = verifyInstructorStatus(course, auth.user.id)  # noqa: F405
     # Yes, these two things could be done as a join.  but this **may** be better for performance
     if course == "thinkcspy" or course == "pythonds":
         start_date = datetime.datetime.utcnow() - datetime.timedelta(days=90)
@@ -912,7 +914,7 @@ def getaggregateresults():
             & (db.useinfo.course_id == course)
             & (db.useinfo.timestamp >= start_date)
         ).select(db.useinfo.act, count, groupby=db.useinfo.act)
-    except:
+    except Exception:
         return json.dumps(
             [dict(answerDict={}, misc={}, emess="Sorry, the request timed out")]
         )
@@ -929,9 +931,9 @@ def getaggregateresults():
     correct = ""
     if tot > 0:
         for key in tdata:
-            l = key.split(":")
+            all_a = key.split(":")
             try:
-                answer = l[1]
+                answer = all_a[1]
                 if "correct" in key:
                     correct = answer
                 count = int(tdata[key])
@@ -941,8 +943,8 @@ def getaggregateresults():
 
                 if answer != "undefined" and answer != "":
                     rdata[answer] = pct
-            except:
-                logger.debug("Bad data for %s data is %s " % (question, key))
+            except Exception as e:
+                logger.error("Bad data for %s data is %s -- %s" % (question, key, e))
 
     miscdata["correct"] = correct
     miscdata["course"] = course
@@ -1045,7 +1047,7 @@ def gettop10Answers():
         miscdata, "fillb"
     )  # TODO: rewrite _getCorrectStats to use xxx_answers
 
-    if auth.user and verifyInstructorStatus(course, auth.user.id):
+    if auth.user and verifyInstructorStatus(course, auth.user.id):  # noqa: F405
         resultList = _getStudentResults(question)
         miscdata["reslist"] = resultList
 
@@ -1070,7 +1072,7 @@ def getassignmentgrade():
     #
     a_q = (
         db(
-            (db.assignments.released == True)
+            (db.assignments.released == True)  # noqa: E712
             & (db.assignments.course == auth.user.course_id)
             & (db.assignment_questions.assignment_id == db.assignments.id)
             & (db.assignment_questions.question_id == db.questions.id)
@@ -1221,7 +1223,7 @@ def getAssessResults():
     elif event == "timedExam":
         rows = (
             db(
-                (db.timed_exam.reset == None)
+                (db.timed_exam.reset == None)  # noqa: E711
                 & (db.timed_exam.div_id == div_id)
                 & (db.timed_exam.course_name == course)
                 & (db.timed_exam.sid == sid)
@@ -1328,7 +1330,7 @@ def checkTimedReset():
     )
 
     if rows:  # If there was a scored exam
-        if rows.reset == True:
+        if rows.reset == True:  # noqa: E712
             return json.dumps({"canReset": True})
         else:
             return json.dumps({"canReset": False})

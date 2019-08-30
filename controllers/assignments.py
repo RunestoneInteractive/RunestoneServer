@@ -36,6 +36,7 @@ from db_dashboard import DashboardDataAnalyzer
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+
 # todo: This is a strange place for this function or at least a strange name.
 # index is called to show the student progress page from the user menu -- its redundant with studentreport in dashboard
 def index():
@@ -773,7 +774,7 @@ def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignment_id = request.vars.assignment_id
-    if not assignment_id or assignment_id.isdigit() == False:
+    if not assignment_id or assignment_id.isdigit() == False:  # noqa: E712
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
         session.flash = "Bad Assignment ID"
         return redirect(URL("assignments", "chooseAssignment"))
@@ -798,8 +799,8 @@ def doAssignment():
         session.flash = "Could not find login and try again."
         return redirect(URL("default", "index"))
 
-    if assignment.visible == "F" or assignment.visible == None:
-        if verifyInstructorStatus(auth.user.course_name, auth.user) == False:
+    if assignment.visible == "F" or assignment.visible is None:
+        if verifyInstructorStatus(auth.user.course_name, auth.user) is False:
             session.flash = "That assignment is no longer available"
             return redirect(URL("assignments", "chooseAssignment"))
 
@@ -839,10 +840,10 @@ def doAssignment():
             timestamp=datetime.datetime.utcnow(),
             course_id=course.course_name,
         )
-    except:
+    except Exception as e:
         logger.debug(
-            "failed to insert log record for {} in {} : doAssignment ".format(
-                auth.user.username, course.course_name
+            "failed to insert log record for {} in {} : doAssignment Details: {}".format(
+                auth.user.username, course.course_name, e
             )
         )
 
@@ -1064,11 +1065,11 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
             (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
             | (
                 (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)
+                & (db.questions.topic == None)  # noqa: E711
                 & (db.questions.subchapter == sub_chapter_label)
             )
         )
-        & (db.questions.practice == True)
+        & (db.questions.practice == True)  # noqa: E712
     ).select()
 
 
@@ -1214,7 +1215,7 @@ def practice():
 
         try:
             qIndex = question_names.index(flashcard.question_name)
-        except:
+        except Exception:
             qIndex = 0
 
         # present the next one in the list after the last one that was asked

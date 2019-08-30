@@ -56,6 +56,7 @@ db.define_table(
     migrate=table_migrate_prefix + "sub_chapter_taught.table",
 )
 
+
 #
 # When a new user is registered we need to add a bunch of rows to the
 # user_sub_chapter_progress table.  One for each section/subsection
