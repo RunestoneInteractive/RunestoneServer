@@ -1,4 +1,3 @@
-import signal
 from os import path
 import os
 import datetime
@@ -9,7 +8,6 @@ from paver.easy import sh
 import json
 from runestone import cmap
 from rs_grading import send_lti_grades, _get_assignment
-from dateutil.parser import parse
 import pandas as pd
 
 import logging
@@ -66,7 +64,8 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
 # - find assignments for a student
 # - show totals for all students
 
-# select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
+# select acid, sid from code as T where timestamp = (select max(timestamp)
+# from code where sid=T.sid and acid=T.acid);
 
 
 @auth.requires_login()
@@ -111,7 +110,7 @@ def sections_create():
         INPUT(_type="Submit", _value="Create Section", _class="btn"),
     )
     if form.accepts(request, session):
-        section = db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
+        db.sections.update_or_insert(name=form.vars.name, course_id=course.id)
         session.flash = "Section Created"
         return redirect("/%s/admin/admin" % (request.application))
     return dict(form=form)
@@ -359,7 +358,7 @@ def practice():
             ).date()
             if start_date < course_start_date:
                 error_start_date = 1
-        except:
+        except Exception:
             error_start_date = 1
         try:
             end_date = datetime.datetime.strptime(
@@ -367,46 +366,46 @@ def practice():
             ).date()
             if end_date < start_date:
                 error_end_date = 1
-        except:
+        except Exception:
             error_end_date = 1
         if spacing == 1:
             try:
                 max_practice_days = int(request.vars.get("maxPracticeDays", None))
-            except:
+            except Exception:
                 error_max_practice_days = 1
         else:
             try:
                 max_practice_questions = int(
                     request.vars.get("maxPracticeQuestions", None)
                 )
-            except:
+            except Exception:
                 error_max_practice_questions = 1
         if spacing == 1:
             try:
                 day_points = float(request.vars.get("pointsPerDay", None))
-            except:
+            except Exception:
                 error_day_points = 1
         else:
             try:
                 question_points = float(request.vars.get("pointsPerQuestion", None))
-            except:
+            except Exception:
                 error_question_points = 1
         if spacing == 1:
             try:
                 questions_to_complete_day = int(
                     request.vars.get("questionsPerDay", None)
                 )
-            except:
+            except Exception:
                 error_questions_to_complete_day = 1
         try:
             flashcard_creation_method = int(
                 request.vars.get("flashcardsCreationType", None)
             )
-        except:
+        except Exception:
             error_flashcard_creation_method = 1
         try:
             graded = int(request.vars.get("graded", None))
-        except:
+        except Exception:
             error_graded = 1
 
         no_error = 0
@@ -478,11 +477,11 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
             (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
             | (
                 (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)
+                & (db.questions.topic == None)  # noqa: E711
                 & (db.questions.subchapter == sub_chapter_label)
             )
         )
-        & (db.questions.practice == True)
+        & (db.questions.practice == True)  # noqa: E712
     )
 
 
@@ -607,7 +606,7 @@ def admin():
         with open("build_info", "w") as bc:
             bc.write(master_build)
             bc.write("\n")
-    except:
+    except Exception:
         master_build = ""
     finally:
         os.chdir(cwd)
@@ -621,16 +620,13 @@ def admin():
             "build_info",
         )
         mbf = open(mbf_path, "r")
-        last_build = os.path.getmtime(mbf_path)
         my_build = mbf.read()[:-1]
         mbf.close()
-    except:
+    except Exception:
         my_build = ""
-        last_build = 0
 
     my_vers = 0
     mst_vers = 0
-    bugfix = False
 
     cur_instructors = db(db.course_instructor.course == auth.user.course_id).select(
         db.course_instructor.instructor
@@ -983,7 +979,7 @@ def deletecourse():
                     )
                 )
                 session.clear()
-            except:
+            except Exception:
                 session.flash = "Error, %s does not appear to exist" % course_name
         else:
             session.flash = "You are not the instructor of %s" % course_name
@@ -1002,7 +998,12 @@ def removeassign():
 
     try:
         assignment_id = int(request.vars["assignid"])
-    except:
+    except Exception as e:
+        logger.error(
+            "Could not remove assignment {} error {}".format(
+                request.vars["assignid"], e
+            )
+        )
         session.flash = "Cannot remove assignment with id of {}".format(
             request.vars["assignid"]
         )
@@ -1027,7 +1028,6 @@ def removeassign():
 )
 def createAssignment():
     response.headers["content-type"] = "application/json"
-    due = None
     name = ""
 
     if "name" in request.vars and len(request.vars["name"]) > 0:
@@ -1133,15 +1133,15 @@ def questionBank():
     base_courseQ = db.questions.base_course == base_course
     try:
 
-        if chapterQ != None and authorQ != None:
+        if chapterQ is not None and authorQ is not None:
 
             questions_query = db(chapterQ & authorQ & base_courseQ).select()
 
-        elif chapterQ == None and authorQ != None:
+        elif chapterQ is None and authorQ is not None:
 
             questions_query = db(authorQ & base_courseQ).select()
 
-        elif chapterQ != None and authorQ == None:
+        elif chapterQ is not None and authorQ is None:
 
             questions_query = db(chapterQ & base_courseQ).select()
 
@@ -1167,17 +1167,18 @@ def questionBank():
                         rows.remove(row)
                         removed_row = True
                     except Exception as err:
-                        ex = err
-            if removed_row == False:
+                        logger.error("Error {}".format(err))
+
+            if removed_row is False:
                 if difficulty:
                     if int(request.vars["difficulty"]) != row.difficulty:
                         try:
                             rows.remove(row)
                             removed_row = True
                         except Exception as err:
-                            ex = err
+                            logger.error("Error: {}".format(err))
 
-            if removed_row == False:
+            if removed_row is False:
                 if tags:
                     tags_query = db(db.question_tags.question_id == row.id).select()
                     tag_list = []
@@ -1197,9 +1198,9 @@ def questionBank():
         for q_row in rows:
             questions.append(q_row.name)
 
-    except Exception as ex:
-        logger.error(ex)
-        return json.dumps("Error " + str(ex))
+    except Exception as e:
+        logger.error("Error: {}".format(e))
+        return json.dumps("Error " + str(e))
 
     return json.dumps(questions)
 
@@ -1224,7 +1225,6 @@ def getQuestionInfo():
     * assignment -- integer assignment id
     * question -- the name of the question
     """
-    assignment_id = int(request.vars["assignment"])
     question_name = request.vars["question"]
     base_course = (
         db(db.courses.course_name == auth.user.course_name).select().first().base_course
@@ -1250,7 +1250,7 @@ def getQuestionInfo():
         tag_id = row.tag_id
         tag_name = db((db.tags.id == tag_id)).select(db.tags.tag_name).first().tag_name
         tags.append(" " + str(tag_name))
-    if question_difficulty != None:
+    if question_difficulty is not None:
         returnDict = {
             "code": question_code,
             "htmlsrc": htmlsrc,
@@ -1280,7 +1280,7 @@ def edit_question():
     new_qname = vars["name"]
     try:
         difficulty = int(vars["difficulty"])
-    except:
+    except Exception:
         difficulty = 0
     tags = vars["tags"]
     base_course = (
@@ -1361,7 +1361,7 @@ def question_text():
             .first()
             .question
         )
-    except:
+    except Exception:
         q_text = "Error: Could not find source for {} in the database".format(qname)
 
     if (
@@ -1430,7 +1430,6 @@ def createquestion():
         .first()
     )
     base_course = row.base_course
-    tab = request.vars["tab"]
     aid = request.vars["assignmentid"]
     if aid == "undefined":
         logger.error(
@@ -1447,7 +1446,7 @@ def createquestion():
     points = int(request.vars["points"]) if request.vars["points"] else 1
     timed = request.vars["timed"]
     unittest = None
-    if re.search(":autograde:\s+unittest", request.vars.question):
+    if re.search(r":autograde:\s+unittest", request.vars.question):
         unittest = "unittest"
 
     try:
@@ -1467,7 +1466,7 @@ def createquestion():
             htmlsrc=request.vars["htmlsrc"],
         )
 
-        assignment_question = db.assignment_questions.insert(
+        db.assignment_questions.insert(
             assignment_id=assignmentid, question_id=newqID, timed=timed, points=points
         )
 
@@ -1527,7 +1526,7 @@ def getGradeComments():
         .select()
         .first()
     )
-    if c != None:
+    if c is not None:
         return json.dumps({"grade": c.score, "comments": c.comment})
     else:
         return json.dumps("Error")
@@ -1614,7 +1613,7 @@ def _get_toc_and_questions():
     topic_query = db(
         (db.courses.course_name == auth.user.course_name)
         & (db.questions.base_course == db.courses.base_course)
-        & (db.questions.practice == True)
+        & (db.questions.practice == True)  # noqa: E712
     ).select(
         db.questions.topic,
         db.questions.chapter,
@@ -1631,7 +1630,7 @@ def _get_toc_and_questions():
             topic_not_found = False
             try:
                 chap, subch = q.topic.split("/")
-            except:
+            except Exception:
                 # a badly formed "topic" for the question; just ignore it
                 logger.info("Bad Topic: {}".format(q.topic))
                 topic_not_found = True
@@ -1649,7 +1648,7 @@ def _get_toc_and_questions():
                     .select()[0]
                     .sub_chapter_name
                 )
-            except:
+            except Exception:
                 # topic's chapter and subchapter are not in the book; ignore this topic
                 logger.info(
                     "Missing Chapter {} or Subchapter {} for topic {}".format(
@@ -1676,7 +1675,7 @@ def _get_toc_and_questions():
                     .select()[0]
                     .sub_chapter_name
                 )
-            except:
+            except Exception:
                 # topic's chapter and subchapter are not in the book; ignore this topic
                 logger.info("Missing Chapter {} or Subchapter {}".format(chap, subch))
                 topic_not_found = True
@@ -1748,7 +1747,7 @@ def _get_toc_and_questions():
             # Copy the same stuff for reading picker.
             if (
                 sub_ch.skipreading == "F"
-                or sub_ch.skipreading == False
+                or sub_ch.skipreading == False  # noqa: E712
                 or sub_ch.skipreading == None
             ):
                 r_sub_ch_info = {}
@@ -1901,7 +1900,7 @@ def get_assignment():
     a_q_rows = db(
         (db.assignment_questions.assignment_id == assignment_id)
         & (db.assignment_questions.question_id == db.questions.id)
-        & (db.assignment_questions.reading_assignment == None)
+        & (db.assignment_questions.reading_assignment == None)  # noqa: E711
     ).select(orderby=db.assignment_questions.sorting_priority)
     # return json.dumps(db._lastsql)
     questions_data = []
@@ -1953,7 +1952,7 @@ def save_assignment():
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
         due = datetime.datetime.strptime(d_str, format_str)
-    except:
+    except Exception:
         logger.error("Bad Date format for assignment: {}".format(d_str))
         due = datetime.datetime.utcnow() + datetime.timedelta(7)
     try:
@@ -1963,7 +1962,7 @@ def save_assignment():
             description=request.vars["description"],
             points=total,
             duedate=due,
-            visible=request.vars["visible"],
+            visible=isVisible,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
@@ -2001,7 +2000,7 @@ def add__or_update_assignment_question():
     # This assumes that question will always be in DB already, before an assignment_question is created
     logger.debug("course_id %s", auth.user.course_id)
     question_id = _get_question_id(question_name, auth.user.course_id)
-    if question_id == None:
+    if question_id is None:
         logger.error(
             "Question Not found for name = {} course = {}".format(
                 question_name, auth.user.course_id
@@ -2048,7 +2047,7 @@ def add__or_update_assignment_question():
             activities_required = int(request.vars.get("activities_required"))
             if activities_required == -1:
                 activities_required = max(int(activity_count * 0.8), 1)
-        except:
+        except Exception:
             logger.error("No Activities set for RA %s", question_name)
             activities_required = None
 
@@ -2060,7 +2059,7 @@ def add__or_update_assignment_question():
     # which doesn't convert to int
     try:
         points = int(request.vars["points"])
-    except:
+    except Exception:
         points = activity_count
 
     autograde = request.vars.get("autograde")
@@ -2304,5 +2303,5 @@ def courselog():
 
 def killer():
     print(routes_onerror)
-    x = 5 / 0
+    x = 5 / 0  # noqa: F841
     return "ERROR"

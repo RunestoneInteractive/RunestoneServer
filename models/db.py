@@ -5,6 +5,22 @@ import random
 
 from gluon import current
 
+## if you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
+## register with janrain.com, write your domain:api_key in private/janrain.key
+# from gluon.contrib.login_methods.rpx_account import use_janrain
+# use_janrain(auth,filename='private/janrain.key')
+try:
+    from gluon.contrib.login_methods.janrain_account import RPXAccount
+except ImportError:
+    print("Warning you should upgrade to a newer web2py for better janrain support")
+    from gluon.contrib.login_methods.rpx_account import RPXAccount  # noqa: F401
+
+from gluon.contrib.login_methods.extended_login_form import (  # noqa: F401
+    ExtendedLoginForm,
+)
+
+from gluon.tools import Auth, Crud, Service, PluginManager, prettydate  # noqa: F401
+
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
 ## File is released under public domain and you can use without limitations
@@ -73,7 +89,6 @@ response.generic_patterns = ["*"] if request.is_local else []
 ## (more options discussed in gluon/tools.py)
 #########################################################################
 
-from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 
 auth = Auth(db, hmac_key=Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
@@ -299,16 +314,6 @@ auth.settings.register_next = URL("default", "index")
 # change default session login time from 1 hour to 24 hours
 auth.settings.expiration = 3600 * 24
 
-## if you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
-## register with janrain.com, write your domain:api_key in private/janrain.key
-# from gluon.contrib.login_methods.rpx_account import use_janrain
-# use_janrain(auth,filename='private/janrain.key')
-try:
-    from gluon.contrib.login_methods.janrain_account import RPXAccount
-except:
-    print("Warning you should upgrade to a newer web2py for better janrain support")
-    from gluon.contrib.login_methods.rpx_account import RPXAccount
-from gluon.contrib.login_methods.extended_login_form import ExtendedLoginForm
 
 janrain_url = "http://%s/%s/default/user/login" % (
     request.env.http_host,
@@ -353,7 +358,7 @@ mail.settings.login = settings.email_login
 adminjs = os.path.join("applications", request.application, "static", "js", "admin.js")
 try:
     mtime = int(os.path.getmtime(adminjs))
-except:
+except FileNotFoundError:
     mtime = random.randrange(10000)
 
 request.admin_mtime = str(mtime)

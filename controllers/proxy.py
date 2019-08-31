@@ -1,6 +1,5 @@
 import requests as rq
 import logging
-import json
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -56,7 +55,6 @@ def jobeCheckFile():
     req.headers["X-API-KEY"] = settings.jobe_key
     uri = "/jobe/index.php/restapi/files/" + request.args[0]
     url = settings.jobe_server + uri
-    rs = {"file_contents": request.vars.file_contents}
     resp = req.head(url)
     logger.debug("Got response from JOBE %s ", resp.status_code)
 

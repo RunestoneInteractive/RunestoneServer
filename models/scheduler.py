@@ -1,7 +1,7 @@
 from gluon.scheduler import Scheduler
 from gluon import current
 
-from feedback import _scheduled_builder
+from feedback import _scheduled_builder  # noqa: F401
 
 if settings.academy_mode:
     scheduler = Scheduler(db, migrate=table_migrate_prefix, heartbeat=1)

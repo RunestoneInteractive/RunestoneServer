@@ -313,7 +313,7 @@ def test_user_profile(test_client, test_user_1):
     # TODO: The e-mail address isn't updated.
     # assert user.email == email
     assert user.course_id == test_course_2.course_id
-    assert user.accept_tcp is False
+    assert user.accept_tcp == False  # noqa: E712
     # TODO: I'm not sure where the section is stored.
     # assert user.section == section
 

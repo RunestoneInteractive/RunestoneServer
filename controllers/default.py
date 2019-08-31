@@ -2,7 +2,6 @@
 import json
 import os
 import requests
-import datetime
 from six.moves.urllib.parse import unquote
 from six.moves.urllib.error import HTTPError
 import logging
@@ -17,9 +16,6 @@ logger.setLevel(settings.log_level)
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
-    if "everyday" in request.env.http_host:
-        redirect("http://interactivepython.org/runestone/everyday")
-
     if not request.args(0):
         redirect(URL("default", "user/login"))
 
@@ -65,7 +61,7 @@ def user():
                 .section
             )
             sectname = db(db.sections.id == sect).select(db.sections.name).first()
-        except:
+        except Exception:
             sectname = None
         if sectname:
             sectname = sectname.name
@@ -121,9 +117,7 @@ def user():
                 .first()
             )
             if sect:
-                x = db.section_users.update_or_insert(
-                    auth_user=auth.user.id, section=sect
-                )
+                db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
                 db(
                     (auth.user.id == db.section_users.auth_user)
                     & (
@@ -139,7 +133,7 @@ def user():
         # The validation function ``IS_COURSE_ID`` in ``models/db.py`` changes the course name supplied to a course ID. If the overall form doesn't validate, the value when the form is re-displayed with errors will contain the ID instead of the course name. Change it back to the course name. Note: if the user enters a course for the course name, it will be displayed as the corresponding course name after a failed validation. I don't think this case is important enough to fix.
         try:
             course_id = int(form.vars.course_id)
-        except:
+        except Exception:
             pass
         else:
             # Look up the course name based on the ID.
@@ -289,7 +283,7 @@ def index():
                 """
                     % (auth.user.id, course.base_course)
                 )
-        except:
+        except Exception:
             session.flash = "Your course is not set up to track your progress"
         # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 

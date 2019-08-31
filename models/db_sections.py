@@ -67,7 +67,7 @@ def make_section_entries(field_dict, id_of_insert):
         .select(db.sections.id)
         .first()
     )
-    x = db.section_users.update_or_insert(auth_user=id_of_insert, section=sect)
+    db.section_users.update_or_insert(auth_user=id_of_insert, section=sect)
     # select from sections where course_id = auth_user.course_id and section.name = 'default'
     # add a row to section_users for this user with the section selected.
 
