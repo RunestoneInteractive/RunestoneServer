@@ -1,4 +1,22 @@
 [flake8]
-ignore=F821
-builtins=settings,request,response,db,auth,redirect,XML,URL,T,HTTP,cache
+max-line-length=88
+ignore=F821,
+  W503,
+  E203,  # space before :
+  E501,
+  E265,
+  E266   # too many #
 
+builtins=settings,
+  request,
+  response,
+  db,
+  auth,
+  redirect,
+  XML,
+  URL,
+  T,
+  HTTP,
+  cache,
+  gluon,
+  verifyInstructorStatus

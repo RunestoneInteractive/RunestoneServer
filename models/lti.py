@@ -1,9 +1,10 @@
-db.define_table('lti_keys',
-                Field('consumer'),
-                Field('secret'),
-                Field('application'),
-                migrate=table_migrate_prefix + 'lti_keys.table'
-                )
+db.define_table(
+    "lti_keys",
+    Field("consumer"),
+    Field("secret"),
+    Field("application"),
+    migrate=table_migrate_prefix + "lti_keys.table",
+)
 
 
 # insert the initial lti_keys; get the values from 1.py

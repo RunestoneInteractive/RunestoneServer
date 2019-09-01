@@ -8,6 +8,9 @@
         <h3 style="visibility: hidden">Admin Panel</h3>
 
 
+        <a id="gradebookLink" href="/{{=request.application}}/dashboard/grades" class="list-group-item">
+            <h4 style="text-align: center" class="list-group-item-heading">Grade Book</h4>
+        </a>
         <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
             <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
         </a>
@@ -61,6 +64,9 @@
         <div id="sections" class="tab-pane fade">
             <div class="col-md-3">
         <h3 style="text-align: center">Sections</h3>
+            <p>Warning:  Sections are a feature that never really went anywhere.  They are mostly useless, and This tab will go away
+                in December 2019.
+            </p>
                 {{ for section in sectionInfo: }}
          <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar" onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
         {{pass}}

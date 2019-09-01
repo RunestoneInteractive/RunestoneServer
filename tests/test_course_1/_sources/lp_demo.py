@@ -6,6 +6,8 @@
 # SOLUTION_BEGIN
 def one():
     return 1
+
+
 # SOLUTION_END
 
 # .. lp_build:: lp_demo_1
