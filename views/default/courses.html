@@ -8,18 +8,23 @@
     <div style="text-align:center;">
 
         <h1>Course Selection</h1>
-        <p style="margin-left: 10%; margin-right: 10%">If you ended up here unexpectedly it is because you are logged in, but trying to access a course that you have not registered for.  This is for your own good. You can click on the <code>Add Another Course</code> button and register for the course.</p>
-        <p>Choose your course. If you want to add a new course, click Add Another Course then change the course name in your profile.</p>
+        <p style="margin-left: 10%; margin-right: 10%">If you ended up here unexpectedly it is because you are logged
+            in, but trying to access a course that you have not registered for. This is for your own good. You can click
+            on the <code>Enroll in a Course</code> button and register for the course on the profile page. You do this
+            by typing the name of the course into the Course Name box.</p>
+        <p>Choose your course. If you want to add a new course, click Add Another Course then change the course name in
+            your profile.</p>
         {{ for course in courses: }}
-            <form action="/{{=request.application}}/default/coursechooser/{{=course}}" method="post">
-                <button class="ac_opt book-btn btn btn-default" type="submit" name=course value={{=course}}>{{=course}}</button><br/>
-            </form>
+        <form action="/{{=request.application}}/default/coursechooser/{{=course}}" method="post">
+            <button class="ac_opt book-btn btn btn-default" type="submit" name=course
+                value={{=course}}>{{=course}}</button><br />
+        </form>
         {{pass}}
         <form action="/{{=request.application}}/default/user/profile">
             <button class="ac_opt course-btn btn btn-default">Enroll in a Course</button>
         </form>
         <form action="/{{=request.application}}/default/remove" method="post">
-        <button class="ac_opt course-btn btn btn-default" name="remove" type="submit">Drop a Course</button>
+            <button class="ac_opt course-btn btn btn-default" name="remove" type="submit">Drop a Course</button>
         </form>
 
     </div>
