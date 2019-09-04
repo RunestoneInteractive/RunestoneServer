@@ -874,11 +874,12 @@ def _getStudentResults(question):
                 answer = None
 
             if row.sid == currentSid:
-                currentAnswers.append(answer)
+                if answer is not None:
+                    currentAnswers.append(answer)
             else:
                 currentAnswers.sort()
                 resultList.append((currentSid, currentAnswers))
-                currentAnswers = [answer]
+                currentAnswers = [answer] if answer is not None else []
                 currentSid = row.sid
 
         currentAnswers.sort()
