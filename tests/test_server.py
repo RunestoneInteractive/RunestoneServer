@@ -857,3 +857,10 @@ def test_lockdown(test_client, test_user_1):
     assert 'div id="fb-root"></div' in res
     assert "<span id='numuserspan'></span><span class='loggedinuser'></span>" in res
     assert '<script async src="https://hypothes.is/embed.js"></script>' in res
+
+
+# Do basic login/logout tests using Selenium. This is to make sure Selenium, rather than actually test something new.
+def test_selenium(test_user_1, selenium_user):
+    selenium_user_1 = selenium_user(test_user_1)
+    selenium_user_1.login()
+    selenium_user_1.logout()
