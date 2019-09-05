@@ -195,7 +195,7 @@ def test_validate_user_pages(
         #
         # **Admin**
         # ----------
-        ("admin/admin", "Manage Section", 1),
+        ("admin/admin", "Manage Section", 2),
         ("admin/course_students", '"test_user_1"', 2),
         ("admin/createAssignment", "ERROR", None),
         ("admin/grading", "assignment", 1),
