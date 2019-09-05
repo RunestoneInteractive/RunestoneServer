@@ -2301,6 +2301,29 @@ def courselog():
     return data.to_csv(na_rep=" ")
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def update_course():
+    response.headers["Content-Type"] = "application/json"
+
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    if thecourse:
+        if "new_date" in request.vars:
+            db(db.courses.id == thecourse.id).update(
+                term_start_date=request.vars["new_date"]
+            )
+        elif "new_pair" in request.vars:
+            db(db.courses.id == thecourse.id).update(
+                allow_pairs=request.vars["new_pair"]
+            )
+
+        return json.dumps(dict(status="success"))
+
+    return json.dumps(dict(status="failed"))
+
+
 def killer():
     print(routes_onerror)
     x = 5 / 0  # noqa: F841

@@ -2,281 +2,313 @@
 
 {{ block tabcontent }}
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet"
+    type="text/css" />
 
 <div class="col-md-3">
-        <h3 style="visibility: hidden">Admin Panel</h3>
+    <h3 style="visibility: hidden">Admin Panel</h3>
 
 
-        <a id="gradebookLink" href="/{{=request.application}}/dashboard/grades" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Grade Book</h4>
-        </a>
-        <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
-        </a>
-        <a id="studentsTab" data-toggle="tab" href="#manageStudents" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Manage Students</h4>
-        </a>
-        <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
-        </a>
-        <a id="courselog" href="/{{=request.application}}/admin/courselog" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Download Log</h4>
-        </a>
+    <a id="gradebookLink" href="/{{=request.application}}/dashboard/grades" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Grade Book</h4>
+    </a>
+    <a id="courseTab" data-toggle="tab" href="#coursedata" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Course Settings</h4>
+    </a>
+    <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
+    </a>
+    <a id="studentsTab" data-toggle="tab" href="#manageStudents" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Manage Students</h4>
+    </a>
+    <a id="AddInstructorTab" data-toggle="tab" href="#AddInstructor" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Add TA</h4>
+    </a>
+    <a id="courselog" href="/{{=request.application}}/admin/courselog" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Download Log</h4>
+    </a>
 
-        <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
-        </a>
-        <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
-            <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
-        </a>
+    <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
+    </a>
+    <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
+    </a>
 
-        <div style="margin-top: 125px; border-top: dashed">
+    <div style="margin-top: 125px; border-top: dashed">
 
 
 
-            <form  style="margin-top: 20px;" action="/{{=request.application}}/sections/newCourse" method="post">
-                <button style="text-align: center; font-size: 12pt;" class="list-group-item" type="submit">New Course</button>
-                </form>
-            </div>
+        <form style="margin-top: 20px;" action="/{{=request.application}}/sections/newCourse" method="post">
+            <button style="text-align: center; font-size: 12pt;" class="list-group-item" type="submit">New
+                Course</button>
+        </form>
+    </div>
 
+</div>
+
+<div class="tab-content">
+
+    <div id="coursedata" class="tab-pane fade">
+        <div class="col-md-3">
+            <h3 style="text-align: center;">Course Settings</h3>
+            <label for="start_date">Term Start Date</label>
+            <input type="date" id="start_date" value="{{=startDate}}" onchange="updateCourse(this, 'new_date')">
         </div>
+    </div>
 
-          <div class="tab-content">
-
-              <div id="manageStudents" class="tab-pane fade">
-                  <form id="removeStudents" method="POST" action="/{{=request.application}}/admin/removeStudents">
-                      <div class="col-md-3">
-                          <h3 style="text-align: center">Students</h3>
-                          <select id="studentList" class="form-control" size="10" name="studentList" multiple>
-                              <option value="None" selected>--Select Student(s) to Remove--</option>
-                              {{ for person in students: }}
-                              <option value="{{=person}}">{{ =students[person] }}</option>
-                              {{ pass }}
-                          </select>
-                          <div style="text-align: center">
-                              <input style="width: 35px; height:30px;" type="submit" value="-">
-                          </div>
-                      </div>
-                  </form>
-              </div>
-
-        <div id="sections" class="tab-pane fade">
+    <div id="manageStudents" class="tab-pane fade">
+        <form id="removeStudents" method="POST" action="/{{=request.application}}/admin/removeStudents">
             <div class="col-md-3">
-        <h3 style="text-align: center">Sections</h3>
-            <p>Warning:  Sections are a feature that never really went anywhere.  They are mostly useless, and This tab will go away
+                <h3 style="text-align: center">Students</h3>
+                <select id="studentList" class="form-control" size="10" name="studentList" multiple>
+                    <option value="None" selected>--Select Student(s) to Remove--</option>
+                    {{ for person in students: }}
+                    <option value="{{=person}}">{{ =students[person] }}</option>
+                    {{ pass }}
+                </select>
+                <div style="text-align: center">
+                    <input style="width: 35px; height:30px;" type="submit" value="-">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="sections" class="tab-pane fade">
+        <div class="col-md-3">
+            <h3 style="text-align: center">Sections</h3>
+            <p>Warning: Sections are a feature that never really went anywhere. They are mostly useless, and This tab
+                will go away
                 in December 2019.
             </p>
-                {{ for section in sectionInfo: }}
-         <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar" onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
-        {{pass}}
+            {{ for section in sectionInfo: }}
+            <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar"
+                onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
+            {{pass}}
 
 
 
 
 
-         <form class="button" action="/{{=request.application}}/sections/addSection" method="post" style="display: inline-block">
-             <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
+            <form class="button" action="/{{=request.application}}/sections/addSection" method="post"
+                style="display: inline-block">
+                <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
 
-                <form class="button" action="/{{=request.application}}/sections/remove" method="post" style="display: inline-block">
+            <form class="button" action="/{{=request.application}}/sections/remove" method="post"
+                style="display: inline-block">
                 <input style="width: 35px; height:30px;" type="submit" value="-">
-                </form>
+            </form>
 
 
 
 
-                </div>
+        </div>
 
 
 
 
         <div id="calendar" class="tab-pane fade">
             <div class="col-md-3">
-            <h3 style="text-align: center">Start Date</h3>
-            <a data-toggle="tab" href="#students" class="list-group-item">
+                <h3 style="text-align: center">Start Date</h3>
+                <a data-toggle="tab" href="#students" class="list-group-item">
                     <h4 style="text-align: center" class="list-group-item-heading">{{=startDate}}</h4>
                 </a>
-                <form class="button" action="/{{=request.application}}/sections/changeDate" method="post" style="text-align: center">
-             <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
-                </div>
-
-
-
-    <div id="students">
-        <div class="col-md-3">
-        <h3 style="text-align: center">Students</h3>
-            <div id="studentNames"></div>
-
-        <h5 id="total"></h5>
+                <form class="button" action="/{{=request.application}}/sections/changeDate" method="post"
+                    style="text-align: center">
+                    <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
             </div>
 
+
+
+            <div id="students">
+                <div class="col-md-3">
+                    <h3 style="text-align: center">Students</h3>
+                    <div id="studentNames"></div>
+
+                    <h5 id="total"></h5>
+                </div>
+
+            </div>
+
+
         </div>
 
+    </div>
+    <div class="tab-pane fade" id="rebuild">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
 
-</div>
+            <h4 style="text-align: center">Change Log</h4>
+            <div style="border: groove; white-space: pre; max-height: 25em; overflow: auto;" id="changelog"></div>
 
-</div>
-        <div class="tab-pane fade" id="rebuild">
-            <div class="col-sm-3"></div>
-  <div  class="col-sm-6">
+            <form name="confirm" method="POST" action="/{{=request.application}}/admin/admin">
+                <input type="hidden" name="projectname" value="{{=coursename}}" />
+                <input type="hidden" name="coursetype" value="rebuildcourse" />
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="loginreq" value="yes" checked />
+                        Require a username to access this course
+                    </label>
+                </div>
 
-      <h4 style="text-align: center">Change Log</h4>
-      <div style="border: groove; white-space: pre; max-height: 25em; overflow: auto;" id="changelog"></div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="python3" value="true" id="python3" checked="checked" />
+                        Use Python3 print function and true division
+                    </label>
+                </div>
 
-    <form name="confirm" method="POST" action="/{{=request.application}}/admin/admin">
-      <input type="hidden" name="projectname" value="{{=coursename}}" />
-      <input type="hidden" name="coursetype" value="rebuildcourse" />
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="loginreq" value="yes" checked />
-          Require a username to access this course
-        </label>
-      </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="allowpairs" value="false" id="allowpairs" />
+                        Enable <strong>experimental</strong> pair programming features.
+                    </label>
+                </div>
 
-      <div class="checkbox">
-          <label>
-            <input type="checkbox" name="python3" value="true" id="python3" checked="checked"  />
-            Use Python3 print function and true division
-         </label>
-      </div>
+                <div class="form-group row">
+                    <div class="col-lg-3">
+                        <label for="startdate">Course start date</label>
+                        <input type="text" name="startdate" id="startdate" value="{{=startDate}}" />
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-default" value="Update course" />
+            </form>
 
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="allowpairs" value="false" id="allowpairs"  />
-          Enable <strong>experimental</strong> pair programming features.
-       </label>
-      </div>
-
-      <div class="form-group row">
-        <div class="col-lg-3">
-          <label for="startdate">Course start date</label>
-          <input type="text" name="startdate" id="startdate" value="{{=startDate}}" />
         </div>
-      </div>
-      <input type="submit" class="btn btn-default" value="Update course" />
-    </form>
+    </div>
 
-  </div>
+
+    <div id="AddInstructor" class="tab-pane fade">
+        <div class="col-md-4" style="text-align: center">
+            <h3>Remove a Current Instructor</h3>
+            <div class="list-group">
+                <form method="POST" id="removeins" action="Javascript:remove_instructor();">
+                    <select size="10" id="instructorlist" name="instructor" class="form-control">
+                        {{ for person in instructors: }}
+                        <option value="{{=person}}">{{ =instructors[person] }}</option>
+                        {{ pass }}
+                    </select>
+                    <div style="text-align: center">
+                        <input type="submit" value="-">
+                    </div>
+                </form>
+            </div>
         </div>
-
-
-<div id="AddInstructor" class="tab-pane fade">
-          <div class="col-md-4" style="text-align: center">
-              <h3>Remove a Current Instructor</h3>
-              <div class="list-group">
-                  <form method="POST" id="removeins" action="Javascript:remove_instructor();">
-                  <select size="10" id="instructorlist" name="instructor" class="form-control">
-                      {{ for person in instructors: }}
-                      <option value="{{=person}}">{{ =instructors[person] }}</option>
-                      {{ pass }}
-                  </select>
-                  <div style="text-align: center">
-                  <input type="submit" value="-">
-                  </div>
-                      </form>
-              </div>
-          </div>
-          <div class="col-md-4" style="text-align: center">
-              <h3>Add a New Instructor</h3>
-              <div class="list-group-item">
-                  <form>
+        <div class="col-md-4" style="text-align: center">
+            <h3>Add a New Instructor</h3>
+            <div class="list-group-item">
+                <form>
                     <input type="text"><input type="submit" value="Search">
-                  </form>
-                  <form id="addins" method="POST" action="Javascript:add_instructor();">
-                  <select size="10" id="studentlist" name="student" class="form-control">
-                      {{ for user in students: }}
-                      <option value="{{=user}}" >{{ =students[user] }}</option>
-                      {{ pass }}
-                  </select>
-                  <div style="text-align: center">
-                  <button id="activatorbutton" type="submit" value="+">+</button>
-                  </div>
-                      </form>
-              </div>
-          </div>
-​
-      </div>
-​
-​
-       <div id="Delete" class="tab-pane fade">
-            <div class="col-md-8">
-                <h2 style="text-align: center">Delete a Course</h2>
-                <h3 style="text-align: center">This action CANNOT BE UNDONE</h3>
-                <div style="text-align: center">
-                    <form action="/{{=request.application}}/admin/deletecourse" method="post"
+                </form>
+                <form id="addins" method="POST" action="Javascript:add_instructor();">
+                    <select size="10" id="studentlist" name="student" class="form-control">
+                        {{ for user in students: }}
+                        <option value="{{=user}}">{{ =students[user] }}</option>
+                        {{ pass }}
+                    </select>
+                    <div style="text-align: center">
+                        <button id="activatorbutton" type="submit" value="+">+</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        ​
+    </div>
+    ​
+    ​
+    <div id="Delete" class="tab-pane fade">
+        <div class="col-md-8">
+            <h2 style="text-align: center">Delete a Course</h2>
+            <h3 style="text-align: center">This action CANNOT BE UNDONE</h3>
+            <div style="text-align: center">
+                <form action="/{{=request.application}}/admin/deletecourse" method="post"
                     onsubmit="return confirm('Are you sure you want to delete this course? This will remove the course for all students and all custom assignments you have made will be deleted. This cannot be undone.')">
                     <button type="submit" style="width: 33%; align-self: center;">Really Delete</button>
-                    </form>
-                </div>
-                <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to access course materials.</h3>
+                </form>
             </div>
+            <h3 style="text-align: center">This will delete all sections under this course. Students will not be able to
+                access course materials.</h3>
         </div>
+    </div>
 
 
-        <div id="CopyAssignments" class="tab-pane fade">
-            <div class="col-md-8">
-                <h2 style="text-align: center">Copy Assignments</h2>
-                <label for="courseSelection">Select the course you want to copy assignments from.</label>
-                <div class="col-sm-3">
+    <div id="CopyAssignments" class="tab-pane fade">
+        <div class="col-md-8">
+            <h2 style="text-align: center">Copy Assignments</h2>
+            <label for="courseSelection">Select the course you want to copy assignments from.</label>
+            <div class="col-sm-3">
                 <select id="courseSelection" class="form-control">
                     {{ for course in instructor_course_list: }}
                     <option value="{{=course.course_name}}">{{=course.course_name}}</option>
                     {{ pass }}
                 </select>
                 <button onclick="copyAssignments();" class="btn btn-primary">Copy</button>
-                </div>
             </div>
         </div>
-
     </div>
+
+</div>
 
 <script>
     $(".dashboardnav").removeClass("active");
-    $("#admintab").addClass("active");
+    $("#coursedata").addClass("active");
     $('#startdate').datepicker();
+    $('#start_date').datepicker();
 
 
-    $('#sectionsTab').click(function(){
-    $('#sectionsTab').css('background-color', 'gainsboro');
-    $('#studentsTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
-    $('#DeleteTab').css('background-color','transparent');
-    $('#CopyAssignmentsTab').css('background-color', 'transparent');
-});
+    $('#sectionsTab').click(function () {
+        $('#sectionsTab').css('background-color', 'gainsboro');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+    });
 
-    $('#AddInstructorTab').click(function(){
-    $('#AddInstructorTab').css('background-color', 'gainsboro');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#studentsTab').css('background-color','transparent');
-    $('#DeleteTab').css('background-color','transparent');
-    $('#CopyAssignmentsTab').css('background-color', 'transparent');
-});
+    $('#courseTab').click(function () {
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'gainsboro');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+    });
 
-    $('#DeleteTab').click(function(){
-    $('#DeleteTab').css('background-color', 'gainsboro');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#studentsTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
-    $('#CopyAssignmentsTab').css('background-color', 'transparent');
-});
+    $('#AddInstructorTab').click(function () {
+        $('#AddInstructorTab').css('background-color', 'gainsboro');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+    });
 
-    $('#CopyAssignmentsTab').click(function(){
-    $('#CopyAssignmentsTab').css('background-color', 'gainsboro');
-    $('#DeleteTab').css('background-color', 'transparent');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#studentsTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
+    $('#DeleteTab').click(function () {
+        $('#DeleteTab').css('background-color', 'gainsboro');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+    });
 
-});
+    $('#CopyAssignmentsTab').click(function () {
+        $('#CopyAssignmentsTab').css('background-color', 'gainsboro');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+    });
 
-    $('#studentsTab').click(function(){
-    $('#studentsTab').css('background-color', 'gainsboro');
-    $('#sectionsTab').css('background-color','transparent');
-    $('#DeleteTab').css('background-color','transparent');
-    $('#AddInstructorTab').css('background-color','transparent');
-    $('#CopyAssignmentsTab').css('background-color', 'transparent');
-});
-
+    $('#studentsTab').click(function () {
+        $('#studentsTab').css('background-color', 'gainsboro');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+    });
 </script>
 
 {{ end }}

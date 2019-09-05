@@ -15,20 +15,18 @@ function gradeIndividualItem() {
     var col3val = col3.options[col3.selectedIndex].value;
 
     var rightSideDiv = $('#rightsideGradingTab');
-    var student_dict=students;
-    var question,sid,student;
-    var questions,sstudents;
+    var student_dict = students;
+    var question, sid, student;
+    var questions, sstudents;
     if (val3 == 'question') {
         var s_column = document.getElementById("gradingcolumn1");
-        sstudents=s_column.selectedOptions;
-        questions=col3.selectedOptions;
-    }
-
-    else if (val3 == 'student') {
+        sstudents = s_column.selectedOptions;
+        questions = col3.selectedOptions;
+    } else if (val3 == 'student') {
         var q_column = document.getElementById("gradingcolumn2");
-        sstudents=col3.selectedOptions;
-        questions=q_column.selectedOptions;
-        if (sstudents.length==1 && (val1 == 'assignment' && getSelectedItem('assignment') != null)) {
+        sstudents = col3.selectedOptions;
+        questions = q_column.selectedOptions;
+        if (sstudents.length == 1 && (val1 == 'assignment' && getSelectedItem('assignment') != null)) {
             calculateTotals()
         } else {
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
@@ -39,32 +37,34 @@ function gradeIndividualItem() {
     $(rightSideDiv)[0].style.visibility = 'visible';
     rightSideDiv.html(""); //empty it out
     //Not sure if questions or students should be the outer loop
-    for (var qnum=0;qnum<questions.length;qnum++){
-        question=questions[qnum].value
-        for (var snum=0;snum<sstudents.length;snum++){
-            student=sstudents[snum].value
+    for (var qnum = 0; qnum < questions.length; qnum++) {
+        question = questions[qnum].value
+        for (var snum = 0; snum < sstudents.length; snum++) {
+            student = sstudents[snum].value
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
                     sid = key;
                 }
             }
-            if(!sid){continue}
-            var newid= "Q" + question.replace(/[#*@+:>~.\/ ]/g,'_') +
-            	       	  "S" + sid.replace(/[#*@+:>~.\/]/g,'_');
+            if (!sid) {
+                continue
+            }
+            var newid = "Q" + question.replace(/[#*@+:>~.\/ ]/g, '_') +
+                "S" + sid.replace(/[#*@+:>~.\/]/g, '_');
             //This creates the equivalent of outerRightDiv for each question and student
-            var divstring='<div style="border:1px solid;padding:5px;margin:5px;" id="'+newid+'">';
-            divstring+='<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
-            divstring+='<div style="display:none" id="shortanswerresponse"></div>'
-            divstring+='<div id="gradingform"><form>'
-            divstring+='<label for="input-grade">Grade</label>'
-            divstring+='<input id="input-grade" type="text" class="form-control" value="" />'
-            divstring+='<label for="input-comments">Comments</label>'
-            divstring+='<input id="input-comments" type="text" class="form-control" value="" />'
-            divstring+='<input type="submit" value="Save Grade" class="btn btn-primary" /></form>'
-            divstring+='<button class="btn btn-default next" type="button">Save and next</button></div>'
-            divstring+='</div></div>'
+            var divstring = '<div style="border:1px solid;padding:5px;margin:5px;" id="' + newid + '">';
+            divstring += '<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
+            divstring += '<div style="display:none" id="shortanswerresponse"></div>'
+            divstring += '<div id="gradingform"><form>'
+            divstring += '<label for="input-grade">Grade</label>'
+            divstring += '<input id="input-grade" type="text" class="form-control" value="" />'
+            divstring += '<label for="input-comments">Comments</label>'
+            divstring += '<input id="input-comments" type="text" class="form-control" value="" />'
+            divstring += '<input type="submit" value="Save Grade" class="btn btn-primary" /></form>'
+            divstring += '<button class="btn btn-default next" type="button">Save and next</button></div>'
+            divstring += '</div></div>'
             rightSideDiv.append(divstring)
-            getRightSideGradingDiv($("#"+newid), question, sid);
+            getRightSideGradingDiv($("#" + newid), question, sid);
         }
     }
 }
@@ -83,14 +83,11 @@ function getSelectedGradingColumn(type) {
 
     if (col1Type == type) {
         col = document.getElementById("gradingcolumn1");
-    }
-    else if (col2Type == type) {
+    } else if (col2Type == type) {
         col = document.getElementById("gradingcolumn2");
-    }
-    else if (col3type == type) {
+    } else if (col3type == type) {
         col = document.getElementById("gradingcolumn3");
-    }
-    else {
+    } else {
         col = null;
     }
     return col;
@@ -114,26 +111,21 @@ function getSelectedItem(type) {
                 }
             }
             return id;
-        }
-        else {
+        } else {
             return null;
         }
-    }
-    else if (type == "assignment") {
+    } else if (type == "assignment") {
         if (col.selectedIndex != -1) {
             // they've selected an assignment; return that assignment name
             return col.options[col.selectedIndex].value;
-        }
-        else {
+        } else {
             return null;
         }
-    }
-    else if (type == "question") {
+    } else if (type == "question") {
         if (col.selectedIndex != -1) {
             // they've selected a question; return that question name
             return col.options[col.selectedIndex].value;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -161,7 +153,7 @@ function autoGrade() {
     }
 
     if (assignment != null && question === null && studentID == null) {
-        (async function(students, ajax_params) {
+        (async function (students, ajax_params) {
             // Grade each student provided.
             let student_array = Object.keys(students);
             for (let index = 0; index < student_array.length; ++index) {
@@ -209,8 +201,7 @@ function calculateTotals(sid) {
                 // populate it with data from retdata
                 $('#computed-total-score').val(retdata.computed_score);
                 $('#manual-total-score').val(retdata.manual_score);
-            }
-            else {
+            } else {
                 alert(retdata.message);
             }
         }
@@ -261,21 +252,28 @@ function getRightSideGradingDiv(element, acid, studentId) {
         alert("Can't grade without a URL");
         return false;
     }
-    var elementID=$(element)[0].id; //some of this might be redundant
+    var elementID = $(element)[0].id; //some of this might be redundant
     // Clear any locally-stored info, which might be from showing another student's answer.
     // See ``runestonebase.js, localStorageKey()``.
     localStorage.removeItem(eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given");
     //make an ajax call to get the htmlsrc for the given question
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
-    obj.send(JSON.stringify({ acid: acid }));
+    obj.send(JSON.stringify({
+        acid: acid
+    }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $('#enforceDeadline').is(':checked');
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
 
-            renderRunestoneComponent(htmlsrc, elementID+">#questiondisplay", { sid: studentId, graderactive: true, enforceDeadline: enforceDeadline, deadline: dl });
+            renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
+                sid: studentId,
+                graderactive: true,
+                enforceDeadline: enforceDeadline,
+                deadline: dl
+            });
         }
 
     };
@@ -285,7 +283,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
     function save(event) {
         event.preventDefault();
 
-//        if (form==undefined){form=$(this);} //This might be redundant
+        //        if (form==undefined){form=$(this);} //This might be redundant
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
@@ -328,7 +326,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             var file_div_template = '<pre id="file_div_template" style = "display:none;">template text</pre>;'
             var index;
             for (index = 0; index < data.file_includes.length; index += 1) {
-                if (jQuery('#' + data.file_includes[index].acid,rightDiv).length == 0) {
+                if (jQuery('#' + data.file_includes[index].acid, rightDiv).length == 0) {
                     // doesn't exist yet, so add it.
                     jQuery('body').append(file_div_template);
                     jQuery('#file_div_template').text(data.file_includes[index].contents);
@@ -362,9 +360,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
                 var ind = col3.selectedIndex + 1;
                 col3.selectedIndex = ind;
                 col3.onchange();
-            }
-
-            catch (err) {
+            } catch (err) {
                 //reached end of list
             }
 
@@ -394,7 +390,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
             //            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
             var obj = new XMLHttpRequest();
             obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
-            obj.send(JSON.stringify({ newins: 'studentid' }));
+            obj.send(JSON.stringify({
+                newins: 'studentid'
+            }));
             obj.onreadystatechange = function () {
                 if (obj.readyState == 4 && obj.status == 200) {
                     var resp = obj.responseText;
@@ -402,8 +400,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
                     if (newdata != "Error") {
                         jQuery('#input-grade', rightDiv).val(newdata['grade']);
                         jQuery('#input-comments', rightDiv).val(newdata['comments']);
-                    }
-                    else {
+                    } else {
                         jQuery('#input-grade', rightDiv).val(null);
                         jQuery('#input-comments', rightDiv).val(null);
                     }
@@ -435,22 +432,23 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 }
 
-function makeOption(text,value,disabledQ){
+function makeOption(text, value, disabledQ) {
     var option = document.createElement("option");
     option.text = text;
     option.value = value;
-    if(disabledQ != undefined) {
-        $(option).attr("disabled",true);
+    if (disabledQ != undefined) {
+        $(option).attr("disabled", true);
     }
     return option;
 
 }
-function populateQuestions(select,question_names){
+
+function populateQuestions(select, question_names) {
     $(select).empty();
-    var chapter="";
+    var chapter = "";
     for (i = 0; i < question_names.length; i++) {
         var q = question_names[i];
-        var questiontext="";
+        var questiontext = "";
         //THE FOLLOWING IS EXPERIMENTAL AND CAN BE IGNORED FOR NOW.
         /*
         if (q.includes("/")) {//if the question has a / in it, assume it is chapter/subchapter
@@ -462,12 +460,13 @@ function populateQuestions(select,question_names){
             questiontext="   "+qL[1];
         } else {
 */
-        questiontext=q;
+        questiontext = q;
         /*
         };*/
-        select.add(makeOption(questiontext,question_names[i]));
+        select.add(makeOption(questiontext, question_names[i]));
     }
 }
+
 function updateColumn2() {
     var sel1 = document.getElementById("gradingoption1");
     var val1 = sel1.options[sel1.selectedIndex].value;
@@ -475,8 +474,8 @@ function updateColumn2() {
     var val2 = sel2.options[sel2.selectedIndex].value;
     var col1 = document.getElementById("gradingcolumn1");
     var col2 = document.getElementById("gradingcolumn2");
-    var col1val="";
-    if (col1.selectedIndex>-1){
+    var col1val = "";
+    if (col1.selectedIndex > -1) {
         var col1val = col1.options[col1.selectedIndex].value;
     }
     if (val1 == 'assignment') {
@@ -488,17 +487,13 @@ function updateColumn2() {
         }
     }
     if (val1 == 'assignment' && val2 == 'question') {
-        populateQuestions(col2,assignmentinfo[col1val]);
-    }
-
-    else if (val1 == 'chapter' && val2 == 'question') {
+        populateQuestions(col2, assignmentinfo[col1val]);
+    } else if (val1 == 'chapter' && val2 == 'question') {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
-        populateQuestions(col2,chapters[col1val]);
-    }
-
-    else if (val1 == 'student') {
+        populateQuestions(col2, chapters[col1val]);
+    } else if (val1 == 'student') {
         if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
             calculateTotals();
         } else {
@@ -528,11 +523,9 @@ function updateColumn3() {
         }
     }
     if (val2 == 'chapter' && val3 == 'question') {
-        populateQuestions(col3,chapters[col2VAL]);
-    }
-
-    else if (val2 == 'assignment' && val3 == 'question') {
-        populateQuestions(col3,assignmentinfo[col2VAL]);
+        populateQuestions(col3, chapters[col2VAL]);
+    } else if (val2 == 'assignment' && val3 == 'question') {
+        populateQuestions(col3, assignmentinfo[col2VAL]);
     }
 
     if (val3 != "") {
@@ -636,17 +629,18 @@ function pickedChapters(column) {
 
 }
 
-function makeOptions(select,texts){
+function makeOptions(select, texts) {
     $(select).children().each(
-        function(i,option){
-            if(texts.includes(option.value)){
+        function (i, option) {
+            if (texts.includes(option.value)) {
                 $(option).show();
             } else {
-                $(option).hide();//("disabled",true);
+                $(option).hide(); //("disabled",true);
             }
         }
     );
 }
+
 function showColumn1() {
 
     var select1 = document.getElementById("gradingoption1");
@@ -667,18 +661,16 @@ function showColumn1() {
     $("#gradingcolumn3").empty();
 
     if (val == 'assignment') {
-        makeOptions(select2,['question','']);
-        makeOptions(select3,['student','']);
+        makeOptions(select2, ['question', '']);
+        makeOptions(select3, ['student', '']);
         pickedAssignments("gradingcolumn1");
-    }
-    else if (val == 'chapter') {
-        makeOptions(select2,['question','']);
-        makeOptions(select3,['student','']);
+    } else if (val == 'chapter') {
+        makeOptions(select2, ['question', '']);
+        makeOptions(select3, ['student', '']);
         pickedChapters('gradingcolumn1');
-    }
-    else if (val == 'student') {
-        makeOptions(select2,['chapter','assignment','']);
-        makeOptions(select3,['question','']);
+    } else if (val == 'student') {
+        makeOptions(select2, ['chapter', 'assignment', '']);
+        makeOptions(select3, ['question', '']);
         pickedStudents('gradingcolumn1');
     }
 }
@@ -695,49 +687,39 @@ function showColumn2() {
     if (val1 == "") {
         select2.selectedIndex = 0;
         alert("That is not a valid combination");
-    }
-
-    else {
+    } else {
         if (val2 == 'assignment') {
-            makeOptions(select3,["question"]);
-            if (['assignment','chapter'].includes(val1)){
+            makeOptions(select3, ["question"]);
+            if (['assignment', 'chapter'].includes(val1)) {
                 alert("That is not a valid combination");
                 select2.selectedIndex = 0;
-            }
-            else {
+            } else {
                 pickedAssignments("gradingcolumn2");
             }
-        }
-
-        else if (val2 == 'chapter') {
-            makeOptions(select3,['question']);
+        } else if (val2 == 'chapter') {
+            makeOptions(select3, ['question']);
             document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-            if (['assignment','chapter'].includes(val1)){
+            if (['assignment', 'chapter'].includes(val1)) {
                 alert("That is not a valid combination");
                 $("#gradingcolumn2").empty();
                 select2.selectedIndex = 0;
-            }
-            else {
+            } else {
                 pickedChapters('gradingcolumn2');
             }
-        }
-
-        else if (val2 == 'question') {
-            makeOptions(select3,['student']);
+        } else if (val2 == 'question') {
+            makeOptions(select3, ['student']);
             var preselected = false;
             if (select1.selectedIndex != -1) {
                 var selectedval = select1.options[select1.selectedIndex].value;
                 preselected = true;
             }
-            if (['chapter','assignment'].includes(val1)){
+            if (['chapter', 'assignment'].includes(val1)) {
                 if (preselected == true) {
                     updateColumn2();
-                }
-                else {
+                } else {
                     displayDefaultQuestion('gradingcolumn2');
                 }
-            }
-            else {
+            } else {
                 alert("That is not a valid combination");
                 $("#gradingcolumn2").empty();
                 select2.selectedIndex = 0;
@@ -765,24 +747,18 @@ function showColumn3() {
         if (val1 == 'student' && val2 == 'chapter') {
             if (preselected == true) {
                 updateColumn3();
-            }
-            else {
+            } else {
                 displayDefaultQuestion('gradingcolumn3');
             }
 
-        }
-
-        else if (val1 == 'student' && val2 == 'assignment') {
+        } else if (val1 == 'student' && val2 == 'assignment') {
             if (preselected == true) {
                 updateColumn3();
-            }
-            else {
+            } else {
                 displayDefaultQuestion('gradingcolumn3');
             }
 
-        }
-
-        else {
+        } else {
             alert("That is not a valid combination");
             select1.selectedIndex = 0;
             $("#gradingcolumn3").empty();
@@ -790,20 +766,13 @@ function showColumn3() {
 
         }
 
-    }
-
-
-    else if (val == 'student') {
+    } else if (val == 'student') {
 
         if (val1 == 'chapter' && val2 == 'question') {
             pickedStudents("gradingcolumn3");
-        }
-
-        else if (val1 == 'assignment' && val2 == 'question') {
+        } else if (val1 == 'assignment' && val2 == 'question') {
             pickedStudents("gradingcolumn3");
-        }
-
-        else {
+        } else {
             alert("That is not a valid combination");
             select1.selectedIndex = 0;
             $("#gradingcolumn3").empty();
@@ -836,7 +805,9 @@ function getStudents(sectionName) {
 
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/sections/students/" + section, true);
-    obj.send(JSON.stringify({ sectionName: sectionName }));
+    obj.send(JSON.stringify({
+        sectionName: sectionName
+    }));
     obj.onreadystatechange = function () {
 
         if (obj.readyState == 4 && obj.status == 200) {
@@ -855,8 +826,7 @@ function getStudents(sectionName) {
             var total = document.getElementById("total");
             if (students == "") {
                 total.innerHTML = "Total: 0";
-            }
-            else {
+            } else {
                 total.innerHTML = "Total: " + students.length;
             }
 
@@ -872,7 +842,9 @@ function getLog() {
 
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/getChangeLog", true);
-    obj.send(JSON.stringify({ variable: 'variable' }));
+    obj.send(JSON.stringify({
+        variable: 'variable'
+    }));
     obj.onreadystatechange = function () {
 
         if (obj.readyState == 4 && obj.status == 200) {
@@ -891,7 +863,9 @@ function add_instructor() {
 
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/addinstructor/' + studentid, true);
-    obj.send(JSON.stringify({ newins: 'studentid' }));
+    obj.send(JSON.stringify({
+        newins: 'studentid'
+    }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             studlist = document.getElementById('studentlist');
@@ -912,7 +886,9 @@ function remove_instructor() {
     var studentname = select.options[index].text;
     var obj = new XMLHttpRequest();
     obj.open('POST', '/runestone/admin/removeinstructor/' + studentid, true);
-    obj.send(JSON.stringify({ newins: 'studentid' }));
+    obj.send(JSON.stringify({
+        newins: 'studentid'
+    }));
     obj.onreadystatechange = function () {
         if (obj.readyState == 4 && obj.status == 200) {
             gotdeleted = JSON.parse(obj.responseText);
@@ -933,7 +909,9 @@ function remove_instructor() {
 
 
 function edit_indexrst(form) {
-    let data = { newtext: form.editIndex.value }
+    let data = {
+        newtext: form.editIndex.value
+    }
     jQuery.post('/runestone/admin/editindexrst', data, function () {
         alert("Successfully edited index.rst");
     });
@@ -1068,59 +1046,67 @@ function menu_from_editable(
     // Map these to the format necessary for a select control.
     var select_source = [];
     for (let val of row[row_key]) {
-        select_source.push({ value: val, text: ui[val] });
+        select_source.push({
+            value: val,
+            text: ui[val]
+        });
     }
     return select_source;
 }
 
 
-function fillinAssignmentName(target){
+function fillinAssignmentName(target) {
     //On the assignments tab, fill in the target with the name of the current assignment
     //Only used by the rename assignment button for now
-    select=$("#assignlist")[0]
-    $("#"+target).html(select.options[select.selectedIndex].innerHTML)
+    select = $("#assignlist")[0]
+    $("#" + target).html(select.options[select.selectedIndex].innerHTML)
 }
 //Invoked by the "Rename" button of the "Rename Assignment" dialog
 function renameAssignment(form) {
-    var select=$("#assignlist")[0]
-    var id=select[select.selectedIndex].value
+    var select = $("#assignlist")[0]
+    var id = select[select.selectedIndex].value
     var name = form['rename-name'].value;
-    data={'name':name,'original':id}
-    url='/runestone/admin/renameAssignment';
-    jQuery.post(url,data,function(iserror,textStatus,whatever){
-        if (iserror=="EXISTS"){
-            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
-        } else if (iserror!='ERROR'){
+    data = {
+        'name': name,
+        'original': id
+    }
+    url = '/runestone/admin/renameAssignment';
+    jQuery.post(url, data, function (iserror, textStatus, whatever) {
+        if (iserror == "EXISTS") {
+            alert('There already is an assignment called "' + name + '".') //FIX: reopen the dialog box?
+        } else if (iserror != 'ERROR') {
             //find the assignment
-            select=$('#assignlist')[0];
-            select.options[select.selectedIndex].innerHTML=name
+            select = $('#assignlist')[0];
+            select.options[select.selectedIndex].innerHTML = name
         } else {
-            alert('Error in renaming assignment '+id)
+            alert('Error in renaming assignment ' + id)
         }
-    },'json')
+    }, 'json')
 }
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
 
     $('#assign_visible').prop('checked', true);
-    data = {'name': name}
+    data = {
+        'name': name
+    }
     url = '/runestone/admin/createAssignment';
     jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror=="EXISTS"){
-            alert('There already is an assignment called "'+name+'".') //FIX: reopen the dialog box?
-        } else if (iserror!='ERROR'){
-                select = document.getElementById('assignlist');
-                newopt = document.createElement('option');
-                newopt.value = iserror[name];
-                newopt.innerHTML = name;
-                select.appendChild(newopt);
-                select.selectedIndex = newopt.index;
-                assignmentInfo();
-            } else {
-                alert('Error in creating new assignment.')
-            }
-        }, 'json')
+        if (iserror == "EXISTS") {
+            alert('There already is an assignment called "' + name + '".') //FIX: reopen the dialog box?
+        } else if (iserror != 'ERROR') {
+            select = document.getElementById('assignlist');
+            newopt = document.createElement('option');
+            newopt.value = iserror[name];
+            newopt.innerHTML = name;
+            select.appendChild(newopt);
+            select.selectedIndex = newopt.index;
+            assignmentInfo();
+        } else {
+            alert('Error in creating new assignment.')
+        }
+    }, 'json')
 }
 
 // Triggered by the ``-`` button on the assignments tab.
@@ -1134,7 +1120,9 @@ function remove_assignment() {
     }
 
     var url = '/runestone/admin/removeassign';
-    var data = {assignid: assignmentid };
+    var data = {
+        assignid: assignmentid
+    };
     jQuery.post(url, data, function (res, status, whatever) {
         if (res != 'Error') {
             select.remove(select.selectedIndex);
@@ -1214,7 +1202,9 @@ function update_assignment(form) {
     }
     $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId(), function (data) {
         alert("Assignment Saved");
-    }).error(function () { alert("huh??") });
+    }).error(function () {
+        alert("huh??")
+    });
 }
 
 // Return the assignment id based on the value selected in the ``assignlist`` item.
@@ -1240,7 +1230,9 @@ function assignmentInfo() {
     $("#leftpanel1").css('visibility', 'visible');
     $("#leftpanel2").css('visibility', 'visible');
 
-    $.getJSON('get_assignment', { 'assignmentid': assignmentid }, function (data) {
+    $.getJSON('get_assignment', {
+        'assignmentid': assignmentid
+    }, function (data) {
         assignmentData = data['assignment_data'];
         $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
         $('#datetimepicker').val(assignmentData['due_date']);
@@ -1358,7 +1350,9 @@ function remove_reading(reading_id) {
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, { variable: 'variable' }).done(function (response_JSON) {
+    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {
+        variable: 'variable'
+    }).done(function (response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
         totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
@@ -1472,7 +1466,10 @@ function create_question(formdata) {
             chapter = chapterMap[chapter];
             var exercises_node = tqp.get_node(chapter + ' Exercises');
             // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
-            tqp.check_node(tqp.create_node(exercises_node, { id: name, text: name }));
+            tqp.check_node(tqp.create_node(exercises_node, {
+                id: name,
+                text: name
+            }));
         }
     }, 'json');
 }
@@ -1483,7 +1480,9 @@ function preview_question_id(question_id, preview_div) {
         preview_div = "component-preview"
     }
     // Request the preview HTML from the server.
-    $.getJSON('/runestone/admin/htmlsrc', { "acid": question_id }).done(function (html_src) {
+    $.getJSON('/runestone/admin/htmlsrc', {
+        "acid": question_id
+    }).done(function (html_src) {
         // Render it.
         renderRunestoneComponent(html_src, preview_div)
     });
@@ -1496,13 +1495,14 @@ function preview_question(form, preview_div) {
         preview_div = "component-preview"
     }
     var code = $(form.editRST).val();
-    var data = { 'code': JSON.stringify(code) };
+    var data = {
+        'code': JSON.stringify(code)
+    };
     $.post('/runestone/ajax/preview_question', data, function (result, status) {
         let code = JSON.parse(result);
         $(form.qrawhtml).val(code); // store the un-rendered html for submission
         renderRunestoneComponent(code, preview_div)
-    }
-    );
+    });
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
     // a sphinx project, run sphinx, and send back the generated index file
@@ -1537,12 +1537,12 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 opt[key] = moreOpts[key]
             }
         }
-}
+    }
 
     if (typeof component_factory === 'undefined') {
         alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
     } else {
-        if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html() ) {
+        if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html()) {
             jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
         } else {
             let res = component_factory[componentKind](opt);
@@ -1552,15 +1552,17 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         }
     }
 
-    if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") {  // if we are in modal we are already editing
-        $("#modal-preview").data("orig_divid", opt.orig.id);  // save the original divid
+    if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
+        $("#modal-preview").data("orig_divid", opt.orig.id); // save the original divid
         let editButton = document.createElement("button")
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
         $(editButton).attr("data-target", "#editModal");
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
-            data = { question_name: opt.orig.id }
+            data = {
+                question_name: opt.orig.id
+            }
             jQuery.get('/runestone/admin/question_text', data,
                 function (obj) {
                     $("#editRST").val(JSON.parse(obj));
@@ -1588,41 +1590,42 @@ function questionBank(form) {
 
     var obj = new XMLHttpRequest();
     var url = '/runestone/admin/questionBank'
-    var data = { variable: 'variable',
+    var data = {
+        variable: 'variable',
         chapter: chapter,
         difficulty: difficulty,
         author: author,
         tags: tags,
         term: term
-        };
+    };
     jQuery.post(url, data, function (resp, textStatus, whatever) {
         resp = JSON.parse(resp)
         if (resp == 'Error') {
             alert("An error occured while searching")
         };
-            var select = document.getElementById('qbankselect');
-            select.onchange = getQuestionInfo;
-            var questionform = document.getElementById('questionform');
-            $("#qbankselect").empty();
-            for (i = 0; i < resp.length; i++) {
-                var option = document.createElement("option");
-                option.text = resp[i];
-                option.value = resp[i];
-                option.onclick = getQuestionInfo;
-                select.add(option);
-            }
-            if (resp.length == 0) {
-                select.style.visibility = 'hidden';
-                questionform.style.visibility = 'hidden';
-                var q_info = document.getElementById('questionInfo');
-                q_info.style.visibility = 'hidden';
-                alert("Sorry, no questions matched your search criteria.");
+        var select = document.getElementById('qbankselect');
+        select.onchange = getQuestionInfo;
+        var questionform = document.getElementById('questionform');
+        $("#qbankselect").empty();
+        for (i = 0; i < resp.length; i++) {
+            var option = document.createElement("option");
+            option.text = resp[i];
+            option.value = resp[i];
+            option.onclick = getQuestionInfo;
+            select.add(option);
+        }
+        if (resp.length == 0) {
+            select.style.visibility = 'hidden';
+            questionform.style.visibility = 'hidden';
+            var q_info = document.getElementById('questionInfo');
+            q_info.style.visibility = 'hidden';
+            alert("Sorry, no questions matched your search criteria.");
 
-            }
-            if (resp.length > 0) {
-                select.style.visibility = 'visible';
-                questionform.style.visibility = 'visible';
-            }
+        }
+        if (resp.length > 0) {
+            select.style.visibility = 'visible';
+            questionform.style.visibility = 'visible';
+        }
     });
 }
 
@@ -1649,42 +1652,42 @@ function getQuestionInfo() {
         assignment: assignmentid
     };
     jQuery.post(url, data, function (question_info, status, whatever) {
-            var res = JSON.parse(question_info);
-            var data = {};
-            var i;
-            for (i in res) {
-                if (res.hasOwnProperty(i)) {
-                    data[i] = res[i];
-                }
+        var res = JSON.parse(question_info);
+        var data = {};
+        var i;
+        for (i in res) {
+            if (res.hasOwnProperty(i)) {
+                data[i] = res[i];
             }
-            var difficulty = data['difficulty'];
-            var code = data['code'];
-            var author = data['author'];
-            var tags = data['tags'];
+        }
+        var difficulty = data['difficulty'];
+        var code = data['code'];
+        var author = data['author'];
+        var tags = data['tags'];
 
-            var q_difficulty = document.getElementById('q_difficulty');
-            if (difficulty == null) {
-                q_difficulty.innerHTML = 'Difficulty not set for this question';
-            } else {
-                q_difficulty.innerHTML = 'Difficulty: ' + difficulty;
-            }
+        var q_difficulty = document.getElementById('q_difficulty');
+        if (difficulty == null) {
+            q_difficulty.innerHTML = 'Difficulty not set for this question';
+        } else {
+            q_difficulty.innerHTML = 'Difficulty: ' + difficulty;
+        }
 
 
-            renderRunestoneComponent(data['htmlsrc'], "component-preview")
+        renderRunestoneComponent(data['htmlsrc'], "component-preview")
 
-            var q_author = document.getElementById('q_author');
-            if (author == null) {
-                q_author.innerHTML = 'No author for this question';
-            } else {
-                q_author.innerHTML = 'Author: ' + author;
-            }
+        var q_author = document.getElementById('q_author');
+        if (author == null) {
+            q_author.innerHTML = 'No author for this question';
+        } else {
+            q_author.innerHTML = 'Author: ' + author;
+        }
 
-            var q_tags = document.getElementById('q_tags');
-            q_tags.innerHTML = 'Tags:' + tags;
-            var q_info = document.getElementById('questionInfo');
-            q_info.style.visibility = 'visible';
+        var q_tags = document.getElementById('q_tags');
+        q_tags.innerHTML = 'Tags:' + tags;
+        var q_info = document.getElementById('questionInfo');
+        q_info.style.visibility = 'visible';
 
-        });
+    });
 }
 
 
@@ -1762,9 +1765,7 @@ function set_release_button() {
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
         }
-    }
-
-    else if (col2val == 'assignment') {
+    } else if (col2val == 'assignment') {
         var assignmentcolumn = document.getElementById("gradingcolumn2");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
@@ -1777,9 +1778,7 @@ function set_release_button() {
     if (assignment == null) {
         //hide the release grades button
         release_button.css('visibility', 'hidden');
-    }
-
-    else {
+    } else {
         release_button.css('visibility', 'visible');
         // see whether grades are currently live for this assignment
         get_assignment_release_states();
@@ -1787,8 +1786,7 @@ function set_release_button() {
         // If so, set the button text appropriately
         if (release_state == true) {
             release_button.text("Hide Grades from Students for " + assignment);
-        }
-        else {
+        } else {
             release_button.text("Release Grades to Students for " + assignment);
         }
     }
@@ -1807,22 +1805,16 @@ function toggle_release_grades() {
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
 
-        }
-
-        else {
+        } else {
             alert("Please choose an assignment first");
         }
-    }
-
-    else if (col2val == 'assignment') {
+    } else if (col2val == 'assignment') {
 
         var assignmentcolumn = document.getElementById("gradingcolumn2");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
 
-        }
-
-        else {
+        } else {
             alert("Please choose an assignment first");
         }
 
@@ -1837,20 +1829,23 @@ function toggle_release_grades() {
         if (release_state == true) {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = null;
-            let data = {assignmentid: assignmentid,
-                        released: 'no'};
+            let data = {
+                assignmentid: assignmentid,
+                released: 'no'
+            };
 
-            jQuery.post('/runestone/admin/releasegrades', data, function(mess,stat,w) {
+            jQuery.post('/runestone/admin/releasegrades', data, function (mess, stat, w) {
                 alert(`${mess} Grades are now hidden from students for ${assignment}`);
             });
-        }
-        else {
+        } else {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = true;
-            let data = {assignmentid: assignmentid,
-                released: 'yes'};
+            let data = {
+                assignmentid: assignmentid,
+                released: 'yes'
+            };
 
-            jQuery.post('/runestone/admin/releasegrades', data, function(mess,stat,w) {
+            jQuery.post('/runestone/admin/releasegrades', data, function (mess, stat, w) {
                 alert(`${mess}: Grades are now visible to students for ${assignment}`);
             });
         }
@@ -1861,14 +1856,28 @@ function toggle_release_grades() {
 
 function copyAssignments() {
     let selectedCourse = document.getElementById("courseSelection").value;
-    data = {oldassignment: -1,
-            course: selectedCourse
-        };
-    $.post("/runestone/admin/copy_assignment", data, function(mess, stat, w) {
-        if(mess == "success") {
+    data = {
+        oldassignment: -1,
+        course: selectedCourse
+    };
+    $.post("/runestone/admin/copy_assignment", data, function (mess, stat, w) {
+        if (mess == "success") {
             alert('Done')
         } else {
             alert('Copy Failed')
         }
     });
+}
+
+
+function updateCourse(widget, attr) {
+    console.log(widget.value);
+    data = {}
+    data[attr] = widget.value
+
+    $.getJSON("/runestone/admin/update_course.json", data, function (retval, stat, w) {
+        if (retval.status != "success") {
+            alert("Update Failed");
+        }
+    })
 }
