@@ -469,9 +469,12 @@ class DashboardDataAnalyzer(object):
         if not self.course:
             rslogger.debug("ERROR - NO COURSE course_id = {}".format(self.course_id))
 
+        base_course = self.course.base_course
+
         self.chapters = current.db(
-            current.db.chapters.course_id == current.auth.user.course_name
+            current.db.chapters.course_id == base_course
         ).select()
+
         self.user = (
             current.db(
                 (current.db.auth_user.username == username)
