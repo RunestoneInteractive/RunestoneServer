@@ -127,37 +127,27 @@ class CourseProblemMetrics(object):
             )
         )
         rslogger.debug("doing chapter {}".format(self.chapter))
-        # todo:  Join this with questions so that we can limit the questions to the selected chapter
-        mcans = current.db(
-            (current.db.mchoice_answers.course_name == course_name)
-            & (current.db.mchoice_answers.div_id == current.db.questions.name)
-            & (current.db.questions.chapter == self.chapter.chapter_label)
-        ).select(orderby=current.db.mchoice_answers.timestamp)
-        rslogger.debug("Found {} exercises")
-        fbans = current.db(
-            (current.db.fitb_answers.course_name == course_name)
-            & (current.db.fitb_answers.div_id == current.db.questions.name)
-            & (current.db.questions.chapter == self.chapter.chapter_label)
-        ).select(orderby=current.db.fitb_answers.timestamp)
-        psans = current.db(
-            (current.db.parsons_answers.course_name == course_name)
-            & (current.db.parsons_answers.div_id == current.db.questions.name)
-            & (current.db.questions.chapter == self.chapter.chapter_label)
-        ).select(orderby=current.db.parsons_answers.timestamp)
-        clkble = current.db(
-            (current.db.clickablearea_answers.course_name == course_name)
-            & (current.db.clickablearea_answers.div_id == current.db.questions.name)
-            & (current.db.questions.chapter == self.chapter.chapter_label)
-        ).select(orderby=current.db.parsons_answers.timestamp)
-        dnd = current.db(
-            (current.db.dragndrop_answers.course_name == course_name)
-            & (current.db.dragndrop_answers.div_id == current.db.questions.name)
-            & (current.db.questions.chapter == self.chapter.chapter_label)
-        ).select(orderby=current.db.parsons_answers.timestamp)
+
+        res = {}
+        tbl_list = [
+            "mchoice_answers",
+            "fitb_answers",
+            "parsons_answers",
+            "clickablearea_answers",
+            "dragndrop_answers",
+            "codelens_answers",
+        ]
+        for tbl in tbl_list:
+            res[tbl] = current.db(
+                (current.db[tbl].course_name == course_name)
+                & (current.db[tbl].div_id == current.db.questions.name)
+                & (current.db.questions.chapter == self.chapter.chapter_label)
+            ).select(orderby=current.db[tbl].timestamp)
+
         # convert the numeric answer to letter answers to match the questions easier.
         to_letter = dict(zip("0123456789", "ABCDEFGHIJ"))
 
-        for row in mcans:
+        for row in res["mchoice_answers"]:
             mc = row["mchoice_answers"]
             mc.answer = to_letter.get(mc.answer, mc.answer)
 
@@ -171,11 +161,8 @@ class CourseProblemMetrics(object):
                     )
                 self.problems[row.div_id].add_data_point(row)
 
-        add_problems(mcans, "mchoice_answers")
-        add_problems(fbans, "fitb_answers")
-        add_problems(psans, "parsons_answers")
-        add_problems(clkble, "clickablearea_answers")
-        add_problems(dnd, "clickablearea_answers")
+        for tbl in tbl_list:
+            add_problems(res[tbl], tbl)
 
     def retrieve_chapter_problems(self):
         return self
