@@ -465,27 +465,22 @@ def _scheduled_builder(
     sim_ret = 0
     args = [os.path.join(xc16_path, "sim30")]
     out += "\nTest results:\n" + _subprocess_string(args, **sp_args)
-    timeout_list = []
     try:
-        p = subprocess.Popen(
-            args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, **sp_args
+        cp = subprocess.run(
+            args,
+            input=ss,
+            stdout=subprocess.PIPE,
+            timeout=5,
+            **sp_args
         )
-        # Horrible kludge: implement a crude timeout. Instead, use ``timeout``
-        # with Python 3.
-        def on_timeout(msg_list):
-            p.terminate()
-            msg_list += ["\n\nTimeout."]
-
-        t = Timer(3, on_timeout, [timeout_list])
-        t.start()
-        p.communicate(ss)
-        sim_ret = p.returncode
-    except subprocess.CalledProcessError as e:
+        sim_ret = cp.returncode
+    except subprocess.TimeoutExpired:
         sim_ret = 1
-    # Check the output.
-    t.cancel()
+        timeout_str = "\n\nTimeout."
+    else:
+        timeout_str = ""
     with open(simout_path, encoding="utf-8") as f:
         out += f.read().rstrip()
     # Put the timeout string at the end of all the simulator output.
-    out += "".join(timeout_list)
+    out += timeout_str
     return out, (100 if not sim_ret and out.endswith("Correct.") else 0)
