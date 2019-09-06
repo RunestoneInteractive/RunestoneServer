@@ -149,7 +149,11 @@ class CourseProblemMetrics(object):
             & (current.db.clickablearea_answers.div_id == current.db.questions.name)
             & (current.db.questions.chapter == self.chapter.chapter_label)
         ).select(orderby=current.db.parsons_answers.timestamp)
-
+        dnd = current.db(
+            (current.db.dragndrop_answers.course_name == course_name)
+            & (current.db.dragndrop_answers.div_id == current.db.questions.name)
+            & (current.db.questions.chapter == self.chapter.chapter_label)
+        ).select(orderby=current.db.parsons_answers.timestamp)
         # convert the numeric answer to letter answers to match the questions easier.
         to_letter = dict(zip("0123456789", "ABCDEFGHIJ"))
 
@@ -171,6 +175,7 @@ class CourseProblemMetrics(object):
         add_problems(fbans, "fitb_answers")
         add_problems(psans, "parsons_answers")
         add_problems(clkble, "clickablearea_answers")
+        add_problems(dnd, "clickablearea_answers")
 
     def retrieve_chapter_problems(self):
         return self
