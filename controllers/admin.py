@@ -1,6 +1,7 @@
 from os import path
 import os
 import datetime
+from dateutil.parser import parse
 import re
 from random import randint
 from collections import OrderedDict
@@ -2311,9 +2312,13 @@ def update_course():
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
     if thecourse:
         if "new_date" in request.vars:
-            db(db.courses.id == thecourse.id).update(
-                term_start_date=request.vars["new_date"]
-            )
+            new_date = request.vars["new_date"]
+            try:
+                new_date = str(parse(new_date).date())
+                db(db.courses.id == thecourse.id).update(term_start_date=new_date)
+            except ValueError:
+                logger.error("Bad Date in update_course {}".format(new_date))
+                return json.dumps(dict(status="failed"))
         elif "new_pair" in request.vars:
             db(db.courses.id == thecourse.id).update(
                 allow_pairs=request.vars["new_pair"]
