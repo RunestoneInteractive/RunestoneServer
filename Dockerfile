@@ -52,6 +52,7 @@ RUN apt-get update && \
         less \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
+        openjdk-8-jre-headless \
         rsync wget nginx && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
