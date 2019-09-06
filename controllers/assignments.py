@@ -646,11 +646,15 @@ def record_grade():
     if "acid" not in request.vars or "sid" not in request.vars:
         return json.dumps({"success": False, "message": "Need problem and user."})
 
-    score_str = request.vars.get("grade", 0)
+    score_str = request.vars.get("grade", "").strip()
     if score_str == "":
         score = 0
     else:
-        score = float(score_str)
+        try:
+            score = float(score_str)
+        except ValueError as e:
+            logger.error("Bad Score: {} - Details: {}".format(score_str, e))
+            return json.dumps({"response": "not replaced"})
     comment = request.vars.get("comment", None)
     if score_str != "" or ("comment" in request.vars and comment != ""):
         try:
