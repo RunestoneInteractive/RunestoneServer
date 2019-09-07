@@ -933,6 +933,7 @@ def doAssignment():
                         db.user_sub_chapter_progress.sub_chapter_id
                         == q.questions.subchapter
                     )
+                    & (db.user_sub_chapter_progress.chapter_id == q.questions.chapter)
                 )
                 .select()
                 .first()
