@@ -48,9 +48,9 @@ def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_use
     test_instructor_1.login()
     db = runestone_db_tools.db
 
-    test_client.validate("dashboard/subchapoverview", "chapter_num")
+    test_client.validate("dashboard/subchapoverview", "Dashboard")
     test_client.validate(
-        "dashboard/subchapoverview", "div_id", data=dict(tablekind="dividnum")
+        "dashboard/subchapoverview", "Dashboard", data=dict(tablekind="dividnum")
     )
 
     test_instructor_1.hsblog(

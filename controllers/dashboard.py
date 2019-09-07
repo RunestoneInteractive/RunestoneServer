@@ -568,10 +568,10 @@ def subchapoverview():
     pt = data.pivot_table(index=idxlist, values=values, columns="sid", aggfunc=afunc)
 
     # TODO: debug tests so these can be live
-    # if pt.empty:
-    #     logger.error("Empty Dataframe after pivot for {} ".format(auth.user.course_name))
-    #     session.flash = "Error: Not enough data"
-    #     return redirect(URL('dashboard','index'))
+    if pt.empty:
+        logger.error("Empty Dataframe after pivot for {} ".format(auth.user.course_name))
+        session.flash = "Error: Not enough data"
+        return redirect(URL('dashboard','index'))
 
     cmap = pd.read_sql_query(
         """select chapter_num, sub_chapter_num, chapter_label, sub_chapter_label
