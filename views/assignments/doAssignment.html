@@ -1,6 +1,5 @@
-{{extend 'admin/instructors.html'}}
+{{extend 'layout.html'}}
 
-{{block tabcontent}}
 {{include '_sphinx_static_files.html'}}
 
 <div id='part1'>
@@ -22,10 +21,10 @@
             <h3>Readings</h3>
             <ul>
                 {{for reading in readings:}}
-                    <li class='{{=readings[reading]['status']}}'>{{=reading}}</li>
+                    <li class="{{=readings[reading]['status']}}">{{=reading}}</li>
                     <ul>
                     {{for r in readings[reading]['subchapters']:}}
-                        <li class='{{=r['status']}}'><a href="{{=get_course_url(r['chapter'], r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
+                        <li class="{{=r['status']}}"><a href="{{=get_course_url(r['chapter'], r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
                         {{if r['points'] > 0:}}
                             {{if r['comment'] != 'ungraded':}}
                                 </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
@@ -124,5 +123,5 @@
 
 </script>
 <script src="/runestone/static/js/selfgrade.js" type="text/javascript"></script>
-{{end}}
+
 
