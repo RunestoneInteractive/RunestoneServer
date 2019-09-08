@@ -1554,7 +1554,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 
     if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
         $("#modal-preview").data("orig_divid", opt.orig.id); // save the original divid
-        let editButton = document.createElement("button")
+        let editButton = document.createElement("button");
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
         $(editButton).attr("data-target", "#editModal");
@@ -1569,6 +1569,23 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 });
         });
         $(`#${whereDiv}`).append(editButton);
+        let reportButton = document.createElement("button");
+        $(reportButton).text("Flag for Review");
+        $(reportButton).css("float", "right");
+        $(reportButton).addClass("btn btn-warning");
+        $(reportButton).click(function (event) {
+            if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
+                data = {
+                    question_name: opt.orig.id
+                }
+                jQuery.getJSON('/runestone/admin/flag_question.json', data,
+                    function(obj) {
+                        alert('Flagged -- This question will be reviewed by an editor');
+                        $(reportButton).attr("disabled", true);
+                    });
+            }
+        });
+        $(`#${whereDiv}`).append(reportButton);
     }
 }
 

@@ -238,3 +238,20 @@ def test_copy_assignment(
     )
     rows = db(db.assignment_questions.assignment_id == row.id).count()
     assert rows == 1
+
+
+def test_flag_question(test_assignment, test_user_1, test_client, runestone_db_tools):
+    test_user_1.make_instructor()
+    test_user_1.login()
+
+    res = test_client.validate(
+        "admin/flag_question", data=dict(question_name="subc_b_fitb")
+    )
+
+    res = json.loads(res)
+    assert res
+    assert res["status"] == "success"
+
+    db = runestone_db_tools.db
+
+    assert db(db.questions.name == "subc_b_fitb").select().first().review_flag

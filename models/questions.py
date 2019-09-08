@@ -16,6 +16,7 @@ db.define_table(
     Field("topic", type="string"),
     Field("feedback", type="text"),
     Field("from_source", type="boolean"),
+    Field("review_flag", type="boolean"),
     migrate=table_migrate_prefix + "questions.table",
 )
 
