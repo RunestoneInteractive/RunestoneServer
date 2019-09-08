@@ -849,6 +849,9 @@ def removeStudents():
         studentList = [request.vars["studentList"]]
 
     for studentID in studentList:
+        logger.warning(
+            "{} has requested the removal of {}".format(auth.user.username, studentID)
+        )
         if studentID.isdigit() and int(studentID) != auth.user.id:
             sid = (
                 db(db.auth_user.id == int(studentID))
