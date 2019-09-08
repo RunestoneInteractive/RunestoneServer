@@ -1276,6 +1276,10 @@ def getQuestionInfo():
     requires_login=True,
 )
 def edit_question():
+    """
+    Called to save an updated version of an existing question
+    1. Can only be updated by the original author
+    """
     vars = request.vars
     old_qname = vars["question"]
     new_qname = vars["name"]
@@ -1770,12 +1774,14 @@ def _get_toc_and_questions():
             #     p_sub_ch_info['state'] = {'checked':
             #                               (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
             # include another level for questions only in the question picker
+            author = auth.user.first_name + " " + auth.user.last_name
             questions_query = db(
                 (db.courses.course_name == auth.user.course_name)
                 & (db.questions.base_course == db.courses.base_course)
                 & (db.questions.chapter == ch.chapter_label)
                 & (db.questions.question_type != "page")
                 & (db.questions.subchapter == sub_ch.sub_chapter_label)
+                & ((db.questions.author == author) | (db.questions.is_private == "F"))
             ).select(orderby=db.questions.id)
             for question in questions_query:
                 q_info = dict(
@@ -2327,6 +2333,26 @@ def update_course():
         return json.dumps(dict(status="success"))
 
     return json.dumps(dict(status="failed"))
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def flag_question():
+    qname = request.vars["question_name"]
+
+    base_course = (
+        db(db.courses.id == auth.user.course_id)
+        .select(db.courses.base_course)
+        .first()
+        .base_course
+    )
+    db((db.questions.name == qname) & (db.questions.base_course == base_course)).update(
+        review_flag="T"
+    )
+
+    return json.dumps(dict(status="success"))
 
 
 def killer():
