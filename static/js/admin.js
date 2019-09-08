@@ -981,6 +981,19 @@ function configure_tree_picker(
 
     // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
     picker.on('check_node.jstree', function (event, data) {
+        if (data.node.text == "Exercises" || event.target.id === "tree-question-picker") {
+            let num_ex = data.node.children.length;
+            if (num_ex > 10 || data.node.parents.length == 1) {
+                if (data.node.parents.length == 1) {
+                    num_ex = "A LOT OF"
+                }
+                let resp = confirm(`Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`)
+                if (! resp) {
+                    $("#tree-question-picker").jstree("uncheck_node", data.node.id)
+                    return
+                }
+            }
+        }
         if (!data.instance.ignore_check) {
             walk_jstree(data.instance, data.node, function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
@@ -1013,6 +1026,7 @@ function jstree_node_depth(instance, node) {
 function walk_jstree(instance, node, f) {
     f(instance, node);
     $(node.children).each(function (index, value) {
+        console.log(index, value)
         walk_jstree(instance, instance.get_node(value), f);
     });
 }
