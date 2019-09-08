@@ -44,6 +44,9 @@ def build():
         if existing_course:
             return dict(mess="That name has already been used.", building=False)
 
+        if not request.vars.coursetype:
+            return dict(mess="You must select a base course.", building=False)
+
         # if make instructor add row to auth_membership
         if "instructor" in request.vars:
             gid = (
