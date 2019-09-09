@@ -1994,6 +1994,7 @@ def add__or_update_assignment_question():
     # -- autograde
     # -- which_to_grade
     # -- reading_assignment (boolean, true if it's a page to visit rather than a directive to interact with)
+    # -- sort_position (optional)
     if request.vars.assignment == "undefined":
         session.flash = (
             "Error: Unable to update assignment in DB. No assignment is selected"
@@ -2035,7 +2036,9 @@ def add__or_update_assignment_question():
 
     # Get the current sorting priority for a question, if its there.
     # otherwise assign it to the end of the list.
-    tmpSp = _get_question_sorting_priority(assignment_id, question_id)
+    tmpSp = request.vars["sort_position"]
+    if not tmpSp:
+        tmpSp = _get_question_sorting_priority(assignment_id, question_id)
 
     if tmpSp is None:
         tmpSp = _get_max_sorting_priority(assignment_id) or 0

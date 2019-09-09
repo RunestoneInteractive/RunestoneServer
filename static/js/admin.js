@@ -995,10 +995,10 @@ function configure_tree_picker(
             }
         }
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function (instance, node) {
+            walk_jstree(data.instance, data.node, function (instance, node, pos) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    checked_func(node);
+                    checked_func(node, pos);  // checked_func is either  updateReading or updateAssignmentRaw
                 }
             });
         }
@@ -1023,11 +1023,11 @@ function jstree_node_depth(instance, node) {
 }
 
 // Given a jstree node, invoke f on node and all its children.
-function walk_jstree(instance, node, f) {
-    f(instance, node);
+function walk_jstree(instance, node, f, pos) {
+    f(instance, node, pos);
     $(node.children).each(function (index, value) {
         console.log(index, value)
-        walk_jstree(instance, instance.get_node(value), f);
+        walk_jstree(instance, instance.get_node(value), f, index);
     });
 }
 
@@ -1303,7 +1303,8 @@ function assignmentInfo() {
 
 
 // Update a reading.
-function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+// This should be serialized is the walk_jstree function to make sure the order is correct
+function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade, pos) {
     let assignid = getAssignmentId();
     if (!assignid || assignid == 'undefined') {
         alert("No assignment selected");
@@ -1316,6 +1317,7 @@ function updateReading(subchapter_id, activities_required, points, autograde, wh
         points: points,
         autograde: autograde,
         which_to_grade: which_to_grade,
+        sort_position: pos,
     }).done(function (response_JSON) {
         $('#totalPoints').html('Total points: ' + response_JSON['total']);
         // See if this question already exists in the table. Only append if it doesn't exist.
@@ -1600,6 +1602,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
             }
         });
         $(`#${whereDiv}`).append(reportButton);
+        $("#qrawhtmlmodal").val("")
     }
 }
 
