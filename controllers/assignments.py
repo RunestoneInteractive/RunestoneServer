@@ -374,12 +374,12 @@ def _get_practice_data(user, timezoneoffset):
             if practice_graded == 1:
                 if spacing == 1:
                     total_possible_points = practice_settings.day_points * max_days
-                    points_received = day_points * practice_completion_count
+                    points_received = round(day_points * practice_completion_count, 2)
                 else:
                     total_possible_points = (
                         practice_settings.question_points * max_questions
                     )
-                    points_received = question_points * practice_completion_count
+                    points_received = round(question_points * practice_completion_count, 2)
 
             # Calculate the number of questions left for the student to practice today to get the completion point.
             if spacing == 1:
