@@ -13,3 +13,5 @@ locustio
 coveralls
 black
 flake8
+selenium>=2.53.6
+pyvirtualdisplay
