@@ -176,7 +176,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
             try:
                 copytree("test_course_1", "../books/test_course_1")
                 break
-            except WindowsError:
+            except OSError:
                 if retry == 99:
                     raise
         # Build the test book to add in db fields needed.
