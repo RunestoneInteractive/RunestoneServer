@@ -1499,7 +1499,7 @@ function preview_question_id(question_id, preview_div) {
         "acid": question_id
     }).done(function (html_src) {
         // Render it.
-        renderRunestoneComponent(html_src, preview_div)
+        renderRunestoneComponent(html_src, preview_div, {acid: question_id})
     });
 }
 
@@ -1568,7 +1568,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
-        $("#modal-preview").data("orig_divid", opt.orig.id); // save the original divid
+        $("#modal-preview").data("orig_divid", this.acid || opt.orig.id); // save the original divid
         let editButton = document.createElement("button");
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
@@ -1576,7 +1576,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
             data = {
-                question_name: opt.orig.id
+                question_name: this.acid || opt.orig.id
             }
             jQuery.get('/runestone/admin/question_text', data,
                 function (obj) {
@@ -1591,7 +1591,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $(reportButton).click(function (event) {
             if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
                 data = {
-                    question_name: opt.orig.id
+                    question_name: this.acid || opt.orig.id
                 }
                 jQuery.getJSON('/runestone/admin/flag_question.json', data,
                     function(obj) {
