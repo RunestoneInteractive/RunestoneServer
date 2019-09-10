@@ -342,14 +342,17 @@
 {{ if flashcard_count > 0: }}
     $(window).on('load', function (e) {
         var check_me_clicked = false;
+        var check_me_time = false;
         if ($('button:contains(\"Check Me\")').length) {
             $('button:contains(\"Check Me\")').click(function(event) {
                 check_me_clicked = true;
+                check_me_time = Date.now();
             });
         }
         else if ($('button:contains("Save & Run")').length) {
             $('button:contains("Save & Run")').click(function(event) {
                 check_me_clicked = true;
+                check_me_time = Date.now();
             });
         }
         $("#DoneBtn").click(function(event) {
@@ -374,7 +377,14 @@
                 }, 2500);
             }
             else {
-                window.location = url;
+                if (check_me_time && (Date.now() - check_me_time >= 2500)) {
+                    window.location = url;
+                }
+                else {
+                    setTimeout(function(){
+                        window.location = url;
+                    }, 2500);
+                }
             }
 
             return false; // for good measure
