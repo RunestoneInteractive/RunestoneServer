@@ -1384,7 +1384,9 @@ function display_write() {
         var returns = JSON.parse(obj);
         tplate = returns['template'];
         $("#qcode").text(tplate);
-
+        $("#qcode").keypress(function() {
+            $("#qrawhtml").val("");
+        })
         $.each(returns['chapters'], function (i, item) {
             chapterMap[item[0]] = item[1];
             $('#qchapter').append($('<option>', {
@@ -1419,9 +1421,6 @@ function create_question(formdata) {
     }
     if (formdata.createpoints.value == "") {
         formdata.createpoints.value == "1"
-    }
-    if (!confirm("Have you generated the HTML for your question?")) {
-        return;
     }
     if (!formdata.qrawhtml.value) {
         alert("No HTML for this question, please generate it.")
@@ -1602,6 +1601,9 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         });
         $(`#${whereDiv}`).append(reportButton);
         $("#qrawhtmlmodal").val("")
+        $("#editRST").keypress(function() {
+            $("#qrawhtmlmodal").val(""); //ensure html refresh
+        })
     }
 }
 
