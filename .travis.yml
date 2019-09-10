@@ -9,6 +9,7 @@ addons:
   apt:
     packages:
       - openjdk-8-jre-headless
+      - google-chrome-stable
 env:
 - WEB2PY_VERSION=2.18.5
 script:
@@ -19,6 +20,11 @@ script:
 - export LANG=en_US.UTF-8
 - export WEB2PY_CONFIG=test
 - export TEST_DBURL=postgres://postgres:@localhost/runestone_test
+# Get the Selenium binary.
+- wget https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip
+- unzip chromedriver_linux64.zip
+# Put the chromedriver in the path.
+- export PATH=$PATH:`pwd`
 # This URL was taken from a `post <https://groups.google.com/forum/#!topic/web2py/VXgsvfz67Fc>`_. Don't download the tagged releases from github, since they lack the DAL.
 - wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
 - unzip web2py_src.zip
@@ -32,8 +38,8 @@ script:
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
 - cd ..
 - cd tests
-# Now actually run the tests
 - cp .coveragerc ../../../
+# Now actually run the tests.
 - pytest
 - cd ../../..
 - coveralls
