@@ -1568,7 +1568,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
-        $("#modal-preview").data("orig_divid", this.acid || opt.orig.id); // save the original divid
+        $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
         let editButton = document.createElement("button");
         $(editButton).text("Edit Source");
         $(editButton).addClass("btn btn-normal");
@@ -1576,7 +1576,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
             data = {
-                question_name: this.acid || opt.orig.id
+                question_name: opt.acid || opt.orig.id
             }
             jQuery.get('/runestone/admin/question_text', data,
                 function (obj) {
@@ -1591,7 +1591,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $(reportButton).click(function (event) {
             if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
                 data = {
-                    question_name: this.acid || opt.orig.id
+                    question_name: opt.acid || opt.orig.id
                 }
                 jQuery.getJSON('/runestone/admin/flag_question.json', data,
                     function(obj) {
@@ -1706,7 +1706,7 @@ function getQuestionInfo() {
         }
 
 
-        renderRunestoneComponent(data['htmlsrc'], "component-preview")
+        renderRunestoneComponent(data['htmlsrc'], "component-preview", {acid: question_name})
 
         var q_author = document.getElementById('q_author');
         if (author == null) {
