@@ -16,6 +16,8 @@ h5 {
 
 #qcode, #editRST {
     font-family: Menlo, Consolas, monospace;
+    overflow: scroll;
+    white-space: pre;
 }
 
 /* navbar and menu related styles */
