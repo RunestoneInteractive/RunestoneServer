@@ -103,10 +103,6 @@ def user():
             form.record.update_record(**dict(form.vars))
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
-            # TODO: Why is this necessary?
-            auth.user.course_name = (
-                db(db.auth_user.id == auth.user.id).select()[0].course_name
-            )
             # Add user to default section for course.
             sect = (
                 db(
