@@ -999,7 +999,11 @@ function configure_tree_picker(
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
                     let resp = await checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
-                    add_to_table(resp);
+                    if (resp.assign_type == 'reading') {
+                        add_to_table(resp);
+                    } else {
+                        add_to_qtable(resp);
+                    }
                 }
             });
         }
@@ -1150,29 +1154,36 @@ function remove_assignment() {
 
 
 // Update an assignment.
-function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
+async function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
     if (!assignmentid || assignmentid == "undefined") {
         alert("No assignment selected");
         return;
     }
-    $.getJSON('add__or_update_assignment_question', {
-        question: question_name,
-        assignment: assignmentid,
-        points: points,
-        autograde: autograde,
-        which_to_grade: which_to_grade
-    }).done(function (response_JSON) {
-        $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table. Only append if it doesn't exist.
-        if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
-            appendToQuestionTable(question_name, points, autograde,
-                response_JSON['autograde_possible_values'], which_to_grade,
-                response_JSON['which_to_grade_possible_values']);
-        }
-    }).fail(function () {
-        alert(`Your added question ${question_name} was not saved to the database for assignment ${assignmentid}, please file a bug report describing exactly what you were doing.`)
-    });
+    let res = await $.ajax({url: 'add__or_update_assignment_question',
+        data: {question: question_name,
+            assignment: assignmentid,
+            points: points,
+            autograde: autograde,
+            which_to_grade: which_to_grade,
+            assign_type: 'problems'
+        },
+        dataType: 'json'});
+
+    return res;
+}
+
+async function add_to_qtable(response_JSON) {
+    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+    // See if this question already exists in the table. Only append if it doesn't exist.
+    if (question_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
+        appendToQuestionTable(response_JSON['question_id'],
+            response_JSON['points'],
+            response_JSON['autograde'],
+            response_JSON['autograde_possible_values'],
+            response_JSON['which_to_grade'],
+            response_JSON['which_to_grade_possible_values']);
+    }
 }
 
 
@@ -1318,6 +1329,7 @@ async function updateReading(subchapter_id, activities_required, points, autogra
         points: points,
         autograde: autograde,
         which_to_grade: which_to_grade,
+        assign_type: 'reading',
         },
         dataType: 'json'});
 
@@ -1674,12 +1686,13 @@ function questionBank(form) {
 }
 
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
-function addToAssignment(form) {
+async function addToAssignment(form) {
     var points = form.points.value;
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    let resp = await updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    add_to_qtable(resp);
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.

@@ -2117,6 +2117,7 @@ def add__or_update_assignment_question():
                 points=points,
                 autograde=autograde,
                 which_to_grade=which_to_grade,
+                assign_type=request.vars.assign_type,
             )
         )
     except Exception as ex:
