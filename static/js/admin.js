@@ -995,10 +995,11 @@ function configure_tree_picker(
             }
         }
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function (instance, node) {
+            walk_jstree(data.instance, data.node, async function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
+                    let resp = await checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
+                    add_to_table(resp);
                 }
             });
         }
@@ -1304,30 +1305,39 @@ function assignmentInfo() {
 
 // Update a reading.
 // This should be serialized is the walk_jstree function to make sure the order is correct
-function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+async function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
     let assignid = getAssignmentId();
     if (!assignid || assignid == 'undefined') {
         alert("No assignment selected");
         return;
     }
-    $.getJSON('add__or_update_assignment_question', {
+    let res = await $.ajax({url: 'add__or_update_assignment_question',
+        data: {
         assignment: assignid,
         question: subchapter_id,
         activities_required: activities_required,
         points: points,
         autograde: autograde,
         which_to_grade: which_to_grade,
-    }).done(function (response_JSON) {
-        $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table. Only append if it doesn't exist.
-        if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
-            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], response_JSON['activities_required'], points, autograde,
-                response_JSON['autograde_possible_values'], which_to_grade,
-                response_JSON['which_to_grade_possible_values']);
-        }
-    }).fail(function () {
-        alert(`Your added question ${subchapter_id} was not saved to the database for assignment ${assignid}, please file a bug report describing exactly what you were doing.`)
-    });
+        },
+        dataType: 'json'});
+
+    return res;
+}
+
+function add_to_table (response_JSON) {
+    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+    // See if this question already exists in the table. Only append if it doesn't exist.
+    if (readings_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
+        appendToReadingsTable(response_JSON['question_id'],
+            response_JSON['activity_count'],
+            response_JSON['activities_required'],
+            response_JSON['points'],
+            response_JSON['autograde'],
+            response_JSON['autograde_possible_values'],
+            response_JSON['which_to_grade'],
+            response_JSON['which_to_grade_possible_values']);
+    }
 }
 
 

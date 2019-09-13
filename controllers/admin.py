@@ -2113,6 +2113,10 @@ def add__or_update_assignment_question():
                     question_type
                 ],
                 status="success",
+                question_id=question_name,
+                points=points,
+                autograde=autograde,
+                which_to_grade=which_to_grade,
             )
         )
     except Exception as ex:
