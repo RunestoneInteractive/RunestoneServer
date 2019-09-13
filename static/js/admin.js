@@ -1909,6 +1909,9 @@ function updateCourse(widget, attr) {
     console.log(widget.value);
     data = {}
     data[attr] = widget.value
+    if (attr == 'downloads_enabled' || attr == 'allow_pairs') {
+        data[attr] = widget.checked
+    }
 
     $.getJSON("/runestone/admin/update_course.json", data, function (retval, stat, w) {
         if (retval.status != "success") {

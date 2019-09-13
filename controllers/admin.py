@@ -664,6 +664,8 @@ def admin():
     ).select(db.courses.course_name, db.courses.id)
 
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+    downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
+    allow_pairs = "true" if sidQuery.allow_pairs else "false"
     return dict(
         sectionInfo=sectionsList,
         startDate=date,
@@ -678,6 +680,8 @@ def admin():
         my_vers=my_vers,
         mst_vers=mst_vers,
         course=sidQuery,
+        downloads_enabled=downloads_enabled,
+        allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
     )
 
@@ -2333,9 +2337,14 @@ def update_course():
             except ValueError:
                 logger.error("Bad Date in update_course {}".format(new_date))
                 return json.dumps(dict(status="failed"))
-        elif "new_pair" in request.vars:
+        if "allow_pairs" in request.vars:
             db(db.courses.id == thecourse.id).update(
-                allow_pairs=request.vars["new_pair"]
+                allow_pairs=(request.vars["allow_pairs"] == "true")
+            )
+        if "downloads_enabled" in request.vars:
+            print("DOWNLOADS = ", request.vars.enable_downloads)
+            db(db.courses.id == thecourse.id).update(
+                downloads_enabled=(request.vars["downloads_enabled"] == "true")
             )
 
         return json.dumps(dict(status="success"))

@@ -54,6 +54,20 @@
             <h3 style="text-align: center;">Course Settings</h3>
             <label for="start_date">Term Start Date</label>
             <input type="text" id="start_date" value="{{=startDate}}" onchange="updateCourse(this, 'new_date')">
+            <label for="downloads">Enable ActiveCode Downloads</label>
+            <input type="checkbox" id="downloads"
+            {{ if downloads_enabled == "true": }}
+              checked
+            {{ pass }}
+            onchange="updateCourse(this,'downloads_enabled')">
+            <br />
+            <label for="pairs">Allow Pairs</label>
+            <input type="checkbox" id="pairs"
+            {{ if allow_pairs == "true": }}
+              checked
+            {{ pass }}
+            onchange="updateCourse(this,'allow_pairs')">
+
         </div>
     </div>
 
