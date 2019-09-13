@@ -1204,7 +1204,14 @@ function createQuestionObject(name, points, autograde, autograde_possible_values
 }
 
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    question_table.bootstrapTable('append', [createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values)]);
+    question_table.bootstrapTable('append',
+        [createQuestionObject(name,
+            points,
+            autograde,
+            autograde_possible_values,
+            which_to_grade,
+            which_to_grade_possible_values)
+        ]);
 }
 
 // Update the grading parameters used for an assignment.
