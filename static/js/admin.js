@@ -1024,12 +1024,11 @@ function jstree_node_depth(instance, node) {
 }
 
 // Given a jstree node, invoke f on node and all its children.
-function walk_jstree(instance, node, f) {
-    f(instance, node);
-    $(node.children).each(function (index, value) {
-        console.log(index, value)
-        setTimeout(() => walk_jstree(instance, instance.get_node(value), f), 500*index);
-    });
+async function walk_jstree(instance, node, f) {
+    await f(instance, node);
+    for (let value of node.children) {
+        await walk_jstree(instance, instance.get_node(value), f);
+    }
 }
 
 // Given an editable element (a hyperlink) in a bootstrap table, return the containing row.
