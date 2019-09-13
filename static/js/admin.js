@@ -1028,7 +1028,7 @@ function walk_jstree(instance, node, f) {
     f(instance, node);
     $(node.children).each(function (index, value) {
         console.log(index, value)
-        walk_jstree(instance, instance.get_node(value), f);
+        setTimeout(() => walk_jstree(instance, instance.get_node(value), f), 500*index);
     });
 }
 
