@@ -555,3 +555,7 @@ div.ExecutionVisualizer table.visualizer {
     margin-right: auto;
     background-color: #fff;
 }
+
+div.settingsbox {
+    margin-top: 20px;
+}
