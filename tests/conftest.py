@@ -883,7 +883,8 @@ def test_assignment(test_client, test_user, runestone_db_tools):
 @pytest.fixture(scope="session")
 def selenium_driver_session():
     # Start a virtual display for Linux.
-    if sys.platform.startswith("linux"):
+    is_linux = sys.platform.startswith("linux")
+    if is_linux:
         display = Display(visible=0, size=(1280, 1024))
         display.start()
     else:
@@ -893,7 +894,7 @@ def selenium_driver_session():
     options = Options()
     options.add_argument("--window-size=1200,800")
     # When run as root, Chrome complains ``Running as root without --no-sandbox is not supported. See https://crbug.com/638180.`` Here's a `crude check for being root <https://stackoverflow.com/a/52621917>`_.
-    if os.geteuid() == 0:
+    if is_linux and os.geteuid() == 0:
         options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(options=options)
 
