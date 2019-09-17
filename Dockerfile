@@ -57,7 +57,7 @@ RUN apt-get update && \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
         openjdk-8-jre-headless \
-        rsync wget nginx xvfb x11-utils google-chrome-stable && \
+        rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
@@ -72,9 +72,15 @@ RUN useradd -s /bin/bash -M -g staff --home-dir ${WEB2PY_PATH} runestone && \
     mkdir -p /srv
 
 # Install additional components
-RUN git clone https://github.com/web2py/web2py ${WEB2PY_PATH} && \
-    cd ${WEB2PY_PATH} && \
-    git submodule update --init --recursive
+RUN wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip && \
+    unzip web2py_src.zip && \
+    rm -f web2py_src.zip && \
+    mv web2py ${WEB2PY_PATH} && \
+    cd ${WEB2PY_PATH}
+
+# RUN git clone https://github.com/web2py/web2py ${WEB2PY_PATH} && \
+#     cd ${WEB2PY_PATH} && \
+#     git submodule update --init --recursive
 
 RUN mkdir -p ${RUNESTONE_PATH}
 ADD . ${RUNESTONE_PATH}
