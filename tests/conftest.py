@@ -285,16 +285,16 @@ def runestone_name():
 # The environment of a web2py controller.
 @pytest.fixture
 def runestone_env(runestone_name):
-    return web2py_controller_env(runestone_name)
+    env = web2py_controller_env(runestone_name)
+    yield env
+    # Close the database connection after the test completes.
+    env["db"].close()
 
 
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller(runestone_env):
-    env = DictToObject(runestone_env)
-    yield env
-    # Close the database connection after the test completes.
-    env.db.close()
+    return DictToObject(runestone_env)
 
 
 # Database
@@ -308,8 +308,8 @@ def runestone_db(runestone_controller):
     db = runestone_controller.db
     yield db
 
-    # Restore the database state after the test finishes.
-    # ----------------------------------------------------
+    # **Restore the database state after the test finishes**
+    ##------------------------------------------------------
     # Rollback changes, which ensures that any errors in the database connection
     # will be cleared.
     db.rollback()
@@ -577,6 +577,8 @@ def test_client(
     tc.tearDown()
 
 
+# User
+# ^^^^
 # Provide a method to create a user and perform common user operations.
 class _TestUser(object):
     def __init__(
@@ -763,6 +765,8 @@ def test_user_1(runestone_db_tools, test_user):
     return test_user("test_user_1", "password_1", course)
 
 
+# Assigmment
+# ^^^^^^^^^^
 class _TestAssignment(object):
     assignment_count = 0
 
@@ -942,6 +946,8 @@ def runestone_selenium_driver(selenium_driver, web2py_server_address, runestone_
     return selenium_driver
 
 
+# User
+# ^^^^
 # Provide basic Selenium-based user operations.
 class _SeleniumUser:
     def __init__(
