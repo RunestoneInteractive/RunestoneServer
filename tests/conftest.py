@@ -77,10 +77,19 @@ def pytest_addoption(parser):
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
     with pushd("../../.."):
-        cp = xqt(
-            "{} -m coverage report".format(sys.executable), universal_newlines=True
-        )
-    terminalreporter.write_line(cp.stdout + cp.stderr)
+        try:
+            cp = xqt(
+                "{} -m coverage report".format(sys.executable),
+                # Capture the output from the report.
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+        except subprocess.CalledProcessError as e:
+            res = "Error in coverage report.\n{}".format(e.stdout + e.stderr)
+        else:
+            res = cp.stdout + cp.stderr
+    terminalreporter.write_line(res)
 
 
 # Utilities
@@ -883,7 +892,8 @@ def test_assignment(test_client, test_user, runestone_db_tools):
 @pytest.fixture(scope="session")
 def selenium_driver_session():
     # Start a virtual display for Linux.
-    if sys.platform.startswith("linux"):
+    is_linux = sys.platform.startswith("linux")
+    if is_linux:
         display = Display(visible=0, size=(1280, 1024))
         display.start()
     else:
@@ -893,7 +903,7 @@ def selenium_driver_session():
     options = Options()
     options.add_argument("--window-size=1200,800")
     # When run as root, Chrome complains ``Running as root without --no-sandbox is not supported. See https://crbug.com/638180.`` Here's a `crude check for being root <https://stackoverflow.com/a/52621917>`_.
-    if os.geteuid() == 0:
+    if is_linux and os.geteuid() == 0:
         options.add_argument("--no-sandbox")
     driver = webdriver.Chrome(options=options)
 
