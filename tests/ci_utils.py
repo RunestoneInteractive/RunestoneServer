@@ -10,7 +10,7 @@
 # Standard library
 # ----------------
 from __future__ import print_function
-from subprocess import run, PIPE
+from subprocess import run
 import sys
 import os
 import os.path
@@ -36,7 +36,7 @@ def xqt(
     # Commands to run. For example, ``'foo -param firstArg secondArg', 'bar |
     # grep alpha'``.
     *cmds,
-    # Optional keyword arguments to pass on to `subprocess.check_call <https://docs.python.org/3/library/subprocess.html#subprocess.check_call>`_.
+    # Optional keyword arguments to pass on to `subprocess.run <https://docs.python.org/3/library/subprocess.html#subprocess.run>`_.
     **kwargs
 ):
 
@@ -58,11 +58,7 @@ def xqt(
         # Use bash instead of sh, so that ``source`` and other bash syntax
         # works. See https://docs.python.org/3/library/subprocess.html#subprocess.Popen.
         executable = "/bin/bash" if is_linux or is_darwin else None
-        ret.append(
-            run(
-                _, shell=True, stdout=PIPE, stderr=PIPE, executable=executable, **kwargs
-            )
-        )
+        ret.append(run(_, shell=True, executable=executable, check=True, **kwargs))
 
     # Return a list only if there were multiple commands to execute.
     return ret[0] if len(ret) == 1 else ret

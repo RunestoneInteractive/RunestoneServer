@@ -77,10 +77,19 @@ def pytest_addoption(parser):
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
     with pushd("../../.."):
-        cp = xqt(
-            "{} -m coverage report".format(sys.executable), universal_newlines=True
-        )
-    terminalreporter.write_line(cp.stdout + cp.stderr)
+        try:
+            cp = xqt(
+                "{} -m coverage report".format(sys.executable),
+                # Capture the output from the report.
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+        except subprocess.CalledProcessError as e:
+            res = "Error in coverage report.\n{}".format(e.stdout + e.stderr)
+        else:
+            res = cp.stdout + cp.stderr
+    terminalreporter.write_line(res)
 
 
 # Utilities
