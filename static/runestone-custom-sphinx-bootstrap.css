@@ -559,3 +559,19 @@ div.ExecutionVisualizer table.visualizer {
 div.settingsbox {
     margin-top: 20px;
 }
+
+
+#component-preview {
+    margin-right: 20px;
+    position: fixed;
+    right: 0px;
+    max-height: 100%;
+    overflow-y: scroll;
+    top: 0px;
+    padding-top: 60px;
+
+}
+
+.runestone_caption {
+    text-align: center;
+}

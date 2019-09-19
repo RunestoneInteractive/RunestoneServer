@@ -1597,7 +1597,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
         $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
         let editButton = document.createElement("button");
-        $(editButton).text("Edit Source");
+        $(editButton).text("Edit Question");
         $(editButton).addClass("btn btn-normal");
         $(editButton).attr("data-target", "#editModal");
         $(editButton).attr("data-toggle", "modal");
@@ -1611,6 +1611,15 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 });
         });
         $(`#${whereDiv}`).append(editButton);
+        let closeButton = document.createElement("button")
+        $(closeButton).text("Close Preview");
+        $(closeButton).addClass("btn btn-normal");
+        $(closeButton).css("margin-left","20px");
+        $(closeButton).click(function(event) {
+            $("#component-preview").html("");
+            });
+        $(`#${whereDiv}`).append(closeButton);
+
         let reportButton = document.createElement("button");
         $(reportButton).text("Flag for Review");
         $(reportButton).css("float", "right");
@@ -1632,6 +1641,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $("#editRST").keypress(function() {
             $("#qrawhtmlmodal").val(""); //ensure html refresh
         })
+
+        // $(`#${whereDiv}`).css("background-color", "white");
     }
 }
 
