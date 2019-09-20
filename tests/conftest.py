@@ -46,6 +46,9 @@ import six
 from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlopen
 
+# Required to allow use of this class on a module-scoped fixture.
+from _pytest.monkeypatch import MonkeyPatch
+
 # Local imports
 # -------------
 from .utils import COVER_DIRS, DictToObject
@@ -76,19 +79,18 @@ def pytest_addoption(parser):
 
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
-    with pushd("../../.."):
-        try:
-            cp = xqt(
-                "{} -m coverage report".format(sys.executable),
-                # Capture the output from the report.
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
-            )
-        except subprocess.CalledProcessError as e:
-            res = "Error in coverage report.\n{}".format(e.stdout + e.stderr)
-        else:
-            res = cp.stdout + cp.stderr
+    try:
+        cp = xqt(
+            "{} -m coverage report".format(sys.executable),
+            # Capture the output from the report.
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+    except subprocess.CalledProcessError as e:
+        res = "Error in coverage report.\n{}".format(e.stdout + e.stderr)
+    else:
+        res = cp.stdout + cp.stderr
     terminalreporter.write_line(res)
 
 
@@ -170,110 +172,116 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
         xqt("rsmanage --verbose initdb --reset --force")
 
         # Copy the test book to the books directory.
-        rmtree("../books/test_course_1", ignore_errors=True)
+        rs_path = "applications/{}".format(runestone_name)
+        rmtree("{}/books/test_course_1".format(rs_path), ignore_errors=True)
         # Sometimes this fails for no good reason on Windows. Retry.
         for retry in range(100):
             try:
-                copytree("test_course_1", "../books/test_course_1")
+                copytree(
+                    "{}/tests/test_course_1".format(rs_path),
+                    "{}/books/test_course_1".format(rs_path),
+                )
                 break
             except OSError:
                 if retry == 99:
                     raise
         # Build the test book to add in db fields needed.
-        with pushd("../books/test_course_1"):
+        with pushd(
+            "{}/books/test_course_1".format(rs_path)
+        ), MonkeyPatch().context() as m:
             # The runestone build process only looks at ``DBURL``.
-            os.environ["DBURL"] = os.environ["TEST_DBURL"]
+            m.setenv("DBURL", os.environ["TEST_DBURL"])
             xqt(
                 "{} -m runestone build --all".format(sys.executable),
                 "{} -m runestone deploy".format(sys.executable),
             )
 
-    with pushd("../../.."):
-        xqt("{} -m coverage erase".format(sys.executable))
+    xqt("{} -m coverage erase".format(sys.executable))
 
-        # For debug, uncomment the next three lines, then run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass -X -K runestone,runestone &`` to also start the workers for the scheduler.
-        ##import pdb; pdb.set_trace()
-        ##yield DictToObject(dict(password=password))
-        ##return
+    # For debug, uncomment the next three lines, then run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass -X -K runestone,runestone &`` to also start the workers for the scheduler.
+    ##import pdb; pdb.set_trace()
+    ##yield DictToObject(dict(password=password))
+    ##return
 
-        # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
-        web2py_server = subprocess.Popen(
-            [
-                sys.executable,
-                "-m",
-                "coverage",
-                "run",
-                "--append",
-                "--source=" + COVER_DIRS,
-                "web2py.py",
-                "-a",
-                password,
-                "--nogui",
-                "--minthreads=10",
-                "--maxthreads=20",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            # Produce text (not binary) output for nice output in ``echo()`` below.
-            universal_newlines=True,
-        )
-        # Wait for the webserver to come up.
-        for tries in range(50):
-            try:
-                urlopen(web2py_server_address, timeout=5)
-            except URLError:
-                # Wait for the server to come up.
-                time.sleep(0.1)
-            else:
-                # The server is up. We're done.
-                break
-        # Run Celery. Per https://github.com/celery/celery/issues/3422, it sounds like celery doesn't support coverage, so omit it.
-        celery_process = subprocess.Popen(
-            [
-                sys.executable,
-                "-m",
-                "celery",
-                "--app=scheduled_builder",
-                "worker",
-                "--pool=gevent",
-                "--concurrency=4",
-                "--loglevel=info",
-            ],
-            # Celery must be run in the ``modules`` directory, where the worker is defined.
-            cwd="applications/{}/modules".format(runestone_name),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            # Produce text (not binary) output for nice output in ``echo()`` below.
-            universal_newlines=True,
-        )
+    # Start the web2py server and the `web2py scheduler <http://web2py.com/books/default/chapter/29/04/the-core#Scheduler-Deployment>`_.
+    web2py_server = subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "coverage",
+            "run",
+            "--append",
+            "--source=" + COVER_DIRS,
+            "web2py.py",
+            "-a",
+            password,
+            "--nogui",
+            "--minthreads=10",
+            "--maxthreads=20",
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        # Produce text (not binary) output for nice output in ``echo()`` below.
+        universal_newlines=True,
+    )
+    # Wait for the webserver to come up.
+    for tries in range(50):
+        try:
+            urlopen(web2py_server_address, timeout=5)
+        except URLError:
+            # Wait for the server to come up.
+            time.sleep(0.1)
+        else:
+            # The server is up. We're done.
+            break
+    # Run Celery. Per https://github.com/celery/celery/issues/3422, it sounds like celery doesn't support coverage, so omit it.
+    celery_process = subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "celery",
+            "--app=scheduled_builder",
+            "worker",
+            "--pool=gevent",
+            "--concurrency=4",
+            "--loglevel=info",
+        ],
+        # Celery must be run in the ``modules`` directory, where the worker is defined.
+        cwd="{}/modules".format(rs_path),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        # Produce text (not binary) output for nice output in ``echo()`` below.
+        universal_newlines=True,
+    )
 
-        # Start a thread to read web2py output and echo it.
-        def echo(popen_obj, description_str):
-            stdout, stderr = popen_obj.communicate()
-            print("\n" "{} stdout\n" "--------------------\n".format(description_str))
-            print(stdout)
-            print("\n" "{} stderr\n" "--------------------\n".format(description_str))
-            print(stderr)
+    # Start a thread to read web2py output and echo it.
+    def echo(popen_obj, description_str):
+        stdout, stderr = popen_obj.communicate()
+        print("\n" "{} stdout\n" "--------------------\n".format(description_str))
+        print(stdout)
+        print("\n" "{} stderr\n" "--------------------\n".format(description_str))
+        print(stderr)
 
-        echo_threads = [
-            Thread(target=echo, args=(web2py_server, "web2py server")),
-            Thread(target=echo, args=(celery_process, "celery process")),
-        ]
-        for echo_thread in echo_threads:
-            echo_thread.start()
+    echo_threads = [
+        Thread(target=echo, args=(web2py_server, "web2py server")),
+        Thread(target=echo, args=(celery_process, "celery process")),
+    ]
+    # TODO: Redis for Windows.
+    for echo_thread in echo_threads:
+        echo_thread.start()
 
-        # Save the password used.
-        web2py_server.password = password
-        # Wait for the server to come up. The delay varies; this is a guess.
+    # Save the password used.
+    web2py_server.password = password
+    # Wait for the server to come up. The delay varies; this is a guess.
 
-        # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
-        yield web2py_server
+    # After this comes the `teardown code <https://docs.pytest.org/en/latest/fixture.html#fixture-finalization-executing-teardown-code>`_.
+    yield web2py_server
 
-        # Terminate the server and schedulers to give web2py time to shut down gracefully.
-        web2py_server.terminate()
-        celery_process.terminate()
-        for echo_thread in echo_threads:
-            echo_thread.join()
+    # Terminate the server and schedulers to give web2py time to shut down gracefully.
+    web2py_server.terminate()
+    celery_process.terminate()
+    for echo_thread in echo_threads:
+        echo_thread.join()
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.

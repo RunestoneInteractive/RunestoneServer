@@ -1367,7 +1367,7 @@ def preview_question():
         # Note that ``os.environ`` isn't a dict, it's an object whose setter modifies environment variables. So, modifications of a copy/deepcopy still `modify the original environment <https://stackoverflow.com/questions/13142972/using-copy-deepcopy-on-os-environ-in-python-appears-broken>`_. Therefore, convert it to a dict, where modifications will not affect the environment.
         env = dict(os.environ)
         # Prevent any changes to the database when building a preview question.
-        del env["DBURL"]
+        env.pop("DBURL", None)
         # Run a runestone build.
         # We would like to use sys.executable But when we run web2py
         # in uwsgi then sys.executable is uwsgi which doesn't work.
