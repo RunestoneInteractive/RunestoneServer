@@ -11,7 +11,6 @@ LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 ARG WEB2PY_PATH=/srv/web2py
 ARG WEB2PY_APPS_PATH=${WEB2PY_PATH}/applications
 ARG WEB2PY_PORT=8080
-ARG DBHOST=db
 
 # And export some as env vars so they could be available at run time
 ENV WEB2PY_PATH=${WEB2PY_PATH}
