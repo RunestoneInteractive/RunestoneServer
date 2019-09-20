@@ -17,6 +17,7 @@ db.define_table(
     Field("feedback", type="text"),
     Field("from_source", type="boolean"),
     Field("review_flag", type="boolean"),
+    Field("qnumber", type="string"),
     migrate=table_migrate_prefix + "questions.table",
 )
 
