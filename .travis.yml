@@ -4,6 +4,8 @@ python:
 - '3.7'
 services:
 - postgresql
+# For Celery (web2py scheduler replacement).
+- redis-server
 addons:
   postgresql: '9.4'
   apt:
