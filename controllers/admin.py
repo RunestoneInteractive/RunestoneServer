@@ -1327,6 +1327,9 @@ def edit_question():
         if newq and newq.author != author:
             return "You cannot replace a question you did not author"
 
+    autograde = ""
+    if re.search(r":autograde:\s+unittest", question):
+        autograde = "unittest"
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname)
@@ -1341,6 +1344,8 @@ def edit_question():
             subchapter=subchapter,
             question_type=question_type,
             htmlsrc=htmlsrc,
+            autograde=autograde,
+            from_source=False,
         )
         if tags and tags != "null":
             tags = tags.split(",")
