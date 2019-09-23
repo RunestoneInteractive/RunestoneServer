@@ -267,7 +267,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $('#enforceDeadline').is(':checked');
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
-
+            // Need to update deadline by timezone
+            var now = new Date();
+            tzoff = now.getTimezoneOffset();
+            dl.setHours(dl.getHours() + tzoff/60);
+            $("#dl_disp").text(dl)
             renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
                 sid: studentId,
                 graderactive: true,
