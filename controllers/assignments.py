@@ -1228,12 +1228,9 @@ def practice():
 
         # This replacement is to render images
         question.htmlsrc = question.htmlsrc.replace(
-            'src="../_static/', 'src="../static/' + course["course_name"] + "/_static/"
+            'src="../_static/', 'src="' + get_course_url("_static/")
         )
-        question.htmlsrc = question.htmlsrc.replace(
-            "../_images",
-            "/{}/static/{}/_images".format(request.application, course.course_name),
-        )
+        question.htmlsrc = question.htmlsrc.replace("../_images/", get_course_url("_images/"))
 
         autogradable = 1
         # If it is possible to autograde it:
