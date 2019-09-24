@@ -379,7 +379,9 @@ def _get_practice_data(user, timezoneoffset):
                     total_possible_points = (
                         practice_settings.question_points * max_questions
                     )
-                    points_received = round(question_points * practice_completion_count, 2)
+                    points_received = round(
+                        question_points * practice_completion_count, 2
+                    )
 
             # Calculate the number of questions left for the student to practice today to get the completion point.
             if spacing == 1:
@@ -1230,7 +1232,9 @@ def practice():
         question.htmlsrc = question.htmlsrc.replace(
             'src="../_static/', 'src="' + get_course_url("_static/")
         )
-        question.htmlsrc = question.htmlsrc.replace("../_images/", get_course_url("_images/"))
+        question.htmlsrc = question.htmlsrc.replace(
+            "../_images/", get_course_url("_images/")
+        )
 
         autogradable = 1
         # If it is possible to autograde it:
