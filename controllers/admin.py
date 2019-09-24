@@ -664,6 +664,8 @@ def admin():
     ).select(db.courses.course_name, db.courses.id)
 
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
+    downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
+    allow_pairs = "true" if sidQuery.allow_pairs else "false"
     return dict(
         sectionInfo=sectionsList,
         startDate=date,
@@ -678,6 +680,8 @@ def admin():
         my_vers=my_vers,
         mst_vers=mst_vers,
         course=sidQuery,
+        downloads_enabled=downloads_enabled,
+        allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
     )
 
@@ -1323,6 +1327,9 @@ def edit_question():
         if newq and newq.author != author:
             return "You cannot replace a question you did not author"
 
+    autograde = ""
+    if re.search(r":autograde:\s+unittest", question):
+        autograde = "unittest"
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname)
@@ -1337,6 +1344,8 @@ def edit_question():
             subchapter=subchapter,
             question_type=question_type,
             htmlsrc=htmlsrc,
+            autograde=autograde,
+            from_source=False,
         )
         if tags and tags != "null":
             tags = tags.split(",")
@@ -2109,6 +2118,11 @@ def add__or_update_assignment_question():
                     question_type
                 ],
                 status="success",
+                question_id=question_name,
+                points=points,
+                autograde=autograde,
+                which_to_grade=which_to_grade,
+                assign_type=request.vars.assign_type,
             )
         )
     except Exception as ex:
@@ -2333,9 +2347,14 @@ def update_course():
             except ValueError:
                 logger.error("Bad Date in update_course {}".format(new_date))
                 return json.dumps(dict(status="failed"))
-        elif "new_pair" in request.vars:
+        if "allow_pairs" in request.vars:
             db(db.courses.id == thecourse.id).update(
-                allow_pairs=request.vars["new_pair"]
+                allow_pairs=(request.vars["allow_pairs"] == "true")
+            )
+        if "downloads_enabled" in request.vars:
+            print("DOWNLOADS = ", request.vars.enable_downloads)
+            db(db.courses.id == thecourse.id).update(
+                downloads_enabled=(request.vars["downloads_enabled"] == "true")
             )
 
         return json.dumps(dict(status="success"))

@@ -14,6 +14,12 @@ h5 {
     padding: 10px 0;
 }
 
+#qcode, #editRST {
+    font-family: Menlo, Consolas, monospace;
+    overflow: scroll;
+    white-space: pre;
+}
+
 /* navbar and menu related styles */
 @media (max-width: 768px) {
     /* Remove top padding when top navbar goes collapsed in narrow viewports */
@@ -133,9 +139,9 @@ div.section {
 }
 
 .CodeMirror-scroll {
-    /* this allows CM elements to be resized to (almost) any 
-     * height while still relying on max-height (which keeps 
-     * the CM editors to no more than the size needed 
+    /* this allows CM elements to be resized to (almost) any
+     * height while still relying on max-height (which keeps
+     * the CM editors to no more than the size needed
      * unless resized) */
     max-height: 30em;
     min-width: 30em;
@@ -548,4 +554,24 @@ div.ExecutionVisualizer table.visualizer {
     margin-left: auto;
     margin-right: auto;
     background-color: #fff;
+}
+
+div.settingsbox {
+    margin-top: 20px;
+}
+
+
+#component-preview {
+    margin-right: 20px;
+    position: fixed;
+    right: 0px;
+    max-height: 100%;
+    overflow-y: scroll;
+    top: 0px;
+    padding-top: 60px;
+
+}
+
+.runestone_caption {
+    text-align: center;
 }

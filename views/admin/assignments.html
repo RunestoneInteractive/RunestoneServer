@@ -259,6 +259,7 @@
                       <div class="col-md-12">
                         <label for="qcode"></label>
                         <textarea cols="65" form="newqform" id="qcode" name="editRST" rows="12"></textarea>
+                        <p>You are writing in <a href="https://www.sphinx-doc.org/en/latest/usage/restructuredtext/basics.html">restructuredText</a>, indentation matters.</p>
                       </div>
                       <div class="col-md-12">
                         <p id="qnameerror" style="color: red"></p>
@@ -369,14 +370,15 @@ $(function () {
     configure_tree_picker(question_picker, eBookConfig.toc.question_picker, $('#search-tree-question-picker'), 3,
         // TODO: Remember last user selections for points, autograde, and which_to_grade, instead of hard-coding them here.
         // Called when a node is checked.
-        function (node) {
+        async function (node) {
           let autograde = 'pct_correct';
           let whichto = 'best_answer';
           if (node.text.indexOf("✓") === -1) {
             autograde = 'manual';
             whichto = '';
           }
-          updateAssignmentRaw(node.id, 1, autograde, whichto);
+          let resp = await updateAssignmentRaw(node.id, 1, autograde, whichto);
+          return resp;
         },
         // Called when a node is unchecked.
         function (node) { remove_question(node.id); }
@@ -396,7 +398,7 @@ $(function () {
 
     configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
         // Called when a node is checked.
-        function (node) { updateReading(node.id, -1, 1, 'interact', 'best_answer'); },
+        async function (node) { let res = await updateReading(node.id, -1, 1, 'interact', 'best_answer'); return res },
         // Called when a node is unchecked.
         function (node) { remove_reading(node.id); }
     );
@@ -472,8 +474,9 @@ $(function () {
         ],
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
-        onEditableSave : function(field, row, oldValue, html_element) {
-            updateAssignmentRaw(row['question_id'], row['points'], row['autograde'], row['which_to_grade']);
+        onEditableSave : async function(field, row, oldValue, html_element) {
+            let resp = await updateAssignmentRaw(row['question_id'], row['points'], row['autograde'], row['which_to_grade']);
+            add_to_qtable(resp);
         },
          // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
         ///onReorderRow : function(rows) {
@@ -598,8 +601,9 @@ $(function () {
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
         //
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
-        onEditableSave : function(field, row, oldValue, html_element) {
-            updateReading(row['subchapter_id'], row['activities_required'], row['points'], row['autograde'], row['which_to_grade']);
+        onEditableSave : async function(field, row, oldValue, html_element) {
+            let resp = await updateReading(row['subchapter_id'], row['activities_required'], row['points'], row['autograde'], row['which_to_grade']);
+            add_to_table(resp);
         },
         //
         // This will be called multiple times. Record the beginning row of the drag.

@@ -29,6 +29,10 @@ EXPOSE ${WEB2PY_PORT}
 # To prevent interactive debconf during installations
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Add in Chrome repo. Copied from https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
+RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+
 # Components from requirements.txt which are available in Debian
 # Missing ones:
 #  runestone -- is the RunestoneComponents, https://pypi.org/project/runestone/, may be install from Git?
@@ -53,17 +57,30 @@ RUN apt-get update && \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
         openjdk-8-jre-headless \
-        rsync wget nginx && \
+        rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
+RUN wget https://chromedriver.storage.googleapis.com/76.0.3809.126/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/bin/chromedriver && \
+    chown root:root /usr/bin/chromedriver && \
+    chmod +x /usr/bin/chromedriver
 
 # The rest could be done and ran under a regular (well, staff for installing under /usr/local) user
 RUN useradd -s /bin/bash -M -g staff --home-dir ${WEB2PY_PATH} runestone && \
     mkdir -p /srv
 
 # Install additional components
-RUN git clone https://github.com/web2py/web2py ${WEB2PY_PATH} && \
-    cd ${WEB2PY_PATH} && \
-    git submodule update --init --recursive
+RUN wget https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip && \
+    unzip web2py_src.zip && \
+    rm -f web2py_src.zip && \
+    mv web2py ${WEB2PY_PATH} && \
+    cd ${WEB2PY_PATH}
+
+# RUN git clone https://github.com/web2py/web2py ${WEB2PY_PATH} && \
+#     cd ${WEB2PY_PATH} && \
+#     git submodule update --init --recursive
 
 RUN mkdir -p ${RUNESTONE_PATH}
 ADD . ${RUNESTONE_PATH}

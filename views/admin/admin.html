@@ -50,10 +50,28 @@
 <div class="tab-content">
 
     <div id="coursedata" class="tab-pane fade">
-        <div class="col-md-3">
+        <div class="col-md-5">
             <h3 style="text-align: center;">Course Settings</h3>
+            <div class="settingsbox">
             <label for="start_date">Term Start Date</label>
-            <input type="date" id="start_date" value="{{=startDate}}" onchange="updateCourse(this, 'new_date')">
+            <input type="text" id="start_date" value="{{=startDate}}" onchange="updateCourse(this, 'new_date')">
+            </div>
+            <div class="settingsbox">
+            <label for="downloads">Enable ActiveCode Downloads</label>
+            <input type="checkbox" id="downloads"
+            {{ if downloads_enabled == "true": }}
+              checked
+            {{ pass }}
+            onchange="updateCourse(this,'downloads_enabled')">
+            </div>
+            <div class="settingsbox">
+            <label for="pairs">Allow Pairs</label>
+            <input type="checkbox" id="pairs"
+            {{ if allow_pairs == "true": }}
+              checked
+            {{ pass }}
+            onchange="updateCourse(this,'allow_pairs')">
+            </div>
         </div>
     </div>
 

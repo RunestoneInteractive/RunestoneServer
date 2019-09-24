@@ -16,7 +16,8 @@ def jobeRun():
 
     req.headers["Content-type"] = "application/json; charset=utf-8"
     req.headers["Accept"] = "application/json"
-    req.headers["X-API-KEY"] = settings.jobe_key
+    if settings.jobe_key:
+        req.headers["X-API-KEY"] = settings.jobe_key
 
     uri = "/jobe/index.php/restapi/runs/"
     url = settings.jobe_server + uri

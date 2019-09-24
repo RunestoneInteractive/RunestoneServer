@@ -267,7 +267,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $('#enforceDeadline').is(':checked');
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
-
+            // Need to update deadline by timezone
+            var now = new Date();
+            tzoff = now.getTimezoneOffset();
+            dl.setHours(dl.getHours() + tzoff/60);
+            $("#dl_disp").text(dl)
             renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
                 sid: studentId,
                 graderactive: true,
@@ -995,10 +999,15 @@ function configure_tree_picker(
             }
         }
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function (instance, node) {
+            walk_jstree(data.instance, data.node, async function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
+                    let resp = await checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
+                    if (resp.assign_type == 'reading') {
+                        add_to_table(resp);
+                    } else {
+                        add_to_qtable(resp);
+                    }
                 }
             });
         }
@@ -1023,12 +1032,11 @@ function jstree_node_depth(instance, node) {
 }
 
 // Given a jstree node, invoke f on node and all its children.
-function walk_jstree(instance, node, f) {
-    f(instance, node);
-    $(node.children).each(function (index, value) {
-        console.log(index, value)
-        walk_jstree(instance, instance.get_node(value), f);
-    });
+async function walk_jstree(instance, node, f) {
+    await f(instance, node);
+    for (let value of node.children) {
+        await walk_jstree(instance, instance.get_node(value), f);
+    }
 }
 
 // Given an editable element (a hyperlink) in a bootstrap table, return the containing row.
@@ -1150,29 +1158,36 @@ function remove_assignment() {
 
 
 // Update an assignment.
-function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
+async function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
     if (!assignmentid || assignmentid == "undefined") {
         alert("No assignment selected");
         return;
     }
-    $.getJSON('add__or_update_assignment_question', {
-        question: question_name,
-        assignment: assignmentid,
-        points: points,
-        autograde: autograde,
-        which_to_grade: which_to_grade
-    }).done(function (response_JSON) {
-        $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table. Only append if it doesn't exist.
-        if (question_table.bootstrapTable('getRowByUniqueId', question_name) === null) {
-            appendToQuestionTable(question_name, points, autograde,
-                response_JSON['autograde_possible_values'], which_to_grade,
-                response_JSON['which_to_grade_possible_values']);
-        }
-    }).fail(function () {
-        alert(`Your added question ${question_name} was not saved to the database for assignment ${assignmentid}, please file a bug report describing exactly what you were doing.`)
-    });
+    let res = await $.ajax({url: 'add__or_update_assignment_question',
+        data: {question: question_name,
+            assignment: assignmentid,
+            points: points,
+            autograde: autograde,
+            which_to_grade: which_to_grade,
+            assign_type: 'problems'
+        },
+        dataType: 'json'});
+
+    return res;
+}
+
+async function add_to_qtable(response_JSON) {
+    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+    // See if this question already exists in the table. Only append if it doesn't exist.
+    if (question_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
+        appendToQuestionTable(response_JSON['question_id'],
+            response_JSON['points'],
+            response_JSON['autograde'],
+            response_JSON['autograde_possible_values'],
+            response_JSON['which_to_grade'],
+            response_JSON['which_to_grade_possible_values']);
+    }
 }
 
 
@@ -1193,7 +1208,14 @@ function createQuestionObject(name, points, autograde, autograde_possible_values
 }
 
 function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    question_table.bootstrapTable('append', [createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values)]);
+    question_table.bootstrapTable('append',
+        [createQuestionObject(name,
+            points,
+            autograde,
+            autograde_possible_values,
+            which_to_grade,
+            which_to_grade_possible_values)
+        ]);
 }
 
 // Update the grading parameters used for an assignment.
@@ -1304,30 +1326,40 @@ function assignmentInfo() {
 
 // Update a reading.
 // This should be serialized is the walk_jstree function to make sure the order is correct
-function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+async function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
     let assignid = getAssignmentId();
     if (!assignid || assignid == 'undefined') {
         alert("No assignment selected");
         return;
     }
-    $.getJSON('add__or_update_assignment_question', {
+    let res = await $.ajax({url: 'add__or_update_assignment_question',
+        data: {
         assignment: assignid,
         question: subchapter_id,
         activities_required: activities_required,
         points: points,
         autograde: autograde,
         which_to_grade: which_to_grade,
-    }).done(function (response_JSON) {
-        $('#totalPoints').html('Total points: ' + response_JSON['total']);
-        // See if this question already exists in the table. Only append if it doesn't exist.
-        if (readings_table.bootstrapTable('getRowByUniqueId', subchapter_id) === null) {
-            appendToReadingsTable(subchapter_id, response_JSON['activity_count'], response_JSON['activities_required'], points, autograde,
-                response_JSON['autograde_possible_values'], which_to_grade,
-                response_JSON['which_to_grade_possible_values']);
-        }
-    }).fail(function () {
-        alert(`Your added question ${subchapter_id} was not saved to the database for assignment ${assignid}, please file a bug report describing exactly what you were doing.`)
-    });
+        assign_type: 'reading',
+        },
+        dataType: 'json'});
+
+    return res;
+}
+
+function add_to_table (response_JSON) {
+    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+    // See if this question already exists in the table. Only append if it doesn't exist.
+    if (readings_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
+        appendToReadingsTable(response_JSON['question_id'],
+            response_JSON['activity_count'],
+            response_JSON['activities_required'],
+            response_JSON['points'],
+            response_JSON['autograde'],
+            response_JSON['autograde_possible_values'],
+            response_JSON['which_to_grade'],
+            response_JSON['which_to_grade_possible_values']);
+    }
 }
 
 
@@ -1384,7 +1416,9 @@ function display_write() {
         var returns = JSON.parse(obj);
         tplate = returns['template'];
         $("#qcode").text(tplate);
-
+        $("#qcode").keypress(function() {
+            $("#qrawhtml").val("");
+        })
         $.each(returns['chapters'], function (i, item) {
             chapterMap[item[0]] = item[1];
             $('#qchapter').append($('<option>', {
@@ -1419,9 +1453,6 @@ function create_question(formdata) {
     }
     if (formdata.createpoints.value == "") {
         formdata.createpoints.value == "1"
-    }
-    if (!confirm("Have you generated the HTML for your question?")) {
-        return;
     }
     if (!formdata.qrawhtml.value) {
         alert("No HTML for this question, please generate it.")
@@ -1568,15 +1599,15 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
-        $("#modal-preview").data("orig_divid", this.acid || opt.orig.id); // save the original divid
+        $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
         let editButton = document.createElement("button");
-        $(editButton).text("Edit Source");
+        $(editButton).text("Edit Question");
         $(editButton).addClass("btn btn-normal");
         $(editButton).attr("data-target", "#editModal");
         $(editButton).attr("data-toggle", "modal");
         $(editButton).click(function (event) {
             data = {
-                question_name: this.acid || opt.orig.id
+                question_name: opt.acid || opt.orig.id
             }
             jQuery.get('/runestone/admin/question_text', data,
                 function (obj) {
@@ -1584,6 +1615,15 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 });
         });
         $(`#${whereDiv}`).append(editButton);
+        let closeButton = document.createElement("button")
+        $(closeButton).text("Close Preview");
+        $(closeButton).addClass("btn btn-normal");
+        $(closeButton).css("margin-left","20px");
+        $(closeButton).click(function(event) {
+            $("#component-preview").html("");
+            });
+        $(`#${whereDiv}`).append(closeButton);
+
         let reportButton = document.createElement("button");
         $(reportButton).text("Flag for Review");
         $(reportButton).css("float", "right");
@@ -1591,7 +1631,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         $(reportButton).click(function (event) {
             if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
                 data = {
-                    question_name: this.acid || opt.orig.id
+                    question_name: opt.acid || opt.orig.id
                 }
                 jQuery.getJSON('/runestone/admin/flag_question.json', data,
                     function(obj) {
@@ -1602,6 +1642,11 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         });
         $(`#${whereDiv}`).append(reportButton);
         $("#qrawhtmlmodal").val("")
+        $("#editRST").keypress(function() {
+            $("#qrawhtmlmodal").val(""); //ensure html refresh
+        })
+
+        // $(`#${whereDiv}`).css("background-color", "white");
     }
 }
 
@@ -1663,12 +1708,13 @@ function questionBank(form) {
 }
 
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
-function addToAssignment(form) {
+async function addToAssignment(form) {
     var points = form.points.value;
     var select = document.getElementById('qbankselect');
     var question_name = select.options[select.selectedIndex].text;
 
-    updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    let resp = await updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    add_to_qtable(resp);
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
@@ -1706,7 +1752,7 @@ function getQuestionInfo() {
         }
 
 
-        renderRunestoneComponent(data['htmlsrc'], "component-preview")
+        renderRunestoneComponent(data['htmlsrc'], "component-preview", {acid: question_name})
 
         var q_author = document.getElementById('q_author');
         if (author == null) {
@@ -1907,6 +1953,9 @@ function updateCourse(widget, attr) {
     console.log(widget.value);
     data = {}
     data[attr] = widget.value
+    if (attr == 'downloads_enabled' || attr == 'allow_pairs') {
+        data[attr] = widget.checked
+    }
 
     $.getJSON("/runestone/admin/update_course.json", data, function (retval, stat, w) {
         if (retval.status != "success") {

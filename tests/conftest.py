@@ -35,18 +35,22 @@ from shutil import rmtree, copytree
 
 # Third-party imports
 # -------------------
-import pytest
 from gluon.contrib.webclient import WebClient
 import gluon.shell
+from html5validator.validator import Validator
+import pytest
+from pyvirtualdisplay import Display
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import six
 from six.moves.urllib.error import HTTPError, URLError
 from six.moves.urllib.request import urlopen
-from html5validator.validator import Validator
 
 # Local imports
 # -------------
 from .utils import COVER_DIRS, DictToObject
 from .ci_utils import xqt, pushd
+
 
 # Set this to False if you want to turn off all web page validation.
 W3_VALIDATE = True
@@ -73,10 +77,19 @@ def pytest_addoption(parser):
 # Output a coverage report when testing is done. See https://docs.pytest.org/en/latest/reference.html#_pytest.hookspec.pytest_terminal_summary.
 def pytest_terminal_summary(terminalreporter):
     with pushd("../../.."):
-        cp = xqt(
-            "{} -m coverage report".format(sys.executable), universal_newlines=True
-        )
-    terminalreporter.write_line(cp.stdout + cp.stderr)
+        try:
+            cp = xqt(
+                "{} -m coverage report".format(sys.executable),
+                # Capture the output from the report.
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+        except subprocess.CalledProcessError as e:
+            res = "Error in coverage report.\n{}".format(e.stdout + e.stderr)
+        else:
+            res = cp.stdout + cp.stderr
+    terminalreporter.write_line(res)
 
 
 # Utilities
@@ -108,6 +121,10 @@ def web2py_controller(
 
 # Fixtures
 # ========
+#
+# web2py access
+# -------------
+# These fixtures provide access to the web2py Runestone server and its environment.
 @pytest.fixture(scope="session")
 def web2py_server_address():
     return "http://127.0.0.1:8000"
@@ -168,7 +185,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
             try:
                 copytree("test_course_1", "../books/test_course_1")
                 break
-            except WindowsError:
+            except OSError:
                 if retry == 99:
                     raise
         # Build the test book to add in db fields needed.
@@ -281,6 +298,10 @@ def runestone_controller(runestone_env):
     env.db.close()
 
 
+# Database
+# --------
+# These fixture provide access to a clean instance of the Runestone database.
+#
 # Provide acess the the Runestone database through a fixture. After a test runs,
 # restore the database to its initial state.
 @pytest.fixture
@@ -428,6 +449,10 @@ def runestone_db_tools(runestone_db):
     return _RunestoneDbTools(runestone_db)
 
 
+# HTTP client
+# -----------
+# Provide access to Runestone through HTTP.
+#
 # Given the ``test_client.text``, prepare to write it to a file.
 def _html_prep(text_str):
     _str = text_str.replace("\r\n", "\n")
@@ -553,7 +578,7 @@ def test_client(
     tc.tearDown()
 
 
-# This class allows creating a user inside a context manager.
+# Provide a method to create a user and perform common user operations.
 class _TestUser(object):
     def __init__(
         self,
@@ -856,4 +881,99 @@ class _TestAssignment(object):
 def test_assignment(test_client, test_user, runestone_db_tools):
     return lambda *args, **kwargs: _TestAssignment(
         test_client, test_user, runestone_db_tools, *args, **kwargs
+    )
+
+
+# Selenium
+# --------
+# Provide access to Runestone through a web browser using Selenium.
+#
+# Create an instance of Selenium once per testing session.
+@pytest.fixture(scope="session")
+def selenium_driver_session():
+    # Start a virtual display for Linux.
+    is_linux = sys.platform.startswith("linux")
+    if is_linux:
+        display = Display(visible=0, size=(1280, 1024))
+        display.start()
+    else:
+        display = None
+
+    # Start up the Selenium driver.
+    options = Options()
+    options.add_argument("--window-size=1200,800")
+    # When run as root, Chrome complains ``Running as root without --no-sandbox is not supported. See https://crbug.com/638180.`` Here's a `crude check for being root <https://stackoverflow.com/a/52621917>`_.
+    if is_linux and os.geteuid() == 0:
+        options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(options=options)
+
+    yield driver
+
+    # Shut everything down.
+    driver.quit()
+    if display:
+        display.stop()
+
+
+# Provide a way to reset the state of Selenium for each test, without exiting/restarting the driver (which is slow).
+@pytest.fixture()
+def selenium_driver(selenium_driver_session):
+    driver = selenium_driver_session
+    # Add an `implicit wait <https://selenium-python.readthedocs.io/waits.html#implicit-waits>`_.
+    driver.implicitly_wait(5)
+
+    yield driver
+
+    # Clear as much as possible, to present an almost-fresh instance of a browser for the next test. (Shutting down then starting up a browswer is very slow.)
+    driver.execute_script("window.localStorage.clear();")
+    driver.execute_script("window.sessionStorage.clear();")
+    driver.delete_all_cookies()
+
+
+@pytest.fixture()
+def runestone_selenium_driver(selenium_driver, web2py_server_address, runestone_name):
+    # A helper function to attach to the Selenium driver: get from a URL relative to the Runestone application.
+    def _rs_get(self, relative_url):
+        return self.get(
+            "{}/{}/{}".format(web2py_server_address, runestone_name, relative_url)
+        )
+
+    # Add the rs_get function to the driver. See https://stackoverflow.com/a/28060251.
+    selenium_driver.rs_get = _rs_get.__get__(selenium_driver)
+    return selenium_driver
+
+
+# Provide basic Selenium-based user operations.
+class _SeleniumUser:
+    def __init__(
+        self,
+        # These are fixtures.
+        runestone_selenium_driver,
+        # The username for this user.
+        username,
+        # The password for this user.
+        password,
+    ):
+
+        self.driver = runestone_selenium_driver
+        self.username = username
+        self.password = password
+
+    def login(self):
+        self.driver.rs_get("default/user/login")
+        self.driver.find_element_by_id("auth_user_username").send_keys(self.username)
+        self.driver.find_element_by_id("auth_user_password").send_keys(self.password)
+        self.driver.find_element_by_id("login_button").click()
+
+    def logout(self):
+        self.driver.rs_get("default/user/logout")
+        # See https://selenium-python.readthedocs.io/api.html?highlight=page_source#selenium.webdriver.remote.webdriver.WebDriver.page_source.
+        assert "Logged out" in self.driver.page_source
+
+
+# Present ``_SeleniumUser`` as a fixture. To use, provide it with a ``_TestUser`` instance.
+@pytest.fixture
+def selenium_user(runestone_selenium_driver):
+    return lambda test_user: _SeleniumUser(
+        runestone_selenium_driver, test_user.username, test_user.password
     )

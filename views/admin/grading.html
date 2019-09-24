@@ -61,7 +61,7 @@
     <form>
       <label>
                             <input id = "enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline" class="big-checkbox" checked>
-                            Only check work submitted before assignment deadline</label>
+                            Only check work submitted before assignment deadline<span id="dl_disp"></span></label>
       <input id="autogradesubmit" type="submit" class="btn btn-primary" value="Autograde and Display Totals" />
       <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
 
@@ -85,7 +85,7 @@
     {{pass}}
   </div>
 
-  <button id="releasebutton" style="text-align: center; visibility: hidden;" class="list-group-item btn btn-success" onclick="toggle_release_grades();">Release Grades</button>
+  <button id="releasebutton" style="text-align: center; visibility: hidden;" class="btn btn-info" onclick="toggle_release_grades();">Release Grades</button>
 
 
 </div>

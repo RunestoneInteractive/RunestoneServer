@@ -31,7 +31,7 @@ EVENT_TABLE = {
 }
 
 
-def compareAndUpdateCookieData(sid):
+def compareAndUpdateCookieData(sid: str):
     if (
         "ipuser" in request.cookies
         and request.cookies["ipuser"].value != sid
@@ -377,8 +377,18 @@ def runlog():  # Log errors and runs with code
                     )
                     if request.vars.partner:
                         if _same_class(sid, request.vars.partner):
+                            comment_map = {
+                                "sql": "--",
+                                "python": "#",
+                                "java": "//",
+                                "javascript": "//",
+                                "c": "//",
+                                "cpp": "//",
+                            }
+                            comchar = comment_map.get(request.vars.lang, "#")
                             newcode = (
-                                "# This code was shared by {}\n\n".format(sid) + code
+                                "{} This code was shared by {}\n\n".format(comchar, sid)
+                                + code
                             )
                             db.code.insert(
                                 sid=request.vars.partner,
@@ -840,7 +850,7 @@ def _getCorrectStats(miscdata, event):
     miscdata["yourpct"] = pctcorr
 
 
-def _getStudentResults(question):
+def _getStudentResults(question: str):
     """
     Internal function to collect student answers
     """
@@ -1446,7 +1456,47 @@ def get_datafile():
     return json.dumps(dict(data=file_contents))
 
 
-def _same_class(user1, user2):
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def broadcast_code():
+    """
+    Callable by an instructor to send the code in their scratch activecode
+    to all students in the class.
+    """
+    the_course = db(db.courses.course_name == auth.user.course_name).select().first()
+    cid = the_course.id
+    student_list = db(
+        (db.user_courses.course_id == cid)
+        & (db.auth_user.id == db.user_courses.user_id)
+    ).select()
+    counter = 0
+    for student in student_list:
+        if student.auth_user.id == auth.user.id:
+            continue
+        sid = student.auth_user.username
+        try:
+            db.code.insert(
+                sid=sid,
+                acid=request.vars.divid,
+                code=request.vars.code,
+                emessage="",
+                timestamp=datetime.datetime.utcnow(),
+                course_id=cid,
+                language=request.vars.lang,
+                comment="Instructor shared code",
+            )
+        except Exception as e:
+            logger.error("Failed to insert instructor code! details: {}".format(e))
+            return json.dumps(dict(mess="failed"))
+
+        counter += 1
+
+    return json.dumps(dict(mess="success", share_count=counter))
+
+
+def _same_class(user1: str, user2: str) -> bool:
     user1_course = (
         db(db.auth_user.username == user1).select(db.auth_user.course_id).first()
     )

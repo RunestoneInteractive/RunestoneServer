@@ -1,6 +1,7 @@
-So you want to help with the development of the Runestone Server.  Thanks!
+# Contributing to Runestone Server
 
-This document is meant to be a collection of things that will make that a bit easier.
+We welcome contributions large and small to the Runestone Components.  We welcome contributions from newcomers as well as seasoned Runestone hackers.  You don't need to be an expert to make a contribution here.  When I started this project I had barely written a line of Javascript, Runestone is a project that is all about helping people learn, if you learn by helping us improve Runestone that is even better!
+.
 
 # Installation
 Installing all of the prerequisites needed to run your own server or help with development is covered extensively in the README, so I won't repeat that here.
@@ -60,7 +61,9 @@ We have a small set of unit tests that we really want to grow into a full blown 
 
 We have a Travis-CI job set up to automatically test all PR's if your pull request does not pass it won't be accepted.
 
-Please take a look at the few unit tests we have, and write a new one that demonstrates that your feature or enhancement works.
+Please take a look at the unit tests we have, and write a new one that demonstrates that your feature or enhancement works.
+
+I know its more fun to just add features, but with a small group it is more important than ever to hvae comprehensive unit tests.  Its the only way we can quickly accept new features and have any confidence that it won't break runestone.academy for 1000's of people!
 
 ## Major Feature Contributions
 
@@ -68,3 +71,6 @@ There are many ways that we can continue to improve and make the Runestone platf
 
 Runestone has grown organically over the years but that has led to duplicated tables in the database duplicated code and lots of inconsistency.  We need to start working to change all of that if we are going to continue to grow runestone efficiently.
 
+## Style
+
+We have adopted the `black` program for helping to keep our code a consistent style.  It is installed when you install the `requirements-test.txt` set of packages.  Many editors can be configured to run `black` when you save your file.  If not you should run it on any files you have edited **before** you make a pull request.  Our CI test suite runs both `black` and `flake8` to find any potential style or lint errors. -- I know this is an extra step, but having a consistent style makes life easier for everyone.
