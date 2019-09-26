@@ -342,6 +342,7 @@
 {{ if flashcard_count > 0: }}
     $(window).on('load', function (e) {
         var check_me_clicked = false;
+        var check_me_time = false;
         if ($('button:contains(\"Check Me\")').length) {
             $('button:contains(\"Check Me\")').click(function(event) {
                 check_me_clicked = true;
