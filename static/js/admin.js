@@ -284,6 +284,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
 
     //this is an internal function for getRightSideGradingDiv
+    // called when Save Grade is pressed
     function save(event) {
         event.preventDefault();
 
@@ -291,6 +292,9 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var form = jQuery(this);
         var grade = jQuery('#input-grade', form).val();
         var comment = jQuery('#input-comments', form).val();
+        if (comment === "autograded") {
+            comment = "instructor graded";
+        }
         jQuery.ajax({
             url: eBookConfig.gradeRecordingUrl,
             type: "POST",
@@ -1568,8 +1572,10 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     componentSrc = componentSrc.replace(patt, `/${eBookConfig.app}/static/${eBookConfig.course}/_images`)
     jQuery(`#${whereDiv}`).html(componentSrc);
 
-    edList = [];
-    mcList = [];
+    if (typeof edList === 'undefined') {
+        edList = {};
+    }
+
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
