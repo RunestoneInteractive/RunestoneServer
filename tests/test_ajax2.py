@@ -88,10 +88,9 @@ def test_hsblog(test_client, test_user_1, test_user, runestone_db_tools):
     print(res)
     assert len(res.keys()) == 2
     assert res["log"] == True
-    time_delta = (
-        datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc) -
-        parse(res["timestamp"]).replace(tzinfo=datetime.timezone.utc)
-        )
+    time_delta = datetime.datetime.utcnow().replace(
+        tzinfo=datetime.timezone.utc
+    ) - parse(res["timestamp"]).replace(tzinfo=datetime.timezone.utc)
     assert time_delta < datetime.timedelta(seconds=1)
 
     db = runestone_db_tools.db
@@ -474,9 +473,10 @@ def test_GetHist(test_client, test_user_1):
     assert len(res["timestamps"]) == 10
     assert len(res["history"]) == 10
 
-    time_delta = datetime.datetime.utcnow() - datetime.datetime.strptime(
-        res["timestamps"][-1], "%Y-%m-%dT%H:%M:%S"
-    )
+    time_delta = datetime.datetime.utcnow().replace(
+        tzinfo=datetime.timezone.utc
+    ) - parse(res["timestamps"][-1]).replace(tzinfo=datetime.timezone.utc)
+
     assert time_delta < datetime.timedelta(seconds=2)
 
     test_client.post("ajax/getprog", data=kwargs)
