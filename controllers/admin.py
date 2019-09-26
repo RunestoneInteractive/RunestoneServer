@@ -747,7 +747,9 @@ def grading():
             questions.append(question_name)
             question_points[question_name] = q.points
         assignments[row.name] = questions
-        assignment_deadlines[row.name] = row.duedate.isoformat()
+        assignment_deadlines[row.name] = row.duedate.replace(
+            tzinfo=datetime.timezone.utc
+        ).isoformat()
 
     cur_students = db(db.user_courses.course_id == auth.user.course_id).select(
         db.user_courses.user_id
