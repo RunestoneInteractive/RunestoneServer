@@ -1,6 +1,15 @@
 Runestone ChangeLog
 ===================
 
+4.2.0 September 30 2019
+-----------------------
+
+* No longer use the web2py scheduler, use celery (requires redis to be installed)
+* Schema Changed - add column to questions for qnumber.  (use ``rsmanage migrate`` to update schema)
+* Update to admin and ajax - when returning a date to the browser Python's datetime.isoformat is interpreted differently on Chrome and Firefox and Safari adding the ``+00:00`` to indicate the times have no timezone offset seems to make all browsers interpret the timestamps the same.
+* Manual grading interface makes it more clear about what things were turned in before and after the deadline
+
+
 3.5.x August 2015 - X 2019
 -----------------
 
