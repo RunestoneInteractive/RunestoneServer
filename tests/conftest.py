@@ -236,33 +236,40 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
             else:
                 # The server is up. We're done.
                 break
-        # Running two processes doesn't produce two active workers. Running with ``-K runestone,runestone`` means additional subprocesses are launched that we lack the PID necessary to kill. So, just use one worker.
-        web2py_scheduler = subprocess.Popen(
+        # Run Celery. Per https://github.com/celery/celery/issues/3422, it sounds like celery doesn't support coverage, so omit it.
+        celery_process = subprocess.Popen(
             [
                 sys.executable,
                 "-m",
-                "coverage",
-                "run",
-                "--append",
-                "--source=" + COVER_DIRS,
-                "web2py.py",
-                "-K",
-                runestone_name,
+                "celery",
+                "--app=scheduled_builder",
+                "worker",
+                "--pool=gevent",
+                "--concurrency=4",
+                "--loglevel=info",
             ],
+            # Celery must be run in the ``modules`` directory, where the worker is defined.
+            cwd="applications/{}/modules".format(runestone_name),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            # Produce text (not binary) output for nice output in ``echo()`` below.
+            universal_newlines=True,
         )
 
         # Start a thread to read web2py output and echo it.
-        def echo():
-            stdout, stderr = web2py_server.communicate()
-            print("\n" "web2py server stdout\n" "--------------------\n")
+        def echo(popen_obj, description_str):
+            stdout, stderr = popen_obj.communicate()
+            print("\n" "{} stdout\n" "--------------------\n".format(description_str))
             print(stdout)
-            print("\n" "web2py server stderr\n" "--------------------\n")
+            print("\n" "{} stderr\n" "--------------------\n".format(description_str))
             print(stderr)
 
-        echo_thread = Thread(target=echo)
-        echo_thread.start()
+        echo_threads = [
+            Thread(target=echo, args=(web2py_server, "web2py server")),
+            Thread(target=echo, args=(celery_process, "celery process")),
+        ]
+        for echo_thread in echo_threads:
+            echo_thread.start()
 
         # Save the password used.
         web2py_server.password = password
@@ -273,8 +280,9 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
 
         # Terminate the server and schedulers to give web2py time to shut down gracefully.
         web2py_server.terminate()
-        web2py_scheduler.terminate()
-        echo_thread.join()
+        celery_process.terminate()
+        for echo_thread in echo_threads:
+            echo_thread.join()
 
 
 # The name of the Runestone controller. It must be module scoped to allow the ``web2py_server`` to use it.

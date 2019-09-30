@@ -8,6 +8,9 @@ services:
       POSTGRES_USER: 'runestone'
       POSTGRES_DB: 'runestone'
 
+  redis:
+    image: redis
+
   runestone:
     image: runestone/server
     restart: always
@@ -16,6 +19,7 @@ services:
       - ./:/srv/web2py/applications/runestone
     links:
       - db
+      - redis
     ports:
       - "80:80"
     environment:
@@ -27,4 +31,5 @@ services:
       DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
       DEV_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
       TEST_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test'
+      REDIS_URI: 'redis://redis:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'

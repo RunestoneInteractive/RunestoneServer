@@ -13,13 +13,8 @@ import re
 import ast
 import os
 import tempfile
-import shutil
-import subprocess
-from threading import Timer
 from io import open
 import json
-import time
-import sys
 
 # Third-party imports
 # -------------------
@@ -28,13 +23,11 @@ from runestone.lp.lp_common_lib import (
     STUDENT_SOURCE_PATH,
     code_here_comment,
     read_sphinx_config,
-    BUILD_SYSTEM_PATH,
-    get_sim_str_sim30,
 )
 
 # Local imports
 # -------------
-# None.
+from scheduled_builder import _scheduled_builder
 
 
 # Return ``(True, feedback)`` if feedback should be computed on the server,
@@ -188,73 +181,36 @@ def lp_feedback(code_snippets, feedback_struct):
     # Join them into a single string. Make sure newlines separate everything.
     source_str = "\n".join(interleaved_source)
 
-    # Create a temporary directory, then write the source there. Horrible kluge
-    # for Python 2.7. Much better: use tempfile.TemporaryDirectory instead.
-    try:
-        temp_path = tempfile.mkdtemp()
+    # Create a temporary directory, then write the source there.
+    with tempfile.TemporaryDirectory() as temp_path:
         temp_source_path = os.path.join(temp_path, os.path.basename(source_path))
         with open(temp_source_path, "w", encoding="utf-8") as f:
             f.write(source_str)
 
-        # Schedule the build. Omitting this commit causes tests to fail. ???
-        current.db.commit()
-        task = current.scheduler.queue_task(
-            _scheduled_builder,
-            pargs=[
+        try:
+            res = _scheduled_builder.delay(
                 feedback_struct["builder"],
                 temp_source_path,
                 sphinx_base_path,
                 sphinx_source_path,
                 sphinx_out_path,
                 source_path,
-            ],
-            immediate=True,
-        )
-        if task.errors:
+            )
+            output, is_correct = res.get(timeout=60)
+        except Exception as e:
+            return {"errors": ["Error in build task: {}".format(e)]}
+        else:
             return {
-                "errors": ["Error in scheduling build task: {}".format(task.errors)]
+                # The answer.
+                "answer": {
+                    # Strip whitespace and return only the last 4K or data or so.
+                    # There's no need for more -- it's probably just a crashed or
+                    # confused program spewing output, so don't waste bandwidth or
+                    # storage space on it.
+                    "resultString": output.strip()[-4096:]
+                },
+                "correct": is_correct,
             }
-        # In order to monitor the status of the scheduled task, commit it now. (web2py assumes that the current request wouldn't want to monitor its own scheduled task.) This allows the workers to see it and begin work.
-        current.db.commit()
-        # Poll until the scheduled build completes.
-        while True:
-            time.sleep(0.5)
-            task_status = current.scheduler.task_status(task.id, output=True)
-            if task_status.scheduler_task.status == "EXPIRED":
-                # Remove the task entry, since it's no longer needed.
-                del current.db.scheduler_task[task_status.scheduler_task.id]
-                return {"errors": ["Build task expired."]}
-            elif task_status.scheduler_task.status == "TIMEOUT":
-                del current.db.scheduler_task[task_status.scheduler_task.id]
-                return {"errors": ["Build task timed out."]}
-            elif task_status.scheduler_task.status == "FAILED":
-                # This also deletes the ``scheduler_run`` record.
-                del current.db.scheduler_task[task_status.scheduler_task.id]
-                return {
-                    "errors": [
-                        "Exception during build: {}".format(
-                            task_status.scheduler_run.traceback
-                        )
-                    ]
-                }
-            elif task_status.scheduler_task.status == "COMPLETED":
-                # This also deletes the ``scheduler_run`` record.
-                del current.db.scheduler_task[task_status.scheduler_task.id]
-                output, is_correct = json.loads(task_status.scheduler_run.run_result)
-
-                return {
-                    # The answer.
-                    "answer": {
-                        # Strip whitespace and return only the last 4K or data or so.
-                        # There's no need for more -- it's probably just a crashed or
-                        # confused program spewing output, so don't waste bandwidth or
-                        # storage space on it.
-                        "resultString": output.strip()[-4096:]
-                    },
-                    "correct": is_correct,
-                }
-    finally:
-        shutil.rmtree(temp_path)
 
 
 # This function should take a list of code snippets and modify them to prepare
@@ -307,185 +263,3 @@ def _platform_edit(
         fmt.format(index + 1) + code_snippets[index]
         for index in range(len(code_snippets))
     ]
-
-
-# Transform the arguments to ``subprocess.run`` into a string showing what
-# command will be executed.
-def _subprocess_string(*args, **kwargs):
-    return kwargs.get("cwd", "") + "% " + " ".join(args[0]) + "\n"
-
-
-# This function should run the provided code and report the results. It will
-# vary for a given compiler and language.
-def _scheduled_builder(
-    # The name of the builder to use.
-    builder,
-    # An absolute path to the file which contains code to test. The file resides in a
-    # temporary directory, which should be used to hold any additional files
-    # produced by the test.
-    file_path,
-    # An absolute path to the Sphinx root directory.
-    sphinx_base_path,
-    # A relative path to the Sphinx source path from the ``sphinx_base_path``.
-    sphinx_source_path,
-    # A relative path to the Sphinx output path from the ``sphinx_base_path``.
-    sphinx_out_path,
-    # A relative path to the source file from the ``sphinx_source_path``, based
-    # on the submitting web page.
-    source_path,
-):
-
-    if builder == "unsafe-python" and os.environ.get("WEB2PY_CONFIG") == "test":
-        # Run the test in Python. This is for testing only, and should never be used in production; instead, this should be run in a limited Docker container. For simplicity, it lacks a timeout.
-        #
-        # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-        cwd = os.path.dirname(file_path)
-        test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.py"
-        dest_test_path = os.path.join(cwd, test_file_name)
-        shutil.copyfile(
-            os.path.join(
-                sphinx_base_path,
-                sphinx_source_path,
-                os.path.dirname(source_path),
-                test_file_name,
-            ),
-            dest_test_path,
-        )
-        try:
-            str_out = subprocess.check_output(
-                [sys.executable, dest_test_path],
-                stderr=subprocess.STDOUT,
-                universal_newlines=True,
-                cwd=cwd,
-            )
-            return str_out, 100
-        except subprocess.CalledProcessError as e:
-            # from gluon.debug import dbg; dbg.set_trace()
-            return e.output, 0
-    elif builder != "pic24-xc16-bullylib":
-        raise RuntimeError("Unknown builder {}".format(builder))
-
-    # Assemble or compile the source. We assume that the binaries are already in the path.
-    xc16_path = ""
-    # Compile in the temporary directory, in which ``file_path`` resides.
-    sp_args = dict(
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,
-        cwd=os.path.dirname(file_path),
-    )
-    o_path = file_path + ".o"
-    extension = os.path.splitext(file_path)[1]
-    if extension == ".s":
-        args = [
-            os.path.join(xc16_path, "xc16-as"),
-            "-omf=elf",
-            "-g",
-            "--processor=33EP128GP502",
-            file_path,
-            "-o" + o_path,
-        ]
-    elif extension == ".c":
-        args = [
-            os.path.join(xc16_path, "xc16-gcc"),
-            "-mcpu=33EP128GP502",
-            "-omf=elf",
-            "-g",
-            "-O0",
-            "-msmart-io=1",
-            "-Wall",
-            "-Wextra",
-            "-Wdeclaration-after-statement",
-            "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "lib/include"),
-            "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "tests"),
-            "-I"
-            + os.path.join(
-                sphinx_base_path, sphinx_source_path, "tests/platform/Microchip_PIC24"
-            ),
-            "-I"
-            + os.path.join(
-                sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
-            ),
-            file_path,
-            "-c",
-            "-o" + o_path,
-        ]
-    else:
-        raise RuntimeError("Unknown file extension in {}.".format(file_path))
-    out = _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
-
-    # Link.
-    elf_path = file_path + ".elf"
-    waf_root = os.path.normpath(
-        os.path.join(
-            sphinx_base_path, sphinx_out_path, BUILD_SYSTEM_PATH, sphinx_source_path
-        )
-    )
-    test_object_path = os.path.join(
-        waf_root, os.path.splitext(source_path)[0] + "-test.c.1.o"
-    )
-    args = [
-        os.path.join(xc16_path, "xc16-gcc"),
-        "-omf=elf",
-        "-Wl,--heap=100,--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io",
-        "-Wl,--script="
-        + os.path.join(
-            sphinx_base_path, sphinx_source_path, "lib/lkr/p33EP128GP502_bootldr.gld"
-        ),
-        test_object_path,
-        o_path,
-        os.path.join(waf_root, "lib/src/pic24_clockfreq.c.1.o"),
-        os.path.join(waf_root, "lib/src/pic24_configbits.c.1.o"),
-        os.path.join(waf_root, "lib/src/pic24_serial.c.1.o"),
-        os.path.join(waf_root, "lib/src/pic24_timer.c.1.o"),
-        os.path.join(waf_root, "lib/src/pic24_uart.c.1.o"),
-        os.path.join(waf_root, "lib/src/pic24_util.c.1.o"),
-        os.path.join(waf_root, "tests/test_utils.c.1.o"),
-        os.path.join(waf_root, "tests/test_assert.c.1.o"),
-        "-o" + elf_path,
-        "-Wl,-Bstatic",
-        "-Wl,-Bdynamic",
-    ]
-    out += "\n" + _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
-
-    # Simulate. Create the simulation commands.
-    simout_path = file_path + ".simout"
-    ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
-    # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
-    # couldn't find a way to re-use that code.
-    sim_ret = 0
-    args = [os.path.join(xc16_path, "sim30")]
-    out += "\nTest results:\n" + _subprocess_string(args, **sp_args)
-    timeout_list = []
-    try:
-        p = subprocess.Popen(
-            args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, **sp_args
-        )
-        # Horrible kludge: implement a crude timeout. Instead, use ``timeout``
-        # with Python 3.
-        def on_timeout(msg_list):
-            p.terminate()
-            msg_list += ["\n\nTimeout."]
-
-        t = Timer(3, on_timeout, [timeout_list])
-        t.start()
-        p.communicate(ss)
-        sim_ret = p.returncode
-    except subprocess.CalledProcessError as e:
-        sim_ret = 1
-    # Check the output.
-    t.cancel()
-    with open(simout_path, encoding="utf-8") as f:
-        out += f.read().rstrip()
-    # Put the timeout string at the end of all the simulator output.
-    out += "".join(timeout_list)
-    return out, (100 if not sim_ret and out.endswith("Correct.") else 0)
