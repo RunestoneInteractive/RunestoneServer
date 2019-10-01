@@ -95,7 +95,6 @@ RUN mkdir -p private && \
     pip3 install -r requirements-test.txt && \
     pip3 install uwsgi uwsgitop && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
-    cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
