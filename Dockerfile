@@ -11,7 +11,6 @@ LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 ARG WEB2PY_PATH=/srv/web2py
 ARG WEB2PY_APPS_PATH=${WEB2PY_PATH}/applications
 ARG WEB2PY_PORT=8080
-ARG DBHOST=db
 
 # And export some as env vars so they could be available at run time
 ENV WEB2PY_PATH=${WEB2PY_PATH}
@@ -95,7 +94,6 @@ RUN mkdir -p private && \
     pip3 install -r requirements-test.txt && \
     pip3 install uwsgi uwsgitop && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
-    cp ${RUNESTONE_PATH}/scripts/run_scheduler.py ${WEB2PY_PATH}/run_scheduler.py && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
 WORKDIR ${WEB2PY_PATH}
