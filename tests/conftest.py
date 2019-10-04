@@ -110,15 +110,6 @@ def web2py_controller_env(
     return env
 
 
-# Create a web2py controller environment. Given ``ctl_env = web2py_controller('app_name')``, then  ``ctl_env.db`` refers to the usual DAL object for database access, ``ctl_env.request`` is an (empty) Request object, etc.
-def web2py_controller(
-    # See env_.
-    env
-):
-
-    return DictToObject(env)
-
-
 # Fixtures
 # ========
 #
@@ -294,21 +285,21 @@ def runestone_name():
 # The environment of a web2py controller.
 @pytest.fixture
 def runestone_env(runestone_name):
-    return web2py_controller_env(runestone_name)
+    env = web2py_controller_env(runestone_name)
+    yield env
+    # Close the database connection after the test completes.
+    env["db"].close()
 
 
 # Create fixture providing a web2py controller environment for a Runestone application.
 @pytest.fixture
 def runestone_controller(runestone_env):
-    env = web2py_controller(runestone_env)
-    yield env
-    # Close the database connection after the test completes.
-    env.db.close()
+    return DictToObject(runestone_env)
 
 
 # Database
 # --------
-# These fixture provide access to a clean instance of the Runestone database.
+# This fixture provides access to a clean instance of the Runestone database.
 #
 # Provide acess the the Runestone database through a fixture. After a test runs,
 # restore the database to its initial state.
@@ -317,8 +308,8 @@ def runestone_db(runestone_controller):
     db = runestone_controller.db
     yield db
 
-    # Restore the database state after the test finishes.
-    # ----------------------------------------------------
+    # **Restore the database state after the test finishes**
+    ##------------------------------------------------------
     # Rollback changes, which ensures that any errors in the database connection
     # will be cleared.
     db.rollback()
@@ -386,7 +377,7 @@ def runestone_db(runestone_controller):
     db.commit()
 
 
-# Provide context managers for manipulating the Runestone database.
+# Provide a class for manipulating the Runestone database.
 class _RunestoneDbTools(object):
     def __init__(self, runestone_db):
         self.db = runestone_db
@@ -586,6 +577,8 @@ def test_client(
     tc.tearDown()
 
 
+# User
+# ^^^^
 # Provide a method to create a user and perform common user operations.
 class _TestUser(object):
     def __init__(
@@ -772,6 +765,8 @@ def test_user_1(runestone_db_tools, test_user):
     return test_user("test_user_1", "password_1", course)
 
 
+# Assigmment
+# ^^^^^^^^^^
 class _TestAssignment(object):
     assignment_count = 0
 
@@ -951,6 +946,8 @@ def runestone_selenium_driver(selenium_driver, web2py_server_address, runestone_
     return selenium_driver
 
 
+# User
+# ^^^^
 # Provide basic Selenium-based user operations.
 class _SeleniumUser:
     def __init__(
