@@ -38,12 +38,10 @@ script:
 - pip install -e rsmanage
 - cd books
 - git clone https://github.com/RunestoneInteractive/thinkcspy.git
-- cd ..
-- cd tests
-- cp .coveragerc ../../../
-# Now actually run the tests.
-- pytest
 - cd ../../..
+- cp applications/runestone/tests/.coveragerc .
+# Now actually run the tests.
+- pytest applications/runestone/tests
 - coveralls
 notifications:
   slack:
