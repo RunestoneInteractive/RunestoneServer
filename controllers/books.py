@@ -182,7 +182,6 @@ def _route_book(is_published=True):
     else:
         reading_list = "null"
 
-    # TODO: - Add log entry for page view
     try:
         db.useinfo.insert(
             sid=user_id,
@@ -206,6 +205,10 @@ def _route_book(is_published=True):
         else "false"
     )
 
+    questions = None
+    if subchapter == "Exercises":
+        questions = _exercises(base_course, chapter)
+    logger.debug("QUESTIONS = {} {}".format(subchapter, questions))
     return dict(
         course_name=course.course_name,
         base_course=base_course,
@@ -218,6 +221,7 @@ def _route_book(is_published=True):
         activity_info=json.dumps(div_counts),
         downloads_enabled=downloads_enabled,
         subchapter_list=_subchaptoc(base_course, chapter),
+        questions=questions,
     )
 
 
@@ -247,6 +251,31 @@ def _subchaptoc(course, chap):
         toclist.append(dict(subchap_uri=sc_url, title=title))
 
     return toclist
+
+
+def _exercises(basecourse, chapter):
+    """
+    Given a base course and a chapter return the instructor generated questions
+    for the Exercises subchapter.
+
+    """
+    print("{} {}".format(chapter, basecourse))
+    questions = db(
+        (db.questions.chapter == chapter)
+        & (db.questions.subchapter == "Exercises")
+        & (db.questions.base_course == basecourse)
+        & (db.questions.is_private == "F")
+        & (db.questions.from_source == "F")
+        & (
+            (db.questions.review_flag != "T") | (db.questions.review_flag == None)
+        )  # noqa: E711
+    ).select(
+        db.questions.htmlsrc,
+        db.questions.author,
+        db.questions.difficulty,
+        db.questions.qnumber,
+    )
+    return questions
 
 
 # This is copied verbatim from https://github.com/pallets/werkzeug/blob/master/werkzeug/security.py#L30.
