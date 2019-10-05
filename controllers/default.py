@@ -250,6 +250,7 @@ def index():
             else:
                 session.request_donation = True
             db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
+            db(db.auth_user.id == auth.user.id).update(active="T")
         try:
             logger.debug("INDEX - checking for progress table")
             chapter_label = (
