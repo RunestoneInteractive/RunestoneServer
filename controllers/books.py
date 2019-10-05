@@ -274,6 +274,7 @@ def _exercises(basecourse, chapter):
         db.questions.author,
         db.questions.difficulty,
         db.questions.qnumber,
+        orderby=db.questions.timestamp,
     )
     return questions
 
