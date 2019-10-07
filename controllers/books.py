@@ -53,6 +53,10 @@ def _route_book(is_published=True):
     # Find the course to access.
     if auth.user:
         # Given a logged-in user, use ``auth.user.course_id``.
+        response.cookies["last_course"] = auth.user.course_name
+        response.cookies["last_course"]["expires"] = 24 * 3600 * 90
+        response.cookies["last_course"]["path"] = "/"
+
         course = (
             db(db.courses.id == auth.user.course_id)
             .select(
@@ -90,6 +94,18 @@ def _route_book(is_published=True):
 
     else:
         # Get the base course from the URL.
+        if "last_course" in request.cookies:
+            last_base = (
+                db(db.courses.course_name == request.cookies["last_course"].value)
+                .select(db.courses.base_course)
+                .first()
+            )
+            if last_base.base_course == base_course:
+                # The user is trying to access the base course for the last course they logged in to
+                # there is a 99% chance this is an error and we should make them log in.
+                session.flash = "You Most likely want to log in to access your course"
+                redirect(URL(c="default", f="courses"))
+
         course = (
             db(db.courses.course_name == base_course)
             .select(
