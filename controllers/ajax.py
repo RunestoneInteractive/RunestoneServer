@@ -45,6 +45,13 @@ def compareAndUpdateCookieData(sid: str):
 def hsblog():
     setCookie = False
     if auth.user:
+        if request.vars.course != auth.user.course_name:
+            return json.dumps(
+                dict(
+                    log=False,
+                    message="You appear to have changed courses in another tab.  Please switch to this course",
+                )
+            )
         sid = auth.user.username
         compareAndUpdateCookieData(sid)
         setCookie = (
@@ -53,6 +60,10 @@ def hsblog():
         # log entries that come from auth timing out even but the user hasn't reloaded
         # the page.
     else:
+        if request.vars.clientLoginStatus == "true":
+            logger.error("Session Expired")
+            return json.dumps(dict(log=False, message="Session Expired"))
+
         if "ipuser" in request.cookies:
             sid = request.cookies["ipuser"].value
             setCookie = True
@@ -282,6 +293,7 @@ def hsblog():
         response.cookies["ipuser"] = sid
         response.cookies["ipuser"]["expires"] = 24 * 3600 * 90
         response.cookies["ipuser"]["path"] = "/"
+
     return json.dumps(res)
 
 
@@ -289,9 +301,21 @@ def runlog():  # Log errors and runs with code
     # response.headers['content-type'] = 'application/json'
     setCookie = False
     if auth.user:
+        if request.vars.course != auth.user.course_name:
+            return json.dumps(
+                dict(
+                    log=False,
+                    message="You appear to have changed courses in another tab.  Please switch to this course",
+                )
+            )
         sid = auth.user.username
         setCookie = True
+        print(sid)
     else:
+        print(request.vars.clientLoginStatus)
+        if request.vars.clientLoginStatus == "true":
+            logger.error("Session Expired")
+            return json.dumps(dict(log=False, message="Session Expired"))
         if "ipuser" in request.cookies:
             sid = request.cookies["ipuser"].value
             setCookie = True
@@ -1507,3 +1531,10 @@ def _same_class(user1: str, user2: str) -> bool:
     )
 
     return user1_course == user2_course
+
+
+def login_status():
+    if auth.user:
+        return json.dumps(dict(status="loggedin", course_name=auth.user.course_name))
+    else:
+        return json.dumps(dict(status="loggedout", course_name=auth.user.course_name))
