@@ -255,3 +255,98 @@ def test_flag_question(test_assignment, test_user_1, test_client, runestone_db_t
     db = runestone_db_tools.db
 
     assert db(db.questions.name == "subc_b_fitb").select().first().review_flag
+
+
+def test_get_assignment_release_states(
+    test_assignment, test_client, test_user_1
+):
+    my_ass = test_assignment("test_assignment", test_user_1.course)
+    my_ass.addq_to_assignment(question="subc_b_fitb", points=10)
+    my_ass.save_assignment()
+    my_ass.autograde()
+    my_ass.calculate_totals()
+    my_ass.release_grades()
+
+    res = test_client.validate("admin/get_assignment_release_states")
+    res = json.loads(res)
+
+    assert res['test_assignment'] == True
+
+
+def test_delete_assignment_question(test_assignment, test_client, test_user_1):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment("test_assignment", test_user_1.course)
+    my_ass.addq_to_assignment(question="subc_b_fitb", points=10)
+    assert len(my_ass.questions()) == 1
+
+    _ = test_client.validate(
+        "admin/delete_assignment_question",
+        data=dict(name="subc_b_fitb", assignment_id=my_ass.assignment_id),
+    )
+
+    assert len(my_ass.questions()) == 0
+
+
+def test_reorder_assignment_questions(
+    test_assignment, test_client, test_user_1, runestone_db_tools
+):
+    test_user_1.make_instructor()
+    test_user_1.login()
+    my_ass = test_assignment("test_assignment", test_user_1.course)
+    my_ass.addq_to_assignment(question="subc_b_fitb", points=10)
+    my_ass.addq_to_assignment(question="subc_b_1", points=10)
+
+    questions = my_ass.questions()
+    question_id_one, name_one = questions[0]
+    question_id_two, name_two = questions[1]
+
+    db = runestone_db_tools.db
+
+    res = (
+        db(
+            (db.assignment_questions.assignment_id == my_ass.assignment_id)
+            & (db.assignment_questions.question_id == question_id_one))
+        .select(db.assignment_questions.sorting_priority)
+        .first()
+    )
+
+    assert res.sorting_priority == 1
+
+    res = (
+        db(
+            (db.assignment_questions.assignment_id == my_ass.assignment_id)
+            & (db.assignment_questions.question_id == question_id_two))
+        .select(db.assignment_questions.sorting_priority)
+        .first()
+    )
+
+    assert res.sorting_priority == 2
+
+    res = test_client.validate(
+        "admin/reorder_assignment_questions",
+        data={
+            'names[]': ["subc_b_1", "subc_b_fitb"],
+            'assignment_id': my_ass.assignment_id,
+        },
+    )
+    assert json.loads(res) == "Reordered in DB"
+
+    res = (
+        db(
+            (db.assignment_questions.assignment_id == my_ass.assignment_id)
+            & (db.assignment_questions.question_id == question_id_one))
+        .select(db.assignment_questions.sorting_priority)
+        .first()
+    )
+    assert res.sorting_priority == 2
+
+    res = (
+        db(
+            (db.assignment_questions.assignment_id == my_ass.assignment_id)
+            & (db.assignment_questions.question_id == question_id_two))
+        .select(db.assignment_questions.sorting_priority)
+        .first()
+    )
+
+    assert res.sorting_priority == 1
