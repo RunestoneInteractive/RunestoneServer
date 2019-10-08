@@ -54,7 +54,7 @@ def _route_book(is_published=True):
     if auth.user:
         # Given a logged-in user, use ``auth.user.course_id``.
         response.cookies["last_course"] = auth.user.course_name
-        response.cookies["last_course"]["expires"] = 24 * 3600 * 90
+        response.cookies["last_course"]["expires"] = 24 * 3600 * 90  # 90 day expiration
         response.cookies["last_course"]["path"] = "/"
 
         course = (
