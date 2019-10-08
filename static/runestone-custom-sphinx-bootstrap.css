@@ -14,7 +14,8 @@ h5 {
     padding: 10px 0;
 }
 
-#qcode, #editRST {
+#qcode,
+#editRST {
     font-family: Menlo, Consolas, monospace;
     overflow: scroll;
     white-space: pre;
@@ -22,6 +23,7 @@ h5 {
 
 /* navbar and menu related styles */
 @media (max-width: 768px) {
+
     /* Remove top padding when top navbar goes collapsed in narrow viewports */
     body {
         padding-top: 0;
@@ -34,6 +36,7 @@ h5 {
 }
 
 @media (min-width: 768px) {
+
     /* when navbar is collapsed we don't want any vertical dividers taking up space */
     .navbar .divider-vertical {
         height: 50px;
@@ -50,30 +53,36 @@ div.section {
     margin-left: auto;
     margin-right: auto;
 }
-.container{
-	padding-left:0;
-	padding-right:0;
+
+.container {
+    padding-left: 0;
+    padding-right: 0;
 }
- .container  .section >*:not(.section) {
-	max-width: 500pt;
-	margin-left: auto;
-	margin-right: auto;
+
+.container .section>*:not(.section) {
+    max-width: 500pt;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .container .section>img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.container  .section .parsons, .container  .section .parsons .sortable-code-container, .container  .section .ac_section, .container  .section .cd_section{
-	max-width: none;
+.container .section .parsons,
+.container .section .parsons .sortable-code-container,
+.container .section .ac_section,
+.container .section .cd_section {
+    max-width: none;
 }
+
 .navbar>.container .navbar-brand {
     margin-left: 0;
 }
 
-.navbar>.container  {
+.navbar>.container {
     background-color: #f8f8f8;
 }
 
@@ -99,7 +108,8 @@ div.section {
     margin-top: 7px;
 }
 
-.fb_iframe_widget span, .fb_iframe_widget iframe {
+.fb_iframe_widget span,
+.fb_iframe_widget iframe {
     height: 20px !important;
     width: 82px !important;
 }
@@ -116,7 +126,7 @@ div.section {
     margin-bottom: -6px;
 }
 
-.dropdown-menu > li > span {
+.dropdown-menu>li>span {
     display: block;
     padding: 3px 20px;
     clear: both;
@@ -135,7 +145,7 @@ div.section {
 .CodeMirror {
     margin: 0 0 1em 0;
     background-color: #fff;
-	clear:both;
+    clear: both;
 }
 
 .CodeMirror-scroll {
@@ -148,19 +158,24 @@ div.section {
 }
 
 .ac_section .CodeMirror pre {
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
-  border-width: 0; margin: 0; padding: 0; background: transparent;
-  font-family:  Monaco, Courier New, monospace;
-  font-size: inherit;
-  padding: 0; margin: 0;
-  white-space: pre;
-  word-wrap: normal;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    -o-border-radius: 0;
+    border-radius: 0;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: Monaco, Courier New, monospace;
+    font-size: inherit;
+    padding: 0;
+    margin: 0;
+    white-space: pre;
+    word-wrap: normal;
 }
 
-button.btn, btn.btn-sm,
+button.btn,
+btn.btn-sm,
 input[type="submit"].btn.btn-sm,
 input[type="button"].btn.btn-sm {
     font-size: 1em;
@@ -186,7 +201,10 @@ input[type="button"].btn.btn-sm {
     border-color: #474949;
 }
 
-.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active {
     background-color: #3a3c3c;
     border-color: #2e2f2f;
     color: #fff;
@@ -208,6 +226,7 @@ h2 {
 .alert form {
     margin-bottom: 0;
 }
+
 /* default bookstrap alert color is hard to read (low contrast). */
 .alert {
     color: #333;
@@ -249,7 +268,8 @@ h2 {
 }
 
 /* .alert-info */
-.admonition.tip, .admonition.note {
+.admonition.tip,
+.admonition.note {
     color: #333;
     background-color: #d9edf7;
     border-color: #bce8f1;
@@ -315,16 +335,17 @@ div.flash {
 #auth_user_remember {
     margin-top: -20px;
 }
+
 /* End login, registration, Janrain styles */
 
 /* end-of-chapter exercises styles */
-#exercises > ol > li,
-#programming-exercises > ol > li {
+#exercises>ol>li,
+#programming-exercises>ol>li {
     margin-bottom: 30px;
 }
 
-#exercises > ol > li:nth-child(even),
-#programming-exercises > ol > li:nth-child(even) {
+#exercises>ol>li:nth-child(even),
+#programming-exercises>ol>li:nth-child(even) {
     padding: 1.2em 1.4em;
     background: #faf7df;
     border: 1px solid #fbeed5;
@@ -332,6 +353,7 @@ div.flash {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
+
 /* End chapter exercises styles */
 
 /* Modal dialog styles (scratch activecode, compare me, etc) */
@@ -374,6 +396,7 @@ div.flash {
 }
 
 @media (max-width: 768px) {
+
     /* remove any custom position styles when the screen is small (mobile devices)
     to prevent the modal from being partially off the screen */
     .codelens-modal {
@@ -384,19 +407,20 @@ div.flash {
     }
 }
 
-.codelens-modal > .modal-dialog {
+.codelens-modal>.modal-dialog {
     width: 400px;
 }
 
-@media (min-width: 768px){
-   /* widescreen, for grading */
-   .modal-dialog {
-      right: auto;
-      left: 50;
-      width: 90%;
-      padding-top: 30px;
-      padding-bottom: 30px;
-   }
+@media (min-width: 768px) {
+
+    /* widescreen, for grading */
+    .modal-dialog {
+        right: auto;
+        left: 50;
+        width: 90%;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
 }
 
 /* End modal dialog styles */
@@ -417,107 +441,113 @@ div.flash {
 }
 
 .video-play-overlay {
-	position: relative;
-	top: -150px;
-	left: 44%;
+    position: relative;
+    top: -150px;
+    left: 44%;
     height: 85px;
     width: 130px;
     background-position: center;
     background-repeat: no-repeat;
 }
+
 .video_popup video {
-	width: 500pt;
-	cursor:pointer;
+    width: 500pt;
+    cursor: pointer;
 }
+
 .ui-sortable-helper {
     height: auto !important;
     width: auto !important;
 }
-.navLink{
-	z-index:2;
-	display: inline;
-	bottom: 65px;
-	position:fixed;
+
+.navLink {
+    z-index: 2;
+    display: inline;
+    bottom: 65px;
+    position: fixed;
 }
 
-#relations-next{
-	right: 35px;
+#relations-next {
+    right: 35px;
 }
 
-#relations-prev{
-	left: 35px;
+#relations-prev {
+    left: 35px;
 }
 
-.navLink a{
-	color: #999;
+.navLink a {
+    color: #999;
 }
 
-#completionButton{
-	margin-top: 25px;
-	margin-bottom: 15px;
-	padding-left: 70px;
-	padding-right: 70px;
-	color: #fff;
-	font-weight: bold;
-}
-.buttonAskCompletion{
-	background-color: #ffaa2b;
-	border-color:#ff9f19;
-	font-weight: bold;
-}
-.buttonAskCompletion:hover{
-	background-color: #ff9f19;
-	border-color:#ff9f19;
+#completionButton {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-left: 70px;
+    padding-right: 70px;
+    color: #fff;
+    font-weight: bold;
 }
 
-.buttonConfirmCompletion{
-	background-color: #50d392;
-	border-color:#3dc682;
-
-}
-.buttonConfirmCompletion:hover{
-	background-color: #3dc682;
-	border-color:#3dc682;
+.buttonAskCompletion {
+    background-color: #ffaa2b;
+    border-color: #ff9f19;
+    font-weight: bold;
 }
 
-.navLinkBg{
-	height: 40px;
-	background-color: #fff;
-	z-index: 1;
-	position: fixed;
-	bottom: 55px;
-	color: #999;
-	font-weight: bold;
-	-webkit-box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
-	-moz-box-shadow:    0px 0px 3px rgba(50, 50, 50, 0.5);
-	box-shadow:         0px 0px 3px rgba(50, 50, 50, 0.5);
+.buttonAskCompletion:hover {
+    background-color: #ff9f19;
+    border-color: #ff9f19;
 }
 
-.navLinkBg:hover{
-	color: #999;
+.buttonConfirmCompletion {
+    background-color: #50d392;
+    border-color: #3dc682;
+
 }
 
-#navLinkBgRight{
-	right: -1000px;
-	padding: 10px 15px 0 65px;
+.buttonConfirmCompletion:hover {
+    background-color: #3dc682;
+    border-color: #3dc682;
 }
 
-#navLinkBgLeft{
-	left: -65px;
-	padding-left: 15px;
-	padding-right: 50px;
+.navLinkBg {
+    height: 40px;
+    background-color: #fff;
+    z-index: 1;
+    position: fixed;
+    bottom: 55px;
+    color: #999;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
+    -moz-box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
+    box-shadow: 0px 0px 3px rgba(50, 50, 50, 0.5);
 }
 
-.activehtml  {
+.navLinkBg:hover {
+    color: #999;
+}
+
+#navLinkBgRight {
+    right: -1000px;
+    padding: 10px 15px 0 65px;
+}
+
+#navLinkBgLeft {
+    left: -65px;
+    padding-left: 15px;
+    padding-right: 50px;
+}
+
+.activehtml {
     width: 100%;
     height: 400px;
     background-color: #fff;
 }
 
-.container  .section>div.sidebar {
-	margin: 0 0 0.5em 1em;
-	width: auto;
-	}
+.container .section>div.sidebar {
+    margin: 0 0 0.5em 1em;
+    width: auto;
+}
 
 a.disqus_thread_link {
     display: block;
@@ -532,20 +562,22 @@ iframe[seamless] {
     display: block;
 }
 
-@media (min-width: 768px){
-	.container  .section>div.sidebar {
-		margin: 0 3em 0.5em 1em;
-	}
+@media (min-width: 768px) {
+    .container .section>div.sidebar {
+        margin: 0 3em 0.5em 1em;
+    }
 }
-@media (min-width: 992px){
-	.container  .section>div.sidebar {
-		margin: 0 11em 0.5em 1em;
-	}
+
+@media (min-width: 992px) {
+    .container .section>div.sidebar {
+        margin: 0 11em 0.5em 1em;
+    }
 }
-@media (min-width: 1200px){
-	.container  .section>div.sidebar {
-		margin: 0 18em 0.5em 1em;
-	}
+
+@media (min-width: 1200px) {
+    .container .section>div.sidebar {
+        margin: 0 18em 0.5em 1em;
+    }
 }
 
 

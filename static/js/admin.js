@@ -473,6 +473,17 @@ function populateQuestions(select, question_names) {
         };*/
         select.add(makeOption(questiontext, question_names[i]));
     }
+
+    $(select).select2({
+        containerCss: {
+            'float':'left',
+            'overflow-x': 'auto',
+            'margin-top': '25px',
+            'margin-right': '5px',
+            'margin-left': '30px',
+        },
+        size: 10,
+    })
 }
 
 function updateColumn2() {
@@ -566,6 +577,19 @@ function pickedAssignments(column) {
         pickedcolumn.style.visibility = 'visible';
 
     }
+    $("#" + column).select2({
+        containerCss: {
+            'float': 'left',
+            'overflow-x': 'auto',
+            'margin-top': '25px',
+            'margin-right': '5px',
+            'width': '125px'
+        },
+        dropdownCss: {
+            'width': '100%'
+        },
+        placeholder: 'select_assignment',
+    });
 
 }
 
@@ -581,6 +605,17 @@ function displayDefaultQuestion(column) {
     pickedcolumn.add(option);
     $("option[value='default']").attr("disabled", "disabled");
     pickedcolumn.style.visibility = 'visible';
+
+    $("#" + column).select2({
+        containerCss: {
+            'float': 'left',
+            'overflow-x': 'auto',
+            'margin-top': '25px',
+            'margin-right': '5px',
+            'margin-left': '30px',
+        }
+    });
+
 }
 
 
@@ -610,6 +645,16 @@ function pickedStudents(column) {
         pickedcolumn.style.visibility = 'visible';
 
     }
+    $("#" + column).select2({
+        containerCss: {
+            'float': 'left',
+            'overflow-x': 'auto',
+            'margin-top': '25px',
+            'margin-right': '5px',
+            'margin-left': '30px',
+        }
+    });
+
 }
 
 
@@ -631,9 +676,16 @@ function pickedChapters(column) {
         option.value = key;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = 'visible';
-
-
     }
+
+    $("#" + column).select2({
+        containerCss: {
+            'float': 'left',
+            'overflow-x': 'auto',
+            'margin-top': '25px',
+            'margin-right': '5px',
+        }
+    });
 
 }
 
