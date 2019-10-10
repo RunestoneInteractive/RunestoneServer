@@ -7,14 +7,19 @@ function gradeIndividualItem() {
 
     set_release_button();
 
-    var col3 = document.getElementById("gradingcolumn3");
-    var col3val = col3.options[col3.selectedIndex].value;
+    var col3 = document.getElementById("studentselector");
+    if (col3.selectedIndex > -1) {
+        var col3val = col3.options[col3.selectedIndex].value;
+    } else {
+        $("#rightsideGradingTab").empty();
+        return;
+    }
 
     var rightSideDiv = $('#rightsideGradingTab');
     var student_dict = students;
     var question, sid, student;
     var questions, sstudents;
-    var q_column = document.getElementById("gradingcolumn2");
+    var q_column = document.getElementById("questionselector");
     sstudents = col3.selectedOptions;
     questions = q_column.selectedOptions;
     if (sstudents.length == 1 && (val1 == 'assignment' && getSelectedItem('assignment') != null)) {
@@ -36,7 +41,7 @@ function gradeIndividualItem() {
                 }
             }
             if (!sid) {
-                continue
+                continue;
             }
             var newid = "Q" + question.replace(/[#*@+:>~.\/ ]/g, '_') +
                 "S" + sid.replace(/[#*@+:>~.\/]/g, '_');
@@ -60,18 +65,18 @@ function gradeIndividualItem() {
 
 function getSelectedGradingColumn(type) {
     //gradingoption1 has contents of picker for type of stuff in column (e.g., assignment, student)
-    //gradingcolumn1 has contents of column (e.g., actual assignments)
+    //chaporassignselector has contents of column (e.g., actual assignments)
     var opt1 = document.getElementById("gradingoption1");
     var col1Type = opt1.options[opt1.selectedIndex].value;
     var col2Type = "question";
     var col3type = "student";
 
     if (col1Type == type) {
-        col = document.getElementById("gradingcolumn1");
+        col = document.getElementById("chaporassignselector");
     } else if (col2Type == type) {
-        col = document.getElementById("gradingcolumn2");
+        col = document.getElementById("questionselector");
     } else if (col3type == type) {
-        col = document.getElementById("gradingcolumn3");
+        col = document.getElementById("studentselector");
     } else {
         col = null;
     }
@@ -117,9 +122,9 @@ function getSelectedItem(type) {
 }
 
 function autoGrade() {
-    var assignment = getSelectedItem("assignment")
-    var question = getSelectedItem("question")
-    var studentID = getSelectedItem("student")
+    var assignment = getSelectedItem("assignment");
+    var question = getSelectedItem("question");
+    var studentID = getSelectedItem("student");
     var enforceDeadline = $('#enforceDeadline').is(':checked')
     var params = {
         url: eBookConfig.autogradingURL,
@@ -348,7 +353,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
             event.preventDefault();
             jQuery('form', rightDiv).submit();
             // This next block should not run until save is complete.
-            var col3 = document.getElementById("gradingcolumn3");
+            var col3 = document.getElementById("studentselector");
             try {
                 var ind = col3.selectedIndex + 1;
                 col3.selectedIndex = ind;
@@ -453,22 +458,43 @@ function populateQuestions(select, question_names) {
         theme: "bootstrap",
         placeholder: 'Select Question(s)',
     })
+
+    $(select).on("select2:unselect", function() {
+        $("#allquestioncb").prop("checked", false);
+    });
 }
 
 // when the chapter or assignment changes
 function updateQuestionList() {
     var sel1 = document.getElementById("gradingoption1");
     var val1 = sel1.options[sel1.selectedIndex].value;
-    var col1 = document.getElementById("gradingcolumn1");
-    var col2 = document.getElementById("gradingcolumn2");
+    var col1 = document.getElementById("chaporassignselector");
+    var col2 = document.getElementById("questionselector");
     var val2 = "question";
+    $("#rightsideGradingTab").empty();
     var col1val = "";
     if (col1.selectedIndex > -1) {
         var col1val = col1.options[col1.selectedIndex].value;
+    } else {
+        $("#questionselector").empty();
+        $("#rightsideGradingTab").empty();
+        $("#autogradingform").hide();
+        $("#assignmentTotalform").hide();
+        $("#releasebutton").hide();
+        return;
     }
+    $("#releasestate").text('');
+
     if (val1 == 'assignment') {
         set_release_button();
+        autograde_form.style.visibility = 'visible';
         document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        if (! assignment_release_states[col1val]) {
+            $("#releasestate").text('Not Released');
+        } else {
+            $("#releasestate").text('');
+        }
+
     }
     if (val1 == 'assignment' && val2 == 'question') {
         populateQuestions(col2, assignmentinfo[col1val]);
@@ -477,12 +503,6 @@ function updateQuestionList() {
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
         populateQuestions(col2, chapters[col1val]);
-    } else if (val1 == 'student') {
-        if (getSelectedItem('student') != null && getSelectedItem('assignment') != null) {
-            calculateTotals();
-        } else {
-            document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        }
     }
 
     if (val2 != "") {
@@ -490,20 +510,14 @@ function updateQuestionList() {
     }
 }
 
-function updateColumn3() {
-    var val2 = "question";
-    var val3 = "student";
-    var col2 = document.getElementById("gradingcolumn2");
-    var col3 = document.getElementById("gradingcolumn3");
-    var col2VAL = col2.options[col2.selectedIndex].value;
+function gradeSelectedStudent() {
+    var col3 = document.getElementById("studentselector");
 
-    if (val3 != "") {
-        var lastcolval = col3.selectedIndex;
-        if (lastcolval != -1) {
-            gradeIndividualItem();
-        }
-        col3.style.visibility = 'visible';
+    var lastcolval = col3.selectedIndex;
+    if (lastcolval != -1) {
+        gradeIndividualItem();
     }
+    col3.style.visibility = 'visible';
 
 }
 
@@ -512,9 +526,9 @@ function pickedAssignments(column) {
     var pickedcolumn = document.getElementById(column);
 
     $("#" + column).empty();
+    var option = document.createElement("option");
+    pickedcolumn.add(option);
     var assignments = assignmentinfo;
-    set_release_button();
-    autograde_form.style.visibility = 'visible';
 
     var keys = Object.keys(assignments);
     keys.sort();
@@ -531,6 +545,9 @@ function pickedAssignments(column) {
         size: 10,
         theme: "bootstrap",
         placeholder: 'Select Assignment',
+    });
+    $("#" + column).on("select2:unselect", function() {
+        $("#releasestate").text("");
     });
 
 }
@@ -586,12 +603,18 @@ function pickedStudents(column) {
         placeholder: 'Select Student(s)',
     });
 
+    $("#" + column).on("select2:unselect",function() {
+        $("#allstudentcb").prop("checked", false);
+    })
+
 }
 
 
 function pickedChapters(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
+    var option = document.createElement("option");
+    pickedcolumn.add(option);
     var keys = [];
     var i;
     for (i in chapters) {
@@ -616,45 +639,36 @@ function pickedChapters(column) {
     });
 
 }
-// This is broken -- better to empty the select and add the things on the list.
-function makeOptions(select, texts) {
-    $(select).children().each(
-        function (i, option) {
-            if (texts.includes(option.value)) {
-                $(option).show();
-            } else {
-                $(option).hide(); //("disabled",true);
-            }
-        }
-    );
-}
-
 
 // Start Here for the flow of events when grading.
 // 1. Choose either an assignment or a chapter
 // 2. When you choose a specific assignment it populates the questions for that assignment
 // 3. students are always populated in the third column
-function showColumn1() {
+function selectChapOrAssignment() {
 
     var select1 = document.getElementById("gradingoption1");
     var val = select1.options[select1.selectedIndex].value;
+    $("#rightsideGradingTab").empty();
+    $("#releasestate").text("");
+    $(".allcbclass").show();
 
-    set_release_button();
     document.getElementById('assignmentTotalform').style.visibility = 'hidden';
     autograde_form = document.getElementById("autogradingform");
     autograde_form.style.visibility = 'hidden';
 
-    $("#gradingcolumn2").empty();
-    $("#gradingcolumn3").empty();
+    $("#questionselector").empty();
+    $("#allquestioncb").prop("checked", false);
+    $("#studentselector").empty();
+    $("#allstudentcb").prop("checked", false);
 
     if (val == 'assignment') {
-        pickedAssignments("gradingcolumn1");
+        pickedAssignments("chaporassignselector");
     } else if (val == 'chapter') {
-        pickedChapters('gradingcolumn1');
+        pickedChapters('chaporassignselector');
     }
 
-    displayDefaultQuestion('gradingcolumn2');
-    pickedStudents("gradingcolumn3");
+    displayDefaultQuestion('questionselector');
+    pickedStudents("studentselector");
 }
 
 
@@ -1709,7 +1723,7 @@ function set_release_button() {
     var assignment = null;
 
     if (col1val == 'assignment') {
-        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
         }
@@ -1729,8 +1743,10 @@ function set_release_button() {
         // If so, set the button text appropriately
         if (release_state == true) {
             release_button.text("Hide Grades from Students for " + assignment);
+            $("#releasestate").text("")
         } else {
             release_button.text("Release Grades to Students for " + assignment);
+            $("#releasestate").text("Not Released")
         }
     }
 }
@@ -1738,29 +1754,16 @@ function set_release_button() {
 function toggle_release_grades() {
     var col1 = document.getElementById("gradingoption1");
     var col1val = col1.options[col1.selectedIndex].value;
-
-    var col2 = document.getElementById("gradingoption2");
-    var col2val = col2.options[col2.selectedIndex].value;
     var assignment = null;
 
     if (col1val == 'assignment') {
-        var assignmentcolumn = document.getElementById("gradingcolumn1");
+        var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
 
         } else {
             alert("Please choose an assignment first");
         }
-    } else if (col2val == 'assignment') {
-
-        var assignmentcolumn = document.getElementById("gradingcolumn2");
-        if (assignmentcolumn.selectedIndex != -1) {
-            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
-
-        } else {
-            alert("Please choose an assignment first");
-        }
-
     }
 
     if (assignment != null) {

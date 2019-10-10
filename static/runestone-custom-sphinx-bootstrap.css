@@ -607,3 +607,8 @@ div.settingsbox {
 .runestone_caption {
     text-align: center;
 }
+
+.allcbclass {
+    display: none;
+    margin-top: 10px;
+}

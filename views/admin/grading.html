@@ -19,27 +19,29 @@
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
 
   <div>
-    <select required onchange="showColumn1();" id="gradingoption1" class="form-control" style="margin-bottom: 10px;" >
+    <select required onchange="selectChapOrAssignment();" id="gradingoption1" class="form-control" style="margin-bottom: 10px;" >
               <option value="" disabled selected>Select: Chapter or Assignment</option>
               <option value="chapter">chapter</option>
               <option value="assignment">assignment</option>
     </select>
 
-    <select multiple onchange="updateQuestionList();" class="form-control" id="gradingcolumn1" style="display:none;" >
+    <select onchange="updateQuestionList();" class="form-control" id="chaporassignselector" style="display:none;" >
+      <option></option>
     </select>
+    <span id="releasestate" style="color: red;"></span>
   </div>
 
   <div>
 
   <h3>Questions</h3>
-  <select multiple onchange="updateColumn3();" class="form-control" id="gradingcolumn2" style="display: none;" >
-  </select> <input type="checkbox" id="checkbox" />Select All
+  <select multiple onchange="gradeSelectedStudent();" class="form-control" id="questionselector" style="display: none;" >
+  </select> <span class="allcbclass"><input type="checkbox" id="allquestioncb" /><label for="allquestioncb">Select All</label></span>
   </div>
   <div>
 
   <h3>Students</h3>
-  <select multiple onchange="gradeIndividualItem();" class="form-control" id="gradingcolumn3" style="display: none;" >
-  </select> <input type="checkbox" id="checkbox" />Select All
+  <select multiple onchange="gradeIndividualItem();" class="form-control" id="studentselector" style="display: none;" >
+  </select> <span class="allcbclass"><input type="checkbox" id="allstudentcb" /><label for="allstudentcb">Select All</label></span>
   </div>
 
 
@@ -149,6 +151,29 @@
     saveManualTotal();
     return false;
   });
+
+// code to select or unselect all students
+
+$("#allquestioncb").click(function(){
+    if($("#allquestioncb").is(":checked") ){
+        $("#questionselector > option").prop("selected","selected");
+        $("#questionselector").trigger("change");
+    }else{
+        $("#questionselector > option").removeAttr("selected");
+         $("#questionselector").trigger("change");
+     }
+});
+
+$("#allstudentcb").click(function(){
+  if($("#allstudentcb").is(":checked") ){
+      $("#studentselector > option").prop("selected","selected");
+      $("#studentselector").trigger("change");
+  }else{
+      $("#studentselector > option").removeAttr("selected");
+       $("#studentselector").trigger("change");
+   }
+});
+
 </script>
 
 
