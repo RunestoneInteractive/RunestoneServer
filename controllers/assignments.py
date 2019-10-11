@@ -648,17 +648,36 @@ def record_grade():
     if "acid" not in request.vars or "sid" not in request.vars:
         return json.dumps({"success": False, "message": "Need problem and user."})
 
-    score_str = request.vars.get("grade", "").strip()
-    if score_str == "":
-        score = 0
+    if "grade" in request.vars:
+        has_score = True
+        score_str = request.vars.get("grade", "").strip()
+        if score_str == "":
+            score = 0
+        else:
+            try:
+                score = float(score_str)
+            except ValueError as e:
+                logger.error("Bad Score: {} - Details: {}".format(score_str, e))
+                return json.dumps({"response": "not replaced"})
     else:
-        try:
-            score = float(score_str)
-        except ValueError as e:
-            logger.error("Bad Score: {} - Details: {}".format(score_str, e))
-            return json.dumps({"response": "not replaced"})
+        has_score = False
+        score_str = ""
+
     comment = request.vars.get("comment", None)
-    if score_str != "" or ("comment" in request.vars and comment != ""):
+
+    updates = dict(
+        sid=request.vars["sid"],
+        div_id=request.vars["acid"],
+        course_name=auth.user.course_name,
+    )
+
+    if has_score:
+        updates["score"] = score
+
+    if comment is not None:
+        updates["comment"] = comment
+
+    if has_score or comment:
         try:
             db.question_grades.update_or_insert(
                 (
@@ -666,11 +685,7 @@ def record_grade():
                     & (db.question_grades.div_id == request.vars["acid"])
                     & (db.question_grades.course_name == auth.user.course_name)
                 ),
-                sid=request.vars["sid"],
-                div_id=request.vars["acid"],
-                course_name=auth.user.course_name,
-                score=score,
-                comment=comment,
+                **updates
             )
         except IntegrityError:
             logger.error(
