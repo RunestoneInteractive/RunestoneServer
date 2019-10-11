@@ -30,6 +30,15 @@ EVENT_TABLE = {
     "parsonsprob": "parsons_answers",
 }
 
+COMMENT_MAP = {
+    "sql": "--",
+    "python": "#",
+    "java": "//",
+    "javascript": "//",
+    "c": "//",
+    "cpp": "//",
+}
+
 
 def compareAndUpdateCookieData(sid: str):
     if (
@@ -404,15 +413,7 @@ def runlog():  # Log errors and runs with code
                     )
                     if request.vars.partner:
                         if _same_class(sid, request.vars.partner):
-                            comment_map = {
-                                "sql": "--",
-                                "python": "#",
-                                "java": "//",
-                                "javascript": "//",
-                                "c": "//",
-                                "cpp": "//",
-                            }
-                            comchar = comment_map.get(request.vars.lang, "#")
+                            comchar = COMMENT_MAP.get(request.vars.lang, "#")
                             newcode = (
                                 "{} This code was shared by {}\n\n".format(comchar, sid)
                                 + code
@@ -1500,6 +1501,12 @@ def broadcast_code():
         (db.user_courses.course_id == cid)
         & (db.auth_user.id == db.user_courses.user_id)
     ).select()
+    shared_code = (
+        "{} Instructor shared code on {}\n".format(
+            COMMENT_MAP.get(request.vars.lang, "#"), datetime.datetime.utcnow().date()
+        )
+        + request.vars.code
+    )
     counter = 0
     for student in student_list:
         if student.auth_user.id == auth.user.id:
@@ -1509,7 +1516,7 @@ def broadcast_code():
             db.code.insert(
                 sid=sid,
                 acid=request.vars.divid,
-                code=request.vars.code,
+                code=shared_code,
                 emessage="",
                 timestamp=datetime.datetime.utcnow(),
                 course_id=cid,
