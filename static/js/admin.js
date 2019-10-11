@@ -471,6 +471,8 @@ function populateQuestions(select, question_names) {
     $(select).select2({
         size: 10,
         theme: "bootstrap",
+        closeOnSelect: false,
+        allowClear: true,
         placeholder: "Select Question(s)",
     });
 
@@ -602,6 +604,8 @@ function pickedStudents(column) {
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
+        closeOnSelect: false,
+        allowClear: true,
         placeholder: "Select Student(s)",
     });
 
