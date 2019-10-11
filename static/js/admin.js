@@ -3,38 +3,41 @@ var assignment_release_states = null;
 function gradeIndividualItem() {
     //This function figures out the parameters to feed to getRightSideGradingDiv, which does most of the work
     var sel1 = document.getElementById("gradingoption1");
-    var val1 = sel1.options[sel1.selectedIndex].value;
+    var assignOrChap = sel1.options[sel1.selectedIndex].value;
 
     set_release_button();
 
-    var col3 = document.getElementById("studentselector");
-    if (col3.selectedIndex > -1) {
-        var col3val = col3.options[col3.selectedIndex].value;
+    var studentPicker = document.getElementById("studentselector");
+    if (studentPicker.selectedIndex > -1) {
+        var selectedStudent = studentPicker.options[studentPicker.selectedIndex].value;
     } else {
         $("#rightsideGradingTab").empty();
         return;
     }
 
-    var rightSideDiv = $('#rightsideGradingTab');
+    var rightSideDiv = $("#rightsideGradingTab");
     var student_dict = students;
     var question, sid, student;
     var questions, sstudents;
     var q_column = document.getElementById("questionselector");
-    sstudents = col3.selectedOptions;
+    sstudents = studentPicker.selectedOptions;
     questions = q_column.selectedOptions;
-    if (sstudents.length == 1 && (val1 == 'assignment' && getSelectedItem('assignment') != null)) {
-        calculateTotals()
+    if (
+        sstudents.length == 1 &&
+        (assignOrChap == "assignment" && getSelectedItem("assignment") != null)
+    ) {
+        calculateTotals();
     } else {
-        document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+        document.getElementById("assignmentTotalform").style.visibility = "hidden";
     }
 
-    $(rightSideDiv)[0].style.visibility = 'visible';
+    $(rightSideDiv)[0].style.visibility = "visible";
     rightSideDiv.html(""); //empty it out
     //Not sure if questions or students should be the outer loop
     for (var qnum = 0; qnum < questions.length; qnum++) {
-        question = questions[qnum].value
+        question = questions[qnum].value;
         for (var snum = 0; snum < sstudents.length; snum++) {
-            student = sstudents[snum].value
+            student = sstudents[snum].value;
             for (var key in student_dict) {
                 if (student_dict[key] == student) {
                     sid = key;
@@ -43,21 +46,32 @@ function gradeIndividualItem() {
             if (!sid) {
                 continue;
             }
-            var newid = "Q" + question.replace(/[#*@+:>~.\/ ]/g, '_') +
-                "S" + sid.replace(/[#*@+:>~.\/]/g, '_');
+            var newid =
+                "Q" +
+                question.replace(/[#*@+:>~.\/ ]/g, "_") +
+                "S" +
+                sid.replace(/[#*@+:>~.\/]/g, "_");
             //This creates the equivalent of outerRightDiv for each question and student
-            var divstring = '<div style="border:1px solid;padding:5px;margin:5px;" id="' + newid + '">';
-            divstring += '<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>'
-            divstring += '<div style="display:none" id="shortanswerresponse"></div>'
-            divstring += '<div id="gradingform"><form>'
-            divstring += '<label for="input-grade">Grade</label>'
-            divstring += '<input id="input-grade" type="text" class="form-control" value="" />'
-            divstring += '<label for="input-comments">Comments</label>'
-            divstring += '<input id="input-comments" type="text" class="form-control" value="" />'
-            divstring += '<input type="submit" value="Save Grade" class="btn btn-primary" /></form>'
-            divstring += '<button class="btn btn-default next" type="button">Save and next</button></div>'
-            divstring += '</div></div>'
-            rightSideDiv.append(divstring)
+            var divstring =
+                '<div style="border:1px solid;padding:5px;margin:5px;" id="' +
+                newid +
+                '">';
+            divstring +=
+                '<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>';
+            divstring += '<div style="display:none" id="shortanswerresponse"></div>';
+            divstring += '<div id="gradingform"><form>';
+            divstring += '<label for="input-grade">Grade</label>';
+            divstring +=
+                '<input id="input-grade" type="text" class="form-control" value="" />';
+            divstring += '<label for="input-comments">Comments</label>';
+            divstring +=
+                '<input id="input-comments" type="text" class="form-control" value="" />';
+            divstring +=
+                '<input type="submit" value="Save Grade" class="btn btn-primary" /></form>';
+            divstring +=
+                '<button class="btn btn-default next" type="button">Save and next</button></div>';
+            divstring += "</div></div>";
+            rightSideDiv.append(divstring);
             getRightSideGradingDiv($("#" + newid), question, sid);
         }
     }
@@ -92,7 +106,7 @@ function getSelectedItem(type) {
     if (type == "student") {
         if (col.selectedIndex != -1) {
             // they've selected an item; get the id associated with it
-            id_diction = students
+            id_diction = students;
             var item = col.options[col.selectedIndex].value;
             for (var key in id_diction) {
                 // one of these should match, since an item was selected!
@@ -125,7 +139,7 @@ function autoGrade() {
     var assignment = getSelectedItem("assignment");
     var question = getSelectedItem("question");
     var studentID = getSelectedItem("student");
-    var enforceDeadline = $('#enforceDeadline').is(':checked')
+    var enforceDeadline = $("#enforceDeadline").is(":checked");
     var params = {
         url: eBookConfig.autogradingURL,
         type: "POST",
@@ -134,47 +148,50 @@ function autoGrade() {
             assignment: assignment,
             question: question,
             sid: studentID,
-            enforceDeadline: enforceDeadline
+            enforceDeadline: enforceDeadline,
         },
-        success: function (retdata) {
-            $('#assignmentTotalform').css('visibility', 'hidden');
+        success: function(retdata) {
+            $("#assignmentTotalform").css("visibility", "hidden");
             //alert(retdata.message);
-        }
-    }
+        },
+    };
 
     if (assignment != null && question === null && studentID == null) {
-        (async function (students, ajax_params) {
+        (async function(students, ajax_params) {
             // Grade each student provided.
             let student_array = Object.keys(students);
             for (let index = 0; index < student_array.length; ++index) {
                 let student = student_array[index];
                 ajax_params.data.sid = student;
                 res = await jQuery.ajax(ajax_params);
-                $("#autogradingprogress").html(`Student ${index + 1} of ${student_array.length}: ${res.message} for ${student}`);
+                $("#autogradingprogress").html(
+                    `Student ${index + 1} of ${student_array.length}: ${
+                        res.message
+                    } for ${student}`
+                );
             }
             // Clear the graing progress.
-            $("#autogradingprogress").html('');
+            $("#autogradingprogress").html("");
             calculateTotals();
             $("#autogradesubmit").prop("disabled", false);
         })(students, params);
     } else {
-        jQuery.ajax(params).always(function () {
+        jQuery.ajax(params).always(function() {
             calculateTotals();
             $("#autogradesubmit").prop("disabled", false);
         });
     }
-
 }
 
 function calculateTotals(sid) {
-    var assignment = getSelectedItem("assignment")
-    var question = getSelectedItem("question")
+    var assignment = getSelectedItem("assignment");
+    var question = getSelectedItem("question");
     if (!sid) {
-        var studentID = getSelectedItem("student")
+        var studentID = getSelectedItem("student");
     } else {
-        studentID = sid
+        studentID = sid;
     }
-    $('#assignmentTotalform').css('visibility', 'hidden');
+    $("#assignmentTotalform").css("visibility", "hidden");
     jQuery.ajax({
         url: eBookConfig.calcTotalsURL,
         type: "POST",
@@ -182,25 +199,25 @@ function calculateTotals(sid) {
         data: {
             assignment: assignment,
             question: question,
-            sid: studentID
+            sid: studentID,
         },
-        success: function (retdata) {
+        success: function(retdata) {
             if (retdata.computed_score != null) {
                 //show the form for setting it manually
-                $('#assignmentTotalform').css('visibility', 'visible');
+                $("#assignmentTotalform").css("visibility", "visible");
                 // populate it with data from retdata
-                $('#computed-total-score').val(retdata.computed_score);
-                $('#manual-total-score').val(retdata.manual_score);
+                $("#computed-total-score").val(retdata.computed_score);
+                $("#manual-total-score").val(retdata.manual_score);
             } else {
                 alert(retdata.message);
             }
-        }
+        },
     });
 }
 
 function saveManualTotal() {
-    var assignment = getSelectedItem("assignment")
-    var studentID = getSelectedItem("student")
+    var assignment = getSelectedItem("assignment");
+    var studentID = getSelectedItem("student");
     jQuery.ajax({
         url: eBookConfig.setTotalURL,
         type: "POST",
@@ -208,19 +225,19 @@ function saveManualTotal() {
         data: {
             assignment: assignment,
             sid: studentID,
-            score: $('#manual-total-score').val(),
+            score: $("#manual-total-score").val(),
         },
-        success: function (retdata) {
+        success: function(retdata) {
             if (!retdata.success) {
                 alert(retdata.message);
             }
-        }
+        },
     });
 }
 
 function sendLTI_Grade() {
-    var assignment = getSelectedItem("assignment")
-    var studentID = getSelectedItem("student")
+    var assignment = getSelectedItem("assignment");
+    var studentID = getSelectedItem("student");
     jQuery.ajax({
         url: eBookConfig.sendLTIGradeURL,
         type: "POST",
@@ -229,11 +246,11 @@ function sendLTI_Grade() {
             assignment: assignment,
             sid: studentID,
         },
-        success: function (retdata) {
+        success: function(retdata) {
             if (!retdata.success) {
                 alert(retdata.message);
             }
-        }
+        },
     });
 }
 
@@ -245,33 +262,35 @@ function getRightSideGradingDiv(element, acid, studentId) {
     var elementID = $(element)[0].id; //some of this might be redundant
     // Clear any locally-stored info, which might be from showing another student's answer.
     // See ``runestonebase.js, localStorageKey()``.
-    localStorage.removeItem(eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given");
+    localStorage.removeItem(
+        eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given"
+    );
     //make an ajax call to get the htmlsrc for the given question
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
-    obj.send(JSON.stringify({
-        acid: acid
-    }));
-    obj.onreadystatechange = function () {
+    obj.send(
+        JSON.stringify({
+            acid: acid,
+        })
+    );
+    obj.onreadystatechange = function() {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
-            var enforceDeadline = $('#enforceDeadline').is(':checked');
+            var enforceDeadline = $("#enforceDeadline").is(":checked");
             var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
             // Need to update deadline by timezone
             var now = new Date();
             tzoff = now.getTimezoneOffset();
-            dl.setHours(dl.getHours() + tzoff/60);
-            $("#dl_disp").text(dl)
+            dl.setHours(dl.getHours() + tzoff / 60);
+            $("#dl_disp").text(dl);
             renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
                 sid: studentId,
                 graderactive: true,
                 enforceDeadline: enforceDeadline,
-                deadline: dl
+                deadline: dl,
             });
         }
-
     };
-
 
     //this is an internal function for getRightSideGradingDiv
     // called when Save Grade is pressed
@@ -280,8 +299,8 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         //        if (form==undefined){form=$(this);} //This might be redundant
         var form = jQuery(this);
-        var grade = jQuery('#input-grade', form).val();
-        var comment = jQuery('#input-comments', form).val();
+        var grade = jQuery("#input-grade", form).val();
+        var comment = jQuery("#input-comments", form).val();
         if (comment === "autograded") {
             comment = "instructor graded";
         }
@@ -295,11 +314,11 @@ function getRightSideGradingDiv(element, acid, studentId) {
                 grade: grade,
                 comment: comment,
             },
-            success: function (data) {
-                jQuery('.grade', element).html(data.grade);
-                jQuery('.comment', element).html(data.comment);
+            success: function(data) {
+                jQuery(".grade", element).html(data.grade);
+                jQuery(".comment", element).html(data.comment);
                 calculateTotals(studentId);
-            }
+            },
         });
     }
 
@@ -309,26 +328,39 @@ function getRightSideGradingDiv(element, acid, studentId) {
 
         var rightDiv = jQuery(element);
 
-        jQuery('#gradingform', rightDiv).remove();
-        var newForm = document.createElement('form');
-        newForm.setAttribute('id', 'gradingform');
-        formstr = '<form> <label for="input-grade">Grade</label> <input id="input-grade" type="text" class="form-control" value= ""/> <label for="input-comments">Comments</label> <input id="input-comments" type="text" class="form-control" value="" /> <input type="submit" value="Save Grade" class="btn btn-primary" /> </form> <button class="btn btn-default next" type="button">Save and next</button>';
+        jQuery("#gradingform", rightDiv).remove();
+        var newForm = document.createElement("form");
+        newForm.setAttribute("id", "gradingform");
+        formstr =
+            '<form> <label for="input-grade">Grade</label> <input id="input-grade" type="text" class="form-control" value= ""/> <label for="input-comments">Comments</label> <input id="input-comments" type="text" class="form-control" value="" /> <input type="submit" value="Save Grade" class="btn btn-primary" /> </form> <button class="btn btn-default next" type="button">Save and next</button>';
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
 
-        jQuery('#rightTitle', rightDiv).html(data.name + ' <em>' + data.acid + '</em> <span>Points: ' + question_points[data.acid] + '</span>');
-
+        jQuery("#rightTitle", rightDiv).html(
+            data.name +
+                " <em>" +
+                data.acid +
+                "</em> <span>Points: " +
+                question_points[data.acid] +
+                "</span>"
+        );
 
         if (data.file_includes) {
             // create divids for any files they might need
-            var file_div_template = '<pre id="file_div_template" style = "display:none;">template text</pre>;'
+            var file_div_template =
+                '<pre id="file_div_template" style = "display:none;">template text</pre>;';
             var index;
             for (index = 0; index < data.file_includes.length; index += 1) {
-                if (jQuery('#' + data.file_includes[index].acid, rightDiv).length == 0) {
+                if (jQuery("#" + data.file_includes[index].acid, rightDiv).length == 0) {
                     // doesn't exist yet, so add it.
-                    jQuery('body').append(file_div_template);
-                    jQuery('#file_div_template').text(data.file_includes[index].contents);
-                    jQuery('#file_div_template').attr("id", data.file_includes[index].acid);
+                    jQuery("body").append(file_div_template);
+                    jQuery("#file_div_template").text(
+                        data.file_includes[index].contents
+                    );
+                    jQuery("#file_div_template").attr(
+                        "id",
+                        data.file_includes[index].acid
+                    );
                 }
             }
         }
@@ -336,22 +368,21 @@ function getRightSideGradingDiv(element, acid, studentId) {
         // pull in any prefix or suffix code, already retrieved in data
         var complete_code = data.code;
         if (data.includes) {
-            complete_code = data.includes + '\n#### end of included code\n\n' + complete_code;
+            complete_code =
+                data.includes + "\n#### end of included code\n\n" + complete_code;
         }
         if (data.suffix_code) {
-            complete_code = complete_code + '\n\n#### tests ####\n' + data.suffix_code;
+            complete_code = complete_code + "\n\n#### tests ####\n" + data.suffix_code;
         }
-
-
 
         // outerdiv, acdiv, sid, initialcode, language
 
         // Handle the save button
-        jQuery('form', rightDiv).submit(save);
+        jQuery("form", rightDiv).submit(save);
         // Handle the save and next button
-        jQuery('.next', rightDiv).click(function (event) {
+        jQuery(".next", rightDiv).click(function(event) {
             event.preventDefault();
-            jQuery('form', rightDiv).submit();
+            jQuery("form", rightDiv).submit();
             // This next block should not run until save is complete.
             var col3 = document.getElementById("studentselector");
             try {
@@ -361,55 +392,46 @@ function getRightSideGradingDiv(element, acid, studentId) {
             } catch (err) {
                 //reached end of list
             }
-
-
         });
         try {
-            jQuery('#' + data.id).focus();
+            jQuery("#" + data.id).focus();
         } catch (err) {
             // this will happen when you try to preview a reading assignment in the manual grading interface
-            console.log(`Cannot preview ${data.id}`)
+            console.log(`Cannot preview ${data.id}`);
         }
 
-
-
         var divid;
-        setTimeout(function () {
-
-            //        jQuery.ajax({
-            //        url: eBookConfig.gradeRecordingUrl,
-            //        type: "POST",
-            //        dataType: "JSON",
-            //        data: {
-            //            acid: acid,
-            //            sid: studentId,
-            //        },
-            //        success: function () {
-            //            //make an XML request to get the right stuff, pass in divid and studentId, then do the jQuery stuff below
+        setTimeout(function() {
             var obj = new XMLHttpRequest();
-            obj.open('GET', '/runestone/admin/getGradeComments?acid=' + acid + '&sid=' + studentId, true);
-            obj.send(JSON.stringify({
-                newins: 'studentid'
-            }));
-            obj.onreadystatechange = function () {
+            obj.open(
+                "GET",
+                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + studentId,
+                true
+            );
+            obj.send(
+                JSON.stringify({
+                    newins: "studentid",
+                })
+            );
+            obj.onreadystatechange = function() {
                 if (obj.readyState == 4 && obj.status == 200) {
                     var resp = obj.responseText;
                     var newdata = JSON.parse(resp);
                     if (newdata != "Error") {
-                        jQuery('#input-grade', rightDiv).val(newdata['grade']);
-                        jQuery('#input-comments', rightDiv).val(newdata['comments']);
+                        jQuery("#input-grade", rightDiv).val(newdata["grade"]);
+                        jQuery("#input-comments", rightDiv).val(newdata["comments"]);
                     } else {
-                        jQuery('#input-grade', rightDiv).val(null);
-                        jQuery('#input-comments', rightDiv).val(null);
+                        jQuery("#input-grade", rightDiv).val(null);
+                        jQuery("#input-comments", rightDiv).val(null);
                     }
                 }
-            }
+            };
         }, 250);
     }
 
     element.addClass("loading");
-    var assignment = getSelectedItem("assignment")
-    var enforceDeadline = $('#enforceDeadline').is(':checked')
+    var assignment = getSelectedItem("assignment");
+    var enforceDeadline = $("#enforceDeadline").is(":checked");
 
     jQuery.ajax({
         url: eBookConfig.gradingURL,
@@ -419,15 +441,12 @@ function getRightSideGradingDiv(element, acid, studentId) {
             assignment: assignment,
             acid: acid,
             sid: studentId,
-            enforceDeadline: enforceDeadline
+            enforceDeadline: enforceDeadline,
         },
-        success: function (data) {
+        success: function(data) {
             show(data);
-        }
+        },
     });
-
-
-
 }
 
 function makeOption(text, value, disabledQ) {
@@ -438,7 +457,6 @@ function makeOption(text, value, disabledQ) {
         $(option).attr("disabled", true);
     }
     return option;
-
 }
 
 function populateQuestions(select, question_names) {
@@ -456,8 +474,8 @@ function populateQuestions(select, question_names) {
     $(select).select2({
         size: 10,
         theme: "bootstrap",
-        placeholder: 'Select Question(s)',
-    })
+        placeholder: "Select Question(s)",
+    });
 
     $(select).on("select2:unselect", function() {
         $("#allquestioncb").prop("checked", false);
@@ -483,22 +501,21 @@ function updateQuestionList() {
         $("#releasebutton").hide();
         return;
     }
-    $("#releasestate").text('');
+    $("#releasestate").text("");
 
-    if (val1 == 'assignment') {
+    if (val1 == "assignment") {
         set_release_button();
-        autograde_form.style.visibility = 'visible';
-        document.getElementById('assignmentTotalform').style.visibility = 'hidden';
-        if (! assignment_release_states[col1val]) {
-            $("#releasestate").text('Not Released');
+        autograde_form.style.visibility = "visible";
+        document.getElementById("assignmentTotalform").style.visibility = "hidden";
+        if (!assignment_release_states[col1val]) {
+            $("#releasestate").text("Not Released");
         } else {
-            $("#releasestate").text('');
+            $("#releasestate").text("");
         }
-
     }
-    if (val1 == 'assignment' && val2 == 'question') {
+    if (val1 == "assignment" && val2 == "question") {
         populateQuestions(col2, assignmentinfo[col1val]);
-    } else if (val1 == 'chapter' && val2 == 'question') {
+    } else if (val1 == "chapter" && val2 == "question") {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
@@ -506,7 +523,7 @@ function updateQuestionList() {
     }
 
     if (val2 != "") {
-        col2.style.visibility = 'visible';
+        col2.style.visibility = "visible";
     }
 }
 
@@ -517,12 +534,10 @@ function gradeSelectedStudent() {
     if (lastcolval != -1) {
         gradeIndividualItem();
     }
-    col3.style.visibility = 'visible';
-
+    col3.style.visibility = "visible";
 }
 
 function pickedAssignments(column) {
-
     var pickedcolumn = document.getElementById(column);
 
     $("#" + column).empty();
@@ -538,44 +553,37 @@ function pickedAssignments(column) {
         option.text = key;
         option.value = key;
         pickedcolumn.add(option);
-        pickedcolumn.style.visibility = 'visible';
-
+        pickedcolumn.style.visibility = "visible";
     }
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
-        placeholder: 'Select Assignment',
+        placeholder: "Select Assignment",
     });
     $("#" + column).on("select2:unselect", function() {
         $("#releasestate").text("");
     });
-
 }
-
 
 function displayDefaultQuestion(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
 
-
     var option = document.createElement("option");
-    option.text = '<- Choose option';
-    option.value = 'default';
+    option.text = "<- Choose option";
+    option.value = "default";
     pickedcolumn.add(option);
     $("option[value='default']").attr("disabled", "disabled");
-    pickedcolumn.style.visibility = 'visible';
+    pickedcolumn.style.visibility = "visible";
 
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
-        placeholder: 'Pick Chapter or Assignment first',
+        placeholder: "Pick Chapter or Assignment first",
     });
-
 }
 
-
 function pickedStudents(column) {
-
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
     // students = students.replace(/&#x27;/g, '"');
@@ -594,21 +602,18 @@ function pickedStudents(column) {
         option.text = studentslist[key];
         option.value = studentslist[key]; // TODO: just store key here
         pickedcolumn.add(option);
-        pickedcolumn.style.visibility = 'visible';
-
+        pickedcolumn.style.visibility = "visible";
     }
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
-        placeholder: 'Select Student(s)',
+        placeholder: "Select Student(s)",
     });
 
-    $("#" + column).on("select2:unselect",function() {
+    $("#" + column).on("select2:unselect", function() {
         $("#allstudentcb").prop("checked", false);
-    })
-
+    });
 }
-
 
 function pickedChapters(column) {
     var pickedcolumn = document.getElementById(column);
@@ -629,15 +634,14 @@ function pickedChapters(column) {
         option.text = key;
         option.value = key;
         pickedcolumn.add(option);
-        pickedcolumn.style.visibility = 'visible';
+        pickedcolumn.style.visibility = "visible";
     }
 
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
-        placeholder: 'Select Chapter',
+        placeholder: "Select Chapter",
     });
-
 }
 
 // Start Here for the flow of events when grading.
@@ -645,32 +649,30 @@ function pickedChapters(column) {
 // 2. When you choose a specific assignment it populates the questions for that assignment
 // 3. students are always populated in the third column
 function selectChapOrAssignment() {
-
     var select1 = document.getElementById("gradingoption1");
     var val = select1.options[select1.selectedIndex].value;
     $("#rightsideGradingTab").empty();
     $("#releasestate").text("");
     $(".allcbclass").show();
 
-    document.getElementById('assignmentTotalform').style.visibility = 'hidden';
+    document.getElementById("assignmentTotalform").style.visibility = "hidden";
     autograde_form = document.getElementById("autogradingform");
-    autograde_form.style.visibility = 'hidden';
+    autograde_form.style.visibility = "hidden";
 
     $("#questionselector").empty();
     $("#allquestioncb").prop("checked", false);
     $("#studentselector").empty();
     $("#allstudentcb").prop("checked", false);
 
-    if (val == 'assignment') {
+    if (val == "assignment") {
         pickedAssignments("chaporassignselector");
-    } else if (val == 'chapter') {
-        pickedChapters('chaporassignselector');
+    } else if (val == "chapter") {
+        pickedChapters("chaporassignselector");
     }
 
-    displayDefaultQuestion('questionselector');
+    displayDefaultQuestion("questionselector");
     pickedStudents("studentselector");
 }
-
 
 
 function getCourseStudents() {
@@ -679,9 +681,9 @@ function getCourseStudents() {
         type: "POST",
         dataType: "JSON",
         data: {},
-        success: function (retdata) {
+        success: function(retdata) {
             students = retdata;
-        }
+        },
     });
 }
 
@@ -689,15 +691,16 @@ function getStudents(sectionName) {
     var section = sectionName;
 
     var studentList = document.getElementById("studentNames");
-    studentList.innerHTML = '';
+    studentList.innerHTML = "";
 
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/sections/students/" + section, true);
-    obj.send(JSON.stringify({
-        sectionName: sectionName
-    }));
-    obj.onreadystatechange = function () {
-
+    obj.send(
+        JSON.stringify({
+            sectionName: sectionName,
+        })
+    );
+    obj.onreadystatechange = function() {
         if (obj.readyState == 4 && obj.status == 200) {
             var students = JSON.parse(obj.responseText);
             var studentsNames = [];
@@ -708,7 +711,10 @@ function getStudents(sectionName) {
             studentsNames.sort();
 
             for (i = 0; i < studentsNames.length; i++) {
-                studentList.innerHTML += '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' + studentsNames[i] + '</h4> </a>';
+                studentList.innerHTML +=
+                    '<a href="#" class="list-group-item"> <h4 style="text-align: center" class="list-group-item-heading">' +
+                    studentsNames[i] +
+                    "</h4> </a>";
             }
 
             var total = document.getElementById("total");
@@ -717,74 +723,73 @@ function getStudents(sectionName) {
             } else {
                 total.innerHTML = "Total: " + students.length;
             }
-
         }
-    }
+    };
 }
-
-
 
 // TODO: This function is also defined in admin.html. ???
 function getLog() {
-
-
     var obj = new XMLHttpRequest();
     obj.open("GET", "/runestone/admin/getChangeLog", true);
-    obj.send(JSON.stringify({
-        variable: 'variable'
-    }));
-    obj.onreadystatechange = function () {
-
+    obj.send(
+        JSON.stringify({
+            variable: "variable",
+        })
+    );
+    obj.onreadystatechange = function() {
         if (obj.readyState == 4 && obj.status == 200) {
             changeLog = document.getElementById("changelog");
             changeLog.innerHTML = obj.responseText;
         }
-    }
+    };
 }
 
-
 function add_instructor() {
-    var select = document.getElementById('addins').elements['student'];
+    var select = document.getElementById("addins").elements["student"];
     var index = select.selectedIndex;
     var studentid = select.options[index].value; //value gives the value, text gives the actual text
     var studentname = select.options[index].text;
 
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/addinstructor/' + studentid, true);
-    obj.send(JSON.stringify({
-        newins: 'studentid'
-    }));
-    obj.onreadystatechange = function () {
+    obj.open("POST", "/runestone/admin/addinstructor/" + studentid, true);
+    obj.send(
+        JSON.stringify({
+            newins: "studentid",
+        })
+    );
+    obj.onreadystatechange = function() {
         if (obj.readyState == 4 && obj.status == 200) {
-            studlist = document.getElementById('studentlist');
+            studlist = document.getElementById("studentlist");
             studlist.remove(index);
-            inslist = document.getElementById('instructorlist');
-            newopt = document.createElement('option');
+            inslist = document.getElementById("instructorlist");
+            newopt = document.createElement("option");
             newopt.value = studentid;
             newopt.innerHTML = studentname;
             inslist.appendChild(newopt);
         }
-    }
+    };
 }
 
 function remove_instructor() {
-    var select = document.getElementById('removeins').elements['instructor'];
+    var select = document.getElementById("removeins").elements["instructor"];
     var index = select.selectedIndex;
     var studentid = select.options[index].value; //value gives the value, text gives the actual text
     var studentname = select.options[index].text;
     var obj = new XMLHttpRequest();
-    obj.open('POST', '/runestone/admin/removeinstructor/' + studentid, true);
-    obj.send(JSON.stringify({
-        newins: 'studentid'
-    }));
-    obj.onreadystatechange = function () {
+    obj.open("POST", "/runestone/admin/removeinstructor/" + studentid, true);
+    obj.send(
+        JSON.stringify({
+            newins: "studentid",
+        })
+    );
+    obj.onreadystatechange = function() {
         if (obj.readyState == 4 && obj.status == 200) {
             gotdeleted = JSON.parse(obj.responseText);
             if (gotdeleted[0]) {
-                inslist = document.getElementById('instructorlist');
+                inslist = document.getElementById("instructorlist");
                 inslist.remove(index);
-                studlist = document.getElementById('studentlist');
-                newopt = document.createElement('option');
+                studlist = document.getElementById("studentlist");
+                newopt = document.createElement("option");
                 newopt.value = studentid;
                 newopt.innerHTML = studentname;
                 studlist.appendChild(newopt);
@@ -792,15 +797,14 @@ function remove_instructor() {
                 //flash message that you can't remove yourself
             }
         }
-    }
+    };
 }
-
 
 function edit_indexrst(form) {
     let data = {
-        newtext: form.editIndex.value
-    }
-    jQuery.post('/runestone/admin/editindexrst', data, function () {
+        newtext: form.editIndex.value,
+    };
+    jQuery.post("/runestone/admin/editindexrst", data, function() {
         alert("Successfully edited index.rst");
     });
 }
@@ -821,34 +825,30 @@ function configure_tree_picker(
     // The function to call when a leaf node is checked. It's passed the leaf node.
     checked_func,
     // The function to call when a leaf node is unchecked. It's passed the leaf node.
-    unchecked_func) {
-
-
+    unchecked_func
+) {
     picker.jstree({
         // Configure the checkbox plugin.
-        "checkbox": {
+        checkbox: {
             // This prevents the selection from including all auto-checked nodes, which I find distracting.
-            "keep_selected_style": false,
+            keep_selected_style: false,
             // Setting `whole_node <https://www.jstree.com/api/#/?q=$.jstree.defaults.checkbox&f=$.jstree.defaults.checkbox.whole_node>`_ false only changes the checkbox state if the checkbox is clicked; this allows the user to select a node without adding/removing that question. This only works if ``tie_selection`` is false.
-            "whole_node": false,
+            whole_node: false,
             // `Scary-sounding <https://www.jstree.com/api/#/?q=$.jstree.defaults&f=$.jstree.defaults.checkbox.tie_selection>`_ setting to make the above work, and to make the ``check_node.jstree`` event actually fire.
-            "tie_selection": false,
+            tie_selection: false,
         },
         // Enable `plugins <https://www.jstree.com/plugins/>`_.
-        "plugins": [
-            "checkbox",
-            "search",
-        ],
+        plugins: ["checkbox", "search"],
         // Populate the tree from JSON (`docs <https://www.jstree.com/docs/json/>`_).
-        "core": {
-            "data": picker_data,
-            "themes": {
+        core: {
+            data: picker_data,
+            themes: {
                 // Note that the CSS for the theme (`proton <https://www.orangehilldev.com/jstree-bootstrap-theme/demo/>`_) must also be loaded -- see assignments.html.
-                "name": "proton",
-                "responsive": true,
+                name: "proton",
+                responsive: true,
             },
             // Allow modifying the tree programatically. See https://www.jstree.com/api/#/?f=$.jstree.defaults.core.check_callback.
-            "check_callback": true,
+            check_callback: true,
         },
     });
 
@@ -857,37 +857,42 @@ function configure_tree_picker(
 
     // Set up for searching. Copied from the search plugin example.
     var to = false;
-    picker_search_input.keyup(function () {
+    picker_search_input.keyup(function() {
         if (to) {
             clearTimeout(to);
         }
-        to = setTimeout(function () {
+        to = setTimeout(function() {
             var v = picker_search_input.val();
             picker.jstree(true).search(v);
         }, 250);
     });
 
     // Ask for events_ when a node is `checked <https://www.jstree.com/api/#/?q=.jstree Event&f=check_node.jstree>`_.
-    picker.on('check_node.jstree', function (event, data) {
-        if (data.node.text == "Exercises" || event.target.id === "tree-question-picker") {
+    picker.on("check_node.jstree", function(event, data) {
+        if (
+            data.node.text == "Exercises" ||
+            event.target.id === "tree-question-picker"
+        ) {
             let num_ex = data.node.children.length;
             if (num_ex > 10 || data.node.parents.length == 1) {
                 if (data.node.parents.length == 1) {
-                    num_ex = "A LOT OF"
+                    num_ex = "A LOT OF";
                 }
-                let resp = confirm(`Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`)
-                if (! resp) {
-                    $("#tree-question-picker").jstree("uncheck_node", data.node.id)
-                    return
+                let resp = confirm(
+                    `Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`
+                );
+                if (!resp) {
+                    $("#tree-question-picker").jstree("uncheck_node", data.node.id);
+                    return;
                 }
             }
         }
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, async function (instance, node) {
+            walk_jstree(data.instance, data.node, async function(instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
-                    let resp = await checked_func(node);  // checked_func is either  updateReading or updateAssignmentRaw
-                    if (resp.assign_type == 'reading') {
+                    let resp = await checked_func(node); // checked_func is either  updateReading or updateAssignmentRaw
+                    if (resp.assign_type == "reading") {
                         add_to_table(resp);
                     } else {
                         add_to_qtable(resp);
@@ -898,9 +903,9 @@ function configure_tree_picker(
     });
 
     // Ask for events_ when a node is `unchecked <https://www.jstree.com/api/#/?q=.jstree Event&f=uncheck_node.jstree>`_.
-    picker.on('uncheck_node.jstree', function (event, data) {
+    picker.on("uncheck_node.jstree", function(event, data) {
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, function (instance, node) {
+            walk_jstree(data.instance, data.node, function(instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     unchecked_func(node);
                 }
@@ -928,11 +933,14 @@ function row_from_editable(
     // The editable jQuery element which needs a menu.
     editable_element,
     // The table containing ``editable_element``.
-    table) {
-
+    table
+) {
     // Determine which row this editable is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
-    var row_index = $(editable_element).parentsUntil('tbody').last().attr('data-index');
-    return table.bootstrapTable('getData')[row_index];
+    var row_index = $(editable_element)
+        .parentsUntil("tbody")
+        .last()
+        .attr("data-index");
+    return table.bootstrapTable("getData")[row_index];
 }
 
 // Given an editable element (a hyperlink) in the a bootstrap table, return the menu data for it.
@@ -944,8 +952,8 @@ function menu_from_editable(
     // The key to the row which gives allowable values from which to create a menu.
     row_key,
     // The table containing ``editable_element``.
-    table) {
-
+    table
+) {
     // Determine which row this editable is associated with.
     var row = row_from_editable(editable_element, table);
     // Determine the appropriate menu for this question. First, find its autograde values in the tree.
@@ -954,70 +962,79 @@ function menu_from_editable(
     for (let val of row[row_key]) {
         select_source.push({
             value: val,
-            text: ui[val]
+            text: ui[val],
         });
     }
     return select_source;
 }
 
-
 function fillinAssignmentName(target) {
     //On the assignments tab, fill in the target with the name of the current assignment
     //Only used by the rename assignment button for now
-    select = $("#assignlist")[0]
-    $("#" + target).html(select.options[select.selectedIndex].innerHTML)
+    select = $("#assignlist")[0];
+    $("#" + target).html(select.options[select.selectedIndex].innerHTML);
 }
 //Invoked by the "Rename" button of the "Rename Assignment" dialog
 function renameAssignment(form) {
-    var select = $("#assignlist")[0]
-    var id = select[select.selectedIndex].value
-    var name = form['rename-name'].value;
+    var select = $("#assignlist")[0];
+    var id = select[select.selectedIndex].value;
+    var name = form["rename-name"].value;
     data = {
-        'name': name,
-        'original': id
-    }
-    url = '/runestone/admin/renameAssignment';
-    jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror == "EXISTS") {
-            alert('There already is an assignment called "' + name + '".') //FIX: reopen the dialog box?
-        } else if (iserror != 'ERROR') {
-            //find the assignment
-            select = $('#assignlist')[0];
-            select.options[select.selectedIndex].innerHTML = name
-        } else {
-            alert('Error in renaming assignment ' + id)
-        }
-    }, 'json')
+        name: name,
+        original: id,
+    };
+    url = "/runestone/admin/renameAssignment";
+    jQuery.post(
+        url,
+        data,
+        function(iserror, textStatus, whatever) {
+            if (iserror == "EXISTS") {
+                alert('There already is an assignment called "' + name + '".'); //FIX: reopen the dialog box?
+            } else if (iserror != "ERROR") {
+                //find the assignment
+                select = $("#assignlist")[0];
+                select.options[select.selectedIndex].innerHTML = name;
+            } else {
+                alert("Error in renaming assignment " + id);
+            }
+        },
+        "json"
+    );
 }
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
 
-    $('#assign_visible').prop('checked', true);
+    $("#assign_visible").prop("checked", true);
     data = {
-        'name': name
-    }
-    url = '/runestone/admin/createAssignment';
-    jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror == "EXISTS") {
-            alert('There already is an assignment called "' + name + '".') //FIX: reopen the dialog box?
-        } else if (iserror != 'ERROR') {
-            select = document.getElementById('assignlist');
-            newopt = document.createElement('option');
-            newopt.value = iserror[name];
-            newopt.innerHTML = name;
-            select.appendChild(newopt);
-            select.selectedIndex = newopt.index;
-            assignmentInfo();
-        } else {
-            alert('Error in creating new assignment.')
-        }
-    }, 'json')
+        name: name,
+    };
+    url = "/runestone/admin/createAssignment";
+    jQuery.post(
+        url,
+        data,
+        function(iserror, textStatus, whatever) {
+            if (iserror == "EXISTS") {
+                alert('There already is an assignment called "' + name + '".'); //FIX: reopen the dialog box?
+            } else if (iserror != "ERROR") {
+                select = document.getElementById("assignlist");
+                newopt = document.createElement("option");
+                newopt.value = iserror[name];
+                newopt.innerHTML = name;
+                select.appendChild(newopt);
+                select.selectedIndex = newopt.index;
+                assignmentInfo();
+            } else {
+                alert("Error in creating new assignment.");
+            }
+        },
+        "json"
+    );
 }
 
 // Triggered by the ``-`` button on the assignments tab.
 function remove_assignment() {
-    var select = document.getElementById('assignlist');
+    var select = document.getElementById("assignlist");
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
 
@@ -1025,12 +1042,12 @@ function remove_assignment() {
         return;
     }
 
-    var url = '/runestone/admin/removeassign';
+    var url = "/runestone/admin/removeassign";
     var data = {
-        assignid: assignmentid
+        assignid: assignmentid,
     };
-    jQuery.post(url, data, function (res, status, whatever) {
-        if (res != 'Error') {
+    jQuery.post(url, data, function(res, status, whatever) {
+        if (res != "Error") {
             select.remove(select.selectedIndex);
             assignmentInfo();
         } else {
@@ -1039,8 +1056,6 @@ function remove_assignment() {
     });
 }
 
-
-
 // Update an assignment.
 async function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
@@ -1048,38 +1063,59 @@ async function updateAssignmentRaw(question_name, points, autograde, which_to_gr
         alert("No assignment selected");
         return;
     }
-    let res = await $.ajax({url: 'add__or_update_assignment_question',
-        data: {question: question_name,
+    let res = await $.ajax({
+        url: "add__or_update_assignment_question",
+        data: {
+            question: question_name,
             assignment: assignmentid,
             points: points,
             autograde: autograde,
             which_to_grade: which_to_grade,
-            assign_type: 'problems'
+            assign_type: "problems",
         },
-        dataType: 'json'});
+        dataType: "json",
+    });
 
     return res;
 }
 
 async function add_to_qtable(response_JSON) {
-    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+    $("#totalPoints").html("Total points: " + response_JSON["total"]);
     // See if this question already exists in the table. Only append if it doesn't exist.
-    if (question_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
-        appendToQuestionTable(response_JSON['question_id'],
-            response_JSON['points'],
-            response_JSON['autograde'],
-            response_JSON['autograde_possible_values'],
-            response_JSON['which_to_grade'],
-            response_JSON['which_to_grade_possible_values']);
+    if (
+        question_table.bootstrapTable(
+            "getRowByUniqueId",
+            response_JSON["question_id"]
+        ) === null
+    ) {
+        appendToQuestionTable(
+            response_JSON["question_id"],
+            response_JSON["points"],
+            response_JSON["autograde"],
+            response_JSON["autograde_possible_values"],
+            response_JSON["which_to_grade"],
+            response_JSON["which_to_grade_possible_values"]
+        );
     }
 }
 
-
 // Append a row to the question table.
-function createQuestionObject(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    var _id = 'question_table_' + name;
+function createQuestionObject(
+    name,
+    points,
+    autograde,
+    autograde_possible_values,
+    which_to_grade,
+    which_to_grade_possible_values
+) {
+    var _id = "question_table_" + name;
     return {
-        question: '<a href="#component-preview" onclick="preview_question_id(\'' + name + '\');">' + name + '</a>',
+        question:
+            '<a href="#component-preview" onclick="preview_question_id(\'' +
+            name +
+            "');\">" +
+            name +
+            "</a>",
         question_id: name,
         points: points,
         autograde: autograde,
@@ -1091,21 +1127,30 @@ function createQuestionObject(name, points, autograde, autograde_possible_values
     };
 }
 
-function appendToQuestionTable(name, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
-    question_table.bootstrapTable('append',
-        [createQuestionObject(name,
+function appendToQuestionTable(
+    name,
+    points,
+    autograde,
+    autograde_possible_values,
+    which_to_grade,
+    which_to_grade_possible_values
+) {
+    question_table.bootstrapTable("append", [
+        createQuestionObject(
+            name,
             points,
             autograde,
             autograde_possible_values,
             which_to_grade,
-            which_to_grade_possible_values)
-        ]);
+            which_to_grade_possible_values
+        ),
+    ]);
 }
 
 // Update the grading parameters used for an assignment.
 function update_assignment(form) {
     if (!form.due.value) {
-        alert("You must assign a due date to your assignment.")
+        alert("You must assign a due date to your assignment.");
         return;
     } else {
         try {
@@ -1116,204 +1161,263 @@ function update_assignment(form) {
         }
     }
     if (form.visible.checked) {
-        form.visible.value = 'T';
+        form.visible.value = "T";
     } else {
-        form.visible.value = 'F';
+        form.visible.value = "F";
     }
-    $.getJSON('save_assignment', $(form).serialize() + '&assignment_id=' + getAssignmentId(), function (data) {
-        alert("Assignment Saved");
-    }).error(function () {
-        alert("huh??")
+    $.getJSON(
+        "save_assignment",
+        $(form).serialize() + "&assignment_id=" + getAssignmentId(),
+        function(data) {
+            alert("Assignment Saved");
+        }
+    ).error(function() {
+        alert("huh??");
     });
 }
 
 // Return the assignment id based on the value selected in the ``assignlist`` item.
 function getAssignmentId() {
-    var assignlist = document.getElementById('assignlist');
+    var assignlist = document.getElementById("assignlist");
     return assignlist.options[assignlist.selectedIndex].value;
 }
-
 
 // Given a selected assignment, retrieve it from the server then display it.
 function assignmentInfo() {
     // If no assignment is selected, hide all assignment-related panels.
-    var select = document.getElementById('assignlist');
+    var select = document.getElementById("assignlist");
     if (select.selectedIndex === -1) {
-        $('#rightSection').css('visibility', 'hidden');
-        $('#leftpanel1').css('visibility', 'hidden');
-        $('#leftpanel2').css('visibility', 'hidden');
+        $("#rightSection").css("visibility", "hidden");
+        $("#leftpanel1").css("visibility", "hidden");
+        $("#leftpanel2").css("visibility", "hidden");
         return;
     }
 
     var assignmentid = select.options[select.selectedIndex].value;
-    $('#rightSection').css('visibility', 'visible');
-    $("#leftpanel1").css('visibility', 'visible');
-    $("#leftpanel2").css('visibility', 'visible');
+    $("#rightSection").css("visibility", "visible");
+    $("#leftpanel1").css("visibility", "visible");
+    $("#leftpanel2").css("visibility", "visible");
 
-    $.getJSON('get_assignment', {
-        'assignmentid': assignmentid
-    }, function (data) {
-        assignmentData = data['assignment_data'];
-        $('#totalPoints').html('Total points: ' + assignmentData['assignment_points']);
-        $('#datetimepicker').val(assignmentData['due_date']);
-        $('#assignment_description').val(assignmentData['description']);
-        $('#readings-threshold').val(assignmentData['threshold']);
-        $('#assign_visible').val(assignmentData['visible']);
-        if (assignmentData['visible'] === true) {
-            $('#assign_visible').prop('checked', true);
-        } else {
-            $('#assign_visible').prop('checked', false);
+    $.getJSON(
+        "get_assignment",
+        {
+            assignmentid: assignmentid,
+        },
+        function(data) {
+            assignmentData = data["assignment_data"];
+            $("#totalPoints").html(
+                "Total points: " + assignmentData["assignment_points"]
+            );
+            $("#datetimepicker").val(assignmentData["due_date"]);
+            $("#assignment_description").val(assignmentData["description"]);
+            $("#readings-threshold").val(assignmentData["threshold"]);
+            $("#assign_visible").val(assignmentData["visible"]);
+            if (assignmentData["visible"] === true) {
+                $("#assign_visible").prop("checked", true);
+            } else {
+                $("#assign_visible").prop("checked", false);
+            }
+            $("#readings-points-to-award").val(assignmentData["points_to_award"]);
+            $("#readings-autograder").val(assignmentData["readings_autograder"]);
+
+            // Update the questions
+            ///====================
+            // Get the question tree picker.
+            var tqp = question_picker.jstree(true);
+            // Ignore these checks in the picker, since it's loading existing data, not user interaction.
+            tqp.ignore_check = true;
+            // Clear all checks and the table initially.
+            tqp.uncheck_all();
+            question_table.bootstrapTable("removeAll");
+            let allQuestions = [];
+            for (let question of data["questions_data"]) {
+                // Put the qeustion in the table.
+                let name = question["name"];
+                allQuestions.push(
+                    createQuestionObject(
+                        name,
+                        question["points"],
+                        question["autograde"],
+                        question["autograde_possible_values"],
+                        question["which_to_grade"],
+                        question["which_to_grade_possible_values"]
+                    )
+                );
+                // Check this question in the question tree picker.
+                // Assumes that the picker tree is built before we do this loop.
+                tqp.check_node(tqp.get_node(name));
+            }
+
+            question_table.bootstrapTable("load", allQuestions);
+
+            // Future checks come from the user.
+            tqp.ignore_check = false;
+
+            // Update the readings
+            ///===================
+            // Same as above.
+            var trp = readings_picker.jstree(true);
+            trp.ignore_check = true;
+            trp.uncheck_all();
+            readings_table.bootstrapTable("removeAll");
+            for (let readings_data of data["pages_data"]) {
+                id = readings_data["name"];
+                trp.check_node(trp.get_node(id));
+                appendToReadingsTable(
+                    id,
+                    readings_data["activity_count"],
+                    readings_data["activities_required"],
+                    readings_data["points"],
+                    readings_data["autograde"],
+                    readings_data["autograde_possible_values"],
+                    readings_data["which_to_grade"],
+                    readings_data["which_to_grade_possible_values"]
+                );
+            }
+            trp.ignore_check = false;
         }
-        $('#readings-points-to-award').val(assignmentData['points_to_award']);
-        $('#readings-autograder').val(assignmentData['readings_autograder']);
-
-        // Update the questions
-        ///====================
-        // Get the question tree picker.
-        var tqp = question_picker.jstree(true);
-        // Ignore these checks in the picker, since it's loading existing data, not user interaction.
-        tqp.ignore_check = true;
-        // Clear all checks and the table initially.
-        tqp.uncheck_all();
-        question_table.bootstrapTable('removeAll');
-        let allQuestions = []
-        for (let question of data['questions_data']) {
-            // Put the qeustion in the table.
-            let name = question['name'];
-            allQuestions.push(createQuestionObject(name, question['points'], question['autograde'], question['autograde_possible_values'], question['which_to_grade'], question['which_to_grade_possible_values']));
-            // Check this question in the question tree picker.
-            // Assumes that the picker tree is built before we do this loop.
-            tqp.check_node(tqp.get_node(name));
-        }
-
-        question_table.bootstrapTable('load', allQuestions);
-
-        // Future checks come from the user.
-        tqp.ignore_check = false;
-
-        // Update the readings
-        ///===================
-        // Same as above.
-        var trp = readings_picker.jstree(true);
-        trp.ignore_check = true;
-        trp.uncheck_all();
-        readings_table.bootstrapTable('removeAll');
-        for (let readings_data of data['pages_data']) {
-            id = readings_data['name'];
-            trp.check_node(trp.get_node(id));
-            appendToReadingsTable(id, readings_data['activity_count'], readings_data['activities_required'], readings_data['points'], readings_data['autograde'], readings_data['autograde_possible_values'], readings_data['which_to_grade'], readings_data['which_to_grade_possible_values']);
-        }
-        trp.ignore_check = false;
-    });
+    );
 }
-
 
 // Update a reading.
 // This should be serialized is the walk_jstree function to make sure the order is correct
-async function updateReading(subchapter_id, activities_required, points, autograde, which_to_grade) {
+async function updateReading(
+    subchapter_id,
+    activities_required,
+    points,
+    autograde,
+    which_to_grade
+) {
     let assignid = getAssignmentId();
-    if (!assignid || assignid == 'undefined') {
+    if (!assignid || assignid == "undefined") {
         alert("No assignment selected");
         return;
     }
-    let res = await $.ajax({url: 'add__or_update_assignment_question',
+    let res = await $.ajax({
+        url: "add__or_update_assignment_question",
         data: {
-        assignment: assignid,
-        question: subchapter_id,
-        activities_required: activities_required,
-        points: points,
-        autograde: autograde,
-        which_to_grade: which_to_grade,
-        assign_type: 'reading',
+            assignment: assignid,
+            question: subchapter_id,
+            activities_required: activities_required,
+            points: points,
+            autograde: autograde,
+            which_to_grade: which_to_grade,
+            assign_type: "reading",
         },
-        dataType: 'json'});
+        dataType: "json",
+    });
 
     return res;
 }
 
-function add_to_table (response_JSON) {
-    $('#totalPoints').html('Total points: ' + response_JSON['total']);
+function add_to_table(response_JSON) {
+    $("#totalPoints").html("Total points: " + response_JSON["total"]);
     // See if this question already exists in the table. Only append if it doesn't exist.
-    if (readings_table.bootstrapTable('getRowByUniqueId', response_JSON['question_id']) === null) {
-        appendToReadingsTable(response_JSON['question_id'],
-            response_JSON['activity_count'],
-            response_JSON['activities_required'],
-            response_JSON['points'],
-            response_JSON['autograde'],
-            response_JSON['autograde_possible_values'],
-            response_JSON['which_to_grade'],
-            response_JSON['which_to_grade_possible_values']);
+    if (
+        readings_table.bootstrapTable(
+            "getRowByUniqueId",
+            response_JSON["question_id"]
+        ) === null
+    ) {
+        appendToReadingsTable(
+            response_JSON["question_id"],
+            response_JSON["activity_count"],
+            response_JSON["activities_required"],
+            response_JSON["points"],
+            response_JSON["autograde"],
+            response_JSON["autograde_possible_values"],
+            response_JSON["which_to_grade"],
+            response_JSON["which_to_grade_possible_values"]
+        );
     }
 }
 
-
 // Append a row to the readings table given the ID of the reading.
-function appendToReadingsTable(subchapter_id, activity_count, activities_required, points, autograde, autograde_possible_values, which_to_grade, which_to_grade_possible_values) {
+function appendToReadingsTable(
+    subchapter_id,
+    activity_count,
+    activities_required,
+    points,
+    autograde,
+    autograde_possible_values,
+    which_to_grade,
+    which_to_grade_possible_values
+) {
     // Find this node in the tree.
     var node = readings_picker.jstree(true).get_node(subchapter_id);
-    var _id = 'readings_table_' + node.id;
-    readings_table.bootstrapTable('append', [{
-        chapter: readings_picker.jstree(true).get_node(node.parent).text,
-        subchapter: node.text,
-        subchapter_id: node.id,
-        activity_count: activity_count,
-        activities_required: activities_required,
-        points: points,
-        autograde: autograde,
-        autograde_possible_values: autograde_possible_values,
-        which_to_grade: which_to_grade,
-        which_to_grade_possible_values: which_to_grade_possible_values,
-        // Set an `ID for the row`_.
-        _id: _id,
-    }]);
+    var _id = "readings_table_" + node.id;
+    readings_table.bootstrapTable("append", [
+        {
+            chapter: readings_picker.jstree(true).get_node(node.parent).text,
+            subchapter: node.text,
+            subchapter_id: node.id,
+            activity_count: activity_count,
+            activities_required: activities_required,
+            points: points,
+            autograde: autograde,
+            autograde_possible_values: autograde_possible_values,
+            which_to_grade: which_to_grade,
+            which_to_grade_possible_values: which_to_grade_possible_values,
+            // Set an `ID for the row`_.
+            _id: _id,
+        },
+    ]);
 }
 
 // Remove a reading from an assignment.
 function remove_reading(reading_id) {
-    $.getJSON('delete_assignment_question', {
+    $.getJSON("delete_assignment_question", {
         assignment_id: getAssignmentId(),
         name: reading_id,
-    }).done(function (response_JSON) {
-        readings_table.bootstrapTable('removeByUniqueId', reading_id);
+    }).done(function(response_JSON) {
+        readings_table.bootstrapTable("removeByUniqueId", reading_id);
     });
 }
 
 // Called to remove a question from an assignment.
 function remove_question(question_name) {
     var assignment_id = getAssignmentId();
-    $.getJSON('delete_assignment_question/?name=' + question_name + '&assignment_id=' + assignment_id, {
-        variable: 'variable'
-    }).done(function (response_JSON) {
+    $.getJSON(
+        "delete_assignment_question/?name=" +
+            question_name +
+            "&assignment_id=" +
+            assignment_id,
+        {
+            variable: "variable",
+        }
+    ).done(function(response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = 'Total points: ' + response_JSON['total'];
+        totalPoints.innerHTML = "Total points: " + response_JSON["total"];
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
-        question_table.bootstrapTable('removeByUniqueId', question_name);
+        question_table.bootstrapTable("removeByUniqueId", question_name);
     });
 }
-var chapterMap = {}
+var chapterMap = {};
 
 // Called when the "Write" button is clicked.
 function display_write() {
-    var template = document.getElementById('template');
+    var template = document.getElementById("template");
     var questiontype = template.options[template.selectedIndex].value;
-    jQuery.get('/runestone/admin/gettemplate/' + questiontype, {}, function (obj) {
+    jQuery.get("/runestone/admin/gettemplate/" + questiontype, {}, function(obj) {
         var returns = JSON.parse(obj);
-        tplate = returns['template'];
+        tplate = returns["template"];
         $("#qcode").text(tplate);
         $("#qcode").keypress(function() {
             $("#qrawhtml").val("");
-        })
-        $.each(returns['chapters'], function (i, item) {
+        });
+        $.each(returns["chapters"], function(i, item) {
             chapterMap[item[0]] = item[1];
-            $('#qchapter').append($('<option>', {
-                value: item[0],
-                text: item[1]
-            }));
+            $("#qchapter").append(
+                $("<option>", {
+                    value: item[0],
+                    text: item[1],
+                })
+            );
         });
     });
 
-    var hiddenwrite = document.getElementById('hiddenwrite');
-    hiddenwrite.style.visibility = 'visible';
+    var hiddenwrite = document.getElementById("hiddenwrite");
+    hiddenwrite.style.visibility = "visible";
 }
 
 function find_name(lines) {
@@ -1326,7 +1430,7 @@ function find_name(lines) {
             break;
         }
     }
-    return name
+    return name;
 }
 
 // Called when the "Done" button of the "Write" dialog is clicked.
@@ -1336,19 +1440,19 @@ function create_question(formdata) {
         return;
     }
     if (formdata.createpoints.value == "") {
-        formdata.createpoints.value == "1"
+        formdata.createpoints.value == "1";
     }
     if (!formdata.qrawhtml.value) {
-        alert("No HTML for this question, please generate it.")
+        alert("No HTML for this question, please generate it.");
         return;
     }
-    var activetab = 'formative';
-    var select = document.getElementById('assignlist');
+    var activetab = "formative";
+    var select = document.getElementById("assignlist");
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
     var template = formdata.template.value;
     var qcode = formdata.qcode.value;
-    var lines = qcode.split('\n');
+    var lines = qcode.split("\n");
     var htmlsrc = formdata.qrawhtml.value;
     var name = find_name(lines);
     var question = formdata.qcode.value;
@@ -1365,81 +1469,86 @@ function create_question(formdata) {
     var timed = formdata.createtimed.checked;
 
     data = {
-        'template': template,
-        'name': name,
-        'question': question,
-        'difficulty': selectedDifficulty,
-        'tags': tags,
-        'chapter': chapter,
-        'subchapter': 'Exercises',
-        'isprivate': isprivate,
-        'tab': activetab,
-        'assignmentid': assignmentid,
-        'points': points,
-        'timed': timed,
-        'htmlsrc': htmlsrc
-    }
-    url = '/runestone/admin/createquestion'
-    jQuery.post(url, data, function (iserror, textStatus, whatever) {
-        if (iserror == 'ERROR') {
-            errortext = document.getElementById('qnameerror');
-            errortext.innerHTML = 'Name is already in use. Please try a different name.'
-        } else {
-            alert('Question created successfully');
-            var newPoints = iserror['points'];
-            var q_type = activetab;
-            var totalPoints = document.getElementById("totalPoints");
-            totalPoints.innerHTML = 'Total points: ' + newPoints;
-            // Add this question to the question picker and the table.
-            var tqp = question_picker.jstree(true);
-            // Find the exercises for this chapter. They have an ID set, making them easy to find.
-            chapter = chapterMap[chapter];
-            var exercises_node = tqp.get_node(chapter + ' Exercises');
-            // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
-            tqp.check_node(tqp.create_node(exercises_node, {
-                id: name,
-                text: name
-            }));
-        }
-    }, 'json');
+        template: template,
+        name: name,
+        question: question,
+        difficulty: selectedDifficulty,
+        tags: tags,
+        chapter: chapter,
+        subchapter: "Exercises",
+        isprivate: isprivate,
+        tab: activetab,
+        assignmentid: assignmentid,
+        points: points,
+        timed: timed,
+        htmlsrc: htmlsrc,
+    };
+    url = "/runestone/admin/createquestion";
+    jQuery.post(
+        url,
+        data,
+        function(iserror, textStatus, whatever) {
+            if (iserror == "ERROR") {
+                errortext = document.getElementById("qnameerror");
+                errortext.innerHTML =
+                    "Name is already in use. Please try a different name.";
+            } else {
+                alert("Question created successfully");
+                var newPoints = iserror["points"];
+                var q_type = activetab;
+                var totalPoints = document.getElementById("totalPoints");
+                totalPoints.innerHTML = "Total points: " + newPoints;
+                // Add this question to the question picker and the table.
+                var tqp = question_picker.jstree(true);
+                // Find the exercises for this chapter. They have an ID set, making them easy to find.
+                chapter = chapterMap[chapter];
+                var exercises_node = tqp.get_node(chapter + " Exercises");
+                // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
+                tqp.check_node(
+                    tqp.create_node(exercises_node, {
+                        id: name,
+                        text: name,
+                    })
+                );
+            }
+        },
+        "json"
+    );
 }
 
 // Given a question ID, preview it.
 function preview_question_id(question_id, preview_div) {
     if (arguments.length == 1) {
-        preview_div = "component-preview"
+        preview_div = "component-preview";
     }
     // Request the preview HTML from the server.
-    $.getJSON('/runestone/admin/htmlsrc', {
-        "acid": question_id
-    }).done(function (html_src) {
+    $.getJSON("/runestone/admin/htmlsrc", {
+        acid: question_id,
+    }).done(function(html_src) {
         // Render it.
-        renderRunestoneComponent(html_src, preview_div, {acid: question_id})
+        renderRunestoneComponent(html_src, preview_div, { acid: question_id });
     });
 }
-
 
 // Called by the "Preview" button of the "Write" panel.
 function preview_question(form, preview_div) {
     if (arguments.length == 1) {
-        preview_div = "component-preview"
+        preview_div = "component-preview";
     }
     var code = $(form.editRST).val();
     var data = {
-        'code': JSON.stringify(code)
+        code: JSON.stringify(code),
     };
-    $.post('/runestone/ajax/preview_question', data, function (result, status) {
+    $.post("/runestone/ajax/preview_question", data, function(result, status) {
         let code = JSON.parse(result);
         $(form.qrawhtml).val(code); // store the un-rendered html for submission
-        renderRunestoneComponent(code, preview_div)
+        renderRunestoneComponent(code, preview_div);
     });
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
     // a sphinx project, run sphinx, and send back the generated index file
     // this generated index can then be displayed...
-
 }
-
 
 // Render a question in the provided div.
 function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
@@ -1449,93 +1558,104 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  source into the actual component.
      */
     patt = /..\/_images/g;
-    componentSrc = componentSrc.replace(patt, `/${eBookConfig.app}/static/${eBookConfig.course}/_images`)
+    componentSrc = componentSrc.replace(
+        patt,
+        `/${eBookConfig.app}/static/${eBookConfig.course}/_images`
+    );
     jQuery(`#${whereDiv}`).html(componentSrc);
 
-    if (typeof edList === 'undefined') {
+    if (typeof edList === "undefined") {
         edList = {};
     }
 
-    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data('component')
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data("component");
     let opt = {};
-    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0]
+    opt.orig = jQuery(`#${whereDiv} [data-component]`)[0];
     if (opt.orig) {
-        opt.lang = $(opt.orig).data('lang')
+        opt.lang = $(opt.orig).data("lang");
         opt.useRunestoneServices = false;
         opt.graderactive = false;
         opt.python3 = true;
-        if (typeof moreOpts !== 'undefined') {
+        if (typeof moreOpts !== "undefined") {
             for (let key in moreOpts) {
-                opt[key] = moreOpts[key]
+                opt[key] = moreOpts[key];
             }
         }
     }
 
-    if (typeof component_factory === 'undefined') {
-        alert("Error:  Missing the component factory!  Either rebuild your course or clear you browser cache.");
+    if (typeof component_factory === "undefined") {
+        alert(
+            "Error:  Missing the component factory!  Either rebuild your course or clear you browser cache."
+        );
     } else {
         if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html()) {
-            jQuery(`#${whereDiv}`).html(`<p>Preview not available for ${componentKind}</p>`)
+            jQuery(`#${whereDiv}`).html(
+                `<p>Preview not available for ${componentKind}</p>`
+            );
         } else {
             let res = component_factory[componentKind](opt);
-            if (componentKind === 'activecode') {
+            if (componentKind === "activecode") {
                 edList[res.divid] = res;
             }
         }
     }
     if (opt.graderactive == false) {
-        if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
+        if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") {
+            // if we are in modal we are already editing
             $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
             let editButton = document.createElement("button");
             $(editButton).text("Edit Question");
             $(editButton).addClass("btn btn-normal");
             $(editButton).attr("data-target", "#editModal");
             $(editButton).attr("data-toggle", "modal");
-            $(editButton).click(function (event) {
+            $(editButton).click(function(event) {
                 data = {
-                    question_name: opt.acid || opt.orig.id
-                }
-                jQuery.get('/runestone/admin/question_text', data,
-                    function (obj) {
-                        $("#editRST").val(JSON.parse(obj));
-                    });
+                    question_name: opt.acid || opt.orig.id,
+                };
+                jQuery.get("/runestone/admin/question_text", data, function(obj) {
+                    $("#editRST").val(JSON.parse(obj));
+                });
             });
             $(`#${whereDiv}`).append(editButton);
-            let closeButton = document.createElement("button")
+            let closeButton = document.createElement("button");
             $(closeButton).text("Close Preview");
             $(closeButton).addClass("btn btn-normal");
-            $(closeButton).css("margin-left","20px");
+            $(closeButton).css("margin-left", "20px");
             $(closeButton).click(function(event) {
                 $("#component-preview").html("");
-                });
+            });
             $(`#${whereDiv}`).append(closeButton);
 
             let reportButton = document.createElement("button");
             $(reportButton).text("Flag for Review");
             $(reportButton).css("float", "right");
             $(reportButton).addClass("btn btn-warning");
-            $(reportButton).click(function (event) {
-                if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
+            $(reportButton).click(function(event) {
+                if (
+                    confirm(
+                        "Clicking OK will mark this question for review as poor or inappropriate so that it may be removed."
+                    )
+                ) {
                     data = {
-                        question_name: opt.acid || opt.orig.id
-                    }
-                    jQuery.getJSON('/runestone/admin/flag_question.json', data,
-                        function(obj) {
-                            alert('Flagged -- This question will be reviewed by an editor');
-                            $(reportButton).attr("disabled", true);
-                        });
+                        question_name: opt.acid || opt.orig.id,
+                    };
+                    jQuery.getJSON("/runestone/admin/flag_question.json", data, function(
+                        obj
+                    ) {
+                        alert("Flagged -- This question will be reviewed by an editor");
+                        $(reportButton).attr("disabled", true);
+                    });
                 }
             });
             $(`#${whereDiv}`).append(reportButton);
-            $("#qrawhtmlmodal").val("")
+            $("#qrawhtmlmodal").val("");
             $("#editRST").keypress(function() {
                 $("#qrawhtmlmodal").val(""); //ensure html refresh
-            })
+            });
         }
         // $(`#${whereDiv}`).css("background-color", "white");
     }
 }
-
 
 // Called by the "Search" button in the "Search question bank" panel.
 function questionBank(form) {
@@ -1544,32 +1664,32 @@ function questionBank(form) {
     var tags = $("#tags").select2("val");
     var term = form.term.value;
     var difficulty = "";
-    var difficulty_options = ['rating1', 'rating2', 'rating3', 'rating4', 'rating5'];
-    var inputs = document.getElementById('qbankform').getElementsByTagName('input');
+    var difficulty_options = ["rating1", "rating2", "rating3", "rating4", "rating5"];
+    var inputs = document.getElementById("qbankform").getElementsByTagName("input");
     for (var i = 0, length = inputs.length; i < length; i++) {
-        if (inputs[i].type == 'radio' && inputs[i].checked) {
+        if (inputs[i].type == "radio" && inputs[i].checked) {
             difficulty = inputs[i].value;
         }
     }
 
     var obj = new XMLHttpRequest();
-    var url = '/runestone/admin/questionBank'
+    var url = "/runestone/admin/questionBank";
     var data = {
-        variable: 'variable',
+        variable: "variable",
         chapter: chapter,
         difficulty: difficulty,
         author: author,
         tags: tags,
-        term: term
+        term: term,
     };
-    jQuery.post(url, data, function (resp, textStatus, whatever) {
-        resp = JSON.parse(resp)
-        if (resp == 'Error') {
-            alert("An error occured while searching")
-        };
-        var select = document.getElementById('qbankselect');
+    jQuery.post(url, data, function(resp, textStatus, whatever) {
+        resp = JSON.parse(resp);
+        if (resp == "Error") {
+            alert("An error occured while searching");
+        }
+        var select = document.getElementById("qbankselect");
         select.onchange = getQuestionInfo;
-        var questionform = document.getElementById('questionform');
+        var questionform = document.getElementById("questionform");
         $("#qbankselect").empty();
         for (i = 0; i < resp.length; i++) {
             var option = document.createElement("option");
@@ -1579,16 +1699,15 @@ function questionBank(form) {
             select.add(option);
         }
         if (resp.length == 0) {
-            select.style.visibility = 'hidden';
-            questionform.style.visibility = 'hidden';
-            var q_info = document.getElementById('questionInfo');
-            q_info.style.visibility = 'hidden';
+            select.style.visibility = "hidden";
+            questionform.style.visibility = "hidden";
+            var q_info = document.getElementById("questionInfo");
+            q_info.style.visibility = "hidden";
             alert("Sorry, no questions matched your search criteria.");
-
         }
         if (resp.length > 0) {
-            select.style.visibility = 'visible';
-            questionform.style.visibility = 'visible';
+            select.style.visibility = "visible";
+            questionform.style.visibility = "visible";
         }
     });
 }
@@ -1596,27 +1715,27 @@ function questionBank(form) {
 // Called by the "Add to assignment" button in the "Search question bank" panel after a search is performed.
 async function addToAssignment(form) {
     var points = form.points.value;
-    var select = document.getElementById('qbankselect');
+    var select = document.getElementById("qbankselect");
     var question_name = select.options[select.selectedIndex].text;
 
-    let resp = await updateAssignmentRaw(question_name, points, 'manual', 'last_answer');
+    let resp = await updateAssignmentRaw(question_name, points, "manual", "last_answer");
     add_to_qtable(resp);
 }
 
 // When a user clicks on a question in the select element of the "Search question bank" panel after doing a search, this is called.
 function getQuestionInfo() {
-    var select = document.getElementById('qbankselect');
+    var select = document.getElementById("qbankselect");
     var question_name = select.options[select.selectedIndex].text;
-    var assignlist = document.getElementById('assignlist');
+    var assignlist = document.getElementById("assignlist");
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
 
-    var url = '/runestone/admin/getQuestionInfo';
+    var url = "/runestone/admin/getQuestionInfo";
     var data = {
-        variable: 'variable',
+        variable: "variable",
         question: question_name,
-        assignment: assignmentid
+        assignment: assignmentid,
     };
-    jQuery.post(url, data, function (question_info, status, whatever) {
+    jQuery.post(url, data, function(question_info, status, whatever) {
         var res = JSON.parse(question_info);
         var data = {};
         var i;
@@ -1625,56 +1744,54 @@ function getQuestionInfo() {
                 data[i] = res[i];
             }
         }
-        var difficulty = data['difficulty'];
-        var code = data['code'];
-        var author = data['author'];
-        var tags = data['tags'];
+        var difficulty = data["difficulty"];
+        var code = data["code"];
+        var author = data["author"];
+        var tags = data["tags"];
 
-        var q_difficulty = document.getElementById('q_difficulty');
+        var q_difficulty = document.getElementById("q_difficulty");
         if (difficulty == null) {
-            q_difficulty.innerHTML = 'Difficulty not set for this question';
+            q_difficulty.innerHTML = "Difficulty not set for this question";
         } else {
-            q_difficulty.innerHTML = 'Difficulty: ' + difficulty;
+            q_difficulty.innerHTML = "Difficulty: " + difficulty;
         }
 
+        renderRunestoneComponent(data["htmlsrc"], "component-preview", {
+            acid: question_name,
+        });
 
-        renderRunestoneComponent(data['htmlsrc'], "component-preview", {acid: question_name})
-
-        var q_author = document.getElementById('q_author');
+        var q_author = document.getElementById("q_author");
         if (author == null) {
-            q_author.innerHTML = 'No author for this question';
+            q_author.innerHTML = "No author for this question";
         } else {
-            q_author.innerHTML = 'Author: ' + author;
+            q_author.innerHTML = "Author: " + author;
         }
 
-        var q_tags = document.getElementById('q_tags');
-        q_tags.innerHTML = 'Tags:' + tags;
-        var q_info = document.getElementById('questionInfo');
-        q_info.style.visibility = 'visible';
-
+        var q_tags = document.getElementById("q_tags");
+        q_tags.innerHTML = "Tags:" + tags;
+        var q_info = document.getElementById("questionInfo");
+        q_info.style.visibility = "visible";
     });
 }
 
-
 // Called from the editing modal when the save button is pressed
 function edit_question(form) {
-
     if (!form.qrawhtml.value) {
         alert("You must generate the HTML for your edit.");
         return;
     }
     var tags = $("#addTags").select2("val");
     var difficulty = null;
-    var difficulty_options = ['r1', 'r2', 'r3', 'r4', 'r5'];
-    var inputs = document.getElementById('editForm').getElementsByTagName('input');
+    var difficulty_options = ["r1", "r2", "r3", "r4", "r5"];
+    var inputs = document.getElementById("editForm").getElementsByTagName("input");
     for (var i = 0, length = inputs.length; i < length; i++) {
-        if (inputs[i].type == 'radio' && inputs[i].checked) {
+        if (inputs[i].type == "radio" && inputs[i].checked) {
             difficulty = inputs[i].value;
         }
     }
-    let orig_divid = $("#modal-preview").data("orig_divid")
+    let orig_divid = $("#modal-preview").data("orig_divid");
     var question_text = form.editRST.value;
-    var lines = form.editRST.value.split('\n');
+    var lines = form.editRST.value.split("\n");
     var htmlsrc = form.qrawhtml.value;
     var name = find_name(lines);
     data = {
@@ -1683,16 +1800,15 @@ function edit_question(form) {
         tags: tags,
         difficulty: difficulty,
         questiontext: question_text,
-        htmlsrc: htmlsrc
+        htmlsrc: htmlsrc,
     };
-    jQuery.post('/runestone/admin/edit_question', data, function (myres) {
+    jQuery.post("/runestone/admin/edit_question", data, function(myres) {
         alert(myres);
         if (myres.includes("Success")) {
-            $('#editModal').modal('hide');
+            $("#editModal").modal("hide");
         }
     });
 }
-
 
 // ***********
 // Grading tab
@@ -1707,22 +1823,21 @@ function get_assignment_release_states() {
             type: "POST",
             dataType: "JSON",
             async: false,
-            success: function (retdata) {
+            success: function(retdata) {
                 assignment_release_states = retdata;
-            }
+            },
         });
     }
 }
 
 // Update the release button in the grading panel?
 function set_release_button() {
-
     // first find out if there is an assignment selected
     var col1 = document.getElementById("gradingoption1");
     var col1val = col1.options[col1.selectedIndex].value;
     var assignment = null;
 
-    if (col1val == 'assignment') {
+    if (col1val == "assignment") {
         var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
@@ -1731,22 +1846,22 @@ function set_release_button() {
 
     // change the release button appropriately
     // var release_button = document.getElementById("releasebutton");
-    var release_button = $('#releasebutton');
+    var release_button = $("#releasebutton");
     if (assignment == null) {
         //hide the release grades button
-        release_button.css('visibility', 'hidden');
+        release_button.css("visibility", "hidden");
     } else {
-        release_button.css('visibility', 'visible');
+        release_button.css("visibility", "visible");
         // see whether grades are currently live for this assignment
         get_assignment_release_states();
         var release_state = assignment_release_states[assignment];
         // If so, set the button text appropriately
         if (release_state == true) {
             release_button.text("Hide Grades from Students for " + assignment);
-            $("#releasestate").text("")
+            $("#releasestate").text("");
         } else {
             release_button.text("Release Grades to Students for " + assignment);
-            $("#releasestate").text("Not Released")
+            $("#releasestate").text("Not Released");
         }
     }
 }
@@ -1756,11 +1871,10 @@ function toggle_release_grades() {
     var col1val = col1.options[col1.selectedIndex].value;
     var assignment = null;
 
-    if (col1val == 'assignment') {
+    if (col1val == "assignment") {
         var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
             assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
-
         } else {
             alert("Please choose an assignment first");
         }
@@ -1768,7 +1882,7 @@ function toggle_release_grades() {
 
     if (assignment != null) {
         //go release the grades now
-        get_assignment_release_states()
+        get_assignment_release_states();
         release_state = assignment_release_states[assignment];
         var ids = assignmentids;
         var assignmentid = ids[assignment];
@@ -1777,10 +1891,10 @@ function toggle_release_grades() {
             assignment_release_states[assignment] = null;
             let data = {
                 assignmentid: assignmentid,
-                released: 'no'
+                released: "no",
             };
 
-            jQuery.post('/runestone/admin/releasegrades', data, function (mess, stat, w) {
+            jQuery.post("/runestone/admin/releasegrades", data, function(mess, stat, w) {
                 alert(`${mess} Grades are now hidden from students for ${assignment}`);
             });
         } else {
@@ -1788,10 +1902,10 @@ function toggle_release_grades() {
             assignment_release_states[assignment] = true;
             let data = {
                 assignmentid: assignmentid,
-                released: 'yes'
+                released: "yes",
             };
 
-            jQuery.post('/runestone/admin/releasegrades', data, function (mess, stat, w) {
+            jQuery.post("/runestone/admin/releasegrades", data, function(mess, stat, w) {
                 alert(`${mess}: Grades are now visible to students for ${assignment}`);
             });
         }
@@ -1799,34 +1913,32 @@ function toggle_release_grades() {
     }
 }
 
-
 function copyAssignments() {
     let selectedCourse = document.getElementById("courseSelection").value;
     data = {
         oldassignment: -1,
-        course: selectedCourse
+        course: selectedCourse,
     };
-    $.post("/runestone/admin/copy_assignment", data, function (mess, stat, w) {
+    $.post("/runestone/admin/copy_assignment", data, function(mess, stat, w) {
         if (mess == "success") {
-            alert('Done')
+            alert("Done");
         } else {
-            alert('Copy Failed')
+            alert("Copy Failed");
         }
     });
 }
 
-
 function updateCourse(widget, attr) {
     console.log(widget.value);
-    data = {}
-    data[attr] = widget.value
-    if (attr == 'downloads_enabled' || attr == 'allow_pairs') {
-        data[attr] = widget.checked
+    data = {};
+    data[attr] = widget.value;
+    if (attr == "downloads_enabled" || attr == "allow_pairs") {
+        data[attr] = widget.checked;
     }
 
-    $.getJSON("/runestone/admin/update_course.json", data, function (retval, stat, w) {
+    $.getJSON("/runestone/admin/update_course.json", data, function(retval, stat, w) {
         if (retval.status != "success") {
             alert("Update Failed");
         }
-    })
+    });
 }
