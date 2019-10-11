@@ -66,6 +66,7 @@ function gradeIndividualItem() {
             divstring += '<label for="input-comments">Comments</label>';
             divstring +=
                 '<input id="input-comments" type="text" class="form-control" value="" />';
+
             divstring +=
                 '<input type="submit" value="Save Grade" class="btn btn-primary" /></form>';
             divstring +=
@@ -1794,11 +1795,13 @@ function edit_question(form) {
     var lines = form.editRST.value.split("\n");
     var htmlsrc = form.qrawhtml.value;
     var name = find_name(lines);
+    var isp = document.getElementById("change_privacy").checked;
     data = {
         question: orig_divid,
         name: name,
         tags: tags,
         difficulty: difficulty,
+        isprivate: isp,
         questiontext: question_text,
         htmlsrc: htmlsrc,
     };

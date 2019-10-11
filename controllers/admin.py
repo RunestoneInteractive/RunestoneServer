@@ -1320,6 +1320,8 @@ def edit_question():
 
     question = vars["questiontext"]
     htmlsrc = vars["htmlsrc"]
+    private = True if vars["isprivate"] == "true" else False
+    print("PRIVATE = ", private)
 
     if old_qname == new_qname and old_question.author != author:
         return "You do not own this question, Please assign a new unique id"
@@ -1332,6 +1334,9 @@ def edit_question():
     autograde = ""
     if re.search(r":autograde:\s+unittest", question):
         autograde = "unittest"
+    practice = ""
+    if re.search(r":practice:\s+T", question):
+        practice = "T"
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname)
@@ -1347,6 +1352,8 @@ def edit_question():
             question_type=question_type,
             htmlsrc=htmlsrc,
             autograde=autograde,
+            practice=practice,
+            is_private=private,
             from_source=False,
         )
         if tags and tags != "null":
@@ -1465,8 +1472,11 @@ def createquestion():
     points = int(request.vars["points"]) if request.vars["points"] else 1
     timed = request.vars["timed"]
     unittest = None
+    practice = False
     if re.search(r":autograde:\s+unittest", request.vars.question):
         unittest = "unittest"
+    if re.search(r":practice:\s+T", request.vars.question):
+        practice = True
 
     try:
         newqID = db.questions.insert(
@@ -1481,6 +1491,7 @@ def createquestion():
             timestamp=datetime.datetime.utcnow(),
             question_type=request.vars["template"],
             is_private=request.vars["isprivate"],
+            practice=practice,
             from_source=False,
             htmlsrc=request.vars["htmlsrc"],
         )

@@ -306,13 +306,24 @@
                                 <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
                               </div><!-- Modal Body -->
                               <div class="modal-body">
-                                <p>If you are not the original author of this question you must change the id on the first line of the directive.</p>
+                                <p>If you are not the original author of this question you must change the id on the first line of the directive.  If you add a unit test,
+                                  make sure that you add the parameter <code>:autograde: unittest </code> to the directive.  Likewise if you want
+                                  to make an autograded question available through the practice tool add <code>:practice: T</code> as a parameter.
+                                </p>
                                 <form id="editForm" name="editForm">
                                   <div class="form-group">
                                     <label for="change_difficulty">Change Difficulty</label>
                                     <div id="change_difficulty">
-                                      <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label> <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label> <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label> <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label> <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+                                      <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label>
+                                      <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label>
+                                      <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label>
+                                      <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label>
+                                      <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
                                     </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="change_privacy">Make Private</label>
+                                      <input id="change_privacy" name="isprivate" type="checkbox">
                                   </div>
                                   <div class="form-group">
                                     <label for="addTags">Add Tags</label>
