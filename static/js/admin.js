@@ -1,7 +1,7 @@
 var assignment_release_states = null;
 
 function gradeIndividualItem() {
-    //This function figures out the parameters to feed to getRightSideGradingDiv, which does most of the work
+    //This function figures out the parameters to feed to createGradingPanel, which does most of the work
     var sel1 = document.getElementById("gradingoption1");
     var assignOrChap = sel1.options[sel1.selectedIndex].value;
 
@@ -34,6 +34,10 @@ function gradeIndividualItem() {
     $(rightSideDiv)[0].style.visibility = "visible";
     rightSideDiv.html(""); //empty it out
     //Not sure if questions or students should be the outer loop
+    var mg = false;
+    if (questions.length * sstudents.length > 1) {
+        mg = true;
+    }
     for (var qnum = 0; qnum < questions.length; qnum++) {
         question = questions[qnum].value;
         for (var snum = 0; snum < sstudents.length; snum++) {
@@ -52,7 +56,7 @@ function gradeIndividualItem() {
                 "S" +
                 sid.replace(/[#*@+:>~.\/]/g, "_");
             // This creates the equivalent of outerRightDiv for each question and student
-            // The guts of the form are filled in by the show function in getRightSideGradingDiv.
+            // The guts of the form are filled in by the show function in createGradingPanel.
             var divstring = `
                 <div style="border:1px solid;padding:5px;margin:5px;" id="${newid}">
                     <h4 id="rightTitle"></h4><div id="questiondisplay">Question Display
@@ -61,7 +65,7 @@ function gradeIndividualItem() {
                     <div id="gradingform"></div>
                 </div>`;
             rightSideDiv.append(divstring);
-            getRightSideGradingDiv($("#" + newid), question, sid);
+            createGradingPanel($("#" + newid), question, sid, mg);
         }
     }
 }
@@ -243,7 +247,7 @@ function sendLTI_Grade() {
     });
 }
 
-function getRightSideGradingDiv(element, acid, studentId) {
+function createGradingPanel(element, acid, studentId, multiGrader) {
     if (!eBookConfig.gradingURL) {
         alert("Can't grade without a URL");
         return false;
@@ -281,7 +285,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         }
     };
 
-    //this is an internal function for getRightSideGradingDiv
+    //this is an internal function for createGradingPanel
     // called when Save Grade is pressed
     function save(event) {
         event.preventDefault();
@@ -311,6 +315,7 @@ function getRightSideGradingDiv(element, acid, studentId) {
         });
     }
 
+
     function show(data) {
         // get rid of any other modals -- incase they are just hanging out.
         //jQuery('.modal.modal-grader:not(#modal-template .modal)').remove();
@@ -325,10 +330,16 @@ function getRightSideGradingDiv(element, acid, studentId) {
                 <label for="input-grade">Grade</label>
                 <input id="input-grade" type="text" class="form-control" value= ""/>
                 <label for="input-comments">Comments</label>
-                <textarea id="input-comments" class="form-control" rows=2> </textarea>
+                <textarea id="input-comments" class="form-control" rows=2> </textarea>`
+        if (! multiGrader) {
+            formstr += `
                 <input type="submit" value="Save Grade" class="btn btn-primary" />
             </form>
-            <button class="btn btn-default next" type="button">Save and next</button>`;
+            <button class="btn btn-default next" type="button">Save and next</button>`
+        }
+        else {
+            formstr += '</form>'
+        }
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
 
@@ -359,6 +370,45 @@ function getRightSideGradingDiv(element, acid, studentId) {
                     );
                 }
             }
+        }
+
+        if (multiGrader) {
+            jQuery("#input-grade", element).change(function() {
+                //alert(this.value + acid + studentId);
+                var inp = this;
+                jQuery.ajax({
+                    url: eBookConfig.gradeRecordingUrl,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        acid: acid,
+                        sid: studentId,
+                        grade: this.value,
+                    },
+                    success: function(data) {
+                        inp.style.backgroundColor = '#ddffdd';
+                        calculateTotals(studentId);
+                    },
+                });
+            });
+
+            jQuery("#input-comments", element).change(function() {
+                var inp = this;
+                jQuery.ajax({
+                    url: eBookConfig.gradeRecordingUrl,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        acid: acid,
+                        sid: studentId,
+                        comment: this.value,
+                    },
+                    success: function(data) {
+                        inp.style.backgroundColor = '#ddffdd';
+                    },
+                });
+            });
+
         }
 
         // pull in any prefix or suffix code, already retrieved in data
