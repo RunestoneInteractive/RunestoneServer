@@ -51,27 +51,15 @@ function gradeIndividualItem() {
                 question.replace(/[#*@+:>~.\/ ]/g, "_") +
                 "S" +
                 sid.replace(/[#*@+:>~.\/]/g, "_");
-            //This creates the equivalent of outerRightDiv for each question and student
-            var divstring =
-                '<div style="border:1px solid;padding:5px;margin:5px;" id="' +
-                newid +
-                '">';
-            divstring +=
-                '<h4 id="rightTitle"></h4><div id="questiondisplay">Question Display</div>';
-            divstring += '<div style="display:none" id="shortanswerresponse"></div>';
-            divstring += '<div id="gradingform"><form>';
-            divstring += '<label for="input-grade">Grade</label>';
-            divstring +=
-                '<input id="input-grade" type="text" class="form-control" value="" />';
-            divstring += '<label for="input-comments">Comments</label>';
-            divstring +=
-                '<input id="input-comments" type="text" class="form-control" value="" />';
-
-            divstring +=
-                '<input type="submit" value="Save Grade" class="btn btn-primary" /></form>';
-            divstring +=
-                '<button class="btn btn-default next" type="button">Save and next</button></div>';
-            divstring += "</div></div>";
+            // This creates the equivalent of outerRightDiv for each question and student
+            // The guts of the form are filled in by the show function in getRightSideGradingDiv.
+            var divstring = `
+                <div style="border:1px solid;padding:5px;margin:5px;" id="${newid}">
+                    <h4 id="rightTitle"></h4><div id="questiondisplay">Question Display
+                </div>
+                <div style="display:none" id="shortanswerresponse"></div>
+                    <div id="gradingform"></div>
+                </div>`;
             rightSideDiv.append(divstring);
             getRightSideGradingDiv($("#" + newid), question, sid);
         }
@@ -333,7 +321,14 @@ function getRightSideGradingDiv(element, acid, studentId) {
         var newForm = document.createElement("form");
         newForm.setAttribute("id", "gradingform");
         formstr =
-            '<form> <label for="input-grade">Grade</label> <input id="input-grade" type="text" class="form-control" value= ""/> <label for="input-comments">Comments</label> <input id="input-comments" type="text" class="form-control" value="" /> <input type="submit" value="Save Grade" class="btn btn-primary" /> </form> <button class="btn btn-default next" type="button">Save and next</button>';
+            `<form>
+                <label for="input-grade">Grade</label>
+                <input id="input-grade" type="text" class="form-control" value= ""/>
+                <label for="input-comments">Comments</label>
+                <textarea id="input-comments" class="form-control" rows=2> </textarea>
+                <input type="submit" value="Save Grade" class="btn btn-primary" />
+            </form>
+            <button class="btn btn-default next" type="button">Save and next</button>`;
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
 
@@ -385,11 +380,12 @@ function getRightSideGradingDiv(element, acid, studentId) {
             event.preventDefault();
             jQuery("form", rightDiv).submit();
             // This next block should not run until save is complete.
-            var col3 = document.getElementById("studentselector");
+            var selectedStudent = document.getElementById("studentselector");
             try {
-                var ind = col3.selectedIndex + 1;
-                col3.selectedIndex = ind;
-                col3.onchange();
+                var ind = selectedStudent.selectedIndex + 1;
+                selectedStudent.selectedIndex = ind;
+                $(selectedStudent).val(selectedStudent.value)
+                $(selectedStudent).trigger('change')
             } catch (err) {
                 //reached end of list
             }
@@ -486,14 +482,14 @@ function populateQuestions(select, question_names) {
 // when the chapter or assignment changes
 function updateQuestionList() {
     var sel1 = document.getElementById("gradingoption1");
-    var val1 = sel1.options[sel1.selectedIndex].value;
-    var col1 = document.getElementById("chaporassignselector");
-    var col2 = document.getElementById("questionselector");
-    var val2 = "question";
+    var chapAssign = sel1.options[sel1.selectedIndex].value;
+    var chapAssignSelector = document.getElementById("chaporassignselector");
+    var questionSelector = document.getElementById("questionselector");
+
     $("#rightsideGradingTab").empty();
     var col1val = "";
-    if (col1.selectedIndex > -1) {
-        var col1val = col1.options[col1.selectedIndex].value;
+    if (chapAssignSelector.selectedIndex > -1) {
+        var col1val = chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
     } else {
         $("#questionselector").empty();
         $("#rightsideGradingTab").empty();
@@ -504,7 +500,7 @@ function updateQuestionList() {
     }
     $("#releasestate").text("");
 
-    if (val1 == "assignment") {
+    if (chapAssign == "assignment") {
         set_release_button();
         autograde_form.style.visibility = "visible";
         document.getElementById("assignmentTotalform").style.visibility = "hidden";
@@ -514,28 +510,26 @@ function updateQuestionList() {
             $("#releasestate").text("");
         }
     }
-    if (val1 == "assignment" && val2 == "question") {
-        populateQuestions(col2, assignmentinfo[col1val]);
-    } else if (val1 == "chapter" && val2 == "question") {
+    if (chapAssign == "assignment") {
+        populateQuestions(questionSelector, assignmentinfo[col1val]);
+    } else if (chapAssign == "chapter") {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names
         //populateQuestions should be a model for this.
-        populateQuestions(col2, chapters[col1val]);
+        populateQuestions(questionSelector, chapters[col1val]);
     }
 
-    if (val2 != "") {
-        col2.style.visibility = "visible";
-    }
+    questionSelector.style.visibility = "visible";
 }
 
 function gradeSelectedStudent() {
-    var col3 = document.getElementById("studentselector");
+    var selectedStudent = document.getElementById("studentselector");
 
-    var lastcolval = col3.selectedIndex;
+    var lastcolval = selectedStudent.selectedIndex;
     if (lastcolval != -1) {
         gradeIndividualItem();
     }
-    col3.style.visibility = "visible";
+    selectedStudent.style.visibility = "visible";
 }
 
 function pickedAssignments(column) {
