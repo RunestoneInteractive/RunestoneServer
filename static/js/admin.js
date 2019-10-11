@@ -1483,55 +1483,55 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
             }
         }
     }
-
-    if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
-        $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
-        let editButton = document.createElement("button");
-        $(editButton).text("Edit Question");
-        $(editButton).addClass("btn btn-normal");
-        $(editButton).attr("data-target", "#editModal");
-        $(editButton).attr("data-toggle", "modal");
-        $(editButton).click(function (event) {
-            data = {
-                question_name: opt.acid || opt.orig.id
-            }
-            jQuery.get('/runestone/admin/question_text', data,
-                function (obj) {
-                    $("#editRST").val(JSON.parse(obj));
-                });
-        });
-        $(`#${whereDiv}`).append(editButton);
-        let closeButton = document.createElement("button")
-        $(closeButton).text("Close Preview");
-        $(closeButton).addClass("btn btn-normal");
-        $(closeButton).css("margin-left","20px");
-        $(closeButton).click(function(event) {
-            $("#component-preview").html("");
-            });
-        $(`#${whereDiv}`).append(closeButton);
-
-        let reportButton = document.createElement("button");
-        $(reportButton).text("Flag for Review");
-        $(reportButton).css("float", "right");
-        $(reportButton).addClass("btn btn-warning");
-        $(reportButton).click(function (event) {
-            if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
+    if (opt.graderactive == false) {
+        if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") { // if we are in modal we are already editing
+            $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
+            let editButton = document.createElement("button");
+            $(editButton).text("Edit Question");
+            $(editButton).addClass("btn btn-normal");
+            $(editButton).attr("data-target", "#editModal");
+            $(editButton).attr("data-toggle", "modal");
+            $(editButton).click(function (event) {
                 data = {
                     question_name: opt.acid || opt.orig.id
                 }
-                jQuery.getJSON('/runestone/admin/flag_question.json', data,
-                    function(obj) {
-                        alert('Flagged -- This question will be reviewed by an editor');
-                        $(reportButton).attr("disabled", true);
+                jQuery.get('/runestone/admin/question_text', data,
+                    function (obj) {
+                        $("#editRST").val(JSON.parse(obj));
                     });
-            }
-        });
-        $(`#${whereDiv}`).append(reportButton);
-        $("#qrawhtmlmodal").val("")
-        $("#editRST").keypress(function() {
-            $("#qrawhtmlmodal").val(""); //ensure html refresh
-        })
+            });
+            $(`#${whereDiv}`).append(editButton);
+            let closeButton = document.createElement("button")
+            $(closeButton).text("Close Preview");
+            $(closeButton).addClass("btn btn-normal");
+            $(closeButton).css("margin-left","20px");
+            $(closeButton).click(function(event) {
+                $("#component-preview").html("");
+                });
+            $(`#${whereDiv}`).append(closeButton);
 
+            let reportButton = document.createElement("button");
+            $(reportButton).text("Flag for Review");
+            $(reportButton).css("float", "right");
+            $(reportButton).addClass("btn btn-warning");
+            $(reportButton).click(function (event) {
+                if (confirm("Clicking OK will mark this question for review as poor or inappropriate so that it may be removed.")) {
+                    data = {
+                        question_name: opt.acid || opt.orig.id
+                    }
+                    jQuery.getJSON('/runestone/admin/flag_question.json', data,
+                        function(obj) {
+                            alert('Flagged -- This question will be reviewed by an editor');
+                            $(reportButton).attr("disabled", true);
+                        });
+                }
+            });
+            $(`#${whereDiv}`).append(reportButton);
+            $("#qrawhtmlmodal").val("")
+            $("#editRST").keypress(function() {
+                $("#qrawhtmlmodal").val(""); //ensure html refresh
+            })
+        }
         // $(`#${whereDiv}`).css("background-color", "white");
     }
 }
