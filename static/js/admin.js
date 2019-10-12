@@ -255,6 +255,8 @@ function showDeadline() {
     tzoff = now.getTimezoneOffset();
     dl.setHours(dl.getHours() + tzoff / 60);
     $("#dl_disp").text(dl);
+
+    return dl;
 }
 
 function createGradingPanel(element, acid, studentId, multiGrader) {
@@ -280,7 +282,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $("#enforceDeadline").is(":checked");
-            showDeadline();
+            var dl = showDeadline();
             renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
                 sid: studentId,
                 graderactive: true,
