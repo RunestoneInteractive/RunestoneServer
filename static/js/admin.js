@@ -128,6 +128,7 @@ function getSelectedItem(type) {
     }
 }
 
+//
 function autoGrade() {
     var assignment = getSelectedItem("assignment");
     var question = getSelectedItem("question");
@@ -247,6 +248,15 @@ function sendLTI_Grade() {
     });
 }
 
+function showDeadline() {
+    var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
+    // Need to update deadline by timezone
+    var now = new Date();
+    tzoff = now.getTimezoneOffset();
+    dl.setHours(dl.getHours() + tzoff / 60);
+    $("#dl_disp").text(dl);
+}
+
 function createGradingPanel(element, acid, studentId, multiGrader) {
     if (!eBookConfig.gradingURL) {
         alert("Can't grade without a URL");
@@ -270,12 +280,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         if (obj.readyState == 4 && obj.status == 200) {
             var htmlsrc = JSON.parse(obj.responseText);
             var enforceDeadline = $("#enforceDeadline").is(":checked");
-            var dl = new Date(assignment_deadlines[getSelectedItem("assignment")]);
-            // Need to update deadline by timezone
-            var now = new Date();
-            tzoff = now.getTimezoneOffset();
-            dl.setHours(dl.getHours() + tzoff / 60);
-            $("#dl_disp").text(dl);
+            showDeadline();
             renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
                 sid: studentId,
                 graderactive: true,
@@ -554,6 +559,7 @@ function updateQuestionList() {
 
     if (chapAssign == "assignment") {
         set_release_button();
+        showDeadline();
         autograde_form.style.visibility = "visible";
         document.getElementById("assignmentTotalform").style.visibility = "hidden";
         if (!assignment_release_states[col1val]) {
