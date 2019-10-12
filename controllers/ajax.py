@@ -302,9 +302,10 @@ def hsblog():
         response.cookies["ipuser"] = sid
         response.cookies["ipuser"]["expires"] = 24 * 3600 * 90
         response.cookies["ipuser"]["path"] = "/"
-        response.cookies["last_course"] = auth.user.course_name
-        response.cookies["last_course"]["expires"] = 24 * 3600 * 90
-        response.cookies["last_course"]["path"] = "/"
+        if auth.user:
+            response.cookies["last_course"] = auth.user.course_name
+            response.cookies["last_course"]["expires"] = 24 * 3600 * 90
+            response.cookies["last_course"]["path"] = "/"
 
     return json.dumps(res)
 
