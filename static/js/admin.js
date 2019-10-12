@@ -557,7 +557,7 @@ function updateQuestionList() {
         autograde_form.style.visibility = "visible";
         document.getElementById("assignmentTotalform").style.visibility = "hidden";
         if (!assignment_release_states[col1val]) {
-            $("#releasestate").text("Not Released");
+            $("#releasestate").text("Scores Not Released");
         } else {
             $("#releasestate").text("");
         }
@@ -1912,7 +1912,7 @@ function set_release_button() {
             $("#releasestate").text("");
         } else {
             release_button.text("Release Grades to Students for " + assignment);
-            $("#releasestate").text("Not Released");
+            $("#releasestate").text("Scores Not Released");
         }
     }
 }
