@@ -46,12 +46,18 @@
     <button class="btn" data-target="#renameAssignment" data-toggle="modal" onclick="fillinAssignmentName('renameName');" style="margin-top: 12px;">Rename</button>
     <fieldset>
       <legend>Assignment properties</legend>
-      <span id="totalPoints"></span><br>
+      <span id="totalPoints" style="margin-bottom: 10px;"></span><br>
       <form id="assignment-form">
         <label for="datetimepicker">Due Date: </label>
-        <input id="datetimepicker" name="due" type="text"><br>
-        <label for="assign_visible">Visible to Students</label>
-        <input id="assign_visible" type="checkbox" name="visible" value="T"><br>
+        <input id="datetimepicker" class="form-control" name="due" type="text"><br>
+        <div class="form-group form-check">
+        <label for="assign_visible" class="form-check-label">Visible to Students</label>
+        <input id="assign_visible" class="form-check-input" type="checkbox" name="visible" value="T"><br>
+        </div>
+        <div class="form-group form-check">
+            <label for="assign_is_timed" class="form-check-label">Show as Timed Assessment</label>
+            <input id="assign_is_timed" class="form-check-input" type="checkbox" name="is_timed" value="T"> (Use this to make quizzes or exams - <strong>Beta!</strong>)<br>
+        </div>
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
 

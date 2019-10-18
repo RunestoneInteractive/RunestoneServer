@@ -288,6 +288,8 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 graderactive: true,
                 enforceDeadline: enforceDeadline,
                 deadline: dl,
+                multiGrader: multiGrader,
+                gradingContainer: elementID,
             });
         }
     };
@@ -1222,6 +1224,11 @@ function update_assignment(form) {
     } else {
         form.visible.value = "F";
     }
+    if (form.is_timed.checked) {
+        form.is_timed.value = "T";
+    } else {
+        form.is_timed.value = "F";
+    }
     $.getJSON(
         "save_assignment",
         $(form).serialize() + "&assignment_id=" + getAssignmentId(),
@@ -1269,10 +1276,16 @@ function assignmentInfo() {
             $("#assignment_description").val(assignmentData["description"]);
             $("#readings-threshold").val(assignmentData["threshold"]);
             $("#assign_visible").val(assignmentData["visible"]);
+            $("#assign_is_timed").val(assignmentData["is_timed"]);
             if (assignmentData["visible"] === true) {
                 $("#assign_visible").prop("checked", true);
             } else {
                 $("#assign_visible").prop("checked", false);
+            }
+            if (assignmentData["is_timed"] === true) {
+                $("#assign_is_timed").prop("checked", true);
+            } else {
+                $("#assign_is_timed").prop("checked", false);
             }
             $("#readings-points-to-award").val(assignmentData["points_to_award"]);
             $("#readings-autograder").val(assignmentData["readings_autograder"]);
@@ -1652,7 +1665,11 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         } else {
             let res = component_factory[componentKind](opt);
             if (componentKind === "activecode") {
-                edList[res.divid] = res;
+                if (moreOpts.multiGrader) {
+                    edList[`${moreOpts.gradingContainer} ${res.divid}`] = res;
+                } else {
+                    edList[res.divid] = res;
+                }
             }
         }
     }

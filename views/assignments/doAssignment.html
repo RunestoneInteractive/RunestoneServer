@@ -49,30 +49,38 @@
                 }
             </style>
             <h3>Questions</h3>
-                {{count=0}}
-                {{for q in questioninfo:}}
-                        {{ if q['comment'] != 'ungraded':}}
-                            <div style='float:right; width:30%;'>
-                            <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-                            <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+                {{ if assignment.is_timed: }}
+                    <ul data-component="timedAssessment"  id="timed_assignment_{{=assignment.id}}">
+                    {{for q in questioninfo:}}
+                        {{=XML(q['htmlsrc'])}}
+                    {{pass}}
+                    </ul>
+                {{else:}}
+                    {{count=0}}
+                    {{for q in questioninfo:}}
+                            {{ if q['comment'] != 'ungraded':}}
+                                <div style='float:right; width:30%;'>
+                                <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+                                <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+                                </div>
+                            {{ else: }}
+                                <div style='float:right; width:10%;'>
+                                <h5 style='text-align:center;'>Not yet graded</h5>
+                                </div>
+                            {{pass}}
+                            <div class='oneq full-width' id='{{=count}}'>
+                                <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
                             </div>
-                        {{ else: }}
-                            <div style='float:right; width:10%;'>
-                            <h5 style='text-align:center;'>Not yet graded</h5>
-                            </div>
-                        {{pass}}
-                        <div class='oneq full-width' id='{{=count}}'>
-                            <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
-                        </div>
 
-                    {{count += 1}}
+                        {{count += 1}}
+                    {{pass}}
                 {{pass}}
 
         </div>
     {{pass}}
 </div>
 
-{{ if not released: }}
+{{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.

@@ -15,6 +15,7 @@ db.define_table(
     Field("description", "text"),
     Field("duedate", "datetime"),
     Field("visible", "boolean"),
+    Field("is_timed", "boolean", default=False),
     format="%(name)s",
     migrate=table_migrate_prefix + "assignments.table",
 )

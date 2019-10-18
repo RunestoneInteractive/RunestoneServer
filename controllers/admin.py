@@ -1884,6 +1884,7 @@ def get_assignment():
         assignment_data["due_date"] = None
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
+    assignment_data["is_timed"] = assignment_row.is_timed
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1979,7 +1980,7 @@ def save_assignment():
 
     assignment_id = request.vars.get("assignment_id")
     isVisible = request.vars["visible"]
-
+    is_timed = request.vars["is_timed"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -1994,6 +1995,7 @@ def save_assignment():
             description=request.vars["description"],
             points=total,
             duedate=due,
+            is_timed=is_timed,
             visible=isVisible,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
