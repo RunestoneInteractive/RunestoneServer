@@ -1921,7 +1921,6 @@ function set_release_button() {
     }
 
     // change the release button appropriately
-    // var release_button = document.getElementById("releasebutton");
     var release_button = $("#releasebutton");
     if (assignment == null) {
         //hide the release grades button
@@ -1933,10 +1932,10 @@ function set_release_button() {
         var release_state = assignment_release_states[assignment];
         // If so, set the button text appropriately
         if (release_state == true) {
-            release_button.text("Hide Grades from Students for " + assignment);
+            release_button.text("Hide Grades");
             $("#releasestate").text("");
         } else {
-            release_button.text("Release Grades to Students for " + assignment);
+            release_button.text("Release Grades");
             $("#releasestate").text("Grades Not Released");
         }
     }
