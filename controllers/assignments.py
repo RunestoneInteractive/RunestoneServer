@@ -875,7 +875,7 @@ def doAssignment():
 
     # For each question, accumulate information, and add it to either the readings or questions data structure
     # If scores have not been released for the question or if there are no scores yet available, the scoring information will be recorded as empty strings
-
+    qset = set()
     for q in questions:
         if q.questions.htmlsrc:
             # This replacement is to render images
@@ -972,9 +972,12 @@ def doAssignment():
                 readings_score += info["score"]
 
         else:
-            if info not in questionslist:  # add to questions
+            if (
+                q.questions.name not in qset and info not in questionslist
+            ):  # add to questions
                 questionslist.append(info)
                 questions_score += info["score"]
+                qset.add(q.questions.name)
 
     # put readings into a session variable, to enable next/prev button
     readings_names = []
