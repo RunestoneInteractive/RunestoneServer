@@ -1108,7 +1108,7 @@ def renameAssignment():
 )
 def questionBank():
     response.headers["content-type"] = "application/json"
-    logger.error("in questionbank")
+
     row = (
         db(db.courses.id == auth.user.course_id)
         .select(db.courses.course_name, db.courses.base_course)
@@ -1167,6 +1167,10 @@ def questionBank():
 
         for row in questions_query:
             removed_row = False
+            if row.is_private == True:  # noqa: E712
+                if row.author != auth.user.first_name + " " + auth.user.last_name:
+                    rows.remove(row)
+                    removed_row = True
             if term:
                 if (
                     request.vars["term"] not in row.name
