@@ -170,7 +170,7 @@ Installation
       If you get an error message that the session table already exists, you need to go into the database and drop the table.
       If you get other error messages about tables that either exist or do not exist when they should or should not, then your database is out of sync with the data in your databases folder created by web2py.  This is not a happy spot to be in.  `rsmanage initdb --reset` will definitely get things back in order for a new installation.
 
-      If this is an old installation and you don't want to lose any data the you can try setting the `WEB2PY_MIGRATE` variable to 'Fake' But, this may cause cause even more problems, so only use it if you really know what changes you have made to the database schema and why.  You may need to study sql.log to figure out which talbes need to be migrated by hand.
+      If this is an old installation and you don't want to lose any data the you can try setting the `WEB2PY_MIGRATE` variable to 'Fake' But, this may cause cause even more problems, so only use it if you really know what changes you have made to the database schema and why.  You may need to study sql.log to figure out which tables need to be migrated by hand.
 
 
 
@@ -305,7 +305,7 @@ I have begun a project to document the `Runestone Interactive <https://runestone
   * Codelens  -- Step through code examples and see variables change
   * mchoicemf  -- multiple choice questions with feedback
   * mchoicema  -- multiple choice question with multiple answers and multiple feedback
-  * fillintheblank  -- fill in the blank questiosn with regular expression matching answers
+  * fillintheblank  -- fill in the blank questions with regular expression matching answers
   * parsonsproblem  -- drag and drop blocks of code to complete a simple programming assignment
   * datafile -- create datafiles for activecode
 
