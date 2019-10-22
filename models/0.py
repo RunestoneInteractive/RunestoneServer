@@ -9,6 +9,7 @@ from gluon.storage import Storage
 import logging
 from os import environ
 import sys
+import time
 
 settings = Storage()
 
@@ -41,14 +42,17 @@ if config == "production":
     # Set these
     settings.STRIPE_PUBLISHABLE_KEY = environ.get("STRIPE_PUBLISHABLE_KEY")
     settings.STRIPE_SECRET_KEY = environ.get("STRIPE_SECRET_KEY")
+    settings.components_version = "4.1.11"
 elif config == "development":
     settings.database_uri = environ.get("DEV_DBURL")
     settings.STRIPE_PUBLISHABLE_KEY = environ.get("STRIPE_DEV_PUBLISHABLE_KEY")
     settings.STRIPE_SECRET_KEY = environ.get("STRIPE_DEV_SECRET_KEY")
+    settings.components_version = str(int(time.time()))
 elif config == "test":
     settings.database_uri = environ.get("TEST_DBURL")
     settings.STRIPE_PUBLISHABLE_KEY = environ.get("STRIPE_TEST_PUBLISHABLE_KEY")
     settings.STRIPE_SECRET_KEY = environ.get("STRIPE_TEST_SECRET_KEY")
+    settings.components_version = str(int(time.time()))
 else:
     print("To configure web2py you should set up both WEB2PY_CONFIG and")
     print("XXX_DBURL values in your environment -- See README for more detail")
