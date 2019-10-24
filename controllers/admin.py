@@ -1977,6 +1977,7 @@ def save_assignment():
     assignment_id = request.vars.get("assignment_id")
     isVisible = request.vars["visible"]
     is_timed = request.vars["is_timed"]
+    time_limit = request.vars["timelimit"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -1993,6 +1994,7 @@ def save_assignment():
             duedate=due,
             is_timed=is_timed,
             visible=isVisible,
+            time_limit=time_limit,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
