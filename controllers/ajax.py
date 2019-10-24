@@ -1370,7 +1370,7 @@ def checkTimedReset():
         .select(orderby=~db.timed_exam.id)
         .first()
     )
-
+    # TODO:  check the logic here if its already been reset it shouldn't be again?
     if rows:  # If there was a scored exam
         if rows.reset == True:  # noqa: E712
             return json.dumps({"canReset": True})
