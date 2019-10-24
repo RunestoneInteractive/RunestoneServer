@@ -105,6 +105,7 @@
   eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
   {{ if 'auth' in globals() and auth.user: }}
   eBookConfig.username = "{{=auth.user.username}}"
+  eBookConfig.email = "{{=auth.user.email}}"
   {{pass}}
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
   eBookConfig.useRunestoneServices = true;
