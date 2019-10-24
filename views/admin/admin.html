@@ -101,10 +101,13 @@
         <form method="POST" action="/{{=request.application}}/admin/enroll_students" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="studentuploads">Choose a CSV file with student information</label>
-                <input type="file" name="students">
+                <input id="studentuploads" type="file" name="students">
             </div>
             <input type="submit" name="Send" value="Register Students">
         </form>
+        <br />
+        <p>You can make the file in your favorite Spreadsheet app and then export it to a CSV file to upload here.  Please export without headers.
+            <strong>Note</strong> If anything fails then none of the students will be added. Fix your file and try again.</p>
         </div>
     </div>
 
