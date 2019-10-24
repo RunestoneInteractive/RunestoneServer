@@ -6,40 +6,6 @@ import click
 import datetime
 
 
-def createUser(username, password, fname, lname, email, course_name, instructor=False):
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        raise ValueError("Course {} does not exist".format(course_name))
-    pw = CRYPT(auth.settings.hmac_key)(password)[0]
-    uid = db.auth_user.insert(
-        username=username,
-        password=pw,
-        first_name=fname,
-        last_name=lname,
-        email=email,
-        course_id=cinfo.id,
-        course_name=course_name,
-        active="T",
-        created_on=datetime.datetime.now(),
-    )
-
-    db.user_courses.insert(user_id=uid, course_id=cinfo.id)
-
-    sect = (
-        db((db.sections.course_id == cinfo.id) & (db.sections.name == "default"))
-        .select(db.sections.id)
-        .first()
-    )
-    db.section_users.update_or_insert(auth_user=uid, section=sect)
-
-    if instructor:
-        irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
-        db.auth_membership.insert(user_id=uid, group_id=irole)
-        db.course_instructor.insert(course=cinfo.id, instructor=uid)
-
-    db.commit()
-
-
 def resetpw(username, password):
     pw = CRYPT(auth.settings.hmac_key)(password)[0]
     db(db.auth_user.username == username).update(password=pw)
@@ -70,6 +36,7 @@ else:
             userinfo["course"],
             userinfo["instructor"],
         )
+        db.commit()
     except ValueError as e:
         click.echo("Value Error: ", e)
         sys.exit(1)

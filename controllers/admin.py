@@ -1,6 +1,8 @@
 from os import path
 import os
 import datetime
+import csv
+import io
 from dateutil.parser import parse
 import re
 from random import randint
@@ -10,7 +12,6 @@ import json
 from runestone import cmap
 from rs_grading import send_lti_grades, _get_assignment
 import pandas as pd
-
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -2393,6 +2394,39 @@ def flag_question():
     )
 
     return json.dumps(dict(status="success"))
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def enroll_students():
+    print(request.vars.students)
+    students = request.vars.students
+    print("type = ", type(students.file))
+    strfile = io.TextIOWrapper(students.file)
+    student_reader = csv.reader(strfile)
+    counter = 0
+    success = True
+    try:
+        for row in student_reader:
+            if len(row) != 6:
+                raise ValueError("CSV must provide six values for each user")
+            #  username, password, fname, lname, email, course_name, db
+            createUser(*row, db)
+            counter += 1
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        counter = 0
+        session.flash = "Error creating users: {}".format(e)
+        success = False
+
+    if success:
+        db.commit()
+        session.flash = "created {} new users".format(counter)
+
+    return redirect(URL("admin", "admin"))
 
 
 def killer():

@@ -375,3 +375,35 @@ def check_for_donate_or_build(field_dict, id_of_insert):
 
 if "auth_user" in db:
     db.auth_user._after_insert.append(check_for_donate_or_build)
+
+
+def createUser(username, password, fname, lname, email, course_name, instructor=False):
+    cinfo = db(db.courses.course_name == course_name).select().first()
+    if not cinfo:
+        raise ValueError("Course {} does not exist".format(course_name))
+    pw = CRYPT(auth.settings.hmac_key)(password)[0]
+    uid = db.auth_user.insert(
+        username=username,
+        password=pw,
+        first_name=fname,
+        last_name=lname,
+        email=email,
+        course_id=cinfo.id,
+        course_name=course_name,
+        active="T",
+        created_on=datetime.datetime.now(),
+    )
+
+    db.user_courses.insert(user_id=uid, course_id=cinfo.id)
+
+    sect = (
+        db((db.sections.course_id == cinfo.id) & (db.sections.name == "default"))
+        .select(db.sections.id)
+        .first()
+    )
+    db.section_users.update_or_insert(auth_user=uid, section=sect)
+
+    if instructor:
+        irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
+        db.auth_membership.insert(user_id=uid, group_id=irole)
+        db.course_instructor.insert(course=cinfo.id, instructor=uid)
