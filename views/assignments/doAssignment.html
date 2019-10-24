@@ -50,7 +50,11 @@
             </style>
             <h3>Questions</h3>
                 {{ if assignment.is_timed: }}
-                    <ul data-component="timedAssessment"  id="timed_assignment_{{=assignment.id}}">
+                    <ul data-component="timedAssessment"  id="timed_assignment_{{=assignment.id}}"
+                    {{ if assignment.time_limit: }}
+                        data-time="{{=assignment.time_limit}}"
+                    {{pass}}
+                    >
                     {{for q in questioninfo:}}
                         {{=XML(q['htmlsrc'])}}
                     {{pass}}
