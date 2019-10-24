@@ -47,7 +47,7 @@ elif config == "development":
     settings.database_uri = environ.get("DEV_DBURL")
     settings.STRIPE_PUBLISHABLE_KEY = environ.get("STRIPE_DEV_PUBLISHABLE_KEY")
     settings.STRIPE_SECRET_KEY = environ.get("STRIPE_DEV_SECRET_KEY")
-    settings.components_version = str(int(time.time()))
+    settings.components_version = "4.1.11"  # str(int(time.time()))
 elif config == "test":
     settings.database_uri = environ.get("TEST_DBURL")
     settings.STRIPE_PUBLISHABLE_KEY = environ.get("STRIPE_TEST_PUBLISHABLE_KEY")
