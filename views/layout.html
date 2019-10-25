@@ -155,8 +155,10 @@
                                     <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
                                 {{ if not settings.lti_only_mode: }}
+                                {{ if auth.user: }}
                                 <li class="divider"></li>
                                 <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
+                                {{ pass }}
                                 <li class="divider"></li>
                                 {{ pass }}
                                 {{ if not settings.lti_only_mode: }}
