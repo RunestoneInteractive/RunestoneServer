@@ -1340,8 +1340,11 @@ def edit_question():
     if re.search(r":autograde:\s+unittest", question):
         autograde = "unittest"
     practice = ""
+    topic = None
     if re.search(r":practice:\s+T", question):
         practice = "T"
+        topic = "{}/{}".format(chapter, subchapter)
+
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname)
@@ -1359,6 +1362,7 @@ def edit_question():
             autograde=autograde,
             practice=practice,
             is_private=private,
+            topic=topic,
             from_source=False,
         )
         if tags and tags != "null":
@@ -1478,10 +1482,12 @@ def createquestion():
     timed = request.vars["timed"]
     unittest = None
     practice = False
+    topic = None
     if re.search(r":autograde:\s+unittest", request.vars.question):
         unittest = "unittest"
     if re.search(r":practice:\s+T", request.vars.question):
         practice = True
+        topic = "{}/{}".format(request.vars.chapter, request.vars.subchapter)
 
     try:
         newqID = db.questions.insert(
@@ -1498,6 +1504,7 @@ def createquestion():
             is_private=request.vars["isprivate"],
             practice=practice,
             from_source=False,
+            topic=topic,
             htmlsrc=request.vars["htmlsrc"],
         )
 
