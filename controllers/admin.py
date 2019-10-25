@@ -2401,9 +2401,10 @@ def flag_question():
     requires_login=True,
 )
 def enroll_students():
-    print(request.vars.students)
+    if not request.vars.students:
+        session.flash = "please choose a CSV file with student data"
+        return redirect(URL("admin", "admin"))
     students = request.vars.students
-    print("type = ", type(students.file))
     strfile = io.TextIOWrapper(students.file)
     student_reader = csv.reader(strfile)
     counter = 0
