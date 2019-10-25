@@ -102,6 +102,7 @@
                         {{ pass }}
                         <!-- end social media dropdown -->
                         <!-- Search Menu -->
+                        {{ if auth.user: }}
                         <li class="divider-vertical"></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -126,7 +127,8 @@
                                 </form>
                               </li>
                             </ul>
-                          </li>
+                        </li>
+                        {{pass}}
                         <!-- user account dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
