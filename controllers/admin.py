@@ -2430,6 +2430,38 @@ def enroll_students():
     return redirect(URL("admin", "admin"))
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def resetpw():
+    sid = int(request.vars.sid)
+    newpw = request.vars.newpass
+    user = db(db.auth_user.id == sid).select().first()
+    logger.warning(
+        "Attempted password reset for {} by {}".format(
+            user.username, auth.user.username
+        )
+    )
+    if user.id == auth.user.id:
+        res = {"status": "fail", "message": "Sorry you cannot update your own password"}
+        return json.dumps(res)
+    if user.course_id == auth.user.course_id:
+        pw = CRYPT(auth.settings.hmac_key)(newpw)[0]
+        db(db.auth_user.id == sid).update(password=pw)
+        res = {
+            "status": "success",
+            "message": "Success Reset password for {} {} ({})".format(
+                user.first_name, user.last_name, user.username
+            ),
+        }
+    else:
+        logger.error("Password reset not authorized for {}".format(user.username))
+        res = {"status": "fail", "message": "You are not authorized for this user"}
+
+    return json.dumps(res)
+
+
 def killer():
     print(routes_onerror)
     x = 5 / 0  # noqa: F841

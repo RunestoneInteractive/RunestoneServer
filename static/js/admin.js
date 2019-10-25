@@ -2017,3 +2017,42 @@ function updateCourse(widget, attr) {
         }
     });
 }
+
+function resetOnePassword() {
+    let student = $("#studentList").val()
+    if (student.length > 1) {
+        alert("You can only reset ONE student at a time");
+        return;
+    }
+    if (student[0] == "None") {
+        alert("Please select a student first");
+        return;
+    }
+    let name = $(`#studentList option[value=${student[0]}]`).text();
+    let newpw = prompt(`Enter New Password for ${name}`);
+    if (! newpw) {
+        return;
+    }
+    data = {newpass: newpw};
+    jQuery.ajax({
+        url: "/runestone/admin/resetpw",
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            sid: student[0],
+            newpass: newpw,
+        },
+        success: function(retdata) {
+            if (retdata.status == "success") {
+                alert(retdata.message);
+            } else {
+                alert(retdata.message);
+            }
+        },
+
+        error: function(err) {
+            alert(`Failed to reset password for ${name}`)
+        }
+
+    })
+}
