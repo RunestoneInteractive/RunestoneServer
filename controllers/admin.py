@@ -1,6 +1,8 @@
 from os import path
 import os
 import datetime
+import csv
+import io
 from dateutil.parser import parse
 import re
 from random import randint
@@ -10,7 +12,6 @@ import json
 from runestone import cmap
 from rs_grading import send_lti_grades, _get_assignment
 import pandas as pd
-
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -1108,7 +1109,7 @@ def renameAssignment():
 )
 def questionBank():
     response.headers["content-type"] = "application/json"
-    logger.error("in questionbank")
+
     row = (
         db(db.courses.id == auth.user.course_id)
         .select(db.courses.course_name, db.courses.base_course)
@@ -1167,6 +1168,10 @@ def questionBank():
 
         for row in questions_query:
             removed_row = False
+            if row.is_private == True:  # noqa: E712
+                if row.author != auth.user.first_name + " " + auth.user.last_name:
+                    rows.remove(row)
+                    removed_row = True
             if term:
                 if (
                     request.vars["term"] not in row.name
@@ -1335,8 +1340,11 @@ def edit_question():
     if re.search(r":autograde:\s+unittest", question):
         autograde = "unittest"
     practice = ""
+    topic = None
     if re.search(r":practice:\s+T", question):
         practice = "T"
+        topic = "{}/{}".format(chapter, subchapter)
+
     try:
         new_qid = db.questions.update_or_insert(
             (db.questions.name == new_qname)
@@ -1354,6 +1362,7 @@ def edit_question():
             autograde=autograde,
             practice=practice,
             is_private=private,
+            topic=topic,
             from_source=False,
         )
         if tags and tags != "null":
@@ -1473,10 +1482,12 @@ def createquestion():
     timed = request.vars["timed"]
     unittest = None
     practice = False
+    topic = None
     if re.search(r":autograde:\s+unittest", request.vars.question):
         unittest = "unittest"
     if re.search(r":practice:\s+T", request.vars.question):
         practice = True
+        topic = "{}/{}".format(request.vars.chapter, request.vars.subchapter)
 
     try:
         newqID = db.questions.insert(
@@ -1493,6 +1504,7 @@ def createquestion():
             is_private=request.vars["isprivate"],
             practice=practice,
             from_source=False,
+            topic=topic,
             htmlsrc=request.vars["htmlsrc"],
         )
 
@@ -1747,12 +1759,12 @@ def _get_toc_and_questions():
     for ch in chapters_query:
         q_ch_info = {}
         question_picker.append(q_ch_info)
-        q_ch_info["text"] = ch.chapter_name
+        q_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
         q_ch_info["children"] = []
         # Copy the same stuff for reading picker.
         r_ch_info = {}
         reading_picker.append(r_ch_info)
-        r_ch_info["text"] = ch.chapter_name
+        r_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
         r_ch_info["children"] = []
         # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
         #                         (db.questions.practice == True))
@@ -1769,7 +1781,9 @@ def _get_toc_and_questions():
         for sub_ch in subchapters_query:
             q_sub_ch_info = {}
             q_ch_info["children"].append(q_sub_ch_info)
-            q_sub_ch_info["text"] = sub_ch.sub_chapter_name
+            q_sub_ch_info["text"] = "{}.{} {}".format(
+                ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
+            )
             # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
             if sub_ch.sub_chapter_name == "Exercises":
                 q_sub_ch_info["id"] = ch.chapter_name + " Exercises"
@@ -1785,20 +1799,10 @@ def _get_toc_and_questions():
                 r_sub_ch_info["id"] = "{}/{}".format(
                     ch.chapter_name, sub_ch.sub_chapter_name
                 )
-                r_sub_ch_info["text"] = sub_ch.sub_chapter_name
-            # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
-            #                (db.questions.subchapter == sub_ch.sub_chapter_label) & \
-            #                (db.questions.practice == True))
-            # if not practice_questions.isempty():
-            #     # Copy the same stuff for reading picker.
-            #     p_sub_ch_info = {}
-            #     p_ch_info['children'].append(p_sub_ch_info)
-            #     p_sub_ch_info['id'] = "{}/{}".format(ch.chapter_name, sub_ch.sub_chapter_name)
-            #     p_sub_ch_info['text'] = sub_ch.sub_chapter_name
-            #     # checked if
-            #     p_sub_ch_info['state'] = {'checked':
-            #                               (ch.chapter_name, sub_ch.sub_chapter_name) in chapters_and_subchapters_taught}
-            # include another level for questions only in the question picker
+                r_sub_ch_info["text"] = "{}.{} {}".format(
+                    ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
+                )
+
             author = auth.user.first_name + " " + auth.user.last_name
             questions_query = db(
                 (db.courses.course_name == auth.user.course_name)
@@ -1981,6 +1985,7 @@ def save_assignment():
     assignment_id = request.vars.get("assignment_id")
     isVisible = request.vars["visible"]
     is_timed = request.vars["is_timed"]
+    time_limit = request.vars["timelimit"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -1997,6 +2002,7 @@ def save_assignment():
             duedate=due,
             is_timed=is_timed,
             visible=isVisible,
+            time_limit=time_limit,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
@@ -2395,6 +2401,72 @@ def flag_question():
     )
 
     return json.dumps(dict(status="success"))
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def enroll_students():
+    if not request.vars.students:
+        session.flash = "please choose a CSV file with student data"
+        return redirect(URL("admin", "admin"))
+    students = request.vars.students
+    strfile = io.TextIOWrapper(students.file)
+    student_reader = csv.reader(strfile)
+    counter = 0
+    success = True
+    try:
+        for row in student_reader:
+            if len(row) != 6:
+                raise ValueError("CSV must provide six values for each user")
+            #  username, password, fname, lname, email, course_name, db
+            createUser(*row, db)
+            counter += 1
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        counter = 0
+        session.flash = "Error creating users: {}".format(e)
+        success = False
+
+    if success:
+        db.commit()
+        session.flash = "created {} new users".format(counter)
+
+    return redirect(URL("admin", "admin"))
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def resetpw():
+    sid = int(request.vars.sid)
+    newpw = request.vars.newpass
+    user = db(db.auth_user.id == sid).select().first()
+    logger.warning(
+        "Attempted password reset for {} by {}".format(
+            user.username, auth.user.username
+        )
+    )
+    if user.id == auth.user.id:
+        res = {"status": "fail", "message": "Sorry you cannot update your own password"}
+        return json.dumps(res)
+    if user.course_id == auth.user.course_id:
+        pw = CRYPT(auth.settings.hmac_key)(newpw)[0]
+        db(db.auth_user.id == sid).update(password=pw)
+        res = {
+            "status": "success",
+            "message": "Success Reset password for {} {} ({})".format(
+                user.first_name, user.last_name, user.username
+            ),
+        }
+    else:
+        logger.error("Password reset not authorized for {}".format(user.username))
+        res = {"status": "fail", "message": "You are not authorized for this user"}
+
+    return json.dumps(res)
 
 
 def killer():

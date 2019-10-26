@@ -28,6 +28,8 @@
     <select onchange="updateQuestionList();" class="form-control" id="chaporassignselector" style="display:none;" >
     </select>
     <span id="releasestate" style="color: red;"></span>
+    <button id="releasebutton" style="text-align: center; visibility: hidden;" class="btn btn-primary btn-sm" onclick="toggle_release_grades();">Release Grades</button>
+
   </div>
 
   <div>
@@ -75,8 +77,6 @@
       <button id="send_lti_grade" style="text-align: center;" class="list-group-item btn btn-success" onclick="sendLTI_Grade();">Release Grade to LMS</button>
     {{pass}}
   </div>
-
-  <button id="releasebutton" style="text-align: center; visibility: hidden;" class="btn btn-info" onclick="toggle_release_grades();">Release Grades</button>
 
 
 </div>

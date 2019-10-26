@@ -78,7 +78,7 @@
 
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-share" style="opacity: 0.9"></i>
+                            <i class="glyphicon glyphicon-globe" style="opacity: 0.9"></i>
                             </a>
                             <ul class="dropdown-menu social-menu">
                                 <li>
@@ -101,7 +101,34 @@
                         </li>
                         {{ pass }}
                         <!-- end social media dropdown -->
+                        <!-- Search Menu -->
+                        {{ if auth.user: }}
                         <li class="divider-vertical"></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                              <i class="glyphicon glyphicon-search" style='opacity:0.9;'><span aria-label="Search" class="visuallyhidden">Search</span></i>
+                            </a>
+                            <ul class='dropdown-menu'>
+                              <li><a href="{{=get_course_url('index.html') }}" aria-label="index-page">Table of Contents</a></li>
+                              <li><a href="{{=get_course_url('genindex.html') }}">Book Index</a></li>
+                              <li class="divider"></li>
+                              <li style="width: 240px;">
+                                <form class="navbar-search" style="margin:10px;" action="{{ =get_course_url('search.html') }}" method="get">
+                                  <div class="input-group">
+                                    <input type="text" class="form-control" name="q" placeholder="Search this book" />
+                                    <span class="input-group-btn">
+                                      <button class="btn btn-primary" style="margin:0;" type="submit">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                      </button>
+                                    </span>
+                                  </div><!-- /input-group -->
+                                  <input type="hidden" name="check_keywords" value="yes" />
+                                  <input type="hidden" name="area" value="default" />
+                                </form>
+                              </li>
+                            </ul>
+                        </li>
+                        {{pass}}
                         <!-- user account dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -115,7 +142,8 @@
                                 {{ pass }}
                                 {{ if auth.user: }}
                                     <li class="divider"></li>
-                                    <li><a href='{{=URL('assignments','practice')}}'>Practice</a></li>
+                                    <li><a href="{{=URL('assignments','chooseAssignment')}}">Assignments</a></li>
+                                    <li><a href="{{=URL('assignments','practice')}}">Practice</a></li>
                                     <li class="divider"></li>
                                     {{ if settings.academy_mode: }}
                                     <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
@@ -127,28 +155,33 @@
                                     <li><a href='/{{=request.application}}/mygroup/newschedule'>Schedule New Chapter</a></li>
                                     <li><a href='/{{=request.application}}/mygroup/manageGroup'>Manage Group</a></li> -->
                                 {{ if not settings.lti_only_mode: }}
+                                {{ if auth.user: }}
                                 <li class="divider"></li>
                                 <li><a href='/{{=request.application}}/admin/index'>Instructor's Page</a></li>
+                                {{ pass }}
                                 <li class="divider"></li>
                                 {{ pass }}
                                 {{ if not settings.lti_only_mode: }}
-                                {{ if auth.user: }}
-                                    <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-                                    <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-                                    <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
-                                    <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+                                    {{ if auth.user: }}
+                                        <li><a href="{{=URL('assignments','index')}}">Progress Page</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
+                                        <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
+                                        <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+                                    {{ else: }}
+                                        <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
+                                        <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
+                                    {{ pass }}
                                 {{ else: }}
-                                    <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
-                                    <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
-                                {{ pass }}
-                                {{ else: }}
-                                    <li><a href='{{=URL('assignments','index')}}'>Progress Page</a></li>
+                                    <li><a href="{{=URL('assignments','index')}}">Progress Page</a></li>
                                 {{ pass }}
                             </ul>
                         </li>
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
                         {{ if settings.academy_mode: }}
+                        <li id="scratch_ac_link" class="dropdown"><a href="javascript:ACFactory.toggleScratchActivecode()">
+                            <i class="glyphicon glyphicon-pencil" style="opacity:0.9;"><span aria-label="Scratch Activecode" class="visuallyhidden">Scratch Activecode</span></i></a></li>
                         <!-- help menu dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" href="#" data-toggle="dropdown">

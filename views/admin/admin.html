@@ -80,16 +80,36 @@
             <div class="col-md-3">
                 <h3 style="text-align: center">Students</h3>
                 <select id="studentList" class="form-control" size="10" name="studentList" multiple>
-                    <option value="None" selected>--Select Student(s) to Remove--</option>
+                    <option value="None" selected>--Select Student(s) for Action--</option>
                     {{ for person in students: }}
                     <option value="{{=person}}">{{ =students[person] }}</option>
                     {{ pass }}
                 </select>
                 <div style="text-align: center">
-                    <input style="width: 35px; height:30px;" type="submit" value="-">
+                    <input style="height:30px; margin-bottom: 10px" type="submit" value="Remove Student(s)"> <br/>
+                    <button type="button" id="passwordreset" onclick="resetOnePassword()">Reset Password</button>
                 </div>
+                <p>Removing a student drops them from your course and transfers them to the "open" course for the same book.</p><p>You
+                   will not see them in the grading interface or gradebook anymore, but no data is lost.</p>
+
             </div>
         </form>
+        <div class="col-md-6">
+            <h3 style="text-align: center">Register Students</h3>
+            <p>Upload a csv file with the following format to automatically register your students.
+            Each row must have six elements in the order shown below.</p>
+            <pre>username, email, first_name, last_name, password, course</pre>
+        <form method="POST" action="/{{=request.application}}/admin/enroll_students" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="studentuploads">Choose a CSV file with student information</label>
+                <input id="studentuploads" type="file" name="students">
+            </div>
+            <input type="submit" name="Send" value="Register Students">
+        </form>
+        <br />
+        <p>You can make the file in your favorite Spreadsheet app and then export it to a CSV file to upload here.  Please export without headers.
+            <strong>Note</strong> If anything fails then none of the students will be added. Fix your file and try again.</p>
+        </div>
     </div>
 
     <div id="sections" class="tab-pane fade">
