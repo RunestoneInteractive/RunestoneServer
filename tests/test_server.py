@@ -43,7 +43,7 @@ def test_manual(runestone_db_tools, test_user):
     course_1 = runestone_db_tools.create_course()
     test_user("bob", "bob", course_1)
 
-    # Pause in the debugginer until manual testing is done.
+    # Pause in the debugger until manual testing is done.
     import pdb
 
     pdb.set_trace()
