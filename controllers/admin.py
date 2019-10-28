@@ -1315,7 +1315,7 @@ def edit_question():
     )
 
     if not old_question:
-        return "Could not find question {} to update".format(old_qname)
+        return json.dumps("Could not find question {} to update".format(old_qname))
 
     author = auth.user.first_name + " " + auth.user.last_name
     timestamp = datetime.datetime.utcnow()
@@ -1329,12 +1329,12 @@ def edit_question():
     print("PRIVATE = ", private)
 
     if old_qname == new_qname and old_question.author != author:
-        return "You do not own this question, Please assign a new unique id"
+        return json.dumps("You do not own this question, Please assign a new unique id")
 
     if old_qname != new_qname:
         newq = db(db.questions.name == new_qname).select().first()
         if newq and newq.author != author:
-            return "You cannot replace a question you did not author"
+            return json.dumps("You cannot replace a question you did not author")
 
     autograde = ""
     if re.search(r":autograde:\s+unittest", question):
@@ -1371,10 +1371,10 @@ def edit_question():
                 logger.error("TAG = %s", tag)
                 tag_id = db(db.tags.tag_name == tag).select(db.tags.id).first().id
                 db.question_tags.insert(question_id=new_qid, tag_id=tag_id)
-        return "Success - Edited Question Saved"
+        return json.dumps("Success - Edited Question Saved")
     except Exception as ex:
         logger.error(ex)
-        return "An error occurred saving your question {}".format(str(ex))
+        return json.dumps("An error occurred saving your question {}".format(str(ex)))
 
 
 @auth.requires(
