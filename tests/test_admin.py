@@ -395,9 +395,7 @@ def test_flag_question(test_assignment, test_user_1, test_client, runestone_db_t
     assert db(db.questions.name == "subc_b_fitb").select().first().review_flag
 
 
-def test_get_assignment_release_states(
-    test_assignment, test_client, test_user_1
-):
+def test_get_assignment_release_states(test_assignment, test_client, test_user_1):
     my_ass = test_assignment("test_assignment", test_user_1.course)
     my_ass.addq_to_assignment(question="subc_b_fitb", points=10)
     my_ass.save_assignment()
@@ -408,7 +406,7 @@ def test_get_assignment_release_states(
     res = test_client.validate("admin/get_assignment_release_states")
     res = json.loads(res)
 
-    assert res['test_assignment'] == True
+    assert res["test_assignment"] == True
 
 
 def test_delete_assignment_question(test_assignment, test_client, test_user_1):
@@ -444,7 +442,8 @@ def test_reorder_assignment_questions(
     res = (
         db(
             (db.assignment_questions.assignment_id == my_ass.assignment_id)
-            & (db.assignment_questions.question_id == question_id_one))
+            & (db.assignment_questions.question_id == question_id_one)
+        )
         .select(db.assignment_questions.sorting_priority)
         .first()
     )
@@ -454,7 +453,8 @@ def test_reorder_assignment_questions(
     res = (
         db(
             (db.assignment_questions.assignment_id == my_ass.assignment_id)
-            & (db.assignment_questions.question_id == question_id_two))
+            & (db.assignment_questions.question_id == question_id_two)
+        )
         .select(db.assignment_questions.sorting_priority)
         .first()
     )
@@ -464,8 +464,8 @@ def test_reorder_assignment_questions(
     res = test_client.validate(
         "admin/reorder_assignment_questions",
         data={
-            'names[]': ["subc_b_1", "subc_b_fitb"],
-            'assignment_id': my_ass.assignment_id,
+            "names[]": ["subc_b_1", "subc_b_fitb"],
+            "assignment_id": my_ass.assignment_id,
         },
     )
     assert json.loads(res) == "Reordered in DB"
@@ -473,7 +473,8 @@ def test_reorder_assignment_questions(
     res = (
         db(
             (db.assignment_questions.assignment_id == my_ass.assignment_id)
-            & (db.assignment_questions.question_id == question_id_one))
+            & (db.assignment_questions.question_id == question_id_one)
+        )
         .select(db.assignment_questions.sorting_priority)
         .first()
     )
@@ -482,7 +483,8 @@ def test_reorder_assignment_questions(
     res = (
         db(
             (db.assignment_questions.assignment_id == my_ass.assignment_id)
-            & (db.assignment_questions.question_id == question_id_two))
+            & (db.assignment_questions.question_id == question_id_two)
+        )
         .select(db.assignment_questions.sorting_priority)
         .first()
     )
