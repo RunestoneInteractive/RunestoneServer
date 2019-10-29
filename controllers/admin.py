@@ -2408,12 +2408,17 @@ def flag_question():
     requires_login=True,
 )
 def enroll_students():
-    if not request.vars.students:
+    if "students" not in request.vars:
         session.flash = "please choose a CSV file with student data"
         return redirect(URL("admin", "admin"))
     students = request.vars.students
-    strfile = io.TextIOWrapper(students.file)
-    student_reader = csv.reader(strfile)
+    try:
+        strfile = io.TextIOWrapper(students.file)
+        student_reader = csv.reader(strfile)
+    except Exception as e:
+        session.flash = "please choose a CSV file with student data"
+        logger.error(e)
+        return redirect(URL("admin", "admin"))
     counter = 0
     success = True
     try:
