@@ -58,9 +58,7 @@ def _score_one_code_run(row, points, autograde):
         (ignore, pct, ignore, passed, ignore, failed) = row.act.split(":")
         pct_correct = 100 * float(passed) / (int(failed) + int(passed))
     except:
-        pct_correct = (
-            0
-        )  # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
+        pct_correct = 0  # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 

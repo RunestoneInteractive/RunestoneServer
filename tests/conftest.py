@@ -104,7 +104,7 @@ class _object(object):
 # Create a web2py controller environment. This is taken from pieces of ``gluon.shell.run``. It returns a ``dict`` containing the environment.
 def web2py_controller_env(
     # _`application`: The name of the application to run in, as a string.
-    application
+    application,
 ):
 
     env = gluon.shell.env(application, import_models=True)
