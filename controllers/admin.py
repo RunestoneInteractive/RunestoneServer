@@ -2425,8 +2425,9 @@ def enroll_students():
         for row in student_reader:
             if len(row) != 6:
                 raise ValueError("CSV must provide six values for each user")
-            #  username, password, fname, lname, email, course_name, db
-            createUser(*row, db)
+            # CSV: username, email, fname, lname, password, course_name, db
+            # Params: username, password, fname, lname, email, course_name,
+            createUser(row[0], row[4], row[2], row[3], row[1], row[5], db)
             counter += 1
     except Exception as e:
         logger.error(e)
