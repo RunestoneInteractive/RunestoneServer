@@ -534,6 +534,7 @@ def inituser(
 @pass_config
 def resetpw(config, username, password):
     """Utility to change a users password. Useful If they can't do it through the normal mechanism"""
+    os.chdir(findProjectRoot())
     userinfo = {}
     userinfo["username"] = username or click.prompt("Username")
     userinfo["password"] = password or click.prompt("Password", hide_input=True)
