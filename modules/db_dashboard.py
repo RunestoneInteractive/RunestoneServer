@@ -7,6 +7,22 @@ from gluon import current, URL, redirect
 rslogger = logging.getLogger(current.settings.logger)
 rslogger.setLevel(current.settings.log_level)
 
+UNGRADED_EVENTS = [
+    "activecode",
+    "codelens",
+    "showeval",
+    "shortanswer",
+    "parsonsMove",
+    "timedExam",
+    "livecode",
+    "video",
+    "poll",
+    "Audio",
+    "tie",
+    "coach",
+    "page",
+]
+
 # current.db.define_table('dash_problem_answers',
 #  Field('timestamp','datetime'),
 #  Field('sid','string'),
@@ -187,14 +203,26 @@ class UserActivity(object):
         self.username = user.username
         self.rows = []
         self.page_views = []
-        # self.exercise_correct  -- cannot find any refs to this unset attr.
+        self.correct_count = 0
+        self.missed_count = 0
 
     def add_activity(self, row):
-        self.rows.append(row)
+        # row is a row from useinfo
+        if row.event in UNGRADED_EVENTS:
+            self.page_views.append(row)
+        else:
+            self.rows.append(row)
+            # this is a start but needs to be made more accurate
+            if "correct" in row.act:
+                self.correct_count += 1
+            elif row.event == "unittest" and "percent:100" in row.act:
+                self.correct_count += 1
+            elif row.event not in UNGRADED_EVENTS:
+                self.missed_count += 1
 
     def get_page_views(self):
         # returns page views for all time
-        return len(self.rows)
+        return len(self.page_views)
 
     def get_recent_page_views(self):
         # returns page views for the last 7 days
@@ -209,6 +237,12 @@ class UserActivity(object):
 
     def get_activity_stats(self):
         return self
+
+    def get_correct_count(self):
+        return self.correct_count
+
+    def get_missed_count(self):
+        return self.missed_count
 
 
 class UserActivityChapterProgress(object):

@@ -189,6 +189,8 @@ def index():
         )
 
     read_data = []
+    correct_data = []
+    missed_data = []
     recent_data = []
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
@@ -201,6 +203,20 @@ def index():
                 "count": activity.get_page_views(),
             }
         )
+        correct_data.append(
+            {
+                "student": activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
+                "sid": activity.username,
+                "count": activity.get_correct_count(),
+            }
+        )
+        missed_data.append(
+            {
+                "student": activity.name,  # causes username instead of full name to show in the report, but it works  ?? how to display the name but use the username on click??
+                "sid": activity.username,
+                "count": activity.get_missed_count(),
+            }
+        )
 
         recent_data.append(
             {
@@ -211,10 +227,11 @@ def index():
         )
 
     logger.debug("finishing")
+    # TODO -- this is not right and explains why all are the same!!
     studentactivity = [
         {"data": read_data, "name": "Sections Read"},
-        {"data": read_data, "name": "Exercises Correct"},
-        {"data": read_data, "name": "Exercises Missed"},
+        {"data": correct_data, "name": "Exercises Correct"},
+        {"data": missed_data, "name": "Exercises Missed"},
     ]
 
     recentactivity = [
