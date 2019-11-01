@@ -23,37 +23,12 @@ UNGRADED_EVENTS = [
     "page",
 ]
 
-# current.db.define_table('dash_problem_answers',
-#  Field('timestamp','datetime'),
-#  Field('sid','string'),
-#  Field('event','string'),
-#  Field('act','string'),
-#  Field('div_id','string'),
-#  Field('course_id','string'),
-#  migrate=table_migrate_prefix + 'useinfo.table'
-# )
-
-
-# current.db.define_table('dash_problem_user_metrics',
-#  Field('timestamp','datetime'),
-#  Field('sid','string'),
-#  Field('event','string'),
-#  Field('act','string'),
-#  Field('div_id','string'),
-#  Field('course_id','string'),
-#  migrate=table_migrate_prefix + 'useinfo.table'
-# )
-
-# it would be good at some point to save these to a table and
-# periodicly update them with new log entries instead of having
-# to regenerate the entire collection of metrics everytime.
-
 
 class ProblemMetrics(object):
     def __init__(self, course_id, problem_id, users):
         self.course_id = course_id
         self.problem_id = problem_id
-        self.problem_text = IdConverter.problem_id_to_text(problem_id)
+        self.problem_text = problem_id
         # total responses by answer choice, eg. A: 5, B: 3, C: 13
         self.aggregate_responses = {}
         # responses keyed by user
@@ -417,19 +392,10 @@ class DashboardDataAnalyzer(object):
         else:
             self.db_chapter = None
 
-    def load_chapter_metrics(self, chapter):
-        if not chapter:
-            rslogger.error("chapter not set, abort!")
-            current.session.flash = "Error No Course Data in DB"
-            return
-
-        self.db_chapter = chapter
-        # go get all the course data... in the future the post processing
-        # should probably be stored and only new data appended.
         self.course = (
             current.db(current.db.courses.id == self.course_id).select().first()
         )
-        rslogger.debug("COURSE QUERY GOT %s", self.course)
+
         self.users = current.db(
             (current.db.auth_user.course_id == current.auth.user.course_id)
             & (current.db.auth_user.active == "T")
@@ -442,8 +408,10 @@ class DashboardDataAnalyzer(object):
         self.instructors = current.db(
             (current.db.course_instructor.course == current.auth.user.course_id)
         ).select(current.db.course_instructor.instructor)
-        inums = [x.instructor for x in self.instructors]
-        self.users.exclude(lambda x: x.id in inums)
+        self.inums = [x.instructor for x in self.instructors]
+        self.users.exclude(lambda x: x.id in self.inums)
+
+        # todo - load this into a DataFrame
         self.logs = current.db(
             (current.db.useinfo.course_id == self.course.course_name)
             & (current.db.useinfo.timestamp >= self.course.term_start_date)
@@ -455,6 +423,17 @@ class DashboardDataAnalyzer(object):
             current.db.useinfo.div_id,
             orderby=current.db.useinfo.timestamp,
         )
+
+    def load_chapter_metrics(self, chapter):
+        if not chapter:
+            rslogger.error("chapter not set, abort!")
+            current.session.flash = "Error No Course Data in DB"
+            return
+
+        self.db_chapter = chapter
+        # go get all the course data... in the future the post processing
+        # should probably be stored and only new data appended.
+        rslogger.debug("COURSE QUERY GOT %s", self.course)
         # todo:  Yikes!  Loading all of the log data for a large or even medium class is a LOT
         self.db_chapter_progress = current.db(
             (current.db.user_sub_chapter_progress.user_id == current.db.auth_user.id)
@@ -469,7 +448,7 @@ class DashboardDataAnalyzer(object):
             current.db.user_sub_chapter_progress.status,
             current.db.auth_user.id,
         )
-        self.db_chapter_progress.exclude(lambda x: x.auth_user.id in inums)
+        self.db_chapter_progress.exclude(lambda x: x.auth_user.id in self.inums)
         self.db_sub_chapters = current.db(
             (current.db.sub_chapters.chapter_id == chapter.id)
         ).select(current.db.sub_chapters.ALL, orderby=current.db.sub_chapters.id)
@@ -495,9 +474,7 @@ class DashboardDataAnalyzer(object):
 
     def load_user_metrics(self, username):
         self.username = username
-        self.course = (
-            current.db(current.db.courses.id == self.course_id).select().first()
-        )
+
         if not self.course:
             rslogger.debug("ERROR - NO COURSE course_id = {}".format(self.course_id))
 
@@ -531,18 +508,6 @@ class DashboardDataAnalyzer(object):
             redirect(URL("default", "courses"))
             # TODO: calling redirect here is kind of a hacky way to handle this.
 
-        self.logs = current.db(
-            (current.db.useinfo.course_id == self.course.course_name)
-            & (current.db.useinfo.sid == username)
-            & (current.db.useinfo.timestamp >= self.course.term_start_date)
-        ).select(
-            current.db.useinfo.timestamp,
-            current.db.useinfo.sid,
-            current.db.useinfo.event,
-            current.db.useinfo.act,
-            current.db.useinfo.div_id,
-            orderby=~current.db.useinfo.timestamp,
-        )
         self.db_chapter_progress = current.db(
             (current.db.user_sub_chapter_progress.user_id == self.user.id)
         ).select(
@@ -556,27 +521,6 @@ class DashboardDataAnalyzer(object):
         )
 
     def load_exercise_metrics(self, exercise):
-        self.course = (
-            current.db(current.db.courses.id == self.course_id).select().first()
-        )
-        self.users = current.db(
-            current.db.auth_user.course_id == current.auth.user.course_id
-        ).select(
-            current.db.auth_user.username,
-            current.db.auth_user.first_name,
-            current.db.auth_user.last_name,
-        )
-        self.logs = current.db(
-            (current.db.useinfo.course_id == self.course.course_name)
-            & (current.db.useinfo.timestamp >= self.course.term_start_date)
-        ).select(
-            current.db.useinfo.timestamp,
-            current.db.useinfo.sid,
-            current.db.useinfo.event,
-            current.db.useinfo.act,
-            current.db.useinfo.div_id,
-            orderby=current.db.useinfo.timestamp,
-        )
         self.problem_metrics = CourseProblemMetrics(
             self.course_id, self.users, self.db_chapter
         )
@@ -658,34 +602,3 @@ class DashboardDataAnalyzer(object):
                     "class_average": "N/A",
                     "due_date": assign["duedate"].date().strftime("%m-%d-%Y"),
                 }
-
-
-# This whole object is a workaround because these strings
-# are not generated and stored in the db. This needs automating
-# to support all books.
-# TODO:  more user friendly naming for problems.
-# The idea here is to provide a more user friendly name for each question beyond its divid This
-# name appears on the donut charts and in the details....
-# We are most of the way there in the questions table.  But we really don't have a more friendly
-# way to identify it.  We could use its chapter-subchapter-position...
-class IdConverter(object):
-    problem_id_map = {
-        "pre_1": "Pretest-1: What will be the values in x, y, and z after the following lines of code execute?",
-        "pre_2": "Pretest-2: What is the output from the program below?",
-        "1_3_1_BMI_Q1": "1-3-1: Imagine that you are 5 foot 7 inches and weighed 140 pounds. What is your BMI?",
-        "1_4_1_String_Methods_Q1": "1-4-1: What would the following code print?",
-        "1_5_1_Turtle_Q1": "1-5-1: Which direction will alex move when the code below executes?",
-        "": "1-5-2: ",
-        "1_6_1_Image_Q1": "1-6-1: Which way does y increase on an image?",
-        "3_2_1_Mult_fill": "3-2-1: What will be printed when you click on the Run button in the code below?",
-        "3_2_2_Div_fill": "3-2-2: What will be printed when you click on the Run button in the code below?",
-        "3_2_3_Mod_fill": "3-2-3: What will be printed when you click on the Run button in the code below?",
-        "4_1_2_noSpace": "4-1-2: What will be printed when the following executes?",
-        "4_2_2_Slice2": "4-2-2: What will be printed when the following executes?",
-        "4_3_1_s1": "4-3-1: Given the following code segment, what is the value of the string s1 after these are executed?",
-        "4_3_2_s2": "4-3-2: What is the value of s1 after the following code executes?",
-    }
-
-    @staticmethod
-    def problem_id_to_text(problem_id):
-        return IdConverter.problem_id_map.get(problem_id, problem_id)
