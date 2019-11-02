@@ -906,7 +906,7 @@ def doAssignment():
         else:
             score, comment = 0, "ungraded"
 
-        if grade.score is None:
+        if score is None:
             score = 0
 
         info = dict(
