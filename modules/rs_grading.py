@@ -1045,6 +1045,8 @@ def do_check_answer(
         autograde = "pct_correct"
         if lastQuestion.autograde is not None:
             autograde = lastQuestion.autograde
+        #  TODO: _autograde_one_q returns 1 thing except for in one instance
+        #  this seems like a terrible idea.
         q, trials_num = _autograde_one_q(
             course_name,
             username,

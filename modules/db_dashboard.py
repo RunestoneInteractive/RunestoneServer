@@ -25,6 +25,11 @@ UNGRADED_EVENTS = [
 
 
 class ProblemMetrics(object):
+    """
+    Used to display the donut charts.
+
+    for all users create a UserReponse
+    """
     def __init__(self, course_id, problem_id, users):
         self.course_id = course_id
         self.problem_id = problem_id
@@ -292,6 +297,23 @@ class UserActivitySubChapterProgress(object):
 
 
 class ProgressMetrics(object):
+    """
+    Build the progress information for Chapter/Subchapter
+
+    * number of starts
+    * number of completions
+    * number of non-starts
+
+    Used on the index page of the dashboard for a particular chapter
+    TODO: Replace most of this with a single aggregation query:
+    select user_sub_chapter_progress.sub_chapter_id, status, count(status)
+    from auth_user join user_sub_chapter_progress ON user_sub_chapter_progress.user_id = http://auth_user.id
+    where chapter_id = 'SimplePythonData' and course_name = 'ac_summit_2019'
+    group by user_sub_chapter_progress.sub_chapter_id, status
+    order by user_sub_chapter_progress.sub_chapter_id;
+
+    """
+
     def __init__(self, course_id, sub_chapters, users):
         self.sub_chapters = OrderedDict()
         for sub_chapter in sub_chapters:
