@@ -990,6 +990,11 @@ def doAssignment():
             for d in readings[chapname]["subchapters"]
         ]
     session.readings = readings_names
+    user_is_instructor = (
+        "true"
+        if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user)
+        else "false"
+    )
 
     return dict(
         course=course,
@@ -1004,6 +1009,7 @@ def doAssignment():
         # calcTotalsURL=URL('assignments', 'calculate_totals'),
         student_id=auth.user.username,
         released=assignment["released"],
+        is_instructor=user_is_instructor,
     )
 
 

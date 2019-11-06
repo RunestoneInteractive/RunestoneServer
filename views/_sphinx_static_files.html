@@ -106,6 +106,9 @@
   {{ if 'auth' in globals() and auth.user: }}
   eBookConfig.username = "{{=auth.user.username}}"
   eBookConfig.email = "{{=auth.user.email}}"
+    {{ if 'is_instructor' in globals(): }}
+    eBookConfig.isInstructor = {{ =is_instructor }};
+    {{pass}}
   {{pass}}
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
   eBookConfig.useRunestoneServices = true;
