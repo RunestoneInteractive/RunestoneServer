@@ -30,6 +30,7 @@ class ProblemMetrics(object):
 
     for all users create a UserReponse
     """
+
     def __init__(self, course_id, problem_id, users):
         self.course_id = course_id
         self.problem_id = problem_id
