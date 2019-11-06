@@ -185,11 +185,17 @@ class UserActivity(object):
         self.page_views = []
         self.correct_count = 0
         self.missed_count = 0
+        self.recent_page_views = 0
+        self.recent_correct = 0
+        self.recent_missed = 0
 
     def add_activity(self, row):
         # row is a row from useinfo
+        week_ago = datetime.datetime.utcnow() - datetime.timedelta(days=7)
         if row.event in UNGRADED_EVENTS:
             self.page_views.append(row)
+            if row.timestamp > week_ago:
+                self.recent_page_views += 1
         else:
             self.rows.append(row)
             # this is a start but needs to be made more accurate
@@ -197,23 +203,19 @@ class UserActivity(object):
                 self.correct_count += 1
             elif row.event == "unittest" and "percent:100" in row.act:
                 self.correct_count += 1
+                if row.timestamp > week_ago:
+                    self.recent_correct += 1
             elif row.event not in UNGRADED_EVENTS:
                 self.missed_count += 1
+                if row.timestamp > week_ago:
+                    self.recent_missed += 1
 
     def get_page_views(self):
         # returns page views for all time
         return len(self.page_views)
 
     def get_recent_page_views(self):
-        # returns page views for the last 7 days
-        recentViewCount = 0
-        current = len(self.rows) - 1
-        while current >= 0 and self.rows[current][
-            "timestamp"
-        ] >= datetime.datetime.utcnow() - datetime.timedelta(days=7):
-            recentViewCount += 1
-            current = current - 1
-        return recentViewCount
+        return self.recent_page_views
 
     def get_activity_stats(self):
         return self
@@ -223,6 +225,12 @@ class UserActivity(object):
 
     def get_missed_count(self):
         return self.missed_count
+
+    def get_recent_correct(self):
+        return self.recent_correct
+
+    def get_recent_missed(self):
+        return self.recent_missed
 
 
 class UserActivityChapterProgress(object):
