@@ -1492,7 +1492,7 @@ def createquestion():
     try:
         newqID = db.questions.insert(
             base_course=base_course,
-            name=request.vars["name"],
+            name=request.vars["name"].strip(),
             chapter=request.vars["chapter"],
             subchapter=request.vars["subchapter"],
             author=auth.user.first_name + " " + auth.user.last_name,
