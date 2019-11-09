@@ -128,11 +128,25 @@ function getSelectedItem(type) {
     }
 }
 
-//
+// This function is called from the gradeing page when the
+// autograde and show scores button is clicked.
 function autoGrade() {
     var assignment = getSelectedItem("assignment");
     var question = getSelectedItem("question");
     var studentID = getSelectedItem("student");
+    // todo -- check the number of selected
+    let qs = $("#questionselector").select2("val");
+    if (qs && qs.length > 1) {
+        alert("Autograding does not work with multiple selections.  Leave blank to grade all questions.  You may select 1 question.");
+        $("#autogradesubmit").prop("disabled", false);
+        return;
+    }
+    let ss = $("#studentselector").select2("val");
+    if (ss && ss.length > 1) {
+        alert("Autograding does not work with multiple selections.  Leave blank to grade all students. You may select 1 student.");
+        $("#autogradesubmit").prop("disabled", false);
+        return;
+    }
     var enforceDeadline = $("#enforceDeadline").is(":checked");
     var params = {
         url: eBookConfig.autogradingURL,
