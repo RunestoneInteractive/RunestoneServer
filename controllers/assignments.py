@@ -992,7 +992,7 @@ def doAssignment():
     session.readings = readings_names
     user_is_instructor = (
         "true"
-        if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user)
+        if auth.user and verifyInstructorStatus(auth.user.course_id, auth.user)
         else "false"
     )
 
