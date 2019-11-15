@@ -68,6 +68,7 @@ def index():
         "webfundamentals",
         "StudentCSP",
         "apcsareview",
+        "csawesome",
     ]:
         session.flash = "{} is not a graded course".format(auth.user.course_name)
         return redirect(URL("default", "user"))

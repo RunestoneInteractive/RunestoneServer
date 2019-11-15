@@ -93,6 +93,8 @@ def index():
             "JavaReview",
             "JavaReview-RU",
             "StudentCSP",
+            "csawesome",
+            "fopp",
         ]:
             session.flash = "Student Progress page not available for {}".format(
                 auth.user.course_name
