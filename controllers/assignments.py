@@ -794,7 +794,7 @@ def get_problem():
 @auth.requires_login()
 def doAssignment():
 
-    course = db(db.courses.id == auth.user.course_id).select().first()
+    course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
     if not assignment_id or assignment_id.isdigit() == False:  # noqa: E712
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
