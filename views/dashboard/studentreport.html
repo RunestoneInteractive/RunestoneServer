@@ -100,8 +100,9 @@
 				<table class="nodec">
 					{{for row in activity:}}
 					<tr>
+						<td>{{=row["timestamp"]}}</td>
 						<td>{{=row["event"]}}</td>
-						<td>{{=row["time"]}}</td>
+						<td>{{=row["div_id"]}}</td>
 					</tr>
 					{{pass}}
 				</table>

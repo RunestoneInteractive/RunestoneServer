@@ -173,9 +173,10 @@ class UserActivityMetrics(object):
             self.user_activities[user.username] = UserActivity(user)
 
     def update_metrics(self, logs):
+
         for row in logs:
-            if row.sid in self.user_activities:
-                self.user_activities[row.sid].add_activity(row)
+            if row["sid"] in self.user_activities:
+                self.user_activities[row["sid"]].add_activity(row)
 
 
 class UserActivity(object):
@@ -183,7 +184,7 @@ class UserActivity(object):
         self.name = "{0} {1}".format(user.first_name, user.last_name)
         self.username = user.username
         self.rows = []
-        self.page_views = []
+        self.page_views = 0
         self.correct_count = 0
         self.missed_count = 0
         self.recent_page_views = 0
@@ -192,28 +193,18 @@ class UserActivity(object):
 
     def add_activity(self, row):
         # row is a row from useinfo
-        week_ago = datetime.datetime.utcnow() - datetime.timedelta(days=7)
-        if row.event in UNGRADED_EVENTS:
-            self.page_views.append(row)
-            if row.timestamp > week_ago:
-                self.recent_page_views += 1
-        else:
+        print(row)
+        if row["event"] == "page":
+            self.page_views += row["count"]
+        elif row["event"] == "activecode":
             self.rows.append(row)
-            # this is a start but needs to be made more accurate
-            if "correct" in row.act:
-                self.correct_count += 1
-            elif row.event == "unittest" and "percent:100" in row.act:
-                self.correct_count += 1
-                if row.timestamp > week_ago:
-                    self.recent_correct += 1
-            elif row.event not in UNGRADED_EVENTS:
-                self.missed_count += 1
-                if row.timestamp > week_ago:
-                    self.recent_missed += 1
+            self.correct_count += row["count"]
+        else:
+            self.missed_count += row["count"]
 
     def get_page_views(self):
         # returns page views for all time
-        return len(self.page_views)
+        return self.page_views
 
     def get_recent_page_views(self):
         return self.recent_page_views
@@ -331,7 +322,7 @@ class ProgressMetrics(object):
                 sub_chapter, len(users)
             )
 
-    def update_metrics(self, logs, chapter_progress):
+    def update_metrics(self, chapter_progress):
         for row in chapter_progress:
             try:
                 self.sub_chapters[
@@ -375,46 +366,6 @@ class SubChapterActivity(object):
         return "{0:.2f}%".format(float(self.completed) / self.total_users * 100)
 
 
-class UserLogCategorizer(object):
-    def __init__(self, logs):
-        self.activities = []
-        for log in logs:
-            self.activities.append(
-                {
-                    "time": log.timestamp,
-                    "event": UserLogCategorizer.format_event(
-                        log.event, log.act, log.div_id
-                    ),
-                }
-            )
-
-    @staticmethod
-    def format_event(event, action, div_id):
-        short_div_id = div_id
-        if len(div_id) > 25:
-            short_div_id = "...{0}".format(div_id[-25:])
-        if (event == "page") & (action == "view"):
-            return "{0} {1}".format("Viewed", short_div_id)
-        elif (event == "timedExam") & (action == "start"):
-            return "{0} {1}".format("Started Timed Exam", div_id)
-        elif (event == "timedExam") & (action == "finish"):
-            return "{0} {1}".format("Finished Timed Exam", div_id)
-        elif event == "highlight":
-            return "{0} {1}".format("Highlighted", short_div_id)
-        elif (event == "activecode") & (action == "run"):
-            return "{0} {1}".format("Ran Activecode", div_id)
-        elif (event == "parsons") & (action == "yes"):
-            return "{0} {1}".format("Solved Parsons", div_id)
-        elif (event == "parsons") & (action != "yes"):
-            return "{0} {1}".format("Attempted Parsons", div_id)
-        elif (event == "mChoice") | (event == "fillb"):
-            answer = action.split(":")
-            if action.count(":") == 2 and answer[2] == "correct":
-                return "{0} {1}".format("Solved", div_id)
-            return "{0} {1}".format("Attempted", div_id)
-        return "{0} {1}".format(event, div_id)
-
-
 class DashboardDataAnalyzer(object):
     def __init__(self, course_id, chapter=None):
         self.course_id = course_id
@@ -442,17 +393,14 @@ class DashboardDataAnalyzer(object):
         self.inums = [x.instructor for x in self.instructors]
         self.users.exclude(lambda x: x.id in self.inums)
 
-        # todo - load this into a DataFrame
-        self.logs = current.db(
-            (current.db.useinfo.course_id == self.course.course_name)
-            & (current.db.useinfo.timestamp >= self.course.term_start_date)
-        ).select(
-            current.db.useinfo.timestamp,
-            current.db.useinfo.sid,
-            current.db.useinfo.event,
-            current.db.useinfo.act,
-            current.db.useinfo.div_id,
-            orderby=current.db.useinfo.timestamp,
+        self.logs = current.db.executesql(
+            """select sid, event, count(*)
+        from useinfo where course_id = '{}'
+        group by sid, event
+        order by sid, event""".format(
+                self.course.course_name
+            ),
+            as_dict=True,
         )
 
     def load_chapter_metrics(self, chapter):
@@ -487,11 +435,13 @@ class DashboardDataAnalyzer(object):
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
         self.user_activity = UserActivityMetrics(self.course_id, self.users)
+
         self.user_activity.update_metrics(self.logs)
         self.progress_metrics = ProgressMetrics(
             self.course_id, self.db_sub_chapters, self.users
         )
-        self.progress_metrics.update_metrics(self.logs, self.db_chapter_progress)
+        self.progress_metrics.update_metrics(self.db_chapter_progress)
+
         self.questions = {}
         for i in self.problem_metrics.problems.keys():
             self.questions[i] = (
@@ -546,10 +496,20 @@ class DashboardDataAnalyzer(object):
             current.db.user_sub_chapter_progress.sub_chapter_id,
             current.db.user_sub_chapter_progress.status,
         )
-        self.formatted_activity = UserLogCategorizer(self.logs)
+        self.formatted_activity = self.load_recent_activity()
         self.chapter_progress = UserActivityChapterProgress(
             self.chapters, self.db_chapter_progress
         )
+
+    def load_recent_activity(self):
+        week_ago = datetime.datetime.utcnow() - datetime.timedelta(days=7)
+        res = current.db(
+            (current.db.useinfo.sid == self.user.username)
+            & (current.db.useinfo.course_id == self.course.course_name)
+            & (current.db.useinfo.timestamp > week_ago)
+        ).select(orderby=~current.db.useinfo.timestamp)
+
+        return res
 
     def load_exercise_metrics(self, exercise):
         self.problem_metrics = CourseProblemMetrics(

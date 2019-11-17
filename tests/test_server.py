@@ -81,7 +81,6 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # ----------------
         ("assignments/chooseAssignment", True, "Assignments", 1),
         ("assignments/doAssignment", True, "Bad Assignment ID", 1),
-        ("assignments/index", True, "Student Progress for", 1),
         # TODO: Why 2 errors here? Was just 1.
         (
             "assignments/practice",
@@ -141,12 +140,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # --------------
         ("dashboard/index", True, "Instructor Dashboard", 1),
         ("dashboard/grades", True, "Gradebook", 1),
-        (
-            "dashboard/studentreport",
-            True,
-            "Please make sure you are in the correct course",
-            1,
-        ),
+        ("dashboard/studentreport", True, "Recent Activity", 1,),
         # TODO: This doesn't really test anything about either
         # exercisemetrics or questiongrades other than properly handling a call with no information
         ("dashboard/exercisemetrics", True, "Instructor Dashboard", 1),

@@ -199,6 +199,8 @@ def index():
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
+    # All of this can be replaced by a nice crosstab call
+    # See UserActivityCrosstab.ipynb
     for user, activity in six.iteritems(user_activity.user_activities):
         read_data.append(
             {
@@ -276,8 +278,14 @@ def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     # todo: Test to see if vars.id is there -- if its not then load_user_metrics will crash
     # todo: This seems redundant with assignments/index  -- should use this one... id should be text sid
-    data_analyzer.load_user_metrics(request.vars.id)
-    data_analyzer.load_assignment_metrics(request.vars.id)
+    if "id" in request.vars:
+        sid = request.vars.id
+    else:
+        sid = auth.user.username
+        response.view = "assignments/index.html"
+
+    data_analyzer.load_user_metrics(sid)
+    data_analyzer.load_assignment_metrics(sid)
 
     chapters = []
     for chapter_label, chapter in six.iteritems(
@@ -290,7 +298,7 @@ def studentreport():
                 "subchapters": chapter.get_sub_chapter_progress(),
             }
         )
-    activity = data_analyzer.formatted_activity.activities
+    activity = data_analyzer.formatted_activity
 
     logger.debug("GRADES = %s", data_analyzer.grades)
     return dict(
@@ -299,6 +307,7 @@ def studentreport():
         chapters=chapters,
         activity=activity,
         assignments=data_analyzer.grades,
+        practice_graded=0,  # TODO: refactor _get_practice_data in assignments
     )
 
 
