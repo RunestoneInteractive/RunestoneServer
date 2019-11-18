@@ -1043,7 +1043,7 @@ def do_check_answer(
     else:
         # Compute q using the auto grader
         autograde = "pct_correct"
-        if lastQuestion.autograde is not None:
+        if lastQuestion.autograde is not None and lastQuestion.autograde != "":
             autograde = lastQuestion.autograde
         #  TODO: _autograde_one_q returns 1 thing except for in one instance
         #  this seems like a terrible idea.
@@ -1061,6 +1061,7 @@ def do_check_answer(
             db=db,
             now=now,
         )
+
     flashcard = _change_e_factor(flashcard, q)
     flashcard = _get_next_i_interval(flashcard, q)
     flashcard.next_eligible_date = (
