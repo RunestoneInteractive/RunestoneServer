@@ -166,17 +166,44 @@ class CourseProblemMetrics(object):
 
 
 class UserActivityMetrics(object):
-    def __init__(self, course_id, users):
-        self.course_id = course_id
+    def __init__(self, course_name, users):
+        self.course_id = course_name
         self.user_activities = {}
         for user in users:
             self.user_activities[user.username] = UserActivity(user)
 
-    def update_metrics(self, logs):
+        # Get summary of logs
+        self.logs = current.db.executesql(
+            """select sid, event, count(*)
+        from useinfo where course_id = '{}'
+        group by sid, event
+        order by sid, event""".format(
+                self.course_id
+            ),
+            as_dict=True,
+        )
 
-        for row in logs:
+        self.recent_logs = current.db.executesql(
+            """select sid, event, count(*)
+        from useinfo where course_id = '{}'
+        and timestamp > now() - interval '7 days'
+        group by sid, event
+        order by sid, event""".format(
+                self.course_id
+            ),
+            as_dict=True,
+        )
+        # read logs here
+
+    def update_metrics(self):
+
+        for row in self.logs:
             if row["sid"] in self.user_activities:
                 self.user_activities[row["sid"]].add_activity(row)
+
+        for row in self.recent_logs:
+            if row["sid"] in self.user_activities:
+                self.user_activities[row["sid"]].add_recent_activity(row)
 
 
 class UserActivity(object):
@@ -193,7 +220,6 @@ class UserActivity(object):
 
     def add_activity(self, row):
         # row is a row from useinfo
-        print(row)
         if row["event"] == "page":
             self.page_views += row["count"]
         elif row["event"] == "activecode":
@@ -201,6 +227,15 @@ class UserActivity(object):
             self.correct_count += row["count"]
         else:
             self.missed_count += row["count"]
+
+    def add_recent_activity(self, row):
+        # row is a row from useinfo
+        if row["event"] == "page":
+            self.recent_page_views += row["count"]
+        elif row["event"] == "activecode":
+            self.recent_correct += row["count"]
+        else:
+            self.recent_missed += row["count"]
 
     def get_page_views(self):
         # returns page views for all time
@@ -393,16 +428,6 @@ class DashboardDataAnalyzer(object):
         self.inums = [x.instructor for x in self.instructors]
         self.users.exclude(lambda x: x.id in self.inums)
 
-        self.logs = current.db.executesql(
-            """select sid, event, count(*)
-        from useinfo where course_id = '{}'
-        group by sid, event
-        order by sid, event""".format(
-                self.course.course_name
-            ),
-            as_dict=True,
-        )
-
     def load_chapter_metrics(self, chapter):
         if not chapter:
             rslogger.error("chapter not set, abort!")
@@ -434,9 +459,10 @@ class DashboardDataAnalyzer(object):
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
-        self.user_activity = UserActivityMetrics(self.course_id, self.users)
 
-        self.user_activity.update_metrics(self.logs)
+        self.user_activity = UserActivityMetrics(self.course.course_name, self.users)
+        self.user_activity.update_metrics()
+
         self.progress_metrics = ProgressMetrics(
             self.course_id, self.db_sub_chapters, self.users
         )
