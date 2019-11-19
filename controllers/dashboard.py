@@ -278,7 +278,9 @@ def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
     # todo: Test to see if vars.id is there -- if its not then load_user_metrics will crash
     # todo: This seems redundant with assignments/index  -- should use this one... id should be text sid
-    if "id" in request.vars:
+    if "id" in request.vars and verifyInstructorStatus(
+        auth.user.course_id, auth.user.id
+    ):
         sid = request.vars.id
     else:
         sid = auth.user.username
