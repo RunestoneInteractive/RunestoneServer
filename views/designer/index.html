@@ -11,7 +11,8 @@
   <p>This page allows you to select a book for your own class.  Once you have selected and built the book, you will also be able to edit
       the table of contents to re-order or remove content, and create assignments for your students.  These assignments will be publish
       right in the book.  As the instructor, You can grade your students homework, and have access to a dashboard that allows you
-      to monitor student progress.  To begin, enter a project name below.</p>
+      to monitor student progress.  To begin, enter a course name below.  Selecting an appropriate course level will help us to recommend questions
+    and practice exercises from the question bank.</p>
 
   <script type="text/javascript">
   function validateForm() {
@@ -41,7 +42,7 @@
     <form name="mainform" action="/{{=request.application}}/{{=request.controller}}/build" method="get"  onsubmit="return validateForm();">
       <div class="form-group row">
         <div class="col-md-4">
-          <label for="projectname">Project Name</label>
+          <label for="projectname">Course Name</label>
           <input type="text" class='form-control' placeholder="myproject" name="projectname" id="projectname" />
         </div>
       </div>
@@ -58,6 +59,15 @@
           <label for="institution">Institution</label>
           <input type="text" class='form-control' placeholder="Your school"
                  name="institution" id="institution" />
+          <label for="courselevel">Course Level</label>
+          <select id="courselevel" class="form-control" name="courselevel">
+            <option value="unknown" disabled selected>Please Select</option>
+            <option value="grad">Graduate</option>
+            <option value="undergradadv">Undergraduate Advanced</option>
+            <option value="undergradintro">Undergraduate Intro (CS1/2)</option>
+            <option value="high">High School</option>
+            <option value="middle">Middle School</option>
+          </select>
         </div>
       </div>
 
@@ -165,13 +175,6 @@
           <label>
             <input type="checkbox" name="loginreq" value="true" id="login-req" checked="checked" />
             Require a username to access this course.
-         </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="python3" value="true" id="python3" checked="checked"  />
-            Use Python3 print function and true division
          </label>
         </div>
 

@@ -136,6 +136,7 @@ db.define_table(
     Field("allow_pairs", type="boolean", default=False),
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
+    Field("courselevel", type="string"),
     migrate=table_migrate_prefix + "courses.table",
 )
 

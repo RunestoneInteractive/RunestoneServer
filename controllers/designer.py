@@ -75,10 +75,12 @@ def build():
         else:
             institution = request.vars.institution
 
-        if not request.vars.python3:
-            python3 = "false"
+        if not request.vars.courselevel:
+            courselevel = "unknown"
         else:
-            python3 = "true"
+            courselevel = request.vars.courselevel
+
+        python3 = "true"
 
         if not request.vars.loginreq:
             login_required = "false"
@@ -92,6 +94,7 @@ def build():
             base_course=base_course,
             login_required=login_required,
             python3=python3,
+            courselevel=courselevel,
         )
 
         # enrol the user in their new course
