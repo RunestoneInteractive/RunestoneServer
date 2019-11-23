@@ -2,8 +2,8 @@
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
 
 <div id="dashboard">
-    <h1>{{=student.first_name}} {{=student.last_name}}</h1>
-    <h2>Student Progress for {{=course_name}}</h2>
+    <h1>{{=auth.user.first_name}} {{=auth.user.last_name}}</h1>
+    <h2>Student Progress for {{=auth.user.course_name}}</h2>
     <div class="col-md-7">
         <div class="dash-section">
             <div class="dash-section-header">
@@ -115,8 +115,9 @@
                 <table class="nodec">
                     {{for row in activity:}}
                         <tr>
+                            <td>{{=row["timestamp"]}}</td>
                             <td>{{=row["event"]}}</td>
-                            <td>{{=row["time"]}}</td>
+                            <td>{{=row["div_id"]}}</td>
                         </tr>
                     {{pass}}
                 </table>

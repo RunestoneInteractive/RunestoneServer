@@ -6,7 +6,7 @@ from collections import OrderedDict
 import six
 import pandas as pd
 from db_dashboard import DashboardDataAnalyzer
-
+from rs_practice import _get_practice_data
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -199,6 +199,8 @@ def index():
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
+    # All of this can be replaced by a nice crosstab call
+    # See UserActivityCrosstab.ipynb
     for user, activity in six.iteritems(user_activity.user_activities):
         read_data.append(
             {
@@ -274,10 +276,15 @@ def index():
 @auth.requires_login()
 def studentreport():
     data_analyzer = DashboardDataAnalyzer(auth.user.course_id)
-    # todo: Test to see if vars.id is there -- if its not then load_user_metrics will crash
-    # todo: This seems redundant with assignments/index  -- should use this one... id should be text sid
-    data_analyzer.load_user_metrics(request.vars.id)
-    data_analyzer.load_assignment_metrics(request.vars.id)
+    for_dashboard = verifyInstructorStatus(auth.user.course_id, auth.user.id)
+    if "id" in request.vars and for_dashboard:
+        sid = request.vars.id
+    else:
+        sid = auth.user.username
+        response.view = "assignments/index.html"
+
+    data_analyzer.load_user_metrics(sid)
+    data_analyzer.load_assignment_metrics(sid)
 
     chapters = []
     for chapter_label, chapter in six.iteritems(
@@ -290,15 +297,51 @@ def studentreport():
                 "subchapters": chapter.get_sub_chapter_progress(),
             }
         )
-    activity = data_analyzer.formatted_activity.activities
+    activity = data_analyzer.formatted_activity
 
     logger.debug("GRADES = %s", data_analyzer.grades)
+
+    pd = dict()
+    if response.view == "assignments/index.html":
+        (
+            pd["now"],
+            pd["now_local"],
+            pd["practice_message1"],
+            pd["practice_message2"],
+            pd["practice_graded"],
+            pd["spacing"],
+            pd["interleaving"],
+            pd["practice_completion_count"],
+            pd["remaining_days"],
+            pd["max_days"],
+            pd["max_questions"],
+            pd["day_points"],
+            pd["question_points"],
+            pd["presentable_flashcards"],
+            pd["flashcard_count"],
+            pd["practiced_today_count"],
+            pd["questions_to_complete_day"],
+            pd["practice_today_left"],
+            pd["points_received"],
+            pd["total_possible_points"],
+            pd["flashcard_creation_method"],
+        ) = _get_practice_data(
+            auth.user,
+            float(session.timezoneoffset) if "timezoneoffset" in session else 0,
+            db,
+        )
+        pd["total_today_count"] = min(
+            pd["practice_today_left"] + pd["practiced_today_count"],
+            pd["questions_to_complete_day"],
+        )
+
     return dict(
         course=get_course_row(db.courses.ALL),
         user=data_analyzer.user,
         chapters=chapters,
         activity=activity,
         assignments=data_analyzer.grades,
+        **pd
     )
 
 

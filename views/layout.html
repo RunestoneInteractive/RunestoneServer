@@ -163,7 +163,7 @@
                                 {{ pass }}
                                 {{ if not settings.lti_only_mode: }}
                                     {{ if auth.user: }}
-                                        <li><a href="{{=URL('assignments','index')}}">Progress Page</a></li>
+                                        <li><a href="{{=URL('dashboard','studentreport')}}">Progress Page</a></li>
                                         <li class="divider"></li>
                                         <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
                                         <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
