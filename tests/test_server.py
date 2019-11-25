@@ -16,6 +16,7 @@ from textwrap import dedent
 import json
 from threading import Thread
 import datetime
+import time
 
 # Third-party imports
 # -------------------
@@ -798,6 +799,7 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
     db = runestone_db_tools.db
     res = db(db.auth_user.username == "user_to_delete").select().first()
     print(res)
+    time.sleep(2)
     assert not db(db.useinfo.sid == "user_to_delete").select().first()
     assert not db(db.code.sid == "user_to_delete").select().first()
     assert not db(db.acerror_log.sid == "user_to_delete").select().first()
