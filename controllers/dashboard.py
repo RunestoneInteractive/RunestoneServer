@@ -681,7 +681,7 @@ def subchapoverview():
         try:
             res = int(x)
             return res
-        except:
+        except ValueError:
             return ""
 
     mtbl["chapter_label"] = mtbl.apply(
