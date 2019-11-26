@@ -675,6 +675,23 @@ def subchapoverview():
         how="outer",
     )
     mtbl = mtbl.set_index(["chapter_num", "sub_chapter_num"]).sort_index()
+    mtbl = mtbl.reset_index()
+    def to_int(x):
+        try:
+            res = int(x)
+            return res
+        except:
+            return ""
+
+    mtbl['chapter_label'] = mtbl.apply(lambda row: "{}.{} {}/{}".format(
+        to_int(row.chapter_num),
+        to_int(row.sub_chapter_num),
+        row.chapter_label,
+        row.sub_chapter_label
+    ), axis=1)
+    neworder = mtbl.columns.to_list()
+    neworder = neworder[-2:-1] + neworder[2:-2]
+    mtbl = mtbl[neworder]
 
     if request.vars.action == "tocsv":
         response.headers["Content-Type"] = "application/vnd.ms-excel"
@@ -687,9 +704,8 @@ def subchapoverview():
             course_name=auth.user.course_name,
             course_id=auth.user.course_name,
             course=thecourse,
-            summary=mtbl.to_html(
-                classes="table table-striped table-bordered table-lg",
-                na_rep=" ",
-                table_id="scsummary",
-            ).replace("NaT", ""),
+            summary=mtbl.to_json(
+                orient="records",
+                date_format="iso"
+            )
         )

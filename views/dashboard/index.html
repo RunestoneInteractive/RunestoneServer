@@ -10,9 +10,9 @@
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
-    <h1>{{=course.course_name}}
-        <span class="dash-title-description">Instructor Dashboard</span>
-        <a href="{{=URL('dashboard','subchapoverview')}}" style="font-size: small">Overview Reports</a>
+    <h1>
+        <span class="dash-title-description">{{=course.course_name}} Instructor Dashboard</span>
+        <a href="{{=URL('dashboard','subchapoverview')}}" class="btn btn-med btn-primary" role="button" style="float: right; font-size: small;">Chapter Activity</a>
     </h1>
     <h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
     <div style="float: right"><b>Select Chapter</b>
@@ -25,7 +25,7 @@
                 {{pass}}
             {{pass}}
         </select>
-        <button onclick="window.location.href='{{=URL('grades')}}'">Gradebook</button>
+        <button class="btn btn-sm btn-primary" onclick="window.location.href='{{=URL('grades')}}'">Gradebook</button>
     </div>
     <div class="col-md-7" style="">
         <div class="dash-section">

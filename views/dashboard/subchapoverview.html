@@ -1,5 +1,11 @@
 {{extend 'admin/instructors.html'}}
 
+{{ block moreincludes }}
+{{super}}
+<script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
+{{ end }}
+
 {{ block tabcontent }}
 <h2>{{=course_name}}</h2>
 <hr>
@@ -14,7 +20,28 @@
 
     <button type="submit" name="action" value="tocsv">Download CSV</button>
 </form>
+<div id="overtable"></div>
 
-{{=XML(summary)}}
+<script type="text/javascript">
+    var tbl_data = {{=XML(summary)}}
+
+    var container = document.getElementById('overtable');
+    var frozenColumns = 1;
+    if (window.location.href.search("sccount") < 0) {
+        frozenColumns = 2;
+    }
+    var hot = new Handsontable(container, {
+        data: tbl_data,
+        rowHeaders: false,
+        colHeaders: Object.keys(tbl_data[0]),
+        fixedColumnsLeft: frozenColumns,
+        height: 800,
+        width: 1200,
+        filters: true,
+        dropdownMenu: true,
+        licenseKey: 'non-commercial-and-evaluation',
+      });
+
+</script>
 
 {{ end }}
