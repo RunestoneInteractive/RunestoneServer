@@ -590,7 +590,7 @@ def _autograde_one_q(
 
 
 def _save_question_grade(
-    sid, course_name, question_name, score, useinfo_id=None, deadline=None, db=None
+    sid, course_name, question_name, score, answer_id=None, deadline=None, db=None
 ):
     try:
         db.question_grades.update_or_insert(
@@ -604,7 +604,7 @@ def _save_question_grade(
             div_id=question_name,
             score=score,
             comment="autograded",
-            useinfo_id=None,
+            answer_id=answer_id,
             deadline=deadline,
         )
     except IntegrityError:
@@ -931,7 +931,7 @@ def do_autograde(
                 course_name,
                 name,
                 save_points,
-                useinfo_id=None,
+                answer_id=None,
                 deadline=deadline,
                 db=db,
             )

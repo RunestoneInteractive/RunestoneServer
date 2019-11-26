@@ -60,7 +60,8 @@ db.define_table(
     Field("sid", type="string", notnull=True),
     Field("course_name", type="string", notnull=True),
     Field("div_id", type="string", notnull=True),
-    Field("useinfo_id", db.useinfo),  # the particular useinfo run that was graded
+    # The ID of a record in the answer table (mchoice_answers, fitb_answers, etc.) that was graded.
+    Field("answer_id", type="integer"),
     Field("deadline", "datetime"),
     Field("score", type="double"),
     Field("comment", type="text"),
