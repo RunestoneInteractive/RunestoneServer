@@ -350,7 +350,6 @@ def runestone_db(runestone_controller):
  public.auth_permission,
  public.auth_user,
  public.clickablearea_answers,
- public.coach_hints,
  public.code,
  public.codelens_answers,
  public.course_instructor,
