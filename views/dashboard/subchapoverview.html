@@ -23,7 +23,7 @@
 <div id="overtable"></div>
 
 <script type="text/javascript">
-    var tbl_data = {{=XML(summary)}}
+    var tbl_data = {{=XML(summary.replace(".000Z",""))}}
 
     var container = document.getElementById('overtable');
     var frozenColumns = 1;

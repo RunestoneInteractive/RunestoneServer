@@ -625,8 +625,11 @@ def subchapoverview():
             course
         ),
         settings.database_uri,
+        parse_dates=['timestamp']
     )
     data = data[~data.sid.str.contains("@")]
+    tdoff = pd.Timedelta(hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0)
+    data['timestamp'] = data.timestamp.map(lambda x: x - tdoff)
     if "tablekind" not in request.vars:
         request.vars.tablekind = "sccount"
 
