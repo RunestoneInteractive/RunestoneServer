@@ -81,19 +81,6 @@ db.define_table(
 )
 
 db.define_table(
-    "coach_hints",
-    Field("category", "string"),
-    Field("symbol", "string"),
-    Field("msg_id", "string"),
-    Field("line", "integer"),
-    Field("col", "integer"),
-    Field("obj", "string"),
-    Field("msg", "string"),
-    Field("source", db.acerror_log),
-    migrate=table_migrate_prefix + "coach_hints.table",
-)
-
-db.define_table(
     "timed_exam",
     Field("timestamp", "datetime"),
     Field("div_id", "string"),

@@ -14,7 +14,6 @@ This book generates data for use with the test suite.
 ActiveCode
 ----------
 .. activecode:: test_activecode_1
-   :coach:
    :caption: This is a caption
 
    print("My first program adds a list of numbers")
