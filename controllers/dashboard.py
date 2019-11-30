@@ -620,8 +620,8 @@ def subchapoverview():
     data = pd.read_sql_query(
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
-    join questions on div_id = name
-    where course_id = '{}'""".format(
+    join questions on div_id = name join auth_user on username = useinfo.sid
+    where useinfo.course_id = '{}' and active='T'""".format(
             course
         ),
         settings.database_uri,
