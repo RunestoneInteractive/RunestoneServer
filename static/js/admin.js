@@ -1743,6 +1743,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         }
         // $(`#${whereDiv}`).css("background-color", "white");
     }
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
 // Called by the "Search" button in the "Search question bank" panel.
