@@ -1319,6 +1319,19 @@ def getAssessResults():
         if not row:
             return ""
         res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+        srow = (
+            db(
+                (db.question_grades.sid == sid)
+                & (db.question_grades.div_id == div_id)
+                & (db.question_grades.course_name == course)
+            )
+            .select()
+            .first()
+        )
+        if srow:
+            res["score"] = srow.score
+            res["comment"] = srow.comment
+
         return json.dumps(res)
     elif event == "lp_build":
         rows = (
