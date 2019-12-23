@@ -62,9 +62,7 @@ def hsblog():
             )
         sid = auth.user.username
         compareAndUpdateCookieData(sid)
-        setCookie = (
-            True
-        )  # we set our own cookie anyway to eliminate many of the extraneous anonymous
+        setCookie = True  # we set our own cookie anyway to eliminate many of the extraneous anonymous
         # log entries that come from auth timing out even but the user hasn't reloaded
         # the page.
     else:
