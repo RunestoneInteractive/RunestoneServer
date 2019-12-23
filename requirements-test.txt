@@ -1,4 +1,4 @@
-coverage
+coverage<5.0
 mock
 html5validator
 pytest
@@ -10,7 +10,7 @@ https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
 # Beautiful soup
 beautifulsoup4
 locustio
-coveralls
+coveralls==1.8.2
 black
 flake8
 selenium>=2.53.6
