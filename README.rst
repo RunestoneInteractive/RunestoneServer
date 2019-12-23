@@ -276,7 +276,8 @@ How to Contribute
    instructions for making a fork are here:  ``https://help.github.com/articles/fork-a-repo``
 #. Clone the repository under your account to your local machine.
 #. Check the issues list, or add your own favorite feature.  commit and pull to your fork at will!
-#. test
+#. Join the slack workspace, runestoneteam.slack.com
+#. test. See https://github.com/RunestoneInteractive/RunestoneServer/tree/master/tests for more details
 #. Make a Pull Request.  This will notify me that I should look at your changes and merge them into the main repository.
 #. Repeat!
 
