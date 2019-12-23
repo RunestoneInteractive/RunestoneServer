@@ -270,13 +270,13 @@ What's New
 How to Contribute
 -----------------
 
+#. See the file `CONTRIBUTING.md` in this directory
 #. Get a Github (free) account.
 #. Make a fork of this project.  That will create a repository in your
    account for you to have read/write access to.  Very nice, complete
    instructions for making a fork are here:  ``https://help.github.com/articles/fork-a-repo``
 #. Clone the repository under your account to your local machine.
 #. Check the issues list, or add your own favorite feature.  commit and pull to your fork at will!
-#. test
 #. Make a Pull Request.  This will notify me that I should look at your changes and merge them into the main repository.
 #. Repeat!
 

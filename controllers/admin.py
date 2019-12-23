@@ -823,7 +823,7 @@ def removeStudents():
     a single id from auth_user or it could be a list of ids.
 
     This does not remove a student from the database but rather marks them as inactive in
-    the database and moves them to the basecourse.
+    the database and moves them to the basecourse if they are not already enrolled in it.
     """
 
     baseCourseName = (
@@ -881,7 +881,25 @@ def removeStudents():
             if section:
                 db(db.section_users.id == section.section_users.id).delete()
 
-            db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
+            baseCourseEnrollment = (
+                db(
+                    (db.user_courses.user_id == int(studentID))
+                    & (db.user_courses.course_id == int(baseCourseID))
+                )
+                .select(db.user_courses.id)
+                .first()
+            )
+            if baseCourseEnrollment is not None:
+                logger.debug(
+                    "{} is already enrolled in base course {}".format(
+                        studentID, baseCourseName
+                    )
+                )
+            else:
+                logger.debug(
+                    "moving {} into base course {}".format(studentID, baseCourseName)
+                )
+                db.user_courses.insert(user_id=int(studentID), course_id=baseCourseID)
             db(db.auth_user.id == int(studentID)).update(
                 course_id=baseCourseID, course_name=baseCourseName, active="F"
             )
