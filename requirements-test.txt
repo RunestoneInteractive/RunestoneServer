@@ -11,7 +11,7 @@ https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip
 beautifulsoup4
 locustio
 coveralls==1.8.2
-black=19.10b0
+black==19.10b0
 flake8
 selenium>=2.53.6
 pyvirtualdisplay
