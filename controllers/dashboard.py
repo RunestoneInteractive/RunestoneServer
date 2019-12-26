@@ -301,39 +301,50 @@ def studentreport():
 
     logger.debug("GRADES = %s", data_analyzer.grades)
 
-    pd = dict()
+    pd_dict = dict()
     if response.view == "assignments/index.html":
         (
-            pd["now"],
-            pd["now_local"],
-            pd["practice_message1"],
-            pd["practice_message2"],
-            pd["practice_graded"],
-            pd["spacing"],
-            pd["interleaving"],
-            pd["practice_completion_count"],
-            pd["remaining_days"],
-            pd["max_days"],
-            pd["max_questions"],
-            pd["day_points"],
-            pd["question_points"],
-            pd["presentable_flashcards"],
-            pd["flashcard_count"],
-            pd["practiced_today_count"],
-            pd["questions_to_complete_day"],
-            pd["practice_today_left"],
-            pd["points_received"],
-            pd["total_possible_points"],
-            pd["flashcard_creation_method"],
+            pd_dict["now"],
+            pd_dict["now_local"],
+            pd_dict["practice_message1"],
+            pd_dict["practice_message2"],
+            pd_dict["practice_graded"],
+            pd_dict["spacing"],
+            pd_dict["interleaving"],
+            pd_dict["practice_completion_count"],
+            pd_dict["remaining_days"],
+            pd_dict["max_days"],
+            pd_dict["max_questions"],
+            pd_dict["day_points"],
+            pd_dict["question_points"],
+            pd_dict["presentable_flashcards"],
+            pd_dict["flashcard_count"],
+            pd_dict["practiced_today_count"],
+            pd_dict["questions_to_complete_day"],
+            pd_dict["practice_today_left"],
+            pd_dict["points_received"],
+            pd_dict["total_possible_points"],
+            pd_dict["flashcard_creation_method"],
         ) = _get_practice_data(
             auth.user,
             float(session.timezoneoffset) if "timezoneoffset" in session else 0,
             db,
         )
-        pd["total_today_count"] = min(
-            pd["practice_today_left"] + pd["practiced_today_count"],
-            pd["questions_to_complete_day"],
+        pd_dict["total_today_count"] = min(
+            pd_dict["practice_today_left"] + pd_dict["practiced_today_count"],
+            pd_dict["questions_to_complete_day"],
         )
+
+    if request.vars.action == "dlcsv":
+        mtbl = pd.read_sql_query("""
+        select * from useinfo where sid = %(sid)s and course_id = %(course)s
+        """, settings.database_uri, params={"sid": auth.user.username, "course": auth.user.course_name})
+        response.headers["Content-Type"] = "application/vnd.ms-excel"
+        response.headers[
+            "Content-Disposition"
+        ] = "attachment; filename=data_for_{}.csv".format(auth.user.username)
+        session.flash = f"Downloading to data_for_{auth.user.username}.csv"
+        return mtbl.to_csv(na_rep=" ")
 
     return dict(
         course=get_course_row(db.courses.ALL),
@@ -341,7 +352,7 @@ def studentreport():
         chapters=chapters,
         activity=activity,
         assignments=data_analyzer.grades,
-        **pd
+        **pd_dict
     )
 
 

@@ -4,7 +4,7 @@
 <script type="text/javascript" src="https://kozea.github.io/pygal.js/javascripts/svg.jquery.js"></script>
 <script type="text/javascript" src="https://kozea.github.io/pygal.js/javascripts/pygal-tooltips.js"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'dashboard.css')}}" />
 <script src="{{=URL('static', 'dashboard-charts.js')}}"></script>
 
 <div id="dashboard">
@@ -32,10 +32,10 @@
 				</div>
 				{{ pass }}
 				<script>
-				$(".chapter .clickable").click(function(){
-					$(this).toggleClass("expanded")
-					$(this).parent().children(".chapter-detail").toggleClass("dhide");
-				});
+					$(".chapter .clickable").click(function () {
+						$(this).toggleClass("expanded")
+						$(this).parent().children(".chapter-detail").toggleClass("dhide");
+					});
 				</script>
 			</div>
 		</div>
@@ -107,6 +107,9 @@
 					{{pass}}
 				</table>
 			</div>
+			<form action="/runestone/dashboard/studentreport">
+				<button type="submit" name="action" value="dlcsv">Download History</button>
+			</form>
 		</div>
 	</div>
 </div>
