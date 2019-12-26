@@ -336,9 +336,13 @@ def studentreport():
         )
 
     if request.vars.action == "dlcsv":
-        mtbl = pd.read_sql_query("""
+        mtbl = pd.read_sql_query(
+            """
         select * from useinfo where sid = %(sid)s and course_id = %(course)s
-        """, settings.database_uri, params={"sid": auth.user.username, "course": auth.user.course_name})
+        """,
+            settings.database_uri,
+            params={"sid": auth.user.username, "course": auth.user.course_name},
+        )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
         response.headers[
             "Content-Disposition"
@@ -352,7 +356,7 @@ def studentreport():
         chapters=chapters,
         activity=activity,
         assignments=data_analyzer.grades,
-        **pd_dict
+        **pd_dict,
     )
 
 
