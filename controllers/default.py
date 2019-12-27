@@ -607,8 +607,10 @@ def privacy():
 def ct_addendum():
     return dict(private={})
 
+
 def ca_addendum():
     return dict(private={})
+
 
 def donate():
     if request.vars.donate:
