@@ -100,7 +100,7 @@ def _route_book(is_published=True):
                 .select(db.courses.base_course)
                 .first()
             )
-            if last_base.base_course == base_course:
+            if last_base and last_base.base_course == base_course:
                 # The user is trying to access the base course for the last course they logged in to
                 # there is a 99% chance this is an error and we should make them log in.
                 session.flash = "You Most likely want to log in to access your course"
