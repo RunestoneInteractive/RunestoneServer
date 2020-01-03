@@ -98,7 +98,7 @@ def build():
         )
 
         if request.vars.invoice:
-            iid = db.invoice_request.insert(
+            db.invoice_request.insert(
                 timestamp=datetime.datetime.now(),
                 sid=auth.user.username,
                 email=auth.user.email,
