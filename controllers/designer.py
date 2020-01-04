@@ -97,6 +97,14 @@ def build():
             courselevel=courselevel,
         )
 
+        if request.vars.invoice:
+            db.invoice_request.insert(
+                timestamp=datetime.datetime.now(),
+                sid=auth.user.username,
+                email=auth.user.email,
+                course_name=request.vars.projectname,
+            )
+
         # enrol the user in their new course
         db(db.auth_user.id == auth.user.id).update(course_id=cid)
         db.course_instructor.insert(instructor=auth.user.id, course=cid)

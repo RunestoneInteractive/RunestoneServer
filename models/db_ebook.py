@@ -187,3 +187,13 @@ db.define_table(
     Field("correct", "double"),
     migrate=table_migrate_prefix + "lp_answers.table",
 )
+
+db.define_table(
+    "invoice_request",
+    Field("timestamp", "datetime"),
+    Field("sid", "string"),
+    Field("course_name", "string"),
+    Field("email", "string"),
+    Field("processed", "boolean"),
+    migrate=table_migrate_prefix + "invoice_request.table",
+)
