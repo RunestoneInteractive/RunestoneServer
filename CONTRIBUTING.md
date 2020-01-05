@@ -57,17 +57,17 @@ Generally the web2py documentation is pretty good, if you are confused after loo
 
 ## Unit Testing
 
-We have a small set of unit tests that we really want to grow into a full blown full coverage set of tests.  To run the unit tests you will need to `pip install -U -r requirements-test.txt`, `cd tests`, then run the `run_tests.py` script. You should also set your `TEST_DBURL` environment variable to connect to the runestone_test database.
+We have a small set of unit tests that we really want to grow into a full blown full coverage set of tests.  For documentation, see `tests/README.rst`.
 
 We have a Travis-CI job set up to automatically test all PR's if your pull request does not pass it won't be accepted.
 
 Please take a look at the unit tests we have, and write a new one that demonstrates that your feature or enhancement works.
 
-I know its more fun to just add features, but with a small group it is more important than ever to hvae comprehensive unit tests.  Its the only way we can quickly accept new features and have any confidence that it won't break runestone.academy for 1000's of people!
+I know it's more fun to just add features, but with a small group it is more important than ever to have comprehensive unit tests.  It's the only way we can quickly accept new features and have any confidence that it won't break runestone.academy for 1000's of people!
 
 ## Major Feature Contributions
 
-There are many ways that we can continue to improve and make the Runestone platform great, and I am exctied to see the platform evolve.  What I would ask is that if you have a large new feature that you would like to propose / contribute please start by creating an issue.  This will allow us to discuss it together up front, consider the design implications, and make it more likely that the PR will be accepted with a minimum of fuss.
+There are many ways that we can continue to improve and make the Runestone platform great, and I am excited to see the platform evolve.  What I would ask is that if you have a large new feature that you would like to propose / contribute please start by creating an issue.  This will allow us to discuss it together up front, consider the design implications, and make it more likely that the PR will be accepted with a minimum of fuss.
 
 Runestone has grown organically over the years but that has led to duplicated tables in the database duplicated code and lots of inconsistency.  We need to start working to change all of that if we are going to continue to grow runestone efficiently.
 
