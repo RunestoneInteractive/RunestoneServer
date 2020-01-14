@@ -128,7 +128,7 @@
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
                 <div class="content row">
-                <div id="web2py_user_form" class="col-md-12 col-sm-12 col-xs-12">
+                <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
                     {{=form}}
                     {{ if settings.academy_mode and request.args(0) == 'profile':}}
                     <form action="{{=URL('default','delete')}}" onsubmit="return confirm('Are you sure?')">
@@ -144,9 +144,9 @@
                     {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
                         <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
                     {{pass}}
+
                 </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-6 col-xs-12">
                     <h4>Course IDs for open courses</h4>
                     <ul>
                             <li>apcsareview</li>
@@ -168,7 +168,7 @@
                             <li>thinkcspy</li>
                             <li>webfundamentals</li>
                     </ul>
-
+                </div>
                 </div>
             {{pass}}
           {{else:}}
