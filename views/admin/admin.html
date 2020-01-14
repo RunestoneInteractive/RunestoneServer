@@ -15,9 +15,6 @@
     <a id="courseTab" data-toggle="tab" href="#coursedata" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Course Settings</h4>
     </a>
-    <a id="sectionsTab" data-toggle="tab" href="#sections" class="list-group-item">
-        <h4 style="text-align: center" class="list-group-item-heading">Manage Section</h4>
-    </a>
     <a id="studentsTab" data-toggle="tab" href="#manageStudents" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Manage Students</h4>
     </a>
@@ -112,66 +109,7 @@
         </div>
     </div>
 
-    <div id="sections" class="tab-pane fade">
-        <div class="col-md-3">
-            <h3 style="text-align: center">Sections</h3>
-            <p>Warning: Sections are a feature that never really went anywhere. They are mostly useless, and This tab
-                will go away
-                in December 2019.
-            </p>
-            {{ for section in sectionInfo: }}
-            <a style="text-align: center; font-size: 12pt;" data-toggle="tab" href="#calendar"
-                onclick="getStudents(this.innerHTML);" class="list-group-item">{{=section}}</a>
-            {{pass}}
 
-
-
-
-
-            <form class="button" action="/{{=request.application}}/sections/addSection" method="post"
-                style="display: inline-block">
-                <input style="width: 35px; height:30px; margin-top: 12px;" type="submit" value="+"></form>
-
-            <form class="button" action="/{{=request.application}}/sections/remove" method="post"
-                style="display: inline-block">
-                <input style="width: 35px; height:30px;" type="submit" value="-">
-            </form>
-
-
-
-
-        </div>
-
-
-
-
-        <div id="calendar" class="tab-pane fade">
-            <div class="col-md-3">
-                <h3 style="text-align: center">Start Date</h3>
-                <a data-toggle="tab" href="#students" class="list-group-item">
-                    <h4 style="text-align: center" class="list-group-item-heading">{{=startDate}}</h4>
-                </a>
-                <form class="button" action="/{{=request.application}}/sections/changeDate" method="post"
-                    style="text-align: center">
-                    <input style="width: 50%; height:30px; margin-top: 12px;" type="submit" value="Change Date"></form>
-            </div>
-
-
-
-            <div id="students">
-                <div class="col-md-3">
-                    <h3 style="text-align: center">Students</h3>
-                    <div id="studentNames"></div>
-
-                    <h5 id="total"></h5>
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </div>
     <div class="tab-pane fade" id="rebuild">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
