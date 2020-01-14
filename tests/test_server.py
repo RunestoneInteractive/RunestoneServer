@@ -283,13 +283,11 @@ def test_user_profile(test_client, test_user_1):
     first_name = "a different first"
     last_name = "a different last"
     email = "a_different_email@foo.com"
-    section = "a_different_section"
     test_user_1.update_profile(
         username=username,
         first_name=first_name,
         last_name=last_name,
         email=email,
-        section=section,
         course_name=course_name,
         accept_tcp="",
         is_free=True,

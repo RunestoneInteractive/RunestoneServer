@@ -397,13 +397,6 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
 
     db.user_courses.insert(user_id=uid, course_id=cinfo.id)
 
-    sect = (
-        db((db.sections.course_id == cinfo.id) & (db.sections.name == "default"))
-        .select(db.sections.id)
-        .first()
-    )
-    db.section_users.update_or_insert(auth_user=uid, section=sect)
-
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=uid, group_id=irole)

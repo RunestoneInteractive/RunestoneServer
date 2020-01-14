@@ -190,15 +190,6 @@ def index():
                 auth.login_user(user)
                 redirect(URL(c="default"))
 
-        if section_id:
-            # set the section in the section_users table
-            # test this
-            db.section_users.update_or_insert(
-                db.section_users.auth_user == user["id"],
-                auth_user=user["id"],
-                section=section_id,
-            )
-
         auth.login_user(user)
 
     if assignment_id:
