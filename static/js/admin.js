@@ -92,7 +92,7 @@ function getSelectedGradingColumn(type) {
 
 function getSelectedItem(type) {
     var col = getSelectedGradingColumn(type);
-
+    var id = null;
     if (col == null) {
         return null;
     }
@@ -104,7 +104,7 @@ function getSelectedItem(type) {
             for (var key in id_diction) {
                 // one of these should match, since an item was selected!
                 if (id_diction[key] == item) {
-                    var id = key;
+                    id = key;
                 }
             }
             return id;
@@ -137,13 +137,17 @@ function autoGrade() {
     // todo -- check the number of selected
     let qs = $("#questionselector").select2("val");
     if (qs && qs.length > 1) {
-        alert("Autograding does not work with multiple selections.  Leave blank to grade all questions.  You may select 1 question.");
+        alert(
+            "Autograding does not work with multiple selections.  Leave blank to grade all questions.  You may select 1 question."
+        );
         $("#autogradesubmit").prop("disabled", false);
         return;
     }
     let ss = $("#studentselector").select2("val");
     if (ss && ss.length > 1) {
-        alert("Autograding does not work with multiple selections.  Leave blank to grade all students. You may select 1 student.");
+        alert(
+            "Autograding does not work with multiple selections.  Leave blank to grade all students. You may select 1 student."
+        );
         $("#autogradesubmit").prop("disabled", false);
         return;
     }
@@ -194,8 +198,9 @@ function autoGrade() {
 function calculateTotals(sid) {
     var assignment = getSelectedItem("assignment");
     var question = getSelectedItem("question");
+    var studentID;
     if (!sid) {
-        var studentID = getSelectedItem("student");
+        studentID = getSelectedItem("student");
     } else {
         studentID = sid;
     }
@@ -338,7 +343,6 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         });
     }
 
-
     function show(data) {
         // get rid of any other modals -- incase they are just hanging out.
         //jQuery('.modal.modal-grader:not(#modal-template .modal)').remove();
@@ -348,20 +352,18 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         jQuery("#gradingform", rightDiv).remove();
         var newForm = document.createElement("form");
         newForm.setAttribute("id", "gradingform");
-        formstr =
-            `<form>
+        formstr = `<form>
                 <label for="input-grade">Grade</label>
                 <input id="input-grade" type="text" class="form-control" value= ""/>
                 <label for="input-comments">Comments</label>
-                <textarea id="input-comments" class="form-control" rows=2> </textarea>`
-        if (! multiGrader) {
+                <textarea id="input-comments" class="form-control" rows=2> </textarea>`;
+        if (!multiGrader) {
             formstr += `
                 <input type="submit" value="Save Grade" class="btn btn-primary" />
             </form>
-            <button class="btn btn-default next" type="button">Save and next</button>`
-        }
-        else {
-            formstr += '</form>'
+            <button class="btn btn-default next" type="button">Save and next</button>`;
+        } else {
+            formstr += "</form>";
         }
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
@@ -409,7 +411,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         grade: this.value,
                     },
                     success: function(data) {
-                        inp.style.backgroundColor = '#ddffdd';
+                        inp.style.backgroundColor = "#ddffdd";
                         calculateTotals(studentId);
                     },
                 });
@@ -427,11 +429,10 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         comment: this.value,
                     },
                     success: function(data) {
-                        inp.style.backgroundColor = '#ddffdd';
+                        inp.style.backgroundColor = "#ddffdd";
                     },
                 });
             });
-
         }
 
         // pull in any prefix or suffix code, already retrieved in data
@@ -457,8 +458,8 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             try {
                 var ind = selectedStudent.selectedIndex + 1;
                 selectedStudent.selectedIndex = ind;
-                $(selectedStudent).val(selectedStudent.value)
-                $(selectedStudent).trigger('change')
+                $(selectedStudent).val(selectedStudent.value);
+                $(selectedStudent).trigger("change");
             } catch (err) {
                 //reached end of list
             }
@@ -488,8 +489,8 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                     var resp = obj.responseText;
                     var newdata = JSON.parse(resp);
                     if (newdata != "Error") {
-                        jQuery("#input-grade", rightDiv).val(newdata["grade"]);
-                        jQuery("#input-comments", rightDiv).val(newdata["comments"]);
+                        jQuery("#input-grade", rightDiv).val(newdata.grade);
+                        jQuery("#input-comments", rightDiv).val(newdata.comments);
                     } else {
                         jQuery("#input-grade", rightDiv).val(null);
                         jQuery("#input-comments", rightDiv).val(null);
@@ -564,7 +565,7 @@ function updateQuestionList() {
     $("#rightsideGradingTab").empty();
     var col1val = "";
     if (chapAssignSelector.selectedIndex > -1) {
-        var col1val = chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
+        col1val = chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
     } else {
         $("#questionselector").empty();
         $("#rightsideGradingTab").empty();
@@ -619,7 +620,7 @@ function pickedAssignments(column) {
     var keys = Object.keys(assignments);
     keys.sort();
     for (var i = 0; i < keys.length; i++) {
-        var option = document.createElement("option");
+        option = document.createElement("option");
         var key = keys[i];
         option.text = key;
         option.value = key;
@@ -703,7 +704,7 @@ function pickedChapters(column) {
 
     for (i = 0; i < keys.length; i++) {
         var key = keys[i];
-        var option = document.createElement("option");
+        option = document.createElement("option");
         option.text = key;
         option.value = key;
         pickedcolumn.add(option);
@@ -746,7 +747,6 @@ function selectChapOrAssignment() {
     displayDefaultQuestion("questionselector");
     pickedStudents("studentselector");
 }
-
 
 function getCourseStudents() {
     jQuery.ajax({
@@ -818,7 +818,7 @@ function getLog() {
 }
 
 function add_instructor() {
-    var select = document.getElementById("addins").elements["student"];
+    var select = document.getElementById("addins").elements.student;
     var index = select.selectedIndex;
     var studentid = select.options[index].value; //value gives the value, text gives the actual text
     var studentname = select.options[index].text;
@@ -844,7 +844,7 @@ function add_instructor() {
 }
 
 function remove_instructor() {
-    var select = document.getElementById("removeins").elements["instructor"];
+    var select = document.getElementById("removeins").elements.instructor;
     var index = select.selectedIndex;
     var studentid = select.options[index].value; //value gives the value, text gives the actual text
     var studentname = select.options[index].text;
@@ -1153,21 +1153,21 @@ async function updateAssignmentRaw(question_name, points, autograde, which_to_gr
 }
 
 async function add_to_qtable(response_JSON) {
-    $("#totalPoints").html("Total points: " + response_JSON["total"]);
+    $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
         question_table.bootstrapTable(
             "getRowByUniqueId",
-            response_JSON["question_id"]
+            response_JSON.question_id
         ) === null
     ) {
         appendToQuestionTable(
-            response_JSON["question_id"],
-            response_JSON["points"],
-            response_JSON["autograde"],
-            response_JSON["autograde_possible_values"],
-            response_JSON["which_to_grade"],
-            response_JSON["which_to_grade_possible_values"]
+            response_JSON.question_id,
+            response_JSON.points,
+            response_JSON.autograde,
+            response_JSON.autograde_possible_values,
+            response_JSON.which_to_grade,
+            response_JSON.which_to_grade_possible_values
         );
     }
 }
@@ -1282,27 +1282,27 @@ function assignmentInfo() {
             assignmentid: assignmentid,
         },
         function(data) {
-            assignmentData = data["assignment_data"];
+            assignmentData = data.assignment_data;
             $("#totalPoints").html(
-                "Total points: " + assignmentData["assignment_points"]
+                "Total points: " + assignmentData.assignment_points
             );
-            $("#datetimepicker").val(assignmentData["due_date"]);
-            $("#assignment_description").val(assignmentData["description"]);
-            $("#readings-threshold").val(assignmentData["threshold"]);
-            $("#assign_visible").val(assignmentData["visible"]);
-            $("#assign_is_timed").val(assignmentData["is_timed"]);
-            if (assignmentData["visible"] === true) {
+            $("#datetimepicker").val(assignmentData.due_date);
+            $("#assignment_description").val(assignmentData.description);
+            $("#readings-threshold").val(assignmentData.threshold);
+            $("#assign_visible").val(assignmentData.visible);
+            $("#assign_is_timed").val(assignmentData.is_timed);
+            if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
             } else {
                 $("#assign_visible").prop("checked", false);
             }
-            if (assignmentData["is_timed"] === true) {
+            if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
-            $("#readings-points-to-award").val(assignmentData["points_to_award"]);
-            $("#readings-autograder").val(assignmentData["readings_autograder"]);
+            $("#readings-points-to-award").val(assignmentData.points_to_award);
+            $("#readings-autograder").val(assignmentData.readings_autograder);
 
             // Update the questions
             ///====================
@@ -1314,17 +1314,17 @@ function assignmentInfo() {
             tqp.uncheck_all();
             question_table.bootstrapTable("removeAll");
             let allQuestions = [];
-            for (let question of data["questions_data"]) {
+            for (let question of data.questions_data) {
                 // Put the qeustion in the table.
-                let name = question["name"];
+                let name = question.name;
                 allQuestions.push(
                     createQuestionObject(
                         name,
-                        question["points"],
-                        question["autograde"],
-                        question["autograde_possible_values"],
-                        question["which_to_grade"],
-                        question["which_to_grade_possible_values"]
+                        question.points,
+                        question.autograde,
+                        question.autograde_possible_values,
+                        question.which_to_grade,
+                        question.which_to_grade_possible_values
                     )
                 );
                 // Check this question in the question tree picker.
@@ -1344,18 +1344,18 @@ function assignmentInfo() {
             trp.ignore_check = true;
             trp.uncheck_all();
             readings_table.bootstrapTable("removeAll");
-            for (let readings_data of data["pages_data"]) {
-                id = readings_data["name"];
+            for (let readings_data of data.pages_data) {
+                id = readings_data.name;
                 trp.check_node(trp.get_node(id));
                 appendToReadingsTable(
                     id,
-                    readings_data["activity_count"],
-                    readings_data["activities_required"],
-                    readings_data["points"],
-                    readings_data["autograde"],
-                    readings_data["autograde_possible_values"],
-                    readings_data["which_to_grade"],
-                    readings_data["which_to_grade_possible_values"]
+                    readings_data.activity_count,
+                    readings_data.activities_required,
+                    readings_data.points,
+                    readings_data.autograde,
+                    readings_data.autograde_possible_values,
+                    readings_data.which_to_grade,
+                    readings_data.which_to_grade_possible_values
                 );
             }
             trp.ignore_check = false;
@@ -1395,23 +1395,23 @@ async function updateReading(
 }
 
 function add_to_table(response_JSON) {
-    $("#totalPoints").html("Total points: " + response_JSON["total"]);
+    $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
         readings_table.bootstrapTable(
             "getRowByUniqueId",
-            response_JSON["question_id"]
+            response_JSON.question_id
         ) === null
     ) {
         appendToReadingsTable(
-            response_JSON["question_id"],
-            response_JSON["activity_count"],
-            response_JSON["activities_required"],
-            response_JSON["points"],
-            response_JSON["autograde"],
-            response_JSON["autograde_possible_values"],
-            response_JSON["which_to_grade"],
-            response_JSON["which_to_grade_possible_values"]
+            response_JSON.question_id,
+            response_JSON.activity_count,
+            response_JSON.activities_required,
+            response_JSON.points,
+            response_JSON.autograde,
+            response_JSON.autograde_possible_values,
+            response_JSON.which_to_grade,
+            response_JSON.which_to_grade_possible_values
         );
     }
 }
@@ -1471,7 +1471,7 @@ function remove_question(question_name) {
         }
     ).done(function(response_JSON) {
         var totalPoints = document.getElementById("totalPoints");
-        totalPoints.innerHTML = "Total points: " + response_JSON["total"];
+        totalPoints.innerHTML = "Total points: " + response_JSON.total;
         // Remove the named row from the table. See the `example <http://issues.wenzhixin.net.cn/bootstrap-table/#methods/removeByUniqueId.html>`__.
         question_table.bootstrapTable("removeByUniqueId", question_name);
     });
@@ -1484,12 +1484,12 @@ function display_write() {
     var questiontype = template.options[template.selectedIndex].value;
     jQuery.get("/runestone/admin/gettemplate/" + questiontype, {}, function(obj) {
         var returns = JSON.parse(obj);
-        tplate = returns["template"];
+        tplate = returns.template;
         $("#qcode").text(tplate);
         $("#qcode").keypress(function() {
             $("#qrawhtml").val("");
         });
-        $.each(returns["chapters"], function(i, item) {
+        $.each(returns.chapters, function(i, item) {
             chapterMap[item[0]] = item[1];
             $("#qchapter").append(
                 $("<option>", {
@@ -1524,12 +1524,13 @@ function create_question(formdata) {
         return;
     }
     if (formdata.createpoints.value == "") {
-        formdata.createpoints.value == "1";
+        formdata.createpoints.value = "1";
     }
     if (!formdata.qrawhtml.value) {
         alert("No HTML for this question, please generate it.");
         return;
     }
+    var selectedDifficulty = "";
     var activetab = "formative";
     var select = document.getElementById("assignlist");
     var assignmentid = select.options[select.selectedIndex].value;
@@ -1543,7 +1544,7 @@ function create_question(formdata) {
     var difficulty = formdata.difficulty;
     for (var i = 0; i < difficulty.length; i++) {
         if (difficulty[i].checked == true) {
-            var selectedDifficulty = difficulty[i].value;
+            selectedDifficulty = difficulty[i].value;
         }
     }
     var tags = formdata.qtags.value;
@@ -1578,7 +1579,7 @@ function create_question(formdata) {
                     "Name is already in use. Please try a different name.";
             } else {
                 alert("Question created successfully");
-                var newPoints = iserror["points"];
+                var newPoints = iserror.points;
                 var q_type = activetab;
                 var totalPoints = document.getElementById("totalPoints");
                 totalPoints.innerHTML = "Total points: " + newPoints;
@@ -1743,7 +1744,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         }
         // $(`#${whereDiv}`).css("background-color", "white");
     }
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 }
 
 // Called by the "Search" button in the "Search question bank" panel.
@@ -1833,10 +1834,10 @@ function getQuestionInfo() {
                 data[i] = res[i];
             }
         }
-        var difficulty = data["difficulty"];
-        var code = data["code"];
-        var author = data["author"];
-        var tags = data["tags"];
+        var difficulty = data.difficulty;
+        var code = data.code;
+        var author = data.author;
+        var tags = data.tags;
 
         var q_difficulty = document.getElementById("q_difficulty");
         if (difficulty == null) {
@@ -1845,7 +1846,7 @@ function getQuestionInfo() {
             q_difficulty.innerHTML = "Difficulty: " + difficulty;
         }
 
-        renderRunestoneComponent(data["htmlsrc"], "component-preview", {
+        renderRunestoneComponent(data.htmlsrc, "component-preview", {
             acid: question_name,
         });
 
@@ -2034,7 +2035,7 @@ function updateCourse(widget, attr) {
 }
 
 function resetOnePassword() {
-    let student = $("#studentList").val()
+    let student = $("#studentList").val();
     if (student.length > 1) {
         alert("You can only reset ONE student at a time");
         return;
@@ -2045,10 +2046,10 @@ function resetOnePassword() {
     }
     let name = $(`#studentList option[value=${student[0]}]`).text();
     let newpw = prompt(`Enter New Password for ${name}`);
-    if (! newpw) {
+    if (!newpw) {
         return;
     }
-    data = {newpass: newpw};
+    data = { newpass: newpw };
     jQuery.ajax({
         url: "/runestone/admin/resetpw",
         type: "POST",
@@ -2066,8 +2067,7 @@ function resetOnePassword() {
         },
 
         error: function(err) {
-            alert(`Failed to reset password for ${name}`)
-        }
-
-    })
+            alert(`Failed to reset password for ${name}`);
+        },
+    });
 }
