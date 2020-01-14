@@ -191,16 +191,12 @@ def test_validate_user_pages(
         #
         # **Admin**
         # ----------
-        ("admin/admin", "Manage Section", 1),
+        ("admin/admin", "Course Settings", 1),
         ("admin/course_students", '"test_user_1"', 2),
         ("admin/createAssignment", "ERROR", None),
         ("admin/grading", "assignment", 1),
         # TODO: This produces an exception.
         # ('admin/practice', 'Choose when students should start their practice.', 1),
-        ("admin/sections_list", "db tables", 1),
-        ("admin/sections_create", "Create New Section", 1),
-        ("admin/sections_delete", "db tables", 1),
-        ("admin/sections_update", "db tables", 1),
         # TODO: This deletes the course, making the test framework raise an exception. Need a separate case to catch this.
         # ('admin/deletecourse', 'Manage Section', 2),
         # FIXME: these raise an exception.
