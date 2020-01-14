@@ -766,17 +766,6 @@ def removeStudents():
                 (db.user_courses.user_id == int(studentID))
                 & (db.user_courses.course_id == auth.user.course_id)
             ).delete()
-            section = (
-                db(
-                    (db.sections.course_id == auth.user.course_id)
-                    & (db.section_users.auth_user == int(studentID))
-                    & (db.section_users.section == db.sections.id)
-                )
-                .select()
-                .first()
-            )
-            if section:
-                db(db.section_users.id == section.section_users.id).delete()
 
             baseCourseEnrollment = (
                 db(
