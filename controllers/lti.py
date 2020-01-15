@@ -154,13 +154,11 @@ def index():
             )
         # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
         course_id = _param_converter(request.vars.get("custom_course_id", None))
-        section_id = _param_converter(request.vars.get("custom_section_id", None))
         if course_id:
             user["course_id"] = course_id
             user["course_name"] = getCourseNameFromId(
                 course_id
             )  # need to set course_name because calls to verifyInstructor use it
-            user["section"] = section_id
             user.update_record()
 
             # Update instructor status.
