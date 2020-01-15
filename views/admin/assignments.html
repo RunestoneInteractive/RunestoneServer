@@ -399,7 +399,7 @@ $(function () {
           let resp = await updateAssignmentRaw(node.id, 1, autograde, whichto);
           return resp;
         },
-        // Called when a node is unchecked.
+        // Called when a node is unchecked. - node.id is the question.name
         function (node) { remove_question(node.id); }
     );
     question_picker.on('ready.jstree', function(event, data) {
@@ -486,7 +486,14 @@ $(function () {
                      // Copied from ``operateEvents`` in an example_.
                     'click .question_table_remove': function (e, value, row, index) {
                         // Unchecking the question in the tree picker also deletes it from the database and table.
-                        question_picker.jstree(true).uncheck_node(row['question_id']);
+                        if (question_picker.jstree(true).get_node(row['question_id'])) {
+                            question_picker.jstree(true).uncheck_node(row['question_id']);
+                        } else {
+                            // sometimes questions get moved or go private and may be in an old assignment, but no longer
+                            // part of the jstree.  In that case removal should not fail, but we may have to do it directly.
+                            remove_question(row["question_id"]);
+                        }
+
                     },
                 },
            },
