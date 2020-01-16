@@ -642,7 +642,7 @@ def subchapoverview():
         settings.database_uri,
         parse_dates=["timestamp"],
     )
-    data = data[~data.sid.str.contains(r"^\d+@")]
+    data = data[~data.sid.str.contains(r"^\d{38,38}@")]
     tdoff = pd.Timedelta(
         hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
     )
