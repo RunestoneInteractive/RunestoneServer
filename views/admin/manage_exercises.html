@@ -1,0 +1,49 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+<script type="text/javascript" src="{{=get_course_url('_static/sharedb.js')}}"></script>
+<script type="text/javascript">
+  eBookConfig.gradingURL = '{{=gradingUrl}}';
+  eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+  eBookConfig.setTotalURL = '{{=setTotalURL}}';
+  eBookConfig.sendLTIGradeURL = '{{=sendLTIGradeURL}}';
+  eBookConfig.getCourseStudentsURL = '{{=getCourseStudentsURL}}';
+  eBookConfig.get_assignment_release_statesURL = '{{=get_assignment_release_statesURL}}';
+  eBookConfig.course = '{{=course_id}}';
+  // load the students dictionary once the page loads
+  $(getCourseStudents)
+</script>
+
+
+<div id='questions'>
+    <style>
+        .ac_section > * {
+            max-width: 100%;
+        }
+    </style>
+    <h3>Questions</h3>
+    {{count=0}}
+    {{for q in questioninfo:}}
+            {{ if q['comment'] != 'ungraded':}}
+                <div style='float:right; width:30%;'>
+                <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
+                <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
+                </div>
+            {{ else: }}
+                <div style='float:right; width:10%;'>
+                <h5 style='text-align:center;'>Not yet graded</h5>
+                </div>
+            {{pass}}
+            <div class='oneq full-width' id='{{=count}}'>
+                <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+            </div>
+
+        {{count += 1}}
+    {{pass}}
+
+</div>
+
+
+{{ endblock }}

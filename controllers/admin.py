@@ -2493,6 +2493,21 @@ def resetpw():
     return json.dumps(res)
 
 
+@auth.requires_membership("editors")
+def manage_exercises():
+    books = db(db.editor_basecourse.editor == auth.user).select()
+    qlist = []
+    for book in books:
+        questions = db( (db.questions.review_flag == 'T') &
+                        (db.questions.base_course == book.base_course) )
+                        .select(db.questions.htmlsrc, db.questions.difficulty)
+
+        for q in questions:
+            qlist.append(q)
+
+    return (questioninfo=qlist)
+
+
 def killer():
     print(routes_onerror)
     x = 5 / 0  # noqa: F841

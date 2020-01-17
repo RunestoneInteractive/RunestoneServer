@@ -197,3 +197,10 @@ db.define_table(
     Field("processed", "boolean"),
     migrate=table_migrate_prefix + "invoice_request.table",
 )
+
+db.define_table(
+    "editor_basecourse",
+    Field("editor", db.auth_user),
+    Field("base_course", "string"),
+    migrate=table_migrate_prefix + "editor_basecourse.table",
+)
