@@ -120,10 +120,6 @@ def build():
             % (auth.user.id, cid)
         )
 
-        # Create a default section for this course and add the instructor.
-        sectid = db.sections.update_or_insert(name="default", course_id=cid)
-        db.section_users.update_or_insert(auth_user=auth.user.id, section=sectid)
-
         session.flash = "Course Created Successfully"
         redirect(
             URL("books", "published", args=[request.vars.projectname, "index.html"])

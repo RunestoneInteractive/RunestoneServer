@@ -154,13 +154,11 @@ def index():
             )
         # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
         course_id = _param_converter(request.vars.get("custom_course_id", None))
-        section_id = _param_converter(request.vars.get("custom_section_id", None))
         if course_id:
             user["course_id"] = course_id
             user["course_name"] = getCourseNameFromId(
                 course_id
             )  # need to set course_name because calls to verifyInstructor use it
-            user["section"] = section_id
             user.update_record()
 
             # Update instructor status.
@@ -189,15 +187,6 @@ def index():
                 session.lti_url_next = full_uri
                 auth.login_user(user)
                 redirect(URL(c="default"))
-
-        if section_id:
-            # set the section in the section_users table
-            # test this
-            db.section_users.update_or_insert(
-                db.section_users.auth_user == user["id"],
-                auth_user=user["id"],
-                section=section_id,
-            )
 
         auth.login_user(user)
 
