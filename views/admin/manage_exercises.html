@@ -26,18 +26,15 @@
     <h3>Questions</h3>
     {{count=0}}
     {{for q in questioninfo:}}
-            {{ if q['comment'] != 'ungraded':}}
-                <div style='float:right; width:30%;'>
-                <h4 style='text-align:center;'>Score: {{=q['score']}} / {{=q['points']}}</h4>
-                <p style='margin-left:2%;'>Comment: {{=q['comment']}}</p>
-                </div>
-            {{ else: }}
-                <div style='float:right; width:10%;'>
-                <h5 style='text-align:center;'>Not yet graded</h5>
-                </div>
-            {{pass}}
-            <div class='oneq full-width' id='{{=count}}'>
-                <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+            <div class='oneq full-width' id='edit_{{=count}}'>
+                {{=XML(q['htmlsrc'])}}
+
+                <button class="btn btn-danger"
+                    onclick="deleteQuestion('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')">
+                    Delete</button>
+                <button class="btn btn-normalV" onclick="(function() {alert('coming soon')})()">Edit</button>
+                Difficulty Level {{= q['difficulty']}}
+
             </div>
 
         {{count += 1}}
@@ -46,4 +43,4 @@
 </div>
 
 
-{{ endblock }}
+{{ end }}

@@ -2071,3 +2071,27 @@ function resetOnePassword() {
         },
     });
 }
+
+function deleteQuestion(qid, baseCourse, edit_div) {
+    let res = confirm(`Really delete ${qid} from ${baseCourse}?`);
+    if (res){
+        jQuery.ajax({
+            url: "/runestone/admin/delete_question",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                name: qid,
+                base_course: baseCourse
+            },
+
+            success: function(retdata) {
+                if (retdata.status == "Error" ) {
+                    alert("Failed to delete");
+                } else {
+                    alert("Success");
+                    $(`#${edit_div}`).hide();
+                }
+            }
+        });
+    }
+}

@@ -2237,6 +2237,21 @@ def delete_assignment_question():
         return json.dumps("Error")
 
 
+@auth.requires_membership("editor")
+def delete_question():
+    qname = request.vars["name"]
+    base_course = request.vars["base_course"]
+
+    try:
+        db(
+            (db.questions.name == qname) & (db.questions.base_course == base_course)
+        ).delete()
+        return json.dumps({"status": "Success"})
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps({"status": "Error"})
+
+
 def _set_assignment_max_points(assignment_id):
     """Called after a change to assignment questions.
     Recalculate the total, save it in the assignment row
@@ -2493,19 +2508,38 @@ def resetpw():
     return json.dumps(res)
 
 
-@auth.requires_membership("editors")
+@auth.requires_membership("editor")
 def manage_exercises():
     books = db(db.editor_basecourse.editor == auth.user).select()
+    the_course = db(db.courses.course_name == auth.user.course_name).select().first()
     qlist = []
     for book in books:
-        questions = db( (db.questions.review_flag == 'T') &
-                        (db.questions.base_course == book.base_course) )
-                        .select(db.questions.htmlsrc, db.questions.difficulty)
+        questions = db(
+            (db.questions.review_flag == "T")
+            & (db.questions.base_course == book.base_course)
+        ).select(
+            db.questions.htmlsrc,
+            db.questions.difficulty,
+            db.questions.name,
+            db.questions.base_course,
+        )
 
         for q in questions:
             qlist.append(q)
 
-    return (questioninfo=qlist)
+    return dict(
+        questioninfo=qlist,
+        course=the_course,
+        gradingUrl=URL("assignments", "get_problem"),
+        autogradingUrl=URL("assignments", "autograde"),
+        gradeRecordingUrl=URL("assignments", "record_grade"),
+        calcTotalsURL=URL("assignments", "calculate_totals"),
+        setTotalURL=URL("assignments", "record_assignment_score"),
+        sendLTIGradeURL=URL("assignments", "send_assignment_score_via_LTI"),
+        getCourseStudentsURL=URL("admin", "course_students"),
+        get_assignment_release_statesURL=URL("admin", "get_assignment_release_states"),
+        course_id=auth.user.course_name,
+    )
 
 
 def killer():
