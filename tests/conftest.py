@@ -366,8 +366,6 @@ def runestone_db(runestone_controller):
  public.practice_grades,
  public.question_grades,
  public.question_tags,
- public.section_users,
- public.sections,
  public.shortanswer_answers,
  public.sub_chapter_taught,
  public.tags,
@@ -685,7 +683,6 @@ class _TestUser(object):
         email=None,
         # An updated last name, or ``None`` to use ``self.course.course_name``.
         course_name=None,
-        section="",
         # A shortcut for specifying the ``expected_string``, which only applies if ``expected_string`` is not set. Use ``None`` if a course will not be added, ``True`` if the added course is free, or ``False`` if the added course is paid.
         is_free=None,
         # The value of the ``accept_tcp`` checkbox; provide an empty string to leave unchecked. The default value leaves it checked.
@@ -717,7 +714,6 @@ class _TestUser(object):
                 # Though the field is ``course_id``, it's really the course name.
                 course_id=course_name,
                 accept_tcp=accept_tcp,
-                section=section,
                 _next="/runestone/default/index",
                 id=str(self.user_id),
                 _formname="auth_user/" + str(self.user_id),

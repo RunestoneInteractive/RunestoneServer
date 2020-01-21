@@ -355,6 +355,9 @@ db.define_table(
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
 mail.settings.login = settings.email_login
+auth.messages.reset_password = (
+    '<html>Click on <a href="%(link)s">this link</a> to reset your password.</html>'
+)
 
 # Make sure the latest version of admin is always loaded.
 adminjs = os.path.join("applications", request.application, "static", "js", "admin.js")
@@ -396,13 +399,6 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
     )
 
     db.user_courses.insert(user_id=uid, course_id=cinfo.id)
-
-    sect = (
-        db((db.sections.course_id == cinfo.id) & (db.sections.name == "default"))
-        .select(db.sections.id)
-        .first()
-    )
-    db.section_users.update_or_insert(auth_user=uid, section=sect)
 
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()

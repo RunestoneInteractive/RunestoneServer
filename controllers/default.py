@@ -44,7 +44,6 @@ def user():
         # After the registration form is submitted the registration is processed here
         # this function will not return in that case, but instead continue on and end up
         # redirecting to index.
-        # Additional registration processing can be handled by make_section_entries or another function added
         # through db.auth_user._after_insert.append(some_function)
         form = auth()
     except HTTPError:
@@ -54,46 +53,6 @@ def user():
         redirect(URL("default", "index"))
 
     if "profile" in request.args(0):
-        try:
-            sect = (
-                db(db.section_users.auth_user == auth.user.id)
-                .select(db.section_users.section)
-                .first()
-                .section
-            )
-            sectname = db(db.sections.id == sect).select(db.sections.name).first()
-        except Exception:
-            sectname = None
-        if sectname:
-            sectname = sectname.name
-        else:
-            sectname = "default"
-        # Add the section. Taken from ``gluon.tools.addrow`` where ``style='table3cols'``.
-        form[0].insert(
-            -1,
-            TR(
-                TD(
-                    LABEL(
-                        "Section Name: ",
-                        _for="auth_user_section",
-                        _id="auth_user_section__label",
-                    ),
-                    _class="w2p_fl",
-                ),
-                TD(
-                    INPUT(
-                        _name="section",
-                        _type="text",
-                        _value=sectname,
-                        _id="auth_user_section",
-                        _class="string",
-                    ),
-                    _class="w2p_fw",
-                ),
-                TD("", _class="w2p_fc"),
-                _id="auth_user_section__row",
-            ),
-        )
         # Make the username read-only.
         form.element("#auth_user_username")["_readonly"] = True
 
@@ -104,26 +63,7 @@ def user():
             form.record.update_record(**dict(form.vars))
             # auth.user session object doesn't automatically update when the DB gets updated
             auth.user.update(form.vars)
-            # Add user to default section for course.
-            sect = (
-                db(
-                    (db.sections.course_id == auth.user.course_id)
-                    & (db.sections.name == form.vars.section)
-                )
-                .select(db.sections.id)
-                .first()
-            )
-            if sect:
-                db.section_users.update_or_insert(auth_user=auth.user.id, section=sect)
-                db(
-                    (auth.user.id == db.section_users.auth_user)
-                    & (
-                        (db.section_users.section != sect)
-                        | (db.section_users.section is None)
-                    )
-                ).delete()
-            # select from sections where course_id = auth_user.course_id and section.name = 'default'
-            # add a row to section_users for this user with the section selected.
+
             redirect(URL("default", "index"))
 
     if "register" in request.args(0):

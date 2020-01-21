@@ -191,16 +191,12 @@ def test_validate_user_pages(
         #
         # **Admin**
         # ----------
-        ("admin/admin", "Manage Section", 1),
+        ("admin/admin", "Course Settings", 1),
         ("admin/course_students", '"test_user_1"', 2),
         ("admin/createAssignment", "ERROR", None),
         ("admin/grading", "assignment", 1),
         # TODO: This produces an exception.
         # ('admin/practice', 'Choose when students should start their practice.', 1),
-        ("admin/sections_list", "db tables", 1),
-        ("admin/sections_create", "Create New Section", 1),
-        ("admin/sections_delete", "db tables", 1),
-        ("admin/sections_update", "db tables", 1),
         # TODO: This deletes the course, making the test framework raise an exception. Need a separate case to catch this.
         # ('admin/deletecourse', 'Manage Section', 2),
         # FIXME: these raise an exception.
@@ -287,13 +283,11 @@ def test_user_profile(test_client, test_user_1):
     first_name = "a different first"
     last_name = "a different last"
     email = "a_different_email@foo.com"
-    section = "a_different_section"
     test_user_1.update_profile(
         username=username,
         first_name=first_name,
         last_name=last_name,
         email=email,
-        section=section,
         course_name=course_name,
         accept_tcp="",
         is_free=True,
