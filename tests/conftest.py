@@ -377,7 +377,7 @@ def runestone_db(runestone_controller):
  public.user_state,
  public.user_sub_chapter_progress,
  public.user_topic_practice,
- public."user_topic_practice_Completion",
+ public.user_topic_practice_completion,
  public.user_topic_practice_feedback,
  public.user_topic_practice_log,
  public.user_topic_practice_survey,
