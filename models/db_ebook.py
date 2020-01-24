@@ -197,3 +197,12 @@ db.define_table(
     Field("processed", "boolean"),
     migrate=table_migrate_prefix + "invoice_request.table",
 )
+
+
+db.define_table(
+    "course_attributes",
+    Field("course_id", db.courses),
+    Field("attr", "string"),
+    Field("value", "text"),
+    migrate=table_migrate_prefix + "course_attributes.table",
+)
