@@ -901,15 +901,15 @@ def practice():
 
         # Add a practice completion record for today, if there isn't one already.
         practice_completion_today = db(
-            (db.user_topic_practice_Completion.course_name == auth.user.course_name)
-            & (db.user_topic_practice_Completion.user_id == auth.user.id)
+            (db.user_topic_practice_completion.course_name == auth.user.course_name)
+            & (db.user_topic_practice_completion.user_id == auth.user.id)
             & (
-                db.user_topic_practice_Completion.practice_completion_date
+                db.user_topic_practice_completion.practice_completion_date
                 == now_local.date()
             )
         )
         if practice_completion_today.isempty():
-            db.user_topic_practice_Completion.insert(
+            db.user_topic_practice_completion.insert(
                 user_id=auth.user.id,
                 course_name=auth.user.course_name,
                 practice_completion_date=now_local.date(),

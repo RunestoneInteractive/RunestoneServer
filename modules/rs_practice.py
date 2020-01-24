@@ -275,8 +275,8 @@ def _get_practice_data(user, timezoneoffset, db):
 def _get_practice_completion(user_id, course_name, spacing, db):
     if spacing == 1:
         return db(
-            (db.user_topic_practice_Completion.course_name == course_name)
-            & (db.user_topic_practice_Completion.user_id == user_id)
+            (db.user_topic_practice_completion.course_name == course_name)
+            & (db.user_topic_practice_completion.user_id == user_id)
         ).count()
     return db(
         (db.user_topic_practice_log.course_name == course_name)
