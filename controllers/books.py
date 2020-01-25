@@ -46,8 +46,8 @@ def _route_book(is_published=True):
     if not base_course:
         raise HTTP(404)
 
-    if base_course == "fcla":
-        response.delimiters = ('~._', '_.~')
+    #    if base_course == "fcla":
+    #        response.delimiters = ("~._", "_.~")
 
     # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
     cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
