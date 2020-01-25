@@ -198,7 +198,12 @@ db.define_table(
     migrate=table_migrate_prefix + "invoice_request.table",
 )
 
-
+# The course attribute table allows us to add parameters to each course without having
+# to add columns to the courses table every time we have something new to store.
+# for example we could have a "source" key value pair to indicate if a course is built
+# with runestone or pretext, or to store the latex macros for a pretext course
+# TODO: migrate allow_pairs, download_enabled, and others from courses to this table.
+#
 db.define_table(
     "course_attributes",
     Field("course_id", db.courses),
