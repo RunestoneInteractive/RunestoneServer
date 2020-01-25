@@ -410,8 +410,8 @@ def grades():
         if practice_setting:
             if practice_setting.spacing == 1:
                 practice_completion_count = db(
-                    (db.user_topic_practice_Completion.course_name == s.course_name)
-                    & (db.user_topic_practice_Completion.user_id == s.id)
+                    (db.user_topic_practice_completion.course_name == s.course_name)
+                    & (db.user_topic_practice_completion.user_id == s.id)
                 ).count()
                 total_possible_points = (
                     practice_setting.day_points * practice_setting.max_practice_days
