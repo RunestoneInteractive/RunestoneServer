@@ -92,6 +92,10 @@
         No deadlines are enforced when self grading, but your instructor may penalize you
         for late work.</p>
 </div>
+{{ elif settings.coursera_mode: }}
+<div style="text-align:center">
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+</div>
 {{ pass }}
 </div>
 <script>
