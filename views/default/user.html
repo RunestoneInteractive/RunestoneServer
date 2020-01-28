@@ -333,6 +333,22 @@
                         <li>Hosting services for your course - See our <a href="https://runestone.academy/runestone/static/instructorguide/index.html">Instructor Guide</a></li>
                     </ul>
                     <p>To learn more about this project, <a href="https://runestone.academy/runestone/books/published/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
+
+                    {{if settings.academy_mode:}}
+                        <h2>Your Privacy</h2>
+                        <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+                            of our educational mission we do collect usage data to help us better understand how you learn and how you
+                            use our
+                            books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+                            this data to publish
+                            academic papers. We would never publish anything that revealed your identity. We may share this data with
+                            fellow
+                            educational researchers, but rest assured that all personally identifying information will be anonymized
+                            before we do.
+                            If you have questions about this please feel free to <a
+                                    href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+                    {{pass}}
+
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
                     <h2>Partners and Supporters</h2>
@@ -351,22 +367,6 @@
                         <p style="margin-top: 15px;">Or...</p>
                         Make a one-time donation <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
                 </div>
-            </div>
-        {{pass}}
-        {{if settings.academy_mode:}}
-            <div class="col-md-6 col-sm-6 col-xs-6">
-                <h2>Your Privacy</h2>
-                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                    of our educational mission we do collect usage data to help us better understand how you learn and how you
-                    use our
-                    books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                    this data to publish
-                    academic papers. We would never publish anything that revealed your identity. We may share this data with
-                    fellow
-                    educational researchers, but rest assured that all personally identifying information will be anonymized
-                    before we do.
-                    If you have questions about this please feel free to <a
-                            href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
             </div>
         {{pass}}
     </div>
