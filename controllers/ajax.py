@@ -1,5 +1,6 @@
 import json
 import datetime
+from dateutil.parser import parse
 import logging
 import subprocess
 import uuid
@@ -1156,6 +1157,13 @@ def getAssessResults():
     else:
         sid = auth.user.username
 
+    if request.vars.deadline:
+        deadline = datetime.datetime.utcfromtimestamp(
+            parse(request.vars.deadline).timestamp()
+        )
+    else:
+        deadline = datetime.datetime.utcnow()
+
     response.headers["content-type"] = "application/json"
 
     # Identify the correct event and query the database so we can load it from the server
@@ -1307,11 +1315,13 @@ def getAssessResults():
         }
         return json.dumps(res)
     elif event == "shortanswer":
+        logger.debug(f"Getting shortanswer: deadline is {deadline} ")
         row = (
             db(
                 (db.shortanswer_answers.sid == sid)
                 & (db.shortanswer_answers.div_id == div_id)
                 & (db.shortanswer_answers.course_name == course)
+                & (db.shortanswer_answers.timestamp <= deadline)
             )
             .select()
             .first()
