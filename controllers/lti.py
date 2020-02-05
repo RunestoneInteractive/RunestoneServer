@@ -31,7 +31,12 @@ def index():
     )
     result_source_did = request.vars.get("lis_result_sourcedid", None)
     outcome_url = request.vars.get("lis_outcome_service_url", None)
-    assignment_id = _param_converter(request.vars.get("assignment_id", None))
+    # Deprecated: the use of the non-LTI-compliant name ``assignment_id``. The parameter should be ``custom_assignment_id``.
+    assignment_id = _param_converter(
+        request.vars.get(
+            "custom_assignment_id", request.vars.get("assignment_id", None)
+        )
+    )
     practice = request.vars.get("practice", None)
 
     if user_id is None:
@@ -193,7 +198,9 @@ def index():
                     redirect(URL(c="default"))
                 else:
                     # Otherwise, simply create the user.
-                    db.user_courses.update_or_insert(user_id=user.id, course_id=course_id)
+                    db.user_courses.update_or_insert(
+                        user_id=user.id, course_id=course_id
+                    )
 
         auth.login_user(user)
 
