@@ -169,12 +169,13 @@ def index():
                     instructor=user.id, course=course_id
                 )
             else:
+                # Make sure previous instructors are removed from the instructor list.
                 db(
                     (db.course_instructor.instructor == user.id)
                     & (db.course_instructor.course == course_id)
                 ).delete()
 
-            # Before creating a new user_courses record, present payment or donation options.
+            # Before creating a new user_courses record:
             if (
                 not db(
                     (db.user_courses.user_id == user.id)
@@ -183,10 +184,16 @@ def index():
                 .select()
                 .first()
             ):
-                # Store the current URL, so this request can be completed after creating the user.
-                session.lti_url_next = full_uri
-                auth.login_user(user)
-                redirect(URL(c="default"))
+                # In academy mode, present payment or donation options, per the discussion at https://github.com/RunestoneInteractive/RunestoneServer/pull/1322.
+                if settings.academy_mode:
+                    # To do so, store the current URL, so this request can be completed after creating the user.
+                    # TODO: this doesn't work, since the ``course_id``` and ``assignment_id`` aren't saved in this redirect. Therefore, these should be stored (perhaps in ``session``) then used after a user pays / donates.
+                    session.lti_url_next = full_uri
+                    auth.login_user(user)
+                    redirect(URL(c="default"))
+                else:
+                    # Otherwise, simply create the user.
+                    db.user_courses.update_or_insert(user_id=user.id, course_id=course_id)
 
         auth.login_user(user)
 
