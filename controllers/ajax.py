@@ -228,16 +228,8 @@ def hsblog():
         )
 
     elif event == "shortanswer" and auth.user:
-        # for shortanswers just keep the latest?? -- the history will be in useinfo
-        db.shortanswer_answers.update_or_insert(
-            (db.shortanswer_answers.sid == sid)
-            & (db.shortanswer_answers.div_id == div_id)
-            & (db.shortanswer_answers.course_name == course),
-            sid=sid,
-            answer=act,
-            div_id=div_id,
-            timestamp=ts,
-            course_name=course,
+        db.shortanswer_answers.insert(
+            sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course,
         )
 
     elif event == "lp_build" and auth.user:
@@ -300,9 +292,7 @@ def runlog():  # Log errors and runs with code
             )
         sid = auth.user.username
         setCookie = True
-        print(sid)
     else:
-        print(request.vars.clientLoginStatus)
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
             return json.dumps(dict(log=False, message="Session Expired"))
@@ -1316,19 +1306,36 @@ def getAssessResults():
         return json.dumps(res)
     elif event == "shortanswer":
         logger.debug(f"Getting shortanswer: deadline is {deadline} ")
-        row = (
-            db(
-                (db.shortanswer_answers.sid == sid)
-                & (db.shortanswer_answers.div_id == div_id)
-                & (db.shortanswer_answers.course_name == course)
-                & (db.shortanswer_answers.timestamp <= deadline)
-            )
-            .select()
-            .first()
-        )
-        if not row:
+        rows = db(
+            (db.shortanswer_answers.sid == sid)
+            & (db.shortanswer_answers.div_id == div_id)
+            & (db.shortanswer_answers.course_name == course)
+        ).select(orderby=~db.shortanswer_answers.id)
+        if not rows:
             return ""
-        res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+        last_answer = None
+        if not request.vars.deadline:
+            row = rows[0]
+        else:
+            last_answer = rows[0]
+            for row in rows:
+                if row.timestamp <= deadline:
+                    break
+            if row.timestamp > deadline:
+                row = None
+
+        if row and row == last_answer:
+            res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+        else:
+            if row and row.timestamp <= deadline:
+                res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+            else:
+                res = {
+                    "answer": "",
+                    "timestamp": None,
+                    "last_answer": last_answer.answer,
+                    "last_timestamp": str(last_answer.timestamp),
+                }
         srow = (
             db(
                 (db.question_grades.sid == sid)
