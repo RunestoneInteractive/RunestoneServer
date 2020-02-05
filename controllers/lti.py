@@ -1,5 +1,4 @@
 import uuid
-import six
 
 
 from rs_grading import _try_to_send_lti_grade
@@ -113,7 +112,7 @@ def index():
             query_string=request.env.query_string,
         )
         # Fix encoding -- the signed keys are in bytes, but the oauth2 Request constructor translates everything to a string. Therefore, they never compare as equal. ???
-        if isinstance(oauth_request.get("oauth_signature"), six.string_types):
+        if isinstance(oauth_request.get("oauth_signature"), str):
             oauth_request["oauth_signature"] = oauth_request["oauth_signature"].encode(
                 "utf-8"
             )
