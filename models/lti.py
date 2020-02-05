@@ -7,7 +7,3 @@ db.define_table(
 )
 
 # To generate keys, one choice is to invoke `import secrets; hex(secrets.randbits(256))[2:]`; this creates a `256-bit hexadecimal <https://www.oauth.com/oauth2-servers/client-registration/client-id-secret/>`_ `secret key <https://docs.python.org/3/library/secrets.html>`_.
-
-# insert the initial lti_keys; get the values from 1.py
-# if db(db.lti_keys.id > 0).isempty():
-#     db.lti_keys.insert(consumer=settings.lti_consumer, secret=settings.lti_secret, application='runestone') # should be id 1
