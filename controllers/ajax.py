@@ -1148,9 +1148,10 @@ def getAssessResults():
         sid = auth.user.username
 
     if request.vars.deadline:
-        deadline = datetime.datetime.utcfromtimestamp(
-            parse(request.vars.deadline).timestamp()
-        )
+        deadline = parse(request.vars.deadline)
+        tzoff = session.timezoneoffset if session.timezoneoffset else 0
+        deadline = deadline + datetime.timedelta(hours=float(tzoff))
+        deadline = deadline.replace(tzinfo=None)
     else:
         deadline = datetime.datetime.utcnow()
 
