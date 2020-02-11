@@ -15,7 +15,7 @@ addons:
 env:
 - WEB2PY_VERSION=2.18.5
 script:
-- pip install -U -r requirements-test.txt
+- pip install -U -r requirements-dev.txt
 - mkdir runestone
 # Move everything except the newly-created ``runestone/`` directory into ``runestone/``. See https://askubuntu.com/questions/91740/how-to-move-all-files-in-current-folder-to-subfolder.
 - mv !(runestone) runestone
