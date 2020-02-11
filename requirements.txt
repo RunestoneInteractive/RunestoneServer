@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements.in
 #
--e file:///home/bmiller/Runestone/RunestoneServer/rsmanage
+-e file:./rsmanage
 alabaster==0.7.12         # via sphinx
 amqp==2.5.2               # via kombu
 astroid==2.3.3            # via pylint

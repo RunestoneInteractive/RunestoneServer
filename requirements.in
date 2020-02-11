@@ -20,4 +20,4 @@ bleach>=3.0
 pathlib2
 stripe
 pandas
--e rsmanage/
+-e file:./rsmanage
