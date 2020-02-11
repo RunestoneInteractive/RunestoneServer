@@ -7,6 +7,7 @@ import uuid
 from bleach import clean
 from collections import Counter
 import os
+import re
 from io import open
 from lxml import html
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
@@ -1134,6 +1135,17 @@ def getassignmentgrade():
     return json.dumps([ret])
 
 
+def _canonicalize_tz(tstring):
+    x = re.search(r"\((.*)\)", tstring)
+    x = x.group(1)
+    y = x.split()
+    if len(y) == 1:
+        return tstring
+    else:
+        zstring = "".join([i[0] for i in y])
+        return re.sub(r"(.*)\((.*)\)", r"\1({})".format(zstring), tstring)
+
+
 def getAssessResults():
     if not auth.user:
         # can't query for user's answers if we don't know who the user is, so just load from local storage
@@ -1147,11 +1159,16 @@ def getAssessResults():
     else:
         sid = auth.user.username
 
+    # TODO This whole thing is messy - get the deadline from the assignment in the db
     if request.vars.deadline:
-        deadline = parse(request.vars.deadline)
-        tzoff = session.timezoneoffset if session.timezoneoffset else 0
-        deadline = deadline + datetime.timedelta(hours=float(tzoff))
-        deadline = deadline.replace(tzinfo=None)
+        try:
+            deadline = parse(_canonicalize_tz(request.vars.deadline))
+            tzoff = session.timezoneoffset if session.timezoneoffset else 0
+            deadline = deadline + datetime.timedelta(hours=float(tzoff))
+            deadline = deadline.replace(tzinfo=None)
+        except Exception:
+            logger.error("Bad Timezone - {}".format(request.vars.deadline))
+            deadline = datetime.datetime.utcnow()
     else:
         deadline = datetime.datetime.utcnow()
 
