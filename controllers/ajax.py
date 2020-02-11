@@ -1343,16 +1343,16 @@ def getAssessResults():
                 row = None
 
         if row and row == last_answer:
-            res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+            res = {"answer": row.answer, "timestamp": row.timestamp.isoformat()}
         else:
             if row and row.timestamp <= deadline:
-                res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+                res = {"answer": row.answer, "timestamp": row.timestamp.isoformat()}
             else:
                 res = {
                     "answer": "",
                     "timestamp": None,
                     "last_answer": last_answer.answer,
-                    "last_timestamp": str(last_answer.timestamp),
+                    "last_timestamp": last_answer.timestamp.isoformat(),
                 }
         srow = (
             db(
