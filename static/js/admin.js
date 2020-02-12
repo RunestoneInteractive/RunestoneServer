@@ -24,7 +24,8 @@ function gradeIndividualItem() {
     questions = q_column.selectedOptions;
     if (
         sstudents.length == 1 &&
-        (assignOrChap == "assignment" && getSelectedItem("assignment") != null)
+        assignOrChap == "assignment" &&
+        getSelectedItem("assignment") != null
     ) {
         calculateTotals();
     } else {
@@ -307,6 +308,8 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 graderactive: true,
                 enforceDeadline: enforceDeadline,
                 deadline: dl,
+                rawdeadline: assignment_deadlines[getSelectedItem("assignment")],
+                tzoff: new Date().getTimezoneOffset() / 60,
                 multiGrader: multiGrader,
                 gradingContainer: elementID,
             });
@@ -1156,10 +1159,8 @@ async function add_to_qtable(response_JSON) {
     $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
-        question_table.bootstrapTable(
-            "getRowByUniqueId",
-            response_JSON.question_id
-        ) === null
+        question_table.bootstrapTable("getRowByUniqueId", response_JSON.question_id) ===
+        null
     ) {
         appendToQuestionTable(
             response_JSON.question_id,
@@ -1283,9 +1284,7 @@ function assignmentInfo() {
         },
         function(data) {
             assignmentData = data.assignment_data;
-            $("#totalPoints").html(
-                "Total points: " + assignmentData.assignment_points
-            );
+            $("#totalPoints").html("Total points: " + assignmentData.assignment_points);
             $("#datetimepicker").val(assignmentData.due_date);
             $("#assignment_description").val(assignmentData.description);
             $("#readings-threshold").val(assignmentData.threshold);
@@ -1398,10 +1397,8 @@ function add_to_table(response_JSON) {
     $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
-        readings_table.bootstrapTable(
-            "getRowByUniqueId",
-            response_JSON.question_id
-        ) === null
+        readings_table.bootstrapTable("getRowByUniqueId", response_JSON.question_id) ===
+        null
     ) {
         appendToReadingsTable(
             response_JSON.question_id,
@@ -1669,9 +1666,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (typeof component_factory === "undefined") {
-        alert(
-            "Error:  Missing the component factory!  Clear you browser cache."
-        );
+        alert("Error:  Missing the component factory!  Clear you browser cache.");
     } else {
         if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html()) {
             jQuery(`#${whereDiv}`).html(
