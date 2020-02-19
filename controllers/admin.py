@@ -2246,7 +2246,7 @@ def courselog():
         ),
         settings.database_uri,
     )
-    data = data[~data.sid.str.contains("@")]
+    data = data[~data.sid.str.contains(r"^\d{38,38}@")]
 
     response.headers["Content-Type"] = "application/vnd.ms-excel"
     response.headers[
