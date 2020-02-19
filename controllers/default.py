@@ -36,7 +36,7 @@ def user():
                 url_parts = ref.split("/")
 
             for i in range(len(url_parts)):
-                if "static" in url_parts[i]:
+                if "static" == url_parts[i]:
                     course_name = url_parts[i + 1]
                     db.auth_user.course_id.default = course_name
                     break
