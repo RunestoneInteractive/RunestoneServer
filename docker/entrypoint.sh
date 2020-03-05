@@ -103,6 +103,8 @@ case $dbstate in
 esac
 
 info "Updating file ownership"
+mkdir -p /srv/web2py/logs
+touch /srv/web2py/logs/uwsgi.logs
 chown -R www-data /srv/web2py
 mkdir -p /run/uwsgi
 mkdir -p ${RUNESTONE_PATH}/databases
