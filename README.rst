@@ -96,7 +96,7 @@ Installation
        # cd /path/to/web2py/applications
        # git clone https://github.com/RunestoneInteractive/RunestoneServer runestone
        # cd runestone
-       # pip install -r requirements.txt
+       # pip install -r requirements-dev.txt
 
 #. Clone the book that you want to use, **into the web2py/applications/runestone/books** directory. You can see some of the available books at https://github.com/RunestoneInteractive. Again, if you might contribute back to the book, please fork the book repository first and then do a local clone onto your machine.
 

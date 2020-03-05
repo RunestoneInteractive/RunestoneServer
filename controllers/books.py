@@ -46,6 +46,9 @@ def _route_book(is_published=True):
     if not base_course:
         raise HTTP(404)
 
+    #    if base_course == "fcla":
+    #        response.delimiters = ("~._", "_.~")
+
     # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
     cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
     allow_pairs = "false"
@@ -103,7 +106,7 @@ def _route_book(is_published=True):
             if last_base and last_base.base_course == base_course:
                 # The user is trying to access the base course for the last course they logged in to
                 # there is a 99% chance this is an error and we should make them log in.
-                session.flash = "You Most likely want to log in to access your course"
+                session.flash = "You most likely want to log in to access your course"
                 redirect(URL(c="default", f="courses"))
 
         course = (

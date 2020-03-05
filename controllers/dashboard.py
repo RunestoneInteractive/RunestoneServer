@@ -341,13 +341,13 @@ def studentreport():
         select * from useinfo where sid = %(sid)s and course_id = %(course)s
         """,
             settings.database_uri,
-            params={"sid": auth.user.username, "course": auth.user.course_name},
+            params={"sid": sid, "course": auth.user.course_name},
         )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
         response.headers[
             "Content-Disposition"
-        ] = "attachment; filename=data_for_{}.csv".format(auth.user.username)
-        session.flash = f"Downloading to data_for_{auth.user.username}.csv"
+        ] = "attachment; filename=data_for_{}.csv".format(sid)
+        session.flash = f"Downloading to data_for_{sid}.csv"
         return mtbl.to_csv(na_rep=" ")
 
     return dict(
@@ -410,8 +410,8 @@ def grades():
         if practice_setting:
             if practice_setting.spacing == 1:
                 practice_completion_count = db(
-                    (db.user_topic_practice_Completion.course_name == s.course_name)
-                    & (db.user_topic_practice_Completion.user_id == s.id)
+                    (db.user_topic_practice_completion.course_name == s.course_name)
+                    & (db.user_topic_practice_completion.user_id == s.id)
                 ).count()
                 total_possible_points = (
                     practice_setting.day_points * practice_setting.max_practice_days

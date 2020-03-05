@@ -67,7 +67,7 @@ db.define_table(
 
 
 db.define_table(
-    "user_topic_practice_Completion",
+    "user_topic_practice_completion",
     Field("user_id", db.auth_user),
     Field("course_name", "string"),
     Field("practice_completion_date", type="date"),

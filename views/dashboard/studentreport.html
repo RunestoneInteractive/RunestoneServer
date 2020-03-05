@@ -108,6 +108,9 @@
 				</table>
 			</div>
 			<form action="/runestone/dashboard/studentreport">
+			{{ if request.vars.id: }}
+				<input type="hidden" name="id" value="{{=request.vars.id}}">
+			{{ pass }}
 				<button type="submit" name="action" value="dlcsv">Download History</button>
 			</form>
 		</div>

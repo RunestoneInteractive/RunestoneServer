@@ -1,5 +1,4 @@
 import uuid
-import six
 
 
 from rs_grading import _try_to_send_lti_grade
@@ -31,7 +30,12 @@ def index():
     )
     result_source_did = request.vars.get("lis_result_sourcedid", None)
     outcome_url = request.vars.get("lis_outcome_service_url", None)
-    assignment_id = _param_converter(request.vars.get("assignment_id", None))
+    # Deprecated: the use of the non-LTI-compliant name ``assignment_id``. The parameter should be ``custom_assignment_id``.
+    assignment_id = _param_converter(
+        request.vars.get(
+            "custom_assignment_id", request.vars.get("assignment_id", None)
+        )
+    )
     practice = request.vars.get("practice", None)
 
     if user_id is None:
@@ -108,7 +112,7 @@ def index():
             query_string=request.env.query_string,
         )
         # Fix encoding -- the signed keys are in bytes, but the oauth2 Request constructor translates everything to a string. Therefore, they never compare as equal. ???
-        if isinstance(oauth_request.get("oauth_signature"), six.string_types):
+        if isinstance(oauth_request.get("oauth_signature"), str):
             oauth_request["oauth_signature"] = oauth_request["oauth_signature"].encode(
                 "utf-8"
             )
@@ -169,12 +173,13 @@ def index():
                     instructor=user.id, course=course_id
                 )
             else:
+                # Make sure previous instructors are removed from the instructor list.
                 db(
                     (db.course_instructor.instructor == user.id)
                     & (db.course_instructor.course == course_id)
                 ).delete()
 
-            # Before creating a new user_courses record, present payment or donation options.
+            # Before creating a new user_courses record:
             if (
                 not db(
                     (db.user_courses.user_id == user.id)
@@ -183,10 +188,18 @@ def index():
                 .select()
                 .first()
             ):
-                # Store the current URL, so this request can be completed after creating the user.
-                session.lti_url_next = full_uri
-                auth.login_user(user)
-                redirect(URL(c="default"))
+                # In academy mode, present payment or donation options, per the discussion at https://github.com/RunestoneInteractive/RunestoneServer/pull/1322.
+                if settings.academy_mode:
+                    # To do so, store the current URL, so this request can be completed after creating the user.
+                    # TODO: this doesn't work, since the ``course_id``` and ``assignment_id`` aren't saved in this redirect. Therefore, these should be stored (perhaps in ``session``) then used after a user pays / donates.
+                    session.lti_url_next = full_uri
+                    auth.login_user(user)
+                    redirect(URL(c="default"))
+                else:
+                    # Otherwise, simply create the user.
+                    db.user_courses.update_or_insert(
+                        user_id=user.id, course_id=course_id
+                    )
 
         auth.login_user(user)
 

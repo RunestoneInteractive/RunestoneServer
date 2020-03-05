@@ -90,8 +90,7 @@ WORKDIR ${RUNESTONE_PATH}
 # base courses as their course when using docker to host their own courses.
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
-    pip3 install -r requirements.txt && \
-    pip3 install -r requirements-test.txt && \
+    pip3 install -r requirements-dev.txt && \
     pip3 install uwsgi uwsgitop && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py

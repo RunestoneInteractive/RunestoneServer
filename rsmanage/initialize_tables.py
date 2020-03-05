@@ -154,6 +154,12 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         db.executesql(
             """create index mult_scd_idx on mchoice_answers (div_id, course_name, sid)"""
         )
+        db.executesql(
+            """create index question_grades_key on question_grades (div_id, course_name, sid)"""
+        )
+        db.executesql(
+            """alter table assignments add constraint unique_assign_names unique (name, course)"""
+        )
     except Exception as e:
         click.echo(
             message="The creation of one or more indices/constraints failed",

@@ -332,38 +332,41 @@
                         <li>Easy to use authoring tools to create Runestone books</li>
                         <li>Hosting services for your course - See our <a href="https://runestone.academy/runestone/static/instructorguide/index.html">Instructor Guide</a></li>
                     </ul>
-                    <p>To learn more about this project, <a href="https://runestone.academy/runestone/static/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
+                    <p>To learn more about this project, <a href="https://runestone.academy/runestone/books/published/overview/overview.html">see this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how to contribute, please <a href="http://runestoneinteractive.org">click here</a>!</p>
+
+                    {{if settings.academy_mode:}}
+                        <h2>Your Privacy</h2>
+                        <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+                            of our educational mission we do collect usage data to help us better understand how you learn and how you
+                            use our
+                            books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
+                            this data to publish
+                            academic papers. We would never publish anything that revealed your identity. We may share this data with
+                            fellow
+                            educational researchers, but rest assured that all personally identifying information will be anonymized
+                            before we do.
+                            If you have questions about this please feel free to <a
+                                    href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
+                    {{pass}}
+
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h2>Support Us</h2>
+                    <h2>Partners and Supporters</h2>
+                    <p><a href="https://edfinity.com/catalog"><img src="/runestone/static/_images/logo-trademark.png" width=200 alt="Edfinity Logo"></a></p>
+                    <p><a href="https://pretextbook.org"><img src="/runestone/static/_images/ptx-logo.png" width=64 alt="PreTeXt Logo"> <span style="font-size: x-large">PreTeXt</span></a></p>
+                    <p><img src="/runestone/static/_images/SIGCSE-logo-large.jpg" width=64 alt="SIGCSE logo"> Special Projects Grant 2013</p>
+                    <p><img src="/runestone/static/_images/nsf-logo.png" width=64 alt="NSF Logo"> REU Support Summers 2014-2017</p>
+                    <p><a href="https://www.luther.edu"><img src="/runestone/static/_images/luther_college_vertical_blue.png" width=64 alt="Luther Logo (Go Norse!)"></a> Summer Student Faculty Research</p>
+
+                    <h2>How can I help?</h2>
                     <p>This project is Open Source, but it does take time and resources.
-                        Especially as our popularity has grown we have server costs. We
-                        were also able to make great progress during the Summer of 2013
-                        thanks to a generous grant from ACM-SIGCSE that supported one of our
-                        undergraduate students. It would be great if we could have a student
-                        working on this all the time.</p>
+                        Especially as our popularity has grown we have server costs. We welcome your help with code, editing, bug fixes almost anything you can think of.  Join us on <a href="https://github.com/RunestoneInteractive">GitHub</a> </p>
                     <p>If these books have helped you, if you liked them,
                         please consider making a small donation.</p>
                         <a href="https://www.patreon.com/bePatron?u=19581921" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
                         <p style="margin-top: 15px;">Or...</p>
                         Make a one-time donation <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
                 </div>
-            </div>
-        {{pass}}
-        {{if settings.academy_mode:}}
-            <div class="col-md-6 col-sm-6 col-xs-6">
-                <h2>Your Privacy</h2>
-                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                    of our educational mission we do collect usage data to help us better understand how you learn and how you
-                    use our
-                    books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                    this data to publish
-                    academic papers. We would never publish anything that revealed your identity. We may share this data with
-                    fellow
-                    educational researchers, but rest assured that all personally identifying information will be anonymized
-                    before we do.
-                    If you have questions about this please feel free to <a
-                            href="mailto:runestoneinteractive@gmail.com">contact</a> us.</p>
             </div>
         {{pass}}
     </div>

@@ -1,11 +1,13 @@
 import json
 import datetime
+from dateutil.parser import parse
 import logging
 import subprocess
 import uuid
 from bleach import clean
 from collections import Counter
 import os
+import re
 from io import open
 from lxml import html
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
@@ -227,16 +229,8 @@ def hsblog():
         )
 
     elif event == "shortanswer" and auth.user:
-        # for shortanswers just keep the latest?? -- the history will be in useinfo
-        db.shortanswer_answers.update_or_insert(
-            (db.shortanswer_answers.sid == sid)
-            & (db.shortanswer_answers.div_id == div_id)
-            & (db.shortanswer_answers.course_name == course),
-            sid=sid,
-            answer=act,
-            div_id=div_id,
-            timestamp=ts,
-            course_name=course,
+        db.shortanswer_answers.insert(
+            sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course,
         )
 
     elif event == "lp_build" and auth.user:
@@ -299,9 +293,7 @@ def runlog():  # Log errors and runs with code
             )
         sid = auth.user.username
         setCookie = True
-        print(sid)
     else:
-        print(request.vars.clientLoginStatus)
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
             return json.dumps(dict(log=False, message="Session Expired"))
@@ -1143,6 +1135,17 @@ def getassignmentgrade():
     return json.dumps([ret])
 
 
+def _canonicalize_tz(tstring):
+    x = re.search(r"\((.*)\)", tstring)
+    x = x.group(1)
+    y = x.split()
+    if len(y) == 1:
+        return tstring
+    else:
+        zstring = "".join([i[0] for i in y])
+        return re.sub(r"(.*)\((.*)\)", r"\1({})".format(zstring), tstring)
+
+
 def getAssessResults():
     if not auth.user:
         # can't query for user's answers if we don't know who the user is, so just load from local storage
@@ -1155,6 +1158,19 @@ def getAssessResults():
         sid = request.vars.sid
     else:
         sid = auth.user.username
+
+    # TODO This whole thing is messy - get the deadline from the assignment in the db
+    if request.vars.deadline:
+        try:
+            deadline = parse(_canonicalize_tz(request.vars.deadline))
+            tzoff = session.timezoneoffset if session.timezoneoffset else 0
+            deadline = deadline + datetime.timedelta(hours=float(tzoff))
+            deadline = deadline.replace(tzinfo=None)
+        except Exception:
+            logger.error("Bad Timezone - {}".format(request.vars.deadline))
+            deadline = datetime.datetime.utcnow()
+    else:
+        deadline = datetime.datetime.utcnow()
 
     response.headers["content-type"] = "application/json"
 
@@ -1307,18 +1323,37 @@ def getAssessResults():
         }
         return json.dumps(res)
     elif event == "shortanswer":
-        row = (
-            db(
-                (db.shortanswer_answers.sid == sid)
-                & (db.shortanswer_answers.div_id == div_id)
-                & (db.shortanswer_answers.course_name == course)
-            )
-            .select()
-            .first()
-        )
-        if not row:
+        logger.debug(f"Getting shortanswer: deadline is {deadline} ")
+        rows = db(
+            (db.shortanswer_answers.sid == sid)
+            & (db.shortanswer_answers.div_id == div_id)
+            & (db.shortanswer_answers.course_name == course)
+        ).select(orderby=~db.shortanswer_answers.id)
+        if not rows:
             return ""
-        res = {"answer": row.answer, "timestamp": str(row.timestamp)}
+        last_answer = None
+        if not request.vars.deadline:
+            row = rows[0]
+        else:
+            last_answer = rows[0]
+            for row in rows:
+                if row.timestamp <= deadline:
+                    break
+            if row.timestamp > deadline:
+                row = None
+
+        if row and row == last_answer:
+            res = {"answer": row.answer, "timestamp": row.timestamp.isoformat()}
+        else:
+            if row and row.timestamp <= deadline:
+                res = {"answer": row.answer, "timestamp": row.timestamp.isoformat()}
+            else:
+                res = {
+                    "answer": "",
+                    "timestamp": None,
+                    "last_answer": last_answer.answer,
+                    "last_timestamp": last_answer.timestamp.isoformat(),
+                }
         srow = (
             db(
                 (db.question_grades.sid == sid)

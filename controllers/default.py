@@ -36,7 +36,7 @@ def user():
                 url_parts = ref.split("/")
 
             for i in range(len(url_parts)):
-                if "static" in url_parts[i]:
+                if "static" == url_parts[i]:
                     course_name = url_parts[i + 1]
                     db.auth_user.course_id.default = course_name
                     break
@@ -330,7 +330,9 @@ def bios():
 
 @auth.requires_login()
 def courses():
-    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    res = db(db.user_courses.user_id == auth.user.id).select(
+        db.user_courses.course_id, orderby=~db.user_courses.id
+    )
     classlist = []
     for row in res:
         classes = db(db.courses.id == row.course_id).select()
@@ -341,7 +343,9 @@ def courses():
 
 @auth.requires_login()
 def remove():
-    res = db(db.user_courses.user_id == auth.user.id).select(db.user_courses.course_id)
+    res = db(db.user_courses.user_id == auth.user.id).select(
+        db.user_courses.course_id, orderby=~db.user_courses.id
+    )
     classlist = []
     for row in res:
         classes = db(db.courses.id == row.course_id).select()
