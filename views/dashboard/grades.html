@@ -89,19 +89,20 @@
 
 
     function searchStudent() {
-        var input, filter, table, tr, td, i;
+        var input, filter, table, tr, firstName, lastName, i;
         input = document.getElementById("studentsearch");
         filter = input.value.toUpperCase();
         table = document.getElementById("gradebook");
         tr = table.querySelectorAll('.search');
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
+            firstName = tr[i].getElementsByTagName("td")[0].innerHTML;
+            lastName = tr[i].getElementsByTagName("td")[1].innerHTML;
+
+            if ((firstName && firstName.toUpperCase().indexOf(filter) > -1)
+                || (lastName && lastName.toUpperCase().indexOf(filter) > -1)) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
             }
         }
     }
