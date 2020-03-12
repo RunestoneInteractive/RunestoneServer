@@ -2317,7 +2317,7 @@ def enroll_students():
         return redirect(URL("admin", "admin"))
     students = request.vars.students
     try:
-        strfile = io.TextIOWrapper(students.file)
+        strfile = io.TextIOWrapper(students.file, encoding="UTF8")
         student_reader = csv.reader(strfile)
     except Exception as e:
         session.flash = "please choose a CSV file with student data"
