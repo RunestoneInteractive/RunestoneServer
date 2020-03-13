@@ -2217,7 +2217,7 @@ def _copy_one_assignment(course, oldid):
         )
     except Exception as e:
         return "failed"
-        
+
     old_questions = db(
         db.assignment_questions.assignment_id == old_assignment.id
     ).select()
@@ -2381,6 +2381,7 @@ def resetpw():
 
     return json.dumps(res)
 
+
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -2388,12 +2389,12 @@ def resetpw():
 def get_assignment_list():
     course_name = request.vars.course_name
     course = db(db.courses.course_name == course_name).select().first()
-    assign_list = db(
-        db.assignments.course == course.id
-        ).select(db.assignments.id, db.assignments.name,orderby=db.assignments.duedate)
+    assign_list = db(db.assignments.course == course.id).select(
+        db.assignments.id, db.assignments.name, orderby=db.assignments.duedate
+    )
     res = []
     for assign in assign_list:
-        res.append({"id": assign.id, "name":assign.name})
+        res.append({"id": assign.id, "name": assign.name})
 
     return json.dumps(dict(assignments=res))
 
