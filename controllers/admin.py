@@ -2206,15 +2206,18 @@ def _copy_one_assignment(course, oldid):
     old_assignment = db(db.assignments.id == int(oldid)).select().first()
     due_delta = old_assignment.duedate.date() - old_course.term_start_date
     due_date = this_course.term_start_date + due_delta
-    newassign_id = db.assignments.insert(
-        course=auth.user.course_id,
-        name=old_assignment.name,
-        duedate=due_date,
-        description=old_assignment.description,
-        points=old_assignment.points,
-        threshold_pct=old_assignment.threshold_pct,
-    )
-
+    try:
+        newassign_id = db.assignments.insert(
+            course=auth.user.course_id,
+            name=old_assignment.name,
+            duedate=due_date,
+            description=old_assignment.description,
+            points=old_assignment.points,
+            threshold_pct=old_assignment.threshold_pct,
+        )
+    except Exception as e:
+        return "failed"
+        
     old_questions = db(
         db.assignment_questions.assignment_id == old_assignment.id
     ).select()
@@ -2377,6 +2380,22 @@ def resetpw():
         res = {"status": "fail", "message": "You are not authorized for this user"}
 
     return json.dumps(res)
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def get_assignment_list():
+    course_name = request.vars.course_name
+    course = db(db.courses.course_name == course_name).select().first()
+    assign_list = db(
+        db.assignments.course == course.id
+        ).select(db.assignments.id, db.assignments.name,orderby=db.assignments.duedate)
+    res = []
+    for assign in assign_list:
+        res.append({"id": assign.id, "name":assign.name})
+
+    return json.dumps(dict(assignments=res))
 
 
 def killer():

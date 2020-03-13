@@ -213,11 +213,12 @@
             <h2 style="text-align: center">Copy Assignments</h2>
             <label for="courseSelection">Select the course you want to copy assignments from.</label>
             <div class="col-sm-3">
-                <select id="courseSelection" class="form-control">
+                <select id="courseSelection" class="form-control" onchange="getAssignList(this);">
                     {{ for course in instructor_course_list: }}
                     <option value="{{=course.course_name}}">{{=course.course_name}}</option>
                     {{ pass }}
                 </select>
+                <div id="assignSelection"></div>
                 <button onclick="copyAssignments();" class="btn btn-primary">Copy</button>
             </div>
         </div>
