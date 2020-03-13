@@ -2011,7 +2011,7 @@ function copyAssignments() {
         if (mess == "success") {
             alert("Done");
         } else {
-            alert("Copy Failed");
+            alert(`Copy Failed ${mess}`);
         }
     });
 }

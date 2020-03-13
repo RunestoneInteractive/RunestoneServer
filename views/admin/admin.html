@@ -214,6 +214,7 @@
             <label for="courseSelection">Select the course you want to copy assignments from.</label>
             <div class="col-sm-3">
                 <select id="courseSelection" class="form-control" onchange="getAssignList(this);">
+                    <option value="">Select a Course</option>
                     {{ for course in instructor_course_list: }}
                     <option value="{{=course.course_name}}">{{=course.course_name}}</option>
                     {{ pass }}

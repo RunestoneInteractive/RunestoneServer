@@ -2216,7 +2216,7 @@ def _copy_one_assignment(course, oldid):
             threshold_pct=old_assignment.threshold_pct,
         )
     except Exception as e:
-        return "failed"
+        return f"failed: {str(e)}"
 
     old_questions = db(
         db.assignment_questions.assignment_id == old_assignment.id
