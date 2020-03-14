@@ -193,7 +193,17 @@ class UserActivityMetrics(object):
             ),
             as_dict=True,
         )
-        # read logs here
+
+        self.daily_logs = current.db.executesql(
+            """select sid, event, count(*)
+        from useinfo where course_id = '{}'
+        and timestamp > now() - interval '24 hours'
+        group by sid, event
+        order by sid, event""".format(
+                self.course_id
+            ),
+            as_dict=True,
+        )
 
     def update_metrics(self):
 
@@ -204,6 +214,10 @@ class UserActivityMetrics(object):
         for row in self.recent_logs:
             if row["sid"] in self.user_activities:
                 self.user_activities[row["sid"]].add_recent_activity(row)
+
+        for row in self.daily_logs:
+            if row["sid"] in self.user_activities:
+                self.user_activities[row["sid"]].add_daily_activity(row)
 
 
 class UserActivity(object):
@@ -217,6 +231,9 @@ class UserActivity(object):
         self.recent_page_views = 0
         self.recent_correct = 0
         self.recent_missed = 0
+        self.daily_page_views = 0
+        self.daily_correct = 0
+        self.daily_missed = 0
 
     def add_activity(self, row):
         # row is a row from useinfo
@@ -237,12 +254,24 @@ class UserActivity(object):
         else:
             self.recent_missed += row["count"]
 
+    def add_daily_activity(self, row):
+        # row is a row from useinfo
+        if row["event"] == "page":
+            self.daily_page_views += row["count"]
+        elif row["event"] == "activecode":
+            self.daily_correct += row["count"]
+        else:
+            self.daily_missed += row["count"]
+
     def get_page_views(self):
         # returns page views for all time
         return self.page_views
 
     def get_recent_page_views(self):
         return self.recent_page_views
+
+    def get_daily_page_views(self):
+        return self.daily_page_views
 
     def get_activity_stats(self):
         return self
@@ -258,6 +287,12 @@ class UserActivity(object):
 
     def get_recent_missed(self):
         return self.recent_missed
+
+    def get_daily_correct(self):
+        return self.daily_correct
+
+    def get_daily_missed(self):
+        return self.daily_missed
 
 
 class UserActivityChapterProgress(object):
