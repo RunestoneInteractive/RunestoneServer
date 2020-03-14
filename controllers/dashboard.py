@@ -196,6 +196,9 @@ def index():
     recent_data = []
     recent_correct = []
     recent_missed = []
+    daily_data = []
+    daily_correct = []
+    daily_missed = []
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
@@ -247,6 +250,29 @@ def index():
             }
         )
 
+        daily_data.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_page_views(),
+            }
+        )
+
+        daily_correct.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_correct(),
+            }
+        )
+        daily_missed.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_missed(),
+            }
+        )
+
     logger.debug("finishing")
     # TODO -- this is not right and explains why all are the same!!
     studentactivity = [
@@ -261,6 +287,12 @@ def index():
         {"data": recent_missed, "name": "Exercises Missed"},
     ]
 
+    dailyactivity = [
+        {"data": daily_data, "name": "Sections Read"},
+        {"data": daily_correct, "name": "Exercises Correct"},
+        {"data": daily_missed, "name": "Exercises Missed"},
+    ]
+
     return dict(
         assignments=assignments,
         course=course,
@@ -270,6 +302,7 @@ def index():
         selected_chapter=selected_chapter,
         studentactivity=studentactivity,
         recentactivity=recentactivity,
+        dailyactivity=dailyactivity,
     )
 
 

@@ -2001,8 +2001,9 @@ function toggle_release_grades() {
 
 function copyAssignments() {
     let selectedCourse = document.getElementById("courseSelection").value;
-    let selectedAssignment = document.getElementById("assignmentsDropdown")
-    selectedAssignment = selectedAssignment.options[selectedAssignment.selectedIndex].value;
+    let selectedAssignment = document.getElementById("assignmentsDropdown");
+    selectedAssignment =
+        selectedAssignment.options[selectedAssignment.selectedIndex].value;
     data = {
         oldassignment: selectedAssignment,
         course: selectedCourse,
@@ -2070,22 +2071,22 @@ function resetOnePassword() {
 }
 
 function getAssignList(sel) {
-
-    data = {course_name: sel.value}
+    data = { course_name: sel.value };
     $("#assignSelection select").remove();
     $.getJSON("get_assignment_list", data, function(data) {
         let sel = document.createElement("select");
+        sel.addClass("form-control");
         sel.id = "assignmentsDropdown";
         let opt = document.createElement("option");
         opt.value = -1;
         opt.text = "All";
         sel.appendChild(opt);
         for (let assign of data.assignments) {
-            let opt = document.createElement("option")
+            let opt = document.createElement("option");
             opt.value = assign.id;
             opt.text = assign.name;
-            sel.appendChild(opt)
+            sel.appendChild(opt);
         }
-        $("#assignSelection").append(sel)
-    })
+        $("#assignSelection").append(sel);
+    });
 }
