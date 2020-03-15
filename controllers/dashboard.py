@@ -763,3 +763,31 @@ def subchapoverview():
             course=thecourse,
             summary=mtbl.to_json(orient="records", date_format="iso"),
         )
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def active():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
+    res = db.executesql(
+        f"""select useinfo.timestamp, useinfo.sid, div_id
+                           from useinfo join
+                           (select sid, count(*), max(id)
+                            from useinfo where course_id = '{course.course_name}'
+                                and event = 'page'
+                                and timestamp > now() - interval '15 minutes' group by sid) as T
+                          on useinfo.id = T.max"""
+    )
+
+    newres = []
+    for row in res:
+        div_id = row[2]
+        components = div_id.rsplit("/", 2)
+        div_id = "/".join(components[1:])
+        newres.append(dict(timestamp=row[0], sid=row[1], div_id=div_id))
+    print(newres)
+    logger.error(newres)
+    return dict(activestudents=newres, course=course)
