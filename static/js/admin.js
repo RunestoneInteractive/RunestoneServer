@@ -2075,7 +2075,7 @@ function getAssignList(sel) {
     $("#assignSelection select").remove();
     $.getJSON("get_assignment_list", data, function(data) {
         let sel = document.createElement("select");
-        sel.addClass("form-control");
+        sel.classList.add("form-control");
         sel.id = "assignmentsDropdown";
         let opt = document.createElement("option");
         opt.value = -1;
