@@ -80,7 +80,10 @@ class ChapterGet:
             return 999
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def index():
     selected_chapter = None
     questions = []
@@ -398,7 +401,10 @@ def studentprogress():
     return dict(course_name=auth.user.course_name)
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def grades():
     response.title = "Gradebook"
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -533,7 +539,10 @@ def grades():
 
 
 # This is meant to be called from a form submission, not as a bare controller endpoint
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def questiongrades():
     if "sid" not in request.vars:
         logger.error("It Appears questiongrades was called without any request vars")
@@ -588,7 +597,10 @@ def update_total_points(assignment_id):
 
 
 # Note this is meant to be called from a form submission not as a bare endpoint
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def exercisemetrics():
     if "chapter" not in request.vars:
         logger.error("It Appears exercisemetrics was called without any request vars")
@@ -655,7 +667,10 @@ def exercisemetrics():
     )
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def subchapoverview():
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
     course = auth.user.course_name
