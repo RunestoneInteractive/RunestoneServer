@@ -64,3 +64,24 @@ def jobeCheckFile():
         response.status = 208
 
     return resp.content
+
+
+def pytutor_trace():
+    code = request.vars.code
+    lang = request.vars.lang
+    response.headers["Content-Type"] = "application/json; charset=utf-8"
+
+    url = f"http://tracer.runestone.academy/trace{lang}"
+    try:
+        r = rq.post(url, data=dict(src=code), timeout=30)
+    except requests.ReadTimeout:
+        self.error(
+            "The request to the trace server timed out, you will need to rerun the build"
+        )
+        return ""
+    if r.status_code == 200:
+        if lang == "java":
+            return r.text
+        else:
+            res = r.text[r.text.find('{"code":') :]
+            return res
