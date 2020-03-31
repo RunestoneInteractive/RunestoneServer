@@ -102,10 +102,6 @@ def assignments():
     for tag in tag_query:
         tags.append(tag.tag_name)
 
-    course_url = path.join(
-        "/", request.application, "static", auth.user.course_name, "index.html"
-    )
-
     course = get_course_row(db.courses.ALL)
     base_course = course.base_course
     chapter_labels = []
@@ -118,7 +114,6 @@ def assignments():
         coursename=auth.user.course_name,
         confirm=False,
         course_id=auth.user.course_name,
-        course_url=course_url,
         assignments=assigndict,
         tags=tags,
         chapters=chapter_labels,
