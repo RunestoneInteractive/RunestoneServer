@@ -2,76 +2,37 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/CLDRPluralRuleParser.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.messagestore.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.fallbacks.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.language.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.parser.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.emitter.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery_i18n/jquery.i18n.emitter.bidi.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/activecode-i18n.en.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/fitb-i18n.en.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/dragndrop-i18n.en.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/parsons-i18n.en.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/mchoice-i18n.en.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.messagestore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.fallbacks.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.parser.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@4.0.0-rc.2/build/vega.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2.5.0/build/vega-lite.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3.14.0/build/vega-embed.js"></script>
+<script src="{{=base_static_url}}/runestone.js?v={{=settings.components_version}}" type="text/javascript"></script>
+<script type="text/javascript" src="{{=base_static_url}}/pytutor-embed.bundle.js?v={{=settings.components_version}}"></script>
+
 <link href="{{=base_static_url}}/parsons.css?v={{=settings.components_version}}" rel="stylesheet"/>
 <link href="{{=base_static_url}}/dragndrop.css?v={{=settings.components_version}}" rel="stylesheet"/>
 <link href="{{=base_static_url}}/js_lib/prettify.css?v={{=settings.components_version}}" rel="stylesheet"/>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
 <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
-<script src="{{=base_static_url}}/skulpt.min.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/skulpt-stdlib.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@4.0.0-rc.2/build/vega.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2.5.0/build/vega-lite.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3.14.0/build/vega-embed.js"></script>
-<!--<script src="{{=base_static_url}}/builtin.js" type="text/javascript"></script>-->
-<script src="{{=base_static_url}}/codemirror.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/runestonebase.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/activecode.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/sql-wasm.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/mchoice.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/shortanswer.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/js_lib/prettify.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/js_lib/hammer.min.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/parsons.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/fitb.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/dragndrop.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/timeddnd.js?v={{=settings.components_version}}" type="text/javascript"></script>
 
-<script src="{{=base_static_url}}/clickable.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/poll.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script src="{{=base_static_url}}/bookfuncs.js?v={{=settings.components_version}}" type="text/javascript"></script>
+<script src="{{=base_static_url}}/sql-wasm.js?v={{=settings.components_version}}" type="text/javascript"></script>
 
 <script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
 <script type="text/javascript" src="{{=base_static_url}}/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.js"></script>
 
-<link href="{{=base_static_url}}/codemirror.css" rel="stylesheet" type="text/css"/>
 <link href="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
 
 <script type="text/javascript" src="{{=base_static_url}}/jquery.idle-timer.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timedclickable.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timed_activecode.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timedfitb.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timed_shortanswer.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timedmc.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timed.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/timedparsons.js?v={{=settings.components_version}}"></script>
 
 
-<script type="text/javascript" src="{{=base_static_url}}/pytutor.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/python.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/javascript.js?v={{=settings.components_version}}"></script>
+
 <script type="text/javascript" src="{{=base_static_url}}/sharedb.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/clike.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/codelens.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/htmlmixed.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/css.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/xml.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery.ba-bbq.min.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery.jsPlumb-1.3.10-all-min.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/d3.v2.min.js"></script>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
