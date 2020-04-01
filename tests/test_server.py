@@ -137,15 +137,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # TODO: This soesn't really test the body of either of these
         ("default/coursechooser", True, "Course Selection", 1),
         ("default/removecourse", True, "Course Selection", 1),
-        # **Dashboard**
-        # --------------
-        ("dashboard/index", True, "Instructor Dashboard", 1),
-        ("dashboard/grades", True, "Gradebook", 1),
         ("dashboard/studentreport", True, "Recent Activity", 1,),
-        # TODO: This doesn't really test anything about either
-        # exercisemetrics or questiongrades other than properly handling a call with no information
-        ("dashboard/exercisemetrics", True, "Instructor Dashboard", 1),
-        ("dashboard/questiongrades", True, "Instructor Dashboard", 1),
         # **Designer**
         # -------------
         (
@@ -209,6 +201,14 @@ def test_validate_user_pages(
         # ('admin/removeinstructor', 'xxx', 1),
         # ('admin/removeStudents', 'xxx', 1),
         # TODO: added to the ``createAssignment`` endpoint so far.
+        # **Dashboard**
+        # --------------
+        ("dashboard/index", "Instructor Dashboard", 1),
+        ("dashboard/grades", "Gradebook", 1),
+        # TODO: This doesn't really test anything about either
+        # exercisemetrics or questiongrades other than properly handling a call with no information
+        ("dashboard/exercisemetrics", "Instructor Dashboard", 1),
+        ("dashboard/questiongrades", "Instructor Dashboard", 1),
     ],
 )
 def test_validate_instructor_pages(
