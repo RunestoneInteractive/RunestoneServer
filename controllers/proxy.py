@@ -70,10 +70,14 @@ def pytutor_trace():
     code = request.vars.code
     lang = request.vars.lang
     response.headers["Content-Type"] = "application/json; charset=utf-8"
+    if request.vars.stdin:
+        stdin = request.vars.stdin
+    else:
+        stdin = ""
 
     url = f"http://tracer.runestone.academy:5000/trace{lang}"
     try:
-        r = rq.post(url, data=dict(src=code), timeout=30)
+        r = rq.post(url, data=dict(src=code, stdin=stdin), timeout=30)
     except rq.ReadTimeout:
         logger.error(
             "The request to the trace server timed out, you will need to rerun the build"
