@@ -71,11 +71,11 @@ def pytutor_trace():
     lang = request.vars.lang
     response.headers["Content-Type"] = "application/json; charset=utf-8"
 
-    url = f"http://tracer.runestone.academy/trace{lang}"
+    url = f"http://tracer.runestone.academy:5000/trace{lang}"
     try:
         r = rq.post(url, data=dict(src=code), timeout=30)
-    except requests.ReadTimeout:
-        self.error(
+    except rq.ReadTimeout:
+        logger.error(
             "The request to the trace server timed out, you will need to rerun the build"
         )
         return ""
@@ -85,3 +85,5 @@ def pytutor_trace():
         else:
             res = r.text[r.text.find('{"code":') :]
             return res
+    logger.error(f"Unknown error occurred while getting trace {r.status_code}")
+    return "Error in pytutor_trace"
