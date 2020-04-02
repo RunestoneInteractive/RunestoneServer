@@ -623,7 +623,7 @@ def grading():
         # Retrieve relevant info for each question, ordering them based on their
         # order in the assignment.
         assignment_questions = db(
-            (db.assignment_questions.assignment_id == int(row.id) )
+            (db.assignment_questions.assignment_id == int(row.id))
             & (db.assignment_questions.question_id == db.questions.id)
         ).select(
             db.assignment_questions.question_id,
