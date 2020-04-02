@@ -1,6 +1,8 @@
 {{ base_static_url = get_course_url('_static') }}
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.messagestore.js"></script>
@@ -13,24 +15,15 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3.14.0/build/vega-embed.js"></script>
 <script src="{{=base_static_url}}/runestone.js?v={{=settings.components_version}}" type="text/javascript"></script>
 <script type="text/javascript" src="{{=base_static_url}}/pytutor-embed.bundle.js?v={{=settings.components_version}}"></script>
-
-<link href="{{=base_static_url}}/parsons.css?v={{=settings.components_version}}" rel="stylesheet"/>
-<link href="{{=base_static_url}}/dragndrop.css?v={{=settings.components_version}}" rel="stylesheet"/>
-<link href="{{=base_static_url}}/js_lib/prettify.css?v={{=settings.components_version}}" rel="stylesheet"/>
-<link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
+<script type="text/javascript" src="{{=base_static_url}}/jquery.idle-timer.js"></script>
 <script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
-
 <script src="{{=base_static_url}}/sql-wasm.js?v={{=settings.components_version}}" type="text/javascript"></script>
-
 <script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
 <script type="text/javascript" src="{{=base_static_url}}/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
 <link href="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
-
-<script type="text/javascript" src="{{=base_static_url}}/jquery.idle-timer.js"></script>
-
-
 
 <script type="text/javascript" src="{{=base_static_url}}/sharedb.js?v={{=settings.components_version}}"></script>
 
