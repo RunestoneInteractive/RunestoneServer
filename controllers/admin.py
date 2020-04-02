@@ -545,7 +545,14 @@ def admin():
             db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
         )
         for identity in person:
-            name = identity.first_name + " " + identity.last_name
+            name = (
+                identity.first_name
+                + " "
+                + identity.last_name
+                + "  ("
+                + identity.username
+                + ")"
+            )
             if row.user_id not in instructordict:
                 studentdict[row.user_id] = name
 
@@ -560,6 +567,10 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    try:
+        motd = open("applications/runestone/static/motd.html").read()
+    except Exception:
+        motd = "You can cusomize this mesage by editing /static/motd.html"
     return dict(
         startDate=date,
         coursename=auth.user.course_name,
@@ -576,6 +587,7 @@ def admin():
         downloads_enabled=downloads_enabled,
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
+        motd=motd,
     )
 
 
@@ -632,9 +644,15 @@ def grading():
             orderby=db.assignment_questions.sorting_priority,
         )
         questions = []
+        if row.name not in question_points:
+            question_points[row.name] = {}
         for q in assignment_questions:
             questions.append(q.questions.name)
+<<<<<<< HEAD
             question_points[q.questions.name] = q.assignment_questions.points
+=======
+            question_points[row.name][q.questions.name] = q.assignment_questions.points
+>>>>>>> master
 
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.replace(
