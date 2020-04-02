@@ -567,6 +567,7 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    motd = open("applications/runestone/static/motd.html").read()
     return dict(
         startDate=date,
         coursename=auth.user.course_name,
@@ -583,6 +584,7 @@ def admin():
         downloads_enabled=downloads_enabled,
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
+        motd=motd
     )
 
 

@@ -48,6 +48,7 @@
 
 <div class="tab-content">
 
+
     <div id="coursedata" class="tab-pane fade">
         <div class="col-md-5">
             <h3 style="text-align: center;">Course Settings</h3>
@@ -227,6 +228,13 @@
         </div>
     </div>
 
+    <div id="rsnews" class="tab-pane">
+        <div class="col-md-8" style="background-color: aliceblue;border-radius: 10px;margin-left: 20px;border: solid;">
+            <h2>Runestone News</h2>
+            {{=XML(motd)}}
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -234,6 +242,7 @@
     $("#admintab").addClass("active")
     $('#startdate').datepicker();
     $('#start_date').datepicker();
+    $("#rsnews").show()
 
 
     $('#sectionsTab').click(function () {
@@ -243,6 +252,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#courseTab').click(function () {
@@ -252,6 +262,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#AddInstructorTab').click(function () {
@@ -261,6 +272,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#DeleteTab').click(function () {
@@ -270,6 +282,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#CopyAssignmentsTab').click(function () {
@@ -279,6 +292,7 @@
         $('#studentsTab').css('background-color', 'transparent');
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#studentsTab').click(function () {
@@ -288,6 +302,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 </script>
 
