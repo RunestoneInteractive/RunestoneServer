@@ -639,9 +639,11 @@ def grading():
             orderby=db.assignment_questions.sorting_priority,
         )
         questions = []
+        if row.name not in question_points:
+            question_points[row.name] = {}
         for q in assignment_questions:
             questions.append(q.questions.name)
-            question_points[q.questions.name] = q.assignment_questions.points
+            question_points[row.name][q.questions.name] = q.assignment_questions.points
 
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.replace(

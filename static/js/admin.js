@@ -370,13 +370,15 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         }
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
-
+        let chapAssignSelector = document.getElementById("chaporassignselector");
+        let currAssign =
+            chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
         jQuery("#rightTitle", rightDiv).html(
             data.name +
                 " <em>" +
                 data.acid +
                 "</em> <span>Points: " +
-                question_points[data.acid] +
+                question_points[currAssign][data.acid] +
                 "</span>"
         );
 
