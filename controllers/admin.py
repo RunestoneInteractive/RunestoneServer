@@ -648,11 +648,7 @@ def grading():
             question_points[row.name] = {}
         for q in assignment_questions:
             questions.append(q.questions.name)
-<<<<<<< HEAD
-            question_points[q.questions.name] = q.assignment_questions.points
-=======
             question_points[row.name][q.questions.name] = q.assignment_questions.points
->>>>>>> master
 
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.replace(
