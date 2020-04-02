@@ -545,7 +545,14 @@ def admin():
             db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
         )
         for identity in person:
-            name = identity.first_name + " " + identity.last_name + "  (" + identity.username + ")"
+            name = (
+                identity.first_name
+                + " "
+                + identity.last_name
+                + "  ("
+                + identity.username
+                + ")"
+            )
             if row.user_id not in instructordict:
                 studentdict[row.user_id] = name
 
