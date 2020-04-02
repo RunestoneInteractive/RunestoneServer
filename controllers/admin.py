@@ -623,22 +623,19 @@ def grading():
         # Retrieve relevant info for each question, ordering them based on their
         # order in the assignment.
         assignment_questions = db(
-            db.assignment_questions.assignment_id == int(row.id)
+            (db.assignment_questions.assignment_id == int(row.id) )
+            & (db.assignment_questions.question_id == db.questions.id)
         ).select(
             db.assignment_questions.question_id,
             db.assignment_questions.points,
+            db.questions.name,
             orderby=db.assignment_questions.sorting_priority,
         )
         questions = []
         for q in assignment_questions:
-            question_name = (
-                db(db.questions.id == q.question_id)
-                .select(db.questions.name)
-                .first()
-                .name
-            )
-            questions.append(question_name)
-            question_points[question_name] = q.points
+            questions.append(q.questions.name)
+            question_points[q.questions.name] = q.assignment_questions.points
+
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.replace(
             tzinfo=datetime.timezone.utc
