@@ -584,7 +584,7 @@ def admin():
         downloads_enabled=downloads_enabled,
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
-        motd=motd
+        motd=motd,
     )
 
 
