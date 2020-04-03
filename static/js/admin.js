@@ -8,10 +8,7 @@ function gradeIndividualItem() {
     set_release_button();
 
     var studentPicker = document.getElementById("studentselector");
-    if (studentPicker.selectedIndex > -1) {
-        var selectedStudent =
-            studentPicker.options[studentPicker.selectedIndex].value;
-    } else {
+    if (studentPicker.selectedIndex == -1) {
         $("#rightsideGradingTab").empty();
         return;
     }
