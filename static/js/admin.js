@@ -8,16 +8,13 @@ function gradeIndividualItem() {
     set_release_button();
 
     var studentPicker = document.getElementById("studentselector");
-    if (studentPicker.selectedIndex > -1) {
-        var selectedStudent = studentPicker.options[studentPicker.selectedIndex].value;
-    } else {
+    if (studentPicker.selectedIndex == -1) {
         $("#rightsideGradingTab").empty();
         return;
     }
 
     var rightSideDiv = $("#rightsideGradingTab");
-    var student_dict = students;
-    var question, sid, student;
+    var question, sid;
     var questions, sstudents;
     var q_column = document.getElementById("questionselector");
     sstudents = studentPicker.selectedOptions;
@@ -42,15 +39,7 @@ function gradeIndividualItem() {
     for (var qnum = 0; qnum < questions.length; qnum++) {
         question = questions[qnum].value;
         for (var snum = 0; snum < sstudents.length; snum++) {
-            student = sstudents[snum].value;
-            for (var key in student_dict) {
-                if (student_dict[key] == student) {
-                    sid = key;
-                }
-            }
-            if (!sid) {
-                continue;
-            }
+            sid = sstudents[snum].value;
             var newid =
                 "Q" +
                 question.replace(/[#*@+:?>~.\/ ]/g, "_") +
@@ -99,16 +88,7 @@ function getSelectedItem(type) {
     }
     if (type == "student") {
         if (col.selectedIndex != -1) {
-            // they've selected an item; get the id associated with it
-            id_diction = students;
-            var item = col.options[col.selectedIndex].value;
-            for (var key in id_diction) {
-                // one of these should match, since an item was selected!
-                if (id_diction[key] == item) {
-                    id = key;
-                }
-            }
-            return id;
+            return col.options[col.selectedIndex].value;
         } else {
             return null;
         }
@@ -129,7 +109,7 @@ function getSelectedItem(type) {
     }
 }
 
-// This function is called from the gradeing page when the
+// This function is called from the grading page when the
 // autograde and show scores button is clicked.
 function autoGrade() {
     var assignment = getSelectedItem("assignment");
@@ -664,23 +644,14 @@ function pickedStudents(column) {
     var pickedcolumn = document.getElementById(column);
     $("#" + column).empty();
     // students = students.replace(/&#x27;/g, '"');
-    var studentslist = students;
-    var keys = [];
-    var i;
-    for (i in studentslist) {
-        if (studentslist.hasOwnProperty(i)) {
-            keys.push(i);
-        }
-    }
-
-    for (i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        var option = document.createElement("option");
-        option.text = studentslist[key];
-        option.value = studentslist[key]; // TODO: just store key here
+    for (const sid in students) {
+        let option = document.createElement("option");
+        option.text = students[sid];
+        option.value = sid;
         pickedcolumn.add(option);
         pickedcolumn.style.visibility = "visible";
     }
+
     $("#" + column).select2({
         size: 10,
         theme: "bootstrap",
