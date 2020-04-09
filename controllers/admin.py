@@ -1238,8 +1238,12 @@ def edit_question():
     private = True if vars["isprivate"] == "true" else False
     print("PRIVATE = ", private)
 
-    if old_qname == new_qname and old_question.author != author:
-        return json.dumps("You do not own this question, Please assign a new unique id")
+    if old_qname == new_qname and (
+        old_question.author != author or is_editor(auth.user.id)
+    ):
+        return json.dumps(
+            "You do not own this question and are not an editor. Please assign a new unique id"
+        )
 
     if old_qname != new_qname:
         newq = db(db.questions.name == new_qname).select().first()
@@ -2434,6 +2438,7 @@ def manage_exercises():
         getCourseStudentsURL=URL("admin", "course_students"),
         get_assignment_release_statesURL=URL("admin", "get_assignment_release_states"),
         course_id=auth.user.course_name,
+        tags=[],
     )
 
 

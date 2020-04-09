@@ -170,7 +170,10 @@ def test_edit_question_does_not_own(
     }
     res = test_client.validate("admin/edit_question", data=data)
     res = json.loads(res)
-    assert res == "You do not own this question, Please assign a new unique id"
+    assert (
+        res
+        == "You do not own this question and are not an editor. Please assign a new unique id"
+    )
 
 
 def test_edit_question_does_not_own_rename(

@@ -706,6 +706,76 @@ def addinstructor(config, username, course):
 
 
 @cli.command()
+@click.option("--username", help="user to promote to instructor")
+@click.option("--basecourse", help="name of base course")
+@pass_config
+def addeditor(config, username, basecourse):
+    """
+    Add an existing user as an instructor for a course
+    """
+    eng = create_engine(config.dburl)
+    res = eng.execute("select id from auth_user where username=%s", username).first()
+    if res:
+        userid = res[0]
+    else:
+        click.echo("Sorry, that user does not exist", color="red")
+        sys.exit(-1)
+
+    res = eng.execute(
+        "select id from courses where course_name=%s and base_course=%s",
+        basecourse,
+        basecourse,
+    ).first()
+    if not res:
+        click.echo("Sorry, that base course does not exist", color="red")
+        sys.exit(-1)
+
+    # if needed insert a row into auth_membership
+    res = eng.execute("select id from auth_group where role='editor'").first()
+    if res:
+        role = res[0]
+    else:
+        click.echo(
+            "Sorry, your system does not have the editor role setup -- this is bad",
+            color="red",
+        )
+        sys.exit(-1)
+
+    res = eng.execute(
+        "select * from auth_membership where user_id=%s and group_id=%s", userid, role
+    ).first()
+    if not res:
+        eng.execute(
+            "insert into auth_membership (user_id, group_id) values (%s, %s)",
+            userid,
+            role,
+        )
+        click.echo("made {} an editor".format(username), color="green")
+    else:
+        click.echo("{} is already an editor".format(username), color="red")
+
+    # if needed insert a row into user_courses
+    res = eng.execute(
+        "select * from editor_basecourse where editor=%s and base_course=%s ",
+        userid,
+        basecourse,
+    ).first()
+    if not res:
+        eng.execute(
+            "insert into editor_basecourse (editor, base_course) values (%s, %s)",
+            userid,
+            basecourse,
+        )
+        click.echo(
+            "made {} an editor for {}".format(username, basecourse), color="green"
+        )
+    else:
+        click.echo(
+            "{} is already an editor for {}".format(username, basecourse), color="red"
+        )
+
+
+@cli.command()
 @click.option("--name", help="Name of the course")
 @pass_config
 def courseinfo(config, name):

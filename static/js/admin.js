@@ -1952,7 +1952,7 @@ function edit_question(form) {
     var name = find_name(lines);
     var isp = document.getElementById("change_privacy").checked;
     data = {
-        question: orig_divid,
+        question: orig_divid || name, // editor interface will not have orig_divid
         name: name,
         tags: tags,
         difficulty: difficulty,
@@ -2200,5 +2200,15 @@ function getAssignList(sel) {
             sel.appendChild(opt);
         }
         $("#assignSelection").append(sel);
+    });
+}
+
+function populateEditor(qname) {
+    data = {
+        question_name: qname,
+    };
+    $("#addTags").select2();
+    jQuery.get("/runestone/admin/question_text", data, function (obj) {
+        $("#editRST").val(JSON.parse(obj));
     });
 }

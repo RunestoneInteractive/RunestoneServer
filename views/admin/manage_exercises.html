@@ -23,7 +23,11 @@
             max-width: 100%;
         }
     </style>
-    <h3>Questions</h3>
+    <h1>Editorial Page</h1>
+    <h3>Questions for Review</h3>
+    <p>The following questions have been flagged for review. Please delete those
+        that are clearly inappropriate or just experimental.  Questions with minor
+        typos can be edited and saved.  Please do not change the unique identifier</p>
     {{count=0}}
     {{for q in questioninfo:}}
             <div class='oneq full-width' id='edit_{{=count}}'>
@@ -32,7 +36,8 @@
                 <button class="btn btn-danger"
                     onclick="deleteQuestion('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')">
                     Delete</button>
-                <button class="btn btn-normalV" onclick="(function() {alert('coming soon')})()">Edit</button>
+                <button class="btn btn-normalV" data-target="#editModal" data-toggle="modal"
+                    onclick="populateEditor('{{=q.name}}')">Edit</button>
                 Difficulty Level {{= q['difficulty']}}
 
             </div>
@@ -42,5 +47,6 @@
 
 </div>
 
+{{include "_qeditor.html"}}
 
 {{ end }}
