@@ -80,7 +80,10 @@ class ChapterGet:
             return 999
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def index():
     selected_chapter = None
     questions = []
@@ -196,6 +199,9 @@ def index():
     recent_data = []
     recent_correct = []
     recent_missed = []
+    daily_data = []
+    daily_correct = []
+    daily_missed = []
     logger.debug("getting user activity")
     user_activity = data_analyzer.user_activity
 
@@ -247,6 +253,29 @@ def index():
             }
         )
 
+        daily_data.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_page_views(),
+            }
+        )
+
+        daily_correct.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_correct(),
+            }
+        )
+        daily_missed.append(
+            {
+                "student": activity.name,
+                "sid": activity.username,
+                "count": activity.get_daily_missed(),
+            }
+        )
+
     logger.debug("finishing")
     # TODO -- this is not right and explains why all are the same!!
     studentactivity = [
@@ -261,6 +290,12 @@ def index():
         {"data": recent_missed, "name": "Exercises Missed"},
     ]
 
+    dailyactivity = [
+        {"data": daily_data, "name": "Sections Read"},
+        {"data": daily_correct, "name": "Exercises Correct"},
+        {"data": daily_missed, "name": "Exercises Missed"},
+    ]
+
     return dict(
         assignments=assignments,
         course=course,
@@ -270,6 +305,7 @@ def index():
         selected_chapter=selected_chapter,
         studentactivity=studentactivity,
         recentactivity=recentactivity,
+        dailyactivity=dailyactivity,
     )
 
 
@@ -365,7 +401,10 @@ def studentprogress():
     return dict(course_name=auth.user.course_name)
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def grades():
     response.title = "Gradebook"
     course = db(db.courses.id == auth.user.course_id).select().first()
@@ -500,7 +539,10 @@ def grades():
 
 
 # This is meant to be called from a form submission, not as a bare controller endpoint
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def questiongrades():
     if "sid" not in request.vars:
         logger.error("It Appears questiongrades was called without any request vars")
@@ -555,7 +597,10 @@ def update_total_points(assignment_id):
 
 
 # Note this is meant to be called from a form submission not as a bare endpoint
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def exercisemetrics():
     if "chapter" not in request.vars:
         logger.error("It Appears exercisemetrics was called without any request vars")
@@ -622,7 +667,10 @@ def exercisemetrics():
     )
 
 
-@auth.requires_login()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def subchapoverview():
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
     course = auth.user.course_name
@@ -730,3 +778,31 @@ def subchapoverview():
             course=thecourse,
             summary=mtbl.to_json(orient="records", date_format="iso"),
         )
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def active():
+    course = db(db.courses.id == auth.user.course_id).select().first()
+
+    res = db.executesql(
+        f"""select useinfo.timestamp, useinfo.sid, div_id
+                           from useinfo join
+                           (select sid, count(*), max(id)
+                            from useinfo where course_id = '{course.course_name}'
+                                and event = 'page'
+                                and timestamp > now() - interval '15 minutes' group by sid) as T
+                          on useinfo.id = T.max"""
+    )
+
+    newres = []
+    for row in res:
+        div_id = row[2]
+        components = div_id.rsplit("/", 2)
+        div_id = "/".join(components[1:])
+        newres.append(dict(timestamp=row[0], sid=row[1], div_id=div_id))
+    print(newres)
+    logger.error(newres)
+    return dict(activestudents=newres, course=course)

@@ -24,7 +24,9 @@
     <a id="courselog" href="/{{=request.application}}/admin/courselog" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Download Log</h4>
     </a>
-
+    <a id="activeLink" href="/{{=request.application}}/dashboard/active" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Students Online</h4>
+    </a>
     <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
     </a>
@@ -45,6 +47,7 @@
 </div>
 
 <div class="tab-content">
+
 
     <div id="coursedata" class="tab-pane fade">
         <div class="col-md-5">
@@ -213,13 +216,22 @@
             <h2 style="text-align: center">Copy Assignments</h2>
             <label for="courseSelection">Select the course you want to copy assignments from.</label>
             <div class="col-sm-3">
-                <select id="courseSelection" class="form-control">
+                <select id="courseSelection" class="form-control" onchange="getAssignList(this);">
+                    <option value="">Select a Course</option>
                     {{ for course in instructor_course_list: }}
                     <option value="{{=course.course_name}}">{{=course.course_name}}</option>
                     {{ pass }}
                 </select>
+                <div id="assignSelection"></div>
                 <button onclick="copyAssignments();" class="btn btn-primary">Copy</button>
             </div>
+        </div>
+    </div>
+
+    <div id="rsnews" class="tab-pane" style="margin-top:30px;">
+        <div class="col-md-8" style="background-color: aliceblue;border-radius: 10px;margin-left: 20px;border: solid;">
+            <h2>Runestone News</h2>
+            {{=XML(motd)}}
         </div>
     </div>
 
@@ -227,9 +239,10 @@
 
 <script>
     $(".dashboardnav").removeClass("active");
-    $("#coursedata").addClass("active");
+    $("#admintab").addClass("active")
     $('#startdate').datepicker();
     $('#start_date').datepicker();
+    $("#rsnews").show()
 
 
     $('#sectionsTab').click(function () {
@@ -239,6 +252,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#courseTab').click(function () {
@@ -248,6 +262,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#AddInstructorTab').click(function () {
@@ -257,6 +272,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#DeleteTab').click(function () {
@@ -266,6 +282,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#CopyAssignmentsTab').click(function () {
@@ -275,6 +292,7 @@
         $('#studentsTab').css('background-color', 'transparent');
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 
     $('#studentsTab').click(function () {
@@ -284,6 +302,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $("#rsnews").hide()
     });
 </script>
 

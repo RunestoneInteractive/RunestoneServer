@@ -102,10 +102,6 @@ def assignments():
     for tag in tag_query:
         tags.append(tag.tag_name)
 
-    course_url = path.join(
-        "/", request.application, "static", auth.user.course_name, "index.html"
-    )
-
     course = get_course_row(db.courses.ALL)
     base_course = course.base_course
     chapter_labels = []
@@ -118,7 +114,6 @@ def assignments():
         coursename=auth.user.course_name,
         confirm=False,
         course_id=auth.user.course_name,
-        course_url=course_url,
         assignments=assigndict,
         tags=tags,
         chapters=chapter_labels,
@@ -550,7 +545,14 @@ def admin():
             db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
         )
         for identity in person:
-            name = identity.first_name + " " + identity.last_name
+            name = (
+                identity.first_name
+                + " "
+                + identity.last_name
+                + "  ("
+                + identity.username
+                + ")"
+            )
             if row.user_id not in instructordict:
                 studentdict[row.user_id] = name
 
@@ -565,6 +567,10 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    try:
+        motd = open("applications/runestone/static/motd.html").read()
+    except Exception:
+        motd = "You can cusomize this mesage by editing /static/motd.html"
     return dict(
         startDate=date,
         coursename=auth.user.course_name,
@@ -581,6 +587,7 @@ def admin():
         downloads_enabled=downloads_enabled,
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
+        motd=motd,
     )
 
 
@@ -628,22 +635,21 @@ def grading():
         # Retrieve relevant info for each question, ordering them based on their
         # order in the assignment.
         assignment_questions = db(
-            db.assignment_questions.assignment_id == int(row.id)
+            (db.assignment_questions.assignment_id == int(row.id))
+            & (db.assignment_questions.question_id == db.questions.id)
         ).select(
             db.assignment_questions.question_id,
             db.assignment_questions.points,
+            db.questions.name,
             orderby=db.assignment_questions.sorting_priority,
         )
         questions = []
+        if row.name not in question_points:
+            question_points[row.name] = {}
         for q in assignment_questions:
-            question_name = (
-                db(db.questions.id == q.question_id)
-                .select(db.questions.name)
-                .first()
-                .name
-            )
-            questions.append(question_name)
-            question_points[question_name] = q.points
+            questions.append(q.questions.name)
+            question_points[row.name][q.questions.name] = q.assignment_questions.points
+
         assignments[row.name] = questions
         assignment_deadlines[row.name] = row.duedate.replace(
             tzinfo=datetime.timezone.utc
@@ -2221,14 +2227,17 @@ def _copy_one_assignment(course, oldid):
     old_assignment = db(db.assignments.id == int(oldid)).select().first()
     due_delta = old_assignment.duedate.date() - old_course.term_start_date
     due_date = this_course.term_start_date + due_delta
-    newassign_id = db.assignments.insert(
-        course=auth.user.course_id,
-        name=old_assignment.name,
-        duedate=due_date,
-        description=old_assignment.description,
-        points=old_assignment.points,
-        threshold_pct=old_assignment.threshold_pct,
-    )
+    try:
+        newassign_id = db.assignments.insert(
+            course=auth.user.course_id,
+            name=old_assignment.name,
+            duedate=due_date,
+            description=old_assignment.description,
+            points=old_assignment.points,
+            threshold_pct=old_assignment.threshold_pct,
+        )
+    except Exception as e:
+        return f"failed: {str(e)}"
 
     old_questions = db(
         db.assignment_questions.assignment_id == old_assignment.id
@@ -2332,7 +2341,7 @@ def enroll_students():
         return redirect(URL("admin", "admin"))
     students = request.vars.students
     try:
-        strfile = io.TextIOWrapper(students.file)
+        strfile = io.TextIOWrapper(students.file, encoding="UTF8")
         student_reader = csv.reader(strfile)
     except Exception as e:
         session.flash = "please choose a CSV file with student data"
@@ -2426,6 +2435,23 @@ def manage_exercises():
         get_assignment_release_statesURL=URL("admin", "get_assignment_release_states"),
         course_id=auth.user.course_name,
     )
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def get_assignment_list():
+    course_name = request.vars.course_name
+    course = db(db.courses.course_name == course_name).select().first()
+    assign_list = db(db.assignments.course == course.id).select(
+        db.assignments.id, db.assignments.name, orderby=db.assignments.duedate
+    )
+    res = []
+    for assign in assign_list:
+        res.append({"id": assign.id, "name": assign.name})
+
+    return json.dumps(dict(assignments=res))
 
 
 def killer():

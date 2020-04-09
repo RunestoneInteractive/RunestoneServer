@@ -135,8 +135,11 @@
     <div class="dash-section">
         <div class="dash-section-header">
             Class Activity
-            <button id="allTime" onclick="getActivity(false)" disabled>All Time</button>
-            <button id="lastWeek" onclick="getActivity(true);">Last 7 Days</button>
+            <select class="form-control" onchange="getActivity(this)">
+                <option value="all">All Time</option>
+                <option value="week">Last 7 Days</option>
+                <option value="day">Last 24 Hours</option>
+            </select>
             <button id="hideStudent" data-target="#classactivitycontent" data-toggle="collapse"  >Hide/Show</button>
         </div>
         <!--NOTE: If switch to Bootstrap 4.0, replace in with show-->
@@ -157,17 +160,16 @@
             <script type="text/javascript">
                 DashboardCharts.studentActivity({{response.write(studentactivity,escape=False)}});
 
-                function getActivity(recent) {
+                function getActivity(sel) {
+                    let freq = sel.value;
                     chart = document.getElementById("studentchart");
                     chart.innerHTML = '<div id="dash-chart-tooltip"><p><span id="value">100</span></p></div>';
-                    if (recent) {
+                    if (freq == "week") {
                         DashboardCharts.studentActivity({{response.write(recentactivity,escape=False)}});
-                        document.getElementById("lastWeek").disabled = true;
-                        document.getElementById("allTime").disabled = false;
-                    } else {
+                    } else if (freq == "all") {
                         DashboardCharts.studentActivity({{response.write(studentactivity,escape=False)}});
-                        document.getElementById("lastWeek").disabled = false;
-                        document.getElementById("allTime").disabled = true;
+                    } else if (freq == "day") {
+                        DashboardCharts.studentActivity({{response.write(dailyactivity,escape=False)}});
                     }
                 }
             </script>
@@ -175,4 +177,10 @@
     </div>
 </div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+    	$(".dashboardnav").removeClass("active");
+		$("#progresstab").addClass("active");
+	});
+</script>
 {{end}}
