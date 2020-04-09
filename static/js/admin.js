@@ -2182,6 +2182,26 @@ function deleteQuestion(qid, baseCourse, edit_div) {
         });
     }
 }
+
+function clearFlag(qid, basecourse, edit_div) {
+    jQuery.ajax({
+        url: "/runestone/admin/delete_question",
+        type: "POST",
+        dataType: "JSON",
+        data: {
+            name: qid,
+            basecourse: basecourse,
+        },
+        success: function (retdata) {
+            if (retdata.status == "Error") {
+                alert("Failed to clear flag");
+            } else {
+                $(`#${edit_div}`).hide();
+            }
+        },
+    });
+}
+
 function getAssignList(sel) {
     data = { course_name: sel.value };
     $("#assignSelection select").remove();

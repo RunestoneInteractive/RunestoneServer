@@ -31,15 +31,23 @@
     {{count=0}}
     {{for q in questioninfo:}}
             <div class='oneq full-width' id='edit_{{=count}}'>
+                <p style="margin-left: 10%"> Base Course: {{= q['base_course']}}
+                    Difficulty Level {{= q['difficulty']}}
+                </p>
+
                 {{=XML(q['htmlsrc'])}}
 
-                <button class="btn btn-danger"
+                <div style="display: flex; justify-content: center;">
+                <button class="btn btn-danger" style="margin-right: 10px"
                     onclick="deleteQuestion('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')">
-                    Delete</button>
-                <button class="btn btn-normalV" data-target="#editModal" data-toggle="modal"
-                    onclick="populateEditor('{{=q.name}}')">Edit</button>
-                Difficulty Level {{= q['difficulty']}}
+                    Delete {{= q.name}}</button>
 
+                <button class="btn btn-info" onclick="clearFlag('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')" >Clear Flag</button>
+
+                <button class="btn btn-primary" data-target="#editModal" data-toggle="modal" style="margin-left: 10px"
+                    onclick="populateEditor('{{=q.name}}')">Edit</button>
+                </div>
+                <hr />
             </div>
 
         {{count += 1}}

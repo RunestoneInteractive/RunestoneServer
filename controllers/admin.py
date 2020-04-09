@@ -1238,8 +1238,10 @@ def edit_question():
     private = True if vars["isprivate"] == "true" else False
     print("PRIVATE = ", private)
 
-    if old_qname == new_qname and (
-        old_question.author != author or is_editor(auth.user.id)
+    if (
+        old_qname == new_qname
+        and old_question.author != author
+        and not is_editor(auth.user.id)
     ):
         return json.dumps(
             "You do not own this question and are not an editor. Please assign a new unique id"
@@ -1248,7 +1250,9 @@ def edit_question():
     if old_qname != new_qname:
         newq = db(db.questions.name == new_qname).select().first()
         if newq and newq.author != author:
-            return json.dumps("You cannot replace a question you did not author")
+            return json.dumps(
+                "Name taken, you cannot replace a question you did not author"
+            )
 
     autograde = ""
     if re.search(r":autograde:\s+unittest", question):
@@ -2330,6 +2334,18 @@ def flag_question():
     )
     db((db.questions.name == qname) & (db.questions.base_course == base_course)).update(
         review_flag="T"
+    )
+
+    return json.dumps(dict(status="success"))
+
+
+@auth.requires_membership("editor")
+def clear_flag():
+    qname = request.vars["question_name"]
+    base_course = request.vars["basecourse"]
+
+    db((db.questions.name == qname) & (db.questions.base_course == base_course)).update(
+        review_flag="F"
     )
 
     return json.dumps(dict(status="success"))
