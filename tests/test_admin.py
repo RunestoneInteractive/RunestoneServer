@@ -228,7 +228,7 @@ def test_edit_question_does_not_own_rename(
     }
     res = test_client.validate("admin/edit_question", data=data)
     res = json.loads(res)
-    assert res == "You cannot replace a question you did not author"
+    assert res == "Name taken, you cannot replace a question you did not author"
 
 
 def test_edit_question_success(test_user_1, test_client, test_assignment):
