@@ -2428,6 +2428,7 @@ def manage_exercises():
     books = db(db.editor_basecourse.editor == auth.user).select()
     the_course = db(db.courses.course_name == auth.user.course_name).select().first()
     qlist = []
+    chapinfo = {}
     for book in books:
         questions = db(
             (db.questions.review_flag == "T")
@@ -2437,10 +2438,23 @@ def manage_exercises():
             db.questions.difficulty,
             db.questions.name,
             db.questions.base_course,
+            db.questions.chapter,
         )
-
         for q in questions:
             qlist.append(q)
+
+        chapters = db(db.chapters.course_id == book.base_course).select(
+            db.chapters.chapter_name,
+            db.chapters.chapter_label,
+            db.chapters.course_id,
+            orderby=db.chapters.chapter_num,
+        )
+        chapinfo[book.base_course] = {}
+        for chap in chapters:
+            chapinfo[book.base_course][chap.chapter_label] = {
+                "title": chap.chapter_name,
+                "basecourse": book.base_course,
+            }
 
     return dict(
         questioninfo=qlist,
@@ -2455,6 +2469,7 @@ def manage_exercises():
         get_assignment_release_statesURL=URL("admin", "get_assignment_release_states"),
         course_id=auth.user.course_name,
         tags=[],
+        chapdict=chapinfo,
     )
 
 

@@ -31,10 +31,13 @@
     {{count=0}}
     {{for q in questioninfo:}}
             <div class='oneq full-width' id='edit_{{=count}}'>
-                <p style="margin-left: 10%"> Base Course: {{= q['base_course']}}
-                    Difficulty Level {{= q['difficulty']}}
+                <div style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
+                    <p></p>
+                <p> Base Course: {{= q['base_course']}}</p>
+                <p>Difficulty Level {{= q['difficulty']}}</p>
+                <p>Chapter: <span class="chaplabel" id="{{= q['chapter']}}">{{= q['chapter']}}</span>
                 </p>
-
+                </div>
                 {{=XML(q['htmlsrc'])}}
 
                 <div style="display: flex; justify-content: center;">
@@ -55,6 +58,9 @@
 
 </div>
 
+<script>
+    chapDict = {{=XML(chapdict)}}
+</script>
 {{include "_qeditor.html"}}
 
 {{ end }}
