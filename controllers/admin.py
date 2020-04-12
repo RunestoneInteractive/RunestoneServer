@@ -37,6 +37,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     showeval=["interact"],
     lp_build=ALL_AUTOGRADE_OPTIONS,
     reveal=[],
+    datfile=[],
 )
 
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
@@ -55,6 +56,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     youtube=[],
     poll=[],
     reveal=[],
+    datafile=[],
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS,
     lp_build=ALL_WHICH_OPTIONS,
@@ -1238,13 +1240,21 @@ def edit_question():
     private = True if vars["isprivate"] == "true" else False
     print("PRIVATE = ", private)
 
-    if old_qname == new_qname and old_question.author != author:
-        return json.dumps("You do not own this question, Please assign a new unique id")
+    if (
+        old_qname == new_qname
+        and old_question.author != author
+        and not is_editor(auth.user.id)
+    ):
+        return json.dumps(
+            "You do not own this question and are not an editor. Please assign a new unique id"
+        )
 
     if old_qname != new_qname:
         newq = db(db.questions.name == new_qname).select().first()
         if newq and newq.author != author:
-            return json.dumps("You cannot replace a question you did not author")
+            return json.dumps(
+                "Name taken, you cannot replace a question you did not author"
+            )
 
     autograde = ""
     if re.search(r":autograde:\s+unittest", question):
@@ -2129,6 +2139,21 @@ def delete_assignment_question():
         return json.dumps("Error")
 
 
+@auth.requires_membership("editor")
+def delete_question():
+    qname = request.vars["name"]
+    base_course = request.vars["base_course"]
+
+    try:
+        db(
+            (db.questions.name == qname) & (db.questions.base_course == base_course)
+        ).delete()
+        return json.dumps({"status": "Success"})
+    except Exception as ex:
+        logger.error(ex)
+        return json.dumps({"status": "Error"})
+
+
 def _set_assignment_max_points(assignment_id):
     """Called after a change to assignment questions.
     Recalculate the total, save it in the assignment row
@@ -2316,6 +2341,18 @@ def flag_question():
     return json.dumps(dict(status="success"))
 
 
+@auth.requires_membership("editor")
+def clear_flag():
+    qname = request.vars["question_name"]
+    base_course = request.vars["basecourse"]
+
+    db((db.questions.name == qname) & (db.questions.base_course == base_course)).update(
+        review_flag="F"
+    )
+
+    return json.dumps(dict(status="success"))
+
+
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -2386,6 +2423,56 @@ def resetpw():
         res = {"status": "fail", "message": "You are not authorized for this user"}
 
     return json.dumps(res)
+
+
+@auth.requires_membership("editor")
+def manage_exercises():
+    books = db(db.editor_basecourse.editor == auth.user).select()
+    the_course = db(db.courses.course_name == auth.user.course_name).select().first()
+    qlist = []
+    chapinfo = {}
+    for book in books:
+        questions = db(
+            (db.questions.review_flag == "T")
+            & (db.questions.base_course == book.base_course)
+        ).select(
+            db.questions.htmlsrc,
+            db.questions.difficulty,
+            db.questions.name,
+            db.questions.base_course,
+            db.questions.chapter,
+        )
+        for q in questions:
+            qlist.append(q)
+
+        chapters = db(db.chapters.course_id == book.base_course).select(
+            db.chapters.chapter_name,
+            db.chapters.chapter_label,
+            db.chapters.course_id,
+            orderby=db.chapters.chapter_num,
+        )
+        chapinfo[book.base_course] = {}
+        for chap in chapters:
+            chapinfo[book.base_course][chap.chapter_label] = {
+                "title": chap.chapter_name,
+                "basecourse": book.base_course,
+            }
+
+    return dict(
+        questioninfo=qlist,
+        course=the_course,
+        gradingUrl=URL("assignments", "get_problem"),
+        autogradingUrl=URL("assignments", "autograde"),
+        gradeRecordingUrl=URL("assignments", "record_grade"),
+        calcTotalsURL=URL("assignments", "calculate_totals"),
+        setTotalURL=URL("assignments", "record_assignment_score"),
+        sendLTIGradeURL=URL("assignments", "send_assignment_score_via_LTI"),
+        getCourseStudentsURL=URL("admin", "course_students"),
+        get_assignment_release_statesURL=URL("admin", "get_assignment_release_states"),
+        course_id=auth.user.course_name,
+        tags=[],
+        chapdict=chapinfo,
+    )
 
 
 @auth.requires(

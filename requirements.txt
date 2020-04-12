@@ -10,7 +10,7 @@ amqp==2.5.2               # via kombu
 astroid==2.3.3            # via pylint
 babel==2.8.0              # via sphinx
 billiard==3.6.2.0         # via celery
-bleach==3.1.1             # via -r requirements.in
+bleach==3.1.4             # via -r requirements.in
 celery[gevent,redis]==4.4.0  # via -r requirements.in
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests

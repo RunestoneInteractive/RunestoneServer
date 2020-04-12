@@ -196,6 +196,20 @@ def verifyInstructorStatus(course, instructor):
     )
 
 
+def is_editor(userid):
+    ed = db(db.auth_group.role == "editor").select(db.auth_group.id).first()
+    row = (
+        db((db.auth_membership.user_id == userid) & (db.auth_membership.group_id == ed))
+        .select()
+        .first()
+    )
+
+    if row:
+        return True
+    else:
+        return False
+
+
 class IS_COURSE_ID:
     """ used to validate that a course name entered (e.g. devcourse) corresponds to a
         valid course ID (i.e. db.courses.id) """

@@ -1,0 +1,66 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+<script type="text/javascript" src="{{=get_course_url('_static/sharedb.js')}}"></script>
+<script type="text/javascript">
+  eBookConfig.gradingURL = '{{=gradingUrl}}';
+  eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
+  eBookConfig.autogradingURL = '{{=autogradingUrl}}';
+  eBookConfig.calcTotalsURL = '{{=calcTotalsURL}}';
+  eBookConfig.setTotalURL = '{{=setTotalURL}}';
+  eBookConfig.sendLTIGradeURL = '{{=sendLTIGradeURL}}';
+  eBookConfig.getCourseStudentsURL = '{{=getCourseStudentsURL}}';
+  eBookConfig.get_assignment_release_statesURL = '{{=get_assignment_release_statesURL}}';
+  eBookConfig.course = '{{=course_id}}';
+  // load the students dictionary once the page loads
+  $(getCourseStudents)
+</script>
+
+
+<div id='questions'>
+    <style>
+        .ac_section > * {
+            max-width: 100%;
+        }
+    </style>
+    <h1>Editorial Page</h1>
+    <h3>Questions for Review</h3>
+    <p>The following questions have been flagged for review. Please delete those
+        that are clearly inappropriate or just experimental.  Questions with minor
+        typos can be edited and saved.  Please do not change the unique identifier</p>
+    {{count=0}}
+    {{for q in questioninfo:}}
+            <div class='oneq full-width' id='edit_{{=count}}'>
+                <div style="display: grid; grid-template-columns: 25% 25% 25% 25%;">
+                    <p></p>
+                <p> Base Course: {{= q['base_course']}}</p>
+                <p>Difficulty Level {{= q['difficulty']}}</p>
+                <p>Chapter: <span class="chaplabel" id="{{= q['chapter']}}">{{= q['chapter']}}</span>
+                </p>
+                </div>
+                {{=XML(q['htmlsrc'])}}
+
+                <div style="display: flex; justify-content: center;">
+                <button class="btn btn-danger" style="margin-right: 10px"
+                    onclick="deleteQuestion('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')">
+                    Delete {{= q.name}}</button>
+
+                <button class="btn btn-info" onclick="clearFlag('{{=q.name}}', '{{=q.base_course}}', 'edit_{{=count}}')" >Clear Flag</button>
+
+                <button class="btn btn-primary" data-target="#editModal" data-toggle="modal" style="margin-left: 10px"
+                    onclick="populateEditor('{{=q.name}}')">Edit</button>
+                </div>
+                <hr />
+            </div>
+
+        {{count += 1}}
+    {{pass}}
+
+</div>
+
+<script>
+    chapDict = {{=XML(chapdict)}}
+</script>
+{{include "_qeditor.html"}}
+
+{{ end }}
