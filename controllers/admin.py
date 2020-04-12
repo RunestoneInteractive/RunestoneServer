@@ -37,7 +37,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     showeval=["interact"],
     lp_build=ALL_AUTOGRADE_OPTIONS,
     reveal=[],
-    datfile=[],
+    datafile=[],
 )
 
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
