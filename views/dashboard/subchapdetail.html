@@ -1,0 +1,31 @@
+{{extend 'admin/instructors.html'}} {{ block moreincludes }} {{super}}
+<script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
+<link
+    href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css"
+    rel="stylesheet"
+    media="screen"
+/>
+{{ end }} {{ block tabcontent }}
+<h2>{{=chapter}} / {{=subchapter}}</h2>
+<h2>{{=sid}}</h2>
+<hr />
+
+<table class="table">
+    <tr>
+        <th>Question</th>
+        <th>Question Type</th>
+        <th>first try</th>
+        <th>last try</th>
+        <th>Number of clicks</th>
+    </tr>
+    {{ for row in rows: }}
+    <tr>
+        <td>{{=row[0]}}</td>
+        <td>{{=row[1]}}</td>
+        <td>{{=row[2]}}</td>
+        <td>{{=row[3]}}</td>
+        <td>{{=row[4]}}</td>
+    </tr>
+    {{ pass }}
+</table>
+{{ end }}

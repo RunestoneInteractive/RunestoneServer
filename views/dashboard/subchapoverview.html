@@ -30,6 +30,10 @@
     if (window.location.href.search("sccount") < 0) {
         frozenColumns = 2;
     }
+    columns = [{data: 'chapter_label'}]
+    for (let k of Object.keys(tbl_data[0]).slice(1)) {
+        columns.push({data: k, renderer: "html"})
+    }
     var hot = new Handsontable(container, {
         data: tbl_data,
         rowHeaders: false,
@@ -40,6 +44,7 @@
         filters: true,
         dropdownMenu: true,
         licenseKey: 'non-commercial-and-evaluation',
+        columns:columns,
       });
 
 </script>

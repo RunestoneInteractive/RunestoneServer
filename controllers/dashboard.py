@@ -5,6 +5,7 @@ from operator import itemgetter
 from collections import OrderedDict
 import six
 import pandas as pd
+import numpy as np
 from db_dashboard import DashboardDataAnalyzer
 from rs_practice import _get_practice_data
 
@@ -667,6 +668,13 @@ def exercisemetrics():
     )
 
 
+def format_cell(sid, chap, subchap, val):
+    if np.isnan(val):
+        return ""
+    else:
+        return f"""<a href="/runestone/dashboard/subchapdetail?chap={chap}&sub={subchap}&sid={sid}">{val}</a>"""
+
+
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -721,6 +729,14 @@ def subchapoverview():
         )
         session.flash = "Error: Not enough data"
         return redirect(URL("dashboard", "index"))
+
+    if request.vars.tablekind == "sccount":
+        x = pt.to_dict()
+        print(x)
+        for k in x:
+            for j in x[k]:
+                x[k][j] = format_cell(k, j[0], j[1], x[k][j])
+        pt = pd.DataFrame(x)
 
     cmap = pd.read_sql_query(
         """select chapter_num, sub_chapter_num, chapter_label, sub_chapter_label
@@ -837,3 +853,26 @@ def active():
     print(newres)
     logger.error(newres)
     return dict(activestudents=newres, course=course)
+
+
+def subchapdetail():
+    # 1. select the name, question_type, from questions for this chapter/subchapter/base_course
+    # 2. for each question get tries to correct, min time, max time, total
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    res = db.executesql(
+        f"""
+select name, question_type, min(useinfo.timestamp), max(useinfo.timestamp), count(*)
+    from questions join useinfo on name = div_id and course_id = '{auth.user.course_name}'
+    where chapter='{request.vars.chap}' and subchapter = '{request.vars.sub}' and base_course = '{thecourse.base_course}' and sid='{request.vars.sid}'
+    group by name, question_type"""
+    )
+
+    return dict(
+        rows=res,
+        sid=request.vars.sid,
+        chapter=request.vars.chap,
+        subchapter=request.vars.sub,
+        course_name=auth.user.course_name,
+        course_id=auth.user.course_name,
+        course=thecourse,
+    )
