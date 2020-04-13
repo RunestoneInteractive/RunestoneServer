@@ -733,6 +733,18 @@ def subchapoverview():
         settings.database_uri,
     )
 
+    act_count = pd.read_sql_query(
+        """
+    select chapter, subchapter, count(*) act_count
+    from questions
+    where base_course = '{}'
+    group by chapter, subchapter order by chapter, subchapter;
+    """.format(
+            thecourse.base_course
+        ),
+        settings.database_uri,
+    )
+
     if request.vars.tablekind != "sccount":
         pt = pt.reset_index(2)
 
@@ -745,6 +757,12 @@ def subchapoverview():
     mtbl = mtbl.set_index(["chapter_num", "sub_chapter_num"]).sort_index()
     mtbl = mtbl.reset_index()
 
+    mtbl = mtbl.merge(
+        act_count,
+        left_on=["chapter_label", "sub_chapter_label"],
+        right_on=["chapter", "subchapter"],
+    )
+
     def to_int(x):
         try:
             res = int(x)
@@ -752,17 +770,30 @@ def subchapoverview():
         except ValueError:
             return ""
 
-    mtbl["chapter_label"] = mtbl.apply(
-        lambda row: "{}.{} {}/{}".format(
-            to_int(row.chapter_num),
-            to_int(row.sub_chapter_num),
-            row.chapter_label,
-            row.sub_chapter_label,
-        ),
-        axis=1,
-    )
+    if request.vars.tablekind == "sccount":
+        mtbl["chapter_label"] = mtbl.apply(
+            lambda row: "{}.{} {}/{} ({})".format(
+                to_int(row.chapter_num),
+                to_int(row.sub_chapter_num),
+                row.chapter_label,
+                row.sub_chapter_label,
+                row.act_count - 1,
+            ),
+            axis=1,
+        )
+    else:
+        mtbl["chapter_label"] = mtbl.apply(
+            lambda row: "{}.{} {}/{}".format(
+                to_int(row.chapter_num),
+                to_int(row.sub_chapter_num),
+                row.chapter_label,
+                row.sub_chapter_label,
+            ),
+            axis=1,
+        )
+
     neworder = mtbl.columns.to_list()
-    neworder = neworder[-2:-1] + neworder[2:-2]
+    neworder = neworder[-5:-4] + neworder[2:-5]
     mtbl = mtbl[neworder]
 
     if request.vars.action == "tocsv":
