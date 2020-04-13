@@ -60,7 +60,6 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     showeval=ALL_WHICH_OPTIONS,
     page=ALL_WHICH_OPTIONS,
     lp_build=ALL_WHICH_OPTIONS,
-    datafile=[],
 )
 
 # create a simple index to provide a page of links
