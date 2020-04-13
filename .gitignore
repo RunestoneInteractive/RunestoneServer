@@ -60,3 +60,4 @@ instructors.csv
 htmlcov
 /languages/
 docker-compose.override.yml
+.history
