@@ -21,7 +21,11 @@
     </tr>
     {{ for row in rows: }}
     <tr>
-        <td>{{=row["name"]}}</td>
+        {{ if row["question_type"] in ["mchoice","fillintheblank","parsonsprob","clickablearea","dragndrop"]: }}
+            <td><a href="/runestone/dashboard/exercisemetrics?id={{=row['name']}}&chapter={{=chapter}}">{{=row["name"]}}</a></td>
+        {{ else: }}
+            <td>{{=row["name"]}}</td>
+        {{ pass }}
         <td>{{=row["question_type"]}}</td>
         <td>{{=row["correct"]}}</td>
         <td>{{=row["first"]}}</td>
