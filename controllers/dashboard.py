@@ -642,7 +642,11 @@ def exercisemetrics():
     answers = []
     attempt_histogram = []
     logger.debug(problem_metrics.problems)
-    problem_metric = problem_metrics.problems[prob_id]
+    try:
+        problem_metric = problem_metrics.problems[prob_id]
+    except KeyError:
+        session.flash = f"Not enough data for {prob_id}"
+        redirect(request.env.http_referer)
     response_frequency = problem_metric.aggregate_responses
 
     for username, user_responses in six.iteritems(problem_metric.user_responses):
