@@ -5,6 +5,7 @@ from operator import itemgetter
 from collections import OrderedDict
 import six
 import pandas as pd
+import numpy as np
 from db_dashboard import DashboardDataAnalyzer
 from rs_practice import _get_practice_data
 
@@ -667,6 +668,13 @@ def exercisemetrics():
     )
 
 
+def format_cell(sid, chap, subchap, val):
+    if np.isnan(val):
+        return ""
+    else:
+        return f"""<a href="/runestone/dashboard/subchapdetail?chap={chap}&sub={subchap}&sid={sid}">{val}</a>"""
+
+
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -683,9 +691,9 @@ def subchapoverview():
     data = pd.read_sql_query(
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
-    join questions on div_id = name join auth_user on username = useinfo.sid
+    join questions on div_id = name and base_course = '{}' join auth_user on username = useinfo.sid
     where useinfo.course_id = '{}' and active='T'""".format(
-            course
+            thecourse.base_course, course
         ),
         settings.database_uri,
         parse_dates=["timestamp"],
@@ -722,12 +730,32 @@ def subchapoverview():
         session.flash = "Error: Not enough data"
         return redirect(URL("dashboard", "index"))
 
+    if request.vars.tablekind == "sccount":
+        x = pt.to_dict()
+        print(x)
+        for k in x:
+            for j in x[k]:
+                x[k][j] = format_cell(k, j[0], j[1], x[k][j])
+        pt = pd.DataFrame(x)
+
     cmap = pd.read_sql_query(
         """select chapter_num, sub_chapter_num, chapter_label, sub_chapter_label
         from sub_chapters join chapters on chapters.id = sub_chapters.chapter_id
         where chapters.course_id = '{}'
         order by chapter_num, sub_chapter_num;
         """.format(
+            thecourse.base_course
+        ),
+        settings.database_uri,
+    )
+
+    act_count = pd.read_sql_query(
+        """
+    select chapter, subchapter, count(*) act_count
+    from questions
+    where base_course = '{}'
+    group by chapter, subchapter order by chapter, subchapter;
+    """.format(
             thecourse.base_course
         ),
         settings.database_uri,
@@ -745,6 +773,12 @@ def subchapoverview():
     mtbl = mtbl.set_index(["chapter_num", "sub_chapter_num"]).sort_index()
     mtbl = mtbl.reset_index()
 
+    mtbl = mtbl.merge(
+        act_count,
+        left_on=["chapter_label", "sub_chapter_label"],
+        right_on=["chapter", "subchapter"],
+    )
+
     def to_int(x):
         try:
             res = int(x)
@@ -752,17 +786,30 @@ def subchapoverview():
         except ValueError:
             return ""
 
-    mtbl["chapter_label"] = mtbl.apply(
-        lambda row: "{}.{} {}/{}".format(
-            to_int(row.chapter_num),
-            to_int(row.sub_chapter_num),
-            row.chapter_label,
-            row.sub_chapter_label,
-        ),
-        axis=1,
-    )
+    if request.vars.tablekind == "sccount":
+        mtbl["chapter_label"] = mtbl.apply(
+            lambda row: "{}.{} {}/{} ({})".format(
+                to_int(row.chapter_num),
+                to_int(row.sub_chapter_num),
+                row.chapter_label,
+                row.sub_chapter_label,
+                row.act_count - 1,
+            ),
+            axis=1,
+        )
+    else:
+        mtbl["chapter_label"] = mtbl.apply(
+            lambda row: "{}.{} {}/{}".format(
+                to_int(row.chapter_num),
+                to_int(row.sub_chapter_num),
+                row.chapter_label,
+                row.sub_chapter_label,
+            ),
+            axis=1,
+        )
+
     neworder = mtbl.columns.to_list()
-    neworder = neworder[-2:-1] + neworder[2:-2]
+    neworder = neworder[-5:-4] + neworder[2:-5]
     mtbl = mtbl[neworder]
 
     if request.vars.action == "tocsv":
@@ -806,3 +853,112 @@ def active():
     print(newres)
     logger.error(newres)
     return dict(activestudents=newres, course=course)
+
+
+GRADEABLE_TYPES = {
+    "mchoice": "mchoice_answers",
+    "clickablearea": "clickablearea_answers",
+    "fillintheblank": "fitb_answers",
+    "parsonsprob": "parsons_answers",
+    "dragndrop": "dragndrop_answers",
+}
+
+
+def subchapdetail():
+    # 1. select the name, question_type, from questions for this chapter/subchapter/base_course
+    # 2. for each question get tries to correct, min time, max time, total
+    thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    questions = db(
+        (db.questions.chapter == request.vars.chap)
+        & (db.questions.subchapter == request.vars.sub)
+        & (db.questions.base_course == thecourse.base_course)
+        & (db.questions.question_type != "page")
+    ).select(db.questions.name, db.questions.question_type)
+
+    res = db.executesql(
+        f"""
+select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timestamp) as last, count(*) as clicks
+    from questions join useinfo on name = div_id and course_id = '{auth.user.course_name}'
+    where chapter='{request.vars.chap}' and subchapter = '{request.vars.sub}' and base_course = '{thecourse.base_course}' and sid='{request.vars.sid}'
+    group by name, question_type""",
+        as_dict=True,
+    )
+    tdoff = datetime.timedelta(
+        hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
+    )
+
+    for row in res:
+        row["first"] = row["first"] - tdoff
+        row["last"] = row["last"] - tdoff
+        if row["question_type"] in GRADEABLE_TYPES.keys():
+            tname = GRADEABLE_TYPES[row["question_type"]]
+            isc = (
+                db(
+                    (db[tname].sid == request.vars.sid)
+                    & (db[tname].correct == "T")
+                    & (db[tname].div_id == row["name"])
+                )
+                .select()
+                .first()
+            )
+            if isc:
+                row["correct"] = "Yes"
+            else:
+                row["correct"] = "No"
+        elif row["question_type"] == "activecode":
+            isU = (
+                db(
+                    (db.questions.name == row["name"])
+                    & (db.questions.autograde == "unittest")
+                    & (db.questions.base_course == thecourse.base_course)
+                )
+                .select()
+                .first()
+            )
+            if isU:
+                isC = (
+                    db(
+                        (db.useinfo.sid == request.vars.sid)
+                        & (db.useinfo.div_id == row["name"])
+                        & (db.useinfo.course_id == thecourse.course_name)
+                        & (db.useinfo.event == "unittest")
+                        & (db.useinfo.act.like("percent:100%"))
+                    )
+                    .select()
+                    .first()
+                )
+                if isC:
+                    row["correct"] = "Yes"
+                else:
+                    row["correct"] = "No"
+            else:
+                row["correct"] = "NA"
+
+        else:
+            row["correct"] = "NA"
+
+    active = set([r["name"] for r in res])
+    allq = set([r.name for r in questions])
+    qtype = {r.name: r.question_type for r in questions}
+    missing = allq - active
+    for q in missing:
+        res.append(
+            {
+                "name": q,
+                "question_type": qtype[q],
+                "first": "",
+                "last": "",
+                "clicks": "",
+                "correct": "",
+            }
+        )
+    print(res)
+    return dict(
+        rows=res,
+        sid=request.vars.sid,
+        chapter=request.vars.chap,
+        subchapter=request.vars.sub,
+        course_name=auth.user.course_name,
+        course_id=auth.user.course_name,
+        course=thecourse,
+    )

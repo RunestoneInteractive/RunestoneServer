@@ -9,6 +9,9 @@
 {{ block tabcontent }}
 <h2>{{=course_name}}</h2>
 <hr>
+{{ if request.vars.tablekind == 'sccount': }}
+    <p>This report shows you the number of activities on each page that your students have attempted.  Clicking on the number in the cell will let you drill down to see details on how  and when the student has interacted with each element on the page.</p>
+{{ pass }}
 
 <form action="/runestone/dashboard/subchapoverview" style="display: inline-block">
     <select name="tablekind" id="tabselect" onchange="this.form.submit()">
@@ -30,6 +33,10 @@
     if (window.location.href.search("sccount") < 0) {
         frozenColumns = 2;
     }
+    columns = [{data: 'chapter_label'}]
+    for (let k of Object.keys(tbl_data[0]).slice(1)) {
+        columns.push({data: k, renderer: "html"})
+    }
     var hot = new Handsontable(container, {
         data: tbl_data,
         rowHeaders: false,
@@ -40,6 +47,7 @@
         filters: true,
         dropdownMenu: true,
         licenseKey: 'non-commercial-and-evaluation',
+        columns:columns,
       });
 
 </script>

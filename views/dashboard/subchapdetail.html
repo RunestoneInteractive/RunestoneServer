@@ -1,0 +1,37 @@
+{{extend 'admin/instructors.html'}} {{ block moreincludes }} {{super}}
+<script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
+<link
+    href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css"
+    rel="stylesheet"
+    media="screen"
+/>
+{{ end }} {{ block tabcontent }}
+<h2>{{=chapter}} / {{=subchapter}}</h2>
+<h2>{{=sid}}</h2>
+<hr />
+
+<table class="table">
+    <tr>
+        <th>Question</th>
+        <th>Question Type</th>
+        <th>Correct</th>
+        <th>first try</th>
+        <th>last try</th>
+        <th>Number of clicks</th>
+    </tr>
+    {{ for row in rows: }}
+    <tr>
+        {{ if row["question_type"] in ["mchoice","fillintheblank","parsonsprob","clickablearea","dragndrop"]: }}
+            <td><a href="/runestone/dashboard/exercisemetrics?id={{=row['name']}}&chapter={{=chapter}}">{{=row["name"]}}</a></td>
+        {{ else: }}
+            <td>{{=row["name"]}}</td>
+        {{ pass }}
+        <td>{{=row["question_type"]}}</td>
+        <td>{{=row["correct"]}}</td>
+        <td>{{=row["first"]}}</td>
+        <td>{{=row["last"]}}</td>
+        <td>{{=row["clicks"]}}</td>
+    </tr>
+    {{ pass }}
+</table>
+{{ end }}
