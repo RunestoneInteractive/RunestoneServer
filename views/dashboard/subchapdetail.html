@@ -14,17 +14,19 @@
     <tr>
         <th>Question</th>
         <th>Question Type</th>
+        <th>Correct</th>
         <th>first try</th>
         <th>last try</th>
         <th>Number of clicks</th>
     </tr>
     {{ for row in rows: }}
     <tr>
-        <td>{{=row[0]}}</td>
-        <td>{{=row[1]}}</td>
-        <td>{{=row[2]}}</td>
-        <td>{{=row[3]}}</td>
-        <td>{{=row[4]}}</td>
+        <td>{{=row["name"]}}</td>
+        <td>{{=row["question_type"]}}</td>
+        <td>{{=row["correct"]}}</td>
+        <td>{{=row["first"]}}</td>
+        <td>{{=row["last"]}}</td>
+        <td>{{=row["clicks"]}}</td>
     </tr>
     {{ pass }}
 </table>

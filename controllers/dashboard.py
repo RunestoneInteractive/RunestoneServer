@@ -691,9 +691,9 @@ def subchapoverview():
     data = pd.read_sql_query(
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
-    join questions on div_id = name join auth_user on username = useinfo.sid
+    join questions on div_id = name and base_course = '{}' join auth_user on username = useinfo.sid
     where useinfo.course_id = '{}' and active='T'""".format(
-            course
+            thecourse.base_course, course
         ),
         settings.database_uri,
         parse_dates=["timestamp"],
@@ -855,18 +855,104 @@ def active():
     return dict(activestudents=newres, course=course)
 
 
+GRADEABLE_TYPES = {
+    "mchoice": "mchoice_answers",
+    "clickablearea": "clickablearea_answers",
+    "fillintheblank": "fitb_answers",
+    "parsonsprob": "parsons_answers",
+    "dragndrop": "dragndrop_answers",
+}
+
+
 def subchapdetail():
     # 1. select the name, question_type, from questions for this chapter/subchapter/base_course
     # 2. for each question get tries to correct, min time, max time, total
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
+    questions = db(
+        (db.questions.chapter == request.vars.chap)
+        & (db.questions.subchapter == request.vars.sub)
+        & (db.questions.base_course == thecourse.base_course)
+        & (db.questions.question_type != "page")
+    ).select(db.questions.name, db.questions.question_type)
+
     res = db.executesql(
         f"""
-select name, question_type, min(useinfo.timestamp), max(useinfo.timestamp), count(*)
+select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timestamp) as last, count(*) as clicks
     from questions join useinfo on name = div_id and course_id = '{auth.user.course_name}'
     where chapter='{request.vars.chap}' and subchapter = '{request.vars.sub}' and base_course = '{thecourse.base_course}' and sid='{request.vars.sid}'
-    group by name, question_type"""
+    group by name, question_type""",
+        as_dict=True,
+    )
+    tdoff = datetime.timedelta(
+        hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
     )
 
+    for row in res:
+        row["first"] = row["first"] - tdoff
+        row["last"] = row["last"] - tdoff
+        if row["question_type"] in GRADEABLE_TYPES.keys():
+            tname = GRADEABLE_TYPES[row["question_type"]]
+            isc = (
+                db(
+                    (db[tname].sid == request.vars.sid)
+                    & (db[tname].correct == "T")
+                    & (db[tname].div_id == row["name"])
+                )
+                .select()
+                .first()
+            )
+            if isc:
+                row["correct"] = "Yes"
+            else:
+                row["correct"] = "No"
+        elif row["question_type"] == "activecode":
+            isU = (
+                db(
+                    (db.questions.name == row["name"])
+                    & (db.questions.autograde == "unittest")
+                    & (db.questions.base_course == thecourse.base_course)
+                )
+                .select()
+                .first()
+            )
+            if isU:
+                isC = (
+                    db(
+                        (db.useinfo.sid == request.vars.sid)
+                        & (db.useinfo.div_id == row["name"])
+                        & (db.useinfo.course_id == thecourse.course_name)
+                        & (db.useinfo.event == "unittest")
+                        & (db.useinfo.act.like("percent:100%"))
+                    )
+                    .select()
+                    .first()
+                )
+                if isC:
+                    row["correct"] = "Yes"
+                else:
+                    row["correct"] = "No"
+            else:
+                row["correct"] = "NA"
+
+        else:
+            row["correct"] = "NA"
+
+    active = set([r["name"] for r in res])
+    allq = set([r.name for r in questions])
+    qtype = {r.name: r.question_type for r in questions}
+    missing = allq - active
+    for q in missing:
+        res.append(
+            {
+                "name": q,
+                "question_type": qtype[q],
+                "first": "",
+                "last": "",
+                "clicks": "",
+                "correct": "",
+            }
+        )
+    print(res)
     return dict(
         rows=res,
         sid=request.vars.sid,
