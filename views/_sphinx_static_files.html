@@ -48,7 +48,12 @@
 <script type="text/javascript" src="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.js"></script>
 
 <link href="{{=base_static_url}}/codemirror.css" rel="stylesheet" type="text/css"/>
+<script src="{{=base_static_url}}/underscore.js"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
 <link href="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="{{=base_static_url}}/pygments.css" type="text/css"/>
+<link rel="stylesheet" href="{{=base_static_url}}/runestone-custom-sphinx-bootstrap.css?v={{=settings.components_version}}" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/accessibility.css?v=DB047029"/>
 
 <script type="text/javascript" src="{{=base_static_url}}/jquery.idle-timer.js"></script>
 <script type="text/javascript" src="{{=base_static_url}}/timedclickable.js?v={{=settings.components_version}}"></script>
@@ -212,6 +217,9 @@
         list-style-type: circle;
         list-style-image: url('{{=base_static_url}}/active.png');
     }
+    .gradeablerow:hover {
+        background-color: #cccccc;
+    }
 </style>
 
 
@@ -240,4 +248,5 @@
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
   eBookConfig.useRunestoneServices = true;
   eBookConfig.basecourse = "{{=course['base_course']}}";
+  eBookConfig.gradeRecordingUrl = `${eBookConfig.app}/assignments/record_grade`;
 </script>

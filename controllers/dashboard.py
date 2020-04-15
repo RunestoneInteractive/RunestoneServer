@@ -566,7 +566,7 @@ def questiongrades():
     )
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(
-        db.auth_user.first_name, db.auth_user.last_name
+        db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username
     )
 
     query = """select questions.name, score, points
@@ -736,7 +736,6 @@ def subchapoverview():
 
     if request.vars.tablekind == "sccount":
         x = pt.to_dict()
-        print(x)
         for k in x:
             for j in x[k]:
                 x[k][j] = format_cell(k, j[0], j[1], x[k][j])
