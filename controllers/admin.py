@@ -40,6 +40,10 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     datafile=[],
 )
 
+AUTOGRADEABLE = set(
+    ["clickablearea", "fillintheblank", "dragndrop", "mchoice", "parsonsprob"]
+)
+
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
 WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     clickablearea=ALL_WHICH_OPTIONS,
@@ -643,13 +647,22 @@ def grading():
             db.assignment_questions.question_id,
             db.assignment_questions.points,
             db.questions.name,
+            db.questions.question_type,
+            db.questions.autograde,
             orderby=db.assignment_questions.sorting_priority,
         )
         questions = []
         if row.name not in question_points:
             question_points[row.name] = {}
         for q in assignment_questions:
-            questions.append(q.questions.name)
+            if (
+                q.questions.question_type in AUTOGRADEABLE
+                or q.questions.autograde == "unittest"
+            ):
+                name_suff = "+"
+            else:
+                name_suff = ""
+            questions.append(q.questions.name + name_suff)
             question_points[row.name][q.questions.name] = q.assignment_questions.points
 
         assignments[row.name] = questions

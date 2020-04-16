@@ -1,11 +1,18 @@
-{{extend 'admin/instructors.html'}} {{ block moreincludes }} {{super}}
+{{extend 'admin/instructors.html'}}
+
+{{ block moreincludes }}
+{{super}}
+{{include '_sphinx_static_files.html'}}
+
 <script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
 <link
     href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css"
     rel="stylesheet"
     media="screen"
 />
-{{ end }} {{ block tabcontent }}
+{{ end }}
+
+{{ block tabcontent }}
 <h2>{{=chapter}} / {{=subchapter}}</h2>
 <h2>{{=sid}}</h2>
 <hr />
@@ -31,7 +38,11 @@
         <td>{{=row["first"]}}</td>
         <td>{{=row["last"]}}</td>
         <td>{{=row["clicks"]}}</td>
+        <td><button onclick="preview_question_id('{{=row['name']}}', 'question_viewer', '{{=sid}}', true)">View</button></td>
     </tr>
     {{ pass }}
 </table>
+
+<div id="question_viewer"></div>
+
 {{ end }}

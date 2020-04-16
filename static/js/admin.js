@@ -334,7 +334,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
     function show(data) {
         // get rid of any other modals -- incase they are just hanging out.
         //jQuery('.modal.modal-grader:not(#modal-template .modal)').remove();
-
+        // the submit button is connected to the save function by a jquery submit event.
         var rightDiv = jQuery(element);
 
         jQuery("#gradingform", rightDiv).remove();
@@ -536,13 +536,18 @@ function makeOption(text, value, disabledQ) {
 function populateQuestions(select, question_names) {
     $(select).empty();
     var chapter = "";
+    var questiontext;
     for (i = 0; i < question_names.length; i++) {
         var q = question_names[i];
-        var questiontext = "";
-        questiontext = q;
-        /*
-        };*/
-        select.add(makeOption(questiontext, question_names[i]));
+        if (q.endsWith("+")) {
+            q = q.substring(0, q.length - 1);
+            questiontext = q + " ✓";
+        } else {
+            questiontext = q;
+        }
+
+        // makeOption(text,value)
+        select.add(makeOption(questiontext, q));
     }
 
     $(select).select2({
@@ -1615,7 +1620,7 @@ function create_question(formdata) {
 }
 
 // Given a question ID, preview it.
-function preview_question_id(question_id, preview_div) {
+function preview_question_id(question_id, preview_div, sid, gradeit) {
     if (arguments.length == 1) {
         preview_div = "component-preview";
     }
@@ -1624,8 +1629,63 @@ function preview_question_id(question_id, preview_div) {
         acid: question_id,
     }).done(function (html_src) {
         // Render it.
-        renderRunestoneComponent(html_src, preview_div, { acid: question_id });
+        data = { acid: question_id };
+        if (sid) {
+            data.sid = sid;
+            data.graderactive = true;
+            data.useRunestoneServices = true;
+        }
+        renderRunestoneComponent(html_src, preview_div, data);
+        if (gradeit) {
+            let pd = document.getElementById(preview_div);
+            pd.appendChild(renderGradingComponents(sid, question_id));
+        }
     });
+}
+
+function renderGradingComponents(sid, divid) {
+    let div = document.createElement("div");
+    let grade = document.createElement("input");
+    let gradelabel = document.createElement("label");
+    gradelabel.for = "grade-input";
+    $(gradelabel).text("Grade");
+    grade.type = "text";
+    grade.id = "grade-input";
+    let comment = document.createElement("input");
+    let commentlabel = document.createElement("label");
+    $(commentlabel).text("Comment");
+    comment.type = "text";
+    comment.id = "comment-input";
+    commentlabel.for = "comment-input";
+
+    let butt = document.createElement("button");
+    $(butt).text("Save Grade");
+    $(butt).addClass("btn btn-normal");
+
+    $(butt).click(function () {
+        jQuery.ajax({
+            url: eBookConfig.gradeRecordingUrl,
+            type: "POST",
+            dataType: "JSON",
+            data: {
+                acid: divid,
+                sid: sid,
+                grade: $(grade).val(),
+                comment: $(comment).val(),
+            },
+            success: function (data) {
+                $(grade).css("background", "lightgreen");
+                $(comment).css("background", "lightgreen");
+            },
+        });
+    });
+    div.appendChild(gradelabel);
+    div.appendChild(grade);
+    div.appendChild(commentlabel);
+    div.appendChild(comment);
+    div.appendChild(butt);
+
+    return div;
 }
 
 // Called by the "Preview" button of the "Write" panel.
