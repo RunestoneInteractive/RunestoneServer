@@ -2448,6 +2448,9 @@ def manage_exercises():
         questions = db(
             (db.questions.review_flag == "T")
             & (db.questions.base_course == book.base_course)
+            & (
+                (db.questions.from_source == "F") | (db.questions.from_source == None)
+            )  # noqa: E711
         ).select(
             db.questions.htmlsrc,
             db.questions.difficulty,
