@@ -1441,9 +1441,30 @@ def createquestion():
             htmlsrc=request.vars["htmlsrc"],
         )
 
-        db.assignment_questions.insert(
-            assignment_id=assignmentid, question_id=newqID, timed=timed, points=points
-        )
+        if request.vars["template"] == "datafile":
+            # datafiles are not questions, but we would like instructors to be able
+            # to add their own datafiles for projects or exercises. So we store
+            # the datafile contents in the database instead of adding a question
+            # to the assignment.
+            divid = request.vars["name"].strip()
+            q = request.vars["question"].lstrip()
+            q = q.split("\n")
+            first_blank = q.index("")
+            q = "\n".join([x.lstrip() for x in q[first_blank + 1 :]])
+            db.source_code.update_or_insert(
+                (db.source_code.acid == divid)
+                & (db.source_code.course_id == base_course),
+                main_code=q,
+                course_id=base_course,
+                acid=divid,
+            )
+        else:
+            db.assignment_questions.insert(
+                assignment_id=assignmentid,
+                question_id=newqID,
+                timed=timed,
+                points=points,
+            )
 
         returndict = {request.vars["name"]: newqID, "timed": timed, "points": points}
 
