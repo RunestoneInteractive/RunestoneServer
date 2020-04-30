@@ -36,13 +36,22 @@ except:
 
 
 # Create the Celery app.
-app = Celery(
-    "scheduled_builder",
-    backend="rpc://",
-    broker=os.environ.get("REDIS_URI", "redis://localhost:6379/0"),
-)
+app = Celery("scheduled_builder")
 
-app.conf.update(result_expires=120)
+# Update the `Celery configuration <https://docs.celeryproject.org/en/latest/userguide/application.html#configuration>`_.
+#
+# Use `Redis with Celery <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#configuration>`_.
+app.conf.broker_url = os.environ.get("REDIS_URI", "redis://localhost:6379/0")
+app.conf.result_backend = os.environ.get("REDIS_URI", "redis://localhost:6379/0")
+# Given that tasks time out in 60 seconds, expire them after that. See `result_expires <https://docs.celeryproject.org/en/latest/userguide/configuration.html#result-expires>`.
+app.conf.result_expires = 120
+# This follows the `Redis caveats <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#redis-caveats>`_.
+app.conf.broker_transport_options = {
+    # 1 hour.
+    "visibility_timeout": 3600,
+    "fanout_prefix": True,
+    "fanout_patterns": True,
+}
 
 # This function should run the provided code and report the results. It will
 # vary for a given compiler and language.
