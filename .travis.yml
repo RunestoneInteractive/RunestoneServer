@@ -28,8 +28,9 @@ script:
 # Put the chromedriver in the path.
 - export PATH=$PATH:`pwd`
 # This URL was taken from a `post <https://groups.google.com/forum/#!topic/web2py/VXgsvfz67Fc>`_. Don't download the tagged releases from github, since they lack the DAL.
-- wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
-- unzip web2py_src.zip
+#- wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+- wget https://github.com/web2py/web2py/archive/R-${WEB2PY_VERSION}.zip
+- unzip $-${WEB2PY_VERSION}.zip
 - cd web2py/applications
 - mv ../../runestone .
 - cd runestone
