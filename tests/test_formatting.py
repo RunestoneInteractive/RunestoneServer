@@ -1,6 +1,7 @@
 import sys
 import os
 from .ci_utils import xqt, pushd
+import pytest
 
 
 def tests_black_format_check(runestone_name):
