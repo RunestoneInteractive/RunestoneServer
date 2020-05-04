@@ -31,7 +31,7 @@ script:
 #- wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
 - wget https://github.com/web2py/web2py/archive/R-${WEB2PY_VERSION}.zip
 - unzip R-${WEB2PY_VERSION}.zip
-- cd web2py/applications
+- cd web2py-R-${WEB2PY_VERSION}/applications
 - mv ../../runestone .
 - cd runestone
 - mkdir private
