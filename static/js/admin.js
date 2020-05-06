@@ -157,24 +157,36 @@ function autoGrade() {
         (async function (students, ajax_params) {
             // Grade each student provided.
             let student_array = Object.keys(students);
+            let total = 0;
+            $("#gradingprogresstitle").html("<h3>Grading Progress</h3>");
+            $("#autogradingprogress").html("");
             for (let index = 0; index < student_array.length; ++index) {
                 let student = student_array[index];
                 ajax_params.data.sid = student;
                 res = await jQuery.ajax(ajax_params);
-                $("#autogradingprogress").html(
-                    `Student ${index + 1} of ${student_array.length}: ${
+                $("#autogradingprogress").append(
+                    `${index + 1} of ${student_array.length}: ${student} ${
                         res.message
-                    } for ${student}`
+                    } Score: ${res.total_mess} <br>`
                 );
+                total = total + res.total_mess;
+                $("#autogradingprogress").animate({
+                    scrollTop: $("#autogradingprogress").height(),
+                });
             }
-            // Clear the graing progress.
-            $("#autogradingprogress").html("");
-            calculateTotals();
+            $("#autogradingprogress").append(
+                `Average Score: ${total / student_array.length}`
+            );
+            $("#autogradingprogress").animate({
+                scrollTop: $("#autogradingprogress").height(),
+            });
+
+            gradingSummary("autogradingsummary");
             $("#autogradesubmit").prop("disabled", false);
         })(students, params);
     } else {
         jQuery.ajax(params).always(function () {
-            calculateTotals();
+            gradingSummary("autogradingsummary");
             $("#autogradesubmit").prop("disabled", false);
         });
     }
@@ -209,6 +221,28 @@ function calculateTotals(sid) {
             } else {
                 alert(retdata.message);
             }
+        },
+    });
+}
+
+function gradingSummary(container) {
+    let assignment = getSelectedItem("assignment");
+    jQuery.ajax({
+        url: `${eBookConfig.app}/assignments/get_summary`,
+        dataType: "JSON",
+        data: {
+            assignment: assignment,
+        },
+        success: function (retdata) {
+            // retdata is array of rows in dictionary form.
+            $("#gradingsummarytitle").html("<h3>Grading Summary</h3>");
+            container = document.getElementById(container);
+            $(container).html("");
+            var hot = new Handsontable(container, {
+                data: retdata,
+                colHeaders: Object.keys(retdata[0]),
+                licenseKey: "non-commercial-and-evaluation",
+            });
         },
     });
 }

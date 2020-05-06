@@ -123,6 +123,32 @@ def calculate_totals():
     return json.dumps(_calculate_totals(sid=sid, assignment_name=assignment_name))
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def get_summary():
+    assignment_name = request.vars.assignment
+    assignment = (
+        db(
+            (db.assignments.name == assignment_name)
+            & (db.assignments.course == auth.user.course_id)
+        )
+        .select()
+        .first()
+    )
+    res = db.executesql(
+        f"""
+    select name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
+where assignment_id = {assignment.id} and course_name = '{auth.user.course_name}'
+group by name
+    """,
+        as_dict=True,
+    )
+
+    return json.dumps(res)
+
+
 def _autograde(
     sid=None,
     student_rownum=None,
@@ -223,16 +249,20 @@ def autograde():
     enforce_deadline = request.vars.get("enforceDeadline", None)
     assignment_name = request.vars.assignment
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
-
-    return json.dumps(
-        _autograde(
-            sid=sid,
-            question_name=question_name,
-            enforce_deadline=enforce_deadline,
-            assignment_name=assignment_name,
-            timezoneoffset=timezoneoffset,
-        )
+    res = _autograde(
+        sid=sid,
+        question_name=question_name,
+        enforce_deadline=enforce_deadline,
+        assignment_name=assignment_name,
+        timezoneoffset=timezoneoffset,
     )
+    tres = _calculate_totals(sid=sid, assignment_name=assignment_name)
+    if "computed_score" in tres:
+        res["total_mess"] = tres["computed_score"]
+    else:
+        res["total_mess"] = tres["message"]
+
+    return json.dumps(res)
 
 
 @auth.requires(
@@ -304,7 +334,7 @@ def record_grade():
                     & (db.question_grades.div_id == request.vars["acid"])
                     & (db.question_grades.course_name == auth.user.course_name)
                 ),
-                **updates
+                **updates,
             )
         except IntegrityError:
             logger.error(
