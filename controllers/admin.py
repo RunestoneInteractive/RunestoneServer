@@ -1809,7 +1809,7 @@ def _add_q_meta_info(qrow):
     if qrow.questions.from_source:
         book = "📘"
     else:
-        book = "👩‍🏫"
+        book = "🏫"
 
     if res != "":
         res = """ <span style="color: green">[{} {}] </span>""".format(book, res)
