@@ -13,7 +13,7 @@
   eBookConfig.get_assignment_release_statesURL = '{{=get_assignment_release_statesURL}}';
   eBookConfig.course = '{{=course_id}}';
   // load the students dictionary once the page loads
-  $(getCourseStudents)
+  $(document).ready(getCourseStudents);
 </script>
 
 <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
@@ -63,7 +63,7 @@
 
   <div>
     <div id="gradingprogresstitle"></div>
-    <div id="autogradingprogress" style="max-height: 100px; overflow: auto;"></div>
+    <div id="autogradingprogress" style="max-height: 100px; overflow: auto; "></div>
     <div id="gradingsummarytitle"></div>
     <div id="autogradingsummary"></div>
   </div>

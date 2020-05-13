@@ -554,16 +554,15 @@ def questiongrades():
 
     # make sure points total is up to date
     assignment_id = request.vars.assignment_id
+
+    if assignment_id.isnumeric():
+        assignmatch = db.assignments.id == request.vars.assignment_id
+    else:
+        assignmatch = db.assignments.name == request.vars.assignment_id
+    assignment = db(assignmatch & (db.assignments.course == course.id)).select().first()
+    assignment_id = assignment.id
     update_total_points(assignment_id)
 
-    assignment = (
-        db(
-            (db.assignments.id == request.vars.assignment_id)
-            & (db.assignments.course == course.id)
-        )
-        .select()
-        .first()
-    )
     sid = request.vars.sid
     student = db(db.auth_user.username == sid).select(
         db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username

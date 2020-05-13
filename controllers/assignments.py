@@ -139,12 +139,18 @@ def get_summary():
     )
     res = db.executesql(
         f"""
-    select name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
+    select chapter, name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
 where assignment_id = {assignment.id} and course_name = '{auth.user.course_name}'
-group by name
+group by chapter, name
     """,
         as_dict=True,
     )
+
+    for row in res:
+        if row["count"] > 0:
+            row[
+                "name"
+            ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
 
     return json.dumps(res)
 

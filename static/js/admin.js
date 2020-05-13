@@ -160,14 +160,16 @@ function autoGrade() {
             let total = 0;
             $("#gradingprogresstitle").html("<h3>Grading Progress</h3>");
             $("#autogradingprogress").html("");
+            $("#autogradingprogress").css("border", "1px solid");
             for (let index = 0; index < student_array.length; ++index) {
                 let student = student_array[index];
                 ajax_params.data.sid = student;
                 res = await jQuery.ajax(ajax_params);
                 $("#autogradingprogress").append(
-                    `${index + 1} of ${student_array.length}: ${student} ${
-                        res.message
-                    } Score: ${res.total_mess} <br>`
+                    `${index + 1} of ${student_array.length}:
+                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${assignment}">${student}</a>
+                        ${res.message}
+                        Score: ${res.total_mess} <br>`
                 );
                 total = total + res.total_mess;
                 $("#autogradingprogress").animate({
@@ -238,10 +240,15 @@ function gradingSummary(container) {
             $("#gradingsummarytitle").html("<h3>Grading Summary</h3>");
             container = document.getElementById(container);
             $(container).html("");
+            let columns = [];
+            for (let k of Object.keys(retdata[0])) {
+                columns.push({ data: k, renderer: "html" });
+            }
             var hot = new Handsontable(container, {
                 data: retdata,
                 colHeaders: Object.keys(retdata[0]),
                 licenseKey: "non-commercial-and-evaluation",
+                columns: columns,
             });
         },
     });
@@ -630,6 +637,7 @@ function updateQuestionList() {
         } else {
             $("#releasestate").text("");
         }
+        gradingSummary("autogradingsummary");
     }
     if (chapAssign == "assignment") {
         populateQuestions(questionSelector, assignmentinfo[col1val]);
