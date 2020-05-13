@@ -1781,11 +1781,8 @@ def _get_toc_and_questions():
     )
 
 
-# except Exception as ex:
-#     print(ex)
-#     return json.dumps({})
-
-
+# This is the place to add meta information about questions for the
+# assignment builder
 def _add_q_meta_info(qrow):
     res = ""
     qt = {
@@ -1809,8 +1806,13 @@ def _add_q_meta_info(qrow):
     if qrow.questions.autograde:
         res += " ✓"
 
+    if qrow.questions.from_source:
+        book = "📘"
+    else:
+        book = "👩‍🏫"
+
     if res != "":
-        res = """ <span style="color: green">[{}] </span>""".format(res)
+        res = """ <span style="color: green">[{} {}] </span>""".format(book, res)
 
     return res
 
