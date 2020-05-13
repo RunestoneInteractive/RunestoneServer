@@ -177,6 +177,7 @@ def _route_book(is_published=True):
             (db.questions.subchapter == subchapter)
             & (db.questions.chapter == chapter)
             & (db.questions.from_source == True)  # noqa: E712
+            & (db.questions.optional == False)
             & (db.questions.base_course == base_course)
         ).select(db.questions.name)
         div_counts = {q.name: 0 for q in page_divids}
@@ -185,6 +186,7 @@ def _route_book(is_published=True):
             & (db.questions.chapter == chapter)
             & (db.questions.base_course == base_course)
             & (db.questions.from_source == True)  # noqa: E712
+            & (db.questions.optional == False)
             & (db.questions.name == db.useinfo.div_id)
             & (db.useinfo.course_id == auth.user.course_name)
             & (db.useinfo.sid == auth.user.username)
