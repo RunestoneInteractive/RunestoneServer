@@ -38,9 +38,9 @@ options(
             "proxy_uri_runs": "/jobe/index.php/restapi/runs/",
             "proxy_uri_files": "/jobe/index.php/restapi/files/",
             "downloads_enabled": "false",
-            "enable_chatcodes": "False",
-            "allow_pairs": "False",
-            "dynamic_pages": "True",
+            "enable_chatcodes": "false",
+            "allow_pairs": "false",
+            "dynamic_pages": True,
             "use_services": use_services,
             "basecourse": project_name,
             # If ``use_services`` is 'true', then the following values are ignored, since they're provided by the server.
