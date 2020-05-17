@@ -8,7 +8,7 @@ info () {
 }
 
 # This file will exist if we've initialized postgres
-stamp=/var/lib/postgresql/9.6/main/initialized.stamp
+stamp=/var/lib/postgresql/11/main/initialized.stamp
 
 # Ensure the user starting the container has provided a password
 if [ -z "$POSTGRES_PASSWORD" ]
@@ -164,6 +164,7 @@ cd "${BOOKS_PATH}"
     (
         cd $book;
         if [ ! -f NOBUILD ]; then
+            pip install -r requirements.txt
             runestone build $buildargs deploy
         else
             info "skipping $book due to NOBUILD file"

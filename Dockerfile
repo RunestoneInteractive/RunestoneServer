@@ -1,4 +1,4 @@
-FROM library/python:3.7-stretch
+FROM python:3.8-buster
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 
@@ -55,7 +55,7 @@ RUN apt-get update && \
         less \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
-        openjdk-8-jre-headless \
+        openjdk-11-jre-headless \
         rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
