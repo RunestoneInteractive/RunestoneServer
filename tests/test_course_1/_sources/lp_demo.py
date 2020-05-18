@@ -4,6 +4,8 @@
 # Write a function named ``one`` which takes no parameters and returns the value 1.
 #
 # SOLUTION_BEGIN
+
+
 def one():
     return 1
 
