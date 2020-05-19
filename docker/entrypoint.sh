@@ -111,6 +111,21 @@ mkdir -p ${RUNESTONE_PATH}/databases
 chown www-data ${RUNESTONE_PATH}/databases
 chown -R www-data /run/uwsgi
 
+# If you want to do development on the components as well, then install them
+# in dev mode.  You should also make a docker-compose.override.yml that looks like
+# version: "3"
+#
+# services:
+#     runestone:
+#         volumes:
+#             - ../RunestoneComponents:/srv/RunestoneComponents
+
+if [ -f /srv/RunestoneComponents/README.rst ]; then
+    info "Installing Development Version of Runestone"
+    pip install --upgrade -e /srv/RunestoneComponents
+fi
+runestone --version
+
 # For development, make all files group-writeable.
 if [ $WEB2PY_CONFIG == "development" ]; then
     chmod -R g+w ${RUNESTONE_PATH}
@@ -164,7 +179,9 @@ cd "${BOOKS_PATH}"
     (
         cd $book;
         if [ ! -f NOBUILD ]; then
-            pip install -r requirements.txt
+            if [ -f requirements.txt ]; then
+                pip install -r requirements.txt
+            fi
             runestone build $buildargs deploy
         else
             info "skipping $book due to NOBUILD file"
