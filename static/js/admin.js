@@ -1762,7 +1762,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     patt = /..\/_images/g;
     componentSrc = componentSrc.replace(
         patt,
-        `/${eBookConfig.app}/static/${eBookConfig.course}/_images`
+        `${eBookConfig.app}/books/published/${eBookConfig.basecourse}/_images`
     );
     jQuery(`#${whereDiv}`).html(componentSrc);
 
