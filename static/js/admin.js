@@ -241,8 +241,10 @@ function gradingSummary(container) {
             container = document.getElementById(container);
             $(container).html("");
             let columns = [];
-            for (let k of Object.keys(retdata[0])) {
-                columns.push({ data: k, renderer: "html" });
+            if (retdata) {
+                for (let k of Object.keys(retdata[0])) {
+                    columns.push({ data: k, renderer: "html" });
+                }
             }
             var hot = new Handsontable(container, {
                 data: retdata,
