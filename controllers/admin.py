@@ -1869,6 +1869,9 @@ def get_assignment():
                 (db.questions.chapter == row.questions.chapter)
                 & (db.questions.subchapter == row.questions.subchapter)
                 & (db.questions.from_source == "T")
+                & (
+                    (db.questions.optional == False) | (db.questions.optional == None)
+                )  # noqa #711
                 & (db.questions.base_course == base_course)
             ).count()
 
