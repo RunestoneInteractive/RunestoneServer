@@ -392,7 +392,11 @@ def get_problem():
             .select()
             .first()
         )
-        deadline = assignment.duedate
+        deadline = assignment.duedate if assignment else None
+        if deadline is None:
+            logger.error(
+                f"Did not find assignment {assignment_name} for course {auth.user.course_name} this should not happen"
+            )
     else:
         deadline = None
 
