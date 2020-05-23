@@ -78,8 +78,7 @@ pyzmq==18.1.1             # via locustio
 redis==3.4.1              # via celery
 regex==2020.1.8           # via black
 requests==2.22.0          # via -r requirements.in, coveralls, locustio, runestone, sphinx, stripe
-https://github.com/RunestoneInteractive/RunestoneComponents/archive/master.zip  # via -r requirements-dev.in
-runestone==5.0.0dev1      # via -r requirements.in
+runestone==5.0.0          # via -r requirements.in
 selenium==3.141.0         # via -r requirements-dev.in, -r requirements.in
 six==1.14.0               # via -r requirements.in, astroid, bleach, geventhttpclient-wheels, locustio, packaging, pathlib2, paver, pip-tools, python-dateutil, runestone
 snowballstemmer==2.0.0    # via runestone, sphinx

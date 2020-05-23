@@ -47,7 +47,7 @@ python-dateutil==2.8.1    # via -r requirements.in, pandas
 pytz==2019.3              # via -r requirements.in, babel, celery, pandas, runestone
 redis==3.4.1              # via celery
 requests==2.22.0          # via -r requirements.in, runestone, sphinx, stripe
-runestone==5.0.0dev1      # via -r requirements.in
+runestone==5.0.0          # via -r requirements.in
 selenium==3.141.0         # via -r requirements.in
 six==1.14.0               # via -r requirements.in, astroid, bleach, packaging, pathlib2, paver, python-dateutil, runestone
 snowballstemmer==2.0.0    # via runestone, sphinx
