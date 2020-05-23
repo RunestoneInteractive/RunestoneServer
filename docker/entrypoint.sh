@@ -25,11 +25,6 @@ if [ -z "$RUNESTONE_HOST" ]; then
     exit 1
 fi
 
-# For development make sure we are up to date with the latest from github.
-if [ $WEB2PY_CONFIG == "development" ]; then
-    pip install --upgrade git+git://github.com/RunestoneInteractive/RunestoneComponents.git
-fi
-
 # Initialize the database
 if [ ! -f "$stamp" ]; then
 
