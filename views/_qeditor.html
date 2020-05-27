@@ -1,0 +1,57 @@
+<div aria-hidden="true"  class="modal fade" id="editModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="editModalHeader">Edit Question</h4>
+        </div><!-- Modal Body -->
+        <div class="modal-body">
+          <p>If you are not the original author of this question you must change the id on the first line of the directive.  If you add a unit test,
+            make sure that you add the parameter <code>:autograde: unittest </code> to the directive.  Likewise if you want
+            to make an autograded question available through the practice tool add <code>:practice: T</code> as a parameter.
+          </p>
+          <form id="editForm" name="editForm">
+            <div class="form-group">
+              <label for="change_difficulty">Change Difficulty</label>
+              <div id="change_difficulty">
+                <input id="r1" name="rating" type="radio" value="1"><label for="r1">1</label>
+                <input id="r2" name="rating" type="radio" value="2"><label for="r2">2</label>
+                <input id="r3" name="rating" type="radio" value="3"><label for="r3">3</label>
+                <input id="r4" name="rating" type="radio" value="4"><label for="r4">4</label>
+                <input id="r5" name="rating" type="radio" value="5"><label for="r5">5</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="change_privacy">Make Private</label>
+                <input id="change_privacy" name="isprivate" type="checkbox">
+            </div>
+            <div class="form-group">
+              <label for="addTags">Add Tags</label>
+              <select class="js-example-basic-multiple" id="addTags" multiple="multiple" style="width:100%">
+                {{ for tag in tags: }}
+                <option value="{{=tag}}">{{ =tag }}</option>
+                {{ pass }}
+              </select>
+            </div>
+            <div class="form-group">
+              <textarea cols="100" id="editRST" name="editRST" placeholder="" rows="20" style="white-space: pre; overflow-x: auto;"></textarea>
+              <div id="modal-preview"></div>
+            </div>
+            <input type="hidden" id="qrawhtmlmodal" name="qrawhtml" value="">
+            <input class="btn btn-default" onclick="edit_question(this.form);" type="button" value="Save Edits">
+            <input class="btn btn-default" onclick="preview_question(this.form,'modal-preview');" type="button" value="Generate/View HTML">
+          </form>
+        </div><!-- Modal Footer -->
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    // clean out the preview when the modal is hidden
+    $("#editModal").on("hidden.bs.modal", function() {
+      $("#modal-preview").html("")
+    });
+  </script>

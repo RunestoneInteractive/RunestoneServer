@@ -67,7 +67,22 @@ export RUNESTONE_HOST=localhost
 export POSTGRES_PASSWORD=runestone
 ```
 
-If you are doing development work You can **skip to step 5** at this point.
+If you are doing **development work** You will want to install the RunestoneComponents in development mode as well.  clone https://github.com/RunestoneInteractive/RunestoneComponents.git as a sibling of the RunestoneServer directory.  As the components also use npm to build the runestone.js file you will want to **follow the directions** in the README for that.  If you do not then you will be **missing runestone.js** and nothing is going to work right!  If you are not developing the components then don't worry about it, docker will already have the latest released version of runestone installed.
+
+Create a docker-compose.override.yml in the same directory as the docker-compose.yml file.  It should look like this:
+
+```yml
+version: "3"
+
+services:
+    runestone:
+        volumes:
+            - ../RunestoneComponents:/srv/RunestoneComponents
+```
+
+The entrypoint.sh file will notice that you have this volume mounted and reinstall the development version of Runestone.
+
+Developers can now skip to step 5.
 
 If you want to deploy a production Runestone Server, you will need
 to change the default usernames and passwords. Notice how there are environment

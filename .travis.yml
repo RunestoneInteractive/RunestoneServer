@@ -1,7 +1,7 @@
 dist: xenial
 language: python
 python:
-- '3.7'
+- '3.8'
 services:
 - postgresql
 # For Celery (web2py scheduler replacement).
@@ -13,7 +13,7 @@ addons:
       - openjdk-8-jre-headless
       - google-chrome-stable
 env:
-- WEB2PY_VERSION=2.18.5
+- WEB2PY_VERSION=2.20.4
 script:
 - pip install -U -r requirements-dev.txt
 - mkdir runestone
@@ -29,6 +29,10 @@ script:
 - export PATH=$PATH:`pwd`
 # This URL was taken from a `post <https://groups.google.com/forum/#!topic/web2py/VXgsvfz67Fc>`_. Don't download the tagged releases from github, since they lack the DAL.
 - wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+#- wget https://github.com/web2py/web2py/archive/R-${WEB2PY_VERSION}.zip
+#- git clone --branch R-2.18.5 https://github.com/web2py/web2py
+#- cd web2py
+#- git submodule update --init --recursive
 - unzip web2py_src.zip
 - cd web2py/applications
 - mv ../../runestone .

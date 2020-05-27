@@ -1,4 +1,4 @@
-FROM library/python:3.7-stretch
+FROM python:3.8-buster
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 
@@ -44,6 +44,7 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 #  rsync is needed when deploying a built book
 #  vim - just for pleasure of being able to do any changes right within
 #  wget - just in case
+#  texlive-full, xsltproc and
 RUN apt-get update && \
     apt-get install -y eatmydata && \
     eatmydata apt-get update && echo "count 1" && \
@@ -55,7 +56,8 @@ RUN apt-get update && \
         less \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
-        openjdk-8-jre-headless \
+        texlive-full xsltproc pdf2svg \
+        openjdk-11-jre-headless \
         rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

@@ -8,7 +8,7 @@ info () {
 }
 
 # This file will exist if we've initialized postgres
-stamp=/var/lib/postgresql/9.6/main/initialized.stamp
+stamp=/var/lib/postgresql/11/main/initialized.stamp
 
 # Ensure the user starting the container has provided a password
 if [ -z "$POSTGRES_PASSWORD" ]
@@ -23,11 +23,6 @@ fi
 if [ -z "$RUNESTONE_HOST" ]; then
     echo "Please export \${RUNESTONE_HOST} set to the hostname"
     exit 1
-fi
-
-# For development make sure we are up to date with the latest from github.
-if [ $WEB2PY_CONFIG == "development" ]; then
-    pip install --upgrade git+git://github.com/RunestoneInteractive/RunestoneComponents.git
 fi
 
 # Initialize the database
@@ -111,6 +106,21 @@ mkdir -p ${RUNESTONE_PATH}/databases
 chown www-data ${RUNESTONE_PATH}/databases
 chown -R www-data /run/uwsgi
 
+# If you want to do development on the components as well, then install them
+# in dev mode.  You should also make a docker-compose.override.yml that looks like
+# version: "3"
+#
+# services:
+#     runestone:
+#         volumes:
+#             - ../RunestoneComponents:/srv/RunestoneComponents
+
+if [ -f /srv/RunestoneComponents/README.rst ]; then
+    info "Installing Development Version of Runestone"
+    pip install --upgrade -e /srv/RunestoneComponents
+fi
+runestone --version
+
 # For development, make all files group-writeable.
 if [ $WEB2PY_CONFIG == "development" ]; then
     chmod -R g+w ${RUNESTONE_PATH}
@@ -164,6 +174,9 @@ cd "${BOOKS_PATH}"
     (
         cd $book;
         if [ ! -f NOBUILD ]; then
+            if [ -f requirements.txt ]; then
+                pip install -r requirements.txt
+            fi
             runestone build $buildargs deploy
         else
             info "skipping $book due to NOBUILD file"

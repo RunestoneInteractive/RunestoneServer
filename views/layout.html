@@ -163,6 +163,9 @@
                                 {{ pass }}
                                 {{ if not settings.lti_only_mode: }}
                                     {{ if auth.user: }}
+                                        {{if is_editor(auth.user.id): }}
+                                        <li><a href='/{{=request.application}}/admin/manage_exercises'>Editorial Page</a></li>
+                                        {{ pass }}
                                         <li><a href="{{=URL('dashboard','studentreport')}}">Progress Page</a></li>
                                         <li class="divider"></li>
                                         <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
@@ -242,7 +245,7 @@
                     {{ pass }}
                 </p>
                 <p>
-                    &copy; Copyright 2018 Runestone Interactive LLC
+                    &copy; Copyright {{=request.now.year}} Runestone Interactive LLC
                     {{ if settings.academy_mode: }}
                         &emsp; ● <a href="/{{=request.application}}/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/{{=request.application}}/default/terms">Terms of Service</a>
                     {{ pass }}

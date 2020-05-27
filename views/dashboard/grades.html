@@ -32,11 +32,11 @@
 
             <thead style="cursor: pointer;">
                 <tr id = "head">
-                    <td id="leaveAlone0">FName</td>
-                    <td id="leaveAlone1">LName</td>
-                    <td id="leaveAlone2">UName</td>
-                    <td id="leaveAlone3">E-mail</td>
-                    <td id="leaveAlone4">Practice</td>
+                    <td id="leaveAlone0" class="roguecol">FName</td>
+                    <td id="leaveAlone1" class="roguecol">LName</td>
+                    <td id="leaveAlone2" class="roguecol">UName</td>
+                    <td id="leaveAlone3" class="roguecol">E-mail</td>
+                    <td id="leaveAlone4" class="roguecol">Practice</td>
                     {{for assignment in assignments:}}
                         <td class="headrow">{{=assignment['name']}}</td>
                     {{pass}}
@@ -45,11 +45,11 @@
 
             <tbody>
                 <tr style="background-color: lightgray" id="classaverage">
-                    <td>Class Average</td>
-                    <td> </td>
-                    <td> </td>
-                    <td> </td>
-                    <td>{{=practice_average}}</td>
+                    <td class="roguecol">Class Average</td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol">{{=practice_average}}</td>
                     {{for average in range(len(averagerow)):}}
 
                         <!-- This if statement is to determine if a percent sign is needed in the average row. -->
@@ -114,6 +114,8 @@
         tablehead = document.getElementById("head");
         tablehead = tablehead.getElementsByTagName("td");
 
+        $("td").hide()
+        $(".roguecol").show()
         for (i = 0; i < tablehead.length; i++) {
             if (tablehead[i].id != "leaveAlone") {
                 console.log(tablehead[i].innerHTML)
@@ -128,15 +130,11 @@
                         tds[j].style.display = "";
                     }
 
-                } else {
-                    tablehead[i].style.display = "none";
-                    for (j = 0; j < tds.length; j ++) {
-                        tds[j].style.display = "none";
-                    }
                 }
             }
         }
     }
+
 
 </script>
 

@@ -75,7 +75,10 @@
                             <div class='oneq full-width' id='{{=count}}'>
                                 <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
                             </div>
-
+                            <div class="oneq" style="width: 100%; text-align: center">
+                            <a href="/runestone/books/published/{{=course.base_course}}/{{=q['chapter']}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                            </div>
+                            <hr>
                         {{count += 1}}
                     {{pass}}
                 {{pass}}

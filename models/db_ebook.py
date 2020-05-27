@@ -198,6 +198,12 @@ db.define_table(
     migrate=table_migrate_prefix + "invoice_request.table",
 )
 
+db.define_table(
+    "editor_basecourse",
+    Field("editor", db.auth_user),
+    Field("base_course", "string"),
+    migrate=table_migrate_prefix + "editor_basecourse.table",
+)
 # The course attribute table allows us to add parameters to each course without having
 # to add columns to the courses table every time we have something new to store.
 # for example we could have a "source" key value pair to indicate if a course is built

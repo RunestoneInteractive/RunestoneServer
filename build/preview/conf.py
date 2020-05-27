@@ -18,7 +18,7 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('../modules'))
 
-from runestone import runestone_static_dirs, runestone_extensions
+from runestone import runestone_static_dirs, runestone_extensions, setup
 
 # -- General configuration -----------------------------------------------------
 

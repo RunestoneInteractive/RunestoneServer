@@ -1,4 +1,5 @@
 {{extend 'admin/instructors.html'}}
+
 {{ block tabcontent }}
 
 <script type="text/javascript" src="https://kozea.github.io/pygal.js/javascripts/svg.jquery.js"></script>
@@ -10,8 +11,8 @@
 
 <div id="dashboard">
 	<h2 style="text-align:center;">{{=assignment['name']}}</h2>
-	<h2>Report for {{=student[0]['first_name']}} {{=student[0]['last_name']}}</h2> 
-
+	<h2>Report for {{=student[0]['first_name']}} {{=student[0]['last_name']}}</h2>
+    <p>Click on the question name to display or update the grade for any question.</p>
 	<div id="questions" class="col-md-12">
 		<table class="sortable">
 			<thead style="cursor: pointer;">
@@ -24,14 +25,21 @@
 			<tbody>
 				{{for row in rows:}}
 					<tr>
-					{{for item in range(len(row)):}}
-						<td>{{=row[item]}}</td>
+                    {{for item in range(len(row)):}}
+                        {{ if item == 0:}}
+                            <td onclick="preview_question_id('{{=row[item]}}', 'question_viewer', '{{=student[0]['username']}}', true)"
+                            class="gradeablerow">
+                        {{ else: }}
+                            <td>
+                        {{ pass }}
+                            {{=row[item]}}
+                        </td>
 						{{if item == 1:}}
 							{{total += row[item] or 0}}
 						{{pass}}
 					{{pass}}
 					</tr>
-				{{pass}}					
+				{{pass}}
 			</tbody>
 			<tfoot>
 				<tr>
@@ -44,4 +52,8 @@
 	</div>
 
 </div>
+<p style="clear: both;"></p>
+<div id="question_viewer">
+</div>
+
 {{end}}
