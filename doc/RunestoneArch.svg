@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="145 76.5 642.6969 756.9307" width="642.6969" height="756.9307">
+  <defs>
+    <filter id="Shadow" filterUnits="userSpaceOnUse" x="145" y="76.5">
+      <feOffset in="SourceAlpha" result="offset" dx="0" dy="2"/>
+      <feFlood flood-color="#919191" flood-opacity=".25" result="flood"/>
+      <feComposite in="flood" in2="offset" operator="in" result="color"/>
+      <feMerge>
+        <feMergeNode in="color"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <font-face font-family="Avenir" font-size="13" panose-1="2 11 7 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="480" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Heavy"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="16" panose-1="2 11 7 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="480" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Heavy"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="17" panose-1="2 11 7 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="480" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Heavy"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Avenir" font-size="15" panose-1="2 11 7 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="480" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Heavy"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -3 5 6" markerWidth="5" markerHeight="6" color="black">
+      <g>
+        <path d="M 2.88 0 L 0 -1.08 L 0 1.08 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-4 -3 5 6" markerWidth="5" markerHeight="6" color="black">
+      <g>
+        <path d="M -2.88 0 L 0 1.08 L 0 -1.08 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_3" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -3 7 6" markerWidth="7" markerHeight="6" color="black">
+      <g>
+        <path d="M 4.8 0 L 0 -1.8 L 0 1.8 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_4" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-6 -3 7 6" markerWidth="7" markerHeight="6" color="black">
+      <g>
+        <path d="M -4.8 0 L 0 1.8 L 0 -1.8 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <font-face font-family="Avenir" font-size="20" panose-1="2 11 7 3 2 2 3 2 2 4" units-per-em="1000" underline-position="-75" underline-thickness="50" slope="0" x-height="480" cap-height="708" ascent="1e3" descent="-365.9973" font-weight="800">
+      <font-face-src>
+        <font-face-name name="Avenir-Heavy"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="12.204" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="20" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_5" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -3 7 6" markerWidth="7" markerHeight="6" color="black">
+      <g>
+        <path d="M 4.8 0 L 0 -1.8 L 0 1.8 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_6" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-6 -3 7 6" markerWidth="7" markerHeight="6" color="black">
+      <g>
+        <path d="M -4.8 0 L 0 1.8 L 0 -1.8 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.11.4 
+    <dc:date>2020-05-27 19:26:25 +0000</dc:date>
+  </metadata>
+  <g id="Flowchart" stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <title>Flowchart</title>
+    <rect fill="white" x="145" y="76.5" width="642.6969" height="756.9307"/>
+    <g id="Flowchart: flowchart">
+      <title>flowchart</title>
+      <g id="Graphic_28" filter="url(#Shadow)">
+        <title>record results</title>
+        <path d="M 662.90486 198.87228 L 779.593 185.5 L 779.593 252.3614 L 662.90486 252.3614 Z" fill="white"/>
+        <path d="M 662.90486 198.87228 L 779.593 185.5 L 779.593 252.3614 L 662.90486 252.3614 Z" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(666.90486 187.36139)" fill="#515556">
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="#515556" x="32.55606" y="31">HTML5</tspan>
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="#515556" x="23.52756" y="49">Templates</tspan>
+        </text>
+      </g>
+      <g id="Graphic_26" filter="url(#Shadow)">
+        <title>send agreement</title>
+        <path d="M 438.9871 148.03465 L 494.70985 148.03465 C 507.9647 148.03465 518.70985 158.77982 518.70985 172.03465 L 518.70985 210.26832 C 487.593 202.4891 446.1039 233.60594 414.9871 218.04752 L 414.9871 172.03465 C 414.9871 158.77982 425.73225 148.03465 438.9871 148.03465 Z" fill="#dae2e3"/>
+        <path d="M 438.9871 148.03465 L 494.70985 148.03465 C 507.9647 148.03465 518.70985 158.77982 518.70985 172.03465 L 518.70985 210.26832 C 487.593 202.4891 446.1039 233.60594 414.9871 218.04752 L 414.9871 172.03465 C 414.9871 158.77982 425.73225 148.03465 438.9871 148.03465 Z" stroke="#b9bfc1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(420.9871 163.03465)" fill="#515556">
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#515556" x="6.317385" y="16">Runestone</tspan>
+          <tspan font-family="Avenir" font-size="16" font-weight="800" fill="#515556" x="26.885385" y="38">Build</tspan>
+        </text>
+      </g>
+      <g id="Graphic_14" filter="url(#Shadow)">
+        <title>view events</title>
+        <rect x="398.91777" y="392.0693" width="129.65347" height="66.86139" fill="#e1e8e8"/>
+        <rect x="398.91777" y="392.0693" width="129.65347" height="66.86139" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(404.91777 414)" fill="#515556">
+          <tspan font-family="Avenir" font-size="17" font-weight="800" fill="#515556" x="10.206733" y="17">Book Server</tspan>
+        </text>
+      </g>
+      <g id="Graphic_12" filter="url(#Shadow)">
+        <title>member database</title>
+        <path d="M 146 458.8 L 146 381.2 C 146 375.8456 163.42543 371.5 184.89604 371.5 C 206.36665 371.5 223.79208 375.8456 223.79208 381.2 L 223.79208 458.8 C 223.79208 464.1544 206.36665 468.5 184.89604 468.5 C 163.42543 468.5 146 464.1544 146 458.8" fill="#adb3b5"/>
+        <path d="M 146 458.8 L 146 381.2 C 146 375.8456 163.42543 371.5 184.89604 371.5 C 206.36665 371.5 223.79208 375.8456 223.79208 381.2 L 223.79208 458.8 C 223.79208 464.1544 206.36665 468.5 184.89604 468.5 C 163.42543 468.5 146 464.1544 146 458.8 M 146 381.2 C 146 386.5544 163.42543 390.9 184.89604 390.9 C 206.36665 390.9 223.79208 386.5544 223.79208 381.2" stroke="#7a7e80" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(152 381.5)" fill="white">
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="white" x="32.89604" y="13"> </tspan>
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="white" x=".7665381" y="31">Runestone</tspan>
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="white" x="4.250538" y="49">Database</tspan>
+        </text>
+      </g>
+      <g id="Graphic_10" filter="url(#Shadow)">
+        <title>member data</title>
+        <path d="M 199.29834 138 L 328.21448 138 L 295.98544 210.32673 L 167.0693 210.32673 Z" fill="white"/>
+        <path d="M 199.29834 138 L 328.21448 138 L 295.98544 210.32673 L 167.0693 210.32673 Z" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(173.0693 154.16337)" fill="#515556">
+          <tspan font-family="Avenir" font-size="15" font-weight="800" fill="#515556" x="16.642586" y="15">restructuredText</tspan>
+          <tspan font-family="Avenir" font-size="15" font-weight="800" fill="#515556" x="50.685086" y="35">Source</tspan>
+        </text>
+      </g>
+      <g id="Graphic_31" filter="url(#Shadow)">
+        <title>view events</title>
+        <rect x="398.91777" y="626.2079" width="129.65347" height="66.86139" fill="#e1e8e9"/>
+        <rect x="398.91777" y="626.2079" width="129.65347" height="66.86139" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(404.91777 629.6386)" fill="#515556">
+          <tspan font-family="Avenir" font-size="15" font-weight="800" fill="#515556" x="24.941733" y="15">Instructor</tspan>
+          <tspan font-family="Avenir" font-size="15" font-weight="800" fill="#515556" x="20.636733" y="35">Dashboard</tspan>
+          <tspan font-family="Avenir" font-size="15" font-weight="800" fill="#515556" x="36.184233" y="55">Server</tspan>
+        </text>
+      </g>
+      <g id="Line_20">
+        <line x1="389.8984" y1="435.7864" x2="232.81144" y2="420.8572" marker-end="url(#FilledArrow_Marker)" marker-start="url(#FilledArrow_Marker_2)" stroke="black" stroke-linecap="square" stroke-linejoin="bevel" stroke-width="2"/>
+      </g>
+      <g id="Line_35">
+        <line x1="389.0451" y1="640.192" x2="195.9527" y2="477.7988" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_37">
+        <line x1="661.90486" y1="219.90584" x2="494.58914" y2="383.06312" marker-end="url(#FilledArrow_Marker_3)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8.0,8.0" stroke-width="2"/>
+      </g>
+      <g id="Line_38">
+        <line x1="313.1374" y1="174.2921" x2="402.18527" y2="185.3421" marker-end="url(#FilledArrow_Marker_3)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_39">
+        <line x1="518.70985" y1="186.9307" x2="649.31124" y2="215.91398" marker-end="url(#FilledArrow_Marker_3)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_41" filter="url(#Shadow)">
+        <rect x="666.90486" y="377" width="119.79208" height="97" fill="white"/>
+        <rect x="666.90486" y="377" width="119.79208" height="97" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(672.90486 398.5)" fill="#515556">
+          <tspan font-family="Avenir" font-size="20" font-weight="800" fill="#515556" x="15.576038" y="20">Browser</tspan>
+          <tspan font-family="Avenir" font-size="20" font-weight="800" fill="#515556" x="10.936038" y="47">(Student)</tspan>
+        </text>
+      </g>
+      <g id="Line_42">
+        <line x1="541.46274" y1="413.88833" x2="653.01335" y2="409.83775" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_43">
+        <line x1="541.46274" y1="437.1117" x2="654.01335" y2="441.19856" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8.0,8.0" stroke-width="2"/>
+      </g>
+      <g id="Graphic_44" filter="url(#Shadow)">
+        <title>record results</title>
+        <path d="M 666.90486 90.87228 L 783.593 77.5 L 783.593 144.36139 L 666.90486 144.36139 Z" fill="white"/>
+        <path d="M 666.90486 90.87228 L 783.593 77.5 L 783.593 144.36139 L 666.90486 144.36139 Z" stroke="#b9c0c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(670.90486 79.36139)" fill="#515556">
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="#515556" x="15.448059" y="31">Static HTML,</tspan>
+          <tspan font-family="Avenir" font-size="13" font-weight="800" fill="#515556" x="7.271059" y="49">CSS, JavaScript</tspan>
+        </text>
+      </g>
+      <g id="Line_45">
+        <line x1="518.70985" y1="186.9307" x2="655.4263" y2="116.81734" marker-end="url(#FilledArrow_Marker_3)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Graphic_46" filter="url(#Shadow)">
+        <rect x="663.8009" y="611.1386" width="119.79208" height="97" fill="white"/>
+        <rect x="663.8009" y="611.1386" width="119.79208" height="97" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(669.8009 632.6386)" fill="#515556">
+          <tspan font-family="Avenir" font-size="20" font-weight="800" fill="#515556" x="15.576038" y="20">Browser</tspan>
+          <tspan font-family="Avenir" font-size="20" font-weight="800" fill="#515556" x="2.796038" y="47">(Instructor)</tspan>
+        </text>
+      </g>
+      <g id="Line_49">
+        <line x1="541.46235" y1="648.0162" x2="650.9098" y2="643.9508" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_51">
+        <line x1="541.46235" y1="671.261" x2="650.9098" y2="675.32644" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8.0,8.0" stroke-width="2"/>
+      </g>
+      <g id="Graphic_53">
+        <rect x="560.97674" y="658.56974" width="85.28" height="30" fill="white" fill-opacity=".5"/>
+        <text transform="translate(565.97674 663.56974)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="0" y="15">Admin API</tspan>
+        </text>
+      </g>
+      <g id="Graphic_54">
+        <rect x="554.1329" y="426.55573" width="91.14742" height="25.341723" fill="white" fill-opacity=".5"/>
+        <text transform="translate(559.1344 431.55573)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="12.204" font-weight="400" fill="black" x="0" y="12">Runestone API</tspan>
+        </text>
+      </g>
+      <g id="Graphic_55">
+        <rect x="424.84847" y="755.1386" width="77.79208" height="77.79208" fill="white"/>
+        <rect x="424.84847" y="755.1386" width="77.79208" height="77.79208" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(429.84847 782.2547)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="20" font-weight="400" fill="black" x="13.146038" y="19">LMS</tspan>
+        </text>
+      </g>
+      <g id="Line_56">
+        <line x1="445.0494" y1="706.6836" x2="452.7201" y2="742.5243" marker-end="url(#FilledArrow_Marker_3)" marker-start="url(#FilledArrow_Marker_4)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8.0,8.0" stroke-width="2"/>
+      </g>
+      <g id="Graphic_57">
+        <rect x="416.6855" y="699.5151" width="60.08" height="30" fill="white" fill-opacity=".5"/>
+        <text transform="translate(421.6855 704.5151)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="8704149e-19" y="15">LTI API</tspan>
+        </text>
+      </g>
+      <g id="Graphic_58" filter="url(#Shadow)">
+        <title>view events</title>
+        <rect x="398.91777" y="518" width="129.65347" height="66.86139" fill="#e1e8e8"/>
+        <rect x="398.91777" y="518" width="129.65347" height="66.86139" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(404.91777 539.9307)" fill="#515556">
+          <tspan font-family="Avenir" font-size="17" font-weight="800" fill="#515556" x="8.617233" y="17">JOBE Server</tspan>
+        </text>
+      </g>
+      <g id="Graphic_59" filter="url(#Shadow)">
+        <title>view events</title>
+        <rect x="398.91777" y="266.1386" width="129.65347" height="66.86139" fill="#e1e8e8"/>
+        <rect x="398.91777" y="266.1386" width="129.65347" height="66.86139" stroke="#00aeef" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        <text transform="translate(404.91777 276.5693)" fill="#515556">
+          <tspan font-family="Avenir" font-size="17" font-weight="800" fill="#515556" x="19.641733" y="17">CodeLens </tspan>
+          <tspan font-family="Avenir" font-size="17" font-weight="800" fill="#515556" x="9.705233" y="40">Trace Server</tspan>
+        </text>
+      </g>
+      <g id="Line_60">
+        <line x1="471.7555" y1="230.08542" x2="480.4239" y2="253.06857" marker-end="url(#FilledArrow_Marker_5)" marker-start="url(#FilledArrow_Marker_6)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_61">
+        <line x1="442.1356" y1="345.9" x2="442.1356" y2="378.1693" marker-end="url(#FilledArrow_Marker_5)" marker-start="url(#FilledArrow_Marker_6)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_62">
+        <line x1="442.1356" y1="471.8307" x2="442.1356" y2="504.1" marker-end="url(#FilledArrow_Marker_5)" marker-start="url(#FilledArrow_Marker_6)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+      <g id="Line_63">
+        <line x1="194.95865" y1="363.4282" x2="414.9871" y2="186.9307" marker-start="url(#FilledArrow_Marker_6)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+</svg>
