@@ -574,10 +574,17 @@ def delete():
         )
         session.flash = "Account Deleted"
         db(db.auth_user.id == auth.user.id).delete()
+        # Commit changes before asking an external program to change the database. This avoids a deadlock when testing.
+        db.commit()
         subprocess.call(
-            "rsmanage rmuser --username {} &".format(auth.user.username),
-            shell=True,
-            close_fds=True,
+            [
+                settings.python_interpreter,
+                "-m",
+                "rsmanage",
+                "rmuser",
+                "--username",
+                auth.user.username,
+            ]
         )
         auth.logout()  # logout user and redirect to home page
     else:
