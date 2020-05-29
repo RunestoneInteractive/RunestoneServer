@@ -989,3 +989,7 @@ def check_db_for_useinfo(config):
     res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
     count = res.first()[0]
     return count
+
+
+if __name__ == "__main__":
+    cli()

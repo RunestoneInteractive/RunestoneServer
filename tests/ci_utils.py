@@ -10,7 +10,7 @@
 # Standard library
 # ----------------
 from __future__ import print_function
-from subprocess import run
+import subprocess
 import sys
 import os
 import os.path
@@ -58,7 +58,14 @@ def xqt(
         # Use bash instead of sh, so that ``source`` and other bash syntax
         # works. See https://docs.python.org/3/library/subprocess.html#subprocess.Popen.
         executable = "/bin/bash" if is_linux or is_darwin else None
-        ret.append(run(_, shell=True, executable=executable, check=True, **kwargs))
+        try:
+            cp = subprocess.run(
+                _, shell=True, executable=executable, check=True, **kwargs
+            )
+        except subprocess.CalledProcessError as e:
+            flush_print("{}\n{}".format(e.stderr, e.stdout))
+            raise
+        ret.append(cp)
 
     # Return a list only if there were multiple commands to execute.
     return ret[0] if len(ret) == 1 else ret
