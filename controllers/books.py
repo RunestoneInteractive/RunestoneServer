@@ -46,7 +46,7 @@ def _route_book(is_published=True):
     if not base_course:
         raise HTTP(404)
 
-    if base_course == "fcla":
+    if base_course in ["fcla", "mc", "dmoi"]:
         response.delimiters = settings.pretext_delimiters
 
     # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
