@@ -532,7 +532,6 @@ def grades():
     return dict(
         course=course,
         assignments=assignments,
-        students=students,
         gradetable=gradetable,
         averagerow=averagerow,
         practice_average=practice_average,
