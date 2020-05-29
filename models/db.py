@@ -316,9 +316,9 @@ auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix 
 
 ## configure email
 mail = auth.settings.mailer
-mail.settings.server = "logging" or "smtp.gmail.com:587"
-mail.settings.sender = "you@gmail.com"
-mail.settings.login = "username:password"
+mail.settings.server = settings.email_server
+mail.settings.sender = settings.email_sender
+mail.settings.login = settings.email_login
 
 ## configure auth policy
 auth.settings.registration_requires_verification = False
@@ -366,9 +366,9 @@ db.define_table(
 #########################################################################
 
 
-mail.settings.server = settings.email_server
-mail.settings.sender = settings.email_sender
-mail.settings.login = settings.email_login
+# mail.settings.server = settings.email_server
+# mail.settings.sender = settings.email_sender
+# mail.settings.login = settings.email_login
 auth.messages.reset_password = (
     '<html>Click on <a href="%(link)s">this link</a> to reset your password.</html>'
 )
