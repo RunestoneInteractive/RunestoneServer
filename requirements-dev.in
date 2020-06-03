@@ -13,6 +13,8 @@ flake8
 selenium>=2.53.6
 pyvirtualdisplay
 pip-tools
+recommonmark
+sphinx_rtd_theme
 
 # Because Runestone is a combination of javascript and python its not safe to
 # install directly from github.

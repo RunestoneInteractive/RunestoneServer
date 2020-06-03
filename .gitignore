@@ -61,3 +61,5 @@ htmlcov
 /languages/
 docker-compose.override.yml
 .history
+/_build/
+sphinx-enki-info.txt
