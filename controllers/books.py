@@ -34,12 +34,10 @@ logger.setLevel(settings.log_level)
 # Local application imports
 # -------------------------
 # None.
-#
-#
+
+
 # Supporting functions
 # ====================
-
-
 def _route_book(is_published=True):
     # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
     base_course = request.args(0)
@@ -60,6 +58,7 @@ def _route_book(is_published=True):
         response.cookies["last_course"]["expires"] = 24 * 3600 * 90  # 90 day expiration
         response.cookies["last_course"]["path"] = "/"
 
+        # Get `course info <courses table>`.
         course = (
             db(db.courses.id == auth.user.course_id)
             .select(
