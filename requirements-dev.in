@@ -6,7 +6,7 @@ contextlib2
 CodeChat >= 1.8.0
 # Beautiful soup
 beautifulsoup4
-locustio
+locust
 coveralls==1.8.2
 black==19.10b0
 flake8
