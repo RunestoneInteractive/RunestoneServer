@@ -200,10 +200,13 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
 
     # For debug:
     #
-    # #.    Uncomment the next three lines
+    # #.    Uncomment the next three lines.
     # #.    Set ``WEB2PY_CONFIG`` to ``test``; all the other usual Runestone environment variables must also be set.
-    # #.    Run ``python -m celery --app=scheduled_builder worker --pool=gevent --concurrency=4 --loglevel=info`` from ``applications/runestone/modules`` to use the scheduler. I'm assuing the redis server (which the tests needs regardless of debug) is also running.
-    # #.    Run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass``.
+    # #.    Run ``python -m celery --app=scheduled_builder worker --pool=gevent --concurrency=4 --loglevel=info`` from ``applications/runestone/modules`` to use the scheduler. I'm assuming the redis server (which the tests needs regardless of debug) is also running.
+    # #.    Run a test (in a separate window). When the debugger stops at the lines below:
+    #
+    #       #.  Run web2py manually to see all debug messages. Use a command line like ``python web2py.py -a pass``.
+    #       #.  After web2py is started, type "c" then enter to continue the debugger and actually run the tests.
     ##import pdb; pdb.set_trace()
     ##yield DictToObject(dict(password=password))
     ##return

@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-
+# *************************************
+# |docname| - Core tables and functions
+# *************************************
 import os
 import random
 
@@ -124,6 +125,10 @@ else:
     SELECT_CACHE = {}
     COUNT_CACHE = {}
 
+# .. _courses table:
+#
+# ``courses`` table
+# =================
 ## create all tables needed by auth if not custom tables
 db.define_table(
     "courses",

@@ -3,8 +3,7 @@ mock
 html5validator
 pytest
 contextlib2
-# CodeChat is Python 3 only.
-CodeChat; python_version != '2.7'
+CodeChat >= 1.8.0
 # Beautiful soup
 beautifulsoup4
 locustio
@@ -14,6 +13,8 @@ flake8
 selenium>=2.53.6
 pyvirtualdisplay
 pip-tools
+recommonmark
+sphinx_rtd_theme
 
 # Because Runestone is a combination of javascript and python its not safe to
 # install directly from github.
