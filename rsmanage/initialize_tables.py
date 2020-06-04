@@ -119,6 +119,8 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         db.executesql(
             """create index "timestamp_idx" on useinfo using btree ("timestamp");"""
         )
+        db.executesql("""create index "act_index" on useinfo using btree (act);""")
+        db.executesql("""create index "div_sid" on useinfo using btree (div_id,sid);""")
         db.executesql(
             """CREATE INDEX chapters_course_id_idx ON chapters USING btree (course_id);"""
         )
@@ -136,6 +138,9 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         )
         db.executesql(
             """CREATE INDEX questions_name_idx ON questions USING btree (name);"""
+        )
+        db.executesql(
+            """create index "from_source_index" on questions using btree (from_source);"""
         )
         db.executesql(
             """CREATE INDEX sub_chapters_chapter_id_idx ON sub_chapters USING btree (chapter_id);"""
@@ -160,6 +165,10 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         db.executesql(
             """alter table assignments add constraint unique_assign_names unique (name, course)"""
         )
+        db.executesql("""create index "course_name_index" on user_topic_practice_log using btree (course_name);""")
+        db.executesql("""create index "user_id_index" on user_topic_practice_log using btree (user_id);""")
+        db.executesql("""create index "q_index" on user_topic_practice_log using btree (q);""")
+
     except Exception as e:
         click.echo(
             message="The creation of one or more indices/constraints failed",
