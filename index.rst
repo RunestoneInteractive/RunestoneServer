@@ -122,19 +122,26 @@ Style
 We have adopted the `black` program for helping to keep our code a consistent style.  It is installed when you install the `requirements-dev.txt` set of packages.  Many editors can be configured to run `black` when you save your file.  If not you should run it on any files you have edited **before** you make a pull request.  Our CI test suite runs both `black` and `flake8` to find any potential style or lint errors. -- I know this is an extra step, but having a consistent style makes life easier for everyone.
 
 
+Overview Material
+=================
+.. toctree::
+    :maxdepth: 2
+
+    /docs/installation.rst
+    /docker/README
+    /rsmanage/toctree
+
 
 web2py server
 =============
 .. toctree::
     :maxdepth: 2
 
-    /docs/installation.rst
     /models/toctree.rst
     /controllers/toctree.rst
     /views/__init__.py
     /modules/__init__.py
     /static/toctree
-    /rsmanage/toctree
     /build/toctree
 
 
@@ -152,7 +159,6 @@ Containers
 ==========
 .. toctree::
 
-    /docker/README
     /Dockerfile
     /docker-compose.yml
     /docker/entrypoint.sh
