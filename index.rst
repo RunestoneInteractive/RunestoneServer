@@ -1,31 +1,11 @@
 ************************************************
 Developer documentation for the Runestone server
 ************************************************
-This is the beginning of developer documentation for the Runestone server. To build these documents:
-
-#.  Open a terminal or command prompt and change to the root of this repository.
-#.  Execute ``python -m pip install -U -r requirements-dev.txt``. This only needs to be done once.
-#.  Execute ``sphinx-build -d _build\doctrees -c doc . _build``.
-
-There's a lot of work left to do. In particular:
-
--   All comments are interpreted as ReST, per the `CodeChat docs <https://codechat.readthedocs.io/en/master/docs/style_guide.cpp.html>`_. **Read this first!** All the style suggestions should be following when documenting this project.
--   Every source file should start with a title, typically like this:
-
-    .. code-block:: Python
-
-        # ***********************************************
-        # |docname| - A one-line description of this file
-        # ***********************************************
-
-    As an example, see `/controllers/books.py`.
-
--   After this, all existing errors and warnings produced by running Sphinx should be fixed.
 
 
 Architecture
 ============
-.. image:: RunestoneArch.svg
+.. image:: docs/RunestoneArch.svg
 
 An entire Runestone system consists of several servers as shown in the diagram above. In this section we will briefly describe the major components, the gray items in the diagram.
 
@@ -177,6 +157,31 @@ Containers
     /docker/entrypoint.sh
     /docker/wsgihandler.py
     /docker/uwsgi/sites/runestone.ini
+
+
+Documentation
+=============
+
+This is the beginning of developer documentation for the Runestone server. To build these documents:
+
+#.  Open a terminal or command prompt and change to the root of this repository.
+#.  Execute ``python -m pip install -U -r requirements-dev.txt``. This only needs to be done once.
+#.  Execute ``sphinx-build -d _build/doctrees . _build``.
+
+There's a lot of work left to do. In particular:
+
+-   All comments are interpreted as ReST, per the `CodeChat docs <https://codechat.readthedocs.io/en/master/docs/style_guide.cpp.html>`_. **Read this first!** All the style suggestions should be following when documenting this project.
+-   Every source file should start with a title, typically like this:
+
+    .. code-block:: Python
+
+        # ***********************************************
+        # |docname| - A one-line description of this file
+        # ***********************************************
+
+    As an example, see `/controllers/books.py`.
+
+-   After this, all existing errors and warnings produced by running Sphinx should be fixed.
 
 
 Other files
