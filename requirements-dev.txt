@@ -35,6 +35,7 @@ easyprocess==0.3          # via pyvirtualdisplay
 flake8==3.8.2             # via -r requirements-dev.in
 flask-basicauth==0.2.0    # via locust
 flask==1.1.2              # via flask-basicauth, locust
+future==0.18.2
 gevent==20.5.2            # via celery, geventhttpclient, locust
 geventhttpclient==1.4.2   # via locust
 greenlet==0.4.15          # via gevent
