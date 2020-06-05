@@ -8,6 +8,11 @@ Runestone Interactive Server and API
    :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
 
 
+.. image:: https://readthedocs.org/projects/runestoneserver/badge/?version=latest
+:target: https://runestoneserver.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
+
+
 Runestone Server Introduction
 -----------------------------
 
