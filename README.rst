@@ -9,8 +9,8 @@ Runestone Interactive Server and API
 
 
 .. image:: https://readthedocs.org/projects/runestoneserver/badge/?version=latest
-:target: https://runestoneserver.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+    :target: https://runestoneserver.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 
 Runestone Server Introduction

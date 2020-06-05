@@ -128,6 +128,7 @@ web2py server
 .. toctree::
     :maxdepth: 2
 
+    /docs/installation.rst
     /models/toctree.rst
     /controllers/toctree.rst
     /views/__init__.py
