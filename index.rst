@@ -197,7 +197,6 @@ Other files
     :maxdepth: 2
     :glob:
 
-    /README
     /CONTRIBUTING
     /ChangeLog
     /scripts/toctree
