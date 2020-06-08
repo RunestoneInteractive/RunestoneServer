@@ -318,6 +318,27 @@ db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
+# Because so many pages rely on `views/_sphinx_static_file.html` it makes
+# sense to provide some default values for variables used in the template here
+# The latex_preamble attribute can be used for any custom latex macros used in
+# the text, that need to be available for grading, assignments, and practice
+# This is used in nearly every PreTeXt book.
+request.latex_preamble = ""
+
+
+def set_latex_preamble(base_course: str):
+    # See `models/db_ebook.py` for course_attributes table
+    bc = db(db.courses.course_name == base_course).select().first()
+    res = (
+        db(
+            (db.course_attributes.course_id == bc.id)
+            & (db.course_attributes.attr == "latex_macros")
+        )
+        .select()
+        .first()
+    )
+    request.latex_preamble = res.value if res else ""
+
 
 ## configure email
 mail = auth.settings.mailer

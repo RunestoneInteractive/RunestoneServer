@@ -655,6 +655,8 @@ def doAssignment():
         else "false"
     )
 
+    set_latex_preamble(course.base_course)
+
     return dict(
         course=course,
         course_name=auth.user.course_name,
@@ -997,6 +999,8 @@ def practice():
                             outcome_url=practice_grade.lis_outcome_url,
                             result_sourcedid=practice_grade.lis_result_sourcedid,
                         )
+
+    set_latex_preamble(course.base_course)
 
     return dict(
         course=course,

@@ -66,15 +66,6 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     lp_build=ALL_WHICH_OPTIONS,
 )
 
-# create a simple index to provide a page of links
-# - re build the book
-# - list assignments
-# - find assignments for a student
-# - show totals for all students
-
-# select acid, sid from code as T where timestamp = (select max(timestamp)
-# from code where sid=T.sid and acid=T.acid);
-
 
 @auth.requires_login()
 def index():
@@ -116,6 +107,10 @@ def assignments():
     )
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
+
+    # See `models/db_ebook.py` for course_attributes table
+    set_latex_preamble(course.base_course)
+
     return dict(
         coursename=auth.user.course_name,
         confirm=False,
@@ -710,6 +705,9 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
+
+    set_latex_preamble(base_course)
+
     return dict(
         assignmentinfo=json.dumps(assignments),
         students=searchdict,
