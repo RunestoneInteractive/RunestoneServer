@@ -2400,7 +2400,9 @@ def enroll_students():
         return redirect(URL("admin", "admin"))
     students = request.vars.students
     try:
-        strfile = io.TextIOWrapper(students.file, encoding="UTF8")
+        # use utf-8-sig because it will work with files from excel that have
+        # the byte order marker BOM set as an invisible first character in the file
+        strfile = io.TextIOWrapper(students.file, encoding="utf-8-sig")
         student_reader = csv.reader(strfile)
     except Exception as e:
         session.flash = "please choose a CSV file with student data"
