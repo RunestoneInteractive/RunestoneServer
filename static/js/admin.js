@@ -146,7 +146,9 @@ function autoGrade() {
         },
         success: function (retdata) {
             $("#assignmentTotalform").css("visibility", "hidden");
-            //alert(retdata.message);
+            if (question != null || studentID != null) {
+                alert(retdata.message);
+            }
         },
     };
 
