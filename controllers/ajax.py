@@ -1154,7 +1154,9 @@ def getAssessResults():
     course = request.vars.course
     div_id = request.vars.div_id
     event = request.vars.event
-    if request.vars.sid:  # retrieving results for grader
+    if (
+        verifyInstructorStatus(auth.user.course_name, auth.user) and request.vars.sid
+    ):  # retrieving results for grader
         sid = request.vars.sid
     else:
         sid = auth.user.username
