@@ -5,7 +5,7 @@ This is the beginning of developer documentation for the Runestone server. To bu
 
 #.  Open a terminal or command prompt and change to the root of this repository.
 #.  Execute ``python -m pip install -U -r requirements-dev.txt``. This only needs to be done once.
-#.  Execute ``sphinx-build -d _build\doctrees -c doc . _build``.
+#.  Execute ``sphinx-build -d _build/doctrees . _build``.
 
 There's a lot of work left to do. In particular:
 
