@@ -146,7 +146,9 @@ function autoGrade() {
         },
         success: function (retdata) {
             $("#assignmentTotalform").css("visibility", "hidden");
-            //alert(retdata.message);
+            if (question != null || studentID != null) {
+                alert(retdata.message);
+            }
         },
     };
 
@@ -2259,11 +2261,11 @@ function deleteQuestion(qid, baseCourse, edit_div) {
 
 function clearFlag(qid, basecourse, edit_div) {
     jQuery.ajax({
-        url: "/runestone/admin/delete_question",
+        url: "/runestone/admin/clear_flag",
         type: "POST",
         dataType: "JSON",
         data: {
-            name: qid,
+            question_name: qid,
             basecourse: basecourse,
         },
         success: function (retdata) {

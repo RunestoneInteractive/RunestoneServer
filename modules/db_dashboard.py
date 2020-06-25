@@ -124,8 +124,15 @@ class CourseProblemMetrics(object):
             )
         )
         rslogger.debug("doing chapter {}".format(self.chapter))
-
         res = {}
+
+        base_course = (
+            current.db(current.db.courses.course_name == course_name)
+            .select(current.db.courses.base_course)
+            .first()
+            .base_course
+        )
+
         tbl_list = [
             "mchoice_answers",
             "fitb_answers",
@@ -139,6 +146,7 @@ class CourseProblemMetrics(object):
                 (current.db[tbl].course_name == course_name)
                 & (current.db[tbl].div_id == current.db.questions.name)
                 & (current.db.questions.chapter == self.chapter.chapter_label)
+                & (current.db.questions.base_course == base_course)
             ).select(orderby=current.db[tbl].timestamp)
 
         # convert the numeric answer to letter answers to match the questions easier.
