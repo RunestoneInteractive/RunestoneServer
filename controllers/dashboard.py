@@ -865,6 +865,10 @@ GRADEABLE_TYPES = {
 }
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def subchapdetail():
     # 1. select the name, question_type, from questions for this chapter/subchapter/base_course
     # 2. for each question get tries to correct, min time, max time, total
