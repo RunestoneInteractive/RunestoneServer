@@ -736,7 +736,8 @@ def subchapoverview():
         x = pt.to_dict()
         for k in x:
             for j in x[k]:
-                x[k][j] = format_cell(k, j[0], j[1], x[k][j])
+                if request.vars.action != "tocsv":
+                    x[k][j] = format_cell(k, j[0], j[1], x[k][j])
         pt = pd.DataFrame(x)
 
     cmap = pd.read_sql_query(
