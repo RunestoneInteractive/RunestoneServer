@@ -51,9 +51,7 @@
             equationNumbers: { autoNumber: "none", useLabelIds: true, },
             TagSide: "right",
             TagIndent: ".8em",
-    Macros: {
-        {{= request.latex_preamble}}
-    },
+    Macros: {    },
         },
         // HTML-CSS output Jax to be dropped for MathJax 3.0
         "HTML-CSS": {
@@ -115,3 +113,7 @@
   eBookConfig.basecourse = "{{=course['base_course']}}";
   eBookConfig.gradeRecordingUrl = `${eBookConfig.app}/assignments/record_grade`;
 </script>
+
+<div class="hidden-content" style="display: none">
+   \( {{= request.latex_preamble}} \)
+</div>
