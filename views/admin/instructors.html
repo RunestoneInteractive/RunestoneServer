@@ -40,7 +40,9 @@
 
 {{ end }}
 
-
+<div class="hidden-content" style="display: none">
+  \( {{= request.latex_preamble}} \)
+</div>
 
 <div id="outerTabs" class="container" style="margin-top: 10px;">
   <h3 id="coursename" style="text-align: center">{{=auth.user.course_name}}</h3>
