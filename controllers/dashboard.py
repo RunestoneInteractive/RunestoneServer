@@ -321,7 +321,7 @@ def studentreport():
         response.view = "assignments/index.html"
 
     data_analyzer.load_user_metrics(sid)
-    data_analyzer.load_assignment_metrics(sid)
+    data_analyzer.load_assignment_metrics(sid, not for_dashboard)
 
     chapters = []
     for chapter_label, chapter in six.iteritems(
