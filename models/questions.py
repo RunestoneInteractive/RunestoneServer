@@ -19,6 +19,7 @@ db.define_table(
     Field("review_flag", type="boolean"),
     Field("qnumber", type="string"),
     Field("optional", type="boolean"),
+    Field("description", type="text"),
     migrate=table_migrate_prefix + "questions.table",
 )
 
