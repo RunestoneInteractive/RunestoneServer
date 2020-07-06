@@ -193,7 +193,9 @@ def index():
             db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
             db(db.auth_user.id == auth.user.id).update(active="T")
         try:
-            logger.debug("INDEX - checking for progress table")
+            logger.debug(
+                f"INDEX - checking for progress table for {course.base_course}"
+            )
             chapter_label = (
                 db(db.chapters.course_id == course.base_course)
                 .select()
@@ -223,7 +225,7 @@ def index():
                 )
         except Exception as e:
             logger.error(f"Select Course got Error {e}")
-            session.flash = "Your course is not set up to track your progress"
+            session.flash = f"{course.course_name} is not set up to track your progress"
         # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
         if session.request_donation:
