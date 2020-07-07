@@ -613,6 +613,7 @@ function updateQuestionList() {
     var questionSelector = document.getElementById("questionselector");
 
     $("#rightsideGradingTab").empty();
+    // This will hold the name of the selected chapter or assignment.
     var col1val = "";
     if (chapAssignSelector.selectedIndex > -1) {
         col1val =
@@ -642,6 +643,7 @@ function updateQuestionList() {
     }
     if (chapAssign == "assignment") {
         populateQuestions(questionSelector, assignmentinfo[col1val]);
+        populateAssignmentTable();
     } else if (chapAssign == "chapter") {
         //FIX: This is where we should get a list of all questions from the chapter
         //chapters[label] should store a list of all question names

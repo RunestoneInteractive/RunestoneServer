@@ -12,10 +12,12 @@
 #
 # Standard library
 # ----------------
+from io import open
 from textwrap import dedent
 import json
 from threading import Thread
 import datetime
+import re
 import time
 
 # Third-party imports
@@ -810,6 +812,255 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
         assert (
             not db(db["{}_answers".format(t)].sid == "user_to_delete").select().first()
         )
+
+
+# Test the grades report.
+def test_grades_1(runestone_db_tools, test_user, tmp_path):
+    # Create test users.
+    course = runestone_db_tools.create_course()
+    course_name = course.course_name
+
+    # **Create test data**
+    # ======================
+    # Create test users.
+    test_user_array = [
+        test_user(
+            "test_user_{}".format(index), "x", course, last_name="user_{}".format(index)
+        )
+        for index in range(3)
+    ]
+
+    def assert_passing(index, *args, **kwargs):
+        res = test_user_array[index].hsblog(*args, **kwargs)
+        assert "errors" not in res
+
+    # Prepare common arguments for each question type.
+    shortanswer_kwargs = dict(
+        event="shortanswer", div_id="test_short_answer_1", course=course_name
+    )
+    fitb_kwargs = dict(event="fillb", div_id="test_fitb_1", course=course_name)
+    mchoice_kwargs = dict(event="mChoice", div_id="test_mchoice_1", course=course_name)
+    lp_kwargs = dict(
+        event="lp_build",
+        div_id="lp_demo_1",
+        course=course_name,
+        builder="unsafe-python",
+    )
+
+    # *User 0*: no data supplied
+    # ----------------------------
+
+    # *User 1*: correct answers
+    # ---------------------------
+    # It doesn't matter which user logs out, since all three users share the same client.
+    logout = test_user_array[2].test_client.logout
+    logout()
+    test_user_array[1].login()
+    assert_passing(1, act=test_user_array[1].username, **shortanswer_kwargs)
+    assert_passing(1, answer=json.dumps(["red", "away"]), **fitb_kwargs)
+    assert_passing(1, answer="0", correct="T", **mchoice_kwargs)
+    assert_passing(
+        1, answer=json.dumps({"code_snippets": ["def one(): return 1"]}), **lp_kwargs
+    )
+
+    # *User 2*: incorrect answers
+    # ----------------------------
+    logout()
+    test_user_array[2].login()
+    # Add three shortanswer answers, to make sure the number of attempts is correctly recorded.
+    for x in range(3):
+        assert_passing(2, act=test_user_array[2].username, **shortanswer_kwargs)
+    assert_passing(2, answer=json.dumps(["xxx", "xxxx"]), **fitb_kwargs)
+    assert_passing(2, answer="1", correct="F", **mchoice_kwargs)
+    assert_passing(
+        2, answer=json.dumps({"code_snippets": ["def one(): return 2"]}), **lp_kwargs
+    )
+
+    # **Test the grades_report endpoint**
+    # ====================================
+    tu = test_user_array[2]
+
+    def grades_report(assignment, *args, **kwargs):
+        return tu.test_client.validate(
+            "assignments/grades_report",
+            *args,
+            data=dict(chap_or_assign=assignment, report_type="assignment"),
+            **kwargs
+        )
+
+    # Test not being an instructor.
+    grades_report("", "About Runestone")
+    tu.make_instructor()
+    # Test an invalid assignment.
+    grades_report("", "Unknown assignment")
+
+    # Create an assignment.
+    assignment_name = "test_assignment"
+    assignment_id = json.loads(
+        tu.test_client.validate(
+            "admin/createAssignment", data={"name": assignment_name}
+        )
+    )[assignment_name]
+    assignment_kwargs = dict(
+        assignment=assignment_id, autograde="pct_correct", which_to_grade="first_answer"
+    )
+
+    # Add questions to the assignment.
+    def add_to_assignment(question_kwargs, points):
+        assert tu.test_client.validate(
+            "admin/add__or_update_assignment_question",
+            data=dict(
+                question=question_kwargs["div_id"], points=points, **assignment_kwargs
+            ),
+        ) != json.dumps("Error")
+
+    # Determine the order of the questions and the _`point values`.
+    add_to_assignment(shortanswer_kwargs, 0)
+    add_to_assignment(fitb_kwargs, 1)
+    add_to_assignment(mchoice_kwargs, 2)
+    add_to_assignment(lp_kwargs, 3)
+
+    # Autograde the assignment.
+    assignment_kwargs = dict(data={"assignment": assignment_name})
+    assert json.loads(
+        tu.test_client.validate("assignments/autograde", **assignment_kwargs)
+    )["message"].startswith("autograded")
+    assert json.loads(
+        tu.test_client.validate("assignments/calculate_totals", **assignment_kwargs)
+    )["success"]
+
+    # **Test this assignment.**
+    # ===========================
+    grades = json.loads(grades_report(assignment_name))
+
+    # Define a regex string comparison.
+    class RegexEquals:
+        def __init__(self, regex):
+            self.regex = re.compile(regex)
+
+        def __eq__(self, other):
+            return bool(re.search(self.regex, other))
+
+    # See if a date in ISO format followed by a "Z" is close to the current time.
+    class AlmostNow:
+        def __eq__(self, other):
+            # Parse the date string. Assume it ends with a Z and discard this.
+            assert other and other[-1] == "Z"
+            dt = datetime.datetime.fromisoformat(other[:-1])
+            return datetime.datetime.utcnow() - dt < datetime.timedelta(minutes=1)
+
+    # These are based on the data input for each user earlier in this test.
+    expected_grades = {
+        "colHeaders": [
+            "userid",
+            "Family name",
+            "Given name",
+            "e-mail",
+            "avg grade (%)",
+            "Q-5",
+            "Q-2",
+            "Q-1",
+            "Q-1",
+        ],
+        "data": [
+            [
+                "div_id",
+                "",
+                "",
+                "",
+                "",
+                "test_short_answer_1",
+                "test_fitb_1",
+                "test_mchoice_1",
+                "lp_demo_1",
+            ],
+            [
+                "location",
+                "",
+                "",
+                "",
+                "",
+                "index - ",
+                "index - ",
+                "index - ",
+                "lp_demo.py - ",
+            ],
+            [
+                "type",
+                "",
+                "",
+                "",
+                "",
+                "shortanswer",
+                "fillintheblank",
+                "mchoice",
+                "lp_build",
+            ],
+            # See the `point values`_ assigned earlier.
+            ["points", "", "", "", "", 0, 1, 2, 3],
+            ["avg grade (%)", "", "", "", ""],
+            ["avg attempts", "", "", "", ""],
+            ["test_user_0", "user_0", "test", "test_user_0@foo.com", 0.0],
+            ["test_user_1", "user_1", "test", "test_user_1@foo.com", 1.0],
+            ["test_user_2", "user_2", "test", "test_user_2@foo.com", 0.0],
+        ],
+        # Correct since the first 3 questions are all on the index page.
+        "mergeCells": [{"col": 5, "colspan": 3, "row": 1, "rowspan": 1}],
+        "orig_data": [
+            # User 0: not submitted.
+            [
+                # The format is: ``[timestamp, score, answer, correct, num_attempts]``.
+                [None, 0.0, None, None, None],
+                [None, 0.0, None, None, None],
+                [None, 0.0, None, None, None],
+                [None, 0.0, {}, None, None],
+            ],
+            # User 1: all correct.
+            [
+                [AlmostNow(), 0.0, "test_user_1", None, 1],
+                [AlmostNow(), 1.0, ["red", "away"], True, 1],
+                [AlmostNow(), 2.0, "0", True, 1],
+                [
+                    AlmostNow(),
+                    3.0,
+                    {"code_snippets": ["def one(): return 1"], "resultString": ""},
+                    100.0,
+                    1,
+                ],
+            ],
+            # User 2: all incorrect.
+            [
+                [AlmostNow(), 0.0, "test_user_2", None, 3],
+                [AlmostNow(), 0.0, ["xxx", "xxxx"], False, 1],
+                [AlmostNow(), 0.0, "1", False, 1],
+                [
+                    AlmostNow(),
+                    0.0,
+                    {
+                        "code_snippets": ["def one(): return 2"],
+                        "resultString": RegexEquals(
+                            "Traceback \\(most recent call last\\):\n"
+                            "  File "
+                            # Use a regex for the file's path.
+                            '"\\S*lp_demo-test.py", '
+                            "line 6, in <module>\n"
+                            "    assert one\\(\\) == 1\n"
+                            "AssertionError"
+                        ),
+                    },
+                    0.0,
+                    1,
+                ],
+            ],
+        ],
+    }
+
+    # Note: on test failure, pytest will report as incorrect all the ``AlmostNow()`` and ``RegexEquals`` items, even though they make have actually compared as equal.
+    assert grades == expected_grades
+
+    logout()
+    # Test with no login.
+    grades_report("", "About Runestone")
 
 
 def test_pageprogress(test_client, runestone_db_tools, test_user_1):

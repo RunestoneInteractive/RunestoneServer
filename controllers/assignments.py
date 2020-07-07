@@ -13,6 +13,7 @@ import json
 import logging
 import datetime
 from collections import OrderedDict
+import traceback
 
 # Third-party imports
 # -------------------
@@ -31,6 +32,7 @@ from rs_grading import (
     _try_to_send_lti_grade,
 )
 from rs_practice import _get_practice_data, _get_practice_completion
+from questions_report import query_assignment, grades_to_hot, questions_to_grades
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -300,58 +302,66 @@ def record_grade():
     """
     Called from the grading interface when the instructor manually records a grade.
     """
-    if "acid" not in request.vars or "sid" not in request.vars:
+    # Validate parameters.
+    if "acid" not in request.vars or not (
+        ("sid" in request.vars) or ("sid[]" in request.vars)
+    ):
         return json.dumps({"success": False, "message": "Need problem and user."})
+    if ("sid" in request.vars) and ("sid[]" in request.vars):
+        return json.dumps(
+            {"success": False, "message": "Cannot specify both sid and sid[]."}
+        )
+    if ("comment" not in request.vars) and ("grade" not in request.vars):
+        return json.dumps(
+            {"success": False, "message": "Must provide either grade or comment."}
+        )
 
+    # Create a dict of updates for this grade.
+    updates = dict(course_name=auth.user.course_name)
+
+    # Parse the grade into a score.
     if "grade" in request.vars:
-        has_score = True
-        score_str = request.vars.get("grade", "").strip()
-        if score_str == "":
-            score = 0
+        score_str = request.vars.grade.strip()
+        # An empty score means delete it.
+        if not score_str:
+            updates["score"] = None
         else:
             try:
-                score = float(score_str)
+                updates["score"] = float(score_str)
             except ValueError as e:
                 logger.error("Bad Score: {} - Details: {}".format(score_str, e))
                 return json.dumps({"response": "not replaced"})
-    else:
-        has_score = False
-        score_str = ""
 
-    comment = request.vars.get("comment", None)
-
-    updates = dict(
-        sid=request.vars["sid"],
-        div_id=request.vars["acid"],
-        course_name=auth.user.course_name,
-    )
-
-    if has_score:
-        updates["score"] = score
-
+    # Update the comment if supplied.
+    comment = request.vars.comment
     if comment is not None:
         updates["comment"] = comment
 
-    if has_score or comment:
-        try:
+    # Gather the remaining parameters.
+    div_id = request.vars.acid
+    # Accept input of a single sid from the request variable ``sid`` or a list from ``sid[]``, following the way `jQuery serielizes this <https://api.jquery.com/jQuery.param/>`_ (with the ``traditional`` flag set to its default value of ``false``). Note that ``$.param({sid: ["one"]})`` produces ``"sid%5B%5D=one"``, meaning that this "list" will still be a single-element value. Therefore, use ``getlist`` for **both** "sid" (which should always be only one element) and "sid[]" (which could be a single element or a list).
+    sids = request.vars.getlist("sid") or request.vars.getlist("sid[]")
+
+    # Update the score(s).
+    try:
+        # sid can be a list of sids to change. Walk through each element in the list.
+        for sid in sids:
             db.question_grades.update_or_insert(
                 (
-                    (db.question_grades.sid == request.vars["sid"])
-                    & (db.question_grades.div_id == request.vars["acid"])
+                    (db.question_grades.sid == sid)
+                    & (db.question_grades.div_id == div_id)
                     & (db.question_grades.course_name == auth.user.course_name)
                 ),
+                sid=sid,
+                div_id=div_id,
                 **updates,
             )
-        except IntegrityError:
-            logger.error(
-                "IntegrityError {} {} {}".format(
-                    request.vars["sid"], request.vars["acid"], auth.user.course_name
-                )
-            )
-            return json.dumps({"response": "not replaced"})
-        return json.dumps({"response": "replaced"})
-    else:
+    except IntegrityError:
+        logger.error(
+            "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
+        )
         return json.dumps({"response": "not replaced"})
+    return json.dumps({"response": "replaced"})
 
 
 # create a unique index:  question_grades_sid_course_name_div_id_idx" UNIQUE, btree (sid, course_name, div_id)
@@ -1075,3 +1085,43 @@ def practice_feedback():
         redirect(URL("practice", vars=dict(feedback_saved=1)))
     session.flash = "Sorry, your request was not saved. Please login and try again."
     redirect(URL("practice"))
+
+
+# Assignment report
+# =================
+# Return an error.
+def _error_formatter(e):
+    response.headers["content-type"] = "application/json"
+
+    return json.dumps({"errors": [traceback.format_exc()]})
+
+
+# .. _assignments/grades_report endpoint:
+#
+# assignments/grades_report endpoint
+# ----------------------------------
+# Produce an table with information about an assignment or chapter, for use in the grading tab.
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def grades_report():
+    try:
+        if request.vars.report_type == "assignment":
+            grades = query_assignment(
+                auth.user.course_name, request.vars.chap_or_assign,
+            )
+        else:
+            assert (
+                request.vars.report_type == "chapter"
+            ), "Unknown report type {}".format(request.vars.report_type)
+            grades = questions_to_grades(
+                auth.user.course_name,
+                (db.questions.chapter == request.vars.chap_or_assign)
+                & (db.questions.base_course == get_course_row().base_course),
+            )
+    except Exception as e:
+        return _error_formatter(e)
+
+    response.headers["content-type"] = "application/json"
+    return grades_to_hot(grades)
