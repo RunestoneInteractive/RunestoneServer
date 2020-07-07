@@ -45,7 +45,21 @@ def _route_book(is_published=True):
     if not base_course:
         raise HTTP(404)
 
-    if base_course in ["fcla", "mc", "dmoi"]:
+    # Does this book originate as a Runestone book or a PreTeXt book.
+    # if it is pretext book we use different delimiters for the templates
+    # as LaTeX is full of {{
+    # These values are set by the runestone process-manifest command
+    res = (
+        db(
+            (db.course_attributes.course_id == db.courses.id)
+            & (db.courses.course_name == base_course)
+            & (db.course_attributes.attr == "markup_system")
+        )
+        .select(db.course_attributes.value)
+        .first()
+    )
+
+    if res and res.value == "PreTeXt":
         response.delimiters = settings.pretext_delimiters
 
     # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
