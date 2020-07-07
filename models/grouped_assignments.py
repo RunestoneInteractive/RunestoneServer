@@ -1,3 +1,7 @@
+# *************************************
+# |docname| - assignment-related tables
+# *************************************
+
 db.define_table(
     "assignments",
     Field("course", db.courses),
@@ -39,7 +43,7 @@ db.define_table(
     Field("lis_result_sourcedid", "string", length=1024),
     # web service endpoint where you send signed xml messages to insert into gradebook; guid above will be one parameter you send in that xml; the actual grade and comment will be others
     #
-    # Per the ``LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
+    # Per the `LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
     Field("lis_outcome_url", "string", length=1024),
     migrate=table_migrate_prefix + "grades.table",
 )
@@ -57,6 +61,10 @@ db.define_table(
 )
 
 
+# .. _question_grades table:
+#
+# question_grades
+# ===============
 db.define_table(
     "question_grades",
     # This table records grades on individual gradeable items
