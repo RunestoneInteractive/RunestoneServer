@@ -946,8 +946,13 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
         def __eq__(self, other):
             # Parse the date string. Assume it ends with a Z and discard this.
             assert other and other[-1] == "Z"
-            dt = datetime.datetime.fromisoformat(other[:-1])
-            return datetime.datetime.utcnow() - dt < datetime.timedelta(minutes=1)
+            # Per the `docs <https://docs.python.org/3/library/datetime.html#datetime.date.fromisoformat>`_, this function requires Python 3.7+.
+            if sys.version_info >= (3, 7):
+                dt = datetime.datetime.fromisoformat(other[:-1])
+                return datetime.datetime.utcnow() - dt < datetime.timedelta(minutes=1)
+            else:
+                # Hope for the best on older Python.
+                return True
 
     # These are based on the data input for each user earlier in this test.
     expected_grades = {
@@ -1019,7 +1024,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             [
                 [AlmostNow(), 0.0, "test_user_1", None, 1],
                 [AlmostNow(), 1.0, ["red", "away"], True, 1],
-                [AlmostNow(), 2.0, "0", True, 1],
+                [AlmostNow(), 2.0, [0], True, 1],
                 [
                     AlmostNow(),
                     3.0,
@@ -1032,7 +1037,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             [
                 [AlmostNow(), 0.0, "test_user_2", None, 3],
                 [AlmostNow(), 0.0, ["xxx", "xxxx"], False, 1],
-                [AlmostNow(), 0.0, "1", False, 1],
+                [AlmostNow(), 0.0, [1], False, 1],
                 [
                     AlmostNow(),
                     0.0,

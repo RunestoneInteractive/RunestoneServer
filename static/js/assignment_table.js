@@ -400,6 +400,9 @@ function renderAnswer(question_type, answer) {
             "</code></span></p>" +
             "</div>"
         );
+    } else if (question_type === "mchoice") {
+        // Convert the number reperesenting each multiple choie answer to the corresponding letter.
+        return answer.map(ans => String.fromCharCode("A".charCodeAt() + ans)).join(", ");
     } else {
         // TODO: Include more renderers for each question type.
         return escapeHTML(answer.toString());

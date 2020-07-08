@@ -334,7 +334,20 @@ def _row_decode(row, question_type):
             timestamp or row.clickablearea_answers.timestamp,
         )
     elif question_type in ("activecode", "actex"):
-        return row.code.code, row.code.grade, timestamp or row.code.timestamp
+        # The format of ``useinfo.act`` for code problems with a unit test looks like ``percent:66.6666666667:passed:2:failed:1``. The code isn't as useful to display. The grade is None in the ``code`` table, so don't bother showing it.
+        try:
+            (
+                percent_label,
+                percent,
+                passed_label,
+                passed,
+                failed_label,
+                failed,
+            ) = row.useinfo.act.split(":")
+        except:
+            # Code problems without a unit test won't be parsed.
+            return "", None, timestamp or row.code.timestamp
+        return row.useinfo.act, percent >= 100, timestamp or row.code.timestamp
     elif question_type == "codelens":
         return (
             row.codelens_answers.answer,
@@ -354,7 +367,7 @@ def _row_decode(row, question_type):
             answer = answer and json.loads(answer)
         except:
             # Handle non-JSON encoded fitb answers.
-            answer = ",".split(answer)
+            answer = answer.split(",")
         return answer, row.fitb_answers.correct, timestamp or row.fitb_answers.timestamp
     elif question_type == "lp_build":
         answer = row.lp_answers.answer
@@ -364,8 +377,11 @@ def _row_decode(row, question_type):
             timestamp or row.lp_answers.timestamp,
         )
     elif question_type == "mchoice":
+        # Multiple choice questions store their answer as a comma-separated string. Turn this into an array of ints.
+        answer = row.mchoice_answers.answer
+        answer = answer and [int(ans) for ans in answer.split(",")]
         return (
-            row.mchoice_answers.answer,
+            answer,
             row.mchoice_answers.correct,
             timestamp or row.mchoice_answers.timestamp,
         )
@@ -378,11 +394,7 @@ def _row_decode(row, question_type):
     elif question_type == "shortanswer":
         # Prefer the answer from the shortanswer table if we have it; otherwise, we can use useinfo's act.
         has_sa_table = "shortanswer_answers" in row
-        answer = (
-            row.shortanswer_answers.answer
-            if has_sa_table
-            else row.useinfo.act
-        )
+        answer = row.shortanswer_answers.answer if has_sa_table else row.useinfo.act
         try:
             # Try to JSON decode this, for old data.
             answer = json.loads(answer)
@@ -391,8 +403,13 @@ def _row_decode(row, question_type):
         except:
             # The newer format is to store the answer as a pure string. So, ``answer`` already has the correct value.
             pass
-        return answer, None, row.shortanswer_answers.timestamp if has_sa_table else timestamp
+        return (
+            answer,
+            None,
+            row.shortanswer_answers.timestamp if has_sa_table else timestamp,
+        )
     elif question_type in [
+        "page",
         "poll",
         "showeval",
         "video",
@@ -402,7 +419,7 @@ def _row_decode(row, question_type):
         return row.useinfo.act, None, timestamp or row.useinfo.timestamp
     else:
         # Unknown question! Panic!
-        return "unknown question type", "unknown question type", None
+        return "unknown question type", None, None
 
 
 # Update the grades structure with the number of attempts for each student.
@@ -491,6 +508,8 @@ def query_assignment(
         db.parsons_answers.answer,
         db.parsons_answers.correct,
         db.parsons_answers.timestamp,
+        ##db.shortanswer_answers.answer,
+        ##db.shortanswer_answers.timestamp,
         db.useinfo.timestamp,
         db.useinfo.act,
         # Get to the answer/correct fields for various problems, if they exist -- hence the left join.
@@ -528,11 +547,24 @@ def query_assignment(
                 (db.questions.question_type == "parsonsprob")
                 & (db.question_grades.answer_id == db.parsons_answers.id)
             ),
-            # The autograder for interaction-only questions (video, showeval, shortanswer, poll) stores a useinfo ID. Get info from there for these questions.
+            ## TODO: currently, the autograder stores the ID of the associated useinfo entry, so this code is wrong. If the autograder is updated, then can be used.
+            ##db.shortanswer_answers.on(
+            ##    (db.questions.question_type == "shortanswer")
+            ##    & (db.question_grades.answer_id == db.shortanswer_answers.id)
+            ##),
+            # The autograder for interaction-only questions stores a useinfo ID. Get info from there for these questions.
             db.useinfo.on(
                 (
                     db.questions.question_type
-                    in ("video", "youtube", "vimeo", "showeval", "shortanswer", "poll")
+                    in (
+                        "page",
+                        "poll",
+                        "shortanswer",
+                        "showeval",
+                        "vimeo",
+                        "video",
+                        "youtube",
+                    )
                 )
                 & (db.question_grades.answer_id == db.useinfo.id)
             ),
