@@ -313,7 +313,8 @@ function populateAssignmentTable() {
 // Compute averages for each column.
 function computeAssignmentTableAverages() {
     let data = assignment_table.getData();
-    let num_students = data.length - 5;
+    // Per the top of the file, the first user's data begins at column 6 (a length of 7).
+    let num_students = data.length - 6;
     let new_averages = [];
     if (num_students === 0) {
         return;

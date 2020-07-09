@@ -273,7 +273,7 @@ def _headers_query(
     ## ---------------------------
     # The base query for this entire function. It's used to get information about each user_id/div_id combination.
     query = (
-        # Choose seleted questions.
+        # Choose selected questions.
         query_questions
         # Join them to ``useinfo``.
         & (db.questions.name == db.useinfo.div_id)
@@ -347,7 +347,7 @@ def _row_decode(row, question_type):
         except:
             # Code problems without a unit test won't be parsed.
             return "", None, timestamp or row.code.timestamp
-        return row.useinfo.act, percent >= 100, timestamp or row.code.timestamp
+        return row.useinfo.act, float(percent) >= 100, timestamp or row.code.timestamp
     elif question_type == "codelens":
         return (
             row.codelens_answers.answer,
