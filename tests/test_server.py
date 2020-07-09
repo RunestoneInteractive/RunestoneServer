@@ -12,18 +12,17 @@
 #
 # Standard library
 # ----------------
-from io import open
-from textwrap import dedent
-import json
-from threading import Thread
 import datetime
+import json
+from textwrap import dedent
+from threading import Thread
 import re
+import sys
 import time
 
 # Third-party imports
 # -------------------
 import pytest
-import six
 
 # Local imports
 # -------------
@@ -496,7 +495,6 @@ def test_payments(runestone_controller, runestone_db_tools, test_user):
 
 
 # Test the LP endpoint.
-@pytest.mark.skipif(six.PY2, reason="Requires Python 3.")
 def test_lp(test_user_1):
     test_user_1.login()
 
