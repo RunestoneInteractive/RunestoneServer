@@ -18,6 +18,7 @@ import json
 from threading import Thread
 import datetime
 import re
+import sys
 import time
 
 # Third-party imports
@@ -846,6 +847,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
         course=course_name,
         builder="unsafe-python",
     )
+    unittest_kwargs = dict(event="unittest", div_id="units2", course=course_name)
 
     # *User 0*: no data supplied
     # ----------------------------
@@ -862,6 +864,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     assert_passing(
         1, answer=json.dumps({"code_snippets": ["def one(): return 1"]}), **lp_kwargs
     )
+    assert_passing(1, act="percent:100:passed:2:failed:0", **unittest_kwargs)
 
     # *User 2*: incorrect answers
     # ----------------------------
@@ -875,6 +878,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     assert_passing(
         2, answer=json.dumps({"code_snippets": ["def one(): return 2"]}), **lp_kwargs
     )
+    assert_passing(2, act="percent:50:passed:1:failed:1", **unittest_kwargs)
 
     # **Test the grades_report endpoint**
     # ====================================
@@ -919,6 +923,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     add_to_assignment(fitb_kwargs, 1)
     add_to_assignment(mchoice_kwargs, 2)
     add_to_assignment(lp_kwargs, 3)
+    add_to_assignment(unittest_kwargs, 4)
 
     # Autograde the assignment.
     assignment_kwargs = dict(data={"assignment": assignment_name})
@@ -966,6 +971,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             "Q-2",
             "Q-1",
             "Q-1",
+            "",
         ],
         "data": [
             [
@@ -978,6 +984,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 "test_fitb_1",
                 "test_mchoice_1",
                 "lp_demo_1",
+                "units2",
             ],
             [
                 "location",
@@ -989,6 +996,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 "index - ",
                 "index - ",
                 "lp_demo.py - ",
+                "index - ",
             ],
             [
                 "type",
@@ -1000,14 +1008,15 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 "fillintheblank",
                 "mchoice",
                 "lp_build",
+                "activecode",
             ],
             # See the `point values`_ assigned earlier.
-            ["points", "", "", "", "", 0, 1, 2, 3],
+            ["points", "", "", "", "", 0, 1, 2, 3, 4],
             ["avg grade (%)", "", "", "", ""],
             ["avg attempts", "", "", "", ""],
             ["test_user_0", "user_0", "test", "test_user_0@foo.com", 0.0],
             ["test_user_1", "user_1", "test", "test_user_1@foo.com", 1.0],
-            ["test_user_2", "user_2", "test", "test_user_2@foo.com", 0.0],
+            ["test_user_2", "user_2", "test", "test_user_2@foo.com", 0.2],
         ],
         # Correct since the first 3 questions are all on the index page.
         "mergeCells": [{"col": 5, "colspan": 3, "row": 1, "rowspan": 1}],
@@ -1019,6 +1028,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 [None, 0.0, None, None, None],
                 [None, 0.0, None, None, None],
                 [None, 0.0, {}, None, None],
+                [None, 0.0, "", None, None],
             ],
             # User 1: all correct.
             [
@@ -1032,6 +1042,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                     100.0,
                     1,
                 ],
+                [AlmostNow(), 4.0, "percent:100:passed:2:failed:0", True, 1],
             ],
             # User 2: all incorrect.
             [
@@ -1056,6 +1067,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                     0.0,
                     1,
                 ],
+                [AlmostNow(), 2.0, "percent:50:passed:1:failed:1", False, 1],
             ],
         ],
     }

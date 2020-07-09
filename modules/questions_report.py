@@ -347,7 +347,7 @@ def _row_decode(row, question_type):
         except:
             # Code problems without a unit test won't be parsed.
             return "", None, timestamp or row.code.timestamp
-        return row.useinfo.act, percent >= 100, timestamp or row.code.timestamp
+        return row.useinfo.act, float(percent) >= 100, timestamp or row.code.timestamp
     elif question_type == "codelens":
         return (
             row.codelens_answers.answer,
