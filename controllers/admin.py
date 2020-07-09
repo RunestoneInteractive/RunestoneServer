@@ -1810,7 +1810,9 @@ def _add_q_meta_info(qrow):
         book = "🏫"
 
     if res != "":
-        res = """ <span style="color: green">[{} {}] </span>""".format(book, res)
+        res = """ <span style="color: green">[{} {} ] </span> <span>{}...</span>""".format(
+            book, res, qrow.questions.description
+        )
 
     return res
 
