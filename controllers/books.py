@@ -35,6 +35,25 @@ logger.setLevel(settings.log_level)
 # -------------------------
 # None.
 
+# See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
+cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
+
+
+def _get_current_course(auth):
+    course = (
+        db(db.courses.id == auth.user.course_id)
+        .select(
+            db.courses.course_name,
+            db.courses.base_course,
+            db.courses.allow_pairs,
+            db.courses.downloads_enabled,
+            **cache_kwargs,
+        )
+        .first()
+    )
+
+    return course
+
 
 # Supporting functions
 # ====================
@@ -62,8 +81,6 @@ def _route_book(is_published=True):
     if res and res.value == "PreTeXt":
         response.delimiters = settings.pretext_delimiters
 
-    # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
-    cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
     allow_pairs = "false"
     downloads_enabled = "false"
     # Find the course to access.
@@ -74,25 +91,41 @@ def _route_book(is_published=True):
         response.cookies["last_course"]["path"] = "/"
 
         # Get `course info <courses table>`.
-        course = (
-            db(db.courses.id == auth.user.course_id)
-            .select(
-                db.courses.course_name,
-                db.courses.base_course,
-                db.courses.allow_pairs,
-                db.courses.downloads_enabled,
-                **cache_kwargs
-            )
-            .first()
-        )
+        course = _get_current_course(auth)
 
+        if course:
+            current_course = course.course_name
         # Ensure the base course in the URL agrees with the base course in ``course``.
         # If not, ask the user to select a course.
         if not course or course.base_course != base_course:
-            session.flash = "{} is not the course your are currently in,  switch to or add it to go there".format(
-                base_course
+            # Check to see if the user is enrolled in this base course
+            res = (
+                db(
+                    (db.user_courses.user_id == auth.user.id)
+                    & (db.user_courses.course_id == db.courses.id)
+                    & (db.courses.base_course == base_course)
+                )
+                .select()
+                .first()
             )
-            redirect(URL(c="default", f="courses"))
+            if res:
+                # change user to this course
+                db(db.auth_user.id == auth.user.id).update(course_id=res.courses.id)
+                db(db.auth_user.id == auth.user.id).update(
+                    course_name=res.courses.course_name
+                )
+                auth.user.update(course_name=res.courses.course_name)
+                auth.user.update(course_id=res.courses.id)
+                current_course = res.courses.course_name
+                course = _get_current_course(auth)
+                session.flash = (
+                    f"Automatically changing your current course to {current_course}"
+                )
+            else:
+                session.flash = "{} is not the course your are currently in,  switch to or add it to go there".format(
+                    base_course
+                )
+                redirect(URL(c="default", f="courses"))
 
         allow_pairs = "true" if course.allow_pairs else "false"
         downloads_enabled = "true" if course.downloads_enabled else "false"
@@ -131,7 +164,7 @@ def _route_book(is_published=True):
                 db.courses.login_required,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -160,7 +193,7 @@ def _route_book(is_published=True):
             "published" if is_published else "build",
             base_course,
         ),
-        *request.args[1:]
+        *request.args[1:],
     )
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))
@@ -245,7 +278,7 @@ def _route_book(is_published=True):
         questions = _exercises(base_course, chapter)
     logger.debug("QUESTIONS = {} {}".format(subchapter, questions))
     return dict(
-        course_name=course.course_name,
+        course_name=current_course,
         base_course=base_course,
         is_logged_in=is_logged_in,
         user_id=user_id,
