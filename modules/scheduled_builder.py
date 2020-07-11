@@ -17,7 +17,12 @@ import sys
 # Third-party imports
 # -------------------
 from celery import Celery
-from runestone.lp.lp_common_lib import BUILD_SYSTEM_PATH, get_sim_str_sim30
+from runestone.lp.lp_common_lib import (
+    BUILD_SYSTEM_PATH,
+    get_sim_str_sim30,
+    get_verification_code,
+    check_sim_out,
+)
 
 try:
     # This can't be imported from uwsgi, but isn't needed there either.
@@ -60,11 +65,11 @@ def _scheduled_builder(
     source_path,
 ):
 
+    cwd = os.path.dirname(file_path)
     if builder == "unsafe-python" and os.environ.get("WEB2PY_CONFIG") == "test":
         # Run the test in Python. This is for testing only, and should never be used in production; instead, this should be run in a limited Docker container. For simplicity, it lacks a timeout.
         #
         # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-        cwd = os.path.dirname(file_path)
         test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.py"
         dest_test_path = os.path.join(cwd, test_file_name)
         shutil.copyfile(
@@ -93,11 +98,7 @@ def _scheduled_builder(
     # Assemble or compile the source. We assume that the binaries are already in the path.
     xc16_path = ""
     # Compile in the temporary directory, in which ``file_path`` resides.
-    sp_args = dict(
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,
-        cwd=os.path.dirname(file_path),
-    )
+    sp_args = dict(stderr=subprocess.STDOUT, universal_newlines=True, cwd=cwd,)
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
     if extension == ".s":
@@ -143,16 +144,56 @@ def _scheduled_builder(
         out += e.output
         return out, 0
 
-    # Link.
-    elf_path = file_path + ".elf"
+    # Build the test code with a random verification code.
+    verification_code = get_verification_code()
     waf_root = os.path.normpath(
         os.path.join(
             sphinx_base_path, sphinx_out_path, BUILD_SYSTEM_PATH, sphinx_source_path
         )
     )
-    test_object_path = os.path.join(
-        waf_root, os.path.splitext(source_path)[0] + "-test.c.1.o"
+    test_file_path = os.path.join(
+        sphinx_base_path,
+        sphinx_source_path,
+        os.path.splitext(source_path)[0] + "-test.c",
     )
+    test_object_path = os.path.join(
+        waf_root,
+        "{}-test.c.{}.o".format(os.path.splitext(source_path)[0], verification_code),
+    )
+    args = [
+        os.path.join(xc16_path, "xc16-gcc"),
+        "-mcpu=33EP128GP502",
+        "-omf=elf",
+        "-g",
+        "-O0",
+        "-msmart-io=1",
+        "-Wall",
+        "-Wextra",
+        "-Wdeclaration-after-statement",
+        "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "lib/include"),
+        "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "tests"),
+        "-I"
+        + os.path.join(
+            sphinx_base_path, sphinx_source_path, "tests/platform/Microchip_PIC24"
+        ),
+        "-I"
+        + os.path.join(
+            sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
+        ),
+        test_file_path,
+        "-DVERIFICATION_CODE=({}u)".format(verification_code),
+        "-c",
+        "-o" + test_object_path,
+    ]
+    out += _subprocess_string(args, **sp_args)
+    try:
+        out += subprocess.check_output(args, **sp_args)
+    except subprocess.CalledProcessError as e:
+        out += e.output
+        return out, 0
+
+    # Link.
+    elf_path = file_path + ".elf"
     args = [
         os.path.join(xc16_path, "xc16-gcc"),
         "-omf=elf",
@@ -204,7 +245,7 @@ def _scheduled_builder(
         out += f.read().rstrip()
     # Put the timeout string at the end of all the simulator output.
     out += timeout_str
-    return out, (100 if not sim_ret and out.endswith("Correct.") else 0)
+    return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
 
 
 # Transform the arguments to ``subprocess.run`` into a string showing what
