@@ -12,7 +12,6 @@
 #
 # Standard library
 # ----------------
-from io import open
 from textwrap import dedent
 import json
 from threading import Thread
@@ -137,9 +136,11 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ("default/terms", False, "Terms and Conditions", 1),
         ("default/privacy", False, "Runestone Academy Privacy Policy", 1),
         ("default/donate", False, "Support Runestone Interactive", 1),
-        # TODO: This soesn't really test the body of either of these
+        # TODO: This doesn't really test much of the body of either of these
         ("default/coursechooser", True, "Course Selection", 1),
+        ("default/coursechooser/xxx", True, "Course Selection", 1),
         ("default/removecourse", True, "Course Selection", 1),
+        ("default/removecourse/xxx", True, "Course Selection", 1),
         ("dashboard/studentreport", True, "Recent Activity", 1,),
         # **Designer**
         # -------------
