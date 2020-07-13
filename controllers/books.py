@@ -110,12 +110,13 @@ def _route_book(is_published=True):
             )
             if res:
                 # change user to this course
-                db(db.auth_user.id == auth.user.id).update(course_id=res.courses.id)
                 db(db.auth_user.id == auth.user.id).update(
-                    course_name=res.courses.course_name
+                    course_id=res.courses.id, course_name=res.courses.course_name
                 )
-                auth.user.update(course_name=res.courses.course_name)
-                auth.user.update(course_id=res.courses.id)
+                auth.user.update(
+                    course_name=res.courses.course_name, course_id=res.courses.id
+                )
+
                 current_course = res.courses.course_name
                 course = _get_current_course(auth)
                 session.flash = (
@@ -172,7 +173,7 @@ def _route_book(is_published=True):
         if not course:
             # This course doesn't exist.
             raise HTTP(404)
-
+        current_course = course.course_name
         # Require a login if necessary.
         if course.login_required:
             # Ask for a login by invoking the auth decorator.
