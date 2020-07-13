@@ -204,6 +204,9 @@ def test_validate_user_pages(
         # ('admin/removeassign', 'Cannot remove assignment with id of', 1),
         # ('admin/removeinstructor', 'xxx', 1),
         # ('admin/removeStudents', 'xxx', 1),
+        ("admin/get_assignment", "Error: assignment ID", 1),
+        ("admin/get_assignment?assignmentid=junk", "Error: assignment ID", 1),
+        ("admin/get_assignment?assignmentid=100", "Error: assignment ID", 1),
         # TODO: added to the ``createAssignment`` endpoint so far.
         # **Dashboard**
         # --------------
