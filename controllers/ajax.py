@@ -1594,3 +1594,19 @@ def login_status():
         return json.dumps(dict(status="loggedin", course_name=auth.user.course_name))
     else:
         return json.dumps(dict(status="loggedout", course_name=auth.user.course_name))
+
+
+@auth.requires_login()
+def get_question_source():
+    questionid = request.vars["questionid"]
+    htmlsrc = ""
+    res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
+    print(res)
+    if res and res.htmlsrc:
+        htmlsrc = res.htmlsrc
+    else:
+        logger.error(
+            "HTML Source not found for %s in course %s", acid, auth.user.course_name
+        )
+        htmlsrc = "<p>No preview Available</p>"
+    return json.dumps(htmlsrc)
