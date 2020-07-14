@@ -271,6 +271,15 @@ def _headers_query(
 
     # **user_id headings query**
     ## ---------------------------
+    # The base query for this entire function. It's used to get information about each user_id/div_id combination.
+    query = (
+        # Choose seleted questions.
+        query_questions
+        # Join them to ``useinfo``.
+        & (db.questions.name == db.useinfo.div_id)
+        # Select only questions in the provided course.
+        & (db.useinfo.course_id == course_name)
+    )
     # Get information about each user_id.
     select_args = [db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email]
     select_kwargs = dict(orderby=db.auth_user.last_name | db.auth_user.first_name)
@@ -291,33 +300,13 @@ def _headers_query(
             [row.first_name, row.last_name, row.email]
         )
 
-    # Second, find all students who answered a question in this course or receive a grade on a question in the course. Students can later remove themselves from a course, but their answers will still be in the course, hence this part of the query. Likewise, students who aren't logged in but did answer questions aren't enrolled in the course, but should also be included.
+    # Second, find all students who answered a question in this course. Students can later remove themselves from a course, but their answers will still be in the course, hence this part of the query. Likewise, students who aren't logged in but did answer questions aren't enrolled in the course, but should also be included.
     for row in db(
-        # Choose selected questions.
-        query_questions
-        & (
-            (
-                # Look for all students that answered any of these questions.
-                #
-                # Join these questions to ``useinfo``.
-                (db.questions.name == db.useinfo.div_id)
-                # Select only questions in the provided course.
-                & (db.useinfo.course_id == course_name)
-            )
-            | (
-                # Look for all students that received a grade on any of these questions.
-                (db.questions.name == db.question_grades.div_id)
-                & (db.question_grades.course_name == course_name)
-            )
-        )
+        query
         # Remove any students produced by the previous query.
         & ~db.useinfo.sid.belongs(db(enrolled_students)._select(db.auth_user.username))
-        & ~db.question_grades.sid.belongs(
-            db(enrolled_students)._select(db.auth_user.username)
-        )
     ).select(
         db.useinfo.sid,
-        db.question_grades.sid,
         *select_args,
         # Get the associated ``auth_user`` record if possible.
         left=(db.auth_user.on(db.useinfo.sid == db.auth_user.username),),
@@ -326,23 +315,13 @@ def _headers_query(
         **select_kwargs
     ):
 
-        # Pick whichever user id is present.
-        user_id = row.useinfo.sid or row.question_grades.sid
+        user_id = row.useinfo.sid
         assert user_id not in grades
         grades[user_id] = dict()
         grades[user_id][None] = _UserInfo._make(
             [row.auth_user.first_name, row.auth_user.last_name, row.auth_user.email]
         )
 
-    # Return a query used to get information about each user_id/div_id combination.
-    query = (
-        # Choose selected questions.
-        query_questions
-        # Join them to ``useinfo``.
-        & (db.questions.name == db.useinfo.div_id)
-        # Select only questions in the provided course.
-        & (db.useinfo.course_id == course_name)
-    )
     return grades, query
 
 

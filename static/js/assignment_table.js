@@ -146,12 +146,6 @@ function populateAssignmentTable() {
         report_type: $("#gradingoption1").val(),
         chap_or_assign: $("#chaporassignselector").val(),
     }, (data) => {
-        // Check for errors.
-        if ("errors" in data) {
-            $("#assignment_info_table_loading").html(`Error<br/>Please report this error: ${escapeHTML(data.errors)}`);
-            return;
-        }
-
         // Recreate more helpful data structures from the "flattened" data.
         data.orig_data.forEach(
             (user_id_row, user_id_index) => user_id_row.forEach((div_id_entry, div_id_index) => {

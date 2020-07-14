@@ -762,16 +762,6 @@ class _TestUser(object):
         # Post to the server.
         return json.loads(self.test_client.validate("ajax/hsblog", data=kwargs))
 
-    def coursechooser(self, course_name):
-        html = self.test_client.validate("default/coursechooser/{}".format(course_name))
-        # Make sure this didn't send us to the user profile page to add a course we aren't registered for.
-        assert "Course IDs for open courses" not in html
-
-    def removecourse(self, course_name):
-        html = self.test_client.validate("default/removecourse/{}".format(course_name))
-        assert "Sorry, you cannot remove" not in html
-        assert "Course Selection" in html
-
 
 # Present ``_TestUser`` as a fixture.
 @pytest.fixture
