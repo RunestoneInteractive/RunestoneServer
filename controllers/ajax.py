@@ -1598,8 +1598,10 @@ def login_status():
 
 @auth.requires_login()
 def get_question_source():
-    questionid = request.vars["questionid"]
+    questionlist = request.vars["questions"].split(",")
     htmlsrc = ""
+
+    questionid = random.choice(questionlist)
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
     print(res)
     if res and res.htmlsrc:
