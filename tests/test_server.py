@@ -828,7 +828,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
         test_user(
             "test_user_{}".format(index), "x", course, last_name="user_{}".format(index)
         )
-        for index in range(4)
+        for index in range(3)
     ]
 
     def assert_passing(index, *args, **kwargs):
@@ -850,10 +850,10 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     unittest_kwargs = dict(event="unittest", div_id="units2", course=course_name)
 
     # *User 0*: no data supplied
-    ##----------------------------
+    # ----------------------------
 
     # *User 1*: correct answers
-    ##---------------------------
+    # ---------------------------
     # It doesn't matter which user logs out, since all three users share the same client.
     logout = test_user_array[2].test_client.logout
     logout()
@@ -867,7 +867,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     assert_passing(1, act="percent:100:passed:2:failed:0", **unittest_kwargs)
 
     # *User 2*: incorrect answers
-    ##----------------------------
+    # ----------------------------
     logout()
     test_user_array[2].login()
     # Add three shortanswer answers, to make sure the number of attempts is correctly recorded.
@@ -880,12 +880,8 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     )
     assert_passing(2, act="percent:50:passed:1:failed:1", **unittest_kwargs)
 
-    # *User 3*: no data supplied, and no longer in course.
-    ##----------------------------------------------------
-    # Wait until the autograder is run to remove the student, so they will have a grade but not have any submissions.
-
     # **Test the grades_report endpoint**
-    ##====================================
+    # ====================================
     tu = test_user_array[2]
 
     def grades_report(assignment, *args, **kwargs):
@@ -938,22 +934,8 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
         tu.test_client.validate("assignments/calculate_totals", **assignment_kwargs)
     )["success"]
 
-    # Remove test user 3 from the course. They can't be removed from the current course, so create a new one then add this user to it.
-    logout()
-    tu = test_user_array[3]
-    tu.login()
-    new_course = runestone_db_tools.create_course("random_course_name")
-    tu.update_profile(course_name=new_course.course_name, is_free=True)
-    tu.coursechooser(new_course.course_name)
-    tu.removecourse(course_name)
-
     # **Test this assignment.**
     # ===========================
-    # Log back in as the instructor.
-    logout()
-    tu = test_user_array[2]
-    tu.login()
-    # Now, we can get the report.
     grades = json.loads(grades_report(assignment_name))
 
     # Define a regex string comparison.
@@ -1035,20 +1017,18 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             ["test_user_0", "user_0", "test", "test_user_0@foo.com", 0.0],
             ["test_user_1", "user_1", "test", "test_user_1@foo.com", 1.0],
             ["test_user_2", "user_2", "test", "test_user_2@foo.com", 0.2],
-            ["test_user_3", "user_3", "test", "test_user_3@foo.com", 0.0],
         ],
         # Correct since the first 3 questions are all on the index page.
         "mergeCells": [{"col": 5, "colspan": 3, "row": 1, "rowspan": 1}],
         "orig_data": [
             # User 0: not submitted.
             [
-                # The format is:
-                # ``[timestamp, score, answer, correct, num_attempts]``.
-                [None, 0.0, None, None, None],  # shortanswer
-                [None, 0.0, None, None, None],  # fillintheblank
-                [None, 0.0, None, None, None],  # mchoice
-                [None, 0.0, {}, None, None],  # lp_build
-                [None, 0.0, "", None, None],  # activecode
+                # The format is: ``[timestamp, score, answer, correct, num_attempts]``.
+                [None, 0.0, None, None, None],
+                [None, 0.0, None, None, None],
+                [None, 0.0, None, None, None],
+                [None, 0.0, {}, None, None],
+                [None, 0.0, "", None, None],
             ],
             # User 1: all correct.
             [
@@ -1089,19 +1069,10 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 ],
                 [AlmostNow(), 2.0, "percent:50:passed:1:failed:1", False, 1],
             ],
-            # User 3: not submitted.
-            [
-                # The format is:
-                [None, 0.0, None, None, None],
-                [None, 0.0, None, None, None],
-                [None, 0.0, None, None, None],
-                [None, 0.0, {}, None, None],
-                [None, 0.0, "", None, None],
-            ],
         ],
     }
 
-    # Note: on test failure, pytest will report as incorrect all the ``AlmostNow()`` and ``RegexEquals`` items, even though they may have actually compared as equal.
+    # Note: on test failure, pytest will report as incorrect all the ``AlmostNow()`` and ``RegexEquals`` items, even though they make have actually compared as equal.
     assert grades == expected_grades
 
     logout()
