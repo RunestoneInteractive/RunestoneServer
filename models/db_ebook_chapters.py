@@ -17,7 +17,6 @@ db.define_table(
     "sub_chapters",
     Field("sub_chapter_name", "string"),  # can have spaces in it, for human consumption
     Field("chapter_id", "reference chapters"),
-    Field("sub_chapter_length", "integer"),
     Field("sub_chapter_label", "string"),  # no spaces, actual filename path
     Field(
         "skipreading", "boolean"
