@@ -1708,12 +1708,12 @@ def _get_toc_and_questions():
     for ch in chapters_query:
         q_ch_info = {}
         question_picker.append(q_ch_info)
-        q_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
+        q_ch_info["text"] = ch.chapter_name
         q_ch_info["children"] = []
         # Copy the same stuff for reading picker.
         r_ch_info = {}
         reading_picker.append(r_ch_info)
-        r_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
+        r_ch_info["text"] = ch.chapter_name
         r_ch_info["children"] = []
         # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
         #                         (db.questions.practice == True))
@@ -1730,9 +1730,7 @@ def _get_toc_and_questions():
         for sub_ch in subchapters_query:
             q_sub_ch_info = {}
             q_ch_info["children"].append(q_sub_ch_info)
-            q_sub_ch_info["text"] = "{}.{} {}".format(
-                ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
-            )
+            q_sub_ch_info["text"] = sub_ch.sub_chapter_name
             # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
             if sub_ch.sub_chapter_name == "Exercises":
                 q_sub_ch_info["id"] = ch.chapter_name + " Exercises"
@@ -1748,9 +1746,7 @@ def _get_toc_and_questions():
                 r_sub_ch_info["id"] = "{}/{}".format(
                     ch.chapter_name, sub_ch.sub_chapter_name
                 )
-                r_sub_ch_info["text"] = "{}.{} {}".format(
-                    ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
-                )
+                r_sub_ch_info["text"] = sub_ch.sub_chapter_name
 
             author = auth.user.first_name + " " + auth.user.last_name
             questions_query = db(
