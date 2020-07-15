@@ -100,7 +100,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ("default/user/login", False, "Login", 1),
         ("default/user/register", False, "Registration", 1),
         ("default/user/logout", True, "Logged out", 1),
-        # One profile error is a result of removing the input field for the e-mail, but web2py still tries to label it, which is an error.
+        # One validation error is a result of removing the input field for the e-mail, but web2py still tries to label it, which is an error.
         ("default/user/profile", True, "Profile", 2),
         ("default/user/change_password", True, "Change password", 1),
         # Runestone doesn't support this.
@@ -113,14 +113,11 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # FIXME: This produces an exception.
         #'default/user/groups', True, 'Groups', 1),
         ("default/user/not_authorized", False, "Not authorized", 1),
-        # Returns a 404.
-        # ('default/user/navbar'=(False, 'xxx', 1),
         # *Other pages*
         #
         # TODO: What is this for?
         # ('default/call', False, 'Not found', 0),
-        # TODO: weird returned HTML. ???
-        # ('default/index', True, 'Course Selection', 1),
+        ("default/index", True, "Course Selection", 1),
         ("default/about", False, "About Us", 1),
         ("default/error", False, "Error: the document does not exist", 1),
         ("default/ack", False, "Acknowledgements", 1),
@@ -131,14 +128,14 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # Should work in both cases.
         ("default/reportabug", False, "Report a Bug", 1),
         ("default/reportabug", True, "Report a Bug", 1),
-        # TODO: weird returned HTML. ???
         # ('default/sendreport', True, 'Could not create issue', 1),
         ("default/terms", False, "Terms and Conditions", 1),
         ("default/privacy", False, "Runestone Academy Privacy Policy", 1),
         ("default/donate", False, "Support Runestone Interactive", 1),
-        # TODO: This doesn't really test much of the body of either of these
+        # TODO: This doesn't really test much of the body of either of these.
         ("default/coursechooser", True, "Course Selection", 1),
-        ("default/coursechooser/xxx", True, "Course Selection", 1),
+        # If we choose an invalid course, then we go to the profile to allow the user to add that course. The second validation failure seems to be about the ``for`` attribute of the ```<label class="readonly" for="auth_user_email" id="auth_user_email__label">`` tag, since the id ``auth_user_email`` isn't defined elsewhere.
+        ("default/coursechooser/xxx", True, "Course IDs for open courses", 2),
         ("default/removecourse", True, "Course Selection", 1),
         ("default/removecourse/xxx", True, "Course Selection", 1),
         ("dashboard/studentreport", True, "Recent Activity", 1,),
