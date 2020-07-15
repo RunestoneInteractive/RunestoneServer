@@ -571,12 +571,27 @@ def query_assignment(
         ),
     ):
 
+        # If a student answers no questions, then is autograded, then is removed from the course, the headings query doesn't contain this student. Add them in.
+        username = row.question_grades.sid
+        if username not in grades:
+            au_row = (
+                db(db.auth_user.username == username)
+                .select(
+                    db.auth_user.first_name, db.auth_user.last_name, db.auth_user.email
+                )
+                .first()
+            )
+            grades[username] = dict()
+            grades[username][None] = _UserInfo._make(
+                [au_row.first_name, au_row.last_name, au_row.email]
+            )
+
         # Get the answer and correct info based on the type of question.
         question_type = grades[None][row.question_grades.div_id].type_
         answer, correct, timestamp = _row_decode(row, question_type)
 
         # Place the query into its appropriate matrix location.
-        grades[row.question_grades.sid][row.question_grades.div_id] = [
+        grades[username][row.question_grades.div_id] = [
             timestamp,
             row.question_grades.score,
             answer,
