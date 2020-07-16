@@ -566,7 +566,10 @@ class _TestClient(WebClient):
                 admin_client.get("default/ticket/" + error_code)
                 assert admin_client.status == 200
                 # Save it to a file.
-                traceback_file = url.replace("/", "-") + "_traceback.html"
+                traceback_file = (
+                    "".join(c if c not in "\/:*?<>|" else "_" for c in url)
+                    + "_traceback.html"
+                )
                 with open(traceback_file, "wb") as f:
                     f.write(_html_prep(admin_client.text))
                 print("Traceback saved to {}.".format(traceback_file))

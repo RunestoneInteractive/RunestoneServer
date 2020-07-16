@@ -5,6 +5,7 @@ This book generates data for use with the test suite.
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
    test_chapter_1/toctree
    lp_demo.py
