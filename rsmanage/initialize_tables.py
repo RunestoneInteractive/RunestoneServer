@@ -159,6 +159,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX us_sid_idx ON public.user_state USING btree (user_id)""",  # New
         """CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);""",
         """CREATE INDEX user_sub_chapter_progress_user_id_idx ON user_sub_chapter_progress USING btree (user_id)""",  # New
+        """CREATE UNIQUE INDEX selector_sid_unique ON selected_questions USING btree (selector_id, sid)""",
     ]
 
     for cmd in sql_commands:

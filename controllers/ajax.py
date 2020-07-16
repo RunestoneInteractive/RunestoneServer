@@ -1,15 +1,30 @@
-import json
-import datetime
-from dateutil.parser import parse
-import logging
-import subprocess
-import uuid
-from bleach import clean
+# *************************
+# |docname| - Runestone API
+# *************************
+# This module implements the API that the Runestone Components use to communicate with a Runestone Server.
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
 from collections import Counter
+import datetime
+from io import open
+import json
+import logging
+from lxml import html
 import os
 import re
-from io import open
-from lxml import html
+import subprocess
+import uuid
+
+# Third-party imports
+# -------------------
+from bleach import clean
+from dateutil.parser import parse
+
+# Local application imports
+# -------------------------
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
 
 logger = logging.getLogger(settings.logger)
@@ -52,6 +67,10 @@ def compareAndUpdateCookieData(sid: str):
         )
 
 
+# Given a JSON record of a clickstream event record the event in the ``useinfo`` table.
+# If the event is an answer to a runestone qustion record that answer in the database in
+# one of the xxx_answers tables.
+#
 def hsblog():
     setCookie = False
     if auth.user:
@@ -1165,6 +1184,9 @@ def _canonicalize_tz(tstring):
         return re.sub(r"(.*)\((.*)\)", r"\1({})".format(zstring), tstring)
 
 
+# getAssessResults
+# ----------------
+#
 def getAssessResults():
     if not auth.user:
         # can't query for user's answers if we don't know who the user is, so just load from local storage
@@ -1622,17 +1644,51 @@ def login_status():
 
 @auth.requires_login()
 def get_question_source():
+    """Called from the selectquestion directive
+    There are 3 cases:
+
+    1. If there is only 1 question in the question list then return the html source for it.
+    2. If there are multiple questions then choose a question at random
+    3. If a proficiency is selected then select a random question that tests that proficiency
+
+    In the last two cases, first check to see if there is a question for this student for this
+    component that was previously selected.
+
+    Returns:
+        json: html source for this question
+    """
     questionlist = request.vars["questions"].split(",")
+    questionlist = [q.strip() for q in questionlist]
     htmlsrc = ""
 
-    questionid = random.choice(questionlist)
+    selector_id = request.vars["selector_id"]
+
+    prev_selection = (
+        db(
+            (db.selected_questions.sid == auth.user.username)
+            & (db.selected_questions.selector_id == selector_id)
+        )
+        .select()
+        .first()
+    )
+
+    if prev_selection:
+        questionid = prev_selection.selected_id
+    else:
+        questionid = random.choice(questionlist)
+
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
-    print(res)
+
+    if res and len(questionlist) > 1 and not prev_selection:
+        db.selected_questions.insert(
+            selector_id=selector_id, sid=auth.user.username, selected_id=questionid
+        )
+
     if res and res.htmlsrc:
         htmlsrc = res.htmlsrc
     else:
         logger.error(
-            "HTML Source not found for %s in course %s", acid, auth.user.course_name
+            f"HTML Source not found for {questionid} in course {auth.user.course_name}"
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
