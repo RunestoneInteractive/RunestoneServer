@@ -412,9 +412,13 @@ def removecourse():
         redirect(URL("default", "courses"))
 
     if settings.academy_mode:
-        course_id_query = db(db.courses.course_name == request.args[0]).select(
-            db.courses.id
+        course_id_query = (
+            db(db.courses.course_name == request.args[0]).select(db.courses.id).first()
         )
+        # Redirect if this course wasn't found.
+        if not course_id_query:
+            redirect(URL("default", "courses"))
+
         # todo: properly encode course_names to handle courses with special characters
         # Check if they're about to remove their currently active course
         auth_query = db(db.auth_user.id == auth.user.id).select()
@@ -426,7 +430,7 @@ def removecourse():
             else:
                 db(
                     (db.user_courses.user_id == auth.user.id)
-                    & (db.user_courses.course_id == course_id_query[0].id)
+                    & (db.user_courses.course_id == course_id_query.id)
                 ).delete()
 
     redirect("/%s/default/courses" % request.application)

@@ -1822,20 +1822,26 @@ def _add_q_meta_info(qrow):
     requires_login=True,
 )
 def get_assignment():
-    assignment_id = request.vars["assignmentid"]
+    try:
+        assignment_id = int(request.vars.assignmentid)
+    except:
+        assignment_row = None
+    else:
+        assignment_row = db(db.assignments.id == assignment_id).select().first()
     # Assemble the assignment-level properties
-    if assignment_id == "undefined":
+    if not assignment_row:
         logger.error(
-            "UNDEFINED assignment {} {}".format(
-                auth.user.course_name, auth.user.username
+            "UNDEFINED assignment {} {} {}".format(
+                request.vars.assignmentid, auth.user.course_name, auth.user.username
             )
         )
-        session.flash = "Error assignment ID is undefined"
-        return redirect(URL("assignments", "index"))
+        session.flash = "Error: assignment ID {} does not exist".format(
+            request.vars.assignmentid
+        )
+        return redirect(URL("assignments", "chooseAssignment.html"))
 
     _set_assignment_max_points(assignment_id)
     assignment_data = {}
-    assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data["assignment_points"] = assignment_row.points
     try:
         assignment_data["due_date"] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
