@@ -15,10 +15,12 @@ import os
 import tempfile
 from io import open
 import json
+import random
 
 # Third-party imports
 # -------------------
-from gluon import current
+from gluon import current, template
+from pytest import approx
 from runestone.lp.lp_common_lib import (
     STUDENT_SOURCE_PATH,
     code_here_comment,
@@ -61,7 +63,7 @@ def is_server_feedback(div_id, course):
 
 # Provide feedback for a fill-in-the-blank problem. This should produce
 # identical results to the code in ``evaluateAnswers`` in ``fitb.js``.
-def fitb_feedback(answer_json, feedback):
+def fitb_feedback(div_id, answer_json, feedback):
     # Grade based on this feedback. The new format is JSON; the old is
     # comma-separated.
     try:
@@ -73,6 +75,10 @@ def fitb_feedback(answer_json, feedback):
         answer = answer_json.split(",")
     displayFeed = []
     isCorrectArray = []
+    # For dynamic problems.
+    seed = None
+    locals_ = {}
+    globals_ = {"approx": approx}
     # The overall correctness of the entire problem.
     correct = True
     for blank, feedback_for_blank in zip(answer, feedback):
@@ -85,18 +91,38 @@ def fitb_feedback(answer_json, feedback):
             is_first_item = True
             # Check everything but the last answer, which always matches.
             for fb in feedback_for_blank[:-1]:
-                if "regex" in fb:
-                    if re.search(
-                        fb["regex"], blank, re.I if fb["regexFlags"] == "i" else 0
-                    ):
+                solution_code = fb.get("solution_code")
+                regex = fb.get("regex")
+                number = fb.get("number")
+                if solution_code:
+                    # Run the dynamic code to compute solution prereqs.
+                    dynamic_code = fb.get("dynamic_code")
+                    if dynamic_code:
+                        seed = get_seed(div_id)
+                        globals_["random"] = random.Random(seed)
+                        exec(dynamic_code, locals_, globals_)
+
+                    # Compare this solution.
+                    globals_["ans"] = blank
+                    try:
+                        is_correct = eval(solution_code, locals_, globals_)
+                    except:
+                        is_correct = False
+                    if is_correct:
+                        isCorrectArray.append(is_first_item)
+                        if not is_first_item:
+                            correct = False
+                        displayFeed.append(template.render(fb["feedback"], context=globals_))
+                        break
+                elif regex:
+                    if re.search(regex, blank, re.I if fb["regexFlags"] == "i" else 0):
                         isCorrectArray.append(is_first_item)
                         if not is_first_item:
                             correct = False
                         displayFeed.append(fb["feedback"])
                         break
                 else:
-                    assert "number" in fb
-                    min_, max_ = fb["number"]
+                    min_, max_ = number
                     try:
                         val = ast.literal_eval(blank)
                         in_range = val >= min_ and val <= max_
@@ -118,7 +144,55 @@ def fitb_feedback(answer_json, feedback):
 
     # Return grading results to the client for a non-test scenario.
     res = dict(correct=correct, displayFeed=displayFeed, isCorrectArray=isCorrectArray)
-    return "T" if correct else "F", res
+    return "T" if correct else "F", seed, res
+
+
+# Get a random seed from the database, or create and save the seed if it wasn't present.
+def get_seed(div_id):
+    # See if this user has a stored seed; always get the most recent one. If no user is logged in or there's no stored seed, generate a new seed. Return a RNG based on this seed.
+    db = current.db
+    auth = current.auth
+    row = (
+        (
+            db(
+                (db.fitb_answers.div_id == div_id)
+                & (db.fitb_answers.sid == auth.user.username)
+                & (db.fitb_answers.course_name == auth.user.course_name)
+            )
+            .select(db.fitb_answers.dynamic_seed, orderby=~db.fitb_answers.id)
+            .first()
+        )
+        if auth.user
+        else None
+    )
+    # If so, return it. Allow a random seed of 0, hence the ``is not None`` test.
+    if row and row.dynamic_seed is not None:
+        return row.dynamic_seed
+    else:
+        # Otherwise, generate one and store it (if a user is logged in).
+        return set_seed(div_id)
+
+
+# Get a RNG based on a stored seed.
+def get_random(div_id):
+    # Return a RNG using this seed.
+    return random.Random(get_seed(div_id))
+
+
+# Create a new random seed then store it if possible. TODO: provide an "entire class" option to set the same seed for the current class.
+def set_seed(div_id):
+    seed = random.randint(-(2 ** 31), 2 ** 31 - 1)
+
+    auth = current.auth
+    if auth.user:
+        current.db.fitb_answers.insert(
+            sid=auth.user.username,
+            div_id=div_id,
+            course_name=auth.user.course_name,
+            dynamic_seed=seed,
+        )
+
+    return seed
 
 
 # lp feedback

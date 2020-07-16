@@ -24,6 +24,11 @@ import datetime
 import importlib
 import random
 
+import pytest
+
+from feedback import get_random
+
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
@@ -291,6 +296,8 @@ def _route_book(is_published=True):
         questions=questions,
         motd=motd,
         banner_num=banner_num,
+        get_random=get_random,
+        approx=pytest.approx,
     )
 
 

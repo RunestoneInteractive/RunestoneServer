@@ -101,6 +101,20 @@ Fill in the Blank
        :x: Nope.
 
 
+.. fillintheblank:: fitb_dynamic
+    :dynamic:
+        a = random.randrange(0, 10)
+        b = random.randrange(0, 10)
+
+    What is :math:`{{=a}} + {{=b}}`?
+
+    -   :int(ans) == a + b: Correct!
+        :int(ans) == a - b: That's :math:`{{=a}} - {{=b}}`.
+        :int(ans) == a * b: That's :math:`{{=a}}\cdot{{=b}}`.
+        :float(ans) == approx(a / b): That's :math:`{{=a}}/{{=b}}`.
+        :x: I don't know what you're doing.
+
+
 Short answers
 -------------
 .. shortanswer:: test_short_answer_1

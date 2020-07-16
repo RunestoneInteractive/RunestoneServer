@@ -153,6 +153,8 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "string"),
     Field("correct", "boolean"),
+    # The seed used to generate this dynamic problem.
+    Field("dynamic_seed", "integer"),
     migrate=table_migrate_prefix + "fitb_answers.table",
 )
 # dragndrop_answers

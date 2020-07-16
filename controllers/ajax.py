@@ -182,7 +182,7 @@ def hsblog():
         # Grade on the server if needed.
         do_server_feedback, feedback = is_server_feedback(div_id, course)
         if do_server_feedback:
-            correct, res_update = fitb_feedback(answer_json, feedback)
+            correct, seed, res_update = fitb_feedback(div_id, answer_json, feedback)
             res.update(res_update)
 
         # Save this data.
@@ -193,6 +193,7 @@ def hsblog():
             answer=answer_json,
             correct=correct,
             course_name=course,
+            dynamic_seed=seed,
         )
 
     elif event == "dragNdrop" and auth.user:
@@ -1202,13 +1203,13 @@ def getAssessResults():
             )
             .first()
         )
-        if not rows:
+        if not rows or rows.answer is None:
             return ""  # server doesn't have it so we load from local storage instead
         #
         res = {"answer": rows.answer, "timestamp": str(rows.timestamp)}
         do_server_feedback, feedback = is_server_feedback(div_id, course)
         if do_server_feedback:
-            correct, res_update = fitb_feedback(rows.answer, feedback)
+            correct, seed, res_update = fitb_feedback(div_id, rows.answer, feedback)
             res.update(res_update)
         return json.dumps(res)
     elif event == "mChoice":
