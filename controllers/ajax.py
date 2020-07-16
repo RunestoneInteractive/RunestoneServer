@@ -1620,6 +1620,7 @@ def login_status():
 
 @auth.requires_login()
 def get_question_source():
+<<<<<<< HEAD
     """Called from the selectquestion directive
     There are 3 cases:
 
@@ -1660,11 +1661,23 @@ def get_question_source():
             selector_id=selector_id, sid=auth.user.username, selected_id=questionid
         )
 
+=======
+    questionlist = request.vars["questions"].split(",")
+    htmlsrc = ""
+
+    questionid = random.choice(questionlist)
+    res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
+    print(res)
+>>>>>>> 05e8cf40bbe67d500160ed5574d69d3a6ae9d9de
     if res and res.htmlsrc:
         htmlsrc = res.htmlsrc
     else:
         logger.error(
+<<<<<<< HEAD
             f"HTML Source not found for {questionid} in course {auth.user.course_name}"
+=======
+            "HTML Source not found for %s in course %s", acid, auth.user.course_name
+>>>>>>> 05e8cf40bbe67d500160ed5574d69d3a6ae9d9de
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
