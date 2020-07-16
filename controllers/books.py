@@ -267,7 +267,6 @@ def _subchaptoc(course, chap):
         & (db.chapters.course_id == course)
         & (db.chapters.chapter_label == chap)
     ).select(
-        db.chapters.chapter_label,
         db.sub_chapters.sub_chapter_label,
         db.sub_chapters.sub_chapter_name,
         orderby=db.sub_chapters.sub_chapter_num,
@@ -276,8 +275,8 @@ def _subchaptoc(course, chap):
     )
     toclist = []
     for row in res:
-        sc_url = "{}.html".format(row.sub_chapters.sub_chapter_label)
-        title = row.sub_chapters.sub_chapter_name
+        sc_url = "{}.html".format(row.sub_chapter_label)
+        title = row.sub_chapter_name
         toclist.append(dict(subchap_uri=sc_url, title=title))
 
     return toclist
