@@ -1801,20 +1801,29 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 `<p>Preview not available for ${componentKind}</p>`
             );
         } else {
-            let res = component_factory[componentKind](opt);
-            if (componentKind === "activecode") {
-                if (moreOpts.multiGrader) {
-                    edList[`${moreOpts.gradingContainer} ${res.divid}`] = res;
-                } else {
-                    edList[res.divid] = res;
+            try {
+                let res = component_factory[componentKind](opt);
+                if (componentKind === "activecode") {
+                    if (moreOpts.multiGrader) {
+                        edList[
+                            `${moreOpts.gradingContainer} ${res.divid}`
+                        ] = res;
+                    } else {
+                        edList[res.divid] = res;
+                    }
                 }
+            } catch (e) {
+                console.log(e);
             }
         }
     }
-    if (opt.graderactive == false) {
+    if (!opt.graderactive) {
         if (whereDiv != "modal-preview" && whereDiv != "questiondisplay") {
             // if we are in modal we are already editing
-            $("#modal-preview").data("orig_divid", opt.acid || opt.orig.id); // save the original divid
+            $("#modal-preview").data(
+                "orig_divid",
+                opt.acid || moreOpts.acid || opt.orig.id
+            ); // save the original divid
             let editButton = document.createElement("button");
             $(editButton).text("Edit Question");
             $(editButton).addClass("btn btn-normal");
@@ -1822,7 +1831,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
             $(editButton).attr("data-toggle", "modal");
             $(editButton).click(function (event) {
                 data = {
-                    question_name: opt.acid || opt.orig.id,
+                    question_name: opt.acid || moreOpts.acid || opt.orig.id,
                 };
                 jQuery.get("/runestone/admin/question_text", data, function (
                     obj
@@ -1851,7 +1860,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                     )
                 ) {
                     data = {
-                        question_name: opt.acid || opt.orig.id,
+                        question_name: opt.acid || moreOpts.acid || opt.orig.id,
                     };
                     jQuery.getJSON(
                         "/runestone/admin/flag_question.json",
