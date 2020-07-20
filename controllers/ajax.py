@@ -1417,6 +1417,7 @@ def getAssessResults():
 
 
 def checkTimedReset():
+    # Deprecated -- Should be removed in 2020
     if auth.user:
         user = auth.user.username
     else:
@@ -1441,6 +1442,30 @@ def checkTimedReset():
             return json.dumps({"canReset": False})
     else:
         return json.dumps({"canReset": True})
+
+
+def tookTimedAssessment():
+    if auth.user:
+        sid = auth.user.username
+    else:
+        return json.dumps({"tookAssessment": False})
+
+    exam_id = request.vars.div_id
+    course = request.vars.course_name
+    rows = (
+        db(
+            (db.timed_exam.div_id == exam_id)
+            & (db.timed_exam.sid == sid)
+            & (db.timed_exam.course_name == course)
+        )
+        .select(orderby=~db.timed_exam.id)
+        .first()
+    )
+    print(f"checking {exam_id} {sid} {course} {rows}")
+    if rows:
+        return json.dumps({"tookAssessment": True})
+    else:
+        return json.dumps({"tookAssessment": False})
 
 
 # The request variable ``code`` must contain JSON-encoded RST to be rendered by Runestone. Only the HTML containing the actual Runestone component will be returned.
