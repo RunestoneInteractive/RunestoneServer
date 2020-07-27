@@ -127,6 +127,11 @@ db.define_table(
 
 # mchoice_answers
 # ---------------
+# define the following indices
+#    CREATE INDEX mchoice_answers_course_name_idx ON mchoice_answers USING btree (course_name);
+#    CREATE INDEX mchoice_answers_div_id_idx ON mchoice_answers USING btree (div_id);
+#    CREATE INDEX mchoice_answers_sid_idx ON mchoice_answers USING btree (sid);
+
 db.define_table(
     "mchoice_answers",
     Field("timestamp", "datetime"),
@@ -218,6 +223,10 @@ db.define_table(
 
 # unittest_answers
 # ----------------
+# define the following indices
+#    CREATE INDEX unittest_answers_course_name_idx ON unittest_answers USING btree (course_name);
+#    CREATE INDEX unittest_answers_div_id_idx ON unittest_answers USING btree (div_id);
+#    CREATE INDEX unittest_answers_sid_idx ON unittest_answers USING btree (sid);
 db.define_table(
     "unittest_answers",
     Field("timestamp", "datetime"),
