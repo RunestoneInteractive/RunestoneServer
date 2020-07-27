@@ -252,6 +252,25 @@ def hsblog():
             sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course,
         )
 
+    elif event == "unittest" and auth.user:
+        statslist = act.split(":")
+        pct = float(statslist[1])
+        passed = int(statslist[3])
+        failed = int(statslist[5])
+        if pct >= 99.99999:
+            correct = "T"
+        else:
+            correct = "F"
+        db.unittest_answers.insert(
+            sid=sid,
+            timestamp=ts,
+            div_id=div_id,
+            correct=correct,
+            passed=passed,
+            failed=failed,
+            course_name=course,
+        )
+
     elif event == "lp_build" and auth.user:
         ret, new_fields = db.lp_answers._validate_fields(
             dict(sid=sid, timestamp=ts, div_id=div_id, course_name=course)

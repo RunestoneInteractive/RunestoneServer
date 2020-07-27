@@ -216,6 +216,21 @@ db.define_table(
     migrate=table_migrate_prefix + "shortanswer_answers.table",
 )
 
+# unittest_answers
+# ----------------
+db.define_table(
+    "unittest_answers",
+    Field("timestamp", "datetime"),
+    Field("div_id", "string"),
+    Field("sid", "string"),
+    Field("course_name", "string"),
+    Field("answer", "string"),
+    Field("passed", "integer"),
+    Field("failed", "integer"),
+    Field("correct", "boolean"),
+    migrate=table_migrate_prefix + "unittest_answers.table",
+)
+
 # payments
 # --------
 db.define_table(
