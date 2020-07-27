@@ -216,7 +216,6 @@ db.define_table(
     migrate=table_migrate_prefix + "shortanswer_answers.table",
 )
 
-<<<<<<< HEAD
 # unittest_answers
 # ----------------
 db.define_table(
@@ -232,8 +231,6 @@ db.define_table(
     migrate=table_migrate_prefix + "unittest_answers.table",
 )
 
-=======
->>>>>>> Store the question selected for the user
 # payments
 # --------
 db.define_table(
