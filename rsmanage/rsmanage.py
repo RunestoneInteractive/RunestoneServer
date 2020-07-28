@@ -627,14 +627,17 @@ def env(config, checkdb):
 
 
 @cli.command()
-@click.option("--username", help="user to promote to instructor")
-@click.option("--course", help="name of course")
+@click.option("--username", default=None, help="user to promote to instructor")
+@click.option("--course", default=None, help="name of course")
 @pass_config
 def addinstructor(config, username, course):
     """
     Add an existing user as an instructor for a course
     """
     eng = create_engine(config.dburl)
+    username = username or click.prompt("Username")
+    course = course or click.prompt("Course name")
+
     res = eng.execute("select id from auth_user where username=%s", username).first()
     if res:
         userid = res[0]
