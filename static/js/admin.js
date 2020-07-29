@@ -1760,6 +1760,9 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
+    if (typeof moreOpts === "undefined") {
+        moreOpts = {};
+    }
     patt = /..\/_images/g;
     componentSrc = componentSrc.replace(
         patt,
