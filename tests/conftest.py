@@ -538,7 +538,7 @@ class _TestClient(WebClient):
                     f.write(self.text)
                 errors = vld.validate([str(tmpname)])
 
-                assert errors == expected_errors
+                assert errors <= expected_errors
 
             return self.text
 
