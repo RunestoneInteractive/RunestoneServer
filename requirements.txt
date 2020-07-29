@@ -15,12 +15,12 @@ celery[gevent,redis]==4.4.4  # via -r requirements.in
 certifi==2020.4.5.1       # via requests, runestone
 chardet==3.0.4            # via requests, runestone
 click==7.1.2              # via rsmanage, runestone
-codechat==1.8.1           # via runestone
+codechat==1.8.2           # via runestone
 cogapp==3.0.0             # via runestone
-colorama==0.4.3           # via runestone
 cssselect==1.1.0          # via -r requirements.in
 diff-match-patch==20181111  # via -r requirements.in
 docutils==0.16            # via codechat, runestone, sphinx
+future==0.18.2            # via -r requirements.in
 gevent==20.5.2            # via celery
 greenlet==0.4.15          # via gevent
 httplib2==0.18.1          # via oauth2
@@ -47,7 +47,7 @@ python-dateutil==2.8.1    # via -r requirements.in, pandas
 pytz==2020.1              # via -r requirements.in, babel, celery, pandas, runestone
 redis==3.5.3              # via celery
 requests==2.23.0          # via -r requirements.in, runestone, sphinx, stripe
-runestone==5.0.1          # via -r requirements.in
+runestone==5.0.9          # via -r requirements.in
 selenium==3.141.0         # via -r requirements.in
 six==1.15.0               # via -r requirements.in, astroid, bleach, packaging, pathlib2, paver, python-dateutil, runestone
 snowballstemmer==2.0.0    # via runestone, sphinx

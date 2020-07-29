@@ -1461,6 +1461,11 @@ def preview_question():
         # We would like to use sys.executable But when we run web2py
         # in uwsgi then sys.executable is uwsgi which doesn't work.
         # Why not just run runestone?
+        if "python" not in settings.python_interpreter:
+            logger.error(f"Error {settings.python_interpreter} is not a valid python")
+            return json.dumps(
+                f"Error: settings.python_interpreter must be set to a valid interpreter not {settings.python_interpreter}"
+            )
         popen_obj = subprocess.Popen(
             [settings.python_interpreter, "-m", "runestone", "build"],
             # The build must be run from the directory containing a ``conf.py`` and all the needed support files.
