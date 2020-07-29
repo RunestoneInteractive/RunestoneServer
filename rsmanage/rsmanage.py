@@ -236,10 +236,9 @@ def shutdown(config):
 @click.option(
     "--login-required",
     is_flag=True,
-    default=True,
     help="Only registered users can access this course?",
 )
-@click.option("--institution", default="Anonymous", help="Your institution")
+@click.option("--institution", help="Your institution")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
 @click.option(
