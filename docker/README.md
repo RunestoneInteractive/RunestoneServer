@@ -166,6 +166,12 @@ or to stop them, and then bring them up again (this should not erase data from t
 $ docker-compose stop
 $ docker-compose up -d
 ```
+
+### 2. Creating Questions from the Web Interface
+
+If you want to write questions from the web interface you will need to make sure
+that `settings.python_interpreter` is set to a real python.  In the uwsgi environment uwsgi tends to replace python in `sys.executable` with itself, which is pretty annoying.
+
 ### 2. Running the Runestone Server Unit Tests
 
 You can run the unit tests in the container using the following command.
