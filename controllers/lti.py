@@ -1,8 +1,25 @@
+# *************************************************
+# |docname| - LTI Endpoint for integrating with LMS
+# *************************************************
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import uuid
+import json
+import html
 
-
-from rs_grading import _try_to_send_lti_grade
+# Third-party imports
+# -------------------
 import oauth2
+
+# Local application imports
+# -------------------------
+from rs_grading import _try_to_send_lti_grade
 
 
 # For some reason, URL query parameters are being processed twice by Canvas and returned as a list, like [23, 23]. So, just take the first element in the list.
@@ -10,7 +27,12 @@ def _param_converter(param):
     return param[0] if isinstance(param, list) else param
 
 
+# Main LTI Launch Endpoint
+# ------------------------
 def index():
+
+    # Basic processing of the LTI request starts here
+    # this first block is about getting the user information provided by the LMS
     myrecord = None
     consumer = None
     masterapp = None
@@ -20,6 +42,9 @@ def index():
     last_name = request.vars.get("lis_person_name_family", None)
     first_name = request.vars.get("lis_person_name_given", None)
     full_name = request.vars.get("lis_person_name_full", None)
+    message_type = request.vars.get("lti_message_type")
+    course_id = _param_converter(request.vars.get("custom_course_id", None))
+
     if full_name and not last_name:
         names = full_name.strip().split()
         last_name = names[-1]
@@ -76,6 +101,9 @@ def index():
         email = email or (user_id + "@junk.com")
         userinfo["email"] = email
 
+    # Now we need to get some security info
+    # oauth_consumer_key
+
     key = request.vars.get("oauth_consumer_key", None)
     if key is not None:
         myrecord = db(db.lti_keys.consumer == key).select().first()
@@ -130,6 +158,9 @@ def index():
                 masterapp=masterapp,
             )
             consumer = None
+    ###############################################################################
+    # I think everything from the beginning to here could/should be refactored into
+    # a validate function.  Or make use of the lti package
 
     # Time to create / update / login the user
     if userinfo and (consumer is not None):
@@ -157,7 +188,6 @@ def index():
                 masterapp=masterapp,
             )
         # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
-        course_id = _param_converter(request.vars.get("custom_course_id", None))
         if course_id:
             user["course_id"] = course_id
             user["course_name"] = getCourseNameFromId(
@@ -203,65 +233,150 @@ def index():
 
         auth.login_user(user)
 
-    if assignment_id:
+    if message_type == "ContentItemSelectionRequest":
+        return _provide_assignment_list(course_id)
+
+    elif assignment_id:
         # If the assignment is released, but this is the first time a student has visited the assignment, auto-upload the grade.
-        assignment = (
-            db(db.assignments.id == assignment_id)
-            .select(db.assignments.released)
-            .first()
-        )
-        grade = (
-            db(
-                (db.grades.auth_user == user.id)
-                & (db.grades.assignment == assignment_id)
-            )
-            .select(db.grades.lis_result_sourcedid, db.grades.lis_outcome_url)
-            .first()
-        )
-        send_grade = (
-            assignment
-            and assignment.released
-            and grade
-            and not grade.lis_result_sourcedid
-            and not grade.lis_outcome_url
-        )
-
-        # save the guid and url for reporting back the grade
-        db.grades.update_or_insert(
-            (db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
-            auth_user=user.id,
-            assignment=assignment_id,
-            lis_result_sourcedid=result_source_did,
-            lis_outcome_url=outcome_url,
-        )
-        if send_grade:
-            _try_to_send_lti_grade(user.id, assignment_id)
-
-        redirect(
-            URL("assignments", "doAssignment", vars={"assignment_id": assignment_id})
-        )
+        _launch_assignment(assignment_id, user, result_source_did, outcome_url)
 
     elif practice:
-        if outcome_url and result_source_did:
-            db.practice_grades.update_or_insert(
-                (db.practice_grades.auth_user == user.id),
-                auth_user=user.id,
-                lis_result_sourcedid=result_source_did,
-                lis_outcome_url=outcome_url,
-                course_name=getCourseNameFromId(course_id),
-            )
-        else:  # don't overwrite outcome_url and result_source_did
-            db.practice_grades.update_or_insert(
-                (db.practice_grades.auth_user == user.id),
-                auth_user=user.id,
-                course_name=getCourseNameFromId(course_id),
-            )
-        redirect(
-            URL(
-                "assignments",
-                "settz_then_practice",
-                vars={"course_name": user["course_name"]},
-            )
-        )
+        _launch_practice(outcome_url, result_source_did, user, course_id)
 
+    # else just redirect to the book index
     redirect(get_course_url("index.html"))
+
+
+def _launch_practice(outcome_url, result_source_did, user, course_id):
+    if outcome_url and result_source_did:
+        db.practice_grades.update_or_insert(
+            (db.practice_grades.auth_user == user.id),
+            auth_user=user.id,
+            lis_result_sourcedid=result_source_did,
+            lis_outcome_url=outcome_url,
+            course_name=getCourseNameFromId(course_id),
+        )
+    else:  # don't overwrite outcome_url and result_source_did
+        db.practice_grades.update_or_insert(
+            (db.practice_grades.auth_user == user.id),
+            auth_user=user.id,
+            course_name=getCourseNameFromId(course_id),
+        )
+    redirect(
+        URL(
+            "assignments",
+            "settz_then_practice",
+            vars={"course_name": user["course_name"]},
+        )
+    )
+
+
+def _launch_assignment(assignment_id, user, result_source_did, outcome_url):
+    assignment = (
+        db(db.assignments.id == assignment_id).select(db.assignments.released).first()
+    )
+    grade = (
+        db((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id))
+        .select(db.grades.lis_result_sourcedid, db.grades.lis_outcome_url)
+        .first()
+    )
+    send_grade = (
+        assignment
+        and assignment.released
+        and grade
+        and not grade.lis_result_sourcedid
+        and not grade.lis_outcome_url
+    )
+
+    # save the guid and url for reporting back the grade
+    db.grades.update_or_insert(
+        (db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id),
+        auth_user=user.id,
+        assignment=assignment_id,
+        lis_result_sourcedid=result_source_did,
+        lis_outcome_url=outcome_url,
+    )
+    if send_grade:
+        _try_to_send_lti_grade(user.id, assignment_id)
+
+    redirect(URL("assignments", "doAssignment", vars={"assignment_id": assignment_id}))
+
+
+def _provide_assignment_list(course_id):
+    """Gather all of the assignments for this course package them up
+    per https://www.imsglobal.org/specs/lticiv1p0/specification
+    and return a form.
+
+    This form is then auto-submitted by javascript
+    The key element of the form is the content_items structure which should look like this:
+    .. code-block::
+
+        {
+        "@context" : "http://purl.imsglobal.org/ctx/lti/v1/ContentItem",
+        "@graph" : [
+            { "@type" : "LtiLinkItem",
+                "@id" : ":item2",
+                "icon" : { OPTIONAL
+                    "@id" : "http://tool.provider.com/icons/small.png",
+                    "width" : 50,
+                    "height" : 50
+                },
+                "thumbnail" : { OPTIONAL
+                    "@id" : "http://tool.provider.com/images/thumb.jpg",
+                    "width" : 100,
+                    "height" : 150
+                },
+                "title" : "Open sIMSon application",
+                "text" : "The &lt;em&gt;sIMSon&lt;/em&gt; application provides a collaborative space for developing semantic modelling skills.",
+                "mediaType" : "application/vnd.ims.lti.v1.ltilink",
+                "custom" : {
+                    "level" : "novice",
+                    "mode" : "interactive"
+                },
+            },
+            ]
+        }
+        keys are to include custom parameters for course_id and assignment_id
+        using mediaType as specified will allow the TC to use the usual LTI
+        launch mechanism
+    """
+    timestamp = request.vars.get("oauth_timestamp")
+    nonce = request.vars.get("oauth_nonce")
+    consumer_key = request.vars.get("oauth_consumer_key")
+    sig = request.vars.get("oauth_signature")
+    return_url = request.vars.get("content_item_return_url")
+
+    query_res = db(db.assignments.course == course_id).select(
+        orderby=~db.assignments.duedate
+    )
+    result = {
+        "@context": "http://purl.imsglobal.org/ctx/lti/v1/ContentItem",
+        "@graph": [],
+    }
+    if query_res:
+        for assignment in query_res:
+            item = {
+                "@type": "LtiLinkItem",
+                "mediaType": "application/vnd.ims.lti.v1.ltilink",
+                "@id": assignment.id,
+                "title": assignment.name,
+                "text": assignment.description,
+                "custom": {
+                    "custom_course_id": course_id,
+                    "assignment_id": assignment.id,
+                },
+            }
+            result["@graph"].append(item)
+
+        result = html.escape(json.dumps(result))
+
+        response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
+
+        return dict(
+            assignlist=result,
+            nonce=nonce,
+            timestamp=timestamp,
+            consumer_key=consumer_key,
+            sig=sig,
+            return_url=return_url,
+        )
