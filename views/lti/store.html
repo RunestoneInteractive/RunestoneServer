@@ -6,12 +6,12 @@
   <input type="hidden" name="content_items" value="{{ =assignlist }}" />
   <input type="hidden" name="data" value="Some opaque TC data" />
   <input type="hidden" name="oauth_version" value="1.0" />
-  <input type="hidden" name="oauth_nonce" value="{{ =nonce}}" />
-  <input type="hidden" name="oauth_timestamp" value="{{ =timestamp }}" />
-  <input type="hidden" name="oauth_consumer_key" value="{{=consumer_key }}" />
+  <input type="hidden" name="oauth_nonce" value="{{ =oauth_nonce}}" />
+  <input type="hidden" name="oauth_timestamp" value="{{ =oauth_timestamp }}" />
+  <input type="hidden" name="oauth_consumer_key" value="{{=oauth_consumer_key }}" />
   <input type="hidden" name="oauth_callback" value="about:blank" />
   <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
-  <input type="hidden" name="oauth_signature" value="{{ =sig }}" />
+  <input type="hidden" name="oauth_signature" value="{{ =oauth_signature }}" />
 </form>
 
 <script type="text/javascript">
@@ -21,11 +21,6 @@
         function submitform(){
             console.log(document.forms["storeForm"]);
             document.forms["storeForm"].submit();
-        }
-
-        function autoRefresh(){
-           clearTimeout(auto);
-           auto = setTimeout(function(){ submitform(); autoRefresh(); }, 100);
         }
     }
 </script>
