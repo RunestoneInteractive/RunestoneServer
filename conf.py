@@ -106,7 +106,7 @@ pygments_style = "sphinx"
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones. **CodeChat
 # note:** The ``CodeChat.CodeToRestSphinx`` extension is mandatory; without it,
 # CodeChat will not translate source code to reST and then (via Sphinx) to html.
-extensions = ["CodeChat.CodeToRestSphinx", "recommonmark"]
+extensions = ["CodeChat.CodeToRestSphinx", "recommonmark", "sphinx.ext.intersphinx"]
 
 # `templates_path <http://sphinx-doc.org/config.html#confval-templates_path>`_:
 # Add any paths that contain templates here, relative to this directory.
@@ -330,3 +330,16 @@ html_sourcelink_suffix = ""
 # `html_file_suffix <http://sphinx-doc.org/config.html#confval-html_file_suffix>`_:
 # This is the file name suffix for HTML files (e.g. ".xhtml").
 ##html_file_suffix = None
+
+# Intersphinx
+# ===========
+# `intersphinx_mapping <https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html#confval-intersphinx_mapping>`_:
+# This config value contains the locations and names of other projects that should be linked to in this documentation.
+intersphinx_mapping = {
+    "RunestoneServer": (
+        "https://runestonecomponents.readthedocs.io/en/latest/",
+        None,
+        # An optional local file location -- useful when updating both Sphinx builds before the updates are pushed to the server.
+        ##"F:/Runestone/RunestoneComponents/build/RunestoneComponents/objects.inv",
+    )
+}
