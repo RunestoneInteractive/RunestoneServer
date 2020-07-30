@@ -12,6 +12,7 @@
 import uuid
 import json
 import html
+import time
 
 # Third-party imports
 # -------------------
@@ -234,7 +235,7 @@ def index():
         auth.login_user(user)
 
     if message_type == "ContentItemSelectionRequest":
-        return _provide_assignment_list(course_id)
+        return _provide_assignment_list(course_id, consumer)
 
     elif assignment_id:
         # If the assignment is released, but this is the first time a student has visited the assignment, auto-upload the grade.
@@ -302,7 +303,7 @@ def _launch_assignment(assignment_id, user, result_source_did, outcome_url):
     redirect(URL("assignments", "doAssignment", vars={"assignment_id": assignment_id}))
 
 
-def _provide_assignment_list(course_id):
+def _provide_assignment_list(course_id, consumer):
     """Gather all of the assignments for this course package them up
     per https://www.imsglobal.org/specs/lticiv1p0/specification
     and return a form.
@@ -340,10 +341,16 @@ def _provide_assignment_list(course_id):
         using mediaType as specified will allow the TC to use the usual LTI
         launch mechanism
     """
-    timestamp = request.vars.get("oauth_timestamp")
-    nonce = request.vars.get("oauth_nonce")
-    consumer_key = request.vars.get("oauth_consumer_key")
-    sig = request.vars.get("oauth_signature")
+    rdict = {}
+    rdict["oauth_timestamp"] = int(time.time())
+    rdict["oauth_nonce"] = uuid.uuid1().int
+    rdict["oauth_consumer_key"] = request.vars.get("oauth_consumer_key")
+    rdict["oauth_signature_method"] = "HMAC-SHA1"
+    rdict["lti_message_type"] = "contentItemSelection"
+    rdict["lti_version"] = "LTI-1p0"
+    rdict["data"] = "Some opaque TC data"
+    rdict["oauth_version"] = "1.0"
+    rdict["oauth_callback"] = "about:blank"
     return_url = request.vars.get("content_item_return_url")
 
     query_res = db(db.assignments.course == course_id).select(
@@ -369,14 +376,11 @@ def _provide_assignment_list(course_id):
             result["@graph"].append(item)
 
         result = html.escape(json.dumps(result))
-
+        rdict["content_items"] = result
         response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
-
-        return dict(
-            assignlist=result,
-            nonce=nonce,
-            timestamp=timestamp,
-            consumer_key=consumer_key,
-            sig=sig,
-            return_url=return_url,
-        )
+        req = oauth2.Request("post", return_url, rdict)
+        rdict["return_url"] = return_url
+        rdict["assignlist"] = result
+        req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
+        rdict["oauth_signature"] = req["oauth_signature"]
+        return rdict
