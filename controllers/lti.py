@@ -344,11 +344,10 @@ def _provide_assignment_list(course_id, consumer):
     rdict = {}
     rdict["oauth_timestamp"] = int(time.time())
     rdict["oauth_nonce"] = uuid.uuid1().int
-    rdict["oauth_consumer_key"] = request.vars.get("oauth_consumer_key")
+    rdict["oauth_consumer_key"] = consumer.key
     rdict["oauth_signature_method"] = "HMAC-SHA1"
     rdict["lti_message_type"] = "contentItemSelection"
     rdict["lti_version"] = "LTI-1p0"
-    rdict["data"] = "Some opaque TC data"
     rdict["oauth_version"] = "1.0"
     rdict["oauth_callback"] = "about:blank"
     return_url = request.vars.get("content_item_return_url")
@@ -378,9 +377,10 @@ def _provide_assignment_list(course_id, consumer):
         result = html.escape(json.dumps(result))
         rdict["content_items"] = result
         response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
-        req = oauth2.Request("post", return_url, rdict)
+        req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
+        req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
+
         rdict["return_url"] = return_url
         rdict["assignlist"] = result
-        req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
         rdict["oauth_signature"] = req["oauth_signature"]
         return rdict
