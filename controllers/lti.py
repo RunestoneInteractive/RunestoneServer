@@ -377,7 +377,15 @@ def _provide_assignment_list(course_id, consumer):
         result = html.escape(json.dumps(result))
         rdict["content_items"] = result
         response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
-        req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
+        # req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
+        req = oauth2.Request.from_consumer_and_token(
+            consumer,
+            token=None,
+            http_method="POST",
+            http_url=return_url,
+            parameters=rdict,
+            is_form_encoded=True,
+        )
         req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
 
         rdict["return_url"] = return_url
