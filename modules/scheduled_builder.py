@@ -20,6 +20,7 @@ from celery import Celery
 from runestone.lp.lp_common_lib import (
     BUILD_SYSTEM_PATH,
     get_sim_str_sim30,
+    get_sim_str_mdb,
     get_verification_code,
     check_sim_out,
 )
@@ -110,7 +111,11 @@ def _scheduled_builder(
     sp_args = dict(stderr=subprocess.STDOUT, universal_newlines=True, cwd=cwd,)
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
-    if extension == ".s":
+    try:
+        is_extension_asm = {".s": True, ".c": False}[extension]
+    except:
+        raise RuntimeError("Unknown file extension in {}.".format(file_path))
+    if is_extension_asm:
         args = [
             os.path.join(xc16_path, "xc16-as"),
             "-omf=elf",
@@ -119,7 +124,7 @@ def _scheduled_builder(
             file_path,
             "-o" + o_path,
         ]
-    elif extension == ".c":
+    else:
         args = [
             os.path.join(xc16_path, "xc16-gcc"),
             "-mcpu=33EP128GP502",
@@ -140,12 +145,11 @@ def _scheduled_builder(
             + os.path.join(
                 sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
             ),
+            "-DSIM",
             file_path,
             "-c",
             "-o" + o_path,
         ]
-    else:
-        raise RuntimeError("Unknown file extension in {}.".format(file_path))
     out = _subprocess_string(args, **sp_args)
     try:
         out += subprocess.check_output(args, **sp_args)
@@ -190,6 +194,7 @@ def _scheduled_builder(
             sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
         ),
         test_file_path,
+        "-DSIM",
         "-DVERIFICATION_CODE=({}u)".format(verification_code),
         "-c",
         "-o" + test_object_path,
@@ -222,8 +227,6 @@ def _scheduled_builder(
         os.path.join(waf_root, "tests/test_utils.c.1.o"),
         os.path.join(waf_root, "tests/test_assert.c.1.o"),
         "-o" + elf_path,
-        "-Wl,-Bstatic",
-        "-Wl,-Bdynamic",
     ]
     out += "\n" + _subprocess_string(args, **sp_args)
     try:
@@ -234,15 +237,26 @@ def _scheduled_builder(
 
     # Simulate. Create the simulation commands.
     simout_path = file_path + ".simout"
-    ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
+    try:
+        os.remove(simout_path)
+    except Exception as e:
+        if not isinstance(e, FileNotFoundError):
+            out += "Unable to remove previous simulator output in {}: {}\n".format(
+                    simout_path, str(e)
+                )
+    if is_extension_asm:
+        ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
+        args = [os.path.join(xc16_path, "sim30")]
+    else:
+        ss = get_sim_str_mdb("dspic33EP128GP502", elf_path, simout_path)
+        args = ["/usr/bin/mdb"]
     # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
     # couldn't find a way to re-use that code.
     sim_ret = 0
-    args = [os.path.join(xc16_path, "sim30")]
     out += "\nTest results:\n" + _subprocess_string(args, **sp_args)
     try:
         cp = subprocess.run(
-            args, input=ss, stdout=subprocess.PIPE, timeout=5, **sp_args
+            args, input=ss, stdout=subprocess.PIPE, timeout=10, **sp_args
         )
         sim_ret = cp.returncode
     except subprocess.TimeoutExpired:
@@ -250,8 +264,11 @@ def _scheduled_builder(
         timeout_str = "\n\nTimeout."
     else:
         timeout_str = ""
-    with open(simout_path, encoding="utf-8") as f:
-        out += f.read().rstrip()
+    try:
+        with open(simout_path, encoding="utf-8", errors='backslashreplace') as f:
+            out += f.read().rstrip()
+    except Exception as e:
+        out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
     # Put the timeout string at the end of all the simulator output.
     out += timeout_str
     return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
