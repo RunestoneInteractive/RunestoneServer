@@ -287,6 +287,7 @@ If you are writing your own book you will want to get that book set up properly 
 4. Now that your course is registered rebuild it `cd .../books/yourbook` and run `runestone build --all deploy`
 5. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
 **Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher.  See the PreTeXt docs for how do do this.
+6. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book.  Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
 
 
 ## Debugging
