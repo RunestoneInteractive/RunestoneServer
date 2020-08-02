@@ -277,6 +277,18 @@ Controllers are reloaded automatically every time they are used.  However if you
 
 File permissions can seem a little strange when you start this container on Linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The container's entrypoint script updates permissions to allow both you and the container enough privileges to do your work.
 
+## 9. If you are writing your own book
+
+If you are writing your own book you will want to get that book set up properly in the runestone system.  You need to do the following:
+
+1. Shell in to the container (see above)
+2. `cd applications/runestone`
+3. Run the command `rsmanage addcourse` Use the project name you configured in `pavement.py` as the name of BOTH the course and the basecourse when it asks.
+4. Now that your course is registered rebuild it `cd .../books/yourbook` and run `runestone build --all deploy`
+5. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
+**Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher.  See the PreTeXt docs for how do do this.
+
+
 ## Debugging
 
 There are a couple of ways to get at the logger output:
