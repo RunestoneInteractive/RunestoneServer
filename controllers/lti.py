@@ -342,14 +342,15 @@ def _provide_assignment_list(course_id, consumer):
         launch mechanism
     """
     rdict = {}
-    rdict["oauth_timestamp"] = int(time.time())
-    rdict["oauth_nonce"] = uuid.uuid1().int
+    rdict["oauth_timestamp"] = str(int(time.time()))
+    rdict["oauth_nonce"] = str(uuid.uuid1().int)
     rdict["oauth_consumer_key"] = consumer.key
     rdict["oauth_signature_method"] = "HMAC-SHA1"
     rdict["lti_message_type"] = "contentItemSelection"
     rdict["lti_version"] = "LTI-1p0"
     rdict["oauth_version"] = "1.0"
     rdict["oauth_callback"] = "about:blank"
+    rdict["data"] = request.vars.get("data")
     return_url = request.vars.get("content_item_return_url")
 
     query_res = db(db.assignments.course == course_id).select(
@@ -374,8 +375,8 @@ def _provide_assignment_list(course_id, consumer):
             }
             result["@graph"].append(item)
 
-        result = html.escape(json.dumps(result))
-        rdict["content_items"] = result
+        result = json.dumps(result)
+        rdict["content_items"] = html.escape(result)
         response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
         # req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
         req = oauth2.Request.from_consumer_and_token(
@@ -387,8 +388,43 @@ def _provide_assignment_list(course_id, consumer):
             is_form_encoded=True,
         )
         req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
-
+        print(req)
         rdict["return_url"] = return_url
-        rdict["assignlist"] = result
-        rdict["oauth_signature"] = req["oauth_signature"]
-        return rdict
+        rdict["oauth_signature"] = req["oauth_signature"].decode("utf8")
+
+        tplate = """
+        <!DOCTYPE html>
+        <html>
+        <body>
+        <form name="storeForm" action="{return_url}" method="post" encType="application/x-www-form-urlencoded">
+        <input type="hidden" name="lti_message_type" value="ContentItemSelection" />
+        <input type="hidden" name="lti_version" value="LTI-1p0" />
+        <input type="hidden" name="content_items" value="{content_items}" />
+        <input type="hidden" name="data" value="{data}" />
+        <input type="hidden" name="oauth_version" value="1.0" />
+        <input type="hidden" name="oauth_nonce" value="{oauth_nonce}" />
+        <input type="hidden" name="oauth_timestamp" value="{oauth_timestamp}" />
+        <input type="hidden" name="oauth_consumer_key" value="{oauth_consumer_key}" />
+        <input type="hidden" name="oauth_callback" value="about:blank" />
+        <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
+        <input type="hidden" name="oauth_signature" value="{oauth_signature}" />
+        </form>
+        """.format(
+            **rdict
+        )
+        scpt = """
+        <script type="text/javascript">
+            window.onload=function(){
+                var auto = setTimeout(function(){ submitform(); }, 1000);
+
+                function submitform(){
+                    console.log(document.forms["storeForm"]);
+                    document.forms["storeForm"].submit();
+                }
+            }
+        </script>
+        </body>
+        </html>
+        """
+        print(tplate + scpt)
+        return tplate + scpt
