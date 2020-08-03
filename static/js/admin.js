@@ -2322,3 +2322,24 @@ function populateEditor(qname) {
         $("#editRST").val(JSON.parse(obj));
     });
 }
+
+// generateLTIKeys
+// ---------------
+function generateLTIKeys() {
+    if ($("#ckey_value").html() != "") {
+        let res = confirm(
+            "Whoa!  You already have a key and secret are you sure?"
+        );
+        if (!res) {
+            return;
+        }
+    }
+    $.getJSON("create_lti_keys", {}, function (data) {
+        if (data.consumer) {
+            $("#ckey_value").html(data.consumer);
+            $("#secret_value").html(data.secret);
+        } else {
+            alert("Hmmm, failed to create keys");
+        }
+    });
+}

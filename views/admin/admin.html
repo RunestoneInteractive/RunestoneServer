@@ -33,6 +33,9 @@
     <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
     </a>
+    <a id="LTITab" data-toggle="tab" href="#SetupLTI" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">LTI Integration</h4>
+    </a>
     <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
     </a>
@@ -231,6 +234,24 @@
         </div>
     </div>
 
+    <div id="SetupLTI" class="tab-pane fade">
+        <div class="col-md-8">
+            <h2 style="text-align: center">LTI Configuration</h2>
+            <p>This is Beta! It works but you need to know how to configure things on the LMS side.  I have only tested this with Canvas and Sakai.  I would love for it to work on every LMS! LTI is a standard after all but debugging this stuff is very difficult when I don't have access to every LMS.</p>
+            <p>To launch lti on Runestone use <code>https://runestone.academy/runestone/lti</code></p>
+            <div class="col-sm-8 col-md-8">
+                <button onclick="generateLTIKeys();" class="btn btn-primary">Create LTI Key and Secret</button>
+                <table style="width: 500px">
+                <tr><td>Consumer Key:</td> <td><span id="ckey_value">{{=consumer}}</span></td></tr>
+                <tr><td>Secret:</td> <td><div id="secret_value" class="collapse">{{=secret}}</div></td></tr>
+                <tr><td></td><td><a href="#secret_value" class="btn btn-default btn-small" data-toggle="collapse">Show Secret</a></td></tr>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
     <div id="rsnews" class="tab-pane" style="margin-top:30px;">
         <div class="col-md-8" style="background-color: aliceblue;border-radius: 10px;margin-left: 20px;border: solid;">
             <h2>Runestone News</h2>
@@ -255,6 +276,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
         $("#rsnews").hide()
     });
 
@@ -265,6 +287,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
         $("#rsnews").hide()
     });
 
@@ -275,6 +298,7 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
         $("#rsnews").hide()
     });
 
@@ -285,12 +309,25 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
         $("#rsnews").hide()
     });
 
     $('#CopyAssignmentsTab').click(function () {
         $('#CopyAssignmentsTab').css('background-color', 'gainsboro');
         $('#DeleteTab').css('background-color', 'transparent');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("#rsnews").hide()
+    });
+
+    $('#LTITab').click(function () {
+        $('#LTITab').css('background-color', 'gainsboro');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#sectionsTab').css('background-color', 'transparent');
         $('#studentsTab').css('background-color', 'transparent');
         $('#AddInstructorTab').css('background-color', 'transparent');
@@ -305,6 +342,7 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
         $("#rsnews").hide()
     });
 </script>

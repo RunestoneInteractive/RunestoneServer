@@ -1,18 +1,35 @@
-from os import path
-import os
-import datetime
+# *******************************
+# |docname| - route to a textbook
+# *******************************
+# This controller provides routes to admin functions
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import csv
+import datetime
 import io
-from dateutil.parser import parse
-import re
-from random import randint
-from collections import OrderedDict
-from paver.easy import sh
 import json
-from runestone import cmap
-from rs_grading import send_lti_grades, _get_assignment
-import pandas as pd
 import logging
+import os
+import re
+import uuid
+from collections import OrderedDict
+from os import path
+from random import randint
+
+# Third Party library
+# -------------------
+import pandas as pd
+from dateutil.parser import parse
+from paver.easy import sh
+from rs_grading import _get_assignment, send_lti_grades
+from runestone import cmap
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -568,6 +585,20 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    keys = (
+        db(
+            (db.course_lti_map.course_id == auth.user.course_id)
+            & (db.lti_keys.id == db.course_lti_map.lti_id)
+        )
+        .select()
+        .first()
+    )
+    if keys:
+        consumer = keys.lti_keys.consumer
+        secret = keys.lti_keys.secret
+    else:
+        consumer = ""
+        secret = ""
     try:
         motd = open("applications/runestone/static/motd.html").read()
     except Exception:
@@ -589,6 +620,8 @@ def admin():
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
         motd=motd,
+        consumer=consumer,
+        secret=secret,
     )
 
 
@@ -2540,6 +2573,35 @@ def get_assignment_list():
         res.append({"id": assign.id, "name": assign.name})
 
     return json.dumps(dict(assignments=res))
+
+
+# Create LTI Keys
+# ---------------
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def create_lti_keys():
+    """
+    Generate a consumer and a secret key.  Store them in the database
+    and associate this key with the course of the instructor.
+    The course_lti_mamp may look a little superflous now, but I think it will grow.
+    There is no real magic about the keys so using a UUID seems like just as good
+    a solution as anything.
+
+    This API is triggered by the generateLTIKeys() function in admin.js and is
+    one panel of the main admin page.
+
+    Returns:
+        JSON: A JSON object with the keys
+    """
+    consumer = auth.user.course_name + "-" + str(uuid.uuid1())
+    secret = str(uuid.uuid4())
+
+    ltid = db.lti_keys.insert(consumer=consumer, secret=secret, application="runestone")
+    db.course_lti_map.insert(course_id=auth.user.course_id, lti_id=ltid)
+
+    return json.dumps(dict(consumer=consumer, secret=secret))
 
 
 def killer():
