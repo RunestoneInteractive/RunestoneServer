@@ -352,6 +352,7 @@ def _provide_assignment_list(course_id, consumer):
     rdict["oauth_callback"] = "about:blank"
     rdict["data"] = request.vars.get("data")
     return_url = request.vars.get("content_item_return_url")
+    # return_url = "http://dev.runestoneinteractive.org/runestone/lti/fakestore"
 
     query_res = db(db.assignments.course == course_id).select(
         orderby=~db.assignments.duedate
@@ -377,7 +378,7 @@ def _provide_assignment_list(course_id, consumer):
 
         result = json.dumps(result)
         rdict["content_items"] = html.escape(result)
-        response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
+        # response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
         # req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
         req = oauth2.Request.from_consumer_and_token(
             consumer,
@@ -400,7 +401,13 @@ def _provide_assignment_list(course_id, consumer):
         <input type="hidden" name="lti_message_type" value="ContentItemSelection" />
         <input type="hidden" name="lti_version" value="LTI-1p0" />
         <input type="hidden" name="content_items" value="{content_items}" />
-        <input type="hidden" name="data" value="{data}" />
+        """
+        tplate += (
+            """ <input type="hidden" name="data" value="{data}" /> """
+            if rdict["data"]
+            else ""
+        )
+        tplate += """
         <input type="hidden" name="oauth_version" value="1.0" />
         <input type="hidden" name="oauth_nonce" value="{oauth_nonce}" />
         <input type="hidden" name="oauth_timestamp" value="{oauth_timestamp}" />
@@ -409,9 +416,9 @@ def _provide_assignment_list(course_id, consumer):
         <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
         <input type="hidden" name="oauth_signature" value="{oauth_signature}" />
         </form>
-        """.format(
-            **rdict
-        )
+        """
+        tplate = tplate.format(**rdict)
+
         scpt = """
         <script type="text/javascript">
             window.onload=function(){
@@ -427,4 +434,9 @@ def _provide_assignment_list(course_id, consumer):
         </html>
         """
         print(tplate + scpt)
-        return tplate + scpt
+        return tplate  # + scpt
+
+
+def fakestore():
+    # define this function just to show what is coming through
+    return str(request.env) + "POST VARS = " + str(request.post_vars)
