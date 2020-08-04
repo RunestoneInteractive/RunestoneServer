@@ -346,11 +346,14 @@ def _provide_assignment_list(course_id, consumer):
     rdict["oauth_nonce"] = str(uuid.uuid1().int)
     rdict["oauth_consumer_key"] = consumer.key
     rdict["oauth_signature_method"] = "HMAC-SHA1"
-    rdict["lti_message_type"] = "contentItemSelection"
+    rdict["lti_message_type"] = "ContentItemSelection"
     rdict["lti_version"] = "LTI-1p0"
     rdict["oauth_version"] = "1.0"
     rdict["oauth_callback"] = "about:blank"
-    rdict["data"] = request.vars.get("data")
+    extra_data = request.vars.get("data", None)
+    if extra_data:
+        rdict["data"] = extra_data
+
     return_url = request.vars.get("content_item_return_url")
     # return_url = "http://dev.runestoneinteractive.org/runestone/lti/fakestore"
 
@@ -377,7 +380,7 @@ def _provide_assignment_list(course_id, consumer):
             result["@graph"].append(item)
 
         result = json.dumps(result)
-        rdict["content_items"] = html.escape(result)
+        rdict["content_items"] = result
         # response.view = "/srv/web2py/applications/runestone/views/lti/store.html"
         # req = oauth2.Request("post", return_url, rdict, is_form_encoded=True)
         req = oauth2.Request.from_consumer_and_token(
@@ -389,10 +392,9 @@ def _provide_assignment_list(course_id, consumer):
             is_form_encoded=True,
         )
         req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
-        print(req)
         rdict["return_url"] = return_url
         rdict["oauth_signature"] = req["oauth_signature"].decode("utf8")
-
+        rdict["content_items"] = html.escape(result)
         tplate = """
         <!DOCTYPE html>
         <html>
@@ -404,7 +406,7 @@ def _provide_assignment_list(course_id, consumer):
         """
         tplate += (
             """ <input type="hidden" name="data" value="{data}" /> """
-            if rdict["data"]
+            if extra_data
             else ""
         )
         tplate += """
@@ -433,10 +435,30 @@ def _provide_assignment_list(course_id, consumer):
         </body>
         </html>
         """
-        print(tplate + scpt)
-        return tplate  # + scpt
+        return tplate + scpt
 
 
 def fakestore():
     # define this function just to show what is coming through
-    return str(request.env) + "POST VARS = " + str(request.post_vars)
+    # I'm going to keep this around as it may be useful for future debugging.
+    content = request.vars.get("content_items")
+    consumer = oauth2.Consumer("bnm.runestone", "supersecret")
+    return_url = "http://dev.runestoneinteractive.org/runestone/lti/fakestore"
+    d = dict(request.vars)
+    req = oauth2.Request.from_consumer_and_token(
+        consumer,
+        token=None,
+        http_method="POST",
+        http_url=return_url,
+        parameters=d,
+        is_form_encoded=True,
+    )
+    req.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, None)
+
+    for k, v in req.items():
+        print(f"{k} : {v}")
+    print(req.method)
+    print(req.normalized_url)
+    print(req.get_normalized_parameters())
+
+    return f" sent sig = {d['oauth_signature']} computed sig {req['oauth_signature'].decode('utf8')} {d}"
