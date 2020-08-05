@@ -314,5 +314,7 @@ db.define_table(
     Field("selector_id", "string"),
     Field("sid", "string"),
     Field("selected_id", "string"),
+    Field("points", "integer"),
+    Field("competency", "string"),
     migrate=table_migrate_prefix + "selected_questions.table",
 )
