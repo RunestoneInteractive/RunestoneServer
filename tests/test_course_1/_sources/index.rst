@@ -5,6 +5,7 @@ This book generates data for use with the test suite.
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
 
    test_chapter_1/toctree
    lp_demo.py
@@ -22,6 +23,26 @@ ActiveCode
    for num in myList:
        total = total + num
    print(total)
+
+.. activecode:: units2
+   :nocodelens:
+   :autograde: unittest
+
+   Fix the following code so that it always correctly adds two numbers.
+   ~~~~
+   def add(a,b):
+      return 4
+
+   ====
+   from unittest.gui import TestCaseGui
+
+   class myTests(TestCaseGui):
+
+       def testOne(self):
+           self.assertEqual(add(2,2),4,"A feedback string when the test fails")
+           self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Try adding your parameters")
+
+   myTests().main()
 
 
 Multiple Choice
@@ -78,3 +99,10 @@ Fill in the Blank
    -   :mary|Mair[a|e|i]: Correct.
        :Sue: Is wrong.
        :x: Nope.
+
+
+Short answers
+-------------
+.. shortanswer:: test_short_answer_1
+
+    Do you like interactive textbooks?

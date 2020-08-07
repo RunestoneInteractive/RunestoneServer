@@ -1,0 +1,30 @@
+/* ****************************************************************
+ * |docname| -- A style sheet for the select2 multi-checkbox plugin
+ * ****************************************************************
+ */
+
+/* Style unchecked checkboxes in a select2 multi-checkbox using an empty checkbox from a nice font. */
+.select2-results__option .wrap::before{
+    font-family: fontAwesome;
+    color: #999;
+    content: "\f096";
+    width: 25px;
+    height: 25px;
+    padding-right: 10px;
+}
+
+/* Style checked checkboxes. */
+.select2-results__option[aria-selected=true] .wrap::before{
+    content: "\f14a";
+}
+
+/* Make the background of selected items the same as unselected items (white). */
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #FFFFFF;
+}
+
+/* The highlighted option needs to be blue. */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #5897fb
+}
+

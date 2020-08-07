@@ -538,7 +538,7 @@ class _TestClient(WebClient):
                     f.write(self.text)
                 errors = vld.validate([str(tmpname)])
 
-                assert errors == expected_errors
+                assert errors <= expected_errors
 
             return self.text
 
@@ -566,7 +566,10 @@ class _TestClient(WebClient):
                 admin_client.get("default/ticket/" + error_code)
                 assert admin_client.status == 200
                 # Save it to a file.
-                traceback_file = url.replace("/", "-") + "_traceback.html"
+                traceback_file = (
+                    "".join(c if c not in "\/:*?<>|" else "_" for c in url)
+                    + "_traceback.html"
+                )
                 with open(traceback_file, "wb") as f:
                     f.write(_html_prep(admin_client.text))
                 print("Traceback saved to {}.".format(traceback_file))
@@ -761,6 +764,16 @@ class _TestUser(object):
             kwargs["answer"] = kwargs["act"]
         # Post to the server.
         return json.loads(self.test_client.validate("ajax/hsblog", data=kwargs))
+
+    def coursechooser(self, course_name):
+        html = self.test_client.validate("default/coursechooser/{}".format(course_name))
+        # Make sure this didn't send us to the user profile page to add a course we aren't registered for.
+        assert "Course IDs for open courses" not in html
+
+    def removecourse(self, course_name):
+        html = self.test_client.validate("default/removecourse/{}".format(course_name))
+        assert "Sorry, you cannot remove" not in html
+        assert "Course Selection" in html
 
 
 # Present ``_TestUser`` as a fixture.

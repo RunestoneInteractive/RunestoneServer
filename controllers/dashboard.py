@@ -321,7 +321,7 @@ def studentreport():
         response.view = "assignments/index.html"
 
     data_analyzer.load_user_metrics(sid)
-    data_analyzer.load_assignment_metrics(sid)
+    data_analyzer.load_assignment_metrics(sid, not for_dashboard)
 
     chapters = []
     for chapter_label, chapter in six.iteritems(
@@ -736,7 +736,8 @@ def subchapoverview():
         x = pt.to_dict()
         for k in x:
             for j in x[k]:
-                x[k][j] = format_cell(k, j[0], j[1], x[k][j])
+                if request.vars.action != "tocsv":
+                    x[k][j] = format_cell(k, j[0], j[1], x[k][j])
         pt = pd.DataFrame(x)
 
     cmap = pd.read_sql_query(
@@ -865,6 +866,10 @@ GRADEABLE_TYPES = {
 }
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def subchapdetail():
     # 1. select the name, question_type, from questions for this chapter/subchapter/base_course
     # 2. for each question get tries to correct, min time, max time, total

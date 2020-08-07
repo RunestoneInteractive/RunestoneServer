@@ -193,7 +193,9 @@ def index():
             db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
             db(db.auth_user.id == auth.user.id).update(active="T")
         try:
-            logger.debug("INDEX - checking for progress table")
+            logger.debug(
+                f"INDEX - checking for progress table for {course.base_course}"
+            )
             chapter_label = (
                 db(db.chapters.course_id == course.base_course)
                 .select()
@@ -221,8 +223,9 @@ def index():
                 """
                     % (auth.user.id, course.base_course)
                 )
-        except Exception:
-            session.flash = "Your course is not set up to track your progress"
+        except Exception as e:
+            logger.error(f"Select Course got Error {e}")
+            session.flash = f"{course.course_name} is not set up to track your progress"
         # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
         if session.request_donation:
@@ -409,9 +412,13 @@ def removecourse():
         redirect(URL("default", "courses"))
 
     if settings.academy_mode:
-        course_id_query = db(db.courses.course_name == request.args[0]).select(
-            db.courses.id
+        course_id_query = (
+            db(db.courses.course_name == request.args[0]).select(db.courses.id).first()
         )
+        # Redirect if this course wasn't found.
+        if not course_id_query:
+            redirect(URL("default", "courses"))
+
         # todo: properly encode course_names to handle courses with special characters
         # Check if they're about to remove their currently active course
         auth_query = db(db.auth_user.id == auth.user.id).select()
@@ -423,7 +430,7 @@ def removecourse():
             else:
                 db(
                     (db.user_courses.user_id == auth.user.id)
-                    & (db.user_courses.course_id == course_id_query[0].id)
+                    & (db.user_courses.course_id == course_id_query.id)
                 ).delete()
 
     redirect("/%s/default/courses" % request.application)

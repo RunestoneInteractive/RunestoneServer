@@ -166,6 +166,12 @@ or to stop them, and then bring them up again (this should not erase data from t
 $ docker-compose stop
 $ docker-compose up -d
 ```
+
+### 2. Creating Questions from the Web Interface
+
+If you want to write questions from the web interface you will need to make sure
+that `settings.python_interpreter` is set to a real python.  In the uwsgi environment uwsgi tends to replace python in `sys.executable` with itself, which is pretty annoying.
+
 ### 2. Running the Runestone Server Unit Tests
 
 You can run the unit tests in the container using the following command.
@@ -270,6 +276,19 @@ Controllers are reloaded automatically every time they are used.  However if you
 ### 8. File Permissions (especially on Linux)
 
 File permissions can seem a little strange when you start this container on Linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The container's entrypoint script updates permissions to allow both you and the container enough privileges to do your work.
+
+## 9. If you are writing your own book
+
+If you are writing your own book you will want to get that book set up properly in the runestone system.  You need to do the following:
+
+1. Shell in to the container (see above)
+2. `cd applications/runestone`
+3. Run the command `rsmanage addcourse` Use the project name you configured in `pavement.py` as the name of BOTH the course and the basecourse when it asks.
+4. Now that your course is registered rebuild it `cd .../books/yourbook` and run `runestone build --all deploy`
+5. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
+**Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher.  See the PreTeXt docs for how do do this.
+6. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book.  Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
+
 
 ## Debugging
 

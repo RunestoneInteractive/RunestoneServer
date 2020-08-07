@@ -1,7 +1,7 @@
 {{ extend "admin/instructors.html"}}
 
 {{ block tabcontent }}
-<script type="text/javascript" src="{{=get_course_url('_static/sharedb.js')}}"></script>
+
 <script type="text/javascript">
   eBookConfig.gradingURL = '{{=gradingUrl}}';
   eBookConfig.gradeRecordingUrl = '{{=gradeRecordingUrl}}';
@@ -16,126 +16,264 @@
   $(document).ready(getCourseStudents);
 </script>
 
-<div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
+<div class="container">
+  <div class="row">
+    <div class="col-md-5" style="margin-top: 50px; margin-bottom: 10px;">
 
-  <div>
-    <select required onchange="selectChapOrAssignment();" id="gradingoption1" class="form-control" style="margin-bottom: 10px;" >
-              <option value="" disabled selected>Select: Chapter or Assignment</option>
-              <option value="chapter">chapter</option>
-              <option value="assignment">assignment</option>
-    </select>
+      <div>
+        <select required onchange="selectChapOrAssignment();" id="gradingoption1" class="form-control" style="margin-bottom: 10px;">
+                  <option value="" disabled selected>Select: Chapter or Assignment</option>
+                  <option value="chapter">chapter</option>
+                  <option value="assignment">assignment</option>
+        </select>
 
-    <select onchange="updateQuestionList();" class="form-control" id="chaporassignselector" style="display:none;" >
-    </select>
-    <span id="releasestate" style="color: red;"></span>
-    <button id="releasebutton" style="text-align: center; visibility: hidden;" class="btn btn-primary btn-sm" onclick="toggle_release_grades();">Release Grades</button>
+        <select onchange="updateQuestionList();" class="form-control" id="chaporassignselector" style="display:none;"></select>
+        <span id="releasestate" style="color: red;"></span>
+        <button id="releasebutton" style="text-align: center; visibility: hidden;" class="btn btn-primary btn-sm" onclick="toggle_release_grades();">Release Grades</button>
+      </div>
 
-  </div>
+      <div>
+        <h3>Questions</h3>
+        <select multiple onchange="gradeSelectedStudent();" class="form-control" id="questionselector" style="display: none;"></select>
+        <span class="allcbclass"><input type="checkbox" id="allquestioncb" /><label for="allquestioncb">Select All</label></span>
+      </div>
 
-  <div>
-
-  <h3>Questions</h3>
-  <select multiple onchange="gradeSelectedStudent();" class="form-control" id="questionselector" style="display: none;" >
-  </select> <span class="allcbclass"><input type="checkbox" id="allquestioncb" /><label for="allquestioncb">Select All</label></span>
-  </div>
-  <div>
-
-  <h3>Students</h3>
-  <select multiple onchange="gradeIndividualItem();" class="form-control" id="studentselector" style="display: none;" >
-  </select> <span class="allcbclass"><input type="checkbox" id="allstudentcb" /><label for="allstudentcb">Select All</label></span>
-  </div>
-
-
-<p style="visibility: hidden">This paragraph takes up some space to deal with a funky display issue of the right side lumping over onto the left</p>
-
-
-  <div id="autogradingform" style="text-align: center; visibility: hidden;">
-    <form>
-      <fieldset>
-      <input id="enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline" class="big-checkbox" checked>
-      <label for="enforceDeadline">Only check work submitted before</label> <span id="dl_disp"></span>
-      </fieldset>
-      <input id="autogradesubmit" type="submit" class="btn btn-primary" value="Autograde and Display Totals" />
-      <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
-    </form>
-    <strong>Warning</strong> Autograde does not support multiple selections yet.
-  </div>
-
-  <div>
-    <div id="gradingprogresstitle"></div>
-    <div id="autogradingprogress" style="max-height: 100px; overflow: auto; "></div>
-    <div id="gradingsummarytitle"></div>
-    <div id="autogradingsummary"></div>
-  </div>
-  <div id="assignmentTotalform" style="text-align: center; visibility: hidden; background-color: rgba(219,103,14,.71); margin: 10px; padding: 5px; border-radius: 10px;">
-    <strong>Override student score for whole assignment.</strong>
-    <form>
-      <label for="computed-total-score">computed score</label>
-      <input id="computed-total-score" type="text" class="form-control" value="" readonly/>
-      <label for="manual-total-score">manual override score</label>
-      <input id="manual-total-score" type="text" class="form-control" value="" />
-      <input type="submit" value="Save Manual Total" class="btn btn-default" style="margin-top: 5px;" />
-    </form>
-    {{if settings.lti_only_mode:}}
-      <button id="send_lti_grade" style="text-align: center;" class="list-group-item btn btn-success" onclick="sendLTI_Grade();">Release Grade to LMS</button>
-    {{pass}}
-  </div>
+      <div>
+        <h3>Students</h3>
+        <select multiple onchange="gradeIndividualItem();" class="form-control" id="studentselector" style="display: none;"></select>
+        <span class="allcbclass">
+          <input type="checkbox" id="allstudentcb" />
+          <label for="allstudentcb">Select All</label>
+        </span>
+      </div>
 
 
-</div>
+      <p style="visibility: hidden">This paragraph takes up some space to deal with a funky display issue of the right side lumping over onto the left</p>
 
 
+      <div id="autogradingform" style="text-align: center; visibility: hidden;">
+        <form>
+          <fieldset>
+            <input id="enforceDeadline" type="checkbox" name="enforceDeadline" value="enforceDeadline" class="big-checkbox" checked />
+            <label for="enforceDeadline">Only check work submitted before</label>
+            <span id="dl_disp"></span>
+          </fieldset>
+          <input id="autogradesubmit" type="submit" class="btn btn-primary" value="Autograde and Display Totals" />
+          <!--<button id="autogradebutton"  class="list-group-item" onclick="function(event){event.preventDefault(); autoGrade(event);}">Autograde</button>-->
+        </form>
+        <strong>Warning</strong> Autograde does not support multiple selections yet.
+      </div>
 
-<div id="rightsideGradingTab" class="col-md-7" style="margin-top: 50px; visibility: visible">
-
-  <div id="outerRightDiv">
-    <h4 id="rightTitle"></h4>
-
-    <div id="questiondisplay">Grading Instructions</div>
-
-    <div style="display:none" id="shortanswerresponse"></div>
-    <div id="initialtext">
-        <h4 style="color: red;">The Grading interface Changed, Please Read</h4>
-        For <strong>Manual</strong> grading:
-        <ol>
-          <li>Begin by Selecting Chapter or Assignment mode for grading. Chapter
-          Mode will let you look at and/or grade any exercise by any student in
-          the chapter you will choose in step 2.  Assignment mode lets you grade
-          the exercises for an assignment you have created.</li>
-          <li>Select the Chapter or Assignment</li>
-          <li>Select the question(s) you want to grade (or Select All)</li>
-          <li>Select the student(s) you want to grade (or Select All)</li>
-        </ol>
-
-        <p>If you don't use the Runestone assignment interface but want to check your
-        students work, then you can select a Chapter, one or more questions, and one
-        or more students to check their work.  This is also useful if a student has a
-        question and you want to review what they have done so far.</p>
-
-        <p>To <strong>Autograde</strong> you typically will <strong>only</strong> select an assignment
-        and click the autograde button. If you need to "touch up" some grades for a
-        particular student with special circumstances, you can select that student and
-        regrade the whole assignment, or you can autograde just one exercise for one
-        student by selecting a question and student. You can click on Autograde at any
-        point.</p>
-
-
-      <p>
-        Note 1:  All the dropdowns Assignments/Chapters, Questions and Students are searchable.
-      </p>
-      <p>
-        Note 2:  If you have selected multiple questions or students, the grades and
-        comments will automatically save to the server as you move from field to
-        field.  The background will change to a very light green as your
-        indication the save was successful.
-      </p>
+      <div>
+        <div id="gradingprogresstitle"></div>
+        <div id="autogradingprogress" style="max-height: 100px; overflow: auto;"></div>
+        <div id="gradingsummarytitle"></div>
+        <div id="autogradingsummary"></div>
+      </div>
+    <div id="assignmentTotalform" style="text-align: center; visibility: hidden; background-color: rgba(219,103,14,.71); margin: 10px; padding: 5px; border-radius: 10px;">
+        <strong>Override student score for whole assignment.</strong>
+        <form>
+          <label for="computed-total-score">computed score</label>
+          <input id="computed-total-score" type="text" class="form-control" value="" readonly />
+          <label for="manual-total-score">manual override score</label>
+          <input id="manual-total-score" type="text" class="form-control" value="" />
+          <input type="submit" value="Save Manual Total" class="btn btn-default" style="margin-top: 5px;" />
+        </form>
+        {{if settings.lti_only_mode:}}
+          <button id="send_lti_grade" style="text-align: center;" class="list-group-item btn btn-success" onclick="sendLTI_Grade();">Release Grade to LMS</button>
+        {{pass}}
+      </div>
     </div>
 
+    <div id="rightsideGradingTab" class="col-md-7" style="margin-top: 50px; visibility: visible">
+
+      <div id="outerRightDiv">
+        <h4 id="rightTitle"></h4>
+
+        <div id="questiondisplay">Grading Instructions</div>
+
+        <div style="display:none" id="shortanswerresponse"></div>
+        <div id="initialtext">
+            <h4 style="color: red;">The Grading interface Changed, Please Read</h4>
+            For <strong>Manual</strong> grading:
+            <ol>
+              <li>Begin by Selecting Chapter or Assignment mode for grading. Chapter
+              Mode will let you look at and/or grade any exercise by any student in
+              the chapter you will choose in step 2.  Assignment mode lets you grade
+              the exercises for an assignment you have created.</li>
+              <li>Select the Chapter or Assignment</li>
+              <li>Select the question(s) you want to grade (or Select All)</li>
+              <li>Select the student(s) you want to grade (or Select All)</li>
+            </ol>
+
+            <p>If you don't use the Runestone assignment interface but want to check your
+            students work, then you can select a Chapter, one or more questions, and one
+            or more students to check their work.  This is also useful if a student has a
+            question and you want to review what they have done so far.</p>
+
+            <p>To <strong>Autograde</strong> you typically will <strong>only</strong> select an assignment
+            and click the autograde button. If you need to "touch up" some grades for a
+            particular student with special circumstances, you can select that student and
+            regrade the whole assignment, or you can autograde just one exercise for one
+            student by selecting a question and student. You can click on Autograde at any
+            point.</p>
+
+          <p>
+            Note 1:  All the dropdowns Assignments/Chapters, Questions and Students are searchable.
+          </p>
+
+          <p>
+            Note 2:  If you have selected multiple questions or students, the grades and
+            comments will automatically save to the server as you move from field to
+            field.  The background will change to a very light green as your
+            indication the save was successful.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div class="row assigment_table_buttons" style="display: none">
+    <div class="col-xs-12">
+      <button class="btn btn-primary" type="button" onclick="$('#assignment_table_all').css('visibility', 'visible')">
+        Assignment table (beta)
+      </button>
+      <script src="../static/js/assignment_table.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+      <script src="../static/js/select2.multi-checkboxes.js"></script>
+      <link href="../static/css/select2.multi-checkboxes.css" rel="stylesheet">
+    </div>
+  </div>
+
+  <div id="assignment_table_all" style="visibility: hidden">
+    <div class="row">
+      <div class="col-sm-3">
+        <select id="assignment_table_rows_visibility" multiple onchange="assignmentTableShowRows(this)" style="width: 100%">
+          <option value="0" aria-selected="false">Question id</option>
+          <option value="1" selected aria-selected="true">Question location</option>
+          <option value="2" aria-selected="false">Question type</option>
+          <option value="3" aria-selected="false">Max points</option>
+          <option value="4" selected aria-selected="true">Average grade</option>
+          <option value="5" selected aria-selected="true">Average # of attempts</option>
+        </select>
+      </div>
+
+      <div class="col-sm-3">
+        <select id="assignment_table_columns_visibility" multiple onchange="assignmentTableShowColumns(this)" class="assignment_table_only" style="width: 100%">
+          <option value="0" aria-selected="false">User id</option>
+          <option value="1" selected aria-selected="true">Family name</option>
+          <option value="2" selected aria-selected="true">Given name</option>
+          <option value="3" aria-selected="false">E-mail address</option>
+          <option value="4" selected aria-selected="true">Average grade</option>
+        </select>
+      </div>
+
+      <div class="col-sm-3">
+        <select id="assignment_table_cells_visibility" multiple onchange="assignmentTableShowCells(this)" style="width: 100%">
+        </select>
+      </div>
+
+      <div class="col-sm-3">
+        <select id="assignment_table_students" multiple onchange="assignmentTableStudentVisibility(this)" class="assignment_table_only" style="width: 100%">
+        </select>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        // See https://github.com/wasikuss/select2-multi-checkboxes.
+        $("#assignment_table_rows_visibility").select2MultiCheckboxes({
+          // The placeholder is displayed when nothing is selected.
+          placeholder: "Row headings",
+          // Otherwise, the ``templateSelection`` is called. Set both to provide the same message.
+          templateSelection: () => "Row headings",
+        });
+        $("#assignment_table_columns_visibility").select2MultiCheckboxes({
+          placeholder: "Column headings",
+          templateSelection: () => "Column headings",
+        });
+        let atcv = $("#assignment_table_cells_visibility");
+        atcv.select2MultiCheckboxes({
+          placeholder: "Cell contents",
+          templateSelection: () =>  "Cell contents",
+          // Don't escape HTML in the text of each option.
+          escapeMarkup: function(markup) {
+            return markup;
+          },
+          // Use this longer format, since it allows HTML.
+          data: [
+            {
+              id: "TIMESTAMP",
+              text: "Timestamp",
+            },
+            {
+              id: "ANSWER",
+              text: "Answer",
+            },
+            {
+              id: "SCORE",
+              text: '<span style="color: blue">Score (editable)',
+            },
+            {
+              id: "CORRECT",
+              text: "Is this answer correct?",
+            },
+            {
+              id: "CORRECT_SHADING",
+              text: '<span style="background-color: #ffcccc">Shade</span> incorrect answers',
+            },
+            {
+              id: "ATTEMPTS",
+              text: '<span style="color: green">Number of attempts</span>',
+            },
+          ],
+        });
+
+        // Check some selections. (This can't be done in the data array with an entry like ``selected: true``. Sigh.)
+        atcv.val(["ANSWER", "CORRECT_SHADING"]);
+        atcv.trigger("change");
+
+        // Assign a class.
+        let atcvo = $("#assignment_table_cells_visibility option");
+        atcvo[0].className = "assignment_table_only";
+        atcvo[5].className = "assignment_table_only";
 
 
+        $("#assignment_table_students").select2MultiCheckboxes({
+          placeholder: "Students hidden",
+          templateSelection: () => "Students hidden",
+        });
+      });
+    </script>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <label>
+          <input type="checkbox" id="group_identical_answers" onchange="groupIdenticalAnswers(this.checked)" /> Group identical answers
+        </label>
+      </div>
+
+      <div class="col-xs-4">
+        <label>
+          <input type="checkbox" id="allow_editing_scores" onchange="allowEditingScores(this.checked)" /> Allow editing scores
+        </label>
+      </div>
+
+      <div class="col-xs-4">
+        <button class="btn btn-primary" onclick="populateAssignmentTable()">Refresh table</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h3 id="assignment_info_table_loading">Loading...</h3>
+        <div id="assignment_info_table"></div>
+        <div id="grouped_assignment_info_table"></div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <!-- Per https://stackoverflow.com/questions/9320427/best-practice-for-embedding-arbitrary-json-in-the-dom -->
 <script type="application/json" id="getassignmentinfo">
@@ -205,6 +343,5 @@ $("#allstudentcb").click(function(){
 });
 
 </script>
-
 
 {{ end }}

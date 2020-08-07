@@ -66,15 +66,6 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     lp_build=ALL_WHICH_OPTIONS,
 )
 
-# create a simple index to provide a page of links
-# - re build the book
-# - list assignments
-# - find assignments for a student
-# - show totals for all students
-
-# select acid, sid from code as T where timestamp = (select max(timestamp)
-# from code where sid=T.sid and acid=T.acid);
-
 
 @auth.requires_login()
 def index():
@@ -116,6 +107,10 @@ def assignments():
     )
     for row in chapters_query:
         chapter_labels.append(row.chapter_label)
+
+    # See `models/db_ebook.py` for course_attributes table
+    set_latex_preamble(course.base_course)
+
     return dict(
         coursename=auth.user.course_name,
         confirm=False,
@@ -710,6 +705,9 @@ def grading():
         for chapter_q in chapter_questions:
             q_list.append(chapter_q.name)
         chapter_labels[row.chapter_label] = q_list
+
+    set_latex_preamble(base_course)
+
     return dict(
         assignmentinfo=json.dumps(assignments),
         students=searchdict,
@@ -1812,7 +1810,9 @@ def _add_q_meta_info(qrow):
         book = "🏫"
 
     if res != "":
-        res = """ <span style="color: green">[{} {}] </span>""".format(book, res)
+        res = """ <span style="color: green">[{} {} ] </span> <span>{}...</span>""".format(
+            book, res, qrow.questions.description
+        )
 
     return res
 
@@ -1822,20 +1822,26 @@ def _add_q_meta_info(qrow):
     requires_login=True,
 )
 def get_assignment():
-    assignment_id = request.vars["assignmentid"]
+    try:
+        assignment_id = int(request.vars.assignmentid)
+    except:
+        assignment_row = None
+    else:
+        assignment_row = db(db.assignments.id == assignment_id).select().first()
     # Assemble the assignment-level properties
-    if assignment_id == "undefined":
+    if not assignment_row:
         logger.error(
-            "UNDEFINED assignment {} {}".format(
-                auth.user.course_name, auth.user.username
+            "UNDEFINED assignment {} {} {}".format(
+                request.vars.assignmentid, auth.user.course_name, auth.user.username
             )
         )
-        session.flash = "Error assignment ID is undefined"
-        return redirect(URL("assignments", "index"))
+        session.flash = "Error: assignment ID {} does not exist".format(
+            request.vars.assignmentid
+        )
+        return redirect(URL("assignments", "chooseAssignment.html"))
 
     _set_assignment_max_points(assignment_id)
     assignment_data = {}
-    assignment_row = db(db.assignments.id == assignment_id).select().first()
     assignment_data["assignment_points"] = assignment_row.points
     try:
         assignment_data["due_date"] = assignment_row.duedate.strftime("%Y/%m/%d %H:%M")
@@ -2402,7 +2408,9 @@ def enroll_students():
         return redirect(URL("admin", "admin"))
     students = request.vars.students
     try:
-        strfile = io.TextIOWrapper(students.file, encoding="UTF8")
+        # use utf-8-sig because it will work with files from excel that have
+        # the byte order marker BOM set as an invisible first character in the file
+        strfile = io.TextIOWrapper(students.file, encoding="utf-8-sig")
         student_reader = csv.reader(strfile)
     except Exception as e:
         session.flash = "please choose a CSV file with student data"
