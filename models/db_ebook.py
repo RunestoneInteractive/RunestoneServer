@@ -314,7 +314,10 @@ db.define_table(
     Field("selector_id", "string"),
     Field("sid", "string"),
     Field("selected_id", "string"),
+<<<<<<< HEAD
     Field("points", "integer"),
     Field("competency", "string"),
+=======
+>>>>>>> 0f1442a72e2e82e80f062a04789b1b0fdcf53604
     migrate=table_migrate_prefix + "selected_questions.table",
 )
