@@ -166,6 +166,14 @@ service nginx start
 info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
+set +e
+if [[ -z "${RUNESTONE_HOST}"]]; then
+    echo "Runestone Host not set will not attempt certbot setup"
+else
+    certbot -n --nginx -d "${RUNESTONE_HOST}"
+    echo "You should be good for https"
+fi
+set -e
 
 ## Go through all books and build
 info "Building & Deploying books"
