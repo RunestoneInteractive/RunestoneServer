@@ -315,19 +315,33 @@
             </div> <!-- end register div -->
              <div class="col-md-6 col-sm-12 col-xs-12">
                 <h4>Registration Hints</h4>
-                <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it.  In the field for the coursename please use the name your instructor gave you or use one of the following for our open, public courses</p>
+                <p>In the field for the <strong>Course Name</strong> please use the course name your instructor gave you. Or...</p>
+                <p> If you are an <strong>instructor</strong> registering for the first time OR an <strong>independent learner</strong> use one of the following for our open, public courses.</p>
+                <p>Runestone uses usernames to keep track of you.  Please write it down somewhere if you're likely to forget it. </p>
+                <h3>Open CS Textbooks</h3>
                 <ul>
-                    <li><strong>thinkcspy</strong> for How to Think Like a Computer Scientist</li>
-                    <li><strong>fopp</strong> for Foundations of Python Programming</li>
-                    <li><strong>pythonds</strong> for Problem Solving with Algorithms and data structures</li>
-                    <li><strong>StudentCSP</strong> for the AP CS Principles</li>
-                    <li><strong>csawesome</strong> AP CS A Java Course <strong>2019</strong></li>
-                    <li><strong>apcsareview</strong>Review for AP CS A Java Exam </li>
-                    <li><strong>httlads</strong> for How to Think like a Data Scientist</li>
-                    <li><strong>cppds</strong> for Problem Solving with Algorithms and Data Structures using C++</li>
-                    <li><strong>pythoned</strong>Spanish Language Edition of <strong>pythonds</strong></li>
-                    <li><strong>webfundamentals</strong>Fundamentals of Web Programming</li>
-                    <li><strong>learnwebgl2</strong>Learn Computer Graphics using WebGL</li>
+                    <li><code>thinkcspy</code> for How to Think Like a Computer Scientist</li>
+                    <li><code>fopp</code> for Foundations of Python Programming</li>
+                    <li><code>pythonds</code> for Problem Solving with Algorithms and Data Structures using Python Second Edition</li>
+                    <li><code>pythonds3</code> for Problem Solving With Algorithms and Data Structures using Python Third Edition</li>
+                    <li><code>StudentCSP</code> for the AP CS Principles</li>
+                    <li><code>csawesome</code> AP CS A Java Course - its Awesome</li>
+                    <li><code>httlads</code> for How to Think like a Data Scientist</li>
+                    <li><code>cppds</code> for Problem Solving with Algorithms and Data Structures using C++</li>
+                    <li><code>cpp4python</code>C++ for Python Programmers</li>
+                    <li><code>java4python</code>Java for Python Programmers</li>
+                    <li><code>JS4python</code>Javascript for Python Programmers</li>
+                    <li><code>thinkcpp</code>How To Think Like A Computer Scientist C++ Edition</li>
+                    <li><code>MasteringDatabases</code>Mastering Relational Databases</li>
+                    <li><code>pythoned</code>Spanish Language Edition of <code>pythonds</code></li>
+                    <li><code>webfundamentals</code>Fundamentals of Web Programming</li>
+                    <li><code>learnwebgl2</code>Learn Computer Graphics using WebGL</li>
+                </ul>
+                <h3>Open Math Textbooks</h3>
+                <ul>
+                    <li><code>fcla</code>A First course in Linear Algebra</li>
+                    <li><code>aata</code>Abstract Algebra, Theory and Applications</li>
+                    <li><code>orcca</code>Open Resources for Community College Algebra</li>
                 </ul>
             </div>
           {{else:}} <!-- lti_only_mode -->
@@ -387,7 +401,7 @@
 <script language="javascript" type="text/javascript">
     var cur_course = $('#auth_user_course_id').val();
     if (cur_course == '') {
-        $('#auth_user_course_id').val('thinkcspy, pythonds, pip or other')
+        $('#auth_user_course_id').val('thinkcspy, pythonds, ... See Hints!')
     }
     $("#auth_user_course_id").on("click", function () {
        $(this).select();
