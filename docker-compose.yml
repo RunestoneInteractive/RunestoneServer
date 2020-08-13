@@ -22,6 +22,7 @@ services:
       - redis
     ports:
       - "80:80"
+      - "443:443"
     environment:
       POSTGRES_PASSWORD: 'runestone'
       POSTGRES_USER: 'runestone'
