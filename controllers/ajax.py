@@ -1682,8 +1682,19 @@ def get_question_source():
     Returns:
         json: html source for this question
     """
-    questionlist = request.vars["questions"].split(",")
-    questionlist = [q.strip() for q in questionlist]
+    if request.vars["questions"]:
+        questionlist = request.vars["questions"].split(",")
+        questionlist = [q.strip() for q in questionlist]
+    elif request.vars["proficiency"]:
+        prof = request.vars["proficiency"]
+        res = db(db.questions.topic == prof).select(db.questions.name)
+        if res:
+            questionlist = [row.name for row in res]
+        else:
+            questionlist = []
+            logger.error(f"No questions found for proficiency {prof}")
+            return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
+
     htmlsrc = ""
 
     selector_id = request.vars["selector_id"]
