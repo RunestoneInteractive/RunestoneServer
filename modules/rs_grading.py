@@ -178,7 +178,7 @@ def _scorable_useinfos(
 
     if question_type == "page":
         quest = db(db.questions.name == div_id).select().first()
-        div_id = u"{}/{}.html".format(quest.chapter, quest.subchapter)
+        div_id = "{}/{}.html".format(quest.chapter, quest.subchapter)
         query = query & (db.useinfo.div_id.endswith(div_id))
     else:
         query = query & (db.useinfo.div_id == div_id)
@@ -390,6 +390,49 @@ def _autograde_one_q(
     #   2a. if scoring 'best_answer', take the max score
     #   Note that the scoring function will take the autograde parameter as an input, which might
     #      affect how the score is determined.
+
+    # If the question type is a selectquestion then we need to resolve the
+    # question for this student first, and we can recursively call again
+    # with the actual question.
+    if question_type == "selectquestion":
+        print("grading a selectquestion")
+        actual_q = (
+            db(
+                (db.selected_questions.selector_id == question_name)
+                & (db.selected_questions.sid == sid)
+                & (db.questions.name == db.selected_questions.selected_id)
+            )
+            .select()
+            .first()
+        )
+        if actual_q:
+            act_question_name = actual_q.selected_questions.selected_id
+            act_points = actual_q.selected_questions.points
+            act_question_type = actual_q.questions.question_type
+            sel_id = actual_q.selected_questions.id
+            score = _autograde_one_q(
+                course_name,
+                sid,
+                act_question_name,
+                act_points,
+                act_question_type,
+                deadline,
+                autograde,
+                which_to_grade,
+                save_score,
+                practice_start_time,
+                db,
+                now,
+            )
+            if save_score:
+                _save_question_grade(
+                    sid, course_name, question_name, score, sel_id, deadline, db
+                )
+
+            return score
+
+        logger.error(f"Could not resolve a question for {question_name} student: {sid}")
+        return 0
 
     # get the results from the right table, and choose the scoring function
     if question_type in ["activecode", "actex"]:
