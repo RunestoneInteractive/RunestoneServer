@@ -30,6 +30,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     mchoice=ALL_AUTOGRADE_OPTIONS,
     codelens=ALL_AUTOGRADE_OPTIONS,
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
+    selectquestion=ALL_AUTOGRADE_OPTIONS,
     video=["interact"],
     youtube=["interact"],
     poll=["interact"],
@@ -41,7 +42,14 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
 )
 
 AUTOGRADEABLE = set(
-    ["clickablearea", "fillintheblank", "dragndrop", "mchoice", "parsonsprob"]
+    [
+        "clickablearea",
+        "fillintheblank",
+        "dragndrop",
+        "mchoice",
+        "parsonsprob",
+        "selectquestion",
+    ]
 )
 
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
@@ -56,6 +64,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     mchoice=ALL_WHICH_OPTIONS,
     codelens=ALL_WHICH_OPTIONS,
     parsonsprob=ALL_WHICH_OPTIONS,
+    selectquestion=ALL_WHICH_OPTIONS,
     video=[],
     youtube=[],
     poll=[],
