@@ -11,6 +11,9 @@ services:
   redis:
     image: redis
 
+  jobe:
+    image: trampgeek/jobeinabox:latest
+
   runestone:
     image: runestone/server
     restart: always
@@ -20,6 +23,7 @@ services:
     links:
       - db
       - redis
+      - jobe
     ports:
       - "80:80"
       - "443:443"
@@ -34,3 +38,4 @@ services:
       TEST_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test'
       REDIS_URI: 'redis://redis:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'
+      CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
