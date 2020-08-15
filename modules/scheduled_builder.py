@@ -226,6 +226,8 @@ def _scheduled_builder(
         os.path.join(waf_root, "lib/src/pic24_util.c.1.o"),
         os.path.join(waf_root, "tests/test_utils.c.1.o"),
         os.path.join(waf_root, "tests/test_assert.c.1.o"),
+        os.path.join(waf_root, "tests/coroutines.c.1.o"),
+        os.path.join(waf_root, "tests/platform/Microchip_PIC24/platform.c.1.o"),
         "-o" + elf_path,
     ]
     out += "\n" + _subprocess_string(args, **sp_args)
@@ -242,8 +244,8 @@ def _scheduled_builder(
     except Exception as e:
         if not isinstance(e, FileNotFoundError):
             out += "Unable to remove previous simulator output in {}: {}\n".format(
-                    simout_path, str(e)
-                )
+                simout_path, str(e)
+            )
     if is_extension_asm:
         ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
         args = [os.path.join(xc16_path, "sim30")]
@@ -265,7 +267,7 @@ def _scheduled_builder(
     else:
         timeout_str = ""
     try:
-        with open(simout_path, encoding="utf-8", errors='backslashreplace') as f:
+        with open(simout_path, encoding="utf-8", errors="backslashreplace") as f:
             out += f.read().rstrip()
     except Exception as e:
         out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
