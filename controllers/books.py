@@ -167,7 +167,9 @@ def _route_book(is_published=True):
         raise HTTP(404)
 
     # See if this is static content. By default, the Sphinx static directory names are ``_static`` and ``_images``.
-    if request.args(1) in ["_static", "_images"]:
+    if request.args(1) in ["_static", "_images"] or book_path.endswith(
+        ("css", "png", "jpg")
+    ):
         # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
         # Warning: this is slow. Configure a production server to serve this statically.
         return response.stream(book_path, 2 ** 20, request=request)
