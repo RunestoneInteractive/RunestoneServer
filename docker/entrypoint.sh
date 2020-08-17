@@ -169,7 +169,7 @@ info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
 set +e
-if [[ -z "${CERTBOT_EMAIL}"]]; then
+if [[ -z "${CERTBOT_EMAIL}" ]]; then
     echo "CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!"
 else
     certbot -n  --agree-tos --email "${CERTBOT_EMAIL}" --nginx -d "${RUNESTONE_HOST}"
