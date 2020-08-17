@@ -125,7 +125,7 @@ def hsblog():
         )
         logger.error("Details: {}".format(e))
 
-    if event == "timedExam" and (act == "finish" or act == "reset"):
+    if event == "timedExam" and (act == "finish" or act == "reset" or act == "start"):
         logger.debug(act)
         if act == "reset":
             r = "T"
@@ -136,9 +136,9 @@ def hsblog():
             db.timed_exam.insert(
                 sid=sid,
                 course_name=course,
-                correct=int(request.vars.correct),
-                incorrect=int(request.vars.incorrect),
-                skipped=int(request.vars.skipped),
+                correct=int(request.vars.correct or 0),
+                incorrect=int(request.vars.incorrect or 0),
+                skipped=int(request.vars.skipped or 0),
                 time_taken=int(tt),
                 timestamp=ts,
                 div_id=div_id,
