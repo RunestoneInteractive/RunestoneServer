@@ -1362,6 +1362,9 @@ function assignmentInfo() {
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
+            if (assignmentData.from_source) {
+                $("#assign_is_timed").prop("disabled", true);
+            }
             $("#readings-points-to-award").val(assignmentData.points_to_award);
             $("#readings-autograder").val(assignmentData.readings_autograder);
 
