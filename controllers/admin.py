@@ -1040,7 +1040,14 @@ def renameAssignment():
     requires_login=True,
 )
 def questionBank():
-    response.headers["content-type"] = "application/json"
+    """called by the questionBank function in admin.js
+    Unpack all of the search criteria and then query the questions table
+    to find matching questions.
+
+    Returns:
+        JSON: A list of questions that match the search criteria
+    """
+    response.headers["Content-Type"] = "application/json"
 
     row = (
         db(db.courses.id == auth.user.course_id)
@@ -1048,14 +1055,16 @@ def questionBank():
         .first()
     )
     base_course = row.base_course
-
+    query_clauses = []
+    # should we search for tags?
     tags = False
     if request.vars["tags"]:
         tags = True
-    term = False
-    if request.vars["term"]:
-        term = True
-    chapterQ = None
+    # should we search the question by term?
+    if request.vars.term:
+        term_list = [x.strip() for x in request.vars.term.split()]
+        query_clauses.append(db.questions.question.contains(term_list, all=True))
+
     if request.vars["chapter"]:
         chapter_label = (
             db(db.chapters.chapter_label == request.vars["chapter"])
@@ -1064,90 +1073,52 @@ def questionBank():
             .chapter_label
         )
         chapterQ = db.questions.chapter == chapter_label
-    difficulty = False
-    if request.vars["difficulty"]:
-        difficulty = True
-    authorQ = None
+        query_clauses.append(chapterQ)
+
+    if request.vars.min_difficulty:
+        query_clauses.append(
+            db.questions.difficulty > float(request.vars.min_difficulty)
+        )
+    if request.vars.max_difficulty:
+        query_clauses.append(
+            db.questions.difficulty < float(request.vars.max_difficulty)
+        )
+
     if request.vars["author"]:
-        authorQ = db.questions.author == request.vars["author"]
-    rows = []
+        query_clauses.append(db.questions.author == request.vars["author"])
+
+    if request.vars["constrainbc"] == "true":
+        query_clauses.append(db.questions.base_course == base_course)
+
+    my_name = f"{auth.user.first_name} {auth.user.last_name}"
+    privacy_clause = (db.questions.is_private == False) | (
+        db.questions.author == my_name
+    )
+    query_clauses.append(privacy_clause)
+
+    is_join = False
+    if request.vars.competency:
+        is_join = True
+        comp_clause = (db.competency.competency == request.vars.competency) & (
+            db.competency.question == db.questions.id
+        )
+        if request.vars.isprim == "true":
+            comp_clause = comp_clause & (db.competency.is_primary == "T")
+        query_clauses.append(comp_clause)
+
+    myquery = query_clauses[0]
+    for clause in query_clauses[1:]:
+        myquery = myquery & clause
+
+    print(myquery)
+    rows = db(myquery).select()
+
     questions = []
-
-    base_courseQ = db.questions.base_course == base_course
-    try:
-
-        if chapterQ is not None and authorQ is not None:
-
-            questions_query = db(chapterQ & authorQ & base_courseQ).select()
-
-        elif chapterQ is None and authorQ is not None:
-
-            questions_query = db(authorQ & base_courseQ).select()
-
-        elif chapterQ is not None and authorQ is None:
-
-            questions_query = db(chapterQ & base_courseQ).select()
-
+    for q_row in rows:
+        if is_join:
+            questions.append(q_row.questions.name)
         else:
-            questions_query = db(base_courseQ).select()
-
-        for (
-            question
-        ) in (
-            questions_query
-        ):  # Initially add all questions that we can to the list, and then remove the rows that don't match search criteria
-            rows.append(question)
-
-        for row in questions_query:
-            removed_row = False
-            if row.is_private == True:  # noqa: E712
-                if row.author != auth.user.first_name + " " + auth.user.last_name:
-                    rows.remove(row)
-                    removed_row = True
-            if term:
-                if (
-                    request.vars["term"] not in row.name
-                    and row.question
-                    and request.vars["term"] not in row.question
-                ) or row.question_type == "page":
-                    try:
-                        rows.remove(row)
-                        removed_row = True
-                    except Exception as err:
-                        logger.error("Error {}".format(err))
-
-            if removed_row is False:
-                if difficulty:
-                    if int(request.vars["difficulty"]) != row.difficulty:
-                        try:
-                            rows.remove(row)
-                            removed_row = True
-                        except Exception as err:
-                            logger.error("Error: {}".format(err))
-
-            if removed_row is False:
-                if tags:
-                    tags_query = db(db.question_tags.question_id == row.id).select()
-                    tag_list = []
-                    for q_tag in tags_query:
-                        tag_names = db(db.tags.id == q_tag.tag_id).select()
-                        for tag_name in tag_names:
-                            tag_list.append(tag_name.tag_name)
-                    needsRemoved = False
-                    for search_tag in request.vars["tags"].split(","):
-                        if search_tag not in tag_list:
-                            needsRemoved = True
-                    if needsRemoved:
-                        try:
-                            rows.remove(row)
-                        except Exception as err:
-                            print(err)
-        for q_row in rows:
             questions.append(q_row.name)
-
-    except Exception as e:
-        logger.error("Error: {}".format(e))
-        return json.dumps("Error " + str(e))
 
     return json.dumps(questions)
 
@@ -1173,17 +1144,16 @@ def getQuestionInfo():
     * question -- the name of the question
     """
     question_name = request.vars["question"]
+    constrainbc = request.vars.constrainbc
+
     base_course = (
         db(db.courses.course_name == auth.user.course_name).select().first().base_course
     )
-    row = (
-        db(
-            (db.questions.name == question_name)
-            & (db.questions.base_course == base_course)
-        )
-        .select()
-        .first()
-    )
+    query = db.questions.name == question_name
+    if constrainbc == "true":
+        query = query & (db.questions.base_course == base_course)
+
+    row = db(query).select().first()
 
     question_code = row.question
     htmlsrc = row.htmlsrc
@@ -1322,20 +1292,19 @@ def edit_question():
     requires_login=True,
 )
 def question_text():
-    qname = request.vars["question_name"]
+    qname = request.vars.question_name
+    constrainbc = request.vars.constrainbc
     base_course = (
         db(db.courses.id == auth.user.course_id)
         .select(db.courses.base_course)
         .first()
         .base_course
     )
+    query = db.questions.name == qname
+    if constrainbc == "true":
+        query = query & (db.questions.base_course == base_course)
     try:
-        q_text = (
-            db((db.questions.name == qname) & (db.questions.base_course == base_course))
-            .select(db.questions.question)
-            .first()
-            .question
-        )
+        q_text = db(query).select(db.questions.question).first().question
     except Exception:
         q_text = "Error: Could not find source for {} in the database".format(qname)
 
