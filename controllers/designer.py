@@ -54,13 +54,7 @@ def build():
             )
             db.auth_membership.insert(user_id=auth.user.id, group_id=gid)
 
-        # todo:  Here we can add some processing to check for an A/B testing course
-        if path.exists(
-            path.join(request.folder, "books", request.vars.coursetype + "_A")
-        ):
-            base_course = request.vars.coursetype + "_" + random.sample("AB", 1)[0]
-        else:
-            base_course = request.vars.coursetype
+        base_course = request.vars.coursetype
 
         if request.vars.startdate == "":
             request.vars.startdate = datetime.date.today()
@@ -121,8 +115,8 @@ def build():
         )
 
         session.flash = "Course Created Successfully"
-        redirect(
-            URL("books", "published", args=[request.vars.projectname, "index.html"])
-        )
+        # redirect(
+        #     URL("books", "published", args=[request.vars.projectname, "index.html"])
+        # )
 
-        return buildvalues
+        return dict(coursename=request.vars.projectname, basecourse=base_course)
