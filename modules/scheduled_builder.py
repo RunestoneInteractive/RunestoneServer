@@ -106,7 +106,7 @@ def _scheduled_builder(
         raise RuntimeError("Unknown builder {}".format(builder))
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
-    xc16_path = ""
+    #
     # Compile in the temporary directory, in which ``file_path`` resides.
     sp_args = dict(stderr=subprocess.STDOUT, universal_newlines=True, cwd=cwd,)
     o_path = file_path + ".o"
@@ -117,7 +117,7 @@ def _scheduled_builder(
         raise RuntimeError("Unknown file extension in {}.".format(file_path))
     if is_extension_asm:
         args = [
-            os.path.join(xc16_path, "xc16-as"),
+            "xc16-as",
             "-omf=elf",
             "-g",
             "--processor=33EP128GP502",
@@ -126,7 +126,7 @@ def _scheduled_builder(
         ]
     else:
         args = [
-            os.path.join(xc16_path, "xc16-gcc"),
+            "xc16-gcc",
             "-mcpu=33EP128GP502",
             "-omf=elf",
             "-g",
@@ -174,7 +174,7 @@ def _scheduled_builder(
         "{}-test.c.{}.o".format(os.path.splitext(source_path)[0], verification_code),
     )
     args = [
-        os.path.join(xc16_path, "xc16-gcc"),
+        "xc16-gcc",
         "-mcpu=33EP128GP502",
         "-omf=elf",
         "-g",
@@ -209,7 +209,7 @@ def _scheduled_builder(
     # Link.
     elf_path = file_path + ".elf"
     args = [
-        os.path.join(xc16_path, "xc16-gcc"),
+        "xc16-gcc",
         "-omf=elf",
         "-Wl,--heap=100,--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io",
         "-Wl,--script="
@@ -248,10 +248,10 @@ def _scheduled_builder(
             )
     if is_extension_asm:
         ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
-        args = [os.path.join(xc16_path, "sim30")]
+        args = ["sim30"]
     else:
         ss = get_sim_str_mdb("dspic33EP128GP502", elf_path, simout_path)
-        args = ["/usr/bin/mdb"]
+        args = ["mdb"]
     # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
     # couldn't find a way to re-use that code.
     sim_ret = 0
