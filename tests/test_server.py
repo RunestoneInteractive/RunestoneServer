@@ -195,7 +195,7 @@ def test_validate_user_pages(
         # FIXME: these raise an exception.
         # ('admin/addinstructor', 'Trying to add non-user', 1), -- this is an api call
         # ('admin/add_practice_items', 'xxx', 1), -- this is an api call
-        ("admin/assignments", "Assignment", 3),  # labels for hidden elements
+        ("admin/assignments", "Assignment", 5),  # labels for hidden elements
         # ('admin/backup', 'xxx', 1),
         ("admin/practice", "Choose when students should start", 1),
         # ('admin/removeassign', 'Cannot remove assignment with id of', 1),
