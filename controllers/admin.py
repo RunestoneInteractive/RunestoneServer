@@ -2420,12 +2420,18 @@ def enroll_students():
     success = True
     try:
         for row in student_reader:
-            if len(row) != 6:
+            if len(row) < 6 or (len(row) > 6 and row[6] != ""):
                 raise ValueError("CSV must provide six values for each user")
             # CSV: username, email, fname, lname, password, course_name, db
             # Params: username, password, fname, lname, email, course_name,
-            createUser(row[0], row[4], row[2], row[3], row[1], row[5])
-            counter += 1
+            # If there are more than 6 values they are likey empty colums
+            # we will ignore them.  If it runs out wrong then there will
+            # be some kind of error in the rest of the processing
+            if row[0] != "":
+                createUser(row[0], row[4], row[2], row[3], row[1], row[5])
+                counter += 1
+            else:
+                logger.error("Skipping empty records in CSV")
     except Exception as e:
         logger.error(e)
         db.rollback()
