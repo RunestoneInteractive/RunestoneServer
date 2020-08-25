@@ -1682,12 +1682,17 @@ def get_question_source():
     Returns:
         json: html source for this question
     """
+    prof = False
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
     elif request.vars["proficiency"]:
         prof = request.vars["proficiency"]
-        res = db(db.questions.topic == prof).select(db.questions.name)
+        # res = db(db.questions.topic == prof).select(db.questions.name)
+        res = db(
+            (db.competency.competency == prof)
+            & (db.competency.question == db.questions.id)
+        ).select(db.questions.name)
         if res:
             questionlist = [row.name for row in res]
         else:
