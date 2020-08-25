@@ -49,16 +49,7 @@ def _route_book(is_published=True):
     # if it is pretext book we use different delimiters for the templates
     # as LaTeX is full of {{
     # These values are set by the runestone process-manifest command
-    res = (
-        db(
-            (db.course_attributes.course_id == db.courses.id)
-            & (db.courses.course_name == base_course)
-            & (db.course_attributes.attr == "markup_system")
-        )
-        .select(db.course_attributes.value)
-        .first()
-    )
-
+    res = getCourseOrigin(base_course)
     if res and res.value == "PreTeXt":
         response.delimiters = settings.pretext_delimiters
 

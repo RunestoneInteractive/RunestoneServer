@@ -667,6 +667,13 @@ def doAssignment():
 
     set_latex_preamble(course.base_course)
 
+    c_origin = getCourseOrigin(course.base_course)
+    if c_origin and c_origin.value == "PreTeXt":
+        c_origin = "PreTeXt"
+    else:
+        c_origin = "Runestone"
+    print("ORIGIN", c_origin)
+
     return dict(
         course=course,
         course_name=auth.user.course_name,
@@ -681,6 +688,7 @@ def doAssignment():
         student_id=auth.user.username,
         released=assignment["released"],
         is_instructor=user_is_instructor,
+        origin=c_origin,
     )
 
 
