@@ -1362,9 +1362,15 @@ function assignmentInfo() {
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
+            if (assignmentData.from_source) {
+                $("#assign_is_timed").prop("disabled", true);
+            }
             $("#readings-points-to-award").val(assignmentData.points_to_award);
             $("#readings-autograder").val(assignmentData.readings_autograder);
 
+            $("#ltilink").html(
+                `${window.location.protocol}://${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
+            );
             // Update the questions
             ///====================
             // Get the question tree picker.
@@ -1828,6 +1834,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 opt.acid || moreOpts.acid || opt.orig.id
             ); // save the original divid
             let editButton = document.createElement("button");
+            let constrainbc = document.getElementById("qbankform").constrainbc
+                .checked;
             $(editButton).text("Edit Question");
             $(editButton).addClass("btn btn-normal");
             $(editButton).attr("data-target", "#editModal");
@@ -1835,6 +1843,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
             $(editButton).click(function (event) {
                 data = {
                     question_name: opt.acid || moreOpts.acid || opt.orig.id,
+                    constrainbc: constrainbc,
                 };
                 jQuery.get("/runestone/admin/question_text", data, function (
                     obj
@@ -1889,40 +1898,32 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 }
 
 // Called by the "Search" button in the "Search question bank" panel.
+// makes ajax call to `controllers/admin.py/questionBank`_
 function questionBank(form) {
     var chapter = form.chapter.value;
     var author = form.author.value;
     var tags = $("#tags").select2("val");
     var term = form.term.value;
-    var difficulty = "";
-    var difficulty_options = [
-        "rating1",
-        "rating2",
-        "rating3",
-        "rating4",
-        "rating5",
-    ];
-    var inputs = document
-        .getElementById("qbankform")
-        .getElementsByTagName("input");
-    for (var i = 0, length = inputs.length; i < length; i++) {
-        if (inputs[i].type == "radio" && inputs[i].checked) {
-            difficulty = inputs[i].value;
-        }
-    }
-
+    var min_difficulty = form.min_diff.value;
+    var max_difficulty = form.max_diff.value;
+    var competency = form.competency.value;
+    var isprim = form.isprim.value;
+    var cbc = form.constrainbc.checked;
     var obj = new XMLHttpRequest();
     var url = "/runestone/admin/questionBank";
     var data = {
         variable: "variable",
         chapter: chapter,
-        difficulty: difficulty,
+        min_difficulty: min_difficulty,
+        max_difficulty: max_difficulty,
+        constrainbc: cbc,
         author: author,
         tags: tags,
         term: term,
+        competency: competency,
+        isprim: isprim,
     };
     jQuery.post(url, data, function (resp, textStatus, whatever) {
-        resp = JSON.parse(resp);
         if (resp == "Error") {
             alert("An error occured while searching");
         }
@@ -1972,12 +1973,13 @@ function getQuestionInfo() {
     var question_name = select.options[select.selectedIndex].text;
     var assignlist = document.getElementById("assignlist");
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-
+    var constrainbc = document.getElementById("qbankform").constrainbc.checked;
     var url = "/runestone/admin/getQuestionInfo";
     var data = {
         variable: "variable",
         question: question_name,
         assignment: assignmentid,
+        constrainbc: constrainbc,
     };
     jQuery.post(url, data, function (question_info, status, whatever) {
         var res = JSON.parse(question_info);

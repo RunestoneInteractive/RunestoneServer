@@ -110,7 +110,6 @@ COPY docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone
 COPY docker/uwsgi/sites/runestone.ini /etc/uwsgi/sites/runestone.ini
 COPY docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service
 COPY docker/wsgihandler.py /srv/web2py/wsgihandler.py
-COPY scripts/logging.conf /srv/web2py/logging.conf
 RUN ln -s /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
 RUN rm /etc/nginx/sites-enabled/default
 

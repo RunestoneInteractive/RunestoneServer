@@ -72,7 +72,7 @@ def _route_book(is_published=True):
                 db.courses.base_course,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -122,7 +122,7 @@ def _route_book(is_published=True):
                 db.courses.login_required,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -151,7 +151,7 @@ def _route_book(is_published=True):
             "published" if is_published else "build",
             base_course,
         ),
-        *request.args[1:]
+        *request.args[1:],
     )
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))
