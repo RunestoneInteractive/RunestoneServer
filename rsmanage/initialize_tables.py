@@ -163,6 +163,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX unittest_answers_course_name_idx ON unittest_answers USING btree (course_name);""",
         """CREATE INDEX unittest_answers_div_id_idx ON unittest_answers USING btree (div_id);""",
         """CREATE INDEX unittest_answers_sid_idx ON unittest_answers USING btree (sid);""",
+        """create index chap_label_idx on sub_chapters using btree(sub_chapter_label);""",
     ]
 
     for cmd in sql_commands:
