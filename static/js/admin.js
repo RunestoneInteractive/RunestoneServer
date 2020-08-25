@@ -1368,6 +1368,9 @@ function assignmentInfo() {
             $("#readings-points-to-award").val(assignmentData.points_to_award);
             $("#readings-autograder").val(assignmentData.readings_autograder);
 
+            $("#ltilink").html(
+                `${window.location.protocol}://${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
+            );
             // Update the questions
             ///====================
             // Get the question tree picker.
