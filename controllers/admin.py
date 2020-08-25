@@ -6,7 +6,7 @@ import io
 from dateutil.parser import parse
 import re
 from random import randint
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 from paver.easy import sh
 import json
 from runestone import cmap
@@ -2525,6 +2525,88 @@ def get_assignment_list():
         res.append({"id": assign.id, "name": assign.name})
 
     return json.dumps(dict(assignments=res))
+
+
+def simulate_exam():
+    """Simulate the distribution of questions on an exam
+    """
+
+    # select * from assignment_questions join questions on question_id = questions.id where assignment_id =24;
+    assignment_id = 24
+    questions = db(
+        (db.assignment_questions.question_id == db.questions.id)
+        & (db.assignment_questions.assignment_id == assignment_id)
+    ).select()
+
+    proflist = []
+    qsel = {}
+    for q in questions:
+        m = re.search(r":proficiency:\s+(\w+)", q.questions.question)
+        if m:
+            proflist.append(m.group(1))
+        m = re.search(r":fromid:\s+(.*?)\n", q.questions.question, re.DOTALL)
+        if m:
+            qlist = m.group(1).split(",")
+            qlist = [x.strip() for x in qlist]
+            qsel[q.questions.name] = qlist
+
+    logger.debug(f"proficiency list {proflist}")
+    logger.debug(f"questions {qsel}")
+
+    selections = {}
+    for i in range(10):
+        selections[i] = []
+        for comp in proflist:
+            q = find_question_for_prof(comp)
+            selections[i].append(q)
+        for k in qsel:
+            selections[i].append(get_id_from_qname(random.choice(qsel[k])))
+
+    logger.debug(f"selected questions = {selections}")
+
+    sprof = {}
+    allprofs = []
+    for student in selections:
+        sprof[student] = []
+        for q in selections[student]:
+            profs = get_proficiencies_for_qid(q)
+            sprof[student].extend(profs)
+
+        c = Counter(sprof[student])
+        allprofs.extend(sprof[student])
+        logger.debug(c)
+    logger.debug(Counter(allprofs))
+
+    return dict(
+        allprofs=Counter(allprofs),
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+    )
+
+
+def find_question_for_prof(prof):
+    questionlist = []
+    res = db(
+        (db.competency.competency == prof) & (db.competency.question == db.questions.id)
+    ).select(db.questions.id)
+    if res:
+        questionlist = [row.id for row in res]
+        # logger.debug(questionlist)
+
+    return random.choice(questionlist)
+
+
+def get_id_from_qname(name):
+    res = db(db.questions.name == name).select(db.questions.id).first()
+    if res:
+        logger.debug(res)
+        return res.id
+
+
+def get_proficiencies_for_qid(qid):
+    res = db(db.competency.question == qid).select()
+    plist = [p.competency for p in res]
+    return plist
 
 
 def killer():

@@ -1,0 +1,9 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+<table>
+    {{ for prof in allprofs: }}
+        <tr><td>{{=prof}}</td><td>{{=allprofs[prof]}}</td></tr>
+    {{ pass }}
+</table>
+{{ end }}
