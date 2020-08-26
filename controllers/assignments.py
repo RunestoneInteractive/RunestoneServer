@@ -219,6 +219,22 @@ def student_autograde():
     """
     assignment_id = request.vars.assignment_id
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    is_timed = request.vars.is_timed
+
+    if assignment_id.isnumeric() is False:
+        aidrow = (
+            db(
+                (db.assignments.name == assignment_id)
+                & (db.assignments.course == auth.user.course_id)
+            )
+            .select()
+            .first()
+        )
+        if aidrow:
+            assignment_id = aidrow.id
+        else:
+            res = {"success": False, "message": "Could not find this assignment"}
+            return json.dumps(res)
 
     res = _autograde(
         student_rownum=auth.user.id,
@@ -232,7 +248,7 @@ def student_autograde():
         )
         res = {"success": False}
     else:
-        if settings.coursera_mode:
+        if settings.coursera_mode or is_timed:
             res2 = _calculate_totals(
                 student_rownum=auth.user.id, assignment_id=assignment_id
             )

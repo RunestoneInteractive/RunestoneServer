@@ -1683,6 +1683,10 @@ def get_question_source():
         json: html source for this question
     """
     prof = False
+    points = request.vars.points
+    logger.debug(f"POINTS = {points}")
+    min_difficulty = request.vars.min_difficulty
+    max_difficulty = request.vars.max_difficulty
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
@@ -1722,7 +1726,10 @@ def get_question_source():
 
     if res and len(questionlist) > 1 and not prev_selection:
         db.selected_questions.insert(
-            selector_id=selector_id, sid=auth.user.username, selected_id=questionid
+            selector_id=selector_id,
+            sid=auth.user.username,
+            selected_id=questionid,
+            points=points,
         )
 
     if res and res.htmlsrc:

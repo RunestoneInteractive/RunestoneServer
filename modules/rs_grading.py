@@ -33,6 +33,8 @@ D1 = Decimal("1")
 
 def _score_from_pct_correct(pct_correct, points, autograde):
     # ALL_AUTOGRADE_OPTIONS = ['all_or_nothing', 'pct_correct', 'interact']
+    if points is None:
+        points = 0
     if autograde == "interact" or autograde == "visited":
         return points
     elif autograde == "pct_correct":
@@ -423,6 +425,9 @@ def _autograde_one_q(
                 practice_start_time,
                 db,
                 now,
+            )
+            logger.debug(
+                f"got a score of {score} / {act_points} for {sid} on {act_question_name} save? {save_score}"
             )
             if save_score:
                 _save_question_grade(

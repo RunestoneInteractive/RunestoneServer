@@ -1,6 +1,7 @@
 {{ extend "admin/instructors.html"}}
 
 {{ block tabcontent }}
+<h1>Simulation Results</h1>
 <table>
     {{ for prof in allprofs: }}
         <tr><td>{{=prof}}</td><td>{{=allprofs[prof]}}</td></tr>

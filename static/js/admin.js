@@ -2315,6 +2315,11 @@ function getAssignList(sel) {
     });
 }
 
+function runSimulation() {
+    assignmentid = getAssignmentId();
+    window.location = `/runestone/admin/simulate_exam?assignment_id=${assignmentid}`;
+}
+
 function populateEditor(qname) {
     data = {
         question_name: qname,

@@ -163,7 +163,12 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX unittest_answers_course_name_idx ON unittest_answers USING btree (course_name);""",
         """CREATE INDEX unittest_answers_div_id_idx ON unittest_answers USING btree (div_id);""",
         """CREATE INDEX unittest_answers_sid_idx ON unittest_answers USING btree (sid);""",
-        """create index chap_label_idx on sub_chapters using btree(sub_chapter_label);""",
+        """CREATE INDEX chap_label_idx on sub_chapters using btree(sub_chapter_label);""",
+        """CREATE UNIQUE INDEX q_comp_unique ON competency USING btree (question, competency)""",
+        """CREATE INDEX sid_divid_idx ON useinfo USING btree(sid, div_id)""",
+        """create index "course_name_index" on user_topic_practice_log using btree (course_name);""",
+        """create index "user_id_index" on user_topic_practice_log using btree (user_id);""",
+        """create index "q_index" on user_topic_practice_log using btree (q);""",
     ]
 
     for cmd in sql_commands:
