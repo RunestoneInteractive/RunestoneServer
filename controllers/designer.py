@@ -42,10 +42,14 @@ def build():
             db(db.courses.course_name == request.vars.projectname).select().first()
         )
         if existing_course:
-            return dict(mess="That name has already been used.", building=False)
+            session.flash = (
+                f"course name {request.vars.projectname} has already been used"
+            )
+            redirect(URL("designer", "index"))
 
         if not request.vars.coursetype:
-            return dict(mess="You must select a base course.", building=False)
+            session.flash = "You must select a base course."
+            redirect(URL("designer", "index"))
 
         # if make instructor add row to auth_membership
         if "instructor" in request.vars:
