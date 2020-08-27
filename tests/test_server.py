@@ -147,7 +147,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
             "This page allows you to select a book for your own class.",
             1,
         ),
-        ("designer/build", True, "Congratulations", 1),
+        ("designer/build", True, "Build a Custom", 1),
         # **OAuth**
         # ----------
         (
