@@ -1667,6 +1667,15 @@ def login_status():
         return json.dumps(dict(status="loggedout", course_name=auth.user.course_name))
 
 
+auto_gradable_q = [
+    "clickablearea",
+    "mchoice",
+    "parsonsprob",
+    "dragndrop",
+    "fillintheblank",
+]
+
+
 @auth.requires_login()
 def get_question_source():
     """Called from the selectquestion directive
@@ -1687,22 +1696,42 @@ def get_question_source():
     logger.debug(f"POINTS = {points}")
     min_difficulty = request.vars.min_difficulty
     max_difficulty = request.vars.max_difficulty
+    not_seen_ever = request.vars.not_seen_ever
+    autogradable = request.vars.autogradable
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
     elif request.vars["proficiency"]:
         prof = request.vars["proficiency"]
-        # res = db(db.questions.topic == prof).select(db.questions.name)
-        res = db(
-            (db.competency.competency == prof)
-            & (db.competency.question == db.questions.id)
-        ).select(db.questions.name)
+
+        query = (db.competency.competency == prof) & (
+            db.competency.question == db.questions.id
+        )
+        if min_difficulty:
+            query = query & db.questions.difficulty >= float(min_difficulty)
+        if max_difficulty:
+            query = query & db.questions.difficulty <= float(max_difficulty)
+        if autogradable:
+            query = query & (
+                (db.questions.autograde == "unittest")
+                | db.questions.question_type.contains(auto_gradable_q, all=False)
+            )
+        res = db(query).select(db.questions.name)
         if res:
             questionlist = [row.name for row in res]
         else:
             questionlist = []
             logger.error(f"No questions found for proficiency {prof}")
             return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
+
+    if not_seen_ever:
+        seenq = db(
+            (db.useinfo.sid == auth.user.username)
+            & (db.useinfo.div_id.contains(questionlist, all=False))
+        ).select(db.useinfo.div_id)
+        seen = set([x.div_id for x in seenq])
+        poss = set(questionlist)
+        questionlist = list(poss - seen)
 
     htmlsrc = ""
 
