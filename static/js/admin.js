@@ -2320,6 +2320,26 @@ function runSimulation() {
     window.location = `/runestone/admin/simulate_exam?assignment_id=${assignmentid}`;
 }
 
+function resetExam() {
+    let slist = document.getElementById("exstudentList");
+    let xlist = document.getElementById("examList");
+    let name = slist.options[slist.selectedIndex].innerHTML;
+    let sid = slist.value;
+    let exam = xlist.value;
+
+    let go = confirm(`Warning you are about to reset ${exam} for ${name}`);
+    if (!go) {
+        return;
+    }
+    let data = {
+        student_id: sid,
+        exam_name: exam,
+    };
+    $.getJSON("reset_exam", data, function (resdata) {
+        alert(resdata.mess);
+    });
+}
+
 function populateEditor(qname) {
     data = {
         question_name: qname,

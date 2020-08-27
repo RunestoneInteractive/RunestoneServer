@@ -577,6 +577,10 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    exams = db(
+        (db.assignments.course == course.id) & (db.assignments.is_timed == "T")
+    ).select()
+    exams = [x.name for x in exams]
     try:
         motd = open("applications/runestone/static/motd.html").read()
     except Exception:
@@ -598,6 +602,7 @@ def admin():
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
         motd=motd,
+        examlist=exams,
     )
 
 
@@ -2527,6 +2532,10 @@ def get_assignment_list():
     return json.dumps(dict(assignments=res))
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def simulate_exam():
     """Simulate the distribution of questions on an exam
     """
@@ -2607,6 +2616,45 @@ def get_proficiencies_for_qid(qid):
     res = db(db.competency.question == qid).select()
     plist = [p.competency for p in res]
     return plist
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def reset_exam():
+    sid = request.vars.student_id
+    assignment_name = request.vars.exam_name
+
+    res = db(db.auth_user.id == sid).select().first()
+    if res:
+        username = res.username
+    else:
+        return json.dumps({"status": "Failed", "mess": "Unknown Student"})
+
+    # Remove records from the timed exam table
+    num_del = db(
+        (db.timed_exam.div_id == assignment_name) & (db.timed_exam.sid == username)
+    ).delete()
+    if num_del == 0:
+        return json.dumps({"status": "Failed", "mess": "Nothing saved"})
+
+    exam_qs = db(
+        (db.assignments.name == assignment_name)
+        & (db.assignments.course == auth.user.course_id)
+        & (db.assignments.id == db.assignment_questions.assignment_id)
+        & (db.questions.id == db.assignment_questions.question_id)
+    ).select(db.questions.name)
+
+    for q in exam_qs:
+        num = db(
+            (db.selected_questions.selector_id == q.name)
+            & (db.selected_questions.sid == username)
+        ).delete()
+        if num > 0:
+            logger.debug(f"deleted {q.name} for {username} {num}")
+
+    return json.dumps({"status": "Success", "mess": "Successfully Reset Exam"})
 
 
 def killer():
