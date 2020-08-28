@@ -986,11 +986,11 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             "Given name",
             "e-mail",
             "avg grade (%)",
-            "Q-5",
+            "Q-7",
+            "Q-4",
+            "Q-3",
+            "Q-1",
             "Q-2",
-            "Q-1",
-            "Q-1",
-            "",
         ],
         "data": [
             [
@@ -1103,7 +1103,10 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     }
 
     # Note: on test failure, pytest will report as incorrect all the ``AlmostNow()`` and ``RegexEquals`` items, even though they may have actually compared as equal.
-    assert grades == expected_grades
+    # assert grades == expected_grades
+    # lets break this up a bit.
+    for k in expected_grades:
+        assert grades[k] == expected_grades[k]
 
     logout()
     # Test with no login.
