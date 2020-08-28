@@ -12,7 +12,7 @@ requests>=2.10.0
 runestone>=5.1.0
 selenium>=2.53.6
 six>=1.10.0
-Sphinx>=1.8.5
+Sphinx>=3.0.0
 sphinxcontrib-paverutils>=1.17
 SQLAlchemy>=1.0.14
 cssselect>=1.0
@@ -21,4 +21,5 @@ bleach>3.1.1
 pathlib2
 stripe
 pandas
+altair
 -e file:./rsmanage
