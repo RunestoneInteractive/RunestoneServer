@@ -12,6 +12,7 @@ import json
 from runestone import cmap
 from rs_grading import send_lti_grades, _get_assignment
 import pandas as pd
+import altair as alt
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -2541,7 +2542,7 @@ def simulate_exam():
     """
 
     # select * from assignment_questions join questions on question_id = questions.id where assignment_id =24;
-    assignment_id = 24
+    assignment_id = request.vars.assignment_id
     questions = db(
         (db.assignment_questions.question_id == db.questions.id)
         & (db.assignment_questions.assignment_id == assignment_id)
@@ -2563,7 +2564,7 @@ def simulate_exam():
     logger.debug(f"questions {qsel}")
 
     selections = {}
-    for i in range(10):
+    for i in range(100):
         selections[i] = []
         for comp in proflist:
             q = find_question_for_prof(comp)
@@ -2585,11 +2586,25 @@ def simulate_exam():
         allprofs.extend(sprof[student])
         logger.debug(c)
     logger.debug(Counter(allprofs))
+    c = Counter(allprofs)
+    df = pd.DataFrame({"comp": list(c.keys()), "freq": list(c.values())})
+    df["exam"] = assignment_id
+
+    bar_order = alt.EncodingSortField(field="freq", op="sum", order="descending")
+    c = (
+        alt.Chart(df)
+        .mark_bar()
+        .encode(x="freq", y=alt.Y("comp", sort=bar_order), tooltip="freq")
+    )
+    hmdata = c.to_json()
+    tblhtml = df.to_html()
 
     return dict(
         allprofs=Counter(allprofs),
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
+        hmdata=hmdata,
+        tblhtml=tblhtml,
     )
 
 

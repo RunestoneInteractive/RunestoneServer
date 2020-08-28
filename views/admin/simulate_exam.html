@@ -1,10 +1,20 @@
 {{ extend "admin/instructors.html"}}
 
 {{ block tabcontent }}
+
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <!-- Import vega-embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
 <h1>Simulation Results</h1>
-<table>
-    {{ for prof in allprofs: }}
-        <tr><td>{{=prof}}</td><td>{{=allprofs[prof]}}</td></tr>
-    {{ pass }}
-</table>
+<div id="vis"></div>
+
+<script>
+    var hmdata = {{=XML(hmdata)}}
+    vegaEmbed('#vis', hmdata);
+</script>
+
 {{ end }}
+
