@@ -2574,33 +2574,33 @@ def simulate_exam():
 
     logger.debug(f"selected questions = {selections}")
 
-    sprof = {}
-    allprofs = []
+    all_p_profs = []
+    all_s_profs = []
     for student in selections:
-        sprof[student] = []
         for q in selections[student]:
-            profs = get_proficiencies_for_qid(q)
-            sprof[student].extend(profs)
+            p_profs, s_profs = get_proficiencies_for_qid(q)
+            all_p_profs.extend(p_profs)
+            all_s_profs.extend(s_profs)
 
-        c = Counter(sprof[student])
-        allprofs.extend(sprof[student])
-        logger.debug(c)
-    logger.debug(Counter(allprofs))
-    c = Counter(allprofs)
-    df = pd.DataFrame({"comp": list(c.keys()), "freq": list(c.values())})
+    pc = Counter(all_p_profs)
+    sc = Counter(all_s_profs)
+    df1 = pd.DataFrame({"comp": list(pc.keys()), "freq": list(pc.values())})
+    df1["kind"] = "primary"
+    df2 = pd.DataFrame({"comp": list(sc.keys()), "freq": list(sc.values())})
+    df2["kind"] = "secondary"
+    df = pd.concat([df1, df2])
     df["exam"] = assignment_id
 
     bar_order = alt.EncodingSortField(field="freq", op="sum", order="descending")
     c = (
         alt.Chart(df)
         .mark_bar()
-        .encode(x="freq", y=alt.Y("comp", sort=bar_order), tooltip="freq")
+        .encode(x="freq", y=alt.Y("comp", sort=bar_order), tooltip="freq", color="kind")
     )
     hmdata = c.to_json()
     tblhtml = df.to_html()
 
     return dict(
-        allprofs=Counter(allprofs),
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
         hmdata=hmdata,
@@ -2629,8 +2629,10 @@ def get_id_from_qname(name):
 
 def get_proficiencies_for_qid(qid):
     res = db(db.competency.question == qid).select()
-    plist = [p.competency for p in res]
-    return plist
+
+    plist = [p.competency for p in res if p.is_primary]
+    slist = [p.competency for p in res if not p.is_primary]
+    return plist, slist
 
 
 @auth.requires(
