@@ -254,9 +254,13 @@ def hsblog():
 
     elif event == "unittest" and auth.user:
         statslist = act.split(":")
-        pct = float(statslist[1])
-        passed = int(statslist[3])
-        failed = int(statslist[5])
+        if "undefined" not in act:
+            pct = float(statslist[1])
+            passed = int(statslist[3])
+            failed = int(statslist[5])
+        else:
+            pct = passed = failed = 0
+            logger.error(f"Got undefined unittest results for {div_id} {sid}")
         if pct >= 99.99999:
             correct = "T"
         else:

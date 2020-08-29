@@ -2551,10 +2551,10 @@ def simulate_exam():
     proflist = []
     qsel = {}
     for q in questions:
-        m = re.search(r":proficiency:\s+(\w+)", q.questions.question)
+        m = re.search(r":proficiency:\s+(\w+)", q.questions.question or "")
         if m:
             proflist.append(m.group(1))
-        m = re.search(r":fromid:\s+(.*?)\n", q.questions.question, re.DOTALL)
+        m = re.search(r":fromid:\s+(.*?)\n", q.questions.question or "", re.DOTALL)
         if m:
             qlist = m.group(1).split(",")
             qlist = [x.strip() for x in qlist]
