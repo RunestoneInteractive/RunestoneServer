@@ -1369,7 +1369,7 @@ function assignmentInfo() {
             $("#readings-autograder").val(assignmentData.readings_autograder);
 
             $("#ltilink").html(
-                `${window.location.protocol}://${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
+                `${window.location.protocol}//${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
             );
 
             // Update the questions
@@ -2349,4 +2349,19 @@ function populateEditor(qname) {
     jQuery.get("/runestone/admin/question_text", data, function (obj) {
         $("#editRST").val(JSON.parse(obj));
     });
+}
+
+function copyElementToClipboard(elid) {
+    /* Get the text field */
+    var copyText = document.getElementById(elid);
+    const el = document.createElement("textarea");
+    el.value = $(copyText).html();
+    document.body.appendChild(el);
+    /* Select the text field */
+    el.select();
+    el.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+    document.body.removeChild(el);
 }

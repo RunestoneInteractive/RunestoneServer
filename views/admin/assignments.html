@@ -68,7 +68,9 @@
       </form>
     </fieldset>
     {{ if settings.lti_interface: }}
-    <div><p>LTI Link: <code><span id="ltilink"></span></code></p></div>
+    <div><p>LTI Link: <code><span id="ltilink"></span></code>
+      <span onclick="copyElementToClipboard('ltilink')" style="cursor: pointer">📋copy</span>
+    </p></div>
     {{ pass }}
   </div>
   <div class="col-md-2"></div>
