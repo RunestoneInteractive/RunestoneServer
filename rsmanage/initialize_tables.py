@@ -137,6 +137,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """create index "course_name_index" on user_topic_practice_log using btree (course_name);""",
         """create index "user_id_index" on user_topic_practice_log using btree (user_id);""",
         """create index "q_index" on user_topic_practice_log using btree (q);""",
+        """CREATE INDEX course_attr_idx ON course_attributes USING btree(course_id, attr);""",
     ]
 
     for cmd in sql_commands:
