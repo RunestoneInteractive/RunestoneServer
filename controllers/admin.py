@@ -1462,6 +1462,7 @@ def createquestion():
 )
 def htmlsrc():
     acid = request.vars["acid"]
+    studentId = request.vars.sid
     htmlsrc = ""
     res = (
         db(
@@ -1469,11 +1470,26 @@ def htmlsrc():
             & (db.questions.base_course == db.courses.base_course)
             & (db.courses.course_name == auth.user.course_name)
         )
-        .select(db.questions.htmlsrc)
+        .select(db.questions.htmlsrc, db.questions.question_type)
         .first()
     )
-    if res and res.htmlsrc:
-        htmlsrc = res.htmlsrc
+    if res and (res.htmlsrc or res.question_type == "selectquestion"):
+        if res.question_type == "selectquestion":
+            # Check the selected_questions table to see which actual question was chosen
+            # then get that question.
+            realq = (
+                db(
+                    (db.selected_questions.selector_id == acid)
+                    & (db.selected_questions.sid == studentId)
+                    & (db.selected_questions.selected_id == db.questions.name)
+                )
+                .select(db.questions.htmlsrc)
+                .first()
+            )
+            if realq:
+                htmlsrc = realq.htmlsrc
+        else:
+            htmlsrc = res.htmlsrc
     else:
         logger.error(
             "HTML Source not found for %s in course %s", acid, auth.user.course_name

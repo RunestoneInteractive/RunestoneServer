@@ -317,31 +317,23 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given"
     );
     //make an ajax call to get the htmlsrc for the given question
-    var obj = new XMLHttpRequest();
-    obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
-    obj.send(
-        JSON.stringify({
-            acid: acid,
-        })
-    );
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var htmlsrc = JSON.parse(obj.responseText);
-            var enforceDeadline = $("#enforceDeadline").is(":checked");
-            var dl = showDeadline();
-            renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
-                sid: studentId,
-                graderactive: true,
-                enforceDeadline: enforceDeadline,
-                deadline: dl,
-                rawdeadline:
-                    assignment_deadlines[getSelectedItem("assignment")],
-                tzoff: new Date().getTimezoneOffset() / 60,
-                multiGrader: multiGrader,
-                gradingContainer: elementID,
-            });
-        }
-    };
+    let data = { acid: acid, sid: studentId };
+
+    $.getJSON("/runestone/admin/htmlsrc", data, function (result) {
+        var htmlsrc = result;
+        var enforceDeadline = $("#enforceDeadline").is(":checked");
+        var dl = showDeadline();
+        renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
+            sid: studentId,
+            graderactive: true,
+            enforceDeadline: enforceDeadline,
+            deadline: dl,
+            rawdeadline: assignment_deadlines[getSelectedItem("assignment")],
+            tzoff: new Date().getTimezoneOffset() / 60,
+            multiGrader: multiGrader,
+            gradingContainer: elementID,
+        });
+    });
 
     //this is an internal function for createGradingPanel
     // called when Save Grade is pressed
