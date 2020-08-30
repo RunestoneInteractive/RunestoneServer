@@ -317,31 +317,23 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         eBookConfig.email + ":" + eBookConfig.course + ":" + acid + "-given"
     );
     //make an ajax call to get the htmlsrc for the given question
-    var obj = new XMLHttpRequest();
-    obj.open("GET", "/runestone/admin/htmlsrc/?acid=" + acid, true);
-    obj.send(
-        JSON.stringify({
-            acid: acid,
-        })
-    );
-    obj.onreadystatechange = function () {
-        if (obj.readyState == 4 && obj.status == 200) {
-            var htmlsrc = JSON.parse(obj.responseText);
-            var enforceDeadline = $("#enforceDeadline").is(":checked");
-            var dl = showDeadline();
-            renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
-                sid: studentId,
-                graderactive: true,
-                enforceDeadline: enforceDeadline,
-                deadline: dl,
-                rawdeadline:
-                    assignment_deadlines[getSelectedItem("assignment")],
-                tzoff: new Date().getTimezoneOffset() / 60,
-                multiGrader: multiGrader,
-                gradingContainer: elementID,
-            });
-        }
-    };
+    let data = { acid: acid, sid: studentId };
+
+    $.getJSON("/runestone/admin/htmlsrc", data, function (result) {
+        var htmlsrc = result;
+        var enforceDeadline = $("#enforceDeadline").is(":checked");
+        var dl = showDeadline();
+        renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
+            sid: studentId,
+            graderactive: true,
+            enforceDeadline: enforceDeadline,
+            deadline: dl,
+            rawdeadline: assignment_deadlines[getSelectedItem("assignment")],
+            tzoff: new Date().getTimezoneOffset() / 60,
+            multiGrader: multiGrader,
+            gradingContainer: elementID,
+        });
+    });
 
     //this is an internal function for createGradingPanel
     // called when Save Grade is pressed
@@ -1359,11 +1351,26 @@ function assignmentInfo() {
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
+                // add simulator button
+                //             <button type="button" onclick="runSimulation()">Simulate</button>
+                let sim_butt = document.createElement("button");
+                sim_butt.type = "button";
+                $(sim_butt).html("Exam Generator Simulator");
+                $(sim_butt).addClass("btn btn-info btn-sm");
+                $(sim_butt).click(runSimulation);
+                $("#simulatorbuttonspan").append(sim_butt);
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
+            if (assignmentData.from_source) {
+                $("#assign_is_timed").prop("disabled", true);
+            }
             $("#readings-points-to-award").val(assignmentData.points_to_award);
             $("#readings-autograder").val(assignmentData.readings_autograder);
+
+            $("#ltilink").html(
+                `${window.location.protocol}//${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
+            );
 
             // Update the questions
             ///====================
@@ -1828,6 +1835,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 opt.acid || moreOpts.acid || opt.orig.id
             ); // save the original divid
             let editButton = document.createElement("button");
+            let constrainbc = document.getElementById("qbankform").constrainbc
+                .checked;
             $(editButton).text("Edit Question");
             $(editButton).addClass("btn btn-normal");
             $(editButton).attr("data-target", "#editModal");
@@ -1835,6 +1844,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
             $(editButton).click(function (event) {
                 data = {
                     question_name: opt.acid || moreOpts.acid || opt.orig.id,
+                    constrainbc: constrainbc,
                 };
                 jQuery.get("/runestone/admin/question_text", data, function (
                     obj
@@ -1889,40 +1899,32 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 }
 
 // Called by the "Search" button in the "Search question bank" panel.
+// makes ajax call to `controllers/admin.py/questionBank`_
 function questionBank(form) {
     var chapter = form.chapter.value;
     var author = form.author.value;
     var tags = $("#tags").select2("val");
     var term = form.term.value;
-    var difficulty = "";
-    var difficulty_options = [
-        "rating1",
-        "rating2",
-        "rating3",
-        "rating4",
-        "rating5",
-    ];
-    var inputs = document
-        .getElementById("qbankform")
-        .getElementsByTagName("input");
-    for (var i = 0, length = inputs.length; i < length; i++) {
-        if (inputs[i].type == "radio" && inputs[i].checked) {
-            difficulty = inputs[i].value;
-        }
-    }
-
+    var min_difficulty = form.min_diff.value;
+    var max_difficulty = form.max_diff.value;
+    var competency = form.competency.value;
+    var isprim = form.isprim.value;
+    var cbc = form.constrainbc.checked;
     var obj = new XMLHttpRequest();
     var url = "/runestone/admin/questionBank";
     var data = {
         variable: "variable",
         chapter: chapter,
-        difficulty: difficulty,
+        min_difficulty: min_difficulty,
+        max_difficulty: max_difficulty,
+        constrainbc: cbc,
         author: author,
         tags: tags,
         term: term,
+        competency: competency,
+        isprim: isprim,
     };
     jQuery.post(url, data, function (resp, textStatus, whatever) {
-        resp = JSON.parse(resp);
         if (resp == "Error") {
             alert("An error occured while searching");
         }
@@ -1972,12 +1974,13 @@ function getQuestionInfo() {
     var question_name = select.options[select.selectedIndex].text;
     var assignlist = document.getElementById("assignlist");
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
-
+    var constrainbc = document.getElementById("qbankform").constrainbc.checked;
     var url = "/runestone/admin/getQuestionInfo";
     var data = {
         variable: "variable",
         question: question_name,
         assignment: assignmentid,
+        constrainbc: constrainbc,
     };
     jQuery.post(url, data, function (question_info, status, whatever) {
         var res = JSON.parse(question_info);
@@ -2313,6 +2316,31 @@ function getAssignList(sel) {
     });
 }
 
+function runSimulation() {
+    assignmentid = getAssignmentId();
+    window.location = `/runestone/admin/simulate_exam?assignment_id=${assignmentid}`;
+}
+
+function resetExam() {
+    let slist = document.getElementById("exstudentList");
+    let xlist = document.getElementById("examList");
+    let name = slist.options[slist.selectedIndex].innerHTML;
+    let sid = slist.value;
+    let exam = xlist.value;
+
+    let go = confirm(`Warning you are about to reset ${exam} for ${name}`);
+    if (!go) {
+        return;
+    }
+    let data = {
+        student_id: sid,
+        exam_name: exam,
+    };
+    $.getJSON("reset_exam", data, function (resdata) {
+        alert(resdata.mess);
+    });
+}
+
 function populateEditor(qname) {
     data = {
         question_name: qname,
@@ -2323,6 +2351,7 @@ function populateEditor(qname) {
     });
 }
 
+<<<<<<< HEAD
 // generateLTIKeys
 // ---------------
 function generateLTIKeys() {
@@ -2342,4 +2371,19 @@ function generateLTIKeys() {
             alert("Hmmm, failed to create keys");
         }
     });
+=======
+function copyElementToClipboard(elid) {
+    /* Get the text field */
+    var copyText = document.getElementById(elid);
+    const el = document.createElement("textarea");
+    el.value = $(copyText).html();
+    document.body.appendChild(el);
+    /* Select the text field */
+    el.select();
+    el.setSelectionRange(0, 99999); /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+    document.body.removeChild(el);
+>>>>>>> master
 }

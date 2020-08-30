@@ -10,7 +10,7 @@ server {
     }
 
     # alias allows us to completely rewrite the static path
-    location ~* /(\w+)/books/(published|draft)/(\w+)/(_static|_images)/(.*)$ {
+    location ~* /(\w+)/books/(published|draft)/(\w+)/(_static|_images|images)/(.*)$ {
         alias /srv/web2py/applications/$1/books/$3/$2/$3/$4/$5;
     }
 

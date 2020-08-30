@@ -91,7 +91,7 @@ def test_hsblog(test_client, test_user_1, test_user, runestone_db_tools):
     time_delta = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc
     ) - parse(res["timestamp"]).replace(tzinfo=datetime.timezone.utc)
-    assert time_delta < datetime.timedelta(seconds=1)
+    assert time_delta < datetime.timedelta(seconds=2)
 
     db = runestone_db_tools.db
     dbres = db(db.useinfo.div_id == "unit_test_1").select(db.useinfo.ALL)

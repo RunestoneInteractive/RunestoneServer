@@ -28,7 +28,11 @@
                     <li class="{{=readings[reading]['status']}}">{{=reading}}</li>
                     <ul>
                     {{for r in readings[reading]['subchapters']:}}
+                        {{ if origin == "Runestone": }}
                         <li class="{{=r['status']}}"><a href="{{=get_course_url(r['chapter'], r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
+                        {{ else: }}
+                        <li class="{{=r['status']}}"><a href="{{=get_course_url('', r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
+                        {{ pass }}
                         {{if r['points'] > 0:}}
                             {{if r['comment'] != 'ungraded':}}
                                 </br>{{=r['score']}} of {{=r['points']}} points earned; minimum {{=r['activities_required']}} activities required
@@ -80,7 +84,11 @@
                                 <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
                             </div>
                             <div class="oneq" style="width: 100%; text-align: center">
-                            <a href="/runestone/books/published/{{=course.base_course}}/{{=q['chapter']}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                                {{ if origin == "Runestone": }}
+                                <a href="/runestone/books/published/{{=course.base_course}}/{{=q['chapter']}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                                {{ else: }}
+                                <a href="/runestone/books/published/{{=course.base_course}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                                {{ pass }}
                             </div>
                             <hr>
                         {{count += 1}}

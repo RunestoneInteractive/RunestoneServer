@@ -49,16 +49,7 @@ def _route_book(is_published=True):
     # if it is pretext book we use different delimiters for the templates
     # as LaTeX is full of {{
     # These values are set by the runestone process-manifest command
-    res = (
-        db(
-            (db.course_attributes.course_id == db.courses.id)
-            & (db.courses.course_name == base_course)
-            & (db.course_attributes.attr == "markup_system")
-        )
-        .select(db.course_attributes.value)
-        .first()
-    )
-
+    res = getCourseOrigin(base_course)
     if res and res.value == "PreTeXt":
         response.delimiters = settings.pretext_delimiters
 
@@ -81,7 +72,7 @@ def _route_book(is_published=True):
                 db.courses.base_course,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -131,7 +122,7 @@ def _route_book(is_published=True):
                 db.courses.login_required,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -160,14 +151,16 @@ def _route_book(is_published=True):
             "published" if is_published else "build",
             base_course,
         ),
-        *request.args[1:]
+        *request.args[1:],
     )
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))
         raise HTTP(404)
 
     # See if this is static content. By default, the Sphinx static directory names are ``_static`` and ``_images``.
-    if request.args(1) in ["_static", "_images"]:
+    if request.args(1) in ["_static", "_images"] or book_path.endswith(
+        ("css", "png", "jpg")
+    ):
         # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
         # Warning: this is slow. Configure a production server to serve this statically.
         return response.stream(book_path, 2 ** 20, request=request)

@@ -1,69 +1,206 @@
+{{user_navs = True}}
 {{left_sidebar_enabled,right_sidebar_enabled=False,False}}
 
 {{extend 'layout.html'}}
 
 {{block left_sidebar}}
-
 {{end}}
 
-{{ if 'mess' in globals(): }}
+<div class="container" style="margin: 5%; width: 80%;">
+    <h1>
+        Congratulations,
+        {{try:}}
+        {{=coursename}}
+        {{except:}}
+        Your course
+        {{pass}}
+        is now Ready
+    </h1>
 
-  <h1 id="title">{{=mess}}</h1>
-
-  {{ if building: }}
-    <div id="spinner_div" class="pull-left" style="align: center; margin-right:20px;">
-	    <img id="spinner" src="/{{=request.application}}/static/images/spinner10.gif">
-    </div>
-<p id="message">Your course will be built. This message will update once the rebuild starts. If it never updates, please ask the server administrator to check that a web2py scheduler is running. </p>
-  <p id = "message2"> This may take several minutes to complete.
-     When the course is finished you will be redirected to your new course.  Because you
-     created the course you are set up as the instructor.</p>
-
-    <p>Please -- If the build takes longer than 10 minutes Do NOT just try to build a new course.
-       Please contact me by email at <a href="mailto:runestoneinteractive@gmail.com">RunestoneInteractive</a>.
-        You can also try to access your course, by using a URL of the form:  <code>https://runestone.academy/runestone/static/&lt;yourcoursename&gt;/index.html</code>
-        If you get an error message contact me by email and I will investigate and get your course built correctly.
+    <p>
+        If this is your first time building a course here are some resources
+        that you may find useful. You will also find this information on the
+        help section of the instructors page.
     </p>
-        <p>Due to memory limitations on the server I can only build one course at a time.  Sometimes the queue
-        gets backed up or even temporarily stuck.  I will get things going again as quick as I can.
-        Thanks for your patience.  -- Brad</p>
 
-      <script type="text/javascript">
-        var iid = setInterval(function() {
-          d = { task_name:'{{ =task_name }}',
-                course_url:'{{ =course_url }}'};
-          $.post(eBookConfig.ajaxURL+'getSphinxBuildStatus.json', d, function(data) {
-            if (data.status == "COMPLETED"){
-              window.location.href = data.course_url;
-            }
-            else if (data.status == "RUNNING"){
-              window.build_status = "started"
-               $("#message").html('The course build has started.');
-            }
-            else if (data.status == "FAILED") {
-              clearInterval(iid);
-              $("#spinner_div").hide();
-              $("#title").text("An error occurred.");
-              $("#message").html("An error occurred while rebuilding this course. Please check that you are not attempting " +
-               "to rebuild a course that you do not have permission for. If you are sure that you are registered for the correct " +
-               "course, please submit an error report <a href='https://github.com/bnmnetp/runestone/issues/new'>here</a>. " +
-               "Make sure you include the following traceback information:" +
-               "<pre>" + data.traceback + "</pre>");
-            }
-          });
-        }, 3000);
-      </script>
+    <p>
+        If you are in a hurry, or are a seasoned user of Runestone
+        <strong
+            >Click this link to proceed to
+            {{if "basecourse" in globals():}}
+            <a href="/runestone/books/published/{{=basecourse}}/index.html">
+            {{=coursename}}
+            </a>
+            {{else:}}
+            <a href="/runestone/default/courses">Your Courses</a>
+            {{pass}}
+        </strong>
+    </p>
 
+    <h2>Video Resources</h2>
 
-  {{ else: }}
-    Please use the back button to back up and use a different name. The name must be unique and should not contain spaces or special characters, especially the &amp; character.
+    <p>
+        In the summer of 2020 Brad Miller and Barb Ericson hosted an online
+        workshop over four days. We covered all the basics for getting the most
+        out of Runestone. you can find the YouTube playlist for the
+        <a
+            href="https://www.youtube.com/playlist?list=PLnjfglXW2QQSVCuOj4VsdmWTRAfQy6Zrb"
+            >workshop here</a
+        >
+    </p>
 
-  {{ pass }}
+    <h2>Community</h2>
+    <p>
+        We are all in this together so we have created some Google Groups to
+        encourage teachers to interact with other teachers to share ideas and
+        ask quesitons. Please join us! <strong>Note</strong> For some books we
+        do have instructor resources/solution manuals so we will need to verify
+        that you are really an instructor. When you join please provide us a
+        link to your faculty page or use your faculty email.
+    </p>
+    <dl class="simple">
+        <dt>Join the conversation on Slack</dt>
+        <dd>
+            <p>
+                <a
+                    class="reference external"
+                    href="https://join.slack.com/t/runestoneteam/shared_invite/enQtODUwNDIwMzg5NDQxLTZlMjAzOTNlNzNlYTVjZDEyODI4ZTY1YjFjNTg3YTBiOWY2ODNlZTA4NWFiMjAxNzlkZGE1MmY0ZTQyY2E5Y2Q"
+                    >The quickest way to get help from a human</a
+                >
+            </p>
+        </dd>
+        <dt>Runestone Google Groups for Books</dt>
+        <dd>
+            <ul class="simple">
+                <li>
+                    <p>
+                        I am Teaching with
+                        <a
+                            class="reference external"
+                            href="https://groups.google.com/forum/#!forum/runestone-fopp"
+                            >Foundations of Python Programming</a
+                        >
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        I am Teaching with
+                        <a
+                            class="reference external"
+                            href="https://groups.google.com/forum/#!forum/runestone-thinkcspy"
+                            >How to Think Like a Computer Scientist</a
+                        >
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        I am Teaching with
+                        <a
+                            class="reference external"
+                            href="https://groups.google.com/forum/#!forum/runestone-httlads"
+                            >How to Think Like a Data Scientist</a
+                        >
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        I am Teaching
+                        <a
+                            class="reference external"
+                            href="https://groups.google.com/forum/#!forum/teaching-csawesome"
+                            >CSAwesome</a
+                        >
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        This
+                        <a
+                            class="reference external"
+                            href="https://groups.google.com/forum/#!forum/runestone_instructors"
+                            >Runestone Instructors</a
+                        >
+                        is very low volume – legacy group.
+                    </p>
+                </li>
+            </ul>
+        </dd>
+        <dt>On Facebook</dt>
+        <dd>
+            <p>
+                <a
+                    class="reference external"
+                    href="https://www.facebook.com/RunestoneInteractive"
+                    >Facebook Page</a
+                >
+            </p>
+        </dd>
+        <dt>On Twitter</dt>
+        <dd>
+            <p>
+                Send a message to
+                <a
+                    class="reference external"
+                    href="http://twitter.com/iRunestone"
+                    >iRunestone</a
+                >
+            </p>
+        </dd>
+    </dl>
 
-{{ else: }}
+    <h2>Support</h2>
 
-    mess variable should be set. If you are seeing this, please report the error to the server administrator
+    <dl>
+        <dt>Check the FAQ</dt>
+        <dd>
+            <p>
+                <a
+                    class="reference external"
+                    href="https://runestoneinteractive.com/pages/faq.html"
+                    >On our Blog Site</a
+                >
+            </p>
+        </dd>
+        <dt>Follow the Blog</dt>
+        <dd>
+            <p>
+                <a
+                    class="reference external"
+                    href="https://runestoneinteractive.com"
+                    >On our Home page</a
+                >
+            </p>
+        </dd>
+        <dt>Check out the Instructors Guide</dt>
+        <dd>
+            <p>
+            <a
+                href="https://runestone.academy/runestone/static/instructorguide/index.html"
+                >Runestone Instructors Guide</a
+            >
+            </p>
+        </dd>
+    </dl>
 
-{{ pass }}
-
-
+    <h2>Bug Reports</h2>
+    <p>
+        Runestone is an open source project, so people volunteer their time and
+        energy to make it better. We don’t have a full time support team, but we
+        do our best to be helpful and responsive. Please
+        <strong>do not email us</strong> about bugs! Bug reports are very likely
+        to get lost in my busy inbox! Everybody has had questions about
+        something on Runestone before, so please use the community resources.
+    </p>
+    <p>
+        The best thing to do is to create an issue on our
+        <a
+            class="reference external"
+            href="http://github.com/RunestoneInteractive"
+            >GitHub</a
+        >
+        page for the project that most closely matches your problem. I know it
+        might be a pain to have to create an account on GitHub, but it is the
+        only way to keep our sanity AND have a conversation with you or keep you
+        up to date about your problem.
+    </p>
+</div>

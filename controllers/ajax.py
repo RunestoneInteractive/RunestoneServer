@@ -1,15 +1,30 @@
-import json
-import datetime
-from dateutil.parser import parse
-import logging
-import subprocess
-import uuid
-from bleach import clean
+# *************************
+# |docname| - Runestone API
+# *************************
+# This module implements the API that the Runestone Components use to communicate with a Runestone Server.
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
 from collections import Counter
+import datetime
+from io import open
+import json
+import logging
+from lxml import html
 import os
 import re
-from io import open
-from lxml import html
+import subprocess
+import uuid
+
+# Third-party imports
+# -------------------
+from bleach import clean
+from dateutil.parser import parse
+
+# Local application imports
+# -------------------------
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
 
 logger = logging.getLogger(settings.logger)
@@ -52,6 +67,10 @@ def compareAndUpdateCookieData(sid: str):
         )
 
 
+# Given a JSON record of a clickstream event record the event in the ``useinfo`` table.
+# If the event is an answer to a runestone qustion record that answer in the database in
+# one of the xxx_answers tables.
+#
 def hsblog():
     setCookie = False
     if auth.user:
@@ -106,7 +125,7 @@ def hsblog():
         )
         logger.error("Details: {}".format(e))
 
-    if event == "timedExam" and (act == "finish" or act == "reset"):
+    if event == "timedExam" and (act == "finish" or act == "reset" or act == "start"):
         logger.debug(act)
         if act == "reset":
             r = "T"
@@ -117,9 +136,9 @@ def hsblog():
             db.timed_exam.insert(
                 sid=sid,
                 course_name=course,
-                correct=int(request.vars.correct),
-                incorrect=int(request.vars.incorrect),
-                skipped=int(request.vars.skipped),
+                correct=int(request.vars.correct or 0),
+                incorrect=int(request.vars.incorrect or 0),
+                skipped=int(request.vars.skipped or 0),
                 time_taken=int(tt),
                 timestamp=ts,
                 div_id=div_id,
@@ -235,9 +254,13 @@ def hsblog():
 
     elif event == "unittest" and auth.user:
         statslist = act.split(":")
-        pct = float(statslist[1])
-        passed = int(statslist[3])
-        failed = int(statslist[5])
+        if "undefined" not in act:
+            pct = float(statslist[1])
+            passed = int(statslist[3])
+            failed = int(statslist[5])
+        else:
+            pct = passed = failed = 0
+            logger.error(f"Got undefined unittest results for {div_id} {sid}")
         if pct >= 99.99999:
             correct = "T"
         else:
@@ -1165,6 +1188,9 @@ def _canonicalize_tz(tstring):
         return re.sub(r"(.*)\((.*)\)", r"\1({})".format(zstring), tstring)
 
 
+# getAssessResults
+# ----------------
+#
 def getAssessResults():
     if not auth.user:
         # can't query for user's answers if we don't know who the user is, so just load from local storage
@@ -1414,6 +1440,7 @@ def getAssessResults():
 
 
 def checkTimedReset():
+    # Deprecated -- Should be removed in 2020
     if auth.user:
         user = auth.user.username
     else:
@@ -1438,6 +1465,30 @@ def checkTimedReset():
             return json.dumps({"canReset": False})
     else:
         return json.dumps({"canReset": True})
+
+
+def tookTimedAssessment():
+    if auth.user:
+        sid = auth.user.username
+    else:
+        return json.dumps({"tookAssessment": False})
+
+    exam_id = request.vars.div_id
+    course = request.vars.course_name
+    rows = (
+        db(
+            (db.timed_exam.div_id == exam_id)
+            & (db.timed_exam.sid == sid)
+            & (db.timed_exam.course_name == course)
+        )
+        .select(orderby=~db.timed_exam.id)
+        .first()
+    )
+    print(f"checking {exam_id} {sid} {course} {rows}")
+    if rows:
+        return json.dumps({"tookAssessment": True})
+    else:
+        return json.dumps({"tookAssessment": False})
 
 
 # The request variable ``code`` must contain JSON-encoded RST to be rendered by Runestone. Only the HTML containing the actual Runestone component will be returned.
@@ -1618,3 +1669,107 @@ def login_status():
         return json.dumps(dict(status="loggedin", course_name=auth.user.course_name))
     else:
         return json.dumps(dict(status="loggedout", course_name=auth.user.course_name))
+
+
+auto_gradable_q = [
+    "clickablearea",
+    "mchoice",
+    "parsonsprob",
+    "dragndrop",
+    "fillintheblank",
+]
+
+
+@auth.requires_login()
+def get_question_source():
+    """Called from the selectquestion directive
+    There are 3 cases:
+
+    1. If there is only 1 question in the question list then return the html source for it.
+    2. If there are multiple questions then choose a question at random
+    3. If a proficiency is selected then select a random question that tests that proficiency
+
+    In the last two cases, first check to see if there is a question for this student for this
+    component that was previously selected.
+
+    Returns:
+        json: html source for this question
+    """
+    prof = False
+    points = request.vars.points
+    logger.debug(f"POINTS = {points}")
+    min_difficulty = request.vars.min_difficulty
+    max_difficulty = request.vars.max_difficulty
+    not_seen_ever = request.vars.not_seen_ever
+    autogradable = request.vars.autogradable
+    if request.vars["questions"]:
+        questionlist = request.vars["questions"].split(",")
+        questionlist = [q.strip() for q in questionlist]
+    elif request.vars["proficiency"]:
+        prof = request.vars["proficiency"]
+
+        query = (db.competency.competency == prof) & (
+            db.competency.question == db.questions.id
+        )
+        if min_difficulty:
+            query = query & db.questions.difficulty >= float(min_difficulty)
+        if max_difficulty:
+            query = query & db.questions.difficulty <= float(max_difficulty)
+        if autogradable:
+            query = query & (
+                (db.questions.autograde == "unittest")
+                | db.questions.question_type.contains(auto_gradable_q, all=False)
+            )
+        res = db(query).select(db.questions.name)
+        if res:
+            questionlist = [row.name for row in res]
+        else:
+            questionlist = []
+            logger.error(f"No questions found for proficiency {prof}")
+            return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
+
+    if not_seen_ever:
+        seenq = db(
+            (db.useinfo.sid == auth.user.username)
+            & (db.useinfo.div_id.contains(questionlist, all=False))
+        ).select(db.useinfo.div_id)
+        seen = set([x.div_id for x in seenq])
+        poss = set(questionlist)
+        questionlist = list(poss - seen)
+
+    htmlsrc = ""
+
+    selector_id = request.vars["selector_id"]
+
+    prev_selection = (
+        db(
+            (db.selected_questions.sid == auth.user.username)
+            & (db.selected_questions.selector_id == selector_id)
+        )
+        .select()
+        .first()
+    )
+
+    if prev_selection:
+        questionid = prev_selection.selected_id
+    else:
+        questionid = random.choice(questionlist)
+
+    res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
+
+    if res and len(questionlist) > 1 and not prev_selection:
+        db.selected_questions.insert(
+            selector_id=selector_id,
+            sid=auth.user.username,
+            selected_id=questionid,
+            points=points,
+        )
+
+    if res and res.htmlsrc:
+        htmlsrc = res.htmlsrc
+    else:
+        logger.error(
+            f"HTML Source not found for {questionid} in course {auth.user.course_name}"
+        )
+        htmlsrc = "<p>No preview Available</p>"
+    return json.dumps(htmlsrc)

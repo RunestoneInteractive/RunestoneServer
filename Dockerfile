@@ -57,6 +57,7 @@ RUN apt-get update && \
         libfreetype6-dev postgresql-common postgresql postgresql-contrib \
         libpq-dev libxml2-dev libxslt1-dev \
         texlive-full xsltproc pdf2svg \
+        certbot python-certbot-nginx \
         openjdk-11-jre-headless \
         rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -109,7 +110,6 @@ COPY docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone
 COPY docker/uwsgi/sites/runestone.ini /etc/uwsgi/sites/runestone.ini
 COPY docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service
 COPY docker/wsgihandler.py /srv/web2py/wsgihandler.py
-COPY scripts/logging.conf /srv/web2py/logging.conf
 RUN ln -s /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
 RUN rm /etc/nginx/sites-enabled/default
 

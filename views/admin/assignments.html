@@ -59,6 +59,7 @@
             <input id="assign_is_timed" class="form-check-input" type="checkbox" name="is_timed" value="T"> (Use this to make quizzes or exams - <strong>Beta!</strong>)<br>
             <label for="timelimit" class="form-check-label">Time Limit</label>
             <input id="timelimit" name="timelimit" type="number" min="5" max="125" value=""> Leave blank for no limit
+            <span id="simulatorbuttonspan" style="margin-left: 10px;"></span>
         </div>
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
@@ -66,6 +67,11 @@
         <input class="btn btn-default" onclick="update_assignment(this.form)" type="button" value="Save">
       </form>
     </fieldset>
+    {{ if settings.lti_interface: }}
+    <div><p>LTI Link: <code><span id="ltilink"></span></code>
+      <span onclick="copyElementToClipboard('ltilink')" style="cursor: pointer">📋copy</span>
+    </p></div>
+    {{ pass }}
   </div>
   <div class="col-md-2"></div>
 </div>
@@ -178,7 +184,14 @@
                   <h5 style="text-align: center">Search Question Bank</h5>
                   <form id="qbankform" name="qbankform" role="form">
                     <div class="form-group">
-                      <label for="term">Term</label> <input class="form-control" id="term" placeholder="Term" type="text">
+                      <label for="term">Free Text Search of question</label> <input class="form-control" id="term" placeholder="Term" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Constrain search to this course
+                            <input type="checkbox" name="constrainbc" value="T" checked>
+                            (normally leave checked)
+                        </label>
+
                     </div>
                     <div class="form-group">
                       <label for="chapter">Chapter</label>
@@ -190,22 +203,36 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="author">Author</label> <input class="form-control" id="author" placeholder="Author" type="text">
+                      <label for="author">Author (First Last)</label>
+                      <input class="form-control" id="author" placeholder="Author" type="text">
                     </div>
                     <div class="form-group">
-                      <label for="difficultyselector">Difficulty</label>
+                      <label for="difficultyselector">Difficulty (1.0 -- 5.0)</label>
                       <div id="difficultyselector">
-                        <input id="rating1" name="rating" type="radio" value="1"><label for="rating1">1</label> <input id="rating2" name="rating" type="radio" value="2"><label for="rating2">2</label> <input id="rating3" name="rating" type="radio" value="3"><label for="rating3">3</label> <input id="rating4" name="rating" type="radio" value="4"><label for="rating4">4</label> <input id="rating5" name="rating" type="radio" value="5"><label for="rating5">5</label>
+                        <label>Minimum
+                        <input type="text" name="min_diff" placeholder="1.0">
+                        </label>
+                        <label>Maximum
+                        <input type="text" name="max_diff" placeholder="5.0">
+                        </label>
                       </div>
                     </div>
                     <div class="form-group">
+                        <label for="competencyselector">Competency</label>
+                        <div id="competencyselector">
+                            <input name="competency" type="text">
+                            <label for="cisprimary">Is Primary</label>
+                            <input name="isprim" type=checkbox>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
                       <label for="tags">Tags</label>
                       <select class="js-example-basic-multiple" id="tags" multiple="multiple" style="width:100%">
                         {{ for tag in tags: }}
                         <option value="{{=tag}}">{{ =tag }}</option>
                         {{ pass }}
                       </select>
-                    </div>
+                    </div> -->
                     <input class="btn btn-default" data-dismiss="modal" onclick="questionBank(this.form)" type="button" value="Search">
                   </form>
                   <div class="col-md-12" style="margin-top: 40px; margin-bottom:40px; text-align: center">
@@ -214,7 +241,8 @@
                     <form id="questionform" name="questionform" style="visibility: hidden">
                       <label for="points">Points</label>
                       <input id="points" name="points" type="number">
-                      <label for="timed">Timed</label> <input id="timed" name="timed" type="checkbox" value="true">
+                      <label for="timed">Timed</label>
+                      <input id="timed" name="timed" type="checkbox" value="true">
                       <input class="btn btn-default" data-dismiss="modal" onclick="addToAssignment(this.form)" type="button" value="Add to Assignment">
                     </form>
                   </div>

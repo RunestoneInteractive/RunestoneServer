@@ -47,6 +47,8 @@ if [ ! -f "$stamp" ]; then
         touch "${RUNESTONE_PATH}/models/1.py"
     fi
     echo "settings.docker_institution_mode = True" >> "${RUNESTONE_PATH}/models/1.py"
+    echo "settings.jobe_key = ''" >> "${RUNESTONE_PATH}/models/1.py"
+    echo "settings.jobe_server = 'http://jobe'" >> "${RUNESTONE_PATH}/models/1.py"
 
     touch "${stamp}"
 else
@@ -118,6 +120,7 @@ chown -R www-data /run/uwsgi
 if [ -f /srv/RunestoneComponents/README.rst ]; then
     info "Installing Development Version of Runestone"
     pip install --upgrade -e /srv/RunestoneComponents
+    info "Make sure you execute the command npm run build to update runestone.js"
 fi
 runestone --version
 
@@ -166,6 +169,14 @@ service nginx start
 info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
+set +e
+if [[ -z "${CERTBOT_EMAIL}" ]]; then
+    echo "CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!"
+else
+    certbot -n  --agree-tos --email "${CERTBOT_EMAIL}" --nginx --redirect -d "${RUNESTONE_HOST}"
+    echo "You should be good for https"
+fi
+set -e
 
 ## Go through all books and build
 info "Building & Deploying books"
