@@ -69,7 +69,7 @@
     </fieldset>
     {{ if settings.lti_interface: }}
     <div><p>LTI Link: <code><span id="ltilink"></span></code>
-      <span onclick="copyElementToClipboard('ltilink')" style="cursor: pointer">📋copy</span>
+      <span class="clipcopy" onclick="copyElementToClipboard('ltilink')" style="cursor: pointer">📋copy</span>
     </p></div>
     {{ pass }}
   </div>

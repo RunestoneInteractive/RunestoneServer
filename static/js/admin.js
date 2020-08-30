@@ -2351,7 +2351,6 @@ function populateEditor(qname) {
     });
 }
 
-<<<<<<< HEAD
 // generateLTIKeys
 // ---------------
 function generateLTIKeys() {
@@ -2371,7 +2370,8 @@ function generateLTIKeys() {
             alert("Hmmm, failed to create keys");
         }
     });
-=======
+}
+
 function copyElementToClipboard(elid) {
     /* Get the text field */
     var copyText = document.getElementById(elid);
@@ -2385,5 +2385,4 @@ function copyElementToClipboard(elid) {
     /* Copy the text inside the text field */
     document.execCommand("copy");
     document.body.removeChild(el);
->>>>>>> master
 }
