@@ -1351,6 +1351,14 @@ function assignmentInfo() {
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
+                // add simulator button
+                //             <button type="button" onclick="runSimulation()">Simulate</button>
+                let sim_butt = document.createElement("button");
+                sim_butt.type = "button";
+                $(sim_butt).html("Exam Generator Simulator");
+                $(sim_butt).addClass("btn btn-info btn-sm");
+                $(sim_butt).click(runSimulation);
+                $("#simulatorbuttonspan").append(sim_butt);
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
@@ -1363,6 +1371,7 @@ function assignmentInfo() {
             $("#ltilink").html(
                 `${window.location.protocol}://${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
             );
+
             // Update the questions
             ///====================
             // Get the question tree picker.
