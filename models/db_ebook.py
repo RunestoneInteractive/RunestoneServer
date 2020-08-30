@@ -318,3 +318,25 @@ db.define_table(
     Field("competency", "string"),
     migrate=table_migrate_prefix + "selected_questions.table",
 )
+
+
+def getCourseAttribute(course_id, attr_name):
+    res = (
+        db(
+            (db.course_attributes.course_id == course_id)
+            & (db.course_attributes.attr == attr_name)
+        )
+        .select(db.course_attributes.value, **SELECT_CACHE)
+        .first()
+    )
+    if res:
+        return res.value
+    else:
+        return None
+
+
+# this check has to be here to ensure that the course_attributes table is defined.
+
+if auth.user:
+    if getCourseAttribute(auth.user.course_id, "lti_interface"):
+        settings.lti_interface = True

@@ -67,7 +67,9 @@
         <input class="btn btn-default" onclick="update_assignment(this.form)" type="button" value="Save">
       </form>
     </fieldset>
+    {{ if settings.lti_interface: }}
     <div><p>LTI Link: <code><span id="ltilink"></span></code></p></div>
+    {{ pass }}
   </div>
   <div class="col-md-2"></div>
 </div>
