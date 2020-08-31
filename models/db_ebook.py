@@ -1,5 +1,24 @@
+# **********************************
+# |docname| - Runestone eBook Tables
+# **********************************
+# This module contains the database table definitions
+#
 # Files in the model directory are loaded in alphabetical order.  This one needs to be loaded after db.py
+#
+# web2py does not allow you to specify indices programmatically.  The indexes for each table **should** be
+# documented here, but may not be.  The command ``rsmanage init`` contains index creation statements for
+# all performance critical tables.
 
+# useinfo
+# -------
+# The largest and busiest table in the whole database!
+# This tracks click stream information on every student
+# Having indices on this table is critical, here is what we have:
+# ``create index "course_id_index" on useinfo using btree (course_id);``
+# ``create index "div_id_index" on useinfo using btree (div_id);``
+# ``create index "event_index" on useinfo using btree (event);``
+# ``create index "sid_index" on useinfo using btree (sid);``
+# ``create index "timestamp_idx" on useinfo using btree ("timestamp");``
 db.define_table(
     "useinfo",
     Field("timestamp", "datetime"),
@@ -12,6 +31,8 @@ db.define_table(
 )
 
 # stores student's saved code and, unfortunately, comments and grades, which really should be their own table linked to this
+# code
+# ----
 db.define_table(
     "code",
     Field("acid", "string"),
@@ -28,6 +49,8 @@ db.define_table(
 
 # Stores the source code for activecodes, including prefix and suffix code, so that prefixes and suffixes can be run when grading
 # Contents of this table are filled when processing activecode directives, in activecod.py
+# source_code
+# -----------
 db.define_table(
     "source_code",
     Field("acid", "string", required=True),
@@ -43,6 +66,8 @@ db.define_table(
     migrate=table_migrate_prefix + "source_code.table",
 )
 
+# acerror_log
+# ----------
 db.define_table(
     "acerror_log",
     Field("timestamp", "datetime"),
@@ -55,6 +80,8 @@ db.define_table(
 )
 
 ##table to store the last position of the user. 1 row per user, per course
+# user_state
+# ----------
 db.define_table(
     "user_state",
     Field("user_id", "integer"),
@@ -69,6 +96,8 @@ db.define_table(
 )
 
 # Table to match instructor(s) to their course(s)
+# course_instructor
+# -----------------
 db.define_table(
     "course_instructor",
     Field("course", db.courses),
@@ -80,6 +109,8 @@ db.define_table(
     migrate=table_migrate_prefix + "course_instructor.table",
 )
 
+# timed_exam
+# ----------
 db.define_table(
     "timed_exam",
     Field("timestamp", "datetime"),
@@ -94,6 +125,13 @@ db.define_table(
     migrate=table_migrate_prefix + "timed_exam.table",
 )
 
+# mchoice_answers
+# ---------------
+# define the following indices
+#    CREATE INDEX mchoice_answers_course_name_idx ON mchoice_answers USING btree (course_name);
+#    CREATE INDEX mchoice_answers_div_id_idx ON mchoice_answers USING btree (div_id);
+#    CREATE INDEX mchoice_answers_sid_idx ON mchoice_answers USING btree (sid);
+
 db.define_table(
     "mchoice_answers",
     Field("timestamp", "datetime"),
@@ -105,6 +143,8 @@ db.define_table(
     migrate=table_migrate_prefix + "mchoice_answers.table",
 )
 
+# fitb_answers
+# ------------
 db.define_table(
     "fitb_answers",
     Field("timestamp", "datetime"),
@@ -115,6 +155,8 @@ db.define_table(
     Field("correct", "boolean"),
     migrate=table_migrate_prefix + "fitb_answers.table",
 )
+# dragndrop_answers
+# -----------------
 db.define_table(
     "dragndrop_answers",
     Field("timestamp", "datetime"),
@@ -126,6 +168,8 @@ db.define_table(
     Field("minHeight", "string"),
     migrate=table_migrate_prefix + "dragndrop_answers.table",
 )
+# clickablearea_answers
+# ---------------------
 db.define_table(
     "clickablearea_answers",
     Field("timestamp", "datetime"),
@@ -136,6 +180,9 @@ db.define_table(
     Field("correct", "boolean"),
     migrate=table_migrate_prefix + "clickablearea_answers.table",
 )
+
+# parsons_answers
+# ---------------
 db.define_table(
     "parsons_answers",
     Field("timestamp", "datetime"),
@@ -147,6 +194,9 @@ db.define_table(
     Field("correct", "boolean"),
     migrate=table_migrate_prefix + "parsons_answers.table",
 )
+
+# codelens_answers
+# ----------------
 db.define_table(
     "codelens_answers",
     Field("timestamp", "datetime"),
@@ -159,6 +209,8 @@ db.define_table(
     migrate=table_migrate_prefix + "codelens_answers.table",
 )
 
+# shortanswer_answers
+# -------------------
 db.define_table(
     "shortanswer_answers",
     Field("timestamp", "datetime"),
@@ -171,6 +223,10 @@ db.define_table(
 
 # unittest_answers
 # ----------------
+# define the following indices
+#    CREATE INDEX unittest_answers_course_name_idx ON unittest_answers USING btree (course_name);
+#    CREATE INDEX unittest_answers_div_id_idx ON unittest_answers USING btree (div_id);
+#    CREATE INDEX unittest_answers_sid_idx ON unittest_answers USING btree (sid);
 db.define_table(
     "unittest_answers",
     Field("timestamp", "datetime"),
@@ -194,6 +250,8 @@ db.define_table(
     migrate=table_migrate_prefix + "payments.table",
 )
 
+# lp_answers
+# ----------
 db.define_table(
     "lp_answers",
     Field("timestamp", "datetime"),
@@ -205,6 +263,8 @@ db.define_table(
     migrate=table_migrate_prefix + "lp_answers.table",
 )
 
+# invoice_request
+# ---------------
 db.define_table(
     "invoice_request",
     Field("timestamp", "datetime"),
@@ -215,18 +275,25 @@ db.define_table(
     migrate=table_migrate_prefix + "invoice_request.table",
 )
 
+# editor_basecourse
+# -----------------
+# This table tracks the userid of a person who has editing authority over a
+# particular book.
 db.define_table(
     "editor_basecourse",
     Field("editor", db.auth_user),
     Field("base_course", "string"),
     migrate=table_migrate_prefix + "editor_basecourse.table",
 )
+
+# course_attributes
+# -----------------
+#
 # The course attribute table allows us to add parameters to each course without having
 # to add columns to the courses table every time we have something new to store.
 # for example we could have a "source" key value pair to indicate if a course is built
 # with runestone or pretext, or to store the latex macros for a pretext course
 # TODO: migrate allow_pairs, download_enabled, and others from courses to this table.
-#
 db.define_table(
     "course_attributes",
     Field("course_id", db.courses),
@@ -234,3 +301,42 @@ db.define_table(
     Field("value", "text"),
     migrate=table_migrate_prefix + "course_attributes.table",
 )
+
+# selected_questions
+# ------------------
+# We define a table to keep track of the questions that were randomly selected for
+# each student in a generated exam.
+# The following index is important for fast performance to lookup the question selected for
+# a strudent, but will also keep us from having duplicate entries and causing confusion!
+# ``CREATE UNIQUE INDEX selector_sid_unique ON selected_questions USING btree (selector_id, sid)``
+db.define_table(
+    "selected_questions",
+    Field("selector_id", "string"),
+    Field("sid", "string"),
+    Field("selected_id", "string"),
+    Field("points", "integer"),
+    Field("competency", "string"),
+    migrate=table_migrate_prefix + "selected_questions.table",
+)
+
+
+def getCourseAttribute(course_id, attr_name):
+    res = (
+        db(
+            (db.course_attributes.course_id == course_id)
+            & (db.course_attributes.attr == attr_name)
+        )
+        .select(db.course_attributes.value, **SELECT_CACHE)
+        .first()
+    )
+    if res:
+        return res.value
+    else:
+        return None
+
+
+# this check has to be here to ensure that the course_attributes table is defined.
+
+if auth.user:
+    if getCourseAttribute(auth.user.course_id, "lti_interface"):
+        settings.lti_interface = True

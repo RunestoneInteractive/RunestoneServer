@@ -21,3 +21,9 @@ settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or what
 
 settings.default_course = 'fopp'
 settings.google_ga = 'UA-XXX-XX'
+
+# lti_interface
+# by default the lti interface is off. It can be turned on for an individual course by setting
+# the course attribute lti_interface with a value of True
+# If you want to enable the lti interface for your whole site then uncomment the next line
+# settings.lti_interface = True

@@ -446,6 +446,11 @@ def build(config, course, repo, skipclone):
 @click.option("--last_name", help="Real last name")
 @click.option("--email", help="email address for password resets")
 @click.option("--course", help="course to register for")
+@click.option(
+    "--ignore_dupes",
+    is_flag=True,
+    help="ignore duplicate student errors and keep processing",
+)
 @pass_config
 def inituser(
     config,
@@ -457,10 +462,16 @@ def inituser(
     last_name,
     email,
     course,
+    ignore_dupes,
 ):
     """Add a user (or users from a csv file)"""
     os.chdir(findProjectRoot())
-
+    mess = [
+        "Success",
+        "Value Error -- check the format of your CSV file",
+        "Duplicate User -- Check your data or use --ignore_dupes if you are adding students to an existing CSV",
+        "Unknown Error -- check the format of your CSV file",
+    ]
     if fromfile:
         # if fromfile then be sure to get the full path name NOW.
         # csv file should be username, email first_name, last_name, password, course
@@ -488,11 +499,14 @@ def inituser(
             )
             if res != 0:
                 click.echo(
-                    "Failed to create user {} error {} fix your data and try again".format(
-                        line[0], res
-                    )
+                    "Failed to create user {} error {}".format(line[0], mess[res])
                 )
-                exit(1)
+                if res == 2 and ignore_dupes:
+                    click.echo(f"ignoring duplicate user {userinfo['username']}")
+                    continue
+                else:
+                    exit(res)
+
     else:
         userinfo = {}
         userinfo["username"] = username or click.prompt("Username")

@@ -17,6 +17,7 @@ if "--userfile" in sys.argv:
     # find the file (.csv) iterate over each line and call createUser
     pass
 
+ec = 0
 userinfo = json.loads(os.environ["RSM_USERINFO"])
 
 if "--resetpw" in sys.argv:
@@ -38,13 +39,16 @@ else:
         )
         db.commit()
     except ValueError as e:
-        click.echo("Value Error: ", e)
-        sys.exit(1)
+        # click.echo("Value Error: ", e)
+        ec = 1
     except IntegrityError as e:
-        click.echo("Caught an integrity error: ", e)
-        sys.exit(2)
+        # click.echo("Caught an integrity error: ", e)
+        ec = 2
     except Exception as e:
-        click.echo("Unexpected Error: ", e)
-        sys.exit(3)
+        # click.echo("Unexpected Error: ", e)
+        ec = 3
 
-    click.echo("Exiting normally")
+    if ec == 0:
+        click.echo(f"User {userinfo['username']} created successfully")
+    else:
+        sys.exit(ec)

@@ -5,7 +5,7 @@ db.define_table(
     Field("chapter", type="string"),  # matches chapter_label, not name
     Field("subchapter", type="string"),  # matches sub_chapter_label, not name
     Field("author", type="string"),
-    Field("difficulty", type="integer"),
+    Field("difficulty", type="float"),
     Field("question", type="text"),
     Field("timestamp", type="datetime"),
     Field("question_type", type="string"),
@@ -20,9 +20,18 @@ db.define_table(
     Field("qnumber", type="string"),
     Field("optional", type="boolean"),
     Field("description", type="text"),
+    Field("pct_on_first", type="float"),
+    Field("mean_clicks_to_correct", "float"),
     migrate=table_migrate_prefix + "questions.table",
 )
 
+db.define_table(
+    "competency",
+    Field("question", type=db.questions),
+    Field("competency", type="string"),
+    Field("is_primary", type="boolean"),
+    migrate=table_migrate_prefix + "competency.table",
+)
 
 db.define_table(
     "tags",

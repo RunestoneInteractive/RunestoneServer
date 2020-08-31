@@ -189,6 +189,14 @@ def index():
                 masterapp=masterapp,
             )
         # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
+        course_id = _param_converter(request.vars.get("custom_course_id", None))
+        # if the instructor uses their course name instead of its id number then get the number.
+        if course_id and not course_id.isnumeric():
+            course_id = (
+                db(db.courses.course_name == course_id).select(**SELECT_CACHE).first()
+            )
+            course_id = course_id.id
+
         if course_id:
             user["course_id"] = course_id
             user["course_name"] = getCourseNameFromId(

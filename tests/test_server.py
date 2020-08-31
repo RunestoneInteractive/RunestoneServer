@@ -147,7 +147,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
             "This page allows you to select a book for your own class.",
             1,
         ),
-        ("designer/build", True, "You must select a base course", 1),
+        ("designer/build", True, "Build a Custom", 1),
         # **OAuth**
         # ----------
         (
@@ -195,7 +195,7 @@ def test_validate_user_pages(
         # FIXME: these raise an exception.
         # ('admin/addinstructor', 'Trying to add non-user', 1), -- this is an api call
         # ('admin/add_practice_items', 'xxx', 1), -- this is an api call
-        ("admin/assignments", "Assignment", 3),  # labels for hidden elements
+        ("admin/assignments", "Assignment", 5),  # labels for hidden elements
         # ('admin/backup', 'xxx', 1),
         ("admin/practice", "Choose when students should start", 1),
         # ('admin/removeassign', 'Cannot remove assignment with id of', 1),
@@ -986,11 +986,11 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             "Given name",
             "e-mail",
             "avg grade (%)",
-            "Q-5",
+            "Q-7",
+            "Q-4",
+            "Q-3",
+            "Q-1",
             "Q-2",
-            "Q-1",
-            "Q-1",
-            "",
         ],
         "data": [
             [
@@ -1103,7 +1103,10 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     }
 
     # Note: on test failure, pytest will report as incorrect all the ``AlmostNow()`` and ``RegexEquals`` items, even though they may have actually compared as equal.
-    assert grades == expected_grades
+    # assert grades == expected_grades
+    # lets break this up a bit.
+    for k in expected_grades:
+        assert grades[k] == expected_grades[k]
 
     logout()
     # Test with no login.

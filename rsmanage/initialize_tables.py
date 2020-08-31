@@ -18,67 +18,35 @@ if db(db.courses.id > 0).isempty():
     )
     db.courses.insert(
         course_name="boguscourse", term_start_date=datetime.date(2000, 1, 1)
-    )  # should be id 1
-    db.courses.insert(
-        course_name="thinkcspy",
-        base_course="thinkcspy",
-        term_start_date=datetime.date(2000, 1, 1),
     )
-    db.courses.insert(
-        course_name="pythonds",
-        base_course="pythonds",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="overview",
-        base_course="overview",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="pip2",
-        base_course="pip2",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="apcsareview",
-        base_course="apcsareview",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="StudentCSP",
-        base_course="StudentCSP",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="TeacherCSP",
-        base_course="TeacherCSP",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="JavaReview",
-        base_course="apcsareview",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="publicpy3",
-        base_course="pip2",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="fopp",
-        base_course="fopp",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="cppds",
-        base_course="cppds",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
-    db.courses.insert(
-        course_name="webfundamentals",
-        base_course="webfundamentals",
-        term_start_date=datetime.date(2000, 1, 1),
-    )
+    # should be id 1
+    BASE_COURSES = [
+        "ac1",
+        "cppds",
+        "cppforpython",
+        "csawesome",
+        "csjava",
+        "fopp",
+        "httlads",
+        "java4python",
+        "JS4Python",
+        "learnwebgl2",
+        "MasteringDatabases",
+        "overview",
+        "py4e-int",
+        "pythonds",
+        "pythonds3",
+        "StudentCSP",
+        "TeacherCSP",
+        "thinkcpp",
+        "thinkcspy",
+        "webfundamentals",
+    ]
+
+    for c in BASE_COURSES:
+        db.courses.insert(
+            course_name=c, base_course=c, term_start_date=datetime.date(2000, 1, 1),
+        )
 else:
     click.echo(message="Your database already has Courses")
 
@@ -159,6 +127,17 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX us_sid_idx ON public.user_state USING btree (user_id)""",  # New
         """CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);""",
         """CREATE INDEX user_sub_chapter_progress_user_id_idx ON user_sub_chapter_progress USING btree (user_id)""",  # New
+        """CREATE UNIQUE INDEX selector_sid_unique ON selected_questions USING btree (selector_id, sid)""",
+        """CREATE INDEX unittest_answers_course_name_idx ON unittest_answers USING btree (course_name);""",
+        """CREATE INDEX unittest_answers_div_id_idx ON unittest_answers USING btree (div_id);""",
+        """CREATE INDEX unittest_answers_sid_idx ON unittest_answers USING btree (sid);""",
+        """CREATE INDEX chap_label_idx on sub_chapters using btree(sub_chapter_label);""",
+        """CREATE UNIQUE INDEX q_comp_unique ON competency USING btree (question, competency)""",
+        """CREATE INDEX sid_divid_idx ON useinfo USING btree(sid, div_id)""",
+        """create index "course_name_index" on user_topic_practice_log using btree (course_name);""",
+        """create index "user_id_index" on user_topic_practice_log using btree (user_id);""",
+        """create index "q_index" on user_topic_practice_log using btree (q);""",
+        """CREATE INDEX course_attr_idx ON course_attributes USING btree(course_id, attr);""",
     ]
 
     for cmd in sql_commands:

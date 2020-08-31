@@ -30,9 +30,17 @@
     <a id="activeLink" href="/{{=request.application}}/dashboard/active" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Students Online</h4>
     </a>
+    <a id="aresetTab" data-toggle="tab" href="#assessmentReset" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">Reset Student Exam</h4>
+    </a>
     <a id="CopyAssignmentsTab" data-toggle="tab" href="#CopyAssignments" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Copy Assignments</h4>
     </a>
+    {{ if settings.lti_interface: }}
+    <a id="LTITab" data-toggle="tab" href="#SetupLTI" class="list-group-item">
+        <h4 style="text-align: center" class="list-group-item-heading">LTI Integration</h4>
+    </a>
+    {{ pass }}
     <a id="DeleteTab" data-toggle="tab" href="#Delete" class="list-group-item">
         <h4 style="text-align: center" class="list-group-item-heading">Delete</h4>
     </a>
@@ -196,7 +204,29 @@
         </div>
         ​
     </div>
-    ​
+
+    <div id="assessmentReset" class="tab-pane fade">
+        <div class="col-md-5">
+            <h3 style="text-align: center;">Reset an Exam</h3>
+            <div class="settingsbox">
+                <select id="exstudentList" class="form-control" size="10" name="exstudentList">
+                    <option value="None" selected>--Select Student(s) for Action--</option>
+                    {{ for person in students: }}
+                    <option value="{{=person}}">{{ =students[person] }}</option>
+                    {{ pass }}
+                </select>
+            </div>
+            <div class="settingsbox">
+                <select id="examList" class="form-control" size="10" name="examList">
+                    <option value="None" selected>--Select Student(s) for Action--</option>
+                    {{ for exam in examlist: }}
+                    <option value="{{=exam}}">{{ =exam }}</option>
+                    {{ pass }}
+                </select>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="resetExam()">Reset</button>
+        </div>
+    </div>    ​
     ​
     <div id="Delete" class="tab-pane fade">
         <div class="col-md-8">
@@ -231,6 +261,24 @@
         </div>
     </div>
 
+    <div id="SetupLTI" class="tab-pane fade">
+        <div class="col-md-8">
+            <h2 style="text-align: center">LTI Configuration</h2>
+            <p>This is Beta! It works but you need to know how to configure things on the LMS side.  I have only tested this with Canvas and Sakai.  I would love for it to work on every LMS! LTI is a standard after all but debugging this stuff is very difficult when I don't have access to every LMS.</p>
+            <p>To launch lti on Runestone use <code>https://runestone.academy/runestone/lti</code></p>
+            <div class="col-sm-8 col-md-8">
+                <button onclick="generateLTIKeys();" class="btn btn-primary">Create LTI Key and Secret</button>
+                <table style="width: 500px">
+                <tr><td>Consumer Key:</td> <td><span id="ckey_value">{{=consumer}}</span></td></tr>
+                <tr><td>Secret:</td> <td><div id="secret_value" class="collapse">{{=secret}}</div></td></tr>
+                <tr><td></td><td><a href="#secret_value" class="btn btn-default btn-small" data-toggle="collapse">Show Secret</a></td></tr>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
     <div id="rsnews" class="tab-pane" style="margin-top:30px;">
         <div class="col-md-8" style="background-color: aliceblue;border-radius: 10px;margin-left: 20px;border: solid;">
             <h2>Runestone News</h2>
@@ -255,6 +303,8 @@
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
         $("#rsnews").hide()
     });
 
@@ -265,11 +315,26 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#DeleteTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
         $("#rsnews").hide()
     });
 
     $('#AddInstructorTab').click(function () {
         $('#AddInstructorTab').css('background-color', 'gainsboro');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
+        $("#rsnews").hide()
+    });
+
+    $('#aresetTab').click(function () {
+        $("aresetTab").css('background-color', 'gainsboro')
+        $('#AddInstructorTab').css('background-color', 'transparent');
         $('#sectionsTab').css('background-color', 'transparent');
         $('#studentsTab').css('background-color', 'transparent');
         $('#DeleteTab').css('background-color', 'transparent');
@@ -285,6 +350,8 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
         $("#rsnews").hide()
     });
 
@@ -295,6 +362,19 @@
         $('#studentsTab').css('background-color', 'transparent');
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("#rsnews").hide()
+    });
+
+    $('#LTITab').click(function () {
+        $('#LTITab').css('background-color', 'gainsboro');
+        $('#DeleteTab').css('background-color', 'transparent');
+        $('#CopyAssignmentsTab').css('background-color', 'transparent');
+        $('#sectionsTab').css('background-color', 'transparent');
+        $('#studentsTab').css('background-color', 'transparent');
+        $('#AddInstructorTab').css('background-color', 'transparent');
+        $('#courseTab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
         $("#rsnews").hide()
     });
 
@@ -305,6 +385,8 @@
         $('#AddInstructorTab').css('background-color', 'transparent');
         $('#CopyAssignmentsTab').css('background-color', 'transparent');
         $('#courseTab').css('background-color', 'transparent');
+        $('#LTITab').css('background-color', 'transparent');
+        $("aresetTab").css('background-color', 'transparent')
         $("#rsnews").hide()
     });
 </script>

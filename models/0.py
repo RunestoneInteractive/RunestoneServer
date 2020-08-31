@@ -70,3 +70,4 @@ settings.log_level = logging.DEBUG
 settings.python_interpreter = sys.executable
 
 settings.pretext_delimiters = ("~._", "_.~")
+settings.lti_interface = False

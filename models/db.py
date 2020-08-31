@@ -168,6 +168,7 @@ def get_course_url(*args):
             .select(db.courses.base_course)
             .first()
         )
+        args = tuple(x for x in args if x != "")
         if course:
             return URL(c="books", f="published", args=(course.base_course,) + args)
         else:
@@ -182,6 +183,19 @@ def getCourseNameFromId(courseid):
     q = db.courses.id == courseid
     row = db(q).select().first()
     return row.course_name if row else ""
+
+
+def getCourseOrigin(base_course):
+    res = (
+        db(
+            (db.course_attributes.course_id == db.courses.id)
+            & (db.courses.course_name == base_course)
+            & (db.course_attributes.attr == "markup_system")
+        )
+        .select(db.course_attributes.value, **SELECT_CACHE)
+        .first()
+    )
+    return res
 
 
 def verifyInstructorStatus(course, instructor):
