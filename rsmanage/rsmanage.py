@@ -7,6 +7,8 @@ import shutil
 import signal
 import subprocess
 from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
+from psycopg2.errors import UniqueViolation
 import sys
 
 
@@ -834,6 +836,41 @@ def courseinfo(config, name):
     print("Instructors:")
     for row in res:
         print(" ".join(row[:-1]))
+
+
+@cli.command()
+@click.option("--course", default=None, help="Name of the course")
+@click.option("--attr", default=None, help="Attribute to add")
+@click.option("--value", default=None, help="Attribute Value")
+@pass_config
+def addattribute(config, course, attr, value):
+    """
+    Add an attribute to the `course_attributes` table
+
+    """
+    course = course or click.prompt("Name of the course ")
+    attr = attr or click.prompt("Attribute to set: ")
+    value = value or click.prompt(f"Value of {attr}: ")
+
+    eng = create_engine(config.dburl)
+
+    res = eng.execute("select id from courses where course_name=%s", course).first()
+    if res:
+        course_id = res[0]
+    else:
+        print("Sorry, that course does not exist")
+        sys.exit(-1)
+    try:
+        res = eng.execute(
+            f"""insert into course_attributes (course_id, attr, value)
+        values ({course_id}, '{attr}', '{value}')"""
+        )
+    except UniqueViolation:
+        click.echo(f"Can only have one attribute {attr} per course")
+    except IntegrityError:
+        click.echo(f"Can only have one attribute {attr} per course")
+
+    click.echo("Success")
 
 
 @cli.command()

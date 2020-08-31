@@ -86,6 +86,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """alter table auth_user add constraint unique_user UNIQUE(username)""",
         """alter table grades ADD CONSTRAINT user_assign_unique UNIQUE (auth_user, assignment);""",
         """alter table assignments add constraint unique_assign_names unique (name, course)""",
+        """alter table course_attributes add constraint course_attr_unique UNIQUE(course_id, attr);""",
         ## Indexes; alphabetically by table name
         """CREATE INDEX assign_course_idx ON assignments USING btree (course)""",  # New
         """CREATE UNIQUE INDEX unique_user ON auth_user USING btree (username)""",  # New
