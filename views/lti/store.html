@@ -1,0 +1,25 @@
+
+
+<form name="storeForm" action="{{=return_url}}" method="post" encType="application/x-www-form-urlencoded">
+  <input type="hidden" name="lti_message_type" value="ContentItemSelection" />
+  <input type="hidden" name="lti_version" value="LTI-1p0" />
+  <input type="hidden" name="content_items" value="{{ =assignlist }}" />
+  <input type="hidden" name="oauth_version" value="1.0" />
+  <input type="hidden" name="oauth_nonce" value="{{ =oauth_nonce}}" />
+  <input type="hidden" name="oauth_timestamp" value="{{ =oauth_timestamp }}" />
+  <input type="hidden" name="oauth_consumer_key" value="{{=oauth_consumer_key }}" />
+  <input type="hidden" name="oauth_callback" value="about:blank" />
+  <input type="hidden" name="oauth_signature_method" value="HMAC-SHA1" />
+  <input type="hidden" name="oauth_signature" value="{{ =oauth_signature }}" />
+</form>
+
+<script type="text/javascript">
+    window.onload=function(){
+        var auto = setTimeout(function(){ submitform(); }, 1000);
+
+        function submitform(){
+            console.log(document.forms["storeForm"]);
+            document.forms["storeForm"].submit();
+        }
+    }
+</script>

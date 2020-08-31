@@ -426,6 +426,8 @@ except FileNotFoundError:
 
 request.admin_mtime = str(mtime)
 
+# response.headers["Access-Control-Allow-Origin"] = "*"
+
 
 def check_for_donate_or_build(field_dict, id_of_insert):
     if "donate" in request.vars:
