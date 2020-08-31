@@ -206,7 +206,7 @@ def hsblog():
             answer=answers,
             correct=correct,
             course_name=course,
-            minHeight=minHeight,
+            min_height=minHeight,
         )
     elif event == "clickableArea" and auth.user:
         correct = request.vars.correct
@@ -1279,7 +1279,7 @@ def getAssessResults():
                 db.dragndrop_answers.answer,
                 db.dragndrop_answers.timestamp,
                 db.dragndrop_answers.correct,
-                db.dragndrop_answers.minHeight,
+                db.dragndrop_answers.min_height,
                 orderby=~db.dragndrop_answers.id,
             )
             .first()
@@ -1290,7 +1290,7 @@ def getAssessResults():
             "answer": rows.answer,
             "timestamp": str(rows.timestamp),
             "correct": rows.correct,
-            "minHeight": str(rows.minHeight),
+            "minHeight": str(rows.min_height),
         }
         return json.dumps(res)
     elif event == "clickableArea":
