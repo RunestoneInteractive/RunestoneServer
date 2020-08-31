@@ -46,6 +46,12 @@ def index():
     message_type = request.vars.get("lti_message_type")
     course_id = _param_converter(request.vars.get("custom_course_id", None))
 
+    if course_id and not course_id.isnumeric():
+        course_id = (
+            db(db.courses.course_name == course_id).select(**SELECT_CACHE).first()
+        )
+        course_id = course_id.id
+
     if full_name and not last_name:
         names = full_name.strip().split()
         last_name = names[-1]
@@ -189,13 +195,8 @@ def index():
                 masterapp=masterapp,
             )
         # user exists; make sure course name and id are set based on custom parameters passed, if this is for runestone. As noted for ``assignment_id``, parameters are passed as a two-element list.
-        course_id = _param_converter(request.vars.get("custom_course_id", None))
+        # course_id = _param_converter(request.vars.get("custom_course_id", None))
         # if the instructor uses their course name instead of its id number then get the number.
-        if course_id and not course_id.isnumeric():
-            course_id = (
-                db(db.courses.course_name == course_id).select(**SELECT_CACHE).first()
-            )
-            course_id = course_id.id
 
         if course_id:
             user["course_id"] = course_id
@@ -205,6 +206,8 @@ def index():
             user.update_record()
 
             # Update instructor status.
+            # TODO: this block should be removed.  The only way to become an instructor
+            # is through Runestone
             if instructor:
                 # Give the instructor free access to the book.
                 db.user_courses.update_or_insert(user_id=user.id, course_id=course_id)
