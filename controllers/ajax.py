@@ -1728,6 +1728,7 @@ def get_question_source():
             logger.error(f"No questions found for proficiency {prof}")
             return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
 
+    poss = set()
     if not_seen_ever:
         seenq = db(
             (db.useinfo.sid == auth.user.username)
@@ -1736,6 +1737,9 @@ def get_question_source():
         seen = set([x.div_id for x in seenq])
         poss = set(questionlist)
         questionlist = list(poss - seen)
+
+    if len(questionlist) == 0 and len(poss) > 0:
+        questionlist = list(poss)
 
     htmlsrc = ""
 
