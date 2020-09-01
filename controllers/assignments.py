@@ -31,7 +31,11 @@ from rs_grading import (
     _get_lti_record,
     _try_to_send_lti_grade,
 )
-from rs_practice import _get_practice_data, _get_practice_completion
+from rs_practice import (
+    _get_practice_data,
+    _get_practice_completion,
+    _get_qualified_questions,
+)
 from questions_report import query_assignment, grades_to_hot, questions_to_grades
 
 logger = logging.getLogger(settings.logger)
@@ -772,22 +776,6 @@ def checkanswer():
     redirect(URL("practice"))
 
 
-# Only questions that are marked for practice are eligible for the spaced practice.
-def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db(
-        (db.questions.base_course == base_course)
-        & (
-            (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
-            | (
-                (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)  # noqa: E711
-                & (db.questions.subchapter == sub_chapter_label)
-            )
-        )
-        & (db.questions.practice == True)  # noqa: E712
-    ).select()
-
-
 # Gets invoked from lti to set timezone and then redirect to practice()
 def settz_then_practice():
     return dict(
@@ -914,7 +902,7 @@ def practice():
         flashcard = presentable_flashcards[0]
         # Get eligible questions.
         questions = _get_qualified_questions(
-            course.base_course, flashcard.chapter_label, flashcard.sub_chapter_label
+            course.base_course, flashcard.chapter_label, flashcard.sub_chapter_label, db
         )
     # If the student has any flashcards to practice and has not practiced enough to get their points for today or they
     # have intrinsic motivation to practice beyond what they are expected to do.

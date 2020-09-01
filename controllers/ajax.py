@@ -26,6 +26,7 @@ from dateutil.parser import parse
 # Local application imports
 # -------------------------
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
+from rs_practice import _get_qualified_questions
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -634,23 +635,6 @@ def getnumusers():
     return json.dumps([res])
 
 
-# I was not sure if it's okay to import it from `assignmnets.py`.
-# Only questions that are marked for practice are eligible for the spaced practice.
-def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db(
-        (db.questions.base_course == base_course)
-        & (
-            (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
-            | (
-                (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)  # noqa: E711
-                & (db.questions.subchapter == sub_chapter_label)
-            )
-        )
-        & (db.questions.practice == True)  # noqa: E712
-    ).select()
-
-
 #
 #  Ajax Handlers to update and retrieve the last position of the user in the course
 #
@@ -714,7 +698,7 @@ def updatelastpage():
 
             # We only retrieve questions to be used in flashcards if they are marked for practice purpose.
             questions = _get_qualified_questions(
-                course.base_course, lastPageChapter, lastPageSubchapter
+                course.base_course, lastPageChapter, lastPageSubchapter, db
             )
             if len(questions) > 0:
                 now = datetime.datetime.utcnow()

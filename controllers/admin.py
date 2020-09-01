@@ -35,6 +35,8 @@ import pandas as pd
 import altair as alt
 import logging
 
+from rs_practice import _get_qualified_questions
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
@@ -401,23 +403,6 @@ def practice():
         )
 
 
-# I was not sure if it's okay to import it from `assignmnets.py`.
-# Only questions that are marked for practice are eligible for the spaced practice.
-def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db(
-        (db.questions.base_course == base_course)
-        & (
-            (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
-            | (
-                (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)  # noqa: E711
-                & (db.questions.subchapter == sub_chapter_label)
-            )
-        )
-        & (db.questions.practice == True)  # noqa: E712
-    )
-
-
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -449,13 +434,16 @@ def add_practice_items():
                 )
             )
             questions = _get_qualified_questions(
-                course.base_course, chapter.chapter_label, subchapter.sub_chapter_label
+                course.base_course,
+                chapter.chapter_label,
+                subchapter.sub_chapter_label,
+                db,
             )
             if (
                 "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name)
                 in string_data
             ):
-                if subchapterTaught.isempty() and not questions.isempty():
+                if subchapterTaught.isempty() and len(questions) > 0:
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
                         chapter_label=chapter.chapter_label,
@@ -481,7 +469,7 @@ def add_practice_items():
                                 course_name=course.course_name,
                                 chapter_label=chapter.chapter_label,
                                 sub_chapter_label=subchapter.sub_chapter_label,
-                                question_name=questions.select().first().name,
+                                question_name=questions.first().name,
                                 i_interval=0,
                                 e_factor=2.5,
                                 q=0,
