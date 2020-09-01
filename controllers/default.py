@@ -369,7 +369,7 @@ def coursechooser():
     )
 
     if res:
-        db(db.auth_user.id == auth.user.id).update(course_id=res.id)
+        db(db.auth_user.id == auth.user.id).update(course_id=res.id, active="T")
         db(db.auth_user.id == auth.user.id).update(course_name=request.args[0])
         auth.user.update(course_name=request.args[0])
         auth.user.update(course_id=res.id)
