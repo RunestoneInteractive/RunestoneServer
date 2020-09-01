@@ -42,10 +42,14 @@ def build():
             db(db.courses.course_name == request.vars.projectname).select().first()
         )
         if existing_course:
-            return dict(mess="That name has already been used.", building=False)
+            session.flash = (
+                f"course name {request.vars.projectname} has already been used"
+            )
+            redirect(URL("designer", "index"))
 
         if not request.vars.coursetype:
-            return dict(mess="You must select a base course.", building=False)
+            session.flash = "You must select a base course."
+            redirect(URL("designer", "index"))
 
         # if make instructor add row to auth_membership
         if "instructor" in request.vars:
@@ -54,13 +58,7 @@ def build():
             )
             db.auth_membership.insert(user_id=auth.user.id, group_id=gid)
 
-        # todo:  Here we can add some processing to check for an A/B testing course
-        if path.exists(
-            path.join(request.folder, "books", request.vars.coursetype + "_A")
-        ):
-            base_course = request.vars.coursetype + "_" + random.sample("AB", 1)[0]
-        else:
-            base_course = request.vars.coursetype
+        base_course = request.vars.coursetype
 
         if request.vars.startdate == "":
             request.vars.startdate = datetime.date.today()
@@ -121,8 +119,8 @@ def build():
         )
 
         session.flash = "Course Created Successfully"
-        redirect(
-            URL("books", "published", args=[request.vars.projectname, "index.html"])
-        )
+        # redirect(
+        #     URL("books", "published", args=[request.vars.projectname, "index.html"])
+        # )
 
-        return buildvalues
+        return dict(coursename=request.vars.projectname, basecourse=base_course)

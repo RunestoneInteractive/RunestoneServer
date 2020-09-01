@@ -49,16 +49,7 @@ def _route_book(is_published=True):
     # if it is pretext book we use different delimiters for the templates
     # as LaTeX is full of {{
     # These values are set by the runestone process-manifest command
-    res = (
-        db(
-            (db.course_attributes.course_id == db.courses.id)
-            & (db.courses.course_name == base_course)
-            & (db.course_attributes.attr == "markup_system")
-        )
-        .select(db.course_attributes.value)
-        .first()
-    )
-
+    res = getCourseOrigin(base_course)
     if res and res.value == "PreTeXt":
         response.delimiters = settings.pretext_delimiters
 
@@ -81,7 +72,7 @@ def _route_book(is_published=True):
                 db.courses.base_course,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -131,7 +122,7 @@ def _route_book(is_published=True):
                 db.courses.login_required,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
-                **cache_kwargs
+                **cache_kwargs,
             )
             .first()
         )
@@ -160,7 +151,7 @@ def _route_book(is_published=True):
             "published" if is_published else "build",
             base_course,
         ),
-        *request.args[1:]
+        *request.args[1:],
     )
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))

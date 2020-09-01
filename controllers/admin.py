@@ -1,17 +1,38 @@
-from os import path
-import os
-import datetime
+# *******************************
+# |docname| - route to a textbook
+# *******************************
+# This controller provides routes to admin functions
+#
+# Imports
+# =======
+# These are listed in the order prescribed by `PEP 8
+# <http://www.python.org/dev/peps/pep-0008/#imports>`_.
+#
+# Standard library
+# ----------------
 import csv
+import datetime
 import io
-from dateutil.parser import parse
-import re
-from random import randint
-from collections import OrderedDict
-from paver.easy import sh
 import json
-from runestone import cmap
-from rs_grading import send_lti_grades, _get_assignment
+import logging
+import os
+import re
+import uuid
+from collections import OrderedDict
+from os import path
+from random import randint
+
+# Third Party library
+# -------------------
 import pandas as pd
+from dateutil.parser import parse
+from random import randint
+from collections import OrderedDict, Counter
+from paver.easy import sh
+from rs_grading import _get_assignment, send_lti_grades
+from runestone import cmap
+import pandas as pd
+import altair as alt
 import logging
 
 logger = logging.getLogger(settings.logger)
@@ -30,6 +51,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     mchoice=ALL_AUTOGRADE_OPTIONS,
     codelens=ALL_AUTOGRADE_OPTIONS,
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
+    selectquestion=ALL_AUTOGRADE_OPTIONS,
     video=["interact"],
     youtube=["interact"],
     poll=["interact"],
@@ -41,7 +63,14 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
 )
 
 AUTOGRADEABLE = set(
-    ["clickablearea", "fillintheblank", "dragndrop", "mchoice", "parsonsprob"]
+    [
+        "clickablearea",
+        "fillintheblank",
+        "dragndrop",
+        "mchoice",
+        "parsonsprob",
+        "selectquestion",
+    ]
 )
 
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
@@ -56,6 +85,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     mchoice=ALL_WHICH_OPTIONS,
     codelens=ALL_WHICH_OPTIONS,
     parsonsprob=ALL_WHICH_OPTIONS,
+    selectquestion=ALL_WHICH_OPTIONS,
     video=[],
     youtube=[],
     poll=[],
@@ -568,6 +598,24 @@ def admin():
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
+    keys = (
+        db(
+            (db.course_lti_map.course_id == auth.user.course_id)
+            & (db.lti_keys.id == db.course_lti_map.lti_id)
+        )
+        .select()
+        .first()
+    )
+    if keys:
+        consumer = keys.lti_keys.consumer
+        secret = keys.lti_keys.secret
+    else:
+        consumer = ""
+        secret = ""
+    exams = db(
+        (db.assignments.course == course.id) & (db.assignments.is_timed == "T")
+    ).select()
+    exams = [x.name for x in exams]
     try:
         motd = open("applications/runestone/static/motd.html").read()
     except Exception:
@@ -589,6 +637,9 @@ def admin():
         allow_pairs=allow_pairs,
         instructor_course_list=instructor_course_list,
         motd=motd,
+        consumer=consumer,
+        secret=secret,
+        examlist=exams,
     )
 
 
@@ -1031,7 +1082,14 @@ def renameAssignment():
     requires_login=True,
 )
 def questionBank():
-    response.headers["content-type"] = "application/json"
+    """called by the questionBank function in admin.js
+    Unpack all of the search criteria and then query the questions table
+    to find matching questions.
+
+    Returns:
+        JSON: A list of questions that match the search criteria
+    """
+    response.headers["Content-Type"] = "application/json"
 
     row = (
         db(db.courses.id == auth.user.course_id)
@@ -1039,14 +1097,16 @@ def questionBank():
         .first()
     )
     base_course = row.base_course
-
+    query_clauses = []
+    # should we search for tags?
     tags = False
     if request.vars["tags"]:
         tags = True
-    term = False
-    if request.vars["term"]:
-        term = True
-    chapterQ = None
+    # should we search the question by term?
+    if request.vars.term:
+        term_list = [x.strip() for x in request.vars.term.split()]
+        query_clauses.append(db.questions.question.contains(term_list, all=True))
+
     if request.vars["chapter"]:
         chapter_label = (
             db(db.chapters.chapter_label == request.vars["chapter"])
@@ -1055,90 +1115,52 @@ def questionBank():
             .chapter_label
         )
         chapterQ = db.questions.chapter == chapter_label
-    difficulty = False
-    if request.vars["difficulty"]:
-        difficulty = True
-    authorQ = None
+        query_clauses.append(chapterQ)
+
+    if request.vars.min_difficulty:
+        query_clauses.append(
+            db.questions.difficulty > float(request.vars.min_difficulty)
+        )
+    if request.vars.max_difficulty:
+        query_clauses.append(
+            db.questions.difficulty < float(request.vars.max_difficulty)
+        )
+
     if request.vars["author"]:
-        authorQ = db.questions.author == request.vars["author"]
-    rows = []
+        query_clauses.append(db.questions.author == request.vars["author"])
+
+    if request.vars["constrainbc"] == "true":
+        query_clauses.append(db.questions.base_course == base_course)
+
+    my_name = f"{auth.user.first_name} {auth.user.last_name}"
+    privacy_clause = (db.questions.is_private == False) | (
+        db.questions.author == my_name
+    )
+    query_clauses.append(privacy_clause)
+
+    is_join = False
+    if request.vars.competency:
+        is_join = True
+        comp_clause = (db.competency.competency == request.vars.competency) & (
+            db.competency.question == db.questions.id
+        )
+        if request.vars.isprim == "true":
+            comp_clause = comp_clause & (db.competency.is_primary == "T")
+        query_clauses.append(comp_clause)
+
+    myquery = query_clauses[0]
+    for clause in query_clauses[1:]:
+        myquery = myquery & clause
+
+    print(myquery)
+    rows = db(myquery).select()
+
     questions = []
-
-    base_courseQ = db.questions.base_course == base_course
-    try:
-
-        if chapterQ is not None and authorQ is not None:
-
-            questions_query = db(chapterQ & authorQ & base_courseQ).select()
-
-        elif chapterQ is None and authorQ is not None:
-
-            questions_query = db(authorQ & base_courseQ).select()
-
-        elif chapterQ is not None and authorQ is None:
-
-            questions_query = db(chapterQ & base_courseQ).select()
-
+    for q_row in rows:
+        if is_join:
+            questions.append(q_row.questions.name)
         else:
-            questions_query = db(base_courseQ).select()
-
-        for (
-            question
-        ) in (
-            questions_query
-        ):  # Initially add all questions that we can to the list, and then remove the rows that don't match search criteria
-            rows.append(question)
-
-        for row in questions_query:
-            removed_row = False
-            if row.is_private == True:  # noqa: E712
-                if row.author != auth.user.first_name + " " + auth.user.last_name:
-                    rows.remove(row)
-                    removed_row = True
-            if term:
-                if (
-                    request.vars["term"] not in row.name
-                    and row.question
-                    and request.vars["term"] not in row.question
-                ) or row.question_type == "page":
-                    try:
-                        rows.remove(row)
-                        removed_row = True
-                    except Exception as err:
-                        logger.error("Error {}".format(err))
-
-            if removed_row is False:
-                if difficulty:
-                    if int(request.vars["difficulty"]) != row.difficulty:
-                        try:
-                            rows.remove(row)
-                            removed_row = True
-                        except Exception as err:
-                            logger.error("Error: {}".format(err))
-
-            if removed_row is False:
-                if tags:
-                    tags_query = db(db.question_tags.question_id == row.id).select()
-                    tag_list = []
-                    for q_tag in tags_query:
-                        tag_names = db(db.tags.id == q_tag.tag_id).select()
-                        for tag_name in tag_names:
-                            tag_list.append(tag_name.tag_name)
-                    needsRemoved = False
-                    for search_tag in request.vars["tags"].split(","):
-                        if search_tag not in tag_list:
-                            needsRemoved = True
-                    if needsRemoved:
-                        try:
-                            rows.remove(row)
-                        except Exception as err:
-                            print(err)
-        for q_row in rows:
             questions.append(q_row.name)
-
-    except Exception as e:
-        logger.error("Error: {}".format(e))
-        return json.dumps("Error " + str(e))
 
     return json.dumps(questions)
 
@@ -1164,17 +1186,16 @@ def getQuestionInfo():
     * question -- the name of the question
     """
     question_name = request.vars["question"]
+    constrainbc = request.vars.constrainbc
+
     base_course = (
         db(db.courses.course_name == auth.user.course_name).select().first().base_course
     )
-    row = (
-        db(
-            (db.questions.name == question_name)
-            & (db.questions.base_course == base_course)
-        )
-        .select()
-        .first()
-    )
+    query = db.questions.name == question_name
+    if constrainbc == "true":
+        query = query & (db.questions.base_course == base_course)
+
+    row = db(query).select().first()
 
     question_code = row.question
     htmlsrc = row.htmlsrc
@@ -1313,20 +1334,19 @@ def edit_question():
     requires_login=True,
 )
 def question_text():
-    qname = request.vars["question_name"]
+    qname = request.vars.question_name
+    constrainbc = request.vars.constrainbc
     base_course = (
         db(db.courses.id == auth.user.course_id)
         .select(db.courses.base_course)
         .first()
         .base_course
     )
+    query = db.questions.name == qname
+    if constrainbc == "true":
+        query = query & (db.questions.base_course == base_course)
     try:
-        q_text = (
-            db((db.questions.name == qname) & (db.questions.base_course == base_course))
-            .select(db.questions.question)
-            .first()
-            .question
-        )
+        q_text = db(query).select(db.questions.question).first().question
     except Exception:
         q_text = "Error: Could not find source for {} in the database".format(qname)
 
@@ -1478,6 +1498,7 @@ def createquestion():
 )
 def htmlsrc():
     acid = request.vars["acid"]
+    studentId = request.vars.sid
     htmlsrc = ""
     res = (
         db(
@@ -1485,11 +1506,26 @@ def htmlsrc():
             & (db.questions.base_course == db.courses.base_course)
             & (db.courses.course_name == auth.user.course_name)
         )
-        .select(db.questions.htmlsrc)
+        .select(db.questions.htmlsrc, db.questions.question_type)
         .first()
     )
-    if res and res.htmlsrc:
-        htmlsrc = res.htmlsrc
+    if res and (res.htmlsrc or res.question_type == "selectquestion"):
+        if res.question_type == "selectquestion":
+            # Check the selected_questions table to see which actual question was chosen
+            # then get that question.
+            realq = (
+                db(
+                    (db.selected_questions.selector_id == acid)
+                    & (db.selected_questions.sid == studentId)
+                    & (db.selected_questions.selected_id == db.questions.name)
+                )
+                .select(db.questions.htmlsrc)
+                .first()
+            )
+            if realq:
+                htmlsrc = realq.htmlsrc
+        else:
+            htmlsrc = res.htmlsrc
     else:
         logger.error(
             "HTML Source not found for %s in course %s", acid, auth.user.course_name
@@ -1851,6 +1887,7 @@ def get_assignment():
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
     assignment_data["is_timed"] = assignment_row.is_timed
+    assignment_data["from_source"] = assignment_row.from_source
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -2420,12 +2457,18 @@ def enroll_students():
     success = True
     try:
         for row in student_reader:
-            if len(row) != 6:
+            if len(row) < 6 or (len(row) > 6 and row[6] != ""):
                 raise ValueError("CSV must provide six values for each user")
             # CSV: username, email, fname, lname, password, course_name, db
             # Params: username, password, fname, lname, email, course_name,
-            createUser(row[0], row[4], row[2], row[3], row[1], row[5])
-            counter += 1
+            # If there are more than 6 values they are likey empty colums
+            # we will ignore them.  If it runs out wrong then there will
+            # be some kind of error in the rest of the processing
+            if row[0] != "":
+                createUser(row[0], row[4], row[2], row[3], row[1], row[5])
+                counter += 1
+            else:
+                logger.error("Skipping empty records in CSV")
     except Exception as e:
         logger.error(e)
         db.rollback()
@@ -2540,6 +2583,172 @@ def get_assignment_list():
         res.append({"id": assign.id, "name": assign.name})
 
     return json.dumps(dict(assignments=res))
+
+
+# Create LTI Keys
+# ---------------
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def create_lti_keys():
+    """
+    Generate a consumer and a secret key.  Store them in the database
+    and associate this key with the course of the instructor.
+    The course_lti_mamp may look a little superflous now, but I think it will grow.
+    There is no real magic about the keys so using a UUID seems like just as good
+    a solution as anything.
+
+    This API is triggered by the generateLTIKeys() function in admin.js and is
+    one panel of the main admin page.
+
+    Returns:
+        JSON: A JSON object with the keys
+    """
+    consumer = auth.user.course_name + "-" + str(uuid.uuid1())
+    secret = str(uuid.uuid4())
+
+    ltid = db.lti_keys.insert(consumer=consumer, secret=secret, application="runestone")
+    db.course_lti_map.insert(course_id=auth.user.course_id, lti_id=ltid)
+
+    return json.dumps(dict(consumer=consumer, secret=secret))
+
+
+def simulate_exam():
+    """Simulate the distribution of questions on an exam
+    """
+
+    # select * from assignment_questions join questions on question_id = questions.id where assignment_id =24;
+    assignment_id = request.vars.assignment_id
+    questions = db(
+        (db.assignment_questions.question_id == db.questions.id)
+        & (db.assignment_questions.assignment_id == assignment_id)
+    ).select()
+
+    proflist = []
+    qsel = {}
+    for q in questions:
+        m = re.search(r":proficiency:\s+(\w+)", q.questions.question or "")
+        if m:
+            proflist.append(m.group(1))
+        m = re.search(r":fromid:\s+(.*?)\n", q.questions.question or "", re.DOTALL)
+        if m:
+            qlist = m.group(1).split(",")
+            qlist = [x.strip() for x in qlist]
+            qsel[q.questions.name] = qlist
+
+    logger.debug(f"proficiency list {proflist}")
+    logger.debug(f"questions {qsel}")
+
+    selections = {}
+    for i in range(100):
+        selections[i] = []
+        for comp in proflist:
+            q = find_question_for_prof(comp)
+            selections[i].append(q)
+        for k in qsel:
+            selections[i].append(get_id_from_qname(random.choice(qsel[k])))
+
+    logger.debug(f"selected questions = {selections}")
+
+    all_p_profs = []
+    all_s_profs = []
+    for student in selections:
+        for q in selections[student]:
+            p_profs, s_profs = get_proficiencies_for_qid(q)
+            all_p_profs.extend(p_profs)
+            all_s_profs.extend(s_profs)
+
+    pc = Counter(all_p_profs)
+    sc = Counter(all_s_profs)
+    df1 = pd.DataFrame({"comp": list(pc.keys()), "freq": list(pc.values())})
+    df1["kind"] = "primary"
+    df2 = pd.DataFrame({"comp": list(sc.keys()), "freq": list(sc.values())})
+    df2["kind"] = "secondary"
+    df = pd.concat([df1, df2])
+    df["exam"] = assignment_id
+
+    bar_order = alt.EncodingSortField(field="freq", op="sum", order="descending")
+    c = (
+        alt.Chart(df)
+        .mark_bar()
+        .encode(x="freq", y=alt.Y("comp", sort=bar_order), tooltip="freq", color="kind")
+    )
+    hmdata = c.to_json()
+    tblhtml = df.to_html()
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        hmdata=hmdata,
+        tblhtml=tblhtml,
+    )
+
+
+def find_question_for_prof(prof):
+    questionlist = []
+    res = db(
+        (db.competency.competency == prof) & (db.competency.question == db.questions.id)
+    ).select(db.questions.id)
+    if res:
+        questionlist = [row.id for row in res]
+        # logger.debug(questionlist)
+
+    return random.choice(questionlist)
+
+
+def get_id_from_qname(name):
+    res = db(db.questions.name == name).select(db.questions.id).first()
+    if res:
+        logger.debug(res)
+        return res.id
+
+
+def get_proficiencies_for_qid(qid):
+    res = db(db.competency.question == qid).select()
+
+    plist = [p.competency for p in res if p.is_primary]
+    slist = [p.competency for p in res if not p.is_primary]
+    return plist, slist
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
+def reset_exam():
+    sid = request.vars.student_id
+    assignment_name = request.vars.exam_name
+
+    res = db(db.auth_user.id == sid).select().first()
+    if res:
+        username = res.username
+    else:
+        return json.dumps({"status": "Failed", "mess": "Unknown Student"})
+
+    # Remove records from the timed exam table
+    num_del = db(
+        (db.timed_exam.div_id == assignment_name) & (db.timed_exam.sid == username)
+    ).delete()
+    if num_del == 0:
+        return json.dumps({"status": "Failed", "mess": "Nothing saved"})
+
+    exam_qs = db(
+        (db.assignments.name == assignment_name)
+        & (db.assignments.course == auth.user.course_id)
+        & (db.assignments.id == db.assignment_questions.assignment_id)
+        & (db.questions.id == db.assignment_questions.question_id)
+    ).select(db.questions.name)
+
+    for q in exam_qs:
+        num = db(
+            (db.selected_questions.selector_id == q.name)
+            & (db.selected_questions.sid == username)
+        ).delete()
+        if num > 0:
+            logger.debug(f"deleted {q.name} for {username} {num}")
+
+    return json.dumps({"status": "Success", "mess": "Successfully Reset Exam"})
 
 
 def killer():
