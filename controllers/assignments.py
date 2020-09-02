@@ -833,6 +833,18 @@ def practice():
         db,
     )
 
+    try:
+        db.useinfo.insert(
+            sid=auth.user.username,
+            act=message1 or "beginning practice",
+            div_id="/runestone/assignments/practice",
+            event="practice",
+            timestamp=datetime.datetime.utcnow(),
+            course_id=auth.user.course_name,
+        )
+    except Exception as e:
+        logger.error(f"failed to insert log record for practice: {e}")
+
     if message1 != "":
         # session.flash = message1 + " " + message2
         return redirect(
