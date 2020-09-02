@@ -40,6 +40,7 @@ from rs_practice import _get_qualified_questions
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+admin_logger(logger)
 
 ALL_AUTOGRADE_OPTIONS = ["manual", "all_or_nothing", "pct_correct", "interact"]
 AUTOGRADE_POSSIBLE_VALUES = dict(

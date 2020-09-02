@@ -450,6 +450,21 @@ if "auth_user" in db:
     db.auth_user._after_insert.append(check_for_donate_or_build)
 
 
+def admin_logger(logger):
+    if settings.academy_mode:
+        try:
+            db.useinfo.insert(
+                sid=auth.user.username,
+                act=request.function,
+                div_id=request.env.query_string or "no params",
+                event=request.controller,
+                timestamp=datetime.datetime.utcnow(),
+                course_id=auth.user.course_name,
+            )
+        except Exception as e:
+            logger.error(f"failed to insert log record for practice: {e}")
+
+
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
     if not cinfo:

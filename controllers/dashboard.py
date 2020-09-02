@@ -12,6 +12,7 @@ from rs_practice import _get_practice_data
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+admin_logger(logger)
 
 # this is for admin links
 # use auth.requires_membership('manager')

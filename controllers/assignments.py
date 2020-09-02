@@ -41,6 +41,8 @@ from questions_report import query_assignment, grades_to_hot, questions_to_grade
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+admin_logger(logger)
+
 
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
