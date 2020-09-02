@@ -73,6 +73,15 @@ else:
     ## from google.appengine.api.memcache import Client
     ## session.connect(request, response, db = MEMDB(Client()))
 
+# For LTI you may want to open Runestone in an iframe.  This is tricky
+# and can run afoul of browser settings that disable 3rd party tracking.
+# However this seems to do the trick at least from the test tool at
+# https://lti.tools/saltire/tc - More testing with Canvas and Company
+# is required.  The Content Request launch also works in an iframe.
+if "https" in settings.server_type and settings.lti_iframes is True:
+    session.secure()
+    session.samesite("None")
+
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ["*"] if request.is_local else []
