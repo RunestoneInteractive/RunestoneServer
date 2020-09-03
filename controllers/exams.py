@@ -55,16 +55,27 @@ def one_exam_competency():
 
     clx = pd.read_sql_query(query, settings.database_uri)
     logging.debug(clx)
-    glx = clx.groupby(["competency", "sid"]).agg(
-        avg_score=("score", "mean"), num_qs=("score", "count")
+    glx = (
+        clx[clx.is_primary == "T"]
+        .groupby(["competency", "sid"])
+        .agg(avg_score=("score", "mean"), num_qs=("score", "count"))
     )
     glx = glx.reset_index()
     c = alt.Chart(glx).mark_rect().encode(x="sid:O", y="competency", color="avg_score")
+    pcdata = c.to_json()
 
-    hmdata = c.to_json()
+    glx = (
+        clx[clx.is_primary == "F"]
+        .groupby(["competency", "sid"])
+        .agg(avg_score=("score", "mean"), num_qs=("score", "count"))
+    )
+    glx = glx.reset_index()
+    c = alt.Chart(glx).mark_rect().encode(x="sid:O", y="competency", color="avg_score")
+    scdata = c.to_json()
 
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
-        hmdata=hmdata,
+        pcdata=pcdata,
+        scdata=scdata,
     )

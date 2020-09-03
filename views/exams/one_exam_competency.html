@@ -9,11 +9,15 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
 <h1>Exam Results</h1>
-<div id="vis"></div>
+<div id="primary_comp"></div>
+<div id="supporting_comp"></div>
 
 <script>
-    var hmdata = {{=XML(hmdata)}}
-    vegaEmbed('#vis', hmdata);
+    var pcdata = {{=XML(pcdata)}}
+    vegaEmbed('#primary_comp', pcdata);
+    var scdata = {{=XML(scdata)}}
+    vegaEmbed('#supporting_comp', scdata);
+
 </script>
 
 {{ end }}
