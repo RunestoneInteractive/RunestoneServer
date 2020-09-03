@@ -166,7 +166,9 @@ function autoGrade() {
                 res = await jQuery.ajax(ajax_params);
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}:
-                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${assignment}">${student}</a>
+                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${encodeURIComponent(
+                        assignment
+                    )}">${student}</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
                 );
