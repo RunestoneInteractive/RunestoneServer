@@ -54,23 +54,47 @@ def one_exam_competency():
     """
 
     clx = pd.read_sql_query(query, settings.database_uri)
+    clx["pct"] = clx.score / clx.points
+    clx["correct"] = clx.pct.map(lambda x: 1 if x > 0.9 else 0)
+
     logging.debug(clx)
     glx = (
         clx[clx.is_primary == "T"]
         .groupby(["competency", "sid"])
-        .agg(avg_score=("score", "mean"), num_qs=("score", "count"))
+        .agg(num_correct=("correct", "sum"), num_answers=("correct", "count"))
     )
     glx = glx.reset_index()
-    c = alt.Chart(glx).mark_rect().encode(x="sid:O", y="competency", color="avg_score")
+    glx["pct_correct"] = glx.num_correct / glx.num_answers
+    c = (
+        alt.Chart(glx, title="Primary Competencies")
+        .mark_rect()
+        .encode(
+            x="sid:O",
+            y="competency",
+            color=alt.Color("pct_correct", scale=alt.Scale(scheme="blues")),
+            tooltip="num_answers",
+        )
+    )
     pcdata = c.to_json()
-
+    # Supporting
     glx = (
         clx[clx.is_primary == "F"]
         .groupby(["competency", "sid"])
-        .agg(avg_score=("score", "mean"), num_qs=("score", "count"))
+        .agg(num_correct=("correct", "sum"), num_answers=("correct", "count"))
     )
     glx = glx.reset_index()
-    c = alt.Chart(glx).mark_rect().encode(x="sid:O", y="competency", color="avg_score")
+    glx["pct_correct"] = glx.num_correct / glx.num_answers
+    c = (
+        alt.Chart(glx, title="Supplemental Competencies")
+        .mark_rect()
+        .encode(
+            x="sid:O",
+            y="competency",
+            color=alt.Color("pct_correct", scale=alt.Scale(scheme="reds")),
+            tooltip="num_answers",
+        )
+    )
+
     scdata = c.to_json()
 
     return dict(
