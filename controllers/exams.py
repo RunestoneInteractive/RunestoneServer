@@ -40,6 +40,11 @@ def one_exam_competency():
     """
 
     assignment_name = request.vars.assignment
+
+    if not assignment_name:
+        session.flash = "You must provide an assignment ID"
+        return redirect(redirect(URL("admin", "admin")))
+
     course_id = auth.user.course_id
 
     logger.debug(f"COMP REPORT for {assignment_name} , {course_id}")
