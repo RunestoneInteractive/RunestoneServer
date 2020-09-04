@@ -83,7 +83,6 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         ## constraints
         """alter table questions add constraint name_bc_unique UNIQUE(name, base_course)""",
         """alter table auth_user add constraint unique_user UNIQUE(username)""",
-        """alter table auth_user add constraint unique_user UNIQUE(username)""",
         """alter table grades ADD CONSTRAINT user_assign_unique UNIQUE (auth_user, assignment);""",
         """alter table assignments add constraint unique_assign_names unique (name, course)""",
         """alter table course_attributes add constraint course_attr_unique UNIQUE(course_id, attr);""",
@@ -97,7 +96,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """create index code_timestamp_idx on code using btree(timestamp)""",
         """CREATE INDEX c_i_idx ON course_instructor USING btree (course, instructor)""",  # New
         """CREATE UNIQUE INDEX courses_course_name_key ON courses USING btree (course_name)""",  # New
-        """CREATE UNIQUE INDEX user_assign_unique ON grades USING btree (auth_user, assignment)""",  # New
+        """CREATE UNIQUE INDEX user_assign_unique_idx ON grades USING btree (auth_user, assignment)""",  # New
         """CREATE INDEX mchoice_answers_course_name_idx ON mchoice_answers USING btree (course_name);""",
         """CREATE INDEX mchoice_answers_div_id_idx ON mchoice_answers USING btree (div_id);""",
         """CREATE INDEX mchoice_answers_sid_idx ON mchoice_answers USING btree (sid);""",
@@ -108,7 +107,6 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX parsons_scd_idx ON parsons_answers USING btree (div_id, course_name, sid)""",  # New
         """create index question_grades_key on question_grades (div_id, course_name, sid)""",
         """CREATE INDEX chap_subchap_idx ON questions USING btree (chapter, subchapter)""",  # New
-        """CREATE UNIQUE INDEX name_bc_unique ON questions USING btree (name, base_course)""",  # New
         """CREATE INDEX q_bc_idx ON questions USING btree (base_course) """,  # New
         """CREATE INDEX questions_chapter_idx ON questions USING btree (chapter);""",
         """CREATE INDEX questions_name_idx ON questions USING btree (name);""",
