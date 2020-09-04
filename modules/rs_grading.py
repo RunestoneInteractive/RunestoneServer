@@ -25,7 +25,7 @@ logger.setLevel(current.settings.log_level)
 
 def _profile(start, msg):
     delta = datetime.datetime.now() - start
-    print("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
+    logger.debug("{}: {}.{}".format(msg, delta.seconds, delta.microseconds))
 
 
 D1 = Decimal("1")
@@ -397,7 +397,7 @@ def _autograde_one_q(
     # question for this student first, and we can recursively call again
     # with the actual question.
     if question_type == "selectquestion":
-        print("grading a selectquestion")
+        logger.debug("grading a selectquestion")
         actual_q = (
             db(
                 (db.selected_questions.selector_id == question_name)
@@ -591,7 +591,7 @@ def _autograde_one_q(
 
     # use query results and the scoring function
     if results:
-        print("WTG = ", which_to_grade)
+        logger.debug("WTG = ", which_to_grade)
         if which_to_grade in ["first_answer", "last_answer", None, ""]:
             # get single row
             if which_to_grade == "first_answer":
@@ -718,7 +718,7 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
 
 
 def _get_students(course_id=None, sid=None, student_rownum=None, db=None):
-    print("_get_students", course_id, sid, student_rownum)
+    logger.debug("_get_students", course_id, sid, student_rownum)
     if student_rownum:
         # get the student id as well as username
         student_rows = db((db.auth_user.id == student_rownum)).select(
@@ -784,7 +784,7 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
                 return False
             else:
                 # really sending
-                # print("send_lti_grade({}, {}, {}, {}, {}, {}".format(assignment.points, grade.score, lti_record.consumer, lti_record.secret, grade.lis_outcome_url, grade.lis_result_sourcedid))
+                # logger.debug("send_lti_grade({}, {}, {}, {}, {}, {}".format(assignment.points, grade.score, lti_record.consumer, lti_record.secret, grade.lis_outcome_url, grade.lis_result_sourcedid))
                 send_lti_grade(
                     assignment.points,
                     score=grade.score,
@@ -804,7 +804,7 @@ def send_lti_grade(
     # print "pct", pct
 
     # send it back to the LMS
-    # print("score", score, points, pct)
+    # logger.debug("score", score, points, pct)
     request = OutcomeRequest(
         {
             "consumer_key": consumer,
@@ -814,13 +814,13 @@ def send_lti_grade(
         }
     )
     resp = request.post_replace_result(pct)
-    # print(resp)
+    # logger.debug(resp)
 
     return pct
 
 
 def send_lti_grades(assignment_id, assignment_points, course_id, lti_record, db):
-    # print("sending lti grades")
+    # logger.debug("sending lti grades")
     student_rows = _get_students(course_id=course_id, db=db)
     for student in student_rows:
         grade = (
@@ -841,7 +841,7 @@ def send_lti_grades(assignment_id, assignment_points, course_id, lti_record, db)
                 outcome_url=grade.lis_outcome_url,
                 result_sourcedid=grade.lis_result_sourcedid,
             )
-    # print("done sending lti grades")
+    # logger.debug("done sending lti grades")
 
 
 def do_calculate_totals(
@@ -942,7 +942,7 @@ def do_autograde(
     count = 0
     # _profile(start, "after readings fetched")
     for (name, chapter, subchapter, points, ar, ag, wtg) in readings:
-        # print("\nGrading all students for {}/{}".format(chapter, subchapter))
+        # logger.debug("\nGrading all students for {}/{}".format(chapter, subchapter))
         count += 1
         for s in sids:
             # print("."),
@@ -1267,12 +1267,12 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     and flashcard_log.id >= 42904
                     and (flashcard_log.available_flashcards != len(presentable_topics))
                 ):
-                    print(
+                    logger.debug(
                         "I calculated for the following flashcard available_flashcardsq =",
                         len(presentable_topics),
                         "However:",
                     )
-                    print(flashcard_log)
+                    logger.debug(flashcard_log)
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (
                 flashcard_log.chapter_label + flashcard_log.sub_chapter_label
@@ -1341,11 +1341,11 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     and flashcard_log.q != q
                     and flashcard_log.trials_num != trials_num
                 ):
-                    print(
+                    logger.debug(
                         "I calculated for the following flashcard q =",
                         q,
                         "and trials_num =",
                         trials_num,
                         "However:",
                     )
-                    print(flashcard_log)
+                    logger.debug(flashcard_log)
