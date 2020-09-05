@@ -86,10 +86,12 @@ def _route_book(is_published=True):
             week2 = datetime.timedelta(weeks=2)
             week4 = datetime.timedelta(weeks=4)
             if (
-                now >= course.term_start_date + week2
-                and now <= course.term_start_date + week4
+                now >= (course.term_start_date + week2)
+                and now <= (course.term_start_date + week4)
                 and course.base_course != "csawesome"
             ):
+                settings.show_rs_banner = True
+            elif course.course_name == course.base_course and random.random() <= 0.2:
                 settings.show_rs_banner = True
 
         # Ensure the base course in the URL agrees with the base course in ``course``.
@@ -252,6 +254,7 @@ def _route_book(is_published=True):
     #
     # settings.show_rs_banner = True  # debug only
     if donated:
+        settings.show_rs_banner = True
         banner_num = 0
     else:
         if settings.num_banners > 0:
@@ -259,7 +262,7 @@ def _route_book(is_published=True):
                 1, settings.num_banners + 1
             )  # select a random banner
         else:
-            banner_num = 0
+            settings.show_rs_banner = False
 
     questions = None
     if subchapter == "Exercises":
