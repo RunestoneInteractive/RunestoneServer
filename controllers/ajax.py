@@ -606,35 +606,6 @@ def set_tz_offset():
     return "done"
 
 
-def getnumonline():
-    response.headers["content-type"] = "application/json"
-
-    try:
-        query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
-        rows = db.executesql(query)
-    except Exception:
-        rows = [[21]]
-
-    res = {"online": rows[0][0]}
-    return json.dumps([res])
-
-
-def getnumusers():
-    response.headers["content-type"] = "application/json"
-
-    # query = """select count(*) from (select distinct(sid) from useinfo) as X """
-    numusers = "more than 850,000"
-
-    # try:
-    #     numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
-    # except:
-    #     # sometimes the DB query takes too long and is timed out - return something anyway
-    #     numusers = 'more than 250,000'
-
-    res = {"numusers": numusers}
-    return json.dumps([res])
-
-
 #
 #  Ajax Handlers to update and retrieve the last position of the user in the course
 #

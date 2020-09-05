@@ -533,14 +533,6 @@ def test_GetLastPage(test_client, test_user_1):
     assert res[0]["lastPageChapter"] == "Test chapter 1"
 
 
-def test_GetNumOnline(test_client, test_user_1, test_user):
-    test_GetTop10Answers(test_client, test_user_1, test_user)
-    test_client.post("ajax/getnumonline")
-    print(test_client.text)
-    res = json.loads(test_client.text)
-    assert res[0]["online"] == 6
-
-
 def test_GetTop10Answers(test_client, test_user_1, test_user):
     user_ids = []
     for index in range(0, 6):
