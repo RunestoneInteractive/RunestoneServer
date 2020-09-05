@@ -82,11 +82,12 @@ def _route_book(is_published=True):
         if auth.user.donated:
             donated = True
         else:
+            now = datetime.datetime.utcnow().date()
             week2 = datetime.timedelta(weeks=2)
             week4 = datetime.timedelta(weeks=4)
             if (
-                course.term_start_date >= course.term_start_date + week2
-                and course.term_start_date <= course.term_start_date + week4
+                now >= course.term_start_date + week2
+                and now <= course.term_start_date + week4
                 and course.base_course != "csawesome"
             ):
                 settings.show_rs_banner = True
