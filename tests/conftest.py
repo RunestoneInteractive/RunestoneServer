@@ -573,6 +573,7 @@ class _TestClient(WebClient):
                 with open(traceback_file, "wb") as f:
                     f.write(_html_prep(admin_client.text))
                 print("Traceback saved to {}.".format(traceback_file))
+                print(_html_prep(admin_client.text))
             raise
 
     def logout(self):
