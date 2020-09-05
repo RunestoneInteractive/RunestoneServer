@@ -89,6 +89,7 @@ def _route_book(is_published=True):
                 now >= (course.term_start_date + week2)
                 and now <= (course.term_start_date + week4)
                 and course.base_course != "csawesome"
+                and course.courselevel != "high"
             ):
                 settings.show_rs_banner = True
             elif course.course_name == course.base_course and random.random() <= 0.2:
