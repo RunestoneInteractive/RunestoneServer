@@ -255,6 +255,7 @@ def _route_book(is_published=True):
     # Support Runestone Campaign
     #
     # settings.show_rs_banner = True  # debug only
+    banner_num = None
     if donated:
         settings.show_rs_banner = True
         banner_num = 0
