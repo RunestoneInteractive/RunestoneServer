@@ -1134,7 +1134,10 @@ def questionBank():
             db.competency.question == db.questions.id
         )
         if request.vars.isprim == "true":
-            comp_clause = comp_clause & (db.competency.is_primary == "T")
+            comp_clause = comp_clause & (db.competency.is_primary == True)
+        else:
+            comp_clause = comp_clause & (db.competency.is_primary == False)
+
         query_clauses.append(comp_clause)
 
     myquery = query_clauses[0]
