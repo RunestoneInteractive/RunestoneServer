@@ -452,14 +452,20 @@ if "auth_user" in db:
 
 def admin_logger(logger):
     if settings.academy_mode:
+        if auth.user:
+            sid = auth.user.username
+            course = auth.user.course_name
+        else:
+            sid = "Anonymous"
+            course = "Unknown"
         try:
             db.useinfo.insert(
-                sid=auth.user.username,
+                sid=sid,
                 act=request.function,
                 div_id=request.env.query_string or "no params",
                 event=request.controller,
                 timestamp=datetime.datetime.utcnow(),
-                course_id=auth.user.course_name,
+                course_id=course,
             )
         except Exception as e:
             logger.error(f"failed to insert log record for practice: {e}")
