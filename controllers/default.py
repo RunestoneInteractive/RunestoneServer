@@ -408,6 +408,7 @@ def coursechooser():
 
 @auth.requires_login()
 def removecourse():
+    admin_logger(logger)
     if not request.args(0):
         redirect(URL("default", "courses"))
 
@@ -564,6 +565,7 @@ def ca_addendum():
 
 
 def donate():
+    admin_logger(logger)
     if request.vars.donate:
         amt = request.vars.donate
     elif session.donate:
@@ -575,6 +577,7 @@ def donate():
 
 @auth.requires_login()
 def delete():
+    admin_logger(logger)
     if request.vars["deleteaccount"]:
         logger.error(
             "deleting account {} for {}".format(auth.user.id, auth.user.username)

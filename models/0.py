@@ -71,3 +71,4 @@ settings.python_interpreter = sys.executable
 
 settings.pretext_delimiters = ("~._", "_.~")
 settings.lti_interface = False
+settings.num_banners = 0

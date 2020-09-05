@@ -22,7 +22,7 @@ import json
 import logging
 import datetime
 import importlib
-
+import random
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -42,6 +42,8 @@ def _route_book(is_published=True):
     # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
     base_course = request.args(0)
     motd = ""
+    donated = False
+    settings.show_rs_banner = False
     if not base_course:
         raise HTTP(404)
 
@@ -72,10 +74,22 @@ def _route_book(is_published=True):
                 db.courses.base_course,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
+                db.courses.term_start_date,
                 **cache_kwargs,
             )
             .first()
         )
+        if auth.user.donated:
+            donated = True
+        else:
+            week2 = datetime.timedelta(weeks=2)
+            week4 = datetime.timedelta(weeks=4)
+            if (
+                course.term_start_date >= course.term_start_date + week2
+                and course.term_start_date <= course.term_start_date + week4
+                and course.base_course != "csawesome"
+            ):
+                settings.show_rs_banner = True
 
         # Ensure the base course in the URL agrees with the base course in ``course``.
         # If not, ask the user to select a course.
@@ -233,6 +247,19 @@ def _route_book(is_published=True):
         else "false"
     )
 
+    # Support Runestone Campaign
+    #
+    settings.show_rs_banner = True  # debug only
+    if donated:
+        banner_num = 0
+    else:
+        if settings.num_banners > 0:
+            banner_num = random.randrange(
+                1, settings.num_banners + 1
+            )  # select a random banner
+        else:
+            banner_num = 0
+
     questions = None
     if subchapter == "Exercises":
         questions = _exercises(base_course, chapter)
@@ -251,6 +278,7 @@ def _route_book(is_published=True):
         subchapter_list=_subchaptoc(base_course, chapter),
         questions=questions,
         motd=motd,
+        banner_num=banner_num,
     )
 
 
