@@ -75,6 +75,7 @@ def _route_book(is_published=True):
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
                 db.courses.term_start_date,
+                db.courses.courselevel,
                 **cache_kwargs,
             )
             .first()
