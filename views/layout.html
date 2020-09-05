@@ -279,7 +279,7 @@
         {{ if request.application == 'runestone': }}
             <script type="text/javascript">
                 var _gaq = _gaq || [];
-                _gaq.push(['_setAccount', 'UA-32029811-1']);
+                _gaq.push(['_setAccount', '{{=settings.google_ga}}']);
                 _gaq.push(['_trackPageview']);
 
                 (function() {
