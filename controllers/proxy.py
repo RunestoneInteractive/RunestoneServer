@@ -20,15 +20,10 @@ def get_jobe_server():
         num_servers = 1
 
     if auth.user:
-        servernum = auth.user.id % (num_servers + 1)
-        if servernum < num_servers:
-            servernum = 0
-        else:
-            servernum = 1
+        servernum = auth.user.id % num_servers
     elif request.client:
-        servernum = request.client.split(".")[-1]
-        if servernum.isnumeric():
-            servernum = int(servernum) % num_servers
+        servernum = hash(request.client)
+        servernum = servernum % num_servers
     else:
         servernum = 0
     logger.debug(f"SERVER SELECTED = {servernum} for {request.client}")
