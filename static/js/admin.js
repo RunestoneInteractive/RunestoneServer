@@ -246,13 +246,14 @@ function gradingSummary(container) {
                 for (let k of Object.keys(retdata[0])) {
                     columns.push({ data: k, renderer: "html" });
                 }
+
+                var hot = new Handsontable(container, {
+                    data: retdata,
+                    colHeaders: Object.keys(retdata[0]),
+                    licenseKey: "non-commercial-and-evaluation",
+                    columns: columns,
+                });
             }
-            var hot = new Handsontable(container, {
-                data: retdata,
-                colHeaders: Object.keys(retdata[0]),
-                licenseKey: "non-commercial-and-evaluation",
-                columns: columns,
-            });
         },
     });
 }
