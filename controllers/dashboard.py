@@ -545,7 +545,7 @@ def grades():
     requires_login=True,
 )
 def questiongrades():
-    if "sid" not in request.vars:
+    if "sid" not in request.vars or "assignment_id" not in request.vars:
         logger.error("It Appears questiongrades was called without any request vars")
         session.flash = "Cannot call questiongrades directly"
         redirect(URL("dashboard", "index"))
