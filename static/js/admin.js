@@ -45,7 +45,7 @@ function gradeIndividualItem() {
                 "Q" +
                 question.replace(/[!-#*@+:?>~.\/ ]/g, "_") +
                 "S" +
-                sid.replace(/[!-#*@+:?>~.\/]/g, "_");
+                sid.replace(/[!-#*@+:?>~.\/ ]/g, "_");
             // This creates the equivalent of outerRightDiv for each question and student
             // The guts of the form are filled in by the show function in createGradingPanel.
             var divstring = `
