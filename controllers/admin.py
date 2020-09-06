@@ -2606,6 +2606,10 @@ def create_lti_keys():
     return json.dumps(dict(consumer=consumer, secret=secret))
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def simulate_exam():
     """Simulate the distribution of questions on an exam
     """
