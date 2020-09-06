@@ -242,7 +242,7 @@ function gradingSummary(container) {
             container = document.getElementById(container);
             $(container).html("");
             let columns = [];
-            if (retdata) {
+            if (retdata && retdata.length > 0) {
                 for (let k of Object.keys(retdata[0])) {
                     columns.push({ data: k, renderer: "html" });
                 }
