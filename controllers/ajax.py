@@ -1657,6 +1657,7 @@ def get_question_source():
     max_difficulty = request.vars.max_difficulty
     not_seen_ever = request.vars.not_seen_ever
     autogradable = request.vars.autogradable
+    is_primary = request.vars.primary
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
@@ -1666,6 +1667,8 @@ def get_question_source():
         query = (db.competency.competency == prof) & (
             db.competency.question == db.questions.id
         )
+        if is_primary:
+            query = query & db.competency.is_primary == True
         if min_difficulty:
             query = query & db.questions.difficulty >= float(min_difficulty)
         if max_difficulty:
