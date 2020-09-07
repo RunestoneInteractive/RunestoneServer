@@ -37,6 +37,7 @@ def index():
     return basicvalues
 
 
+@auth.requires_login()
 def build():
     buildvalues = {}
     if settings.academy_mode:
