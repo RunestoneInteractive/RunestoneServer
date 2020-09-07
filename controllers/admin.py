@@ -909,19 +909,6 @@ def deletecourse():
             uset.delete()
             db(db.courses.id == courseid).delete()
             try:
-                shutil.rmtree(
-                    path.join(
-                        "applications", request.application, "static", course_name
-                    )
-                )
-                shutil.rmtree(
-                    path.join(
-                        "applications",
-                        request.application,
-                        "custom_courses",
-                        course_name,
-                    )
-                )
                 session.clear()
             except Exception:
                 session.flash = "Error, %s does not appear to exist" % course_name
