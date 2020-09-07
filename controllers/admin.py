@@ -510,36 +510,7 @@ def admin():
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
-    cwd = os.getcwd()
-    try:
-        os.chdir(
-            path.join(
-                "applications", request.application, "books", sidQuery.base_course
-            )
-        )
-        master_build = sh("git describe --long", capture=True)[:-1]
-        with open("build_info", "w") as bc:
-            bc.write(master_build)
-            bc.write("\n")
-    except Exception:
-        master_build = ""
-    finally:
-        os.chdir(cwd)
-
-    try:
-        mbf_path = path.join(
-            "applications",
-            request.application,
-            "custom_courses",
-            sidQuery.course_name,
-            "build_info",
-        )
-        mbf = open(mbf_path, "r")
-        my_build = mbf.read()[:-1]
-        mbf.close()
-    except Exception:
-        my_build = ""
-
+    my_build = ""
     my_vers = 0
     mst_vers = 0
 
@@ -618,7 +589,6 @@ def admin():
         curr_start_date=curr_start_date,
         confirm=True,
         build_info=my_build,
-        master_build=master_build,
         my_vers=my_vers,
         mst_vers=mst_vers,
         course=sidQuery,
