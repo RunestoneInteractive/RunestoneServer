@@ -82,7 +82,6 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
     sql_commands = [
         ## constraints
         """alter table questions add constraint name_bc_unique UNIQUE(name, base_course)""",
-        """alter table auth_user add constraint unique_user UNIQUE(username)""",
         """alter table grades ADD CONSTRAINT user_assign_unique UNIQUE (auth_user, assignment);""",
         """alter table assignments add constraint unique_assign_names unique (name, course)""",
         """alter table course_attributes add constraint course_attr_unique UNIQUE(course_id, attr);""",
@@ -129,12 +128,10 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX us_sid_idx ON public.user_state USING btree (user_id)""",  # New
         """CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);""",
         """CREATE INDEX user_sub_chapter_progress_user_id_idx ON user_sub_chapter_progress USING btree (user_id)""",  # New
-        """CREATE UNIQUE INDEX courses_course_name_key ON courses USING btree (course_name)""",  # New
+        """CREATE UNIQUE INDEX courses_course_name_idx ON courses USING btree (course_name)""",  # New
         """CREATE UNIQUE INDEX q_comp_unique ON competency USING btree (question, competency)""",
-        """CREATE UNIQUE INDEX scheduler_task_uuid_key ON scheduler_task USING btree (uuid)""",  # New
-        """CREATE UNIQUE INDEX scheduler_worker_worker_name_key ON scheduler_worker USING btree (worker_name)""",  # New
         """CREATE UNIQUE INDEX selector_sid_unique ON selected_questions USING btree (selector_id, sid)""",
-        """CREATE UNIQUE INDEX tags_tag_name_key ON tags USING btree (tag_name)""",  # New
+        """CREATE UNIQUE INDEX tags_tag_name_idx ON tags USING btree (tag_name)""",  # New
         """CREATE UNIQUE INDEX unique_user ON auth_user USING btree (username)""",  # New
         """CREATE UNIQUE INDEX user_assign_unique_idx ON grades USING btree (auth_user, assignment)""",  # New
     ]
