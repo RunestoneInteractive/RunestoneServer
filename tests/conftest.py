@@ -223,7 +223,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
             "web2py.py",
             "-a",
             password,
-            "--nogui",
+            "--no_gui",
             "--minthreads=10",
             "--maxthreads=20",
         ],
