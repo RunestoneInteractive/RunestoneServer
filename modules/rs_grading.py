@@ -591,7 +591,7 @@ def _autograde_one_q(
 
     # use query results and the scoring function
     if results:
-        logger.debug("WTG = ", which_to_grade)
+        logger.debug("WTG = %s", which_to_grade)
         if which_to_grade in ["first_answer", "last_answer", None, ""]:
             # get single row
             if which_to_grade == "first_answer":
@@ -718,7 +718,7 @@ def _compute_assignment_total(student, assignment, course_name, db=None):
 
 
 def _get_students(course_id=None, sid=None, student_rownum=None, db=None):
-    logger.debug("_get_students", course_id, sid, student_rownum)
+    logger.debug("_get_students %s %s %s", course_id, sid, student_rownum)
     if student_rownum:
         # get the student id as well as username
         student_rows = db((db.auth_user.id == student_rownum)).select(
@@ -1268,11 +1268,10 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     and (flashcard_log.available_flashcards != len(presentable_topics))
                 ):
                     logger.debug(
-                        "I calculated for the following flashcard available_flashcardsq =",
+                        "I calculated for the following flashcard available_flashcardsq = %s, however: %s",
                         len(presentable_topics),
-                        "However:",
+                        flashcard_log,
                     )
-                    logger.debug(flashcard_log)
             # Now that the flashcard is practiced, it's not available anymore. So we should remove it.
             if (
                 flashcard_log.chapter_label + flashcard_log.sub_chapter_label
@@ -1342,10 +1341,8 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                     and flashcard_log.trials_num != trials_num
                 ):
                     logger.debug(
-                        "I calculated for the following flashcard q =",
+                        "I calculated for the following flashcard q = %s and trials_num = %s, however: %s",
                         q,
-                        "and trials_num =",
                         trials_num,
-                        "However:",
+                        flashcard_log,
                     )
-                    logger.debug(flashcard_log)
