@@ -1911,7 +1911,7 @@ function questionBank(form) {
     var min_difficulty = form.min_diff.value;
     var max_difficulty = form.max_diff.value;
     var competency = form.competency.value;
-    var isprim = form.isprim.value;
+    var isprim = form.isprim.checked;
     var cbc = form.constrainbc.checked;
     var obj = new XMLHttpRequest();
     var url = "/runestone/admin/questionBank";
