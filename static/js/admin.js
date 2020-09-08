@@ -1361,7 +1361,9 @@ function assignmentInfo() {
                 $(sim_butt).html("Exam Generator Simulator");
                 $(sim_butt).addClass("btn btn-info btn-sm");
                 $(sim_butt).click(runSimulation);
-                $("#simulatorbuttonspan").append(sim_butt);
+                if ($("#simulatorbuttonspan button").length == 0) {
+                    $("#simulatorbuttonspan").append(sim_butt);
+                }
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
