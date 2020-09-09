@@ -645,6 +645,10 @@ def doAssignment():
                         == q.questions.subchapter
                     )
                     & (db.user_sub_chapter_progress.chapter_id == q.questions.chapter)
+                    & (
+                        db.user_sub_chapter_progress.course_name
+                        == auth.user.course_name
+                    )
                 )
                 .select()
                 .first()

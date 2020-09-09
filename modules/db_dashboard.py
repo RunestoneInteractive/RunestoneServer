@@ -488,6 +488,10 @@ class DashboardDataAnalyzer(object):
             & (  # todo: missing link from course_id to chapter/sub_chapter progress
                 current.db.user_sub_chapter_progress.chapter_id == chapter.chapter_label
             )
+            & (
+                current.db.user_sub_chapter_progress.course_name
+                == self.course.course_name
+            )
         ).select(
             current.db.auth_user.username,
             current.db.user_sub_chapter_progress.chapter_id,
@@ -560,6 +564,10 @@ class DashboardDataAnalyzer(object):
 
         self.db_chapter_progress = current.db(
             (current.db.user_sub_chapter_progress.user_id == self.user.id)
+            & (
+                current.db.user_sub_chapter_progress.course_name
+                == self.course.course_name
+            )
         ).select(
             current.db.user_sub_chapter_progress.chapter_id,
             current.db.user_sub_chapter_progress.sub_chapter_id,

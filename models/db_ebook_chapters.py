@@ -43,6 +43,7 @@ db.define_table(
     Field("start_date", "datetime", default=datetime.datetime.utcnow()),
     Field("end_date", "datetime"),
     Field("status", "integer"),  # -1  - not started. 0 - active. 1 - completed
+    Field("course_name", "string"),
     migrate=table_migrate_prefix + "user_sub_chapter_progress.table",
 )
 

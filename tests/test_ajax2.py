@@ -813,6 +813,10 @@ def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
         db(
             (db.user_sub_chapter_progress.user_id == test_user_1.user_id)
             & (db.user_sub_chapter_progress.sub_chapter_id == "subchapter_a")
+            & (
+                db.user_sub_chapter_progress.course_name
+                == test_user_1.course.course_name
+            )
         )
         .select()
         .first()
