@@ -47,7 +47,7 @@ script:
 - cd ../../..
 - cp applications/runestone/tests/.coveragerc .
 # Now actually run the tests.
-- pytest applications/runestone/tests
+- pytest -v applications/runestone/tests
 - coveralls
 notifications:
   slack:
