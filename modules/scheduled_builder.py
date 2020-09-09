@@ -10,6 +10,7 @@
 # Standard library
 # ----------------
 import os
+import subprocess
 import shutil
 from io import open
 import sys
@@ -17,42 +18,23 @@ import sys
 # Third-party imports
 # -------------------
 from celery import Celery
-from runestone.lp.lp_common_lib import (
-    BUILD_SYSTEM_PATH,
+from runestone.lp.lp_common_lib import BUILD_SYSTEM_PATH
+from common_builder import (
     get_sim_str_sim30,
-    get_sim_str_mdb,
+    sim_run_mdb,
     get_verification_code,
     check_sim_out,
+    celery_config,
 )
-
-try:
-    # This can't be imported from uwsgi, but isn't needed there either.
-    from gevent import subprocess
-except:
-    pass
 
 # Local imports
 # -------------
 # None.
 
 
-# Create the Celery app.
+# Create and configure the Celery app.
 app = Celery("scheduled_builder")
-
-# Update the `Celery configuration <https://docs.celeryproject.org/en/latest/userguide/application.html#configuration>`_.
-#
-# Use `Redis with Celery <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#configuration>`_.
-app.conf.broker_url = os.environ.get("REDIS_URI", "redis://localhost:6379/0")
-app.conf.result_backend = os.environ.get("REDIS_URI", "redis://localhost:6379/0")
-# Given that tasks time out in 60 seconds, expire them after that. See `result_expires <https://docs.celeryproject.org/en/latest/userguide/configuration.html#result-expires>`.
-app.conf.result_expires = 120
-# This follows the `Redis caveats <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#redis-caveats>`_.
-app.conf.broker_transport_options = {
-    # 1 hour.
-    "visibility_timeout": 3600,
-    "fanout_prefix": True,
-    "fanout_patterns": True,
-}
+app.conf.update(celery_config)
 
 # This function should run the provided code and report the results. It will
 # vary for a given compiler and language.
@@ -238,41 +220,37 @@ def _scheduled_builder(
         return out, 0
 
     # Simulate. Create the simulation commands.
-    simout_path = file_path + ".simout"
-    try:
-        os.remove(simout_path)
-    except Exception as e:
-        if not isinstance(e, FileNotFoundError):
-            out += "Unable to remove previous simulator output in {}: {}\n".format(
-                simout_path, str(e)
-            )
-    if is_extension_asm:
+    out += "\nTest results:\n"
+    sim_ret = 0
+    if not is_extension_asm:
+        out = sim_run_mdb("mdb", "dspic33EP128GP502", elf_path)
+    else:
+        simout_path = file_path + ".simout"
+        timeout_str = ""
         ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
         args = ["sim30"]
-    else:
-        ss = get_sim_str_mdb("dspic33EP128GP502", elf_path, simout_path)
-        args = ["mdb"]
-    # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
-    # couldn't find a way to re-use that code.
-    sim_ret = 0
-    out += "\nTest results:\n" + _subprocess_string(args, **sp_args)
-    try:
-        cp = subprocess.run(
-            args, input=ss, stdout=subprocess.PIPE, timeout=10, **sp_args
-        )
-        sim_ret = cp.returncode
-    except subprocess.TimeoutExpired:
-        sim_ret = 1
-        timeout_str = "\n\nTimeout."
-    else:
-        timeout_str = ""
-    try:
-        with open(simout_path, encoding="utf-8", errors="backslashreplace") as f:
-            out += f.read().rstrip()
-    except Exception as e:
-        out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
-    # Put the timeout string at the end of all the simulator output.
-    out += timeout_str
+
+        # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
+        # couldn't find a way to re-use that code.
+        out += _subprocess_string(args, **sp_args)
+        try:
+            cp = subprocess.run(
+                args, input=ss, stdout=subprocess.PIPE, timeout=10, **sp_args
+            )
+            sim_ret = cp.returncode
+        except subprocess.TimeoutExpired:
+            sim_ret = 1
+            timeout_str = "\n\nTimeout."
+
+        # Read the results of the simulation.
+        try:
+            with open(simout_path, encoding="utf-8", errors="backslashreplace") as f:
+                out += f.read().rstrip()
+        except Exception as e:
+            out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
+        # Put the timeout string at the end of all the simulator output.
+        out += timeout_str
+
     return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
 
 
