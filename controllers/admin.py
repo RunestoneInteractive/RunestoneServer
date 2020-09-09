@@ -554,7 +554,10 @@ def admin():
         & (db.courses.base_course == course.base_course)
         & (db.courses.course_name != course.course_name)
     ).select(db.courses.course_name, db.courses.id)
-
+    base_course_id = (
+        db(db.courses.course_name == course.base_course).select(db.courses.id).first()
+    )
+    base_course_id = base_course_id.id
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
@@ -572,8 +575,19 @@ def admin():
     else:
         consumer = ""
         secret = ""
+    # valid exams to show are:
+    # Exams the instructor has created for their course
+    # Or exams embedded in the base course.  Embedded exams will have from_source
+    # set to True and will have the base course id instead of this courses id.
     exams = db(
-        (db.assignments.course == course.id) & (db.assignments.is_timed == "T")
+        (db.assignments.is_timed == True)
+        & (
+            (db.assignments.course == course.id)
+            | (
+                (db.assignments.from_source == True)
+                & (db.assignments.course == base_course_id)
+            )
+        )
     ).select()
     exams = [x.name for x in exams]
     try:
