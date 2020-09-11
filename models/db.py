@@ -82,6 +82,9 @@ if "https" in settings.server_type and settings.lti_iframes is True:
     session.secure()
     session.samesite("None")
 
+if settings.session_domain:
+    response.cookies["session_id_runestone"]["domain"] = settings.session_domain
+
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ["*"] if request.is_local else []
