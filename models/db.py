@@ -78,12 +78,18 @@ else:
 # However this seems to do the trick at least from the test tool at
 # https://lti.tools/saltire/tc - More testing with Canvas and Company
 # is required.  The Content Request launch also works in an iframe.
-if "https" in settings.server_type and settings.lti_iframes is True:
+if "https" in settings.server_type:
     session.secure()
-    session.samesite("None")
+    if settings.lti_iframes is True:
+        session.samesite("None")
 
-if settings.session_domain and "session_id_runestone" in response.cookies:
-    response.cookies["session_id_runestone"]["domain"] = settings.session_domain
+
+# This seems like it should allow us to share the session cookie across subdomains.
+# and seems to work for every browser except for Safari
+# I'm  not sure what the issue is... So I'm commenting it out until I understand what is gong on.
+
+# if settings.session_domain and "session_id_runestone" in response.cookies:
+#    response.cookies["session_id_runestone"]["domain"] = settings.session_domain
 
 ## by default give a view/generic.extension to all actions from localhost
 ## none otherwise. a pattern can be 'controller/function.extension'
