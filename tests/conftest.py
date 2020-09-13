@@ -223,7 +223,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
             "web2py.py",
             "-a",
             password,
-            "--nogui",
+            "--no_gui",
             "--minthreads=10",
             "--maxthreads=20",
         ],
@@ -573,6 +573,7 @@ class _TestClient(WebClient):
                 with open(traceback_file, "wb") as f:
                     f.write(_html_prep(admin_client.text))
                 print("Traceback saved to {}.".format(traceback_file))
+                print(_html_prep(admin_client.text))
             raise
 
     def logout(self):

@@ -27,6 +27,8 @@ def test_build(test_client, test_user_1, runestone_db_tools):
     res = db(db.courses.course_name == "build_course_1").select().first()
     assert not res
 
+    # deleting the course invalidates the session
+    test_user_1.login()
     test_client.validate(
         "designer/build",
         "build_course_2",

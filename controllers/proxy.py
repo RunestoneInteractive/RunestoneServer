@@ -10,6 +10,31 @@ response.headers[
 response.headers["Access-Control-Allow-Methods"] = "GET, PUT, POST, HEAD, OPTIONS"
 
 
+# Using this function makes the runestone proxy act like a load balancer
+# for using more than one jobe server.
+#
+def get_jobe_server():
+    if settings.num_jobes:
+        num_servers = settings.num_jobes
+    else:
+        num_servers = 1
+
+    if auth.user:
+        servernum = auth.user.id % num_servers
+    elif request.client:
+        servernum = hash(request.client)
+        servernum = servernum % num_servers
+    else:
+        servernum = 0
+    logger.debug(f"SERVER SELECTED = {servernum} for {request.client}")
+    try:
+        server = settings.jobe_server.format(servernum)
+    except:
+        server = settings.jobe_server
+
+    return server
+
+
 def jobeRun():
     req = rq.Session()
     logger.debug("got a jobe request %s", request.vars.run_spec)
@@ -20,7 +45,7 @@ def jobeRun():
         req.headers["X-API-KEY"] = settings.jobe_key
 
     uri = "/jobe/index.php/restapi/runs/"
-    url = settings.jobe_server + uri
+    url = get_jobe_server() + uri
     rs = {"run_spec": request.vars.run_spec}
     resp = req.post(url, json=rs)
 
@@ -37,7 +62,7 @@ def jobePushFile():
     req.headers["X-API-KEY"] = settings.jobe_key
 
     uri = "/jobe/index.php/restapi/files/" + request.args[0]
-    url = settings.jobe_server + uri
+    url = get_jobe_server() + uri
     rs = {"file_contents": request.vars.file_contents}
     resp = req.put(url, json=rs)
 
@@ -55,7 +80,7 @@ def jobeCheckFile():
     req.headers["Accept"] = "application/json"
     req.headers["X-API-KEY"] = settings.jobe_key
     uri = "/jobe/index.php/restapi/files/" + request.args[0]
-    url = settings.jobe_server + uri
+    url = get_jobe_server() + uri
     resp = req.head(url)
     logger.debug("Got response from JOBE %s ", resp.status_code)
 

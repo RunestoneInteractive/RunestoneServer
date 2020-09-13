@@ -165,7 +165,7 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "string"),
     Field("correct", "boolean"),
-    Field("minHeight", "string"),
+    Field("min_height", "string"),
     migrate=table_migrate_prefix + "dragndrop_answers.table",
 )
 # clickablearea_answers
@@ -320,7 +320,7 @@ db.define_table(
 )
 
 
-def getCourseAttribute(course_id, attr_name):
+def getCourseAttribute(course_id: int, attr_name: str):
     res = (
         db(
             (db.course_attributes.course_id == course_id)

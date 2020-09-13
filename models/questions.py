@@ -28,6 +28,7 @@ db.define_table(
 db.define_table(
     "competency",
     Field("question", type=db.questions),
+    Field("question_name", type="string"),
     Field("competency", type="string"),
     Field("is_primary", type="boolean"),
     migrate=table_migrate_prefix + "competency.table",

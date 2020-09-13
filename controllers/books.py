@@ -22,7 +22,7 @@ import json
 import logging
 import datetime
 import importlib
-
+import random
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -42,6 +42,8 @@ def _route_book(is_published=True):
     # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
     base_course = request.args(0)
     motd = ""
+    donated = False
+    settings.show_rs_banner = False
     if not base_course:
         raise HTTP(404)
 
@@ -68,14 +70,19 @@ def _route_book(is_published=True):
         course = (
             db(db.courses.id == auth.user.course_id)
             .select(
+                db.courses.id,
                 db.courses.course_name,
                 db.courses.base_course,
                 db.courses.allow_pairs,
                 db.courses.downloads_enabled,
+                db.courses.term_start_date,
+                db.courses.courselevel,
                 **cache_kwargs,
             )
             .first()
         )
+        if auth.user.donated:
+            donated = True
 
         # Ensure the base course in the URL agrees with the base course in ``course``.
         # If not, ask the user to select a course.
@@ -84,6 +91,24 @@ def _route_book(is_published=True):
                 base_course
             )
             redirect(URL(c="default", f="courses"))
+
+        # Determine if we should ask for support
+        # Trying to do banner ads during the 2nd and 3rd weeks of the term
+        # but not to high school students or if the instructor has donated for the course
+        now = datetime.datetime.utcnow().date()
+        week2 = datetime.timedelta(weeks=2)
+        week4 = datetime.timedelta(weeks=4)
+        if (
+            now >= (course.term_start_date + week2)
+            and now <= (course.term_start_date + week4)
+            and course.base_course != "csawesome"
+            and course.courselevel != "high"
+            and getCourseAttribute(course.id, "supporter") is None
+        ):
+            settings.show_rs_banner = True
+        elif course.course_name == course.base_course and random.random() <= 0.2:
+            # Show banners to base course users 20% of the time.
+            settings.show_rs_banner = True
 
         allow_pairs = "true" if course.allow_pairs else "false"
         downloads_enabled = "true" if course.downloads_enabled else "false"
@@ -233,6 +258,20 @@ def _route_book(is_published=True):
         else "false"
     )
 
+    # Support Runestone Campaign
+    #
+    # settings.show_rs_banner = True  # debug only
+    banner_num = None
+    if donated:
+        banner_num = 0  # Thank You Banner
+    else:
+        if settings.num_banners > 0:
+            banner_num = random.randrange(
+                1, settings.num_banners + 1
+            )  # select a random banner
+        else:
+            settings.show_rs_banner = False
+
     questions = None
     if subchapter == "Exercises":
         questions = _exercises(base_course, chapter)
@@ -251,6 +290,7 @@ def _route_book(is_published=True):
         subchapter_list=_subchaptoc(base_course, chapter),
         questions=questions,
         motd=motd,
+        banner_num=banner_num,
     )
 
 

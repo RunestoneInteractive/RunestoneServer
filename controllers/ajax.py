@@ -26,6 +26,7 @@ from dateutil.parser import parse
 # Local application imports
 # -------------------------
 from feedback import is_server_feedback, fitb_feedback, lp_feedback
+from rs_practice import _get_qualified_questions
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -206,7 +207,7 @@ def hsblog():
             answer=answers,
             correct=correct,
             course_name=course,
-            minHeight=minHeight,
+            min_height=minHeight,
         )
     elif event == "clickableArea" and auth.user:
         correct = request.vars.correct
@@ -605,52 +606,6 @@ def set_tz_offset():
     return "done"
 
 
-def getnumonline():
-    response.headers["content-type"] = "application/json"
-
-    try:
-        query = """select count(distinct sid) from useinfo where timestamp > current_timestamp - interval '5 minutes'  """
-        rows = db.executesql(query)
-    except Exception:
-        rows = [[21]]
-
-    res = {"online": rows[0][0]}
-    return json.dumps([res])
-
-
-def getnumusers():
-    response.headers["content-type"] = "application/json"
-
-    # query = """select count(*) from (select distinct(sid) from useinfo) as X """
-    numusers = "more than 850,000"
-
-    # try:
-    #     numusers = cache.disk('numusers', lambda: db.executesql(query)[0][0], time_expire=21600)
-    # except:
-    #     # sometimes the DB query takes too long and is timed out - return something anyway
-    #     numusers = 'more than 250,000'
-
-    res = {"numusers": numusers}
-    return json.dumps([res])
-
-
-# I was not sure if it's okay to import it from `assignmnets.py`.
-# Only questions that are marked for practice are eligible for the spaced practice.
-def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db(
-        (db.questions.base_course == base_course)
-        & (
-            (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
-            | (
-                (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)  # noqa: E711
-                & (db.questions.subchapter == sub_chapter_label)
-            )
-        )
-        & (db.questions.practice == True)  # noqa: E712
-    ).select()
-
-
 #
 #  Ajax Handlers to update and retrieve the last position of the user in the course
 #
@@ -714,7 +669,7 @@ def updatelastpage():
 
             # We only retrieve questions to be used in flashcards if they are marked for practice purpose.
             questions = _get_qualified_questions(
-                course.base_course, lastPageChapter, lastPageSubchapter
+                course.base_course, lastPageChapter, lastPageSubchapter, db
             )
             if len(questions) > 0:
                 now = datetime.datetime.utcnow()
@@ -1279,7 +1234,7 @@ def getAssessResults():
                 db.dragndrop_answers.answer,
                 db.dragndrop_answers.timestamp,
                 db.dragndrop_answers.correct,
-                db.dragndrop_answers.minHeight,
+                db.dragndrop_answers.min_height,
                 orderby=~db.dragndrop_answers.id,
             )
             .first()
@@ -1290,7 +1245,7 @@ def getAssessResults():
             "answer": rows.answer,
             "timestamp": str(rows.timestamp),
             "correct": rows.correct,
-            "minHeight": str(rows.minHeight),
+            "minHeight": str(rows.min_height),
         }
         return json.dumps(res)
     elif event == "clickableArea":
@@ -1702,6 +1657,7 @@ def get_question_source():
     max_difficulty = request.vars.max_difficulty
     not_seen_ever = request.vars.not_seen_ever
     autogradable = request.vars.autogradable
+    is_primary = request.vars.primary
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
@@ -1711,6 +1667,8 @@ def get_question_source():
         query = (db.competency.competency == prof) & (
             db.competency.question == db.questions.id
         )
+        if is_primary:
+            query = query & db.competency.is_primary == True
         if min_difficulty:
             query = query & db.questions.difficulty >= float(min_difficulty)
         if max_difficulty:

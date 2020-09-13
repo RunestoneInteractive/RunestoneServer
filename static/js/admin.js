@@ -45,7 +45,7 @@ function gradeIndividualItem() {
                 "Q" +
                 question.replace(/[!-#*@+:?>~.\/ ]/g, "_") +
                 "S" +
-                sid.replace(/[!-#*@+:?>~.\/]/g, "_");
+                sid.replace(/[!-#*@+:?>~.\/ ]/g, "_");
             // This creates the equivalent of outerRightDiv for each question and student
             // The guts of the form are filled in by the show function in createGradingPanel.
             var divstring = `
@@ -166,7 +166,9 @@ function autoGrade() {
                 res = await jQuery.ajax(ajax_params);
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}:
-                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${assignment}">${student}</a>
+                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${encodeURIComponent(
+                        assignment
+                    )}">${student}</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
                 );
@@ -240,17 +242,18 @@ function gradingSummary(container) {
             container = document.getElementById(container);
             $(container).html("");
             let columns = [];
-            if (retdata) {
+            if (retdata && retdata.length > 0) {
                 for (let k of Object.keys(retdata[0])) {
                     columns.push({ data: k, renderer: "html" });
                 }
+
+                var hot = new Handsontable(container, {
+                    data: retdata,
+                    colHeaders: Object.keys(retdata[0]),
+                    licenseKey: "non-commercial-and-evaluation",
+                    columns: columns,
+                });
             }
-            var hot = new Handsontable(container, {
-                data: retdata,
-                colHeaders: Object.keys(retdata[0]),
-                licenseKey: "non-commercial-and-evaluation",
-                columns: columns,
-            });
         },
     });
 }
@@ -1358,7 +1361,9 @@ function assignmentInfo() {
                 $(sim_butt).html("Exam Generator Simulator");
                 $(sim_butt).addClass("btn btn-info btn-sm");
                 $(sim_butt).click(runSimulation);
-                $("#simulatorbuttonspan").append(sim_butt);
+                if ($("#simulatorbuttonspan button").length == 0) {
+                    $("#simulatorbuttonspan").append(sim_butt);
+                }
             } else {
                 $("#assign_is_timed").prop("checked", false);
             }
@@ -1369,7 +1374,7 @@ function assignmentInfo() {
             $("#readings-autograder").val(assignmentData.readings_autograder);
 
             $("#ltilink").html(
-                `${window.location.protocol}//${window.location.host}/runestone/lti/index?assignment_id=${assignmentid}`
+                `${window.location.protocol}//${window.location.host}/runestone/lti?assignment_id=${assignmentid}`
             );
 
             // Update the questions
@@ -1908,7 +1913,7 @@ function questionBank(form) {
     var min_difficulty = form.min_diff.value;
     var max_difficulty = form.max_diff.value;
     var competency = form.competency.value;
-    var isprim = form.isprim.value;
+    var isprim = form.isprim.checked;
     var cbc = form.constrainbc.checked;
     var obj = new XMLHttpRequest();
     var url = "/runestone/admin/questionBank";

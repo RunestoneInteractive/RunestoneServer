@@ -210,7 +210,7 @@
             <h3 style="text-align: center;">Reset an Exam</h3>
             <div class="settingsbox">
                 <select id="exstudentList" class="form-control" size="10" name="exstudentList">
-                    <option value="None" selected>--Select Student(s) for Action--</option>
+                    <option value="None" selected>--Select Student to Reset--</option>
                     {{ for person in students: }}
                     <option value="{{=person}}">{{ =students[person] }}</option>
                     {{ pass }}
@@ -218,7 +218,7 @@
             </div>
             <div class="settingsbox">
                 <select id="examList" class="form-control" size="10" name="examList">
-                    <option value="None" selected>--Select Student(s) for Action--</option>
+                    <option value="None" selected>--Select Assessment to Reset --</option>
                     {{ for exam in examlist: }}
                     <option value="{{=exam}}">{{ =exam }}</option>
                     {{ pass }}

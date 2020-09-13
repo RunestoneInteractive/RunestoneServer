@@ -1,0 +1,27 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+  <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+  <!-- Import vega-embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+
+<h1>Exam Results</h1>
+<div class="graphwrapper" style="width: 100%;">
+<div id="primary_comp"></div>
+<div id="supporting_comp"></div>
+</div>
+
+
+<script>
+    var pcdata = {{=XML(pcdata)}}
+    vegaEmbed('#primary_comp', pcdata);
+    var scdata = {{=XML(scdata)}}
+    vegaEmbed('#supporting_comp', scdata);
+
+</script>
+
+{{ end }}

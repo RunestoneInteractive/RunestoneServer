@@ -8,22 +8,24 @@
 {{end}}
 
 <div class="container">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-8 col-md-offset-2" style="font-size: large;">
         <h1>Support Runestone Interactive</h1>
 
         <p>Your support of Runestone Interactive is vital to our future.
             Runestone has grown from one introductory computer science
-            course to supporting hundreds of courses and thousands of
-            students every day!</p>
-        <p>If I get enough support through donations I can devote full time to this
-            project.  Your support goes directly to Runestone Interactive LLC to
-            support hosting and ongoing development efforts.  Although we would truly
-            appreciate your support it is not required, and you still have full access
-            to all features.
-        </p>
+            course in 2012 to supporting thousands of courses and hundreds of thousands of
+            students! Since the Fall of 2018 Runestone Academy has saved students over
+            $21 million in textbook fees!</p>
+        <p>Your support ensures that great interactive textbooks
+            will remain free. It also:</p>
+            <ul>
+                <li>Supports the ongoing development of the Runestone platform.</li>
+                <li>Motivates new authors to write more books on new topics.</li>
+                <li>Pays our server bills.</li>
+                <li>Creates resources to train and support instructors.</li>
+            </ul>
         <p>Thank You! <br/>
             Brad Miller, Founder and Chief Developer -- Runestone Interactive LLC</p>
-
         <div class="panel panel-default">
             <div class="panel-heading">Donation Amount</div>
             <div class="panel panel-body">
@@ -31,12 +33,24 @@
                 <input type="radio" name="donate" id="donate20" value="20.00"> <label for="donate20">$20</label><br>
                 <input type="radio" name="donate" id="donate50" value="50.00"> <label for="donate50">$50</label><br>
                 Other: <input type="text" name="donate" id="donateother" value=""/><br>
-                <a class="btn btn-primary" href="{{=URL('index')}}" role="button">Sorry, not Today</a>
+                <a class="btn btn-warning" href="{{=URL('index')}}" role="button">Sorry, not Today</a><br>
+                If you don't PayPal, see below for Venmo option!
             </div>
         </div>
     </div>
 </div>
 <div id="paypal-button"></div>
+
+<div class="panel panel-default" style="text-align: center; font-size: large; width: 80%; margin-left: auto; margin-right: auto;">
+    <div class="panel-heading" >
+        <h2>Support with Venmo</h2>
+    </div>
+    <div class="panel panel-body">
+    <p style="padding: 5px;">For your Convenience you can also <strong>Venmo</strong> your support to @RunestoneInteractive
+        <button type="button" class="btn btn-info btn-sm" onclick="venmosupport()">I have Venmo'd my Support</button>
+    </p>
+    </div>
+</div>
 
 <script>
     paypal.Button.render({
@@ -99,6 +113,11 @@
          */
       }
     }, '#paypal-button');
+
+    function venmosupport() {
+        $.get("/{{=request.application}}/ajax/save_donate");
+        window.location.href = "/{{=request.application}}/default";
+    }
 </script>
 
 {{ if request.args: }}

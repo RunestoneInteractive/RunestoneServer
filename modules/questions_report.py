@@ -327,13 +327,20 @@ def _headers_query(
 
 def _row_decode(row, question_type):
     timestamp = row.useinfo.timestamp
+
+    # Use a specific table's timestamp field if at all possible; otherwise, use the useinfo timestamp.
+    def ts_get(table):
+        # Some queries don't select the timestamp field. In other cases, it may be present but None, while the ``useinfo`` timestamp is valid. So:
+        return table.get("timestamp", timestamp) or timestamp
+
     if question_type == "clickablearea":
         return (
             row.clickablearea_answers.answer,
             row.clickablearea_answers.correct,
-            timestamp or row.clickablearea_answers.timestamp,
+            ts_get(row.clickablearea_answers),
         )
     elif question_type in ("activecode", "actex"):
+        ts = row.code.get("timestamp", timestamp) or timestamp
         # The format of ``useinfo.act`` for code problems with a unit test looks like ``percent:66.6666666667:passed:2:failed:1``. The code isn't as useful to display. The grade is None in the ``code`` table, so don't bother showing it.
         try:
             (
@@ -346,19 +353,19 @@ def _row_decode(row, question_type):
             ) = row.useinfo.act.split(":")
         except:
             # Code problems without a unit test won't be parsed.
-            return "", None, timestamp or row.code.timestamp
-        return row.useinfo.act, float(percent) >= 100, timestamp or row.code.timestamp
+            return "", None, ts
+        return row.useinfo.act, float(percent) >= 100, ts
     elif question_type == "codelens":
         return (
             row.codelens_answers.answer,
             row.codelens_answers.correct,
-            timestamp or row.codelens_answers.timestamp,
+            ts_get(row.codelens_answers),
         )
     elif question_type == "dragndrop":
         return (
             row.dragndrop_answers.answer,
             row.dragndrop_answers.correct,
-            timestamp or row.dragndrop_answers.timestamp,
+            ts_get(row.dragndrop_answers),
         )
     elif question_type == "fillintheblank":
         answer = row.fitb_answers.answer
@@ -368,13 +375,17 @@ def _row_decode(row, question_type):
         except:
             # Handle non-JSON encoded fitb answers.
             answer = answer.split(",")
-        return answer, row.fitb_answers.correct, timestamp or row.fitb_answers.timestamp
+        return (
+            answer,
+            row.fitb_answers.correct,
+            ts_get(row.fitb_answers),
+        )
     elif question_type == "lp_build":
         answer = row.lp_answers.answer
         return (
             {} if not answer else json.loads(answer),
             row.lp_answers.correct,
-            timestamp or row.lp_answers.timestamp,
+            ts_get(row.lp_answers),
         )
     elif question_type == "mchoice":
         # Multiple choice questions store their answer as a comma-separated string. Turn this into an array of ints.
@@ -383,30 +394,31 @@ def _row_decode(row, question_type):
         return (
             answer,
             row.mchoice_answers.correct,
-            timestamp or row.mchoice_answers.timestamp,
+            ts_get(row.mchoice_answers),
         )
     elif question_type == "parsonsprob":
         return (
             row.parsons_answers.answer,
             row.parsons_answers.correct,
-            timestamp or row.parsons_answers.timestamp,
+            ts_get(row.parsons_answers),
         )
     elif question_type == "shortanswer":
-        # Prefer the answer from the shortanswer table if we have it; otherwise, we can use useinfo's act.
-        has_sa_table = "shortanswer_answers" in row
-        answer = row.shortanswer_answers.answer if has_sa_table else row.useinfo.act
+        # Prefer data from the shortanswer table if we have it; otherwise, we can use useinfo's act.
+        answer, ts = (
+            (row.shortanswer_answers.answer, ts_get(row.shortanswer_answers),)
+            if "shortanswer_answers" in row
+            else (row.useinfo.act, timestamp)
+        )
         try:
             # Try to JSON decode this, for old data.
             answer = json.loads(answer)
-            # Make sure we decoded a string, not something bizarre.
-            assert isinstance(answer, str)
         except:
             # The newer format is to store the answer as a pure string. So, ``answer`` already has the correct value.
             pass
         return (
             answer,
             None,
-            row.shortanswer_answers.timestamp if has_sa_table else timestamp,
+            ts,
         )
     elif question_type in [
         "page",
@@ -416,7 +428,7 @@ def _row_decode(row, question_type):
         "vimeo",
         "youtube",
     ]:
-        return row.useinfo.act, None, timestamp or row.useinfo.timestamp
+        return row.useinfo.act, None, timestamp
     else:
         # Unknown question! Panic!
         return "unknown question type", None, None

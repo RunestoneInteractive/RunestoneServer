@@ -35,9 +35,12 @@ import pandas as pd
 import altair as alt
 import logging
 
+from rs_practice import _get_qualified_questions
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+admin_logger(logger)
 
 ALL_AUTOGRADE_OPTIONS = ["manual", "all_or_nothing", "pct_correct", "interact"]
 AUTOGRADE_POSSIBLE_VALUES = dict(
@@ -401,23 +404,6 @@ def practice():
         )
 
 
-# I was not sure if it's okay to import it from `assignmnets.py`.
-# Only questions that are marked for practice are eligible for the spaced practice.
-def _get_qualified_questions(base_course, chapter_label, sub_chapter_label):
-    return db(
-        (db.questions.base_course == base_course)
-        & (
-            (db.questions.topic == "{}/{}".format(chapter_label, sub_chapter_label))
-            | (
-                (db.questions.chapter == chapter_label)
-                & (db.questions.topic == None)  # noqa: E711
-                & (db.questions.subchapter == sub_chapter_label)
-            )
-        )
-        & (db.questions.practice == True)  # noqa: E712
-    )
-
-
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
@@ -449,13 +435,16 @@ def add_practice_items():
                 )
             )
             questions = _get_qualified_questions(
-                course.base_course, chapter.chapter_label, subchapter.sub_chapter_label
+                course.base_course,
+                chapter.chapter_label,
+                subchapter.sub_chapter_label,
+                db,
             )
             if (
                 "{}/{}".format(chapter.chapter_name, subchapter.sub_chapter_name)
                 in string_data
             ):
-                if subchapterTaught.isempty() and not questions.isempty():
+                if subchapterTaught.isempty() and len(questions) > 0:
                     db.sub_chapter_taught.insert(
                         course_name=auth.user.course_name,
                         chapter_label=chapter.chapter_label,
@@ -481,7 +470,7 @@ def add_practice_items():
                                 course_name=course.course_name,
                                 chapter_label=chapter.chapter_label,
                                 sub_chapter_label=subchapter.sub_chapter_label,
-                                question_name=questions.select().first().name,
+                                question_name=questions.first().name,
                                 i_interval=0,
                                 e_factor=2.5,
                                 q=0,
@@ -521,36 +510,7 @@ def admin():
     dateQuery = db(db.courses.course_name == auth.user.course_name).select()
     date = dateQuery[0].term_start_date
     date = date.strftime("%m/%d/%Y")
-    cwd = os.getcwd()
-    try:
-        os.chdir(
-            path.join(
-                "applications", request.application, "books", sidQuery.base_course
-            )
-        )
-        master_build = sh("git describe --long", capture=True)[:-1]
-        with open("build_info", "w") as bc:
-            bc.write(master_build)
-            bc.write("\n")
-    except Exception:
-        master_build = ""
-    finally:
-        os.chdir(cwd)
-
-    try:
-        mbf_path = path.join(
-            "applications",
-            request.application,
-            "custom_courses",
-            sidQuery.course_name,
-            "build_info",
-        )
-        mbf = open(mbf_path, "r")
-        my_build = mbf.read()[:-1]
-        mbf.close()
-    except Exception:
-        my_build = ""
-
+    my_build = ""
     my_vers = 0
     mst_vers = 0
 
@@ -594,7 +554,10 @@ def admin():
         & (db.courses.base_course == course.base_course)
         & (db.courses.course_name != course.course_name)
     ).select(db.courses.course_name, db.courses.id)
-
+    base_course_id = (
+        db(db.courses.course_name == course.base_course).select(db.courses.id).first()
+    )
+    base_course_id = base_course_id.id
     curr_start_date = course.term_start_date.strftime("%m/%d/%Y")
     downloads_enabled = "true" if sidQuery.downloads_enabled else "false"
     allow_pairs = "true" if sidQuery.allow_pairs else "false"
@@ -612,8 +575,19 @@ def admin():
     else:
         consumer = ""
         secret = ""
+    # valid exams to show are:
+    # Exams the instructor has created for their course
+    # Or exams embedded in the base course.  Embedded exams will have from_source
+    # set to True and will have the base course id instead of this courses id.
     exams = db(
-        (db.assignments.course == course.id) & (db.assignments.is_timed == "T")
+        (db.assignments.is_timed == True)
+        & (
+            (db.assignments.course == course.id)
+            | (
+                (db.assignments.from_source == True)
+                & (db.assignments.course == base_course_id)
+            )
+        )
     ).select()
     exams = [x.name for x in exams]
     try:
@@ -629,7 +603,6 @@ def admin():
         curr_start_date=curr_start_date,
         confirm=True,
         build_info=my_build,
-        master_build=master_build,
         my_vers=my_vers,
         mst_vers=mst_vers,
         course=sidQuery,
@@ -950,19 +923,6 @@ def deletecourse():
             uset.delete()
             db(db.courses.id == courseid).delete()
             try:
-                shutil.rmtree(
-                    path.join(
-                        "applications", request.application, "static", course_name
-                    )
-                )
-                shutil.rmtree(
-                    path.join(
-                        "applications",
-                        request.application,
-                        "custom_courses",
-                        course_name,
-                    )
-                )
                 session.clear()
             except Exception:
                 session.flash = "Error, %s does not appear to exist" % course_name
@@ -1145,7 +1105,8 @@ def questionBank():
             db.competency.question == db.questions.id
         )
         if request.vars.isprim == "true":
-            comp_clause = comp_clause & (db.competency.is_primary == "T")
+            comp_clause = comp_clause & (db.competency.is_primary == True)
+
         query_clauses.append(comp_clause)
 
     myquery = query_clauses[0]
@@ -2614,6 +2575,10 @@ def create_lti_keys():
     return json.dumps(dict(consumer=consumer, secret=secret))
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
+    requires_login=True,
+)
 def simulate_exam():
     """Simulate the distribution of questions on an exam
     """

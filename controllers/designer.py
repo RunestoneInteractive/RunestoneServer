@@ -3,7 +3,12 @@
 from os import path
 import random
 import datetime
+import logging
 
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
+
+admin_logger(logger)
 #########################################################################
 ## This is a samples controller
 ## - index is the default action of any application
@@ -32,6 +37,7 @@ def index():
     return basicvalues
 
 
+@auth.requires_login()
 def build():
     buildvalues = {}
     if settings.academy_mode:

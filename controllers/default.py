@@ -369,7 +369,7 @@ def coursechooser():
     )
 
     if res:
-        db(db.auth_user.id == auth.user.id).update(course_id=res.id)
+        db(db.auth_user.id == auth.user.id).update(course_id=res.id, active="T")
         db(db.auth_user.id == auth.user.id).update(course_name=request.args[0])
         auth.user.update(course_name=request.args[0])
         auth.user.update(course_id=res.id)
@@ -408,6 +408,7 @@ def coursechooser():
 
 @auth.requires_login()
 def removecourse():
+    admin_logger(logger)
     if not request.args(0):
         redirect(URL("default", "courses"))
 
@@ -564,6 +565,7 @@ def ca_addendum():
 
 
 def donate():
+    admin_logger(logger)
     if request.vars.donate:
         amt = request.vars.donate
     elif session.donate:
@@ -575,6 +577,7 @@ def donate():
 
 @auth.requires_login()
 def delete():
+    admin_logger(logger)
     if request.vars["deleteaccount"]:
         logger.error(
             "deleting account {} for {}".format(auth.user.id, auth.user.username)
