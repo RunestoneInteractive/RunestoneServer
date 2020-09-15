@@ -1758,8 +1758,12 @@ def _get_toc_and_questions():
                 & ((db.questions.author == author) | (db.questions.is_private == "F"))
             ).select(orderby=db.questions.id)
             for question in questions_query:
+                if question.questions.qnumber:
+                    qlabel = question.questions.qnumber
+                else:
+                    qlabel = question.questions.name
                 q_info = dict(
-                    text=question.questions.name + _add_q_meta_info(question),
+                    text=qlabel + _add_q_meta_info(question),
                     id=question.questions.name,
                 )
                 q_sub_ch_info["children"].append(q_info)
@@ -1775,7 +1779,6 @@ def _get_toc_and_questions():
 # This is the place to add meta information about questions for the
 # assignment builder
 def _add_q_meta_info(qrow):
-    res = ""
     qt = {
         "mchoice": "Mchoice ✓",
         "clickablearea": "Clickable ✓",
@@ -1792,20 +1795,25 @@ def _add_q_meta_info(qrow):
         "actex": "ActiveCode",
         "fillintheblank": "FillB ✓",
     }
-    res += qt.get(qrow.questions.question_type, "")
+    qt = qt.get(qrow.questions.question_type, "")
 
     if qrow.questions.autograde:
-        res += " ✓"
+        ag = " ✓"
+    else:
+        ag = ""
 
     if qrow.questions.from_source:
         book = "📘"
     else:
         book = "🏫"
 
-    if res != "":
-        res = """ <span style="color: green">[{} {} ] </span> <span>{}...</span>""".format(
-            book, res, qrow.questions.description
-        )
+    name = qrow.questions.name
+
+    res = """ <span style="color: green">[{} {} {}
+        </span> <span style="color: mediumblue">({})</span>]
+        <span>{}...</span>""".format(
+        book, qt, ag, name, qrow.questions.description
+    )
 
     return res
 
