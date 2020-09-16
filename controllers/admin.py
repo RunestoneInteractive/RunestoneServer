@@ -1700,7 +1700,7 @@ def _get_toc_and_questions():
 
     # chapters are associated base_course.
     chapters_query = db((db.chapters.course_id == base_course)).select(
-        orderby=db.chapters.id
+        orderby=db.chapters.chapter_num
     )
     ids = {row.chapter_name: row.id for row in chapters_query}
     practice_picker.sort(key=lambda d: ids[d["text"]])
@@ -1725,7 +1725,7 @@ def _get_toc_and_questions():
         #     p_ch_info['children'] = []
         # todo:  check the chapters attribute to see if its available for readings
         subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(
-            orderby=db.sub_chapters.id
+            orderby=[db.sub_chapters.sub_chapter_num, db.sub_chapters.sub_chapter_name]
         )
         for sub_ch in subchapters_query:
             q_sub_ch_info = {}
