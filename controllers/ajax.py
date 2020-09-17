@@ -1105,29 +1105,31 @@ def getassignmentgrade():
         )
         .first()
     )
-    logger.debug(a_q)
-    if not a_q:
-        return json.dumps([ret])
-    # try new way that we store scores and comments
 
+    # if there is no assignment_question
+    # try new way that we store scores and comments
     # divid is a question; find question_grades row
-    result = (
-        db(
-            (db.question_grades.sid == auth.user.username)
-            & (db.question_grades.course_name == auth.user.course_name)
-            & (db.question_grades.div_id == divid)
+    if not a_q:
+        result = (
+            db(
+                (db.question_grades.sid == auth.user.username)
+                & (db.question_grades.course_name == auth.user.course_name)
+                & (db.question_grades.div_id == divid)
+            )
+            .select(db.question_grades.score, db.question_grades.comment)
+            .first()
         )
-        .select(db.question_grades.score, db.question_grades.comment)
-        .first()
-    )
-    logger.debug(result)
-    if result:
-        # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
-        ret["version"] = 2
-        ret["grade"] = result.score
-        ret["max"] = a_q.assignment_questions.points
-        if result.comment:
-            ret["comment"] = result.comment
+        logger.debug(result)
+        if result:
+            # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
+            ret["version"] = 2
+            ret["grade"] = result.score or "Written Feedback Only"
+            if result.score:
+                ret["max"] = "Not Scored"
+            else:
+                ret["max"] = ""
+            if result.comment:
+                ret["comment"] = result.comment
 
     return json.dumps([ret])
 

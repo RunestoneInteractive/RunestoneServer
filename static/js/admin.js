@@ -397,13 +397,12 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         );
         let currAssign =
             chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
+        let currPoints = "";
+        if (question_points[currAssign]) {
+            currPoints = question_points[currAssign][data.acid];
+        }
         jQuery("#rightTitle", rightDiv).html(
-            data.name +
-                " <em>" +
-                data.acid +
-                "</em> <span>Points: " +
-                question_points[currAssign][data.acid] +
-                "</span>"
+            `${data.name} <em>${data.acid}</em> <span>Points: ${currPoints} </span>`
         );
 
         if (data.file_includes) {
@@ -449,6 +448,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 });
             });
 
+            // Grading interface when a comment is entered.
             jQuery("#input-comments", element).change(function () {
                 var inp = this;
                 jQuery.ajax({
