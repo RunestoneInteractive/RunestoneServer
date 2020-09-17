@@ -1088,14 +1088,14 @@ def getassignmentgrade():
         "comment": "No Comments",
         "avg": "None",
         "count": "None",
+        "released": False,
     }
 
     # check that the assignment is released
     #
     a_q = (
         db(
-            (db.assignments.released == True)  # noqa: E712
-            & (db.assignments.course == auth.user.course_id)
+            (db.assignments.course == auth.user.course_id)
             & (db.assignment_questions.assignment_id == db.assignments.id)
             & (db.assignment_questions.question_id == db.questions.id)
             & (db.questions.name == divid)
@@ -1109,27 +1109,32 @@ def getassignmentgrade():
     # if there is no assignment_question
     # try new way that we store scores and comments
     # divid is a question; find question_grades row
-    if not a_q:
-        result = (
-            db(
-                (db.question_grades.sid == auth.user.username)
-                & (db.question_grades.course_name == auth.user.course_name)
-                & (db.question_grades.div_id == divid)
-            )
-            .select(db.question_grades.score, db.question_grades.comment)
-            .first()
+    result = (
+        db(
+            (db.question_grades.sid == auth.user.username)
+            & (db.question_grades.course_name == auth.user.course_name)
+            & (db.question_grades.div_id == divid)
         )
-        logger.debug(result)
-        if result:
-            # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
-            ret["version"] = 2
+        .select(db.question_grades.score, db.question_grades.comment)
+        .first()
+    )
+    logger.debug(result)
+    if result:
+        # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
+        ret["version"] = 2
+        ret["released"] = a_q.assignments.released if a_q else False
+        if a_q and not a_q.assignments.released:
+            ret["grade"] = "Not graded yet"
+        elif a_q and a_q.assignments.released:
             ret["grade"] = result.score or "Written Feedback Only"
-            if result.score:
-                ret["max"] = "Not Scored"
-            else:
-                ret["max"] = ""
-            if result.comment:
-                ret["comment"] = result.comment
+
+        if a_q and a_q.assignments.released == True:
+            ret["max"] = a_q.assignment_questions.points
+        else:
+            ret["max"] = ""
+
+        if result.comment:
+            ret["comment"] = result.comment
 
     return json.dumps([ret])
 

@@ -859,7 +859,7 @@ def test_getassignmentgrade(test_assignment, test_user_1, test_user, test_client
     print(test_client.text)
     res = json.loads(test_client.text)
     assert res[0]["grade"] == "Not graded yet"
-    assert res[0]["comment"] == "No Comments"
+    assert res[0]["comment"] == "OK job"
     assert res[0]["avg"] == "None"
     assert res[0]["count"] == "None"
     student1.logout()
