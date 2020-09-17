@@ -1670,17 +1670,18 @@ def get_question_source():
             db.competency.question == db.questions.id
         )
         if is_primary:
-            query = query & db.competency.is_primary == True
+            query = query & (db.competency.is_primary == True)
         if min_difficulty:
-            query = query & db.questions.difficulty >= float(min_difficulty)
+            query = query & (db.questions.difficulty >= float(min_difficulty))
         if max_difficulty:
-            query = query & db.questions.difficulty <= float(max_difficulty)
+            query = query & (db.questions.difficulty <= float(max_difficulty))
         if autogradable:
             query = query & (
                 (db.questions.autograde == "unittest")
                 | db.questions.question_type.contains(auto_gradable_q, all=False)
             )
         res = db(query).select(db.questions.name)
+        logger.debug(f"Query was {db._lastsql}")
         if res:
             questionlist = [row.name for row in res]
         else:
