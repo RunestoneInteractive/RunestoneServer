@@ -1278,34 +1278,35 @@ function appendToQuestionTable(
 
 // Update the grading parameters used for an assignment.
 function update_assignment(form) {
+    let data = {};
     if (!form.due.value) {
         alert("You must assign a due date to your assignment.");
         return;
     } else {
         try {
             d = new Date(form.due.value);
+            data.due = form.due.value;
         } catch (e) {
             alert("Invalid Date: " + form.due.value);
             return;
         }
     }
     if (form.visible.checked) {
-        form.visible.value = "T";
+        data.visible = "T";
     } else {
-        form.visible.value = "F";
+        data.visible = "F";
     }
     if (form.is_timed.checked) {
-        form.is_timed.value = "T";
+        data.is_timed = "T";
     } else {
-        form.is_timed.value = "F";
+        data.is_timed = "F";
     }
-    $.getJSON(
-        "save_assignment",
-        $(form).serialize() + "&assignment_id=" + getAssignmentId(),
-        function (data) {
-            alert("Assignment Saved");
-        }
-    ).error(function () {
+    data.timelimit = form.timelimit.value;
+    data.description = form.description.value;
+    data.assignment_id = getAssignmentId();
+    $.getJSON("save_assignment", data, function (result) {
+        alert("Assignment Saved");
+    }).error(function () {
         alert("huh??");
     });
 }
