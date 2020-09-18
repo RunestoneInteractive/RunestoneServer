@@ -519,6 +519,15 @@ def doAssignment():
     if assignment.points is None:
         assignment.points = 0
 
+    # This query assumes that questions are on a page and in a subchapter that is
+    # present in the book.  For many questions that is of course a given.  But for
+    # instructor created questions on the web interface it is not. Therefore we
+    # store those questions in the chapter the person selects and the subchapter
+    # is automatically populated as Exercises.  The implication of this is that IF
+    # a book does not have an Exercises.rst page for each chapter then the questions
+    # will not appear as a part of the assignment!  This also means that fore a
+    # proficiency exam that you are writing as an rst page that the page containing
+    # the exam should be linked to a toctree somewhere so that it gets added.
     questions = db(
         (db.assignment_questions.assignment_id == assignment.id)
         & (db.assignment_questions.question_id == db.questions.id)
@@ -543,6 +552,25 @@ def doAssignment():
         orderby=db.assignment_questions.sorting_priority,
     )
 
+    # Should we include the old query as a fallback?
+    # if only **some** questions from an assignment show up then chapter / subchapter
+    # is still likely an issue. But this will provide a nice fallback when NO
+    # questions appear.
+    if not questions:
+        questions = db(
+            (db.assignment_questions.assignment_id == assignment.id)
+            & (db.assignment_questions.question_id == db.questions.id)
+        ).select(
+            db.questions.name,
+            db.questions.htmlsrc,
+            db.questions.id,
+            db.questions.chapter,
+            db.questions.subchapter,
+            db.assignment_questions.points,
+            db.assignment_questions.activities_required,
+            db.assignment_questions.reading_assignment,
+            orderby=db.assignment_questions.sorting_priority,
+        )
     try:
         db.useinfo.insert(
             sid=auth.user.username,
@@ -607,8 +635,8 @@ def doAssignment():
             comment=comment,
             chapter=q.questions.chapter,
             subchapter=q.questions.subchapter,
-            chapter_name=q.chapters.chapter_name,
-            subchapter_name=q.sub_chapters.sub_chapter_name,
+            chapter_name=q.chapters.chapter_name or q.questions.chapter,
+            subchapter_name=q.sub_chapters.sub_chapter_name or q.questions.subchapter,
             name=q.questions.name,
             activities_required=q.assignment_questions.activities_required,
         )
