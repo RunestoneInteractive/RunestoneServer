@@ -1,0 +1,3502 @@
+
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<meta name=Originator content="Microsoft Word 15">
+<link rel=File-List
+href="FORM%20Information%20Security%20Plan%203-1-17.fld/filelist.xml">
+<title>DATA SECURITY POLICY</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Erik Rexford</o:Author>
+  <o:LastAuthor>Brad Miller</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:LastPrinted>2017-01-10T16:31:00Z</o:LastPrinted>
+  <o:Created>2020-09-16T14:34:00Z</o:Created>
+  <o:LastSaved>2020-09-16T14:34:00Z</o:LastSaved>
+  <o:Pages>6</o:Pages>
+  <o:Words>2009</o:Words>
+  <o:Characters>11454</o:Characters>
+  <o:Company>Microsoft</o:Company>
+  <o:Lines>95</o:Lines>
+  <o:Paragraphs>26</o:Paragraphs>
+  <o:CharactersWithSpaces>13437</o:CharactersWithSpaces>
+  <o:Version>16.00</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<link rel=themeData
+href="FORM%20Information%20Security%20Plan%203-1-17.fld/themedata.thmx">
+<link rel=colorSchemeMapping
+href="FORM%20Information%20Security%20Plan%203-1-17.fld/colorschememapping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>EN-US</w:LidThemeOther>
+  <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:SplitPgBreakAndParaMark/>
+   <w:EnableOpenTypeKerning/>
+   <w:DontFlipMirrorIndents/>
+   <w:OverrideTableStyleHps/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:DoNotOptimizeForBrowser/>
+  <m:mathPr>
+   <m:mathFont m:val="Cambria Math"/>
+   <m:brkBin m:val="before"/>
+   <m:brkBinSub m:val="&#45;-"/>
+   <m:smallFrac m:val="off"/>
+   <m:dispDef/>
+   <m:lMargin m:val="0"/>
+   <m:rMargin m:val="0"/>
+   <m:defJc m:val="centerGroup"/>
+   <m:wrapIndent m:val="1440"/>
+   <m:intLim m:val="subSup"/>
+   <m:naryLim m:val="undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" DefUnhideWhenUsed="false"
+  DefSemiHidden="false" DefQFormat="false" DefPriority="99"
+  LatentStyleCount="376">
+  <w:LsdException Locked="false" Priority="0" QFormat="true" Name="Normal"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 1"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 2"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 3"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 4"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 5"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 6"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 7"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 8"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="heading 9"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index 9"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 1"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 2"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 3"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 4"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 5"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 6"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 7"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 8"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" Name="toc 9"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Normal Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footnote text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="header"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footer"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="index heading"/>
+  <w:LsdException Locked="false" Priority="35" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="caption"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="table of figures"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="envelope address"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="envelope return"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="footnote reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="line number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="page number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="endnote reference"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="endnote text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="table of authorities"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="macro"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="toa heading"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Bullet 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Number 5"/>
+  <w:LsdException Locked="false" Priority="10" QFormat="true" Name="Title"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Closing"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Signature"/>
+  <w:LsdException Locked="false" Priority="1" SemiHidden="true"
+   UnhideWhenUsed="true" Name="Default Paragraph Font"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="List Continue 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Message Header"/>
+  <w:LsdException Locked="false" Priority="11" QFormat="true" Name="Subtitle"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Salutation"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Date"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text First Indent"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text First Indent 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Note Heading"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Body Text Indent 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Block Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Hyperlink"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="FollowedHyperlink"/>
+  <w:LsdException Locked="false" Priority="22" QFormat="true" Name="Strong"/>
+  <w:LsdException Locked="false" Priority="20" QFormat="true" Name="Emphasis"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Document Map"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Plain Text"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="E-mail Signature"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Top of Form"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Bottom of Form"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Normal (Web)"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Acronym"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Address"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Cite"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Code"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Definition"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Keyboard"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Preformatted"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Sample"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Typewriter"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="HTML Variable"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="annotation subject"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="No List"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Outline List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Simple 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Classic 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Colorful 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Columns 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Grid 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 4"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 5"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 7"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table List 8"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table 3D effects 3"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Contemporary"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Elegant"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Professional"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Subtle 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Web 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Web 2"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Balloon Text"/>
+  <w:LsdException Locked="false" Priority="39" Name="Table Grid"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Table Theme"/>
+  <w:LsdException Locked="false" SemiHidden="true" Name="Placeholder Text"/>
+  <w:LsdException Locked="false" Priority="1" QFormat="true" Name="No Spacing"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 1"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 1"/>
+  <w:LsdException Locked="false" SemiHidden="true" Name="Revision"/>
+  <w:LsdException Locked="false" Priority="34" QFormat="true"
+   Name="List Paragraph"/>
+  <w:LsdException Locked="false" Priority="29" QFormat="true" Name="Quote"/>
+  <w:LsdException Locked="false" Priority="30" QFormat="true"
+   Name="Intense Quote"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 1"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 1"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 2"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 2"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 2"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 3"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 3"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 3"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 4"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 4"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 4"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 5"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 5"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 5"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="60" Name="Light Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="61" Name="Light List Accent 6"/>
+  <w:LsdException Locked="false" Priority="62" Name="Light Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="63" Name="Medium Shading 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="64" Name="Medium Shading 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="65" Name="Medium List 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="66" Name="Medium List 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="67" Name="Medium Grid 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="68" Name="Medium Grid 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="69" Name="Medium Grid 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="70" Name="Dark List Accent 6"/>
+  <w:LsdException Locked="false" Priority="71" Name="Colorful Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="72" Name="Colorful List Accent 6"/>
+  <w:LsdException Locked="false" Priority="73" Name="Colorful Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="19" QFormat="true"
+   Name="Subtle Emphasis"/>
+  <w:LsdException Locked="false" Priority="21" QFormat="true"
+   Name="Intense Emphasis"/>
+  <w:LsdException Locked="false" Priority="31" QFormat="true"
+   Name="Subtle Reference"/>
+  <w:LsdException Locked="false" Priority="32" QFormat="true"
+   Name="Intense Reference"/>
+  <w:LsdException Locked="false" Priority="33" QFormat="true" Name="Book Title"/>
+  <w:LsdException Locked="false" Priority="37" SemiHidden="true"
+   UnhideWhenUsed="true" Name="Bibliography"/>
+  <w:LsdException Locked="false" Priority="39" SemiHidden="true"
+   UnhideWhenUsed="true" QFormat="true" Name="TOC Heading"/>
+  <w:LsdException Locked="false" Priority="41" Name="Plain Table 1"/>
+  <w:LsdException Locked="false" Priority="42" Name="Plain Table 2"/>
+  <w:LsdException Locked="false" Priority="43" Name="Plain Table 3"/>
+  <w:LsdException Locked="false" Priority="44" Name="Plain Table 4"/>
+  <w:LsdException Locked="false" Priority="45" Name="Plain Table 5"/>
+  <w:LsdException Locked="false" Priority="40" Name="Grid Table Light"/>
+  <w:LsdException Locked="false" Priority="46" Name="Grid Table 1 Light"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark"/>
+  <w:LsdException Locked="false" Priority="51" Name="Grid Table 6 Colorful"/>
+  <w:LsdException Locked="false" Priority="52" Name="Grid Table 7 Colorful"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 1"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 1"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 1"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 2"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 2"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 2"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 3"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 3"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 3"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 4"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 4"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 5"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 5"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 5"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="Grid Table 1 Light Accent 6"/>
+  <w:LsdException Locked="false" Priority="47" Name="Grid Table 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="48" Name="Grid Table 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="49" Name="Grid Table 4 Accent 6"/>
+  <w:LsdException Locked="false" Priority="50" Name="Grid Table 5 Dark Accent 6"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="Grid Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="Grid Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="46" Name="List Table 1 Light"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark"/>
+  <w:LsdException Locked="false" Priority="51" Name="List Table 6 Colorful"/>
+  <w:LsdException Locked="false" Priority="52" Name="List Table 7 Colorful"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 1"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 1"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 1"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 1"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 2"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 2"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 2"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 2"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 3"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 3"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 3"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 3"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 4"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 4"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 4"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 4"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 5"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 5"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 5"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 5"/>
+  <w:LsdException Locked="false" Priority="46"
+   Name="List Table 1 Light Accent 6"/>
+  <w:LsdException Locked="false" Priority="47" Name="List Table 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="48" Name="List Table 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="49" Name="List Table 4 Accent 6"/>
+  <w:LsdException Locked="false" Priority="50" Name="List Table 5 Dark Accent 6"/>
+  <w:LsdException Locked="false" Priority="51"
+   Name="List Table 6 Colorful Accent 6"/>
+  <w:LsdException Locked="false" Priority="52"
+   Name="List Table 7 Colorful Accent 6"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Mention"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Smart Hyperlink"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Hashtag"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Unresolved Mention"/>
+  <w:LsdException Locked="false" SemiHidden="true" UnhideWhenUsed="true"
+   Name="Smart Link"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1107305727 0 0 415 0;}
+@font-face
+	{font-family:"Segoe UI Symbol";
+	panose-1:2 11 5 2 4 2 4 2 2 3;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-2147483153 302055407 6602752 0 1 0;}
+@font-face
+	{font-family:"Segoe UI";
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-alt:Sylfaen;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-469750017 -1073683329 9 0 511 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:2.4pt;
+	margin-left:13.8pt;
+	text-indent:-14.55pt;
+	line-height:98%;
+	mso-pagination:widow-orphan;
+	font-size:11.5pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+h1
+	{mso-style-priority:9;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 1 Char";
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:-.75pt;
+	margin-bottom:2.15pt;
+	margin-left:-.25pt;
+	text-indent:-.5pt;
+	line-height:98%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:11.5pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	mso-font-kerning:0pt;
+	mso-bidi-font-weight:normal;}
+h2
+	{mso-style-priority:9;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 2 Char";
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:-.75pt;
+	margin-bottom:2.2pt;
+	margin-left:.5pt;
+	text-align:center;
+	text-indent:-.5pt;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:11.5pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+h3
+	{mso-style-priority:9;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 3 Char";
+	mso-style-next:Normal;
+	margin-top:0in;
+	margin-right:-.75pt;
+	margin-bottom:2.15pt;
+	margin-left:-.25pt;
+	text-indent:-.5pt;
+	line-height:98%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:11.5pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;
+	mso-bidi-font-weight:normal;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-priority:99;
+	mso-style-link:"Header Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:13.8pt;
+	text-indent:-14.55pt;
+	mso-pagination:widow-orphan;
+	tab-stops:center 3.25in right 6.5in;
+	font-size:11.5pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Times New Roman",serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-link:"Balloon Text Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:13.8pt;
+	text-indent:-14.55pt;
+	mso-pagination:widow-orphan;
+	font-size:9.0pt;
+	font-family:"Segoe UI",sans-serif;
+	mso-fareast-font-family:"Times New Roman";
+	color:black;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 1";
+	mso-ansi-font-size:11.5pt;
+	font-family:"Times New Roman",serif;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 2";
+	mso-ansi-font-size:11.5pt;
+	font-family:"Times New Roman",serif;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-parent:"";
+	mso-style-link:"Heading 3";
+	mso-ansi-font-size:11.5pt;
+	font-family:"Times New Roman",serif;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	font-weight:bold;
+	mso-bidi-font-weight:normal;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-priority:99;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:Header;
+	mso-ansi-font-size:11.5pt;
+	font-family:"Times New Roman",serif;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Balloon Text";
+	mso-ansi-font-size:9.0pt;
+	mso-bidi-font-size:9.0pt;
+	font-family:"Segoe UI",sans-serif;
+	mso-ascii-font-family:"Segoe UI";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Segoe UI";
+	mso-bidi-font-family:"Segoe UI";
+	color:black;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	font-size:11.0pt;
+	mso-ansi-font-size:11.0pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:minor-fareast;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;}
+.MsoPapDefault
+	{mso-style-type:export-only;
+	margin-bottom:8.0pt;
+	line-height:107%;}
+ /* Page Definitions */
+ @page
+	{mso-footnote-separator:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") fs;
+	mso-footnote-continuation-separator:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") fcs;
+	mso-endnote-separator:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") es;
+	mso-endnote-continuation-separator:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") ecs;}
+@page WordSection1
+	{size:595.0pt 842.0pt;
+	margin:108.4pt 69.35pt 121.05pt 70.1pt;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-title-page:yes;
+	mso-even-footer:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") ef1;
+	mso-footer:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") f1;
+	mso-first-footer:url("FORM%20Information%20Security%20Plan%203-1-17.fld/header.html") ff1;
+	mso-paper-source:0;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:42025553;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1353316902 -671076980 -896105780 880829532 2053269950 404887144 11974512 -648659346 1834796898 -1780705456;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:66.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:105.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:141.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:177.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:213.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:249.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:285.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:321.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l0:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:357.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1
+	{mso-list-id:794061965;
+	mso-list-type:hybrid;
+	mso-list-template-ids:878747006 -1760903246 2138619080 -53999706 -920242288 40645334 -1578348572 1575251276 2105305034 311996636;}
+@list l1:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:"\(%1\)";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%2;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:59.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%3;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:95.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level4
+	{mso-level-text:%4;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:131.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%5;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:167.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%6;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:203.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level7
+	{mso-level-text:%7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:239.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%8;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:275.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l1:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%9;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:311.9pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2
+	{mso-list-id:912012030;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-182179316 1381685498 -1784240806 66323828 -1507194490 -1293512734 1406723040 -1390786530 879374426 1757945540;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:31.55pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:71.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:107.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:143.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:179.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:215.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:251.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:287.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l2:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:323.5pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3
+	{mso-list-id:935557698;
+	mso-list-type:hybrid;
+	mso-list-template-ids:631911968 -627297648 167835826 1784172948 270593624 632702034 1574858162 -1547503136 -877914972 1473962454;}
+@list l3:level1
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%2;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%3;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level4
+	{mso-level-text:%4;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%5;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%6;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level7
+	{mso-level-text:%7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:3.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%8;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l3:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%9;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4
+	{mso-list-id:1045713172;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1944893820 1874352362 1769511230 1352847522 2016200744 1140242108 -682490958 965395832 24307770 -1109346728;}
+@list l4:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:88.3pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:122.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:158.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:194.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:230.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:266.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:302.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:338.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l4:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:374.45pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5
+	{mso-list-id:1434474819;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1658503936 1927468420 -1404518030 -1295977284 2109776504 1575014616 1958618694 -894790596 845846990 -386782598;}
+@list l5:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:49.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:87.6pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:124.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:160.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:196.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:232.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:268.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:304.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l5:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:340.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";
+	mso-hansi-font-family:"Courier New";
+	mso-bidi-font-family:"Courier New";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6
+	{mso-list-id:1631470120;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1767889466 1905801698 -341295840 1948132646 2006243852 -1775228760 458012082 54835160 -1954676036 629068064;}
+@list l6:level1
+	{mso-level-text:"\(%1\)";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%2;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%3;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level4
+	{mso-level-text:%4;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:1.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%5;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:2.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%6;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:2.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level7
+	{mso-level-text:%7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:3.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%8;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:3.75in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l6:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%9;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:4.25in;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7
+	{mso-list-id:2003464850;
+	mso-list-type:hybrid;
+	mso-list-template-ids:610415366 -478912730 -1710165160 -138633048 -1035553940 -409589224 739299118 -1929093410 -157762558 1364642354;}
+@list l7:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:81.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:124.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:160.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:196.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:232.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:268.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:304.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:340.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l7:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:▪;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:376.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Segoe UI Symbol";
+	mso-fareast-font-family:"Segoe UI Symbol";
+	mso-hansi-font-family:"Segoe UI Symbol";
+	mso-bidi-font-family:"Segoe UI Symbol";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8
+	{mso-list-id:2087535126;
+	mso-list-type:hybrid;
+	mso-list-template-ids:86909036 838119684 -1711773882 2145168458 988446046 -311396344 1258329274 1287309890 -183977140 -811303900;}
+@list l8:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:•;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:84.1pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:"\(%2\)";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:81.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%3;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:135.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level4
+	{mso-level-text:%4;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:171.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%5;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:207.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%6;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:243.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level7
+	{mso-level-text:%7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:279.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-text:%8;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:315.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+@list l8:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-text:%9;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:351.85pt;
+	text-indent:0in;
+	mso-ansi-font-size:11.5pt;
+	mso-bidi-font-size:11.5pt;
+	mso-ascii-font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-hansi-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	color:black;
+	border:none;
+	mso-ansi-font-weight:normal;
+	mso-ansi-font-style:normal;
+	text-underline:black;
+	text-decoration:none;
+	text-underline:none;
+	text-decoration:none;
+	text-line-through:none;
+	vertical-align:baseline;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin-top:0in;
+	mso-para-margin-right:0in;
+	mso-para-margin-bottom:8.0pt;
+	mso-para-margin-left:0in;
+	line-height:107%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;}
+table.TableGrid
+	{mso-style-name:TableGrid;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-unhide:no;
+	mso-style-parent:"";
+	mso-padding-alt:0in 0in 0in 0in;
+	mso-para-margin:0in;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US style='tab-interval:.5in; margin: 10%;'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:-.75pt;margin-bottom:
+2.2pt;margin-left:157.8pt;text-indent:22.2pt;line-height:normal'><b
+style='mso-bidi-font-weight:normal'>Runestone Interactive LLC</b></p>
+
+<h2>WRITTEN INFORMATION SECURITY PLAN </h2>
+
+<p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+margin-bottom:2.35pt;margin-left:0in;text-align:center;text-indent:0in;
+line-height:normal'><b style='mso-bidi-font-weight:normal'>LAST UPDATED: [09/16/2020]<i
+style='mso-bidi-font-style:normal'> </i></b></p>
+
+<p class=MsoNormal align=center style='margin-top:0in;margin-right:0in;
+margin-bottom:2.35pt;margin-left:0in;text-align:center;text-indent:0in;
+line-height:normal'><b style='mso-bidi-font-weight:normal'><span
+style='mso-spacerun:yes'> </span></b></p>
+
+<h3>I. OBJECTIVE:<span style='font-weight:normal'> </span></h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>The objective of <b
+style='mso-bidi-font-weight:normal'>Runestone Interactive LLC</b> (“Runestone
+Interactive”) in the development and implementation of this comprehensive
+written information security program (“WISP”), is to create effective
+administrative, technical and physical safeguards for the protection of data
+developed by Runestone Interactive, data provided by Runestone Interactive
+customers and data collected by Runestone Interactive from the users of its
+services (collectively the “Data”). The WISP sets forth our procedure for
+evaluating and addressing our electronic and physical methods of accessing,
+collecting, storing, using, transmitting, and protecting Data.<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<h3>II. PURPOSE:<span style='mso-spacerun:yes'>  </span></h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>The purpose of
+the WISP is to better: (a) ensure the security and confidentiality of Data; (b)
+protect against any reasonably anticipated threats or hazards to the security
+or integrity of such Data; and (c) protect against unauthorized access to or
+use of such Data. </p>
+
+<p class=MsoNormal style='margin:0in;text-indent:0in;line-height:normal'><b
+style='mso-bidi-font-weight:normal'><span style='mso-spacerun:yes'>  </span></b></p>
+
+<h3>III. SCOPE: <span style='font-weight:normal'><span
+style='mso-spacerun:yes'> </span></span></h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>In formulating
+and implementing the WISP, Runestone Interactive has addressed and incorporated
+the following protocols: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>a.<span
+style='mso-tab-count:1'>         </span>identified reasonably foreseeable
+internal and external risks to the security, confidentiality, and/or integrity
+of any electronic, paper or other records containing Data;<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'>b.<span style='mso-tab-count:
+1'>         </span>assessed the likelihood and potential damage of these
+threats, taking into consideration the sensitivity of Data;<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'>c.<span style='mso-tab-count:
+1'>         </span>evaluated the sufficiency of existing policies, procedures,
+customer information systems, and other safeguards in place to control
+risks;<span style='mso-spacerun:yes'>  </span>and</p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>d.<span
+style='mso-tab-count:1'>         </span>implemented regular monitoring of the
+effectiveness of those safeguards. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'>  </span></p>
+
+<h3>IV. DATA SECURITY COORDINATOR: <span style='font-weight:normal'><span
+style='mso-spacerun:yes'> </span></span></h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>Runestone
+Interactive has designated <b style='mso-bidi-font-weight:normal'>Bradley
+Miller</b> to implement, supervise and maintain the WISP. This designated
+employee (the “Data Security Coordinator”) will be responsible for the
+following:<span style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:98%'><span style='mso-list:Ignore'>a.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Implementation of the WISP including all
+provisions outlined in Section VII: Daily Operational Protocol;<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:98%'><span style='mso-list:Ignore'>b.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Training of all employees;<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:98%'><span style='mso-list:Ignore'>c.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Regular testing of the WISP’s safeguards;<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:98%'><span style='mso-list:Ignore'>d.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Evaluating the ability of any of our third party
+service providers to implement and maintain appropriate security measures for
+the Data to which we have permitted them access, and requiring such third party
+service providers by contract to implement and maintain appropriate security
+measures; </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:98%'><span style='mso-list:Ignore'>e.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Reviewing the scope of the security measures in
+the WISP at least annually, or whenever there is a material change in our
+business practices that may implicate the security or integrity of records
+containing Data; and</p>
+
+<p class=MsoNormal style='margin:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.2pt;
+margin-left:0in;text-indent:0in;line-height:97%;mso-list:l3 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-size:11.5pt;line-height:97%'><span style='mso-list:Ignore'>f.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Conducting an annual training session for all managers,
+employees and independent <span style='font-size:11.0pt;line-height:97%'>contractors
+who have access to Data on the elements of the WISP. All attendees at such
+training sessions are required to certify their attendance at the training, and
+their familiarity with our requirements for ensuring the protection of Data.<span
+style='mso-spacerun:yes'>  </span></span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.55pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'>  </span></p>
+
+<h3>V. INTERNAL RISK MITIGATION POLICIES: <span style='font-weight:normal'><span
+style='mso-spacerun:yes'> </span></span></h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>To guard against
+internal risks to the security, confidentiality, and/or integrity of any
+electronic, paper or other records containing Data, and evaluating and
+improving, where necessary, the effectiveness of the current safeguards for
+limiting such risks, the following measures are mandatory:<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;line-height:97%'>a. <span
+style='mso-tab-count:1'>        </span>We will only collect Data of clients,
+customers or employees that is necessary to accomplish our legitimate business
+transactions or to comply with any and all federal, state or local regulations.
+</p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;line-height:97%'>b.<span
+style='mso-tab-count:1'>         </span>Access to records containing Data shall
+be limited to those employees whose duties, relevant to their job description,
+have a legitimate need to access said records, and only for this legitimate
+job-related purpose. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;line-height:97%'>c.<span
+style='mso-tab-count:1'>         </span>Written and electronic records
+containing Data shall be securely destroyed or deleted at the earliest
+opportunity consistent with business needs or legal retention
+requirements.<span style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in;line-height:97%'>d.<span
+style='mso-tab-count:1'>         </span>A copy of the WISP is to be distributed
+to each current employee and to each new employee on the beginning date of
+their employment.<span style='mso-spacerun:yes'>  </span>It shall be the
+employee’s responsibility for acknowledging in writing, by signing the attached
+sheet, that he/she has received a copy of the WISP and will abide by its
+provisions. Employees are encouraged and invited to advise the WISP Data
+Security Coordinator of any activities or operations which appear to pose risks
+to the security of Data.<span style='mso-spacerun:yes'>   </span>If the Data
+Security Coordinator is involved with these risks, employees are encouraged and
+invited to advise any other manager or supervisor or business owner.<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>e.<span
+style='mso-tab-count:1'>         </span>All employment contracts, where
+applicable, will be amended to require all employees to comply with the
+provisions of the WISP and to prohibit any nonconforming use of Data as defined
+by the WISP </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:0in;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>f.<span
+style='mso-tab-count:1'>          </span>Terminated employees must return all
+records containing personal data, in any form, in their possession at the time
+of termination.<span style='mso-spacerun:yes'>  </span>This includes all data
+stored on any portable device and any device owned directly by the terminated
+employee </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>g.<span
+style='mso-tab-count:1'>         </span>A terminated employee’s physical and
+electronic access to records containing Data shall be restricted at the time of
+termination.<span style='mso-spacerun:yes'>  </span>This shall include remote
+electronic access to personal records, voicemail, internet, and email
+access.<span style='mso-spacerun:yes'>  </span>All keys, keycards, access
+devices, badges, company IDs, business cards, and the like shall be surrendered
+at the time of termination. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>h.<span
+style='mso-tab-count:1'>         </span>Disciplinary action will be applicable
+to violations of the WISP, up to and including termination, irrespective of
+whether Data was actually accessed or used without authorization. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>i.<span
+style='mso-tab-count:1'>          </span>All security measures shall be
+reviewed at least annually to ensure that the policies contained in the WISP
+are adequate to meet all applicable federal and state regulations.<span
+style='mso-spacerun:yes'>   </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>j.<span
+style='mso-tab-count:1'>          </span>Should our business practices change
+in a way that impacts the collection, storage, and/or transportation of records
+containing Data the WISP will be reviewed to ensure that the policies contained
+in the WISP are adequate meet all applicable federal and state regulations. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>k.<span
+style='mso-tab-count:1'>         </span>The Data Security Coordinator or
+his/her designee shall be responsible for all review and modifications of the
+WISP and shall fully consult and apprise management of all reviews including
+any recommendations for improves security arising from the review. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>l.<span
+style='mso-tab-count:1'>          </span>The Data Security Coordinator or
+his/her designee shall ensure that access to Data in restricted to approved and
+active user accounts. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>m.<span
+style='mso-tab-count:1'>        </span>Current employees’ user ID’s and
+passwords shall conform to accepted security standards.<span
+style='mso-spacerun:yes'>  </span>All passwords shall be changed at least
+annually, more often as needed. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<h3>VI. EXTERNAL RISK MITIGATION POLICIES: </h3>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:17.5pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>a.<span
+style='mso-tab-count:1'>         </span>Firewall protection, operating system
+security patches, and all software products shall be reasonably up-to-date and
+installed on any computer that stores or processes Data </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:35.05pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>b.<span
+style='mso-tab-count:1'>         </span>Data shall not be removed from the
+business premises in electronic or written form absent legitimate business need
+and use of reasonable security measures, as described in this policy<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:35.05pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>c.<span
+style='mso-tab-count:1'>         </span>All system security software including,
+anti-virus, anti-malware, and internet security shall be reasonably up-to-date
+and installed on any computer that stores or processes Data. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='text-indent:-13.8pt'>d.<span style='mso-tab-count:
+2'>         </span>There shall be secure user authentication protocols in place
+that: </p>
+
+<p class=MsoNormal style='text-indent:-13.8pt'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='text-indent:22.2pt'>1.<span style='mso-tab-count:
+1'>         </span>Control user ID and other identifiers; </p>
+
+<p class=MsoNormal style='text-indent:22.2pt'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='margin-left:70.1pt;text-indent:-34.1pt'>2.<span
+style='mso-tab-count:1'>        </span>Assigns passwords in a manner that
+conforms to accepted security standards, or applies use of unique identifier
+technologies; and</p>
+
+<p class=MsoNormal style='margin-left:70.1pt;text-indent:-34.1pt'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='text-indent:22.2pt'>3.<span style='mso-tab-count:
+1'>         </span>Control passwords to ensure that password information is
+secure. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.2pt;
+margin-left:0in;text-indent:0in;line-height:normal'><b style='mso-bidi-font-weight:
+normal'><span style='mso-spacerun:yes'> </span></b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><b style='mso-bidi-font-weight:
+normal'><span style='mso-spacerun:yes'> </span>VII. DAILY OPERATIONAL PROTOCOL <o:p></o:p></b></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>This section of
+our WISP outlines our daily efforts to minimize security risks to any computer
+system that processes or stores Data, ensures that physical files containing Data
+are reasonable secured and develops daily employee practices designed to
+minimize access and security risks to Data of our clients and/or customers and
+employees.<span style='mso-spacerun:yes'>   </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'>The Daily
+Operational Protocol shall be reviewed and modified as deemed necessary at a
+meeting of the Data Security Coordinator and personnel responsible and/or
+authorized for the security of Data. Any modifications to the Daily Operational
+Protocol shall be published in an updated version of the WISP.<span
+style='mso-spacerun:yes'>  </span>At the time of publication, a copy of the
+WISP shall be distributed to all current employees and to new hires on their
+date of employment. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.2pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'>a.<span
+style='mso-tab-count:1'>         </span><b style='mso-bidi-font-weight:normal'>Recordkeeping
+Protocol:</b><span style='mso-spacerun:yes'>  </span>We will only collect Data
+of clients and customers and employees that is necessary to accomplish our
+legitimate business transactions or to comply with any and all federal and
+state and local laws. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:70.1pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>1.<span
+style='mso-tab-count:1'>         </span>Within 30 days of the publication of
+the WISP or any update the Data Security Coordinator or his/her designee shall
+perform an audit of all relevant company records to determine which records
+contain Data, assign those files to the appropriate secured storage location,
+and to redact, expunge or otherwise eliminate all unnecessary Data in a manner
+consistent with the WISP </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:70.1pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>2.<span
+style='mso-tab-count:1'>         </span>Any Data stored shall be disposed of
+when no longer needed for business purposes or required by law for
+storage.<span style='mso-spacerun:yes'>  </span>Disposal methods must be
+consistent with those prescribed by the WISP. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>3.<span
+style='mso-tab-count:1'>         </span>Any paper files containing Data of
+clients or employees shall be stored in a locked filing cabinet.<span
+style='mso-spacerun:yes'>  </span>Only department heads and the Data Security
+Coordinator will be assigned keys to filing cabinets and only those individuals
+are allowed access to the paper files.<span style='mso-spacerun:yes'> 
+</span>Individual files may be assigned to employees on an as-needed basis by
+the department supervisor. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:70.1pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>4.<span
+style='mso-tab-count:1'>         </span>All employees are prohibited from
+keeping unsecured paper files containing Data in their work area when they are
+not present (e.g. lunch breaks). </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>5.<span
+style='mso-tab-count:1'>         </span>At the end of the day, all files
+containing Data are to be returned to the locked filing cabinet by department
+heads or the Data Security Coordinator. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>6.<span
+style='mso-tab-count:1'>         </span>Electronic records containing Data
+shall not be stored or transported on any portable electronic device, sent or
+transmitted electronically to any portable device, or sent or transported
+electronically to any computer, portable or not, without being encrypted. The
+only exception shall be where there is no reasonable risk of unauthorized
+access to the Data or it is technologically not feasible to encrypt the data as
+and where transmitted. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:35.05pt'>7.<span
+style='mso-tab-count:1'>         </span>If necessary for the functioning of
+individual departments, the department head, in consultation with the Data
+Security Coordinator, may develop departmental rules that ensure reasonable
+restrictions upon access and handling of files containing Data and must comply
+with all WISP standards.<span style='mso-spacerun:yes'>  </span>Departmental
+rules are to be published as an addendum to the WISP. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.55pt;
+margin-left:70.1pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<h1 style='margin-left:0in;text-indent:0in'><span style='font-weight:normal'>b.<span
+style='mso-tab-count:1'>         </span></span>Access Control Protocol:<span
+style='mso-spacerun:yes'>   </span></h1>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>1.<span
+style='mso-tab-count:1'>         </span>All our computers shall restrict user
+access to those employees having an authorized and unique log-in ID assigned by
+the Data Security Coordinator </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:70.1pt;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='text-indent:22.2pt'>2.<span style='mso-tab-count:
+1'>         </span>All computers that have been inactive for 5 or more minutes
+shall require relog-in </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>3.<span
+style='mso-tab-count:1'>         </span>After 5 unsuccessful log-in attempts by
+any user ID, that user ID will be blocked from accessing any computer or file
+stored on any computer until access privileges are reestablished by the Data
+Security Coordinator or his/her designee<span style='mso-spacerun:yes'>  
+</span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>4.<span
+style='mso-tab-count:1'>         </span>Access to electronically stored records
+containing Data shall be electronically limited to those employees having an
+authorized and unique login ID assigned by the Data Security Coordinator </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>5.<span
+style='mso-tab-count:1'>         </span>Where practical, all visitors who are
+expected to access areas other than common retail space or are granted access
+to office space containing Data should be required to sign-in with a Photo ID
+at a designated reception area where they will be assigned a visitor’s ID or
+guest badge unless escorted at all times.<span style='mso-spacerun:yes'> 
+</span>Visitors are required to wear said visitor ID in a plainly visible
+location on their body, unless escorted at all times. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>6.<span
+style='mso-tab-count:1'>         </span>Where practical, all visitors are
+restricted from areas where files containing Data are stored.<span
+style='mso-spacerun:yes'>  </span>Alternatively, visitors must be escorted or
+accompanied by an approved employee in any area where files containing Data are
+stored </p>
+
+<p class=MsoNormal style='margin:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>7.<span
+style='mso-tab-count:1'>         </span>All computers with an internet
+connections or any computer that stores or processes Data must have a
+reasonably up-to-date version of software providing virus, anti-spyware and
+anti-malware protection installed and active at all times. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.15pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:.5in'>8.<span
+style='mso-tab-count:1'>         </span>An inventory of all company computers
+and handhelds authorized for Data storage shall be maintained by the company,
+which shall be made known only to the Data Security Coordinator and other
+managers on a “need to know” basis: </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.35pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:2.3pt;
+margin-left:0in;text-indent:0in;line-height:normal'>c.<span style='mso-tab-count:
+1'>         </span><b style='mso-bidi-font-weight:normal'>Third Party Service
+Provider Protocol:</b><span style='mso-spacerun:yes'>  </span>Any service
+provider or individual that receives, stores, maintains, processes, or
+otherwise is permitted access to any file containing Data (“Third Party Service
+Provider”) shall be required to meet the standards forth in this Agreement.
+Each contract with a Third Party Service Provider shall be reviewed by the Data
+Security Coordinator.<span style='mso-spacerun:yes'>   </span></p>
+
+<p class=MsoNormal style='margin-left:0in;text-indent:0in'><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='margin-left:-.75pt;text-indent:0in'><b
+style='mso-bidi-font-weight:normal'>VIII.</b> <b style='mso-bidi-font-weight:
+normal'>Breach of Data Security Protocol:</b><span style='mso-spacerun:yes'> 
+</span>Should any employee know of a security breach at any of our facilities,
+or that any unencrypted Data has been lost or stolen or accessed without
+authorization, or that encrypted Data along with the access code or security
+key has been acquired by an unauthorized person or for an unauthorized purpose,
+the following protocol is to be followed: employees are to notify the Data
+Security Coordinator or department head in the event of a known or suspected
+security breach or unauthorized use of Data. </p>
+
+<p class=MsoNormal style='margin-top:0in;margin-right:0in;margin-bottom:3.25pt;
+margin-left:0in;text-indent:0in;line-height:normal'><span
+style='mso-spacerun:yes'> </span></p>
+
+</div>
+
+</body>
+
+</html>

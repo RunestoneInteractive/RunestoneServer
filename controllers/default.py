@@ -556,6 +556,10 @@ def privacy():
     return dict(private={})
 
 
+def wisp():
+    return dict(wisp={})
+
+
 def ct_addendum():
     return dict(private={})
 
