@@ -1702,7 +1702,7 @@ def _get_toc_and_questions():
     chapters_query = db((db.chapters.course_id == base_course)).select(
         orderby=db.chapters.chapter_num
     )
-    ids = {row.chapter_name: row.id for row in chapters_query}
+    ids = {row.chapter_name: row.chapter_num for row in chapters_query}
     practice_picker.sort(key=lambda d: ids[d["text"]])
 
     for ch in chapters_query:
