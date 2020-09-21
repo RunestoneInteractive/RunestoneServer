@@ -764,7 +764,8 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
 
     # The reason I'm manually stringifying the list value is that test_client.post does something strange with compound objects instead of passing them to json.dumps.
     test_client.post(
-        "admin/add_practice_items", data={"data": '["Test chapter 1/Subchapter B"]'}
+        "admin/add_practice_items",
+        data={"data": '["1. Test chapter 1/1.2 Subchapter B"]'},
     )
 
     practice_settings_1 = (
@@ -986,11 +987,11 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
             "Given name",
             "e-mail",
             "avg grade (%)",
-            "Q-7",
-            "Q-4",
-            "Q-3",
-            "Q-1",
-            "Q-2",
+            "1",
+            "1",
+            "1",
+            "2.1",
+            "2",
         ],
         "data": [
             [

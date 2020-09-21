@@ -530,7 +530,7 @@ def test_GetLastPage(test_client, test_user_1):
     # Now, test a query.
     res = ajaxCall(test_client, "getlastpage", **kwargs)
     assert res[0]["lastPageUrl"] == "test_chapter_1/subchapter_a.html"
-    assert res[0]["lastPageChapter"] == "Test chapter 1"
+    assert "Test chapter 1" in res[0]["lastPageChapter"]
 
 
 def test_GetTop10Answers(test_client, test_user_1, test_user):

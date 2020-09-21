@@ -504,7 +504,7 @@ class _TestClient(WebClient):
         # The expected status code from the request.
         expected_status=200,
         # All additional keyword arguments are passed to the ``post`` method.
-        **kwargs
+        **kwargs,
     ):
 
         try:
