@@ -852,7 +852,10 @@ def active():
         div_id = row[2]
         components = div_id.rsplit("/", 2)
         div_id = "/".join(components[1:])
-        newres.append(dict(timestamp=row[0], sid=row[1], div_id=div_id))
+        time_local = row[0] - datetime.timedelta(
+            hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
+        )
+        newres.append(dict(timestamp=time_local, sid=row[1], div_id=div_id))
     print(newres)
     logger.error(newres)
     return dict(activestudents=newres, course=course)
