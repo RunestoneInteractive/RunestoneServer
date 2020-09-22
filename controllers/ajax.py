@@ -995,13 +995,11 @@ def getpollresults():
     response.headers["content-type"] = "application/json"
 
     query = """select act from useinfo
-    join (select sid,  max(id) mid
-        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T
-        on id = T.mid""".format(
-        div_id, course
-    )
+        join (select sid,  max(id) mid
+        from useinfo where event='poll' and div_id = %s and course_id = %s group by sid) as T
+        on id = T.mid"""
 
-    rows = db.executesql(query)
+    rows = db.executesql(query, (div_id, course))
 
     result_list = []
     for row in rows:
