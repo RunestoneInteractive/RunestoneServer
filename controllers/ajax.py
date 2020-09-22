@@ -650,6 +650,7 @@ def updatelastpage():
                         db.user_sub_chapter_progress.sub_chapter_id
                         == lastPageSubchapter
                     )
+                    & (db.user_sub_chapter_progress.course_name == course)
                 ).update(status=completionFlag, end_date=datetime.datetime.utcnow())
                 done = True
             except Exception:
@@ -718,6 +719,7 @@ def getCompletionStatus():
             (db.user_sub_chapter_progress.user_id == auth.user.id)
             & (db.user_sub_chapter_progress.chapter_id == lastPageChapter)
             & (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)
+            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
         ).select(db.user_sub_chapter_progress.status)
         rowarray_list = []
         if result:
@@ -738,6 +740,7 @@ def getCompletionStatus():
                 sub_chapter_id=lastPageSubchapter,
                 status=-1,
                 start_date=datetime.datetime.utcnow(),
+                course_name=auth.user.course_name,
             )
             # the chapter might exist without the subchapter
             result = db(
@@ -753,7 +756,10 @@ def getCompletionStatus():
 
 def getAllCompletionStatus():
     if auth.user:
-        result = db((db.user_sub_chapter_progress.user_id == auth.user.id)).select(
+        result = db(
+            (db.user_sub_chapter_progress.user_id == auth.user.id)
+            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+        ).select(
             db.user_sub_chapter_progress.chapter_id,
             db.user_sub_chapter_progress.sub_chapter_id,
             db.user_sub_chapter_progress.status,
@@ -989,13 +995,11 @@ def getpollresults():
     response.headers["content-type"] = "application/json"
 
     query = """select act from useinfo
-    join (select sid,  max(id) mid
-        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T
-        on id = T.mid""".format(
-        div_id, course
-    )
+        join (select sid,  max(id) mid
+        from useinfo where event='poll' and div_id = %s and course_id = %s group by sid) as T
+        on id = T.mid"""
 
-    rows = db.executesql(query)
+    rows = db.executesql(query, (div_id, course))
 
     result_list = []
     for row in rows:
@@ -1720,6 +1724,7 @@ def get_question_source():
         .first()
     )
 
+    # TODO -- Make sure we don't select a duplicate question.
     if prev_selection:
         questionid = prev_selection.selected_id
     else:

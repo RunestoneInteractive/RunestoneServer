@@ -120,8 +120,8 @@ def build():
             """
             INSERT INTO user_courses(user_id, course_id)
             SELECT %s, %s
-            """
-            % (auth.user.id, cid)
+            """,
+            (auth.user.id, cid),
         )
 
         session.flash = "Course Created Successfully"

@@ -146,11 +146,12 @@ def get_summary():
         .first()
     )
     res = db.executesql(
-        f"""
+        """
     select chapter, name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
-where assignment_id = {assignment.id} and course_name = '{auth.user.course_name}'
+where assignment_id = %s and course_name = %s
 group by chapter, name
     """,
+        (assignment.id, auth.user.course_name),
         as_dict=True,
     )
 
@@ -673,6 +674,10 @@ def doAssignment():
                         == q.questions.subchapter
                     )
                     & (db.user_sub_chapter_progress.chapter_id == q.questions.chapter)
+                    & (
+                        db.user_sub_chapter_progress.course_name
+                        == auth.user.course_name
+                    )
                 )
                 .select()
                 .first()

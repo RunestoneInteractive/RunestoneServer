@@ -533,6 +533,37 @@ def test_GetLastPage(test_client, test_user_1):
     assert "Test chapter 1" in res[0]["lastPageChapter"]
 
 
+def test_LastPageCrossCourse(test_client, test_user_1, runestone_db_tools):
+
+    course_2 = runestone_db_tools.create_course("test_course_2")
+    test_user_1.login()
+    orig_course = test_user_1.course.course_name
+
+    test_user_1.update_profile("Support Runestone", course_name=course_2.course_name)
+    kwargs = dict(
+        course="test_course_2",
+        lastPageUrl="test_chapter_1/subchapter_a.html",
+        lastPageScrollLocation=100,
+        completionFlag="1",
+    )
+    # Call ``getlastpage`` first to insert a new record.
+    test_client.post("ajax/getlastpage", data=kwargs)
+
+    # Then, we can update it with the required info.
+    test_client.post("ajax/updatelastpage", data=kwargs)
+    test_user_1.update_profile(course_name=orig_course)
+
+    kwargs = dict(
+        course=test_user_1.course.course_name,
+        lastPageUrl="test_chapter_1/subchapter_a.html",
+        lastPageScrollLocation=100,
+        completionFlag="1",
+    )
+    # Now, test a query.
+    res = ajaxCall(test_client, "getlastpage", **kwargs)
+    assert res is None
+
+
 def test_GetTop10Answers(test_client, test_user_1, test_user):
     user_ids = []
     for index in range(0, 6):
@@ -813,6 +844,10 @@ def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
         db(
             (db.user_sub_chapter_progress.user_id == test_user_1.user_id)
             & (db.user_sub_chapter_progress.sub_chapter_id == "subchapter_a")
+            & (
+                db.user_sub_chapter_progress.course_name
+                == test_user_1.course.course_name
+            )
         )
         .select()
         .first()
