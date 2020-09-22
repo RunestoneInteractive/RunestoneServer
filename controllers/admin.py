@@ -1700,20 +1700,20 @@ def _get_toc_and_questions():
 
     # chapters are associated base_course.
     chapters_query = db((db.chapters.course_id == base_course)).select(
-        orderby=db.chapters.id
+        orderby=db.chapters.chapter_num
     )
-    ids = {row.chapter_name: row.id for row in chapters_query}
+    ids = {row.chapter_name: row.chapter_num for row in chapters_query}
     practice_picker.sort(key=lambda d: ids[d["text"]])
 
     for ch in chapters_query:
         q_ch_info = {}
         question_picker.append(q_ch_info)
-        q_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
+        q_ch_info["text"] = ch.chapter_name
         q_ch_info["children"] = []
         # Copy the same stuff for reading picker.
         r_ch_info = {}
         reading_picker.append(r_ch_info)
-        r_ch_info["text"] = "{}. {}".format(ch.chapter_num, ch.chapter_name)
+        r_ch_info["text"] = ch.chapter_name
         r_ch_info["children"] = []
         # practice_questions = db((db.questions.chapter == ch.chapter_label) & \
         #                         (db.questions.practice == True))
@@ -1725,14 +1725,12 @@ def _get_toc_and_questions():
         #     p_ch_info['children'] = []
         # todo:  check the chapters attribute to see if its available for readings
         subchapters_query = db(db.sub_chapters.chapter_id == ch.id).select(
-            orderby=db.sub_chapters.id
+            orderby=[db.sub_chapters.sub_chapter_num, db.sub_chapters.sub_chapter_name]
         )
         for sub_ch in subchapters_query:
             q_sub_ch_info = {}
             q_ch_info["children"].append(q_sub_ch_info)
-            q_sub_ch_info["text"] = "{}.{} {}".format(
-                ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
-            )
+            q_sub_ch_info["text"] = sub_ch.sub_chapter_name
             # Make the Exercises sub-chapters easy to access, since user-written problems will be added there.
             if sub_ch.sub_chapter_name == "Exercises":
                 q_sub_ch_info["id"] = ch.chapter_name + " Exercises"
@@ -1748,9 +1746,7 @@ def _get_toc_and_questions():
                 r_sub_ch_info["id"] = "{}/{}".format(
                     ch.chapter_name, sub_ch.sub_chapter_name
                 )
-                r_sub_ch_info["text"] = "{}.{} {}".format(
-                    ch.chapter_num, sub_ch.sub_chapter_num, sub_ch.sub_chapter_name
-                )
+                r_sub_ch_info["text"] = sub_ch.sub_chapter_name
 
             author = auth.user.first_name + " " + auth.user.last_name
             questions_query = db(
@@ -1762,8 +1758,12 @@ def _get_toc_and_questions():
                 & ((db.questions.author == author) | (db.questions.is_private == "F"))
             ).select(orderby=db.questions.id)
             for question in questions_query:
+                if question.questions.qnumber:
+                    qlabel = question.questions.qnumber
+                else:
+                    qlabel = question.questions.name
                 q_info = dict(
-                    text=question.questions.name + _add_q_meta_info(question),
+                    text=qlabel + _add_q_meta_info(question),
                     id=question.questions.name,
                 )
                 q_sub_ch_info["children"].append(q_info)
@@ -1779,7 +1779,6 @@ def _get_toc_and_questions():
 # This is the place to add meta information about questions for the
 # assignment builder
 def _add_q_meta_info(qrow):
-    res = ""
     qt = {
         "mchoice": "Mchoice ✓",
         "clickablearea": "Clickable ✓",
@@ -1796,20 +1795,25 @@ def _add_q_meta_info(qrow):
         "actex": "ActiveCode",
         "fillintheblank": "FillB ✓",
     }
-    res += qt.get(qrow.questions.question_type, "")
+    qt = qt.get(qrow.questions.question_type, "")
 
     if qrow.questions.autograde:
-        res += " ✓"
+        ag = " ✓"
+    else:
+        ag = ""
 
     if qrow.questions.from_source:
         book = "📘"
     else:
         book = "🏫"
 
-    if res != "":
-        res = """ <span style="color: green">[{} {} ] </span> <span>{}...</span>""".format(
-            book, res, qrow.questions.description
-        )
+    name = qrow.questions.name
+
+    res = """ <span style="color: green">[{} {} {}
+        </span> <span style="color: mediumblue">({})</span>]
+        <span>{}...</span>""".format(
+        book, qt, ag, name, qrow.questions.description
+    )
 
     return res
 
