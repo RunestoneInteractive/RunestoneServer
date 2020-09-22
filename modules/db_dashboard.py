@@ -183,22 +183,20 @@ class UserActivityMetrics(object):
         # Get summary of logs
         self.logs = current.db.executesql(
             """select sid, event, count(*)
-        from useinfo where course_id = '{}'
+        from useinfo where course_id = %s
         group by sid, event
-        order by sid, event""".format(
-                self.course_id
-            ),
+        order by sid, event""",
+            [self.course_id],
             as_dict=True,
         )
 
         self.recent_logs = current.db.executesql(
             """select sid, event, count(*)
-        from useinfo where course_id = '{}'
+        from useinfo where course_id = %s
         and timestamp > now() - interval '7 days'
         group by sid, event
-        order by sid, event""".format(
-                self.course_id
-            ),
+        order by sid, event""",
+            [self.course_id],
             as_dict=True,
         )
 
@@ -207,9 +205,8 @@ class UserActivityMetrics(object):
         from useinfo where course_id = '{}'
         and timestamp > now() - interval '24 hours'
         group by sid, event
-        order by sid, event""".format(
-                self.course_id
-            ),
+        order by sid, event""",
+            [self.course_id],
             as_dict=True,
         )
 
