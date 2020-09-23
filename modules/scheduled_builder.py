@@ -10,6 +10,7 @@
 # Standard library
 # ----------------
 import os
+import subprocess
 import shutil
 from io import open
 import sys
@@ -17,32 +18,23 @@ import sys
 # Third-party imports
 # -------------------
 from celery import Celery
-from runestone.lp.lp_common_lib import (
-    BUILD_SYSTEM_PATH,
+from runestone.lp.lp_common_lib import BUILD_SYSTEM_PATH
+from common_builder import (
     get_sim_str_sim30,
+    sim_run_mdb,
     get_verification_code,
     check_sim_out,
+    celery_config,
 )
-
-try:
-    # This can't be imported from uwsgi, but isn't needed there either.
-    from gevent import subprocess
-except:
-    pass
 
 # Local imports
 # -------------
 # None.
 
 
-# Create the Celery app.
-app = Celery(
-    "scheduled_builder",
-    backend="rpc://",
-    broker=os.environ.get("REDIS_URI", "redis://localhost:6379/0"),
-)
-
-app.conf.update(result_expires=120)
+# Create and configure the Celery app.
+app = Celery("scheduled_builder")
+app.conf.update(celery_config)
 
 # This function should run the provided code and report the results. It will
 # vary for a given compiler and language.
@@ -96,23 +88,27 @@ def _scheduled_builder(
         raise RuntimeError("Unknown builder {}".format(builder))
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
-    xc16_path = ""
+    #
     # Compile in the temporary directory, in which ``file_path`` resides.
     sp_args = dict(stderr=subprocess.STDOUT, universal_newlines=True, cwd=cwd,)
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
-    if extension == ".s":
+    try:
+        is_extension_asm = {".s": True, ".c": False}[extension]
+    except:
+        raise RuntimeError("Unknown file extension in {}.".format(file_path))
+    if is_extension_asm:
         args = [
-            os.path.join(xc16_path, "xc16-as"),
+            "xc16-as",
             "-omf=elf",
             "-g",
             "--processor=33EP128GP502",
             file_path,
             "-o" + o_path,
         ]
-    elif extension == ".c":
+    else:
         args = [
-            os.path.join(xc16_path, "xc16-gcc"),
+            "xc16-gcc",
             "-mcpu=33EP128GP502",
             "-omf=elf",
             "-g",
@@ -131,12 +127,11 @@ def _scheduled_builder(
             + os.path.join(
                 sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
             ),
+            "-DSIM",
             file_path,
             "-c",
             "-o" + o_path,
         ]
-    else:
-        raise RuntimeError("Unknown file extension in {}.".format(file_path))
     out = _subprocess_string(args, **sp_args)
     try:
         out += subprocess.check_output(args, **sp_args)
@@ -161,7 +156,7 @@ def _scheduled_builder(
         "{}-test.c.{}.o".format(os.path.splitext(source_path)[0], verification_code),
     )
     args = [
-        os.path.join(xc16_path, "xc16-gcc"),
+        "xc16-gcc",
         "-mcpu=33EP128GP502",
         "-omf=elf",
         "-g",
@@ -181,6 +176,7 @@ def _scheduled_builder(
             sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
         ),
         test_file_path,
+        "-DSIM",
         "-DVERIFICATION_CODE=({}u)".format(verification_code),
         "-c",
         "-o" + test_object_path,
@@ -195,7 +191,7 @@ def _scheduled_builder(
     # Link.
     elf_path = file_path + ".elf"
     args = [
-        os.path.join(xc16_path, "xc16-gcc"),
+        "xc16-gcc",
         "-omf=elf",
         "-Wl,--heap=100,--stack=16,--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io",
         "-Wl,--script="
@@ -212,9 +208,9 @@ def _scheduled_builder(
         os.path.join(waf_root, "lib/src/pic24_util.c.1.o"),
         os.path.join(waf_root, "tests/test_utils.c.1.o"),
         os.path.join(waf_root, "tests/test_assert.c.1.o"),
+        os.path.join(waf_root, "tests/coroutines.c.1.o"),
+        os.path.join(waf_root, "tests/platform/Microchip_PIC24/platform.c.1.o"),
         "-o" + elf_path,
-        "-Wl,-Bstatic",
-        "-Wl,-Bdynamic",
     ]
     out += "\n" + _subprocess_string(args, **sp_args)
     try:
@@ -224,27 +220,37 @@ def _scheduled_builder(
         return out, 0
 
     # Simulate. Create the simulation commands.
-    simout_path = file_path + ".simout"
-    ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
-    # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
-    # couldn't find a way to re-use that code.
+    out += "\nTest results:\n"
     sim_ret = 0
-    args = [os.path.join(xc16_path, "sim30")]
-    out += "\nTest results:\n" + _subprocess_string(args, **sp_args)
-    try:
-        cp = subprocess.run(
-            args, input=ss, stdout=subprocess.PIPE, timeout=5, **sp_args
-        )
-        sim_ret = cp.returncode
-    except subprocess.TimeoutExpired:
-        sim_ret = 1
-        timeout_str = "\n\nTimeout."
+    if not is_extension_asm:
+        out = sim_run_mdb("mdb", "dspic33EP128GP502", elf_path)
     else:
+        simout_path = file_path + ".simout"
         timeout_str = ""
-    with open(simout_path, encoding="utf-8") as f:
-        out += f.read().rstrip()
-    # Put the timeout string at the end of all the simulator output.
-    out += timeout_str
+        ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
+        args = ["sim30"]
+
+        # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
+        # couldn't find a way to re-use that code.
+        out += _subprocess_string(args, **sp_args)
+        try:
+            cp = subprocess.run(
+                args, input=ss, stdout=subprocess.PIPE, timeout=10, **sp_args
+            )
+            sim_ret = cp.returncode
+        except subprocess.TimeoutExpired:
+            sim_ret = 1
+            timeout_str = "\n\nTimeout."
+
+        # Read the results of the simulation.
+        try:
+            with open(simout_path, encoding="utf-8", errors="backslashreplace") as f:
+                out += f.read().rstrip()
+        except Exception as e:
+            out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
+        # Put the timeout string at the end of all the simulator output.
+        out += timeout_str
+
     return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
 
 
