@@ -1724,11 +1724,20 @@ def get_question_source():
         .first()
     )
 
-    # TODO -- Make sure we don't select a duplicate question.
     if prev_selection:
         questionid = prev_selection.selected_id
     else:
-        questionid = random.choice(questionlist)
+        # Eliminaate any previous exam questions for this student
+        prev_questions = db(db.selected_questions.sid == auth.user.username).select(
+            db.selected_questions.selected_id
+        )
+        prev_questions = set([row.selected_id for row in prev_questions])
+        possible = set(questionlist)
+        questionlist = list(possible - prev_questions)
+        if questionlist:
+            questionid = random.choice(questionlist)
+        else:
+            questionid = random.choice(list(possible))
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
