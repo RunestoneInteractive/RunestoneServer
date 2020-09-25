@@ -3,6 +3,7 @@
 import logging
 from operator import itemgetter
 from collections import OrderedDict
+import urllib.parse
 import six
 import pandas as pd
 import numpy as np
@@ -516,7 +517,7 @@ def grades():
         studentrow = []
         studentrow.append(studentinfo[k]["first_name"])
         studentrow.append(studentinfo[k]["last_name"])
-        studentrow.append(studentinfo[k]["username"])
+        studentrow.append(urllib.parse.quote(studentinfo[k]["username"]))
         studentrow.append(studentinfo[k]["email"])
         studentrow.append(studentinfo[k]["practice"])
         for assignment in gradebook[k]:
