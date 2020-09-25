@@ -2409,19 +2409,40 @@ def enroll_students():
         session.flash = "please choose a CSV file with student data"
         return redirect(URL("admin", "admin"))
     students = request.vars.students
+    the_course = db(db.courses.course_name == auth.user.course_name).select().first()
     try:
         # use utf-8-sig because it will work with files from excel that have
         # the byte order marker BOM set as an invisible first character in the file
         strfile = io.TextIOWrapper(students.file, encoding="utf-8-sig")
+        logger.debug(type(students.file))
         student_reader = csv.reader(strfile)
+        validfile = io.TextIOWrapper(students.file, encoding="utf-8-sig")
+        validation_reader = csv.reader(validfile)
     except Exception as e:
         session.flash = "please choose a CSV file with student data"
         logger.error(e)
         return redirect(URL("admin", "admin"))
+    messages = []
+    line = 0
+    for row in validation_reader:
+        line += 1
+        res = _validateUser(row[0], row[4], row[2], row[3], row[1], row[5], line)
+        if res:
+            messages.extend(res)
+
+    if messages:
+        return dict(
+            coursename=auth.user.course_name,
+            course_id=auth.user.course_name,
+            course=the_course,
+            messages=messages,
+        )
     counter = 0
     success = True
+    students.file.seek(0)  # reset the file pointer for underlying data
     try:
         for row in student_reader:
+            logger.debug(f"ROW = {row}")
             if len(row) < 6 or (len(row) > 6 and row[6] != ""):
                 raise ValueError("CSV must provide six values for each user")
             # CSV: username, email, fname, lname, password, course_name, db
@@ -2446,6 +2467,31 @@ def enroll_students():
         session.flash = "created {} new users".format(counter)
 
     return redirect(URL("admin", "admin"))
+
+
+def _validateUser(username, password, fname, lname, email, course_name, line):
+    errors = []
+
+    if auth.user.course_name != course_name:
+        errors.append(f"Course name does not match your course on line {line}")
+    cinfo = db(db.courses.course_name == course_name).select().first()
+    if not cinfo:
+        errors.append(f"Course {course_name} does not exist on line {line}")
+    match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
+    if match:
+        errors.append(
+            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line {line}"""
+        )
+    uinfo = db(db.auth_user.username == username).count()
+    if uinfo > 0:
+        errors.append(f"Username {username} already exists on line {line}")
+
+    if password == "":
+        errors.append(f"password cannot be blank on line {line}")
+    if "@" not in email:
+        errors.append(f"Email address missing @ on line {line}")
+
+    return errors
 
 
 @auth.requires(

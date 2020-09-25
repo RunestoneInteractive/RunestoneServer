@@ -1,0 +1,19 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+
+<h1>Errors in CSV No students registered</h1>
+
+<p>Your CSV file has the following problems:</p>
+<ol>
+    {{ for mess in messages:}}
+    <li>{{= mess}}</li>
+    {{pass}}
+</ol>
+
+<p>Please edit your csv file in a text editor and correct the errors.
+    You can resubmit the file after your corrections.</p>
+
+{{ end }}
+
