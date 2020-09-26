@@ -44,6 +44,7 @@ html5validator==0.3.3     # via -r requirements-dev.in
 httplib2==0.18.1          # via oauth2
 idna==2.9                 # via requests, runestone
 imagesize==1.2.0          # via runestone, sphinx
+importlib-metadata==1.7.0  # via flake8, jsonschema, kombu, pluggy, pytest
 isort==4.3.21             # via pylint
 itsdangerous==1.1.0       # via flask
 jinja2==2.11.2            # via altair, flask, runestone, sphinx
@@ -84,7 +85,7 @@ recommonmark==0.6.0       # via -r requirements-dev.in
 redis==3.5.3              # via celery
 regex==2020.5.14          # via black
 requests==2.23.0          # via -r requirements.in, coveralls, locust, runestone, sphinx, stripe
-runestone==5.1.0          # via -r requirements.in
+runestone==5.3.0          # via -r requirements.in
 selenium==3.141.0         # via -r requirements-dev.in, -r requirements.in
 six==1.15.0               # via -r requirements.in, astroid, bleach, geventhttpclient, jsonschema, packaging, pathlib2, paver, pip-tools, pyrsistent, python-dateutil, runestone
 snowballstemmer==2.0.0    # via runestone, sphinx
@@ -102,13 +103,14 @@ sqlalchemy==1.3.17        # via -r requirements.in, runestone
 stripe==2.48.0            # via -r requirements.in
 toml==0.10.1              # via black, pylint
 toolz==0.10.0             # via altair
-typed-ast==1.4.1          # via black
+typed-ast==1.4.1          # via astroid, black
 urllib3==1.25.9           # via requests, runestone, selenium
 vine==1.3.0               # via amqp, celery
 wcwidth==0.2.3            # via pytest
 webencodings==0.5.1       # via bleach
 werkzeug==1.0.1           # via flask
 wrapt==1.12.1             # via astroid
+zipp==3.2.0               # via importlib-metadata
 zope.event==4.4           # via gevent
 zope.interface==5.1.0     # via gevent
 

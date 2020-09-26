@@ -165,10 +165,12 @@ function autoGrade() {
                 ajax_params.data.sid = student;
                 res = await jQuery.ajax(ajax_params);
                 $("#autogradingprogress").append(
-                    `${index + 1} of ${student_array.length}:
-                        <a href="/runestone/dashboard/questiongrades?sid=${student}&assignment_id=${encodeURIComponent(
-                        assignment
-                    )}">${student}</a>
+                    `${index + 1} of ${student_array.length}: ${student}
+                        <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
+                            student
+                        )}&assignment_id=${encodeURIComponent(assignment)}">${
+                        students[student]
+                    }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
                 );
@@ -397,13 +399,12 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         );
         let currAssign =
             chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
+        let currPoints = "";
+        if (question_points[currAssign]) {
+            currPoints = question_points[currAssign][data.acid];
+        }
         jQuery("#rightTitle", rightDiv).html(
-            data.name +
-                " <em>" +
-                data.acid +
-                "</em> <span>Points: " +
-                question_points[currAssign][data.acid] +
-                "</span>"
+            `${data.name} <em>${data.acid}</em> <span>Points: ${currPoints} </span>`
         );
 
         if (data.file_includes) {
@@ -449,6 +450,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 });
             });
 
+            // Grading interface when a comment is entered.
             jQuery("#input-comments", element).change(function () {
                 var inp = this;
                 jQuery.ajax({
@@ -1278,34 +1280,35 @@ function appendToQuestionTable(
 
 // Update the grading parameters used for an assignment.
 function update_assignment(form) {
+    let data = {};
     if (!form.due.value) {
         alert("You must assign a due date to your assignment.");
         return;
     } else {
         try {
             d = new Date(form.due.value);
+            data.due = form.due.value;
         } catch (e) {
             alert("Invalid Date: " + form.due.value);
             return;
         }
     }
     if (form.visible.checked) {
-        form.visible.value = "T";
+        data.visible = "T";
     } else {
-        form.visible.value = "F";
+        data.visible = "F";
     }
     if (form.is_timed.checked) {
-        form.is_timed.value = "T";
+        data.is_timed = "T";
     } else {
-        form.is_timed.value = "F";
+        data.is_timed = "F";
     }
-    $.getJSON(
-        "save_assignment",
-        $(form).serialize() + "&assignment_id=" + getAssignmentId(),
-        function (data) {
-            alert("Assignment Saved");
-        }
-    ).error(function () {
+    data.timelimit = form.timelimit.value;
+    data.description = form.description.value;
+    data.assignment_id = getAssignmentId();
+    $.getJSON("save_assignment", data, function (result) {
+        alert("Assignment Saved");
+    }).error(function () {
         alert("huh??");
     });
 }

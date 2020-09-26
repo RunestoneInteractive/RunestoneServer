@@ -222,7 +222,7 @@ def test_reading(
 
     my_ass = test_assignment("reading_test", test_user_1.course)
     my_ass.addq_to_assignment(
-        question="Test chapter 1/Subchapter A",
+        question="1. Test chapter 1/1.1 Subchapter A",
         points=10,
         which_to_grade="best_answer",
         autograde="interact",
@@ -230,7 +230,7 @@ def test_reading(
         activities_required=1,
     )
     my_ass.addq_to_assignment(
-        question="Test chapter 1/Subchapter B",
+        question="1. Test chapter 1/1.2 Subchapter B",
         points=10,
         which_to_grade="best_answer",
         autograde="interact",

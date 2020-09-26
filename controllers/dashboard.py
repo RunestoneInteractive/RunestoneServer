@@ -3,6 +3,7 @@
 import logging
 from operator import itemgetter
 from collections import OrderedDict
+import urllib.parse
 import six
 import pandas as pd
 import numpy as np
@@ -516,7 +517,7 @@ def grades():
         studentrow = []
         studentrow.append(studentinfo[k]["first_name"])
         studentrow.append(studentinfo[k]["last_name"])
-        studentrow.append(studentinfo[k]["username"])
+        studentrow.append(urllib.parse.quote(studentinfo[k]["username"]))
         studentrow.append(studentinfo[k]["email"])
         studentrow.append(studentinfo[k]["practice"])
         for assignment in gradebook[k]:
@@ -838,13 +839,14 @@ def active():
     course = db(db.courses.id == auth.user.course_id).select().first()
 
     res = db.executesql(
-        f"""select useinfo.timestamp, useinfo.sid, div_id
+        """select useinfo.timestamp, useinfo.sid, div_id
                            from useinfo join
                            (select sid, count(*), max(id)
-                            from useinfo where course_id = '{course.course_name}'
+                            from useinfo where course_id = %(cname)s
                                 and event = 'page'
                                 and timestamp > now() - interval '15 minutes' group by sid) as T
-                          on useinfo.id = T.max"""
+                          on useinfo.id = T.max""",
+        dict(cname=course.course_name),
     )
 
     newres = []
@@ -852,7 +854,10 @@ def active():
         div_id = row[2]
         components = div_id.rsplit("/", 2)
         div_id = "/".join(components[1:])
-        newres.append(dict(timestamp=row[0], sid=row[1], div_id=div_id))
+        time_local = row[0] - datetime.timedelta(
+            hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
+        )
+        newres.append(dict(timestamp=time_local, sid=row[1], div_id=div_id))
     print(newres)
     logger.error(newres)
     return dict(activestudents=newres, course=course)
@@ -883,11 +888,19 @@ def subchapdetail():
     ).select(db.questions.name, db.questions.question_type)
 
     res = db.executesql(
-        f"""
+        """
 select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timestamp) as last, count(*) as clicks
-    from questions join useinfo on name = div_id and course_id = '{auth.user.course_name}'
-    where chapter='{request.vars.chap}' and subchapter = '{request.vars.sub}' and base_course = '{thecourse.base_course}' and sid='{request.vars.sid}'
+    from questions join useinfo on name = div_id and course_id = %s
+    where chapter = %s and subchapter = %s
+    and base_course = %s and sid = %s
     group by name, question_type""",
+        (
+            auth.user.course_name,
+            request.vars.chap,
+            request.vars.sub,
+            thecourse.base_course,
+            request.vars.sid,
+        ),
         as_dict=True,
     )
     tdoff = datetime.timedelta(

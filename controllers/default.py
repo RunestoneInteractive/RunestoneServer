@@ -212,16 +212,21 @@ def index():
                 db(
                     (db.user_sub_chapter_progress.user_id == auth.user.id)
                     & (db.user_sub_chapter_progress.chapter_id == chapter_label)
+                    & (db.user_sub_chapter_progress.course_name == course.course_name)
                 ).count()
                 == 0
             ):
                 db.executesql(
                     """
-                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status, start_date)
-                    SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1, now()
-                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
-                """
-                    % (auth.user.id, course.base_course)
+                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status, start_date, course_name)
+                    SELECT %(userid)s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1, now(), %(course_name)s
+                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %(base_course)s
+                """,
+                    dict(
+                        userid=auth.user.id,
+                        course_name=course.course_name,
+                        base_course=course.base_course,
+                    ),
                 )
         except Exception as e:
             logger.error(f"Select Course got Error {e}")
@@ -554,6 +559,10 @@ def terms():
 
 def privacy():
     return dict(private={})
+
+
+def wisp():
+    return dict(wisp={})
 
 
 def ct_addendum():

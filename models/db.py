@@ -3,6 +3,7 @@
 # *************************************
 import os
 import random
+import re
 
 from gluon import current
 
@@ -266,17 +267,23 @@ class IS_COURSE_ID:
         return (value, self.e)
 
 
+# Do not allow any of the reserved CSS characters in a username.
 class HAS_NO_DOTS:
     def __init__(
         self,
-        error_message="Your username may not contain a ' or space or any other special characters just letters and numbers",
+        error_message=r"""Your username may not contain spaces or any other special characters: !"#$%&'()*+,./:;<=>?@[\]^`{|}~ just letters and numbers""",
     ):
         self.e = error_message
 
     def __call__(self, value):
-        if "'" not in value and " " not in value:
-            return (value, None)
-        return (value, self.e)
+        match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", value)
+        if match:
+            exist = db(db.auth_user.username == value).count()
+            if exist > 0:  # user already registered give them a pass
+                return (value, None)
+            self.e = f"""Your username may not contain a {match.group(0).replace(" ","space")} or any other special characters except - or _"""
+            return (value, self.e)
+        return (value, None)
 
     def formatter(self, value):
         return value

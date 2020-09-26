@@ -43,6 +43,7 @@ db.define_table(
     Field("start_date", "datetime", default=datetime.datetime.utcnow()),
     Field("end_date", "datetime"),
     Field("status", "integer"),  # -1  - not started. 0 - active. 1 - completed
+    Field("course_name", "string"),
     migrate=table_migrate_prefix + "user_sub_chapter_progress.table",
 )
 
@@ -71,17 +72,17 @@ def make_progress_entries(field_dict, id_of_insert):
         """
        INSERT INTO user_chapter_progress(user_id, chapter_id, status)
            SELECT %s, chapters.chapter_label, -1
-           FROM chapters where chapters.course_id = '%s';
-    """
-        % (id_of_insert, cname)
+           FROM chapters where chapters.course_id = %s;
+    """,
+        (id_of_insert, cname),
     )
     db.executesql(
         """
        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
            SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
-           FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = '%s';
-    """
-        % (id_of_insert, cname)
+           FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
+    """,
+        (id_of_insert, cname),
     )
 
 

@@ -128,6 +128,7 @@ if environ.get("WEB2PY_MIGRATE", "") != "fake":
         """CREATE INDEX us_sid_idx ON public.user_state USING btree (user_id)""",  # New
         """CREATE INDEX user_sub_chapter_progress_chapter_id_idx ON user_sub_chapter_progress USING btree (chapter_id);""",
         """CREATE INDEX user_sub_chapter_progress_user_id_idx ON user_sub_chapter_progress USING btree (user_id)""",  # New
+        """CREATE INDEX user_sub_chapter_progress_course_name_idx ON user_sub_chapter_progress USING btree (course_name)""",
         """CREATE UNIQUE INDEX courses_course_name_idx ON courses USING btree (course_name)""",  # New
         """CREATE UNIQUE INDEX q_comp_unique ON competency USING btree (question, competency)""",
         """CREATE UNIQUE INDEX selector_sid_unique ON selected_questions USING btree (selector_id, sid)""",

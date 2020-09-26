@@ -530,7 +530,38 @@ def test_GetLastPage(test_client, test_user_1):
     # Now, test a query.
     res = ajaxCall(test_client, "getlastpage", **kwargs)
     assert res[0]["lastPageUrl"] == "test_chapter_1/subchapter_a.html"
-    assert res[0]["lastPageChapter"] == "Test chapter 1"
+    assert "Test chapter 1" in res[0]["lastPageChapter"]
+
+
+def test_LastPageCrossCourse(test_client, test_user_1, runestone_db_tools):
+
+    course_2 = runestone_db_tools.create_course("test_course_2")
+    test_user_1.login()
+    orig_course = test_user_1.course.course_name
+
+    test_user_1.update_profile("Support Runestone", course_name=course_2.course_name)
+    kwargs = dict(
+        course="test_course_2",
+        lastPageUrl="test_chapter_1/subchapter_a.html",
+        lastPageScrollLocation=100,
+        completionFlag="1",
+    )
+    # Call ``getlastpage`` first to insert a new record.
+    test_client.post("ajax/getlastpage", data=kwargs)
+
+    # Then, we can update it with the required info.
+    test_client.post("ajax/updatelastpage", data=kwargs)
+    test_user_1.update_profile(course_name=orig_course)
+
+    kwargs = dict(
+        course=test_user_1.course.course_name,
+        lastPageUrl="test_chapter_1/subchapter_a.html",
+        lastPageScrollLocation=100,
+        completionFlag="1",
+    )
+    # Now, test a query.
+    res = ajaxCall(test_client, "getlastpage", **kwargs)
+    assert res is None
 
 
 def test_GetTop10Answers(test_client, test_user_1, test_user):
@@ -813,6 +844,10 @@ def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
         db(
             (db.user_sub_chapter_progress.user_id == test_user_1.user_id)
             & (db.user_sub_chapter_progress.sub_chapter_id == "subchapter_a")
+            & (
+                db.user_sub_chapter_progress.course_name
+                == test_user_1.course.course_name
+            )
         )
         .select()
         .first()
@@ -859,7 +894,7 @@ def test_getassignmentgrade(test_assignment, test_user_1, test_user, test_client
     print(test_client.text)
     res = json.loads(test_client.text)
     assert res[0]["grade"] == "Not graded yet"
-    assert res[0]["comment"] == "No Comments"
+    assert res[0]["comment"] == "OK job"
     assert res[0]["avg"] == "None"
     assert res[0]["count"] == "None"
     student1.logout()

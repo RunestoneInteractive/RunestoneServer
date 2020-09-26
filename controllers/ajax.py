@@ -650,6 +650,7 @@ def updatelastpage():
                         db.user_sub_chapter_progress.sub_chapter_id
                         == lastPageSubchapter
                     )
+                    & (db.user_sub_chapter_progress.course_name == course)
                 ).update(status=completionFlag, end_date=datetime.datetime.utcnow())
                 done = True
             except Exception:
@@ -718,6 +719,7 @@ def getCompletionStatus():
             (db.user_sub_chapter_progress.user_id == auth.user.id)
             & (db.user_sub_chapter_progress.chapter_id == lastPageChapter)
             & (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)
+            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
         ).select(db.user_sub_chapter_progress.status)
         rowarray_list = []
         if result:
@@ -738,6 +740,7 @@ def getCompletionStatus():
                 sub_chapter_id=lastPageSubchapter,
                 status=-1,
                 start_date=datetime.datetime.utcnow(),
+                course_name=auth.user.course_name,
             )
             # the chapter might exist without the subchapter
             result = db(
@@ -753,7 +756,10 @@ def getCompletionStatus():
 
 def getAllCompletionStatus():
     if auth.user:
-        result = db((db.user_sub_chapter_progress.user_id == auth.user.id)).select(
+        result = db(
+            (db.user_sub_chapter_progress.user_id == auth.user.id)
+            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+        ).select(
             db.user_sub_chapter_progress.chapter_id,
             db.user_sub_chapter_progress.sub_chapter_id,
             db.user_sub_chapter_progress.status,
@@ -989,13 +995,11 @@ def getpollresults():
     response.headers["content-type"] = "application/json"
 
     query = """select act from useinfo
-    join (select sid,  max(id) mid
-        from useinfo where event='poll' and div_id = '{}' and course_id = '{}' group by sid) as T
-        on id = T.mid""".format(
-        div_id, course
-    )
+        join (select sid,  max(id) mid
+        from useinfo where event='poll' and div_id = %s and course_id = %s group by sid) as T
+        on id = T.mid"""
 
-    rows = db.executesql(query)
+    rows = db.executesql(query, (div_id, course))
 
     result_list = []
     for row in rows:
@@ -1088,14 +1092,14 @@ def getassignmentgrade():
         "comment": "No Comments",
         "avg": "None",
         "count": "None",
+        "released": False,
     }
 
     # check that the assignment is released
     #
     a_q = (
         db(
-            (db.assignments.released == True)  # noqa: E712
-            & (db.assignments.course == auth.user.course_id)
+            (db.assignments.course == auth.user.course_id)
             & (db.assignment_questions.assignment_id == db.assignments.id)
             & (db.assignment_questions.question_id == db.questions.id)
             & (db.questions.name == divid)
@@ -1105,11 +1109,9 @@ def getassignmentgrade():
         )
         .first()
     )
-    logger.debug(a_q)
-    if not a_q:
-        return json.dumps([ret])
-    # try new way that we store scores and comments
 
+    # if there is no assignment_question
+    # try new way that we store scores and comments
     # divid is a question; find question_grades row
     result = (
         db(
@@ -1124,8 +1126,17 @@ def getassignmentgrade():
     if result:
         # say that we're sending back result styles in new version, so they can be processed differently without affecting old way during transition.
         ret["version"] = 2
-        ret["grade"] = result.score
-        ret["max"] = a_q.assignment_questions.points
+        ret["released"] = a_q.assignments.released if a_q else False
+        if a_q and not a_q.assignments.released:
+            ret["grade"] = "Not graded yet"
+        elif a_q and a_q.assignments.released:
+            ret["grade"] = result.score or "Written Feedback Only"
+
+        if a_q and a_q.assignments.released == True:
+            ret["max"] = a_q.assignment_questions.points
+        else:
+            ret["max"] = ""
+
         if result.comment:
             ret["comment"] = result.comment
 
@@ -1668,17 +1679,18 @@ def get_question_source():
             db.competency.question == db.questions.id
         )
         if is_primary:
-            query = query & db.competency.is_primary == True
+            query = query & (db.competency.is_primary == True)
         if min_difficulty:
-            query = query & db.questions.difficulty >= float(min_difficulty)
+            query = query & (db.questions.difficulty >= float(min_difficulty))
         if max_difficulty:
-            query = query & db.questions.difficulty <= float(max_difficulty)
+            query = query & (db.questions.difficulty <= float(max_difficulty))
         if autogradable:
             query = query & (
                 (db.questions.autograde == "unittest")
                 | db.questions.question_type.contains(auto_gradable_q, all=False)
             )
         res = db(query).select(db.questions.name)
+        logger.debug(f"Query was {db._lastsql}")
         if res:
             questionlist = [row.name for row in res]
         else:
@@ -1715,7 +1727,17 @@ def get_question_source():
     if prev_selection:
         questionid = prev_selection.selected_id
     else:
-        questionid = random.choice(questionlist)
+        # Eliminaate any previous exam questions for this student
+        prev_questions = db(db.selected_questions.sid == auth.user.username).select(
+            db.selected_questions.selected_id
+        )
+        prev_questions = set([row.selected_id for row in prev_questions])
+        possible = set(questionlist)
+        questionlist = list(possible - prev_questions)
+        if questionlist:
+            questionid = random.choice(questionlist)
+        else:
+            questionid = random.choice(list(possible))
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
