@@ -337,6 +337,9 @@ class UserActivitySubChapterProgress(object):
         sub_chapter_label_to_text = {
             sc.sub_chapter_label: sc.sub_chapter_name for sc in subchapter_res
         }
+        # Why iterating here over self.sub_chapters?  We want the order
+        # in subchapter_res
+        rslogger.debug(f"in get_subchapter_progress {self.sub_chapters}")
         for subchapter_label, status in six.iteritems(self.sub_chapters):
             subchapters.append(
                 {
@@ -392,7 +395,7 @@ class ProgressMetrics(object):
     def __init__(self, course_id, sub_chapters, users):
         self.sub_chapters = OrderedDict()
         for sub_chapter in sub_chapters:
-            rslogger.debug(sub_chapter)
+            rslogger.debug(f" LIST of SUBS: {sub_chapter}")
             self.sub_chapters[sub_chapter.sub_chapter_label] = SubChapterActivity(
                 sub_chapter, len(users)
             )
@@ -506,7 +509,7 @@ class DashboardDataAnalyzer(object):
 
         self.user_activity = UserActivityMetrics(self.course.course_name, self.users)
         self.user_activity.update_metrics()
-
+        rslogger.debug(f"sub chapters for Progress Metrics = {self.db_sub_chapters}")
         self.progress_metrics = ProgressMetrics(
             self.course_id, self.db_sub_chapters, self.users
         )
@@ -565,10 +568,24 @@ class DashboardDataAnalyzer(object):
                 current.db.user_sub_chapter_progress.course_name
                 == self.course.course_name
             )
+            & (
+                current.db.user_sub_chapter_progress.sub_chapter_id
+                == current.db.sub_chapters.sub_chapter_label
+            )
+            & (current.db.sub_chapters.chapter_id == current.db.chapters.id)
+            & (current.db.chapters.course_id == base_course)
+            & (
+                current.db.chapters.chapter_label
+                == current.db.user_sub_chapter_progress.chapter_id
+            )
         ).select(
             current.db.user_sub_chapter_progress.chapter_id,
             current.db.user_sub_chapter_progress.sub_chapter_id,
             current.db.user_sub_chapter_progress.status,
+            orderby=[
+                current.db.chapters.chapter_num,
+                current.db.sub_chapters.sub_chapter_num,
+            ],
         )
         self.formatted_activity = self.load_recent_activity()
         self.chapter_progress = UserActivityChapterProgress(
