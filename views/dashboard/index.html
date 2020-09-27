@@ -19,9 +19,9 @@
         <select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
             {{for chapter in chapters:}}
                 {{if chapter['chapter_label'] == selected_chapter['chapter_label']: }}
-                    <option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_num']}}. {{=chapter['chapter_name']}}</option>
+                    <option selected value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
                 {{else:}}
-                    <option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_num']}}. {{=chapter['chapter_name']}}</option>
+                    <option value="{{=chapter['chapter_label']}}">{{=chapter['chapter_name']}}</option>
                 {{pass}}
             {{pass}}
         </select>
