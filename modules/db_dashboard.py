@@ -333,7 +333,7 @@ class UserActivitySubChapterProgress(object):
         subchapters = []
         subchapter_res = current.db(
             current.db.sub_chapters.chapter_id == self.chapter_id
-        ).select()
+        ).select(orderby=current.db.sub_chapters.sub_chapter_num)
         sub_chapter_label_to_text = {
             sc.sub_chapter_label: sc.sub_chapter_name for sc in subchapter_res
         }
@@ -499,7 +499,7 @@ class DashboardDataAnalyzer(object):
         self.db_chapter_progress.exclude(lambda x: x.auth_user.id in self.inums)
         self.db_sub_chapters = current.db(
             (current.db.sub_chapters.chapter_id == chapter.id)
-        ).select(current.db.sub_chapters.ALL, orderby=current.db.sub_chapters.id)
+        ).select(orderby=current.db.sub_chapters.sub_chapter_num)
         self.problem_metrics = CourseProblemMetrics(self.course_id, self.users, chapter)
         rslogger.debug("About to call update_metrics")
         self.problem_metrics.update_metrics(self.course.course_name)
@@ -531,9 +531,9 @@ class DashboardDataAnalyzer(object):
 
         base_course = self.course.base_course
 
-        self.chapters = current.db(
-            current.db.chapters.course_id == base_course
-        ).select()
+        self.chapters = current.db(current.db.chapters.course_id == base_course).select(
+            orderby=current.db.chapters.chapter_num
+        )
 
         self.user = (
             current.db(
