@@ -650,8 +650,17 @@ def updatelastpage():
                         db.user_sub_chapter_progress.sub_chapter_id
                         == lastPageSubchapter
                     )
-                    & (db.user_sub_chapter_progress.course_name == course)
-                ).update(status=completionFlag, end_date=datetime.datetime.utcnow())
+                    & (
+                        (db.user_sub_chapter_progress.course_name == course)
+                        | (
+                            db.user_sub_chapter_progress.course_name == None
+                        )  # Back fill for old entries without course
+                    )
+                ).update(
+                    status=completionFlag,
+                    end_date=datetime.datetime.utcnow(),
+                    course_name=course,
+                )
                 done = True
             except Exception:
                 num_tries -= 1
@@ -719,7 +728,12 @@ def getCompletionStatus():
             (db.user_sub_chapter_progress.user_id == auth.user.id)
             & (db.user_sub_chapter_progress.chapter_id == lastPageChapter)
             & (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)
-            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+            & (
+                (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+                | (
+                    db.user_sub_chapter_progress.course_name == None
+                )  # for backward compatibility
+            )
         ).select(db.user_sub_chapter_progress.status)
         rowarray_list = []
         if result:
