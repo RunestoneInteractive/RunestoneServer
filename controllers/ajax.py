@@ -385,26 +385,6 @@ def runlog():  # Log errors and runs with code
     if num_tries == 0:
         raise Exception("Runlog Failed to insert into useinfo")
 
-    num_tries = 3
-    done = False
-    while num_tries > 0 and not done:
-        try:
-            db.acerror_log.insert(
-                sid=sid,
-                div_id=div_id,
-                timestamp=ts,
-                course_id=course,
-                code=pre + code + post,
-                emessage=error_info,
-            )
-            done = True
-        except Exception as e:
-            logger.error("INSERT into acerror_log FAILED retrying -- {}".format(e))
-            num_tries -= 1
-    if num_tries == 0:
-        raise Exception("Runlog Failed to insert into acerror_log")
-
-    # lintAfterSave(dbid, code, div_id, sid)
     if auth.user:
         if "to_save" in request.vars and (
             request.vars.to_save == "True" or request.vars.to_save == "true"

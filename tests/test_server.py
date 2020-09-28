@@ -801,7 +801,6 @@ def test_deleteaccount(test_client, runestone_db_tools, test_user):
     time.sleep(2)
     assert not db(db.useinfo.sid == "user_to_delete").select().first()
     assert not db(db.code.sid == "user_to_delete").select().first()
-    assert not db(db.acerror_log.sid == "user_to_delete").select().first()
     for t in [
         "clickablearea",
         "codelens",

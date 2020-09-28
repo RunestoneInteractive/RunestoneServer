@@ -68,6 +68,7 @@ db.define_table(
 
 # acerror_log
 # ----------
+# TODO: remove this definition after safely backing up and removing the table from academy
 db.define_table(
     "acerror_log",
     Field("timestamp", "datetime"),

@@ -844,10 +844,6 @@ def removeStudents():
             db(
                 (db.code.sid == sid) & (db.code.course_id == auth.user.course_id)
             ).update(course_id=baseCourseID)
-            db(
-                (db.acerror_log.sid == sid)
-                & (db.acerror_log.course_id == auth.user.course_name)
-            ).update(course_id=baseCourseName)
             # leave user_chapter_progress and user_sub_chapter_progress alone for now.
 
     session.flash = T("You have successfully removed students")
