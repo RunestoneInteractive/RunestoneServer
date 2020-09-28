@@ -385,26 +385,6 @@ def runlog():  # Log errors and runs with code
     if num_tries == 0:
         raise Exception("Runlog Failed to insert into useinfo")
 
-    num_tries = 3
-    done = False
-    while num_tries > 0 and not done:
-        try:
-            db.acerror_log.insert(
-                sid=sid,
-                div_id=div_id,
-                timestamp=ts,
-                course_id=course,
-                code=pre + code + post,
-                emessage=error_info,
-            )
-            done = True
-        except Exception as e:
-            logger.error("INSERT into acerror_log FAILED retrying -- {}".format(e))
-            num_tries -= 1
-    if num_tries == 0:
-        raise Exception("Runlog Failed to insert into acerror_log")
-
-    # lintAfterSave(dbid, code, div_id, sid)
     if auth.user:
         if "to_save" in request.vars and (
             request.vars.to_save == "True" or request.vars.to_save == "true"
@@ -650,8 +630,17 @@ def updatelastpage():
                         db.user_sub_chapter_progress.sub_chapter_id
                         == lastPageSubchapter
                     )
-                    & (db.user_sub_chapter_progress.course_name == course)
-                ).update(status=completionFlag, end_date=datetime.datetime.utcnow())
+                    & (
+                        (db.user_sub_chapter_progress.course_name == course)
+                        | (
+                            db.user_sub_chapter_progress.course_name == None
+                        )  # Back fill for old entries without course
+                    )
+                ).update(
+                    status=completionFlag,
+                    end_date=datetime.datetime.utcnow(),
+                    course_name=course,
+                )
                 done = True
             except Exception:
                 num_tries -= 1
@@ -719,7 +708,12 @@ def getCompletionStatus():
             (db.user_sub_chapter_progress.user_id == auth.user.id)
             & (db.user_sub_chapter_progress.chapter_id == lastPageChapter)
             & (db.user_sub_chapter_progress.sub_chapter_id == lastPageSubchapter)
-            & (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+            & (
+                (db.user_sub_chapter_progress.course_name == auth.user.course_name)
+                | (
+                    db.user_sub_chapter_progress.course_name == None
+                )  # for backward compatibility
+            )
         ).select(db.user_sub_chapter_progress.status)
         rowarray_list = []
         if result:

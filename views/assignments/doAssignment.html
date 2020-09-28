@@ -62,6 +62,9 @@
                     {{ if assignment.time_limit: }}
                         data-time="{{=assignment.time_limit}}"
                     {{pass}}
+                    {{ if assignment.nofeedback: }}
+                        data-no-feedback
+                    {{pass}}
                     >
                     {{for q in questioninfo:}}
                         {{=XML(q['htmlsrc'])}}
