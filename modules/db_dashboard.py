@@ -661,11 +661,15 @@ class DashboardDataAnalyzer(object):
                                 userEntry["auth_user"]["username"] == username
                             ):  # If this is the student we are looking for
                                 self.grades[assign["name"]]["score"] = this_score
-
+                                # todo add percentage
+                                self.grades[assign["name"]]["pct"] = (
+                                    this_score / assign["points"]
+                                )
                     if "score" not in self.grades[assign["name"]]:
                         self.grades[assign["name"]][
                             "score"
                         ] = "N/A"  # This is redundant as a failsafe
+                        self.grades[assign["name"]]["pct"] = "N/A"
                     rslogger.debug("COUNT = %s", count)
                     try:
                         average = s / count
@@ -681,6 +685,7 @@ class DashboardDataAnalyzer(object):
             else:  # The row has no result --> the query returned empty
                 self.grades[assign["name"]] = {
                     "score": "N/A",
+                    "pct": "N/A",
                     "class_average": "N/A",
                     "due_date": assign["duedate"].date().strftime("%m-%d-%Y"),
                 }
