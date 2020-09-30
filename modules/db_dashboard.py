@@ -644,6 +644,7 @@ class DashboardDataAnalyzer(object):
                 ):  # N/A should be shown to students if assignment grades are not released
                     self.grades[assign["name"]] = {
                         "score": "N/A",
+                        "pct": "N/A",
                         "class_average": "N/A",
                         "due_date": assign["duedate"].date().strftime("%m-%d-%Y"),
                     }
@@ -661,7 +662,6 @@ class DashboardDataAnalyzer(object):
                                 userEntry["auth_user"]["username"] == username
                             ):  # If this is the student we are looking for
                                 self.grades[assign["name"]]["score"] = this_score
-                                # todo add percentage
                                 self.grades[assign["name"]]["pct"] = (
                                     this_score / assign["points"]
                                 )
