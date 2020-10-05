@@ -218,6 +218,7 @@ Other files
     :maxdepth: 2
     :glob:
 
+    docs/lti.rst
     /CONTRIBUTING
     /ChangeLog
     /scripts/toctree
