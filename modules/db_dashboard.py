@@ -651,7 +651,12 @@ class DashboardDataAnalyzer(object):
                 else:
                     s = 0.0
                     count = 0
-                    self.grades[assign["name"]] = {}
+                    self.grades[assign["name"]] = {
+                        "score": "N/A",
+                        "pct": "N/A",
+                        "class_average": "N/A",
+                        "due_date": assign["duedate"].date().strftime("%m-%d-%Y"),
+                    }
                     for userEntry in rl:
                         rslogger.debug("GETTING USER SCORES %s", userEntry)
                         this_score = userEntry["grades"]["score"]
