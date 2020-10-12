@@ -1444,7 +1444,7 @@ def tookTimedAssessment():
         .select(orderby=~db.timed_exam.id)
         .first()
     )
-    print(f"checking {exam_id} {sid} {course} {rows}")
+    logger.debug(f"checking {exam_id} {sid} {course} {rows}")
     if rows:
         return json.dumps({"tookAssessment": True})
     else:
