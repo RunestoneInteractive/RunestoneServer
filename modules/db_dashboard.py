@@ -662,7 +662,7 @@ class DashboardDataAnalyzer(object):
                                 userEntry["auth_user"]["username"] == username
                             ):  # If this is the student we are looking for
                                 self.grades[assign["name"]]["score"] = this_score
-                                self.grades[assign["name"]]["pct"] = int(
+                                self.grades[assign["name"]]["pct"] = round(
                                     100 * this_score / assign["points"]
                                 )
                     if "score" not in self.grades[assign["name"]]:
