@@ -489,8 +489,7 @@ def test_GetHist(test_client, test_user_1):
 def test_RunLog(test_client, test_user_1):
 
     """
-    runlog should add an entry into the useinfo table as well as the code and acerror_log tables...
-    code and acerror_log seem pretty redundant... This ought to be cleaned up.
+    runlog should add an entry into the useinfo table as well as the code table
     """
     test_user_1.login()
 

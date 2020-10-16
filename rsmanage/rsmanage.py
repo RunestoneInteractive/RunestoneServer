@@ -589,7 +589,6 @@ def rmuser(config, username):
     eng.execute("delete from auth_user where username = %s", sid)
     eng.execute("delete from useinfo where sid = %s", sid)
     eng.execute("delete from code where sid = %s", sid)
-    eng.execute("delete from acerror_log where sid = %s", sid)
     for t in [
         "clickablearea",
         "codelens",

@@ -844,10 +844,6 @@ def removeStudents():
             db(
                 (db.code.sid == sid) & (db.code.course_id == auth.user.course_id)
             ).update(course_id=baseCourseID)
-            db(
-                (db.acerror_log.sid == sid)
-                & (db.acerror_log.course_id == auth.user.course_name)
-            ).update(course_id=baseCourseName)
             # leave user_chapter_progress and user_sub_chapter_progress alone for now.
 
     session.flash = T("You have successfully removed students")
@@ -1853,6 +1849,7 @@ def get_assignment():
     assignment_data["visible"] = assignment_row.visible
     assignment_data["is_timed"] = assignment_row.is_timed
     assignment_data["from_source"] = assignment_row.from_source
+    assignment_data["nofeedback"] = assignment_row.nofeedback
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1953,6 +1950,7 @@ def save_assignment():
     isVisible = request.vars["visible"]
     is_timed = request.vars["is_timed"]
     time_limit = request.vars["timelimit"]
+    nofeedback = request.vars["nofeedback"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -1970,6 +1968,7 @@ def save_assignment():
             is_timed=is_timed,
             visible=isVisible,
             time_limit=time_limit,
+            nofeedback=nofeedback,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
