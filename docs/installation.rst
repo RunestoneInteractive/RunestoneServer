@@ -135,6 +135,7 @@ Installation
      * Set and export environment variable for ``DBURL`` -- Note the url format for web2py is different from sqlalchemy.  use `postgres` for web2py and `postgresql` for sqlalchemy.  example:  `postgresql://username:pw@host/database` where pw may be empty, and `database` is the database you created above, `runestone`.
      * Set and export environment variable ``WEB2PY_CONFIG``. If set to production, it will get the database connection string from DBURL. If set to development, it will get the database connection string from DEV_DBURL. If set to test, it will get it from TEST_DBURL.
      * Set and export environment variable ``WEB2PY_MIGRATE``. If set to Yes, web2py will check on each page load whether any database migrations are needed and perform them. If set to No, web2py will just assume that models match the database. If set to Fake, web2py will try to update the metadata it maintains about the database tables to match the models, but will not make any changes to the database; use that setting only for repairs when something has gone wrong.
+     * You can confirm that you have set the environment variable and database connection string correctly using ``psql %DBURL%``, and then to exit this command, use ``\q``.
      * If you want to customize other settings you can create a file ``applications/runestone/models/1.py`` using ``models/1.py.prototype`` as the template.  If you have your environment variables set up as explained above you probably won't need to worry about this for your initial setup.
 
    ::
@@ -144,9 +145,7 @@ Installation
        export DBURL=postgresql://username:pw@host/database
        export TEST_DBURL=postgresql://username:pw@host/database
        export DEV_DBURL=postgresql://username:pw@host/database
-
-     * For Windows, use the ``set`` command instead of ``export``, e.g. ``set WEB2PY_CONFIG=production``.
-     * You can confirm that you have set the environment variable and database connection string correctly using the following, and then to exit this command, use ``\q``.
+       # For Windows, use the 'set' command instead of 'export', e.g. 'set WEB2PY_CONFIG=production'
 
    ::
 
