@@ -65,6 +65,7 @@
                     {{ if assignment.nofeedback: }}
                         data-no-feedback
                     {{pass}}
+                    style="display: none;"
                     >
                     {{for q in questioninfo:}}
                         {{=XML(q['htmlsrc'])}}
