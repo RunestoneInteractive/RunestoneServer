@@ -10,7 +10,7 @@ If you just want to run the tests:
   .. code-block::
 
       cd runestone
-      pip install -r requirements-test.txt
+      pip install -r requirements-dev.txt
 
 
 - Next, switch to the test directory (``runestone/tests``)
