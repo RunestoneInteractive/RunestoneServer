@@ -1848,6 +1848,7 @@ def get_assignment():
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
     assignment_data["is_timed"] = assignment_row.is_timed
+    assignment_data["time_limit"] = assignment_row.time_limit
     assignment_data["from_source"] = assignment_row.from_source
     assignment_data["nofeedback"] = assignment_row.nofeedback
 

@@ -1355,6 +1355,7 @@ function assignmentInfo() {
             $("#readings-threshold").val(assignmentData.threshold);
             $("#assign_visible").val(assignmentData.visible);
             $("#assign_is_timed").val(assignmentData.is_timed);
+            $("#timelimit").val(assignmentData.time_limit);
             $("#nofeedback").val(assignmentData.nofeedback);
             if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
@@ -1363,6 +1364,8 @@ function assignmentInfo() {
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);
+            } else {
+                $("#nofeedback").prop("checked", false);
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
@@ -1378,6 +1381,11 @@ function assignmentInfo() {
                 }
             } else {
                 $("#assign_is_timed").prop("checked", false);
+            }
+            if (assignmentData.time_limit) {
+                $("#timelimit").prop("value", assignmentData.time_limit);
+            } else {
+                $("#timelimit").prop("value", "");
             }
             if (assignmentData.from_source) {
                 $("#assign_is_timed").prop("disabled", true);
@@ -2076,6 +2084,11 @@ function edit_question(form) {
             $("#editModal").modal("hide");
         }
     });
+}
+
+//  Called when the "Match Auto-Grade" button is clicked.
+function matchAutoGrade() {
+    
 }
 
 // ***********
