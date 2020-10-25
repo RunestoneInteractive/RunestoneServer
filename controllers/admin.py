@@ -1848,8 +1848,10 @@ def get_assignment():
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
     assignment_data["is_timed"] = assignment_row.is_timed
+    assignment_data["time_limit"] = assignment_row.time_limit
     assignment_data["from_source"] = assignment_row.from_source
     assignment_data["nofeedback"] = assignment_row.nofeedback
+    assignment_data["nopause"] = assignment_row.nopause
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -1951,6 +1953,7 @@ def save_assignment():
     is_timed = request.vars["is_timed"]
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
+    nopause = request.vars["nopause"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -1969,6 +1972,7 @@ def save_assignment():
             visible=isVisible,
             time_limit=time_limit,
             nofeedback=nofeedback,
+            nopause=nopause,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:

@@ -1308,6 +1308,11 @@ function update_assignment(form) {
     } else {
         data.nofeedback = "F";
     }
+    if (form.nopause.checked) {
+        data.nopause = "T";
+    } else {
+        data.nopause = "F";
+    }
     data.timelimit = form.timelimit.value;
     data.description = form.description.value;
     data.assignment_id = getAssignmentId();
@@ -1355,6 +1360,8 @@ function assignmentInfo() {
             $("#readings-threshold").val(assignmentData.threshold);
             $("#assign_visible").val(assignmentData.visible);
             $("#assign_is_timed").val(assignmentData.is_timed);
+            $("#timelimit").val(assignmentData.time_limit);
+            $("#nopause").val(assignmentData.nopause);
             $("#nofeedback").val(assignmentData.nofeedback);
             if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
