@@ -389,6 +389,21 @@ def studentreport():
         session.flash = f"Downloading to data_for_{sid}.csv"
         return mtbl.to_csv(na_rep=" ")
 
+    if request.vars.action == "dlcode":
+        mtbl = pd.read_sql_query(
+            """
+        select * from code where sid = %(sid)s and course_id = %(course)s
+        """,
+            settings.database_uri,
+            params={"sid": auth.user.username, "course": auth.user.course_id},
+        )
+        response.headers["Content-Type"] = "application/vnd.ms-excel"
+        response.headers[
+            "Content-Disposition"
+        ] = "attachment; filename=code_for_{}.csv".format(sid)
+        session.flash = f"Downloading to code_for_{sid}.csv"
+        return mtbl.to_csv(na_rep=" ")
+
     return dict(
         course=get_course_row(db.courses.ALL),
         user=data_analyzer.user,
@@ -397,6 +412,7 @@ def studentreport():
         assignments=data_analyzer.grades,
         **pd_dict,
     )
+
 
 
 @auth.requires_login()
