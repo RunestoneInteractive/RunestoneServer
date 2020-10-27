@@ -414,7 +414,6 @@ def studentreport():
     )
 
 
-
 @auth.requires_login()
 def studentprogress():
     return dict(course_name=auth.user.course_name)
