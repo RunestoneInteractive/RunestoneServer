@@ -19,6 +19,7 @@ db.define_table(
     Field("time_limit", "integer"),
     Field("from_source", "boolean"),
     Field("nofeedback", "boolean"),
+    Field("nopause", "boolean"),
     format="%(name)s",
     migrate=table_migrate_prefix + "assignments.table",
 )

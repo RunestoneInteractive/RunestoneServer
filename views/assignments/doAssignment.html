@@ -65,6 +65,9 @@
                     {{ if assignment.nofeedback: }}
                         data-no-feedback
                     {{pass}}
+                    {{ if assignment.nopause: }}
+                        data-no-pause
+                    {{pass}}
                     style="display: none;"
                     >
                     {{for q in questioninfo:}}

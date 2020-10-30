@@ -24,6 +24,7 @@ function DashboardCharts() {
                 return d.data.map(function (o, i) {
                     // Structure it so that your numeric
                     // axis (the stacked amount) is y
+                    // BUG: if a course has students with same first last name then we lose one!
                     nameMap[o["student"]] = o["sid"];
                     return {
                         y: o["count"],
