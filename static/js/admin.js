@@ -2092,11 +2092,6 @@ function edit_question(form) {
     });
 }
 
-//  Called when the "Match Auto-Grade" button is clicked.
-function matchAutoGrade() {
-    
-}
-
 // ***********
 // Grading tab
 // ***********
