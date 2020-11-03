@@ -1735,7 +1735,7 @@ def get_question_source():
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
-    if res and len(questionlist) > 1 and not prev_selection:
+    if res and len(questionlist) > 0 and not prev_selection:
         db.selected_questions.insert(
             selector_id=selector_id,
             sid=auth.user.username,
