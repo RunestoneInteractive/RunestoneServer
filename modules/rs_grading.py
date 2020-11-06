@@ -755,8 +755,8 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
     # try to send lti grades
     assignment = _get_assignment(assignment_id)
     if not assignment:
-        current.session.flash = "Failed to find assignment object for assignment {}".format(
-            assignment_id
+        current.session.flash = (
+            "Failed to find assignment object for assignment {}".format(assignment_id)
         )
         return False
     else:
@@ -769,8 +769,10 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
             .first()
         )
         if not grade:
-            current.session.flash = "Failed to find grade object for user {} and assignment {}".format(
-                auth.user.id, assignment_id
+            current.session.flash = (
+                "Failed to find grade object for user {} and assignment {}".format(
+                    auth.user.id, assignment_id
+                )
             )
             return False
         else:
@@ -780,7 +782,9 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
                 or (not grade.lis_result_sourcedid)
                 or (not grade.lis_outcome_url)
             ):
-                current.session.flash = "Failed to send grade back to LMS (Coursera, Canvas, Blackboard...), probably because the student accessed this assignment directly rather than using a link from the LMS, or because there is an error in the assignment link in the LMS. Please report this error."
+                if lti_record:
+                    # if there is an LTI record then it should go to LTI but if not then this course is not hooked up to LTI, so don'e send a confusing message.
+                    current.session.flash = "Failed to send grade back to LMS (Coursera, Canvas, Blackboard...), probably because the student accessed this assignment directly rather than using a link from the LMS, or because there is an error in the assignment link in the LMS. Please report this error."
                 return False
             else:
                 # really sending
@@ -1240,16 +1244,13 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                         # have a corresponding key in last_practiced where the time of the corresponding
                         # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
                         elif (
-                            (
-                                flashcard_log.end_practice.date()
-                                - last_practiced[
-                                    f.chapter_label + f.sub_chapter_label
-                                ].end_practice.date()
-                            ).days
-                            >= last_practiced[
+                            flashcard_log.end_practice.date()
+                            - last_practiced[
                                 f.chapter_label + f.sub_chapter_label
-                            ].i_interval
-                        ):
+                            ].end_practice.date()
+                        ).days >= last_practiced[
+                            f.chapter_label + f.sub_chapter_label
+                        ].i_interval:
                             presentable_topics[
                                 f.chapter_label + f.sub_chapter_label
                             ] = f
