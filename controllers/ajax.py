@@ -250,7 +250,11 @@ def hsblog():
 
     elif event == "shortanswer" and auth.user:
         db.shortanswer_answers.insert(
-            sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course,
+            sid=sid,
+            answer=act,
+            div_id=div_id,
+            timestamp=ts,
+            course_name=course,
         )
 
     elif event == "unittest" and auth.user:

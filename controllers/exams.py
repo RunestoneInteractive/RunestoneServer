@@ -34,7 +34,7 @@ logger.setLevel(settings.log_level)
     requires_login=True,
 )
 def one_exam_competency():
-    """ Get data about one exam
+    """Get data about one exam
     using a very cool query.
 
     """

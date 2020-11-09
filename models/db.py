@@ -253,8 +253,8 @@ def is_editor(userid):
 
 
 class IS_COURSE_ID:
-    """ used to validate that a course name entered (e.g. devcourse) corresponds to a
-        valid course ID (i.e. db.courses.id) """
+    """used to validate that a course name entered (e.g. devcourse) corresponds to a
+    valid course ID (i.e. db.courses.id)"""
 
     def __init__(
         self, error_message="Unknown course name. Please see your instructor."

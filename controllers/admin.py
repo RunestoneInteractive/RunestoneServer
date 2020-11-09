@@ -2633,8 +2633,7 @@ def create_lti_keys():
     requires_login=True,
 )
 def simulate_exam():
-    """Simulate the distribution of questions on an exam
-    """
+    """Simulate the distribution of questions on an exam"""
 
     # select * from assignment_questions join questions on question_id = questions.id where assignment_id =24;
     assignment_id = request.vars.assignment_id
