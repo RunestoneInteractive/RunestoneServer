@@ -15,25 +15,18 @@ import datetime
 import io
 import json
 import logging
-import os
 import re
 import uuid
-from collections import OrderedDict
-from os import path
+from collections import OrderedDict, Counter
 from random import randint
 
 # Third Party library
 # -------------------
-import pandas as pd
 from dateutil.parser import parse
-from random import randint
-from collections import OrderedDict, Counter
-from paver.easy import sh
 from rs_grading import _get_assignment, send_lti_grades
 from runestone import cmap
 import pandas as pd
 import altair as alt
-import logging
 
 from rs_practice import _get_qualified_questions
 
@@ -977,7 +970,7 @@ def createAssignment():
         return json.dumps("ERROR")
 
     course = auth.user.course_id
-    logger.debug("Adding new assignment {} for course".format(name, course))
+    logger.debug("Adding new assignment {} for course: {}".format(name, course))
     name_existsQ = len(
         db((db.assignments.name == name) & (db.assignments.course == course)).select()
     )
@@ -1054,10 +1047,7 @@ def questionBank():
     )
     base_course = row.base_course
     query_clauses = []
-    # should we search for tags?
-    tags = False
-    if request.vars["tags"]:
-        tags = True
+
     # should we search the question by term?
     if request.vars.term:
         term_list = [x.strip() for x in request.vars.term.split()]
@@ -1821,7 +1811,7 @@ def _add_q_meta_info(qrow):
 def get_assignment():
     try:
         assignment_id = int(request.vars.assignmentid)
-    except:
+    except (TypeError, ValueError):
         assignment_row = None
     else:
         assignment_row = db(db.assignments.id == assignment_id).select().first()

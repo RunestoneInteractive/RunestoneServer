@@ -59,7 +59,7 @@ def _score_one_code_run(row, points, autograde):
     try:
         (ignore, pct, ignore, passed, ignore, failed) = row.act.split(":")
         pct_correct = 100 * float(passed) / (int(failed) + int(passed))
-    except:
+    except (ZeroDivisionError, ValueError):
         pct_correct = 0  # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
     return _score_from_pct_correct(pct_correct, points, autograde)
 
@@ -818,7 +818,7 @@ def send_lti_grade(
         }
     )
     resp = request.post_replace_result(pct)
-    # logger.debug(resp)
+    logger.debug(resp)
 
     return pct
 
@@ -890,7 +890,7 @@ def do_autograde(
     db,
     settings,
 ):
-    start = datetime.datetime.now()
+
     if enforce_deadline == "true":
         # get the deadline associated with the assignment
         deadline = assignment.duedate
