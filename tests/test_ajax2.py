@@ -618,8 +618,7 @@ def testPreviewQuestion(test_client, test_user_1):
     assert 'id="preview_test1"' in res
     assert 'print("Hello World")' in res
     assert "textarea>" in res
-    assert 'textarea data-component="activecode"' in res
-    assert 'div data-childcomponent="preview_test1"' in res
+    assert 'div data-component="activecode"' in res
 
 
 def test_GetUserLoggedIn(test_client, test_user_1):
