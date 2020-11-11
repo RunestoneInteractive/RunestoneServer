@@ -68,6 +68,7 @@
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
 
+        <input class="btn btn-default" onclick="window.open('../assignments/doAssignment?assignment_id=' + document.getElementById('assignlist').options[document.getElementById('assignlist').selectedIndex].value);" type="button" value="Preview">
         <input class="btn btn-default" onclick="update_assignment(this.form)" type="button" value="Save">
       </form>
     </fieldset>
@@ -127,8 +128,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="row">
   <div class="col-md-12" id="leftpanel2" style="visibility: hidden">

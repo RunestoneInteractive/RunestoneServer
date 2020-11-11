@@ -1370,6 +1370,8 @@ function assignmentInfo() {
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);
+            } else {
+                $("#nofeedback").prop("checked", false);
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
@@ -1385,6 +1387,11 @@ function assignmentInfo() {
                 }
             } else {
                 $("#assign_is_timed").prop("checked", false);
+            }
+            if (assignmentData.time_limit) {
+                $("#timelimit").prop("value", assignmentData.time_limit);
+            } else {
+                $("#timelimit").prop("value", "");
             }
             if (assignmentData.from_source) {
                 $("#assign_is_timed").prop("disabled", true);
