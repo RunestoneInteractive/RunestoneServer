@@ -533,6 +533,7 @@ def doAssignment():
     # will not appear as a part of the assignment!  This also means that fore a
     # proficiency exam that you are writing as an rst page that the page containing
     # the exam should be linked to a toctree somewhere so that it gets added.
+    use_alt = False
     questions = db(
         (db.assignment_questions.assignment_id == assignment.id)
         & (db.assignment_questions.question_id == db.questions.id)
@@ -562,6 +563,7 @@ def doAssignment():
     # is still likely an issue. But this will provide a nice fallback when NO
     # questions appear.
     if not questions:
+        use_alt = True
         questions = db(
             (db.assignment_questions.assignment_id == assignment.id)
             & (db.assignment_questions.question_id == db.questions.id)
@@ -633,6 +635,16 @@ def doAssignment():
         if score is None:
             score = 0
 
+        if use_alt:
+            chap_name = q.questions.chapter
+            subchap_name = q.questions.subchapter
+            logger.error(
+                f"Probaly missing Exercises.rst for {chap_name}/{subchap_name} in {course.base_course}"
+            )
+        else:
+            chap_name = q.chapters.chapter_name
+            subchap_name = q.sub_chapters.sub_chapter_name
+
         info = dict(
             htmlsrc=htmlsrc,
             score=score,
@@ -640,8 +652,8 @@ def doAssignment():
             comment=comment,
             chapter=q.questions.chapter,
             subchapter=q.questions.subchapter,
-            chapter_name=q.chapters.chapter_name or q.questions.chapter,
-            subchapter_name=q.sub_chapters.sub_chapter_name or q.questions.subchapter,
+            chapter_name=chap_name,
+            subchapter_name=subchap_name,
             name=q.questions.name,
             activities_required=q.assignment_questions.activities_required,
         )
