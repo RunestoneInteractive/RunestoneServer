@@ -659,13 +659,12 @@ def doAssignment():
         )
         if q.assignment_questions.reading_assignment:
             # add to readings
-            ch_name = q.chapters.chapter_name
-            if ch_name not in readings:
+            if chap_name not in readings:
                 # add chapter info
                 completion = (
                     db(
                         (db.user_chapter_progress.user_id == auth.user.id)
-                        & (db.user_chapter_progress.chapter_id == ch_name)
+                        & (db.user_chapter_progress.chapter_id == chap_name)
                     )
                     .select()
                     .first()
@@ -678,7 +677,7 @@ def doAssignment():
                     status = "started"
                 else:
                     status = "notstarted"
-                readings[ch_name] = dict(status=status, subchapters=[])
+                readings[chap_name] = dict(status=status, subchapters=[])
 
             # add subchapter info
             # add completion status to info
@@ -710,8 +709,8 @@ def doAssignment():
 
             # Make sure we don't create duplicate entries for older courses. New style
             # courses only have the base course in the database, but old will have both
-            if info not in readings[ch_name]["subchapters"]:
-                readings[ch_name]["subchapters"].append(info)
+            if info not in readings[chap_name]["subchapters"]:
+                readings[chap_name]["subchapters"].append(info)
                 readings_score += info["score"]
 
         else:
