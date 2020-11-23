@@ -184,14 +184,20 @@ info "Building & Deploying books"
 cd "${BOOKS_PATH}"
 /bin/ls | while read book; do
     (
-        cd $book;
-        if [ ! -f NOBUILD ]; then
-            if [ -f requirements.txt ]; then
-                pip install -r requirements.txt
-            fi
-            runestone build $buildargs deploy
+        rsmanage courseinfo $book
+        if [ $? -eq 0 ]; then
+          cd $book;
+          if [ ! -f NOBUILD ]; then
+              if [ -f requirements.txt ]; then
+                  pip install -r requirements.txt
+              fi
+              runestone build $buildargs deploy
+          else
+              info "skipping $book due to NOBUILD file"
+          fi
         else
-            info "skipping $book due to NOBUILD file"
+          info "There is no database info for $book -- skipping"
+          info "You should add a new book to the database before building."
         fi
     );
 done
