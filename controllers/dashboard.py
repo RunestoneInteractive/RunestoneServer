@@ -430,7 +430,7 @@ def grades():
     if not course:
         session.flash = "Your course does not exist"
         redirect(URL("dashboard", "index"))
-        
+
     assignments = db(db.assignments.course == course.id).select(
         db.assignments.ALL, orderby=(db.assignments.duedate, db.assignments.id)
     )
