@@ -498,12 +498,12 @@ def test_RunLog(test_client, test_user_1):
     )
     test_client.post("ajax/runlog", data=kwargs)
 
-    kwargs = dict(acid="test_activecode_1", sid="test_user_1")
+    kwargs = dict(acid="test_activecode_1")
     test_client.post("ajax/gethist", data=kwargs)
     print(test_client.text)
     prog = json.loads(test_client.text)
 
-    assert prog[0]["history"][-1] == "this is a unittest"
+    assert prog["history"][-1] == "this is a unittest"
 
 
 def test_GetLastPage(test_client, test_user_1):
