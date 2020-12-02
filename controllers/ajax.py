@@ -498,51 +498,6 @@ def gethist():
     return json.dumps(res)
 
 
-def getprog():
-    """
-    return the program code for a particular acid
-    :Parameters:
-        - `acid`: id of the active code block
-        - `user`: optional identifier for the owner of the code
-    :Return:
-        - json object containing the source text
-    """
-    codetbl = db.code
-    acid = request.vars.acid
-    sid = request.vars.sid
-
-    if sid:
-        query = (
-            (codetbl.sid == sid)
-            & (codetbl.acid == acid)
-            & (codetbl.timestamp != None)  # noqa: E711
-        )
-    else:
-        if auth.user:
-            query = (
-                (codetbl.sid == auth.user.username)
-                & (codetbl.acid == acid)
-                & (codetbl.timestamp != None)  # noqa: E711
-            )
-        else:
-            query = None
-
-    res = {}
-    if query:
-        result = db(query)
-        res["acid"] = acid
-        if not result.isempty():
-            # get the last code they saved; id order gets that for us
-            r = result.select(orderby=codetbl.id).last().code
-            res["source"] = r
-            if sid:
-                res["sid"] = sid
-        else:
-            logger.debug("Did not find anything to load for %s" % sid)
-    response.headers["content-type"] = "application/json"
-    return json.dumps([res])
-
-
 # @auth.requires_login()
 # This function is deprecated as of June 2019
 # We need to keep it in place as long as we continue to serve books
