@@ -339,6 +339,7 @@ db.define_table(
     ),
     Field("active", type="boolean", writable=False, readable=False, default=True),
     Field("donated", type="boolean", writable=False, readable=False, default=False),
+    Field("exp_group", type="integer", writable=False, readable=False),
     #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ""),
     migrate=table_migrate_prefix + "auth_user.table",
