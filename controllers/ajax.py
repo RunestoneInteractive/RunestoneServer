@@ -1658,10 +1658,15 @@ def get_question_source():
     logger.debug(f"is_ab is {is_ab}")
     if is_ab:
         logger.debug(f"experimental group is {auth.user.exp_group}")
-        if auth.user.exp_group == None:
+
+        res = db(
+            (db.user_experiment.sid == auth.user.username)
+            & (db.user_experiment.experiment_id == is_ab)
+        ).count()
+
+        if res > 0:
             exp_group = random.randrange(2)
-            auth.user.update(exp_group=exp_group)
-            db(db.auth_user.id == auth.user.id).update(exp_group=exp_group)
+            db.user_experiement.insert(sid=auth.user.username, experiment_id=is_ab)
         else:
             exp_group = auth.user.exp_group
 
