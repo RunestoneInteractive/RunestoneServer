@@ -1665,7 +1665,7 @@ def get_question_source():
 
         if res == 0:
             exp_group = random.randrange(2)
-            db.user_experiement.insert(sid=auth.user.username, experiment_id=is_ab)
+            db.user_experiment.insert(sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group)
         else:
             res = db(
                 (db.user_experiment.sid == auth.user.username)
