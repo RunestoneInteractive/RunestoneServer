@@ -1665,12 +1665,18 @@ def get_question_source():
 
         if res == 0:
             exp_group = random.randrange(2)
-            db.user_experiment.insert(sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group)
+            db.user_experiment.insert(
+                sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group
+            )
         else:
-            res = db(
-                (db.user_experiment.sid == auth.user.username)
-                & (db.user_experiment.experiment_id == is_ab)
-            ).select().first()
+            res = (
+                db(
+                    (db.user_experiment.sid == auth.user.username)
+                    & (db.user_experiment.experiment_id == is_ab)
+                )
+                .select()
+                .first()
+            )
             exp_group = res.exp_group
 
         logger.debug(f"experimental group is {exp_group}")
