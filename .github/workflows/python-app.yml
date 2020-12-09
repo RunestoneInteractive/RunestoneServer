@@ -14,7 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             WEB2PY_CONFIG: test
-            TEST_DBURL: postgres://postgres@localhost/runestone_test
+            TEST_DBURL: postgres://postgres:@localhost/runestone_test
             LANG: en_US.UTF-8
             WEB2PY_VERSION: 2.20.4
         steps:
@@ -49,5 +49,6 @@ jobs:
             - name: Test with pytest
               run: |
                   cd web2py
+                  echo $TEST_DBURL
                   pytest -v applications/runestone/tests
                   coveralls
