@@ -1,0 +1,51 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      WEB2PY_CONFIG: test
+      TEST_DBURL: postgres://postgres@localhost/runestone_test
+      LANG: en_US.UTF-8
+      WEB2PY_VERSION: 2.20.4
+    steps:
+    - uses: actions/checkout@v2
+    - uses: Harmon758/postgresql-action@v1.0.0
+    - uses: Cyb3r-Jak3/html5validator-action@v0.4.4
+    - uses: supercharge/redis-github-action@1.1.0
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+          
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        mkdir runestone
+        mv !(runestone) runestone
+        wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+        unzip web2py_src.zip
+        mv runestone web2py/applications
+        mkdir web2py/applications/runestone/private
+        echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/aplications/runestone/private/auth.key
+        pip install -e web2py/applications/runestone/rsmanage
+        cd web2py
+        cp applications/runestone/tests/.coveragerc .
+        
+    - name: Test with pytest
+      run: |
+        pytest -v applications/runestone/tests
+        coveralls
+        
