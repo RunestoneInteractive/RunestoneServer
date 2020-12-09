@@ -250,7 +250,11 @@ def hsblog():
 
     elif event == "shortanswer" and auth.user:
         db.shortanswer_answers.insert(
-            sid=sid, answer=act, div_id=div_id, timestamp=ts, course_name=course,
+            sid=sid,
+            answer=act,
+            div_id=div_id,
+            timestamp=ts,
+            course_name=course,
         )
 
     elif event == "unittest" and auth.user:
@@ -492,51 +496,6 @@ def gethist():
 
     response.headers["content-type"] = "application/json"
     return json.dumps(res)
-
-
-def getprog():
-    """
-    return the program code for a particular acid
-    :Parameters:
-        - `acid`: id of the active code block
-        - `user`: optional identifier for the owner of the code
-    :Return:
-        - json object containing the source text
-    """
-    codetbl = db.code
-    acid = request.vars.acid
-    sid = request.vars.sid
-
-    if sid:
-        query = (
-            (codetbl.sid == sid)
-            & (codetbl.acid == acid)
-            & (codetbl.timestamp != None)  # noqa: E711
-        )
-    else:
-        if auth.user:
-            query = (
-                (codetbl.sid == auth.user.username)
-                & (codetbl.acid == acid)
-                & (codetbl.timestamp != None)  # noqa: E711
-            )
-        else:
-            query = None
-
-    res = {}
-    if query:
-        result = db(query)
-        res["acid"] = acid
-        if not result.isempty():
-            # get the last code they saved; id order gets that for us
-            r = result.select(orderby=codetbl.id).last().code
-            res["source"] = r
-            if sid:
-                res["sid"] = sid
-        else:
-            logger.debug("Did not find anything to load for %s" % sid)
-    response.headers["content-type"] = "application/json"
-    return json.dumps([res])
 
 
 # @auth.requires_login()
@@ -1643,11 +1602,12 @@ auto_gradable_q = [
 @auth.requires_login()
 def get_question_source():
     """Called from the selectquestion directive
-    There are 3 cases:
+    There are 4 cases:
 
     1. If there is only 1 question in the question list then return the html source for it.
     2. If there are multiple questions then choose a question at random
     3. If a proficiency is selected then select a random question that tests that proficiency
+    4. If the question is an AB question then see if this student is an A or a B or assign them to one randomly.
 
     In the last two cases, first check to see if there is a question for this student for this
     component that was previously selected.
@@ -1663,6 +1623,9 @@ def get_question_source():
     not_seen_ever = request.vars.not_seen_ever
     autogradable = request.vars.autogradable
     is_primary = request.vars.primary
+    is_ab = request.vars.AB
+    selector_id = request.vars["selector_id"]
+
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
         questionlist = [q.strip() for q in questionlist]
@@ -1692,46 +1655,85 @@ def get_question_source():
             logger.error(f"No questions found for proficiency {prof}")
             return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
 
-    poss = set()
-    if not_seen_ever:
-        seenq = db(
-            (db.useinfo.sid == auth.user.username)
-            & (db.useinfo.div_id.contains(questionlist, all=False))
-        ).select(db.useinfo.div_id)
-        seen = set([x.div_id for x in seenq])
-        poss = set(questionlist)
-        questionlist = list(poss - seen)
+    logger.debug(f"is_ab is {is_ab}")
+    if is_ab:
 
-    if len(questionlist) == 0 and len(poss) > 0:
-        questionlist = list(poss)
+        res = db(
+            (db.user_experiment.sid == auth.user.username)
+            & (db.user_experiment.experiment_id == is_ab)
+        ).count()
 
-    htmlsrc = ""
-
-    selector_id = request.vars["selector_id"]
-
-    prev_selection = (
-        db(
-            (db.selected_questions.sid == auth.user.username)
-            & (db.selected_questions.selector_id == selector_id)
-        )
-        .select()
-        .first()
-    )
-
-    if prev_selection:
-        questionid = prev_selection.selected_id
-    else:
-        # Eliminaate any previous exam questions for this student
-        prev_questions = db(db.selected_questions.sid == auth.user.username).select(
-            db.selected_questions.selected_id
-        )
-        prev_questions = set([row.selected_id for row in prev_questions])
-        possible = set(questionlist)
-        questionlist = list(possible - prev_questions)
-        if questionlist:
-            questionid = random.choice(questionlist)
+        if res == 0:
+            exp_group = random.randrange(2)
+            db.user_experiment.insert(
+                sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group
+            )
         else:
-            questionid = random.choice(list(possible))
+            res = (
+                db(
+                    (db.user_experiment.sid == auth.user.username)
+                    & (db.user_experiment.experiment_id == is_ab)
+                )
+                .select()
+                .first()
+            )
+            exp_group = res.exp_group
+
+        logger.debug(f"experimental group is {exp_group}")
+
+        prev_selection = (
+            db(
+                (db.selected_questions.sid == auth.user.username)
+                & (db.selected_questions.selector_id == selector_id)
+            )
+            .select()
+            .first()
+        )
+
+        if prev_selection:
+            questionid = prev_selection.selected_id
+        else:
+            questionid = questionlist[exp_group]
+
+    if not is_ab:
+        poss = set()
+        if not_seen_ever:
+            seenq = db(
+                (db.useinfo.sid == auth.user.username)
+                & (db.useinfo.div_id.contains(questionlist, all=False))
+            ).select(db.useinfo.div_id)
+            seen = set([x.div_id for x in seenq])
+            poss = set(questionlist)
+            questionlist = list(poss - seen)
+
+        if len(questionlist) == 0 and len(poss) > 0:
+            questionlist = list(poss)
+
+        htmlsrc = ""
+
+        prev_selection = (
+            db(
+                (db.selected_questions.sid == auth.user.username)
+                & (db.selected_questions.selector_id == selector_id)
+            )
+            .select()
+            .first()
+        )
+
+        if prev_selection:
+            questionid = prev_selection.selected_id
+        else:
+            # Eliminate any previous exam questions for this student
+            prev_questions = db(db.selected_questions.sid == auth.user.username).select(
+                db.selected_questions.selected_id
+            )
+            prev_questions = set([row.selected_id for row in prev_questions])
+            possible = set(questionlist)
+            questionlist = list(possible - prev_questions)
+            if questionlist:
+                questionid = random.choice(questionlist)
+            else:
+                questionid = random.choice(list(possible))
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 

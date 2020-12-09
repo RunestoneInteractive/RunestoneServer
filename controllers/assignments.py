@@ -250,8 +250,10 @@ def student_autograde():
     )
 
     if not res["success"]:
-        session.flash = "Failed to autograde questions for user id {} for assignment {}".format(
-            auth.user.id, assignment_id
+        session.flash = (
+            "Failed to autograde questions for user id {} for assignment {}".format(
+                auth.user.id, assignment_id
+            )
         )
         res = {"success": False}
     else:
@@ -260,8 +262,10 @@ def student_autograde():
                 student_rownum=auth.user.id, assignment_id=assignment_id
             )
             if not res2["success"]:
-                session.flash = "Failed to compute totals for user id {} for assignment {}".format(
-                    auth.user.id, assignment_id
+                session.flash = (
+                    "Failed to compute totals for user id {} for assignment {}".format(
+                        auth.user.id, assignment_id
+                    )
                 )
                 res = {"success": False}
             else:
@@ -529,6 +533,7 @@ def doAssignment():
     # will not appear as a part of the assignment!  This also means that fore a
     # proficiency exam that you are writing as an rst page that the page containing
     # the exam should be linked to a toctree somewhere so that it gets added.
+    use_alt = False
     questions = db(
         (db.assignment_questions.assignment_id == assignment.id)
         & (db.assignment_questions.question_id == db.questions.id)
@@ -558,6 +563,7 @@ def doAssignment():
     # is still likely an issue. But this will provide a nice fallback when NO
     # questions appear.
     if not questions:
+        use_alt = True
         questions = db(
             (db.assignment_questions.assignment_id == assignment.id)
             & (db.assignment_questions.question_id == db.questions.id)
@@ -629,6 +635,16 @@ def doAssignment():
         if score is None:
             score = 0
 
+        if use_alt:
+            chap_name = q.questions.chapter
+            subchap_name = q.questions.subchapter
+            logger.error(
+                f"Probaly missing Exercises.rst for {chap_name}/{subchap_name} in {course.base_course}"
+            )
+        else:
+            chap_name = q.chapters.chapter_name
+            subchap_name = q.sub_chapters.sub_chapter_name
+
         info = dict(
             htmlsrc=htmlsrc,
             score=score,
@@ -636,20 +652,19 @@ def doAssignment():
             comment=comment,
             chapter=q.questions.chapter,
             subchapter=q.questions.subchapter,
-            chapter_name=q.chapters.chapter_name or q.questions.chapter,
-            subchapter_name=q.sub_chapters.sub_chapter_name or q.questions.subchapter,
+            chapter_name=chap_name,
+            subchapter_name=subchap_name,
             name=q.questions.name,
             activities_required=q.assignment_questions.activities_required,
         )
         if q.assignment_questions.reading_assignment:
             # add to readings
-            ch_name = q.chapters.chapter_name
-            if ch_name not in readings:
+            if chap_name not in readings:
                 # add chapter info
                 completion = (
                     db(
                         (db.user_chapter_progress.user_id == auth.user.id)
-                        & (db.user_chapter_progress.chapter_id == ch_name)
+                        & (db.user_chapter_progress.chapter_id == chap_name)
                     )
                     .select()
                     .first()
@@ -662,7 +677,7 @@ def doAssignment():
                     status = "started"
                 else:
                     status = "notstarted"
-                readings[ch_name] = dict(status=status, subchapters=[])
+                readings[chap_name] = dict(status=status, subchapters=[])
 
             # add subchapter info
             # add completion status to info
@@ -694,8 +709,8 @@ def doAssignment():
 
             # Make sure we don't create duplicate entries for older courses. New style
             # courses only have the base course in the database, but old will have both
-            if info not in readings[ch_name]["subchapters"]:
-                readings[ch_name]["subchapters"].append(info)
+            if info not in readings[chap_name]["subchapters"]:
+                readings[chap_name]["subchapters"].append(info)
                 readings_score += info["score"]
 
         else:
@@ -1168,7 +1183,8 @@ def grades_report():
     try:
         if request.vars.report_type == "assignment":
             grades = query_assignment(
-                auth.user.course_name, request.vars.chap_or_assign,
+                auth.user.course_name,
+                request.vars.chap_or_assign,
             )
         else:
             assert (

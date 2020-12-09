@@ -427,6 +427,10 @@ def grades():
     response.title = "Gradebook"
     course = db(db.courses.id == auth.user.course_id).select().first()
 
+    if not course:
+        session.flash = "Your course does not exist"
+        redirect(URL("dashboard", "index"))
+
     assignments = db(db.assignments.course == course.id).select(
         db.assignments.ALL, orderby=(db.assignments.duedate, db.assignments.id)
     )

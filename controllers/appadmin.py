@@ -794,7 +794,7 @@ def hooks():
 
 
 def d3_graph_model():
-    """ See https://www.facebook.com/web2py/posts/145613995589010 from Bruno Rocha
+    """See https://www.facebook.com/web2py/posts/145613995589010 from Bruno Rocha
     and also the app_admin bg_graph_model function
 
     Create a list of table dicts, called "nodes"

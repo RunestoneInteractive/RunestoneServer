@@ -479,12 +479,6 @@ def test_GetHist(test_client, test_user_1):
 
     assert time_delta < datetime.timedelta(seconds=2)
 
-    test_client.post("ajax/getprog", data=kwargs)
-    print(test_client.text)
-    prog = json.loads(test_client.text)
-
-    assert res["history"][-1] == prog[0]["source"]
-
 
 def test_RunLog(test_client, test_user_1):
 
@@ -504,12 +498,12 @@ def test_RunLog(test_client, test_user_1):
     )
     test_client.post("ajax/runlog", data=kwargs)
 
-    kwargs = dict(acid="test_activecode_1", sid="test_user_1")
-    test_client.post("ajax/getprog", data=kwargs)
+    kwargs = dict(acid="test_activecode_1")
+    test_client.post("ajax/gethist", data=kwargs)
     print(test_client.text)
     prog = json.loads(test_client.text)
 
-    assert prog[0]["source"] == "this is a unittest"
+    assert prog["history"][-1] == "this is a unittest"
 
 
 def test_GetLastPage(test_client, test_user_1):
@@ -618,8 +612,7 @@ def testPreviewQuestion(test_client, test_user_1):
     assert 'id="preview_test1"' in res
     assert 'print("Hello World")' in res
     assert "textarea>" in res
-    assert 'textarea data-component="activecode"' in res
-    assert 'div data-childcomponent="preview_test1"' in res
+    assert 'div data-component="activecode"' in res
 
 
 def test_GetUserLoggedIn(test_client, test_user_1):

@@ -65,3 +65,4 @@ docker-compose.override.yml
 sphinx-enki-info.txt
 _builddoctrees
 .venv
+.nova

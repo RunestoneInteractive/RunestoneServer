@@ -320,6 +320,14 @@ db.define_table(
     migrate=table_migrate_prefix + "selected_questions.table",
 )
 
+db.define_table(
+    "user_experiment",
+    Field("experiment_id", "string"),
+    Field("sid", "string"),
+    Field("exp_group", "integer"),
+    migrate=table_migrate_prefix + "experiment_user.table",
+)
+
 
 def getCourseAttribute(course_id: int, attr_name: str):
     res = (
