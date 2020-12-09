@@ -41,7 +41,7 @@ jobs:
                   unzip web2py_src.zip
                   mv runestone web2py/applications
                   mkdir web2py/applications/runestone/private
-                  echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/aplications/runestone/private/auth.key
+                  echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
                   pip install -e web2py/applications/runestone/rsmanage
                   cd web2py
                   cp applications/runestone/tests/.coveragerc .
