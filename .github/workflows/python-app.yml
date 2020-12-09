@@ -48,5 +48,6 @@ jobs:
 
             - name: Test with pytest
               run: |
+                  cd web2py
                   pytest -v applications/runestone/tests
                   coveralls
