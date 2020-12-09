@@ -21,7 +21,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: Harmon758/postgresql-action@v1.0.0
-    - uses: Cyb3r-Jak3/html5validator-action@v0.4.4
+    - uses: actions/setup-java@v1.4.3
+      with:
+        java-version: 1.8
+        java-package: jre
     - uses: supercharge/redis-github-action@1.1.0
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
