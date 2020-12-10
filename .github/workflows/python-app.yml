@@ -14,12 +14,16 @@ jobs:
         runs-on: ubuntu-latest
         env:
             WEB2PY_CONFIG: test
-            TEST_DBURL: postgres://postgres:@localhost/runestone_test
+            TEST_DBURL: postgres://runestone:runestone@localhost/runestone_test
             LANG: en_US.UTF-8
             WEB2PY_VERSION: 2.20.4
         steps:
             - uses: actions/checkout@v2
             - uses: Harmon758/postgresql-action@v1.0.0
+              with:
+                  postgresql db: runestone_test
+                  postgresql user: runestone
+                  postgresql password: runestone
             - uses: actions/setup-java@v1.4.3
               with:
                   java-version: 1.8
