@@ -56,8 +56,3 @@ jobs:
                   cd web2py
                   echo $TEST_DBURL
                   pytest -v applications/runestone/tests
-
-            - name: Updatae Coveralls
-              uses: coverallsapp/github-action@master
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
