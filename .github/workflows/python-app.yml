@@ -55,4 +55,3 @@ jobs:
                   cd web2py
                   echo $TEST_DBURL
                   pytest -v applications/runestone/tests
-                  coveralls
