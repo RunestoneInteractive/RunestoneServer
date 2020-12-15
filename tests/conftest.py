@@ -952,7 +952,7 @@ def selenium_driver(selenium_driver_session):
 
     yield driver
 
-    # Clear as much as possible, to present an almost-fresh instance of a browser for the next test. (Shutting down then starting up a browswer is very slow.)
+    # Clear as much as possible, to present an almost-fresh instance of a browser for the next test. (Shutting down then starting up a browser is very slow.)
     driver.execute_script("window.localStorage.clear();")
     driver.execute_script("window.sessionStorage.clear();")
     driver.delete_all_cookies()

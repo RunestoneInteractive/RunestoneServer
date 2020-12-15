@@ -68,8 +68,15 @@ def compareAndUpdateCookieData(sid: str):
         )
 
 
+# Endpoints
+# =========
+#
+# .. _hsblog endpoint:
+#
+# hsblog endpoint
+# ---------------
 # Given a JSON record of a clickstream event record the event in the ``useinfo`` table.
-# If the event is an answer to a runestone qustion record that answer in the database in
+# If the event is an answer to a runestone question record that answer in the database in
 # one of the xxx_answers tables.
 #
 def hsblog():
@@ -327,6 +334,11 @@ def hsblog():
     return json.dumps(res)
 
 
+# .. _runlog endpoint:
+#
+# runlog endpoint
+# ---------------
+# The `logRunEvent` client-side function calls this endpoint to record TODO...
 def runlog():  # Log errors and runs with code
     # response.headers['content-type'] = 'application/json'
     setCookie = False
