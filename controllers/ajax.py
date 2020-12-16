@@ -1358,34 +1358,6 @@ def getAssessResults():
         )
 
 
-def checkTimedReset():
-    # Deprecated -- Should be removed in 2020
-    if auth.user:
-        user = auth.user.username
-    else:
-        return json.dumps({"canReset": False})
-
-    divId = request.vars.div_id
-    course = request.vars.course
-    rows = (
-        db(
-            (db.timed_exam.div_id == divId)
-            & (db.timed_exam.sid == user)
-            & (db.timed_exam.course_name == course)
-        )
-        .select(orderby=~db.timed_exam.id)
-        .first()
-    )
-    # TODO:  check the logic here if its already been reset it shouldn't be again?
-    if rows:  # If there was a scored exam
-        if rows.reset == True:  # noqa: E712
-            return json.dumps({"canReset": True})
-        else:
-            return json.dumps({"canReset": False})
-    else:
-        return json.dumps({"canReset": True})
-
-
 def tookTimedAssessment():
     if auth.user:
         sid = auth.user.username
