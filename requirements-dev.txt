@@ -85,7 +85,7 @@ recommonmark==0.6.0       # via -r requirements-dev.in
 redis==3.5.3              # via celery
 regex==2020.5.14          # via black
 requests==2.23.0          # via -r requirements.in, coveralls, locust, runestone, sphinx, stripe
-runestone==5.5.0          # via -r requirements.in
+runestone==5.5.3          # via -r requirements.in
 selenium==3.141.0         # via -r requirements-dev.in, -r requirements.in
 six==1.15.0               # via -r requirements.in, astroid, bleach, geventhttpclient, jsonschema, packaging, pathlib2, paver, pip-tools, pyrsistent, python-dateutil, runestone
 snowballstemmer==2.0.0    # via runestone, sphinx
