@@ -1,3 +1,11 @@
+The following license applies to all files in this repository, with these exceptions:
+
+-   CSS and JS files included by this library contain their own, third-party licenses.
+-   The Handsontable component is commercial software; if you make a copy of this software, you must contact https://handsontable.com/ to verify your compliance with their license.
+-   The text of "How to Think Like a Computer Scientist", which is published under the GNU Documentation License
+-   The text of "Problem Solving with Algorithms and Data Structures using Python", which is (c) Franklin Beedle and Associates.
+
+
 The MIT License (MIT)
 
 Copyright (c) 2014 Brad Miller, David Ranum.
@@ -19,8 +27,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
- 
-(except for the css and js files that it includes, which have their own third party licenses, and the text of How to Think Like a Computer Scientist which is published under the GNU Documentation License, the text of Problem Solving with Algorithms and Data Structures using Python is (c) Franklin Beedle and Associates).
-
-
