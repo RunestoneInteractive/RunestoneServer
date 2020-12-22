@@ -2,8 +2,8 @@
 # bash -c "clear && docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'"
 
 echo "$@"
-basecommand="rsmanage $@"
 container=`docker ps -a | grep runestone/server | awk '{print $1}'`
+basecommand="psql \$DEV_DBURL"
 echo $basecommand
 docker exec -it $container bash -c "$basecommand"
 

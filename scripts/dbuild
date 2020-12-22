@@ -11,6 +11,7 @@ if [ $# -eq 0 ]
 fi
 
 echo "$@"
+container=`docker ps -a | grep runestone/server | awk '{print $1}'`
 basecomm="cd applications/runestone/books/$1; runestone build --all deploy"
-docker exec -it runestoneserver_runestone_1 bash -c "$basecomm"
+docker exec -it $container bash -c "$basecomm"
 

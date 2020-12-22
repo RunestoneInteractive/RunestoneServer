@@ -68,8 +68,15 @@ def compareAndUpdateCookieData(sid: str):
         )
 
 
+# Endpoints
+# =========
+#
+# .. _hsblog endpoint:
+#
+# hsblog endpoint
+# ---------------
 # Given a JSON record of a clickstream event record the event in the ``useinfo`` table.
-# If the event is an answer to a runestone qustion record that answer in the database in
+# If the event is an answer to a runestone question record that answer in the database in
 # one of the xxx_answers tables.
 #
 def hsblog():
@@ -327,6 +334,11 @@ def hsblog():
     return json.dumps(res)
 
 
+# .. _runlog endpoint:
+#
+# runlog endpoint
+# ---------------
+# The `logRunEvent` client-side function calls this endpoint to record TODO...
 def runlog():  # Log errors and runs with code
     # response.headers['content-type'] = 'application/json'
     setCookie = False
@@ -1356,34 +1368,6 @@ def getAssessResults():
         return json.dumps(
             {"answer": answer, "timestamp": str(rows.timestamp), "correct": correct}
         )
-
-
-def checkTimedReset():
-    # Deprecated -- Should be removed in 2020
-    if auth.user:
-        user = auth.user.username
-    else:
-        return json.dumps({"canReset": False})
-
-    divId = request.vars.div_id
-    course = request.vars.course
-    rows = (
-        db(
-            (db.timed_exam.div_id == divId)
-            & (db.timed_exam.sid == user)
-            & (db.timed_exam.course_name == course)
-        )
-        .select(orderby=~db.timed_exam.id)
-        .first()
-    )
-    # TODO:  check the logic here if its already been reset it shouldn't be again?
-    if rows:  # If there was a scored exam
-        if rows.reset == True:  # noqa: E712
-            return json.dumps({"canReset": True})
-        else:
-            return json.dumps({"canReset": False})
-    else:
-        return json.dumps({"canReset": True})
 
 
 def tookTimedAssessment():
