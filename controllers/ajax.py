@@ -38,7 +38,7 @@ EVENT_TABLE = {
     "dragNdrop": "dragndrop_answers",
     "clickableArea": "clickablearea_answers",
     "parsons": "parsons_answers",
-    "codelens1": "codelens_answers",
+    "codelensq": "codelens_answers",
     "shortanswer": "shortanswer_answers",
     "fillintheblank": "fitb_answers",
     "mchoice": "mchoice_answers",
