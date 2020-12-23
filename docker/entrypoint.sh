@@ -186,7 +186,7 @@ if [ $BUILD_BOOKS == 'yes' ]; then
   cd "${BOOKS_PATH}"
   /bin/ls | while read book; do
       (
-          rsmanage courseinfo $book
+          rsmanage courseinfo --name $book
           if [ $? -eq 0 ]; then
             cd $book;
             if [ ! -f NOBUILD ]; then
