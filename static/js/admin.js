@@ -1776,7 +1776,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     if (opt.orig) {
         opt.lang = $(opt.orig).data("lang");
         if (!opt.lang) {
-            $(opt.orig).find("[data-lang]").data("lang");
+            opt.lang = $(opt.orig).find("[data-lang]").data("lang");
         }
         opt.useRunestoneServices = false;
         opt.graderactive = false;
