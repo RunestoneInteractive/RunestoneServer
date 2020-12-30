@@ -26,8 +26,7 @@ function gradeIndividualItem() {
     ) {
         calculateTotals();
     } else {
-        document.getElementById("assignmentTotalform").style.visibility =
-            "hidden";
+        document.getElementById("assignmentTotalform").style.visibility = "hidden";
     }
 
     $(rightSideDiv)[0].style.visibility = "visible";
@@ -394,9 +393,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         }
         newForm.innerHTML = formstr;
         rightDiv[0].appendChild(newForm);
-        let chapAssignSelector = document.getElementById(
-            "chaporassignselector"
-        );
+        let chapAssignSelector = document.getElementById("chaporassignselector");
         let currAssign =
             chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
         let currPoints = "";
@@ -413,10 +410,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 '<pre id="file_div_template" style = "display:none;">template text</pre>;';
             var index;
             for (index = 0; index < data.file_includes.length; index += 1) {
-                if (
-                    jQuery("#" + data.file_includes[index].acid, rightDiv)
-                        .length == 0
-                ) {
+                if (jQuery("#" + data.file_includes[index].acid, rightDiv).length == 0) {
                     // doesn't exist yet, so add it.
                     jQuery("body").append(file_div_template);
                     jQuery("#file_div_template").text(
@@ -473,13 +467,10 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         var complete_code = data.code;
         if (data.includes) {
             complete_code =
-                data.includes +
-                "\n#### end of included code\n\n" +
-                complete_code;
+                data.includes + "\n#### end of included code\n\n" + complete_code;
         }
         if (data.suffix_code) {
-            complete_code =
-                complete_code + "\n\n#### tests ####\n" + data.suffix_code;
+            complete_code = complete_code + "\n\n#### tests ####\n" + data.suffix_code;
         }
 
         // outerdiv, acdiv, sid, initialcode, language
@@ -513,10 +504,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             var obj = new XMLHttpRequest();
             obj.open(
                 "GET",
-                "/runestone/admin/getGradeComments?acid=" +
-                    acid +
-                    "&sid=" +
-                    studentId,
+                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + studentId,
                 true
             );
             obj.send(
@@ -530,9 +518,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                     var newdata = JSON.parse(resp);
                     if (newdata != "Error") {
                         jQuery("#input-grade", rightDiv).val(newdata.grade);
-                        jQuery("#input-comments", rightDiv).val(
-                            newdata.comments
-                        );
+                        jQuery("#input-comments", rightDiv).val(newdata.comments);
                     } else {
                         jQuery("#input-grade", rightDiv).val(null);
                         jQuery("#input-comments", rightDiv).val(null);
@@ -613,8 +599,7 @@ function updateQuestionList() {
     // This will hold the name of the selected chapter or assignment.
     var col1val = "";
     if (chapAssignSelector.selectedIndex > -1) {
-        col1val =
-            chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
+        col1val = chapAssignSelector.options[chapAssignSelector.selectedIndex].value;
     } else {
         $("#questionselector").empty();
         $("#rightsideGradingTab").empty();
@@ -629,8 +614,7 @@ function updateQuestionList() {
         set_release_button();
         showDeadline();
         autograde_form.style.visibility = "visible";
-        document.getElementById("assignmentTotalform").style.visibility =
-            "hidden";
+        document.getElementById("assignmentTotalform").style.visibility = "hidden";
         if (!assignment_release_states[col1val]) {
             $("#releasestate").text("Grades Not Released");
         } else {
@@ -998,19 +982,13 @@ function configure_tree_picker(
                     `Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`
                 );
                 if (!resp) {
-                    $("#tree-question-picker").jstree(
-                        "uncheck_node",
-                        data.node.id
-                    );
+                    $("#tree-question-picker").jstree("uncheck_node", data.node.id);
                     return;
                 }
             }
         }
         if (!data.instance.ignore_check) {
-            walk_jstree(data.instance, data.node, async function (
-                instance,
-                node
-            ) {
+            walk_jstree(data.instance, data.node, async function (instance, node) {
                 if (jstree_node_depth(instance, node) == leaf_depth) {
                     // Add each checked item to the assignment list with default values.
                     let resp = await checked_func(node); // checked_func is either  updateReading or updateAssignmentRaw
@@ -1058,10 +1036,7 @@ function row_from_editable(
     table
 ) {
     // Determine which row this editable is associated with. First, find the index of this row. Note that `parentsUntil <https://api.jquery.com/parentsUntil/>`_ returns a list of all parents up to, but not including, the provided target. Therefore, ask for the ``tbody``, since the element before will be the ``tr`` with the ``data-index`` we want.
-    var row_index = $(editable_element)
-        .parentsUntil("tbody")
-        .last()
-        .attr("data-index");
+    var row_index = $(editable_element).parentsUntil("tbody").last().attr("data-index");
     return table.bootstrapTable("getData")[row_index];
 }
 
@@ -1160,11 +1135,7 @@ function remove_assignment() {
     var assignmentid = select.options[select.selectedIndex].value;
     var assignmentname = select.options[select.selectedIndex].text;
 
-    if (
-        !confirm(
-            `Are you sure you want to remove the assignment ${assignmentname}?`
-        )
-    ) {
+    if (!confirm(`Are you sure you want to remove the assignment ${assignmentname}?`)) {
         return;
     }
 
@@ -1183,12 +1154,7 @@ function remove_assignment() {
 }
 
 // Update an assignment.
-async function updateAssignmentRaw(
-    question_name,
-    points,
-    autograde,
-    which_to_grade
-) {
+async function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
     var assignmentid = getAssignmentId();
     if (!assignmentid || assignmentid == "undefined") {
         alert("No assignment selected");
@@ -1214,10 +1180,8 @@ async function add_to_qtable(response_JSON) {
     $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
-        question_table.bootstrapTable(
-            "getRowByUniqueId",
-            response_JSON.question_id
-        ) === null
+        question_table.bootstrapTable("getRowByUniqueId", response_JSON.question_id) ===
+        null
     ) {
         appendToQuestionTable(
             response_JSON.question_id,
@@ -1352,9 +1316,7 @@ function assignmentInfo() {
         },
         function (data) {
             assignmentData = data.assignment_data;
-            $("#totalPoints").html(
-                "Total points: " + assignmentData.assignment_points
-            );
+            $("#totalPoints").html("Total points: " + assignmentData.assignment_points);
             $("#datetimepicker").val(assignmentData.due_date);
             $("#assignment_description").val(assignmentData.description);
             $("#readings-threshold").val(assignmentData.threshold);
@@ -1497,10 +1459,8 @@ function add_to_table(response_JSON) {
     $("#totalPoints").html("Total points: " + response_JSON.total);
     // See if this question already exists in the table. Only append if it doesn't exist.
     if (
-        readings_table.bootstrapTable(
-            "getRowByUniqueId",
-            response_JSON.question_id
-        ) === null
+        readings_table.bootstrapTable("getRowByUniqueId", response_JSON.question_id) ===
+        null
     ) {
         appendToReadingsTable(
             response_JSON.question_id,
@@ -1581,9 +1541,7 @@ var chapterMap = {};
 function display_write() {
     var template = document.getElementById("template");
     var questiontype = template.options[template.selectedIndex].value;
-    jQuery.get("/runestone/admin/gettemplate/" + questiontype, {}, function (
-        obj
-    ) {
+    jQuery.get("/runestone/admin/gettemplate/" + questiontype, {}, function (obj) {
         var returns = JSON.parse(obj);
         tplate = returns.template;
         $("#qcode").text(tplate);
@@ -1812,13 +1770,14 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         edList = {};
     }
 
-    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data(
-        "component"
-    );
+    let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data("component");
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0];
     if (opt.orig) {
         opt.lang = $(opt.orig).data("lang");
+        if (!opt.lang) {
+            $(opt.orig).find("[data-lang]").data("lang");
+        }
         opt.useRunestoneServices = false;
         opt.graderactive = false;
         opt.python3 = true;
@@ -1830,14 +1789,9 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (typeof component_factory === "undefined") {
-        alert(
-            "Error:  Missing the component factory!  Clear you browser cache."
-        );
+        alert("Error:  Missing the component factory!  Clear you browser cache.");
     } else {
-        if (
-            !component_factory[componentKind] &&
-            !jQuery(`#${whereDiv}`).html()
-        ) {
+        if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html()) {
             jQuery(`#${whereDiv}`).html(
                 `<p>Preview not available for ${componentKind}</p>`
             );
@@ -1846,9 +1800,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 let res = component_factory[componentKind](opt);
                 if (componentKind === "activecode") {
                     if (moreOpts.multiGrader) {
-                        edList[
-                            `${moreOpts.gradingContainer} ${res.divid}`
-                        ] = res;
+                        edList[`${moreOpts.gradingContainer} ${res.divid}`] = res;
                     } else {
                         edList[res.divid] = res;
                     }
@@ -1866,8 +1818,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 opt.acid || moreOpts.acid || opt.orig.id
             ); // save the original divid
             let editButton = document.createElement("button");
-            let constrainbc = document.getElementById("qbankform").constrainbc
-                .checked;
+            let constrainbc = document.getElementById("qbankform").constrainbc.checked;
             $(editButton).text("Edit Question");
             $(editButton).addClass("btn btn-normal");
             $(editButton).attr("data-target", "#editModal");
@@ -1877,9 +1828,7 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                     question_name: opt.acid || moreOpts.acid || opt.orig.id,
                     constrainbc: constrainbc,
                 };
-                jQuery.get("/runestone/admin/question_text", data, function (
-                    obj
-                ) {
+                jQuery.get("/runestone/admin/question_text", data, function (obj) {
                     $("#editRST").val(JSON.parse(obj));
                 });
             });
@@ -1990,12 +1939,7 @@ async function addToAssignment(form) {
     var select = document.getElementById("qbankselect");
     var question_name = select.options[select.selectedIndex].text;
 
-    let resp = await updateAssignmentRaw(
-        question_name,
-        points,
-        "manual",
-        "last_answer"
-    );
+    let resp = await updateAssignmentRaw(question_name, points, "manual", "last_answer");
     add_to_qtable(resp);
 }
 
@@ -2061,9 +2005,7 @@ function edit_question(form) {
     var tags = $("#addTags").select2("val");
     var difficulty = null;
     var difficulty_options = ["r1", "r2", "r3", "r4", "r5"];
-    var inputs = document
-        .getElementById("editForm")
-        .getElementsByTagName("input");
+    var inputs = document.getElementById("editForm").getElementsByTagName("input");
     for (var i = 0, length = inputs.length; i < length; i++) {
         if (inputs[i].type == "radio" && inputs[i].checked) {
             difficulty = inputs[i].value;
@@ -2122,8 +2064,7 @@ function set_release_button() {
     if (col1val == "assignment") {
         var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
-            assignment =
-                assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
         }
     }
 
@@ -2156,8 +2097,7 @@ function toggle_release_grades() {
     if (col1val == "assignment") {
         var assignmentcolumn = document.getElementById("chaporassignselector");
         if (assignmentcolumn.selectedIndex != -1) {
-            assignment =
-                assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
+            assignment = assignmentcolumn.options[assignmentcolumn.selectedIndex].value;
         } else {
             alert("Please choose an assignment first");
         }
@@ -2177,15 +2117,15 @@ function toggle_release_grades() {
                 released: "no",
             };
 
-            jQuery.post("/runestone/admin/releasegrades", data, function (
-                mess,
-                stat,
-                w
-            ) {
-                alert(
-                    `${mess} Grades are now hidden from students for ${assignment}`
-                );
-            });
+            jQuery.post(
+                "/runestone/admin/releasegrades",
+                data,
+                function (mess, stat, w) {
+                    alert(
+                        `${mess} Grades are now hidden from students for ${assignment}`
+                    );
+                }
+            );
         } else {
             // Have to toggle the local variable before making the asynch call, so that button will be updated correctly
             assignment_release_states[assignment] = true;
@@ -2194,15 +2134,15 @@ function toggle_release_grades() {
                 released: "yes",
             };
 
-            jQuery.post("/runestone/admin/releasegrades", data, function (
-                mess,
-                stat,
-                w
-            ) {
-                alert(
-                    `${mess}: Grades are now visible to students for ${assignment}`
-                );
-            });
+            jQuery.post(
+                "/runestone/admin/releasegrades",
+                data,
+                function (mess, stat, w) {
+                    alert(
+                        `${mess}: Grades are now visible to students for ${assignment}`
+                    );
+                }
+            );
         }
         set_release_button();
     }
@@ -2234,11 +2174,7 @@ function updateCourse(widget, attr) {
         data[attr] = widget.checked;
     }
 
-    $.getJSON("/runestone/admin/update_course.json", data, function (
-        retval,
-        stat,
-        w
-    ) {
+    $.getJSON("/runestone/admin/update_course.json", data, function (retval, stat, w) {
         if (retval.status != "success") {
             alert("Update Failed");
         }
@@ -2386,9 +2322,7 @@ function populateEditor(qname) {
 // ---------------
 function generateLTIKeys() {
     if ($("#ckey_value").html() != "") {
-        let res = confirm(
-            "Whoa!  You already have a key and secret are you sure?"
-        );
+        let res = confirm("Whoa!  You already have a key and secret are you sure?");
         if (!res) {
             return;
         }
