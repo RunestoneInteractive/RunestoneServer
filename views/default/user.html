@@ -152,7 +152,8 @@
                     </form>
                     {{ pass }}
                     {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
-                        <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future.</p>
+                        <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future. </p>
+                        <p><strong>Note:</strong>  Some school email system block runestone for various reasons, or expect a human to click a button on an email reply.  Your instructor can reset your password.</p>
                     {{pass}}
 
                 </div>
