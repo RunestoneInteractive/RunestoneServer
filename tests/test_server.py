@@ -255,7 +255,7 @@ def test_preview_question(test_client, test_user_1):
         data={
             "code": json.dumps(
                 dedent(
-                    u"""\
+                    """\
         .. fillintheblank:: question_1
 
             Mary had a \u0263.
