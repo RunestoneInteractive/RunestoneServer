@@ -1,4 +1,4 @@
-{{extend 'admin/instructors.html'}}
+{{extend 'layout.html'}}
 
 {{block tabcontent}}
 {{include '_sphinx_static_files.html'}}
@@ -242,7 +242,7 @@
          {{ else: }}
             <span>
                 <div class='oneq' id='QuestionContainer' style='width:90%;'>
-                    <script id='htmlblock' type='text/html'>{{=q[0]}}</script>
+                    {{=XML(q[0])}}
                 </div>
             </span>
             {{ if q[3] == 1: }}
@@ -397,7 +397,7 @@
     });
 {{ pass }}
 {{ if practice_today_left > 0 or q: }}
-    var questionHtmlCode = document.getElementById("htmlblock");
+    //var questionHtmlCode = document.getElementById("htmlblock");
     // Interestingly, javascript won't understand the html string without first dumping it into an html element
     // a console.log of the html string within the questioninfo array would only give an unexpected token error
     // pulling the html strings from the script element provides the string that javascript recognizes
@@ -414,9 +414,9 @@
     }
 
     let $div = $("#QuestionContainer");
-    let unescapedhtml = htmlDecode(questionHtmlCode.innerHTML);
-    let change = $.parseHTML(unescapedhtml, keepScripts=true);
-    $div.append(change);
+   // let unescapedhtml = htmlDecode(questionHtmlCode.innerHTML);
+    //let change = $.parseHTML(unescapedhtml, keepScripts=true);
+    //$div.append(change);
 
     // $(function(){
     //     var startTime = new Date($.now());
