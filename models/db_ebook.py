@@ -346,6 +346,6 @@ def getCourseAttribute(course_id: int, attr_name: str):
 
 # this check has to be here to ensure that the course_attributes table is defined.
 
-if auth.user:
-    if getCourseAttribute(auth.user.course_id, "lti_interface"):
-        settings.lti_interface = True
+# if auth.user:
+#     if getCourseAttribute(auth.user.course_id, "lti_interface"):
+#         settings.lti_interface = True

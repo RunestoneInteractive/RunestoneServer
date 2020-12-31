@@ -70,5 +70,5 @@ settings.log_level = logging.DEBUG
 settings.python_interpreter = sys.executable
 
 settings.pretext_delimiters = ("~._", "_.~")
-settings.lti_interface = False
+settings.lti_interface = True
 settings.num_banners = 0
