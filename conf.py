@@ -336,7 +336,7 @@ html_sourcelink_suffix = ""
 # `intersphinx_mapping <https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html#confval-intersphinx_mapping>`_:
 # This config value contains the locations and names of other projects that should be linked to in this documentation.
 intersphinx_mapping = {
-    "RunestoneServer": (
+    "RunestoneComponents": (
         "https://runestonecomponents.readthedocs.io/en/latest/", (
             None,
             # An optional local file location -- useful when updating both Sphinx builds before the updates are pushed to the server.
