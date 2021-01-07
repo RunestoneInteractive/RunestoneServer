@@ -674,7 +674,7 @@ def exercisemetrics():
         answers.append(
             {
                 "user": user_responses.user,
-                "username": user_responses.username,
+                "username": urllib.parse.quote(user_responses.username),
                 "answers": responses,
             }
         )
@@ -692,6 +692,7 @@ def exercisemetrics():
 
 
 def format_cell(sid, chap, subchap, val):
+    sid = urllib.parse.quote(sid)
     if np.isnan(val):
         return ""
     else:
@@ -715,8 +716,8 @@ def subchapoverview():
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
     join questions on div_id = name and base_course = '{}' join auth_user on username = useinfo.sid
-    where useinfo.course_id = '{}' and active='T'""".format(
-            thecourse.base_course, course
+    where useinfo.course_id = '{}' and active='T' and useinfo.timestamp >= '{}'""".format(
+            thecourse.base_course, course, thecourse.term_start_date
         ),
         settings.database_uri,
         parse_dates=["timestamp"],
