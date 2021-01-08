@@ -746,7 +746,7 @@ def _get_assignment(assignment_id):
 
 
 def _get_lti_record(oauth_consumer_key):
-    if oath_consumer_key:
+    if oauth_consumer_key:
         return (
             current.db(current.db.lti_keys.consumer == oauth_consumer_key)
             .select()
