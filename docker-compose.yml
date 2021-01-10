@@ -12,7 +12,10 @@ services:
     image: redis
 
   jobe:
-    image: trampgeek/jobeinabox:latest
+    image: runestone/jobeinabox
+    build: ./jobeinabox/
+    volumes:
+      - ./jobeinabox/files:/usr/local/lib/java
 
   runestone:
     image: runestone/server
