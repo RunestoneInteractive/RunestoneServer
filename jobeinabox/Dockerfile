@@ -1,5 +1,6 @@
 FROM trampgeek/jobeinabox:latest
 
+COPY include/* /usr/include/
 RUN rm -rf /var/www/html/jobe && \
     git clone https://github.com/RunestoneInteractive/jobe.git /var/www/html/jobe && \
     apache2ctl start && \
