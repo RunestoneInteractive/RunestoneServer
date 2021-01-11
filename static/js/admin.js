@@ -1335,6 +1335,11 @@ function assignmentInfo() {
             } else {
                 $("#nofeedback").prop("checked", false);
             }
+            if (assignmentData.nopause === true) {
+                $("#nopause").prop("checked", true);
+            } else {
+                $("#nopause").prop("checked", false);
+            }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
                 // add simulator button
