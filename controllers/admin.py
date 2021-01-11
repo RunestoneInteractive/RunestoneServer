@@ -1387,6 +1387,13 @@ def createquestion():
         practice = True
         topic = "{}/{}".format(request.vars.chapter, request.vars.subchapter)
 
+    question_type = request.vars["template"]
+    g = re.search(r"^\s*.. (\w+)::", request.vars.question)
+    if g:
+        question_type = g.group(1)
+        if question_type != request.vars["template"]:
+            logger.error(f"question mismatch for question type {question_type}")
+
     try:
         newqID = db.questions.insert(
             base_course=base_course,
@@ -1398,7 +1405,7 @@ def createquestion():
             difficulty=request.vars["difficulty"],
             question=request.vars["question"],
             timestamp=datetime.datetime.utcnow(),
-            question_type=request.vars["template"],
+            question_type=question_type,
             is_private=request.vars["isprivate"],
             practice=practice,
             from_source=False,
