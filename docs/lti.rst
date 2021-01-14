@@ -6,7 +6,7 @@ Adding Runestone to Canvas
 #.  Generate a shared/secret key pair for use with Canvas:
 
     #.  Browse to the `Runestone Academy <https://runestone.academy>`_ and log in, then select a course you’re the instructor of.
-    #.  Browse to the `instructor interface <https://runestone.academy/runestone/admin/admin>`_, then click on the “LTI Integration” tab.
+    #.  Browse to the `Instructor's Page <https://runestone.academy/runestone/admin/admin>`_, then click on “LTI Integration” in the Admin tab.
     #.  Click on the “Create LTI Key and Secret” button. Click the “Show Secret” button. You will use these in the next step.
 
 #.  Follow the `Canvas instructions <https://community.canvaslms.com/t5/Instructor-Guide/How-do-I-configure-a-manual-entry-external-app-for-a-course/ta-p/1137>`_ to add an external app:
