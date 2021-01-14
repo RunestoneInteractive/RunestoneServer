@@ -322,6 +322,8 @@ def studentreport():
         sid = auth.user.username
         response.view = "assignments/index.html"
 
+    logger.debug(f"id = {request.vars.id} is instructor = {for_dashboard} sid = {sid}")
+    
     data_analyzer.load_user_metrics(sid)
     data_analyzer.load_assignment_metrics(sid, not for_dashboard)
 
@@ -395,7 +397,7 @@ def studentreport():
         select * from code where sid = %(sid)s and course_id = %(course)s
         """,
             settings.database_uri,
-            params={"sid": auth.user.username, "course": auth.user.course_id},
+            params={"sid": sid, "course": auth.user.course_id},
         )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
         response.headers[
