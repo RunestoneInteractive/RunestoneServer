@@ -323,7 +323,7 @@ def studentreport():
         response.view = "assignments/index.html"
 
     logger.debug(f"id = {request.vars.id} is instructor = {for_dashboard} sid = {sid}")
-    
+
     data_analyzer.load_user_metrics(sid)
     data_analyzer.load_assignment_metrics(sid, not for_dashboard)
 
