@@ -120,6 +120,7 @@ def _get_practice_data(user, timezoneoffset, db):
                                 course.base_course,
                                 subchapterTaught.chapters.chapter_label,
                                 subchapterTaught.sub_chapters.sub_chapter_label,
+                                db,
                             )
                             if len(questions) > 0:
                                 # There is at least one qualified question in this subchapter, so insert a flashcard for
