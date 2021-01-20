@@ -1652,7 +1652,7 @@ def get_question_source():
             db.user_experiment.insert(
                 sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group
             )
-            logger.debug(f"added {auth.user.username} to {is_abs} group {exp_group}")
+            logger.debug(f"added {auth.user.username} to {is_ab} group {exp_group}")
 
         else:
             exp_group = res[0].exp_group
