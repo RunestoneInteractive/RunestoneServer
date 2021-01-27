@@ -98,9 +98,10 @@ def fitb_feedback(answer_json, feedback):
                     assert "number" in fb
                     min_, max_ = fb["number"]
                     try:
-                        val = ast.literal_eval(blank)
+                        # Note that ``literal_eval`` does **not** discard leading / trailing spaces, but considers them indentation errors. So, explicitly invoke ``strip``.
+                        val = ast.literal_eval(blank.strip())
                         in_range = val >= min_ and val <= max_
-                    except:
+                    except Exception:
                         # In case something weird or invalid was parsed (dict, etc.)
                         in_range = False
                     if in_range:
