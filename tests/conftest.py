@@ -566,7 +566,7 @@ class _TestClient(WebClient):
                 assert admin_client.status == 200
                 # Save it to a file.
                 traceback_file = (
-                    "".join(c if c not in "\/:*?<>|" else "_" for c in url)
+                    "".join(c if c not in r"\/:*?<>|" else "_" for c in url)
                     + "_traceback.html"
                 )
                 with open(traceback_file, "wb") as f:
