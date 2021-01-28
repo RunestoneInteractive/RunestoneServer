@@ -513,6 +513,8 @@ $(function () {
             $.getJSON('reorder_assignment_questions', {
                 assignment_id: getAssignmentId(),
                 names: question_array,
+            }).fail(function() {
+              alert("Failed to Save your reordered question");
             });
         },
     });
@@ -636,7 +638,9 @@ $(function () {
             $.getJSON('reorder_assignment_questions', {
                 assignment_id: getAssignmentId(),
                 names: question_array,
-            });
+            }).fail(function() {
+              alert("Failed to save your reordered question");
+            })
         },
     });
 });
