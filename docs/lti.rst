@@ -14,7 +14,7 @@ Adding Runestone to Canvas
     :Name: Runestone
     :Consumer key: Enter this from step 1.
     :Shared Secret: Enter this from step 1.
-    :Launch URL: Enter the value https://runestone.academy/runestone/lti.
+    :Launch URL: Enter the value `https://runestone.academy/runestone/lti`. Or, it could also be `https://csawesome.runestone.academy/runestone/lti` if you are using the csawesome course and its dedicated server.
     :Domain: Leave blank.
     :Privacy: Select Public; otherwise, Runestone won’t work.
     :Custom Fields: A matter of debate — I leave this blank; Brad prefers ``custom_course_id=xxx``.
