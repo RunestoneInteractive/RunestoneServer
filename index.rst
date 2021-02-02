@@ -219,6 +219,7 @@ Other files
     :glob:
 
     docs/lti.rst
+    docs/lti_selfhost.rst
     /CONTRIBUTING
     /ChangeLog
     /scripts/toctree
