@@ -24,7 +24,7 @@ Adding Runestone to Canvas
 
     #.  At `Runestone Academy`_, create an assignment; be sure you’ve checked the “Visible to Students” box and saved that change.
     #.  Still on the assignments page, copy the LTI link.
-    #.  In Canvas, add an assignment. For the submission type, select “External Tool.” For the external tool URL, use the URL you just copied. You’ll have to manually enter the same due date/time and a similar assignment name; these aren’t copied automatically.
+    #.  In Canvas, add an assignment. For the submission type, select “External Tool.” For the external tool URL, use the URL you just copied. You’ll have to manually enter the same due date/time and a similar assignment name; these aren’t copied automatically. You must be sure the Load This Tool In A New Tab checkbox is checked.
 
 #.  Students can now click on this assignment and work it. **If they don’t click on the assignment, they won’t receive a grade.**
 #.  When the assignment is due, go to Runestone directly from your Canvas course by using an assignment link. Otherwise, grade reporting won’t work.
