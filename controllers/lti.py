@@ -22,7 +22,8 @@ import oauth2
 # -------------------------
 from rs_grading import _try_to_send_lti_grade
 
-
+# Code
+# ====
 # For some reason, URL query parameters are being processed twice by Canvas and returned as a list, like [23, 23]. So, just take the first element in the list.
 def _param_converter(param):
     return param[0] if isinstance(param, list) else param
@@ -46,11 +47,15 @@ def index():
     message_type = request.vars.get("lti_message_type")
     course_id = _param_converter(request.vars.get("custom_course_id", None))
 
-    if course_id and not course_id.isnumeric():
-        course_id = (
-            db(db.courses.course_name == course_id).select(**SELECT_CACHE).first()
-        )
-        course_id = course_id.id
+    if course_id:
+        # Allow the course_id to be either a number or the name of the course, as a string.
+        try:
+            course_id = int(course_id)
+        except ValueError:
+            course_id = (
+                db(db.courses.course_name == course_id).select(**SELECT_CACHE).first()
+            )
+            course_id = course_id.id
 
     if full_name and not last_name:
         names = full_name.strip().split()
