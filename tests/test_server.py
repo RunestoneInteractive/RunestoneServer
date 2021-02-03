@@ -1165,7 +1165,6 @@ def test_lockdown(test_client, test_user_1):
     assert ">Change Course</a></li>" in res
     assert 'id="profilelink">Edit' in res
     assert '<ul class="dropdown-menu user-menu">' in res
-    assert 'div id="fb-root"></div' in res
     assert "<span id='numuserspan'></span><span class='loggedinuser'></span>" in res
     assert '<script async src="https://hypothes.is/embed.js"></script>' in res
 
