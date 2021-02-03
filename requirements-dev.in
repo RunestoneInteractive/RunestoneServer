@@ -3,7 +3,7 @@ mock
 html5validator
 pytest
 contextlib2
-CodeChat >= 1.8.0
+CodeChat >= 1.8.6
 # Beautiful soup
 beautifulsoup4
 locust

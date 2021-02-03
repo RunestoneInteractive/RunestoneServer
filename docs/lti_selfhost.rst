@@ -73,7 +73,8 @@ Operating Runestone as a LTI Provider
         :Share Email: True
         :Share Name: True
         :Custom params: 
-|
+
+
 4.  Login to your Runestone instance with the tool just created, and create your class as well as your assignments.
 
 #.  In Moodle, create a new enrollment external app directly to your course and assignment. You will need to repeat this for each assignment. You will also need the database values for your course ID, and assignment ID. Get these from step 2.2. Please note that in order to receive roles and grades. "Accept Grades" must be checked in Moodle. In other LMS's this may be referenced by a "Share IMS Names and Roles" or similar.
@@ -87,7 +88,7 @@ Operating Runestone as a LTI Provider
         :Share Name: True
         :Custom params: 
         :Accept Grades: True
-|
+
 6.  Copy the tool as many times as you need to within your Moodle Course and updating the Name and Tool URL
 
 #.  Students can now click on these external tool assignment to be enrolled/logged directly into your runestone course and assignment. The grade should return to Moodle once they are released in Runestone in the instructor interface.

@@ -1731,3 +1731,16 @@ def get_question_source():
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
+
+
+@auth.requires_login()
+def update_selected_question():
+    sid = auth.user.username
+    selector_id = request.vars.metaid
+    selected_id = request.vars.selected
+
+    db.selected_questions.update_or_insert(
+        (db.selected_questions.selector_id == selector_id)
+        & (db.selected_questions.sid == sid),
+        selected_id=selected_id,
+    )
