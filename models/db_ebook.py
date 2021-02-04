@@ -141,6 +141,7 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "string", length=50),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "mchoice_answers.table",
 )
 
@@ -154,6 +155,7 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "string"),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "fitb_answers.table",
 )
 # dragndrop_answers
@@ -167,6 +169,7 @@ db.define_table(
     Field("answer", "string"),
     Field("correct", "boolean"),
     Field("min_height", "string"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "dragndrop_answers.table",
 )
 # clickablearea_answers
@@ -179,6 +182,7 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "string"),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "clickablearea_answers.table",
 )
 
@@ -193,6 +197,7 @@ db.define_table(
     Field("answer", "string"),
     Field("source", "string"),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "parsons_answers.table",
 )
 
@@ -207,6 +212,7 @@ db.define_table(
     Field("answer", "string"),
     Field("source", "string"),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "codelens_answers.table",
 )
 
@@ -238,6 +244,7 @@ db.define_table(
     Field("passed", "integer"),
     Field("failed", "integer"),
     Field("correct", "boolean"),
+    Field("percent", "double"),
     migrate=table_migrate_prefix + "unittest_answers.table",
 )
 

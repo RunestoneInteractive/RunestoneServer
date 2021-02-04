@@ -170,6 +170,12 @@ def hsblog():
 
     # Produce a default result.
     res = dict(log=True, timestamp=str(ts))
+    try:
+        pct = float(request.vars.percent)
+    except ValueError:
+        pct = None
+    except TypeError:
+        pct = None
 
     # Process this event.
     if event == "mChoice" and auth.user:
@@ -182,6 +188,7 @@ def hsblog():
             answer=answer,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
     elif event == "fillb" and auth.user:
         answer_json = request.vars.answer
@@ -200,6 +207,7 @@ def hsblog():
             answer=answer_json,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "dragNdrop" and auth.user:
@@ -215,6 +223,7 @@ def hsblog():
             correct=correct,
             course_name=course,
             min_height=minHeight,
+            percent=pct,
         )
     elif event == "clickableArea" and auth.user:
         correct = request.vars.correct
@@ -225,6 +234,7 @@ def hsblog():
             answer=act,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "parsons" and auth.user:
@@ -239,6 +249,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "codelensq" and auth.user:
@@ -253,6 +264,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "shortanswer" and auth.user:
@@ -285,6 +297,7 @@ def hsblog():
             passed=passed,
             failed=failed,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "lp_build" and auth.user:
