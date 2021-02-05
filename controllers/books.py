@@ -148,6 +148,7 @@ def _route_book(is_published=True):
         course = (
             db(db.courses.course_name == base_course)
             .select(
+                db.courses.id,
                 db.courses.course_name,
                 db.courses.base_course,
                 db.courses.login_required,
