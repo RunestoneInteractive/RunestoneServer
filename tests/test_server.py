@@ -28,6 +28,9 @@ import six
 # Local imports
 # -------------
 from .utils import web2py_controller_import
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 # Debugging notes
@@ -1162,13 +1165,36 @@ def test_lockdown(test_client, test_user_1):
     assert ">Change Course</a></li>" in res
     assert 'id="profilelink">Edit' in res
     assert '<ul class="dropdown-menu user-menu">' in res
-    assert 'div id="fb-root"></div' in res
     assert "<span id='numuserspan'></span><span class='loggedinuser'></span>" in res
     assert '<script async src="https://hypothes.is/embed.js"></script>' in res
 
 
-# Do basic login/logout tests using Selenium. This is to make sure Selenium, rather than actually test something new.
-def test_selenium(test_user_1, selenium_user):
+# Test server-side logic in FITB questions.
+def test_fitb(test_user_1, selenium_user):
     selenium_user_1 = selenium_user(test_user_1)
     selenium_user_1.login()
+    # Browse to the page with a fitb question.
+    d = selenium_user_1.driver
+    d.rs_get("books/published/test_course_1/index.html")
+    id = "test_fitb_numeric"
+    fitb = d.find_element_by_id(id)
+    blank = fitb.find_elements_by_tag_name("input")[0]
+    check_me_button = fitb.find_element_by_tag_name("button")
+    feedback_id = id + "_feedback"
+    wait = WebDriverWait(d, 10)
+
+    # Enter a value and check it
+    def check_val(val, feedback_str="Correct"):
+        # Erase any previous answer text.
+        blank.clear()
+        blank.send_keys(val)
+        check_me_button.click()
+        wait.until(EC.text_to_be_present_in_element((By.ID, feedback_id), feedback_str))
+
+    check_val("10")
+    # Check this next, since it expects a different answer -- two correct answers in a row are harder to distinguish (has the new text been updated yet or not?).
+    check_val("11", "Close")
+    # Ensure spaces don't prevent correct numeric parsing.
+    check_val(" 10 ")
+
     selenium_user_1.logout()

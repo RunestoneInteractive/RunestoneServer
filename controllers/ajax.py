@@ -170,6 +170,12 @@ def hsblog():
 
     # Produce a default result.
     res = dict(log=True, timestamp=str(ts))
+    try:
+        pct = float(request.vars.percent)
+    except ValueError:
+        pct = None
+    except TypeError:
+        pct = None
 
     # Process this event.
     if event == "mChoice" and auth.user:
@@ -182,6 +188,7 @@ def hsblog():
             answer=answer,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
     elif event == "fillb" and auth.user:
         answer_json = request.vars.answer
@@ -200,6 +207,7 @@ def hsblog():
             answer=answer_json,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "dragNdrop" and auth.user:
@@ -215,6 +223,7 @@ def hsblog():
             correct=correct,
             course_name=course,
             min_height=minHeight,
+            percent=pct,
         )
     elif event == "clickableArea" and auth.user:
         correct = request.vars.correct
@@ -225,6 +234,7 @@ def hsblog():
             answer=act,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "parsons" and auth.user:
@@ -239,6 +249,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "codelensq" and auth.user:
@@ -253,6 +264,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "shortanswer" and auth.user:
@@ -285,6 +297,7 @@ def hsblog():
             passed=passed,
             failed=failed,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "lp_build" and auth.user:
@@ -1731,3 +1744,26 @@ def get_question_source():
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
+
+
+@auth.requires_login()
+def update_selected_question():
+    """
+    This endpoint is used by the selectquestion problems that allow the
+    student to select the problem they work on.  For example they may have
+    a programming problem that can be solved with writing code, or they
+    can switch to a parsons problem if necessary.
+
+    Caller must provide:
+    * ``metaid`` -- the id of the selectquestion
+    * ``selected`` -- the id of the real question chosen by the student
+    """
+    sid = auth.user.username
+    selector_id = request.vars.metaid
+    selected_id = request.vars.selected
+
+    db.selected_questions.update_or_insert(
+        (db.selected_questions.selector_id == selector_id)
+        & (db.selected_questions.sid == sid),
+        selected_id=selected_id,
+    )

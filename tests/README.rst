@@ -21,15 +21,16 @@ If you just want to run the tests:
 
   .. code-block::
 
-      cd tests
-      pytest
+      # Change to the web2py installation directory.
+      cd web2py
+      pytest applications/runestone/tests
 
 
   Or if you have a docker container set up:
 
   .. code-block::
 
-      docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; pytest'
+      docker exec -it runestoneserver_runestone_1 bash -c 'pytest applications/runestone/tests'
 
 But we really hope you will write some tests, so lets take a look at a sample of a test that simulates a user submitting a response to a poll.  We'll then check to see that their answer made it into the database, and then make sure that the api call to retrieve poll results works as expected
 

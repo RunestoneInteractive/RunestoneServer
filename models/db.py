@@ -217,6 +217,12 @@ def getCourseOrigin(base_course):
     return res
 
 
+def getCourseAttributesDict(course_id):
+    attributes = db(db.course_attributes.course_id == course_id).select(**SELECT_CACHE)
+    attrdict = {row.attr: row.value for row in attributes}
+    return attrdict
+
+
 def verifyInstructorStatus(course, instructor):
     """
     Make sure that the instructor specified is actually an instructor for the
