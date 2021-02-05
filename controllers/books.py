@@ -162,6 +162,11 @@ def _route_book(is_published=True):
             # This course doesn't exist.
             raise HTTP(404)
 
+        attrdict = getCourseAttributesDict(course.id)
+        # set defaults for various attrs
+        if "enable_compare_me" not in attrdict:
+            attrdict["enable_compare_me"] = "true"
+
         # Require a login if necessary.
         if course.login_required:
             # Ask for a login by invoking the auth decorator.
