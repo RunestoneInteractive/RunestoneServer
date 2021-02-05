@@ -43,6 +43,7 @@ def _route_book(is_published=True):
     base_course = request.args(0)
     motd = ""
     donated = False
+    attrdict = {}
     settings.show_rs_banner = False
     if not base_course:
         raise HTTP(404)
@@ -91,6 +92,11 @@ def _route_book(is_published=True):
                 base_course
             )
             redirect(URL(c="default", f="courses"))
+
+        attrdict = getCourseAttributesDict(course.id)
+        # set defaults for various attrs
+        if "enable_compare_me" not in attrdict:
+            attrdict["enable_compare_me"] = "true"
 
         # Determine if we should ask for support
         # Trying to do banner ads during the 2nd and 3rd weeks of the term
@@ -291,6 +297,7 @@ def _route_book(is_published=True):
         questions=questions,
         motd=motd,
         banner_num=banner_num,
+        **attrdict,
     )
 
 

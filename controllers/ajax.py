@@ -1748,6 +1748,16 @@ def get_question_source():
 
 @auth.requires_login()
 def update_selected_question():
+    """
+    This endpoint is used by the selectquestion problems that allow the
+    student to select the problem they work on.  For example they may have
+    a programming problem that can be solved with writing code, or they
+    can switch to a parsons problem if necessary.
+
+    Caller must provide:
+    * ``metaid`` -- the id of the selectquestion
+    * ``selected`` -- the id of the real question chosen by the student
+    """
     sid = auth.user.username
     selector_id = request.vars.metaid
     selected_id = request.vars.selected
