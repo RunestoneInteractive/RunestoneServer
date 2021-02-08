@@ -3,7 +3,7 @@ LTI Integration
 ***************
 
 Phase 1 (All LMS platforms)
-=================
+===========================
 Generate a shared/secret key pair for use with Canvas:
 
 #.  Browse to the `Runestone Academy <https://runestone.academy>`_ and log in, then select your course (you must be the Instructor).
@@ -11,10 +11,10 @@ Generate a shared/secret key pair for use with Canvas:
 #.  Click on the “Create LTI Key and Secret” button. Click the “Show Secret” button. You will use these in the next phase.
 
 Phase 2 (LMS-specific Steps)
-=================
+============================
 Follow instructions for your LMS:
 
-.. contents:: Table of Contents
+.. contents::
     :local:
 
 
