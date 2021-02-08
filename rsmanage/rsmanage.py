@@ -581,7 +581,7 @@ def resetpw(config, username, password):
 @click.option("--username", help="Username, must be unique")
 @pass_config
 def rmuser(config, username):
-    """Utility to change a users password. Useful If they can't do it through the normal mechanism"""
+    """Utility to remove a user from the system completely."""
     os.chdir(findProjectRoot())
     sid = username or click.prompt("Username")
 

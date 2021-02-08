@@ -179,29 +179,31 @@ info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
 
-## Go through all books and build
-info "Building & Deploying books"
-cd "${BOOKS_PATH}"
-/bin/ls | while read book; do
-    (
-        rsmanage courseinfo $book
-        if [ $? -eq 0 ]; then
-          cd $book;
-          if [ ! -f NOBUILD ]; then
-              if [ -f requirements.txt ]; then
-                  pip install -r requirements.txt
-              fi
-              runestone build $buildargs deploy
-          else
-              info "skipping $book due to NOBUILD file"
-          fi
-        else
-          info "There is no database info for $book -- skipping"
-          info "You should add a new book to the database before building."
-        fi
-    );
-done
 
+## Go through all books and build
+if [ $BUILD_BOOKS == 'yes' ]; then
+  info "Building & Deploying books"
+  cd "${BOOKS_PATH}"
+  /bin/ls | while read book; do
+      (
+          rsmanage courseinfo --name $book
+          if [ $? -eq 0 ]; then
+            cd $book;
+            if [ ! -f NOBUILD ]; then
+                if [ -f requirements.txt ]; then
+                    pip install -r requirements.txt
+                fi
+                runestone build $buildargs deploy
+            else
+                info "skipping $book due to NOBUILD file"
+            fi
+          else
+            info "There is no database info for $book -- skipping"
+            info "You should add a new book to the database before building."
+          fi
+      );
+  done
+fi
 
 tail -F ${WEB2PY_PATH}/logs/uwsgi.log
 

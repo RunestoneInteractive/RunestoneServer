@@ -746,9 +746,12 @@ def _get_assignment(assignment_id):
 
 
 def _get_lti_record(oauth_consumer_key):
-    return (
-        current.db(current.db.lti_keys.consumer == oauth_consumer_key).select().first()
-    )
+    if oauth_consumer_key:
+        return (
+            current.db(current.db.lti_keys.consumer == oauth_consumer_key)
+            .select()
+            .first()
+        )
 
 
 def _try_to_send_lti_grade(student_row_num, assignment_id):

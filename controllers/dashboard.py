@@ -322,6 +322,8 @@ def studentreport():
         sid = auth.user.username
         response.view = "assignments/index.html"
 
+    logger.debug(f"id = {request.vars.id} is instructor = {for_dashboard} sid = {sid}")
+
     data_analyzer.load_user_metrics(sid)
     data_analyzer.load_assignment_metrics(sid, not for_dashboard)
 
@@ -395,7 +397,7 @@ def studentreport():
         select * from code where sid = %(sid)s and course_id = %(course)s
         """,
             settings.database_uri,
-            params={"sid": auth.user.username, "course": auth.user.course_id},
+            params={"sid": sid, "course": auth.user.course_id},
         )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
         response.headers[
@@ -674,7 +676,7 @@ def exercisemetrics():
         answers.append(
             {
                 "user": user_responses.user,
-                "username": user_responses.username,
+                "username": urllib.parse.quote(user_responses.username),
                 "answers": responses,
             }
         )
@@ -692,6 +694,7 @@ def exercisemetrics():
 
 
 def format_cell(sid, chap, subchap, val):
+    sid = urllib.parse.quote(sid)
     if np.isnan(val):
         return ""
     else:
@@ -715,8 +718,8 @@ def subchapoverview():
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
     join questions on div_id = name and base_course = '{}' join auth_user on username = useinfo.sid
-    where useinfo.course_id = '{}' and active='T'""".format(
-            thecourse.base_course, course
+    where useinfo.course_id = '{}' and active='T' and useinfo.timestamp >= '{}'""".format(
+            thecourse.base_course, course, thecourse.term_start_date
         ),
         settings.database_uri,
         parse_dates=["timestamp"],

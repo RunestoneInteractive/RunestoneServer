@@ -12,7 +12,10 @@ services:
     image: redis
 
   jobe:
-    image: trampgeek/jobeinabox:latest
+    image: runestone/jobeinabox
+    build: ./jobeinabox/
+    volumes:
+      - ./jobeinabox/files:/usr/local/lib/java
 
   runestone:
     image: runestone/server
@@ -39,3 +42,4 @@ services:
       REDIS_URI: 'redis://redis:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'
       CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
+      BUILD_BOOKS: '${BUILD_BOOKS}'

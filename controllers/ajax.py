@@ -38,7 +38,7 @@ EVENT_TABLE = {
     "dragNdrop": "dragndrop_answers",
     "clickableArea": "clickablearea_answers",
     "parsons": "parsons_answers",
-    "codelens1": "codelens_answers",
+    "codelensq": "codelens_answers",
     "shortanswer": "shortanswer_answers",
     "fillintheblank": "fitb_answers",
     "mchoice": "mchoice_answers",
@@ -170,6 +170,12 @@ def hsblog():
 
     # Produce a default result.
     res = dict(log=True, timestamp=str(ts))
+    try:
+        pct = float(request.vars.percent)
+    except ValueError:
+        pct = None
+    except TypeError:
+        pct = None
 
     # Process this event.
     if event == "mChoice" and auth.user:
@@ -182,6 +188,7 @@ def hsblog():
             answer=answer,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
     elif event == "fillb" and auth.user:
         answer_json = request.vars.answer
@@ -200,6 +207,7 @@ def hsblog():
             answer=answer_json,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "dragNdrop" and auth.user:
@@ -215,6 +223,7 @@ def hsblog():
             correct=correct,
             course_name=course,
             min_height=minHeight,
+            percent=pct,
         )
     elif event == "clickableArea" and auth.user:
         correct = request.vars.correct
@@ -225,6 +234,7 @@ def hsblog():
             answer=act,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "parsons" and auth.user:
@@ -239,6 +249,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "codelensq" and auth.user:
@@ -253,6 +264,7 @@ def hsblog():
             source=source,
             correct=correct,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "shortanswer" and auth.user:
@@ -285,6 +297,7 @@ def hsblog():
             passed=passed,
             failed=failed,
             course_name=course,
+            percent=pct,
         )
 
     elif event == "lp_build" and auth.user:
@@ -1370,34 +1383,6 @@ def getAssessResults():
         )
 
 
-def checkTimedReset():
-    # Deprecated -- Should be removed in 2020
-    if auth.user:
-        user = auth.user.username
-    else:
-        return json.dumps({"canReset": False})
-
-    divId = request.vars.div_id
-    course = request.vars.course
-    rows = (
-        db(
-            (db.timed_exam.div_id == divId)
-            & (db.timed_exam.sid == user)
-            & (db.timed_exam.course_name == course)
-        )
-        .select(orderby=~db.timed_exam.id)
-        .first()
-    )
-    # TODO:  check the logic here if its already been reset it shouldn't be again?
-    if rows:  # If there was a scored exam
-        if rows.reset == True:  # noqa: E712
-            return json.dumps({"canReset": True})
-        else:
-            return json.dumps({"canReset": False})
-    else:
-        return json.dumps({"canReset": True})
-
-
 def tookTimedAssessment():
     if auth.user:
         sid = auth.user.username
@@ -1673,23 +1658,17 @@ def get_question_source():
         res = db(
             (db.user_experiment.sid == auth.user.username)
             & (db.user_experiment.experiment_id == is_ab)
-        ).count()
+        ).select(orderby=db.user_experiment.id)
 
-        if res == 0:
+        if not res:
             exp_group = random.randrange(2)
             db.user_experiment.insert(
                 sid=auth.user.username, experiment_id=is_ab, exp_group=exp_group
             )
+            logger.debug(f"added {auth.user.username} to {is_ab} group {exp_group}")
+
         else:
-            res = (
-                db(
-                    (db.user_experiment.sid == auth.user.username)
-                    & (db.user_experiment.experiment_id == is_ab)
-                )
-                .select()
-                .first()
-            )
-            exp_group = res.exp_group
+            exp_group = res[0].exp_group
 
         logger.debug(f"experimental group is {exp_group}")
 
@@ -1765,3 +1744,26 @@ def get_question_source():
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
+
+
+@auth.requires_login()
+def update_selected_question():
+    """
+    This endpoint is used by the selectquestion problems that allow the
+    student to select the problem they work on.  For example they may have
+    a programming problem that can be solved with writing code, or they
+    can switch to a parsons problem if necessary.
+
+    Caller must provide:
+    * ``metaid`` -- the id of the selectquestion
+    * ``selected`` -- the id of the real question chosen by the student
+    """
+    sid = auth.user.username
+    selector_id = request.vars.metaid
+    selected_id = request.vars.selected
+
+    db.selected_questions.update_or_insert(
+        (db.selected_questions.selector_id == selector_id)
+        & (db.selected_questions.sid == sid),
+        selected_id=selected_id,
+    )

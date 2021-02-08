@@ -88,7 +88,7 @@
                                 </div>
                             {{pass}}
                             <div class='oneq full-width' id='{{=count}}'>
-                                <script class='htmlblock' type='text/html'>{{=q['htmlsrc']}}</script>
+                                {{=XML(q['htmlsrc'])}}
                             </div>
                             <div class="oneq" style="width: 100%; text-align: center">
                                 {{ if origin == "Runestone": }}
@@ -126,7 +126,7 @@
     // The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
 
 
-    var questionHtmlCode = document.getElementsByClassName("htmlblock");
+    //var questionHtmlCode = document.getElementsByClassName("htmlblock");
     // Interestingly, javascript won't understand the html string without first dumping it into an html element
     // a console.log of the html string within the questioninfo array would only give an unexpected token error
     // pulling the html strings from the script element provides the string that javascript recognizes
@@ -144,12 +144,12 @@
 
 
 
-    for (let i=0; i<questionHtmlCode.length; i++) {
-        let $div = $('#' + i);
-        let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
-        let change = $.parseHTML(unescapedhtml, keepScripts=true);
-        $div.append(change);
-    }
+    // for (let i=0; i<questionHtmlCode.length; i++) {
+    //     let $div = $('#' + i);
+    //     let unescapedhtml = htmlDecode(questionHtmlCode[i].innerHTML);
+    //     let change = $.parseHTML(unescapedhtml, keepScripts=true);
+    //     $div.append(change);
+    // }
 
 
     $("#gradeMeButton").on("click", function(){
