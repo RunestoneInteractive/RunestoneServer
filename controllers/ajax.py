@@ -16,6 +16,7 @@ from lxml import html
 import os
 import re
 import subprocess
+from textwrap import dedent
 import uuid
 
 # Third-party imports
@@ -1425,7 +1426,7 @@ def preview_question():
 """
 
     try:
-        code = begin + json.loads(request.vars.code).strip() + end
+        code = begin + dedent(json.loads(request.vars.code)) + end
         with open(
             "applications/{}/build/preview/_sources/index.rst".format(
                 request.application
@@ -1474,13 +1475,15 @@ def preview_question():
             encoding="utf-8",
         ) as ixf:
             src = ixf.read()
+            tree = html.fromstring(src)
+            if len(tree.cssselect(".runestone")) == 0:
+                src = ""
             result = re.search(
                 "<begin_directive>(.*)<end_directive>", src, flags=re.DOTALL
             )
             if result:
                 ctext = result.group(1)
             else:
-                tree = html.fromstring(src)
                 component = tree.cssselect(".system-message")
                 if len(component) > 0:
                     ctext = html.tostring(component[0]).decode("utf-8")

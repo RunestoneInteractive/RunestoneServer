@@ -609,7 +609,7 @@ def testPreviewQuestion(test_client, test_user_1):
     print(test_client.text)
     res = json.loads(test_client.text)
 
-    assert 'id="preview_test1"' in res
+    assert "id=preview_test1" in res
     assert 'print("Hello World")' in res
     assert "textarea>" in res
     assert 'div data-component="activecode"' in res
