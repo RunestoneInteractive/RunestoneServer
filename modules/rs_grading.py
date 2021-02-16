@@ -68,10 +68,13 @@ def _score_one_mchoice(row, points, autograde):
     # row is from mchoice_answers
     ## It appears that the mchoice_answers is only storing a binary correct_or_not
     ## If that is updated to store a pct_correct, the next few lines can change
-    if row.correct:
-        pct_correct = 100
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        pct_correct = 0
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
@@ -87,37 +90,49 @@ def _score_one_parsons(row, points, autograde):
     # row is from parsons_answers
     # Much like mchoice, parsons_answers currently stores a binary correct value
     # So much like in _score_one_mchoice, the next lines can be altered if a pct_correct value is added to parsons_answers
-    if row.correct:
-        pct_correct = 100
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        pct_correct = 0
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
 def _score_one_fitb(row, points, autograde):
     # row is from fitb_answers
-    if row.correct:
-        pct_correct = 100
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        pct_correct = 0
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
 def _score_one_clickablearea(row, points, autograde):
     # row is from clickablearea_answers
-    if row.correct:
-        pct_correct = 100
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        pct_correct = 0
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
 def _score_one_dragndrop(row, points, autograde):
     # row is from dragndrop_answers
-    if row.correct:
-        pct_correct = 100
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        pct_correct = 0
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
