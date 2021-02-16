@@ -16,6 +16,7 @@ from lxml import html
 import os
 import re
 import subprocess
+from textwrap import dedent
 import uuid
 
 # Third-party imports
@@ -1409,8 +1410,23 @@ def tookTimedAssessment():
 
 # The request variable ``code`` must contain JSON-encoded RST to be rendered by Runestone. Only the HTML containing the actual Runestone component will be returned.
 def preview_question():
+
+    begin = """
+.. raw:: html
+
+    <begin_directive>
+
+"""
+    end = """
+
+.. raw:: html
+
+    <end_directive>
+
+"""
+
     try:
-        code = json.loads(request.vars.code)
+        code = begin + dedent(json.loads(request.vars.code)) + end
         with open(
             "applications/{}/build/preview/_sources/index.rst".format(
                 request.application
@@ -1460,9 +1476,13 @@ def preview_question():
         ) as ixf:
             src = ixf.read()
             tree = html.fromstring(src)
-            component = tree.cssselect(".runestone")
-            if len(component) > 0:
-                ctext = html.tostring(component[0]).decode("utf-8")
+            if len(tree.cssselect(".runestone")) == 0:
+                src = ""
+            result = re.search(
+                "<begin_directive>(.*)<end_directive>", src, flags=re.DOTALL
+            )
+            if result:
+                ctext = result.group(1)
             else:
                 component = tree.cssselect(".system-message")
                 if len(component) > 0:
@@ -1470,7 +1490,6 @@ def preview_question():
                     logger.debug("error - ", ctext)
                 else:
                     ctext = "Error: Runestone content missing."
-
             return json.dumps(ctext)
     except Exception as ex:
         return json.dumps("Error: {}".format(ex))

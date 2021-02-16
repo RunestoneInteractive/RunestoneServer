@@ -6,6 +6,11 @@ import random
 import re
 
 from gluon import current
+import logging
+
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 ## if you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
 ## register with janrain.com, write your domain:api_key in private/janrain.key
@@ -228,6 +233,7 @@ def verifyInstructorStatus(course, instructor):
     Make sure that the instructor specified is actually an instructor for the
     given course.
     """
+    res = False
     if type(course) == str:
         course = (
             db(db.courses.course_name == course)
@@ -235,13 +241,26 @@ def verifyInstructorStatus(course, instructor):
             .first()
         )
 
-    return (
-        db(
-            (db.course_instructor.course == course)
-            & (db.course_instructor.instructor == instructor)
-        ).count(**COUNT_CACHE)
-        > 0
-    )
+    try:
+        res = (
+            db(
+                (db.course_instructor.course == course)
+                & (db.course_instructor.instructor == instructor)
+            ).count(**COUNT_CACHE)
+            > 0
+        )
+    except Exception as e:
+        logger.error(f"VIS -- {e}")
+        db.rollback()
+        res = (
+            db(
+                (db.course_instructor.course == course)
+                & (db.course_instructor.instructor == instructor)
+            ).count(**COUNT_CACHE)
+            > 0
+        )
+
+    return res
 
 
 def is_editor(userid):

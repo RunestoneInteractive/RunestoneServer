@@ -2507,10 +2507,12 @@ def resetpw():
             user.username, auth.user.username
         )
     )
+    cl = db(db.user_courses.user_id == user.id).select(db.user_courses.course_id)
+    course_list = [row.course_id for row in cl]
     if user.id == auth.user.id:
         res = {"status": "fail", "message": "Sorry you cannot update your own password"}
         return json.dumps(res)
-    if user.course_id == auth.user.course_id:
+    if user.course_id == auth.user.course_id or (auth.user.course_id in course_list):
         pw = CRYPT(auth.settings.hmac_key)(newpw)[0]
         db(db.auth_user.id == sid).update(password=pw)
         res = {

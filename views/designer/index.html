@@ -3,14 +3,17 @@
 
 
 {{if 'message' in globals():}}
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+<link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <h3>{{=message}}</h3>
 
-<p><strong>For Instructors ONLY</strong> If you are a self learner you DO NOT need to build your own course.  If you are a student and think that building your own course will show you the answers, YOU ARE WRONG.</p>
+<p><strong>For Instructors ONLY</strong> If you are a self learner you DO NOT need to build your own course. If you are
+    a student and think that building your own course will show you the answers, YOU ARE WRONG.</p>
 <p>
-    This page allows you to select a book for your own class. Once you have selected and built the book, you will be able to create assignments for your students. These assignments
+    This page allows you to select a book for your own class. Once you have selected and built the book, you will be
+    able to create assignments for your students. These assignments
     will be publish
     right in the book. As the instructor, You can grade your students homework, and have access to a dashboard that
     allows you
@@ -87,14 +90,16 @@
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="fopp" />
-                    Foundations of Python Programming (Optional Companion online homework from <a href="https://edfinity.co/cs">Edfinity</a>)
+                    Foundations of Python Programming (Optional Companion online homework from <a
+                        href="https://edfinity.co/cs">Edfinity</a>)
                 </label>
             </div>
 
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="thinkcspy" checked="checked" />
-                    How to Think Like a Computer Scientist: Interactive Edition (Optional Companion online homework from <a href="https://edfinity.co/cs">Edfinity</a>)
+                    How to Think Like a Computer Scientist: Interactive Edition (Optional Companion online homework from
+                    <a href="https://edfinity.co/cs">Edfinity</a>)
                 </label>
             </div>
 
@@ -108,15 +113,25 @@
 
             <div class="radio">
                 <label>
+                    <input type="radio" name="coursetype" value="pythonds3" />
+                    Problem Solving with Algorithms and Data Structures using Python (Third Edition), Brad Miller and
+                    David Ranum
+                </label>
+            </div>
+
+            <div class="radio">
+                <label>
                     <input type="radio" name="coursetype" value="pythonds" />
-                    Problem Solving with Algorithms and Data Structures using Python, Brad Miller and David Ranum
+                    Problem Solving with Algorithms and Data Structures using Python (2nd Edition), Brad Miller and
+                    David Ranum
                 </label>
             </div>
 
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="thinkcpp" />
-                    How to Think Like a Computer Scientist: C++ Interactive Version, Allen Downey, Interaction by Barb Ericson
+                    How to Think Like a Computer Scientist: C++ Interactive Version, Allen Downey, Interaction by Barb
+                    Ericson
                 </label>
             </div>
 
@@ -138,7 +153,8 @@
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="complex" />
-                    On Complexity, A remix by Jan Pearce, Based on Think Complexity by Allen Downey and <code>pythonds</code> by Brad Miller and David Ranum
+                    On Complexity, A remix by Jan Pearce, Based on Think Complexity by Allen Downey and
+                    <code>pythonds</code> by Brad Miller and David Ranum
                 </label>
             </div>
 
@@ -152,13 +168,15 @@
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="csjava" />
-                        Introduction to Programming with Java (csjava) - a derivative of CSAwesome for College Students - Adapted by Linda Seiter
+                    Introduction to Programming with Java (csjava) - a derivative of CSAwesome for College Students -
+                    Adapted by Linda Seiter
                 </label>
             </div>
             <div class="radio">
                 <label>
                     <input type="radio" name="coursetype" value="Subgoals" />
-                        Java Subgoals (Subgoals) - Learn Java through Worked Examples and Subgoals with practice - By Briana Morrison
+                    Java Subgoals (Subgoals) - Learn Java through Worked Examples and Subgoals with practice - By Briana
+                    Morrison
                 </label>
             </div>
 
@@ -288,12 +306,16 @@
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="invoice" value="false" id="invoice-me" />
-                    <strong>Make Runestone Sustainable: </strong>I would be happy to have you invoice my school for a small
+                    <strong>Make Runestone Sustainable: </strong>I would be happy to have you invoice my school for a
+                    small
                     support fee. If you check this box we will email you an invoice for
-                    $10/student registered about a week after your start date. Checking this box is <strong>voluntary!</strong>
-                    If you do not want to (or cannot) support Runestone please do not check this box as it just generates extra work.
+                    $10/student registered about a week after your start date. Checking this box is
+                    <strong>voluntary!</strong>
+                    If you do not want to (or cannot) support Runestone please do not check this box as it just
+                    generates extra work.
                     If we could get just $10 for every registered student on Runestone we could
-                    focus all our efforts on growing the Runestone platform, the team,  adding more books and support for instructors!<br />
+                    focus all our efforts on growing the Runestone platform, the team, adding more books and support for
+                    instructors!<br />
                     Thanks for your consideration!
                 </label>
             </div>
