@@ -254,7 +254,7 @@ def test_preview_question(test_client, test_user_1):
     # Passing a string with Unicode should work. Note that 0x0263 == 611; the JSON-encoded result will use this.
     test_client.validate(
         preview_question,
-        "π",
+        r"\u03c0",
         data={
             "code": json.dumps(
                 dedent(
