@@ -1641,6 +1641,30 @@ def get_question_source():
     is_primary = request.vars.primary
     is_ab = request.vars.AB
     selector_id = request.vars["selector_id"]
+    assignment_name = request.vars["timedWrapper"]
+
+    # If the question has a :points: option then those points are the default
+    # however sometimes questions are entered in the web ui without the :points:
+    # and potins are assigned in the UI instead.  If this is part of an
+    # assignment or timed exam AND the points are set in the web UI we will
+    # use the points from the UI over the :points:  If this is an assignment
+    # or exam that is totally written in RST then  the poitns in the UI will match
+    # the points from the assignment anyway.
+    if assignment_name:
+        ui_points = (
+            db(
+                (db.assignments.name == assignment_name)
+                & (db.assignments.id == db.assignment_questions.assignment_id)
+                & (db.assignment_questions.question_id == db.questions.id)
+                & (db.questions.name == selector_id)
+            )
+            .select(db.assignment_questions.points)
+            .first()
+        )
+        logger.debug(
+            f"Assignment Points for {assignment_name}, {selector_id} = {ui_points}"
+        )
+        points = ui_points.points
 
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
