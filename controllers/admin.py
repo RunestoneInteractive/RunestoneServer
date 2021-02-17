@@ -1446,10 +1446,12 @@ def createquestion():
         return json.dumps("ERROR")
 
 
-@auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
-)
+# @auth.requires(
+#     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+#     requires_login=True,
+# )
+# replacing the above to allow any logged in account to access getToggleSrc and preview function
+@auth.requires_login()
 def htmlsrc():
     acid = request.vars["acid"]
     studentId = request.vars.sid
