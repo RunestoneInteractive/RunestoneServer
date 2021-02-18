@@ -1804,9 +1804,11 @@ def update_selected_question():
     sid = auth.user.username
     selector_id = request.vars.metaid
     selected_id = request.vars.selected
-
+    logger.debug(f"USQ - {selector_id} --> {selected_id} for {sid}")
     db.selected_questions.update_or_insert(
         (db.selected_questions.selector_id == selector_id)
         & (db.selected_questions.sid == sid),
         selected_id=selected_id,
+        selector_id=selector_id,
+        sid=sid,
     )
