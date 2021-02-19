@@ -2343,6 +2343,30 @@ def courselog():
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
     requires_login=True,
 )
+def codelog():
+    course = auth.user.course_name
+
+    data = pd.read_sql_query(
+        """
+    select * from code where course_id = {}
+    """.format(
+            auth.user.course_id
+        ),
+        settings.database_uri,
+    )
+    data = data[~data.sid.str.contains(r"^\d{38,38}@")]
+
+    response.headers["Content-Type"] = "application/vnd.ms-excel"
+    response.headers[
+        "Content-Disposition"
+    ] = "attachment; filename=data_for_{}.csv".format(auth.user.course_name)
+    return data.to_csv(na_rep=" ")
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
 def update_course():
     response.headers["Content-Type"] = "application/json"
 
