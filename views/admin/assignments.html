@@ -135,9 +135,14 @@
       <div class="panel panel-default">
 
         <!-- Readings collapsible section -->
+        <style>
+          .panel-heading:hover {
+            background-color: lightblue;
+          }
+        </style>
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" href="#readings-collapse">Readings</a>
+            <a data-toggle="collapse" href="#readings-collapse"><span class="glyphicon glyphicon-expand" aria-hidden="true"></span> Readings</a>
           </h4>
         </div>
         <div id="readings-collapse" class="panel-collapse collapse">
@@ -153,7 +158,7 @@
         <!-- Problems collapsible section -->
         <div class="panel-heading">
           <h4 class="panel-title">
-            <a data-toggle="collapse" href="#problems-collapse">Problems</a>
+            <a data-toggle="collapse" href="#problems-collapse"><span class="glyphicon glyphicon-expand" aria-hidden="true"></span> Problems</a>
           </h4>
         </div>
         <div id="problems-collapse" class="panel-collapse collapse">
