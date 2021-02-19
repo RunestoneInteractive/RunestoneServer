@@ -541,6 +541,8 @@ def admin():
                 studentdict[row.user_id] = name
 
     course = db(db.courses.course_name == auth.user.course_name).select().first()
+    course_attrs = getCourseAttributesDict(course.id)
+
     instructor_course_list = db(
         (db.course_instructor.instructor == auth.user.id)
         & (db.courses.id == db.course_instructor.course)
@@ -606,6 +608,7 @@ def admin():
         consumer=consumer,
         secret=secret,
         examlist=exams,
+        **course_attrs,
     )
 
 
@@ -2362,7 +2365,14 @@ def update_course():
             db(db.courses.id == thecourse.id).update(
                 downloads_enabled=(request.vars["downloads_enabled"] == "true")
             )
-
+        if "enable_compare_me" in request.vars:
+            db.course_attributes.update_or_insert(
+                (db.course_attributes.course_id == thecourse.id)
+                & (db.course_attributes.attr == "enable_compare_me"),
+                course_id=thecourse.id,
+                attr="enable_compare_me",
+                value=request.vars.enable_compare_me,
+            )
         return json.dumps(dict(status="success"))
 
     return json.dumps(dict(status="failed"))
