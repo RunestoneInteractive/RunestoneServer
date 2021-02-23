@@ -463,9 +463,43 @@ db.define_table(
 # mail.settings.server = settings.email_server
 # mail.settings.sender = settings.email_sender
 # mail.settings.login = settings.email_login
-auth.messages.reset_password = (
-    '<html>Click on <a href="%(link)s">this link</a> to reset your password.</html>'
-)
+auth.messages.retrieve_username_subject = "Runestone Academy username"
+auth.messages.reset_password_subject = "Runestone Academy password"
+auth.messages.retrieve_username = """<html>
+Hello,
+<br>
+<p>We received your request to retrieve your username.  According to our files
+Your username is: %(username)s </p>
+
+<p>If you have any trouble with this automated system you can also ask your instructor 
+and they can help you retrieve your username or reset your password.  If you are
+an instructor, you can  (as a last resort) contact Runestone by creating an issue
+on  <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
+
+<p>This message was generated automatically and comes from an unmonitored email address.  If you reply to this message a human will not see it.  Use the github link above if you need help from a real person.</p>
+
+Thanks for using Runestone!<br><br>
+
+Brad Miller
+</html>
+"""
+auth.messages.reset_password = """"<html>
+Hello, <br>
+
+<p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
+
+<p>If you have any trouble with the link you can also ask your instructor 
+and they can help you retrieve your username or reset your password.  If you are
+an instructor, you can  (as a last resort) contact Runestone by creating an issue
+on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
+
+<p>This message was generated automatically and comes from an unmonitored email address.  If you reply to this message a human will not see it.  Use the github link above if you need help from a real person.</p>
+
+Thanks for using Runestone!<br><br>
+
+Brad Miller
+</html>'
+"""
 
 # Make sure the latest version of admin is always loaded.
 adminjs = os.path.join("applications", request.application, "static", "js", "admin.js")
