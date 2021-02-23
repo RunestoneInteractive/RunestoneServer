@@ -13,6 +13,7 @@ from io import open
 import json
 import logging
 from lxml import html
+import math
 import os
 import re
 import subprocess
@@ -283,6 +284,8 @@ def hsblog():
             pct = float(statslist[1])
             passed = int(statslist[3])
             failed = int(statslist[5])
+            if math.isnan(pct):
+                pct = 0
         else:
             pct = passed = failed = 0
             logger.error(f"Got undefined unittest results for {div_id} {sid}")
