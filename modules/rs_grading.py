@@ -194,7 +194,20 @@ def _scorable_useinfos(
     query = (db.useinfo.course_id == course_name) & (db.useinfo.sid == sid)
 
     if question_type == "page":
-        quest = db(db.questions.name == div_id).select().first()
+        base_course = (
+            db(db.courses.course_name == course_name)
+            .select(db.courses.base_course)
+            .first()
+            .base_course
+        )
+        quest = (
+            db(
+                (db.questions.name == div_id)
+                & (db.questions.base_course == base_course)
+            )
+            .select()
+            .first()
+        )
         div_id = "{}/{}.html".format(quest.chapter, quest.subchapter)
         query = query & (db.useinfo.div_id.endswith(div_id))
     else:
