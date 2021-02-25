@@ -498,7 +498,7 @@ on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Gith
 Thanks for using Runestone!<br><br>
 
 Brad Miller
-</html>'
+</html>
 """
 
 # Make sure the latest version of admin is always loaded.
