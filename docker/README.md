@@ -23,7 +23,7 @@ cd books
 git clone https://github.com/RunestoneInteractive/thinkcspy.git
 ```
 
-After cloning the book edit the pavement.py file.  It is **critical** that the `master_url` variable in that file is set correctly.  If you are running docker and doing your development on the same machine then `http://localhost` will work. If you are running docker on a remote host then make sure to set it to the name of the remote host. `master_url` is the URL that the API calls in the browser will use to connect to the server running in the docker container.
+After cloning the book edit the pavement.py file. It is **critical** that the `master_url` variable in that file is set correctly. If you are running docker and doing your development on the same machine then `http://localhost` will work. If you are running docker on a remote host then make sure to set it to the name of the remote host. `master_url` is the URL that the API calls in the browser will use to connect to the server running in the docker container.
 
 ### 2. Add Users
 
@@ -34,13 +34,22 @@ put them in a folder called `configs` in the root of the repository. The format 
 username,email,first_name,last_name,pw,course
 ```
 
-This will create usernames for each person and pre-register them for the course.  In the case of instructors it register and make them instructors for the course.  From the `$RUNESTONE_PATH` directory (top level of runestone) you can exectue the following commands:
-
+This will create usernames for each person and pre-register them for the course. In the case of instructors it register and make them instructors for the course. From the `$RUNESTONE_PATH` directory (top level of runestone) you can exectue the following commands:
 
 ```bash
 $ mkdir -p configs
 $ cp instructors.csv configs
 $ cp students.csv configs
+```
+
+### 3. Configure Email (Optional)
+
+If you are going to use this with a live class you will probably want to configure an email to handle forgotten passwords and usernames. You do this by creating or editing the `models/1.py` file. I found that a simple gmail account can be configured to handle this task. However you will want to configure that account so that 2-factor authentication is turned on, AND you will need to create an application specific password for your server. After creating the app specific password add the following lines to 1.py
+
+```python
+settings.email_server = "smtp.gmail.com:587"
+settings.email_sender = "youraccount@gmail.com"
+settings.email_login = "youraccount@gmail.com:APP-SECIFIC-PW-HERE"
 ```
 
 ### 3. Build
@@ -51,7 +60,7 @@ First, build the application container.
 $ docker build -t runestone/server .
 ```
 
-This build step *only needs to be done once* and only again if you need
+This build step _only needs to be done once_ and only again if you need
 to update dependencies in the container (and don't want to shell inside and update
 them manually). We will show you how to do that further below. The build
 creates an image that you can create instances of (the instances are the containers)
@@ -67,9 +76,9 @@ export RUNESTONE_HOST=localhost
 export POSTGRES_PASSWORD=runestone
 ```
 
-If you are doing **development work** You will want to install the RunestoneComponents in development mode as well.  clone https://github.com/RunestoneInteractive/RunestoneComponents.git as a sibling of the RunestoneServer directory.  As the components also use npm to build the runestone.js file you will want to **follow the directions** in the README for that.  If you do not then you will be **missing runestone.js** and nothing is going to work right!  If you are not developing the components then don't worry about it, docker will already have the latest released version of runestone installed.
+If you are doing **development work** You will want to install the RunestoneComponents in development mode as well. clone https://github.com/RunestoneInteractive/RunestoneComponents.git as a sibling of the RunestoneServer directory. As the components also use npm to build the runestone.js file you will want to **follow the directions** in the README for that. If you do not then you will be **missing runestone.js** and nothing is going to work right! If you are not developing the components then don't worry about it, docker will already have the latest released version of runestone installed.
 
-Create a docker-compose.override.yml in the same directory as the docker-compose.yml file.  It should look like this:
+Create a docker-compose.override.yml in the same directory as the docker-compose.yml file. It should look like this:
 
 ```yml
 version: "3"
@@ -86,7 +95,7 @@ Developers can now skip to step 5.
 
 If you want to deploy a production Runestone Server, you will need
 to change the default usernames and passwords. Notice how there are environment
-variables for the database (POSTGRES_*) in the `environment` section of the
+variables for the database (POSTGRES\_\*) in the `environment` section of the
 uwsgi and db images:
 
 ```bash
@@ -99,7 +108,7 @@ uwsgi and db images:
 
 These will be provided to the containers that are created to initialize the postgres
 database. For a production deployment, you have a few options. You can change
-these variables (and *do not* commit the file to GitHub) or you can create an
+these variables (and _do not_ commit the file to GitHub) or you can create an
 environment variable file on your host, here is `.env`:
 
 ```bash
@@ -146,7 +155,7 @@ This means that if you make changes to the repository root
 (the runestone application) they will also be made in the container!
 For example, if you add a new book, the files will also be in the container.
 You won't need to rebuild the container, however, to properly get the book running,
-you *will* need to restart it.
+you _will_ need to restart it.
 
 ```bash
 $ docker-compose restart runestone
@@ -170,7 +179,7 @@ $ docker-compose up -d
 ### 2. Creating Questions from the Web Interface
 
 If you want to write questions from the web interface you will need to make sure
-that `settings.python_interpreter` is set to a real python.  In the uwsgi environment uwsgi tends to replace python in `sys.executable` with itself, which is pretty annoying.
+that `settings.python_interpreter` is set to a real python. In the uwsgi environment uwsgi tends to replace python in `sys.executable` with itself, which is pretty annoying.
 
 ### 2. Running the Runestone Server Unit Tests
 
@@ -225,7 +234,6 @@ $ docker build -t runestone/server .
 For now, it's recommended to remove the folder. Hopefully we will
 develop a cleaner solution to handle migrations.
 
-
 ### 5. Testing the Entrypoint
 
 If you want to test the [entrypoint.sh](entrypoint.sh) script, the easiest thing
@@ -271,24 +279,23 @@ so **do not edit files from inside the container** otherwise they will have a ch
 
 ### 7. Restarting uwsgi/web2py
 
-Controllers are reloaded automatically every time they are used.  However if you are making changes to code in the `modules` folder you will need to restart web2py or else it is likely that a cached version of that code will be used.  You can restart web2py easily by first shelling into the container and then running the command `touch /srv/web2py/reload_server`
+Controllers are reloaded automatically every time they are used. However if you are making changes to code in the `modules` folder you will need to restart web2py or else it is likely that a cached version of that code will be used. You can restart web2py easily by first shelling into the container and then running the command `touch /srv/web2py/reload_server`
 
 ### 8. File Permissions (especially on Linux)
 
-File permissions can seem a little strange when you start this container on Linux.  Primarily because both nginx and uwsgi run as the `www-data` user.  So you will suddenly find your files under RunestoneServer owned by `www-data` . The container's entrypoint script updates permissions to allow both you and the container enough privileges to do your work.
+File permissions can seem a little strange when you start this container on Linux. Primarily because both nginx and uwsgi run as the `www-data` user. So you will suddenly find your files under RunestoneServer owned by `www-data` . The container's entrypoint script updates permissions to allow both you and the container enough privileges to do your work.
 
 ## 9. If you are writing your own book
 
-If you are writing your own book you will want to get that book set up properly in the runestone system.  You need to do the following:
+If you are writing your own book you will want to get that book set up properly in the runestone system. You need to do the following:
 
 1. Shell in to the container (see above)
 2. `cd applications/runestone`
 3. Run the command `rsmanage addcourse` Use the project name you configured in `pavement.py` as the name of BOTH the course and the basecourse when it asks.
 4. Now that your course is registered rebuild it `cd .../books/yourbook` and run `runestone build --all deploy`
 5. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
-**Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher.  See the PreTeXt docs for how do do this.
-6. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book.  Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
-
+   **Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher. See the PreTeXt docs for how do do this.
+6. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book. Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
 
 ## Debugging
 
@@ -296,6 +303,3 @@ There are a couple of ways to get at the logger output:
 
 1.  Shell into the container and then look at `/srv/web2py/logs/uwsgi.log`
 2.  Run `docker-compose logs --follow` This will give you the continuous stream of log information coming out of the container including the uwsgi/web2py log.
-
-
-
