@@ -483,7 +483,7 @@ Thanks for using Runestone!<br><br>
 Brad Miller
 </html>
 """
-auth.messages.reset_password = """"<html>
+auth.messages.reset_password = """<html>
 Hello, <br>
 
 <p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
