@@ -111,6 +111,8 @@ def doc():
 def assignments():
     """
     This is called for the assignments tab on the instructor interface
+    When an assignment is selected get_assignment is called to gather the details
+    for that assignment.
     """
     response.title = "Assignments"
     cur_assignments = db(db.assignments.course == auth.user.course_id).select(
@@ -2460,7 +2462,10 @@ def enroll_students():
     line = 0
     for row in validation_reader:
         line += 1
-        res = _validateUser(row[0], row[4], row[2], row[3], row[1], row[5], line)
+        if len(row) == 6:
+            res = _validateUser(row[0], row[4], row[2], row[3], row[1], row[5], line)
+        else:
+            res = [f"Error on line {line} you should have 6 fields"]
         if res:
             messages.extend(res)
 
