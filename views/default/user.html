@@ -138,6 +138,7 @@
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
                 <div class="content row">
+                    <p class="col-md-4 col-sm-6 col-xs-12"><strong>Important:</strong>  Some school email systems block all external emails, filter "password reset" type emails, or use other filters that may prevent you from getting this email! <strong>Your instructor can reset your password.</strong></p>
                 <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
                     {{=form}}
                     {{ if settings.academy_mode and request.args(0) == 'profile':}}
@@ -152,8 +153,7 @@
                     </form>
                     {{ pass }}
                     {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
-                        <p> You will receive an email from info@runestone.academy with your username.  If you don't see it right away check your spam folder.  You may want to add info@runestone.academy to your contacts to prevent it from going to spam in the future. </p>
-                        <p><strong>Note:</strong>  Some school email system block runestone for various reasons, or expect a human to click a button on an email reply.  Your instructor can reset your password.</p>
+                        <p> You should receive an email from Runestone with your username.  If you don't see it right away check your spam folder.</p>
                     {{pass}}
 
                 </div>
