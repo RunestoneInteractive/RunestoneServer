@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Runestone Community Support
+      url: https://runestoneinteractive.org/pages/support.html
+      about: Our slack channel is the best place to get immediate support for questions
+    - name: Frequently Asked Questions
+      url: https://runestoneinteractive.org/pages/faq.html
+      about: Please Check here before asking a question or creating an issue
