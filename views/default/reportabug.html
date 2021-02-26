@@ -1,9 +1,12 @@
 {{ extend 'layout.html'}}
+{{ block moreincludes }}
 <style>
     body {
         font-size: large;
     }
 </style>
+{{end}}
+
 <div class="col-md-12">
     <h1 style="text-align: center">Report a Bug</h1>
 
@@ -83,7 +86,8 @@
         <li>
             If there is a traceback on this page, please copy it and include it in your
             <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues"
-            >Github Issue</a>.
+                >Github Issue</a
+            >.
         </li>
         <li>
             Many many errors can be quickly diagnosed from the Javascript Console error
