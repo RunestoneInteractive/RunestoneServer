@@ -1,91 +1,105 @@
 {{ extend 'layout.html'}}
+<style>
+    body {
+        font-size: large;
+    }
+</style>
+<div class="col-md-12">
+    <h1 style="text-align: center">Report a Bug</h1>
 
-<h1 style="text-align: center">Report a Bug</h1>
+    <h3>Check the FAQ</h3>
+    <p>
+        Sorry you are having trouble. I want to hear about problems you are having but
+        before you create a bug report please
+        <a href="https://runestoneinteractive.org/pages/faq.html">Check our FAQ</a>
+    </p>
 
-<h3>Check the FAQ</h3>
-<p>
-    Sorry you are having trouble. I want to hear about problems you are having but before
-    you create a bug report please
-    <a href="https://runestoneinteractive.org/pages/faq.html">Check our FAQ</a>
-</p>
-
-<h3>Get help from the Community</h3>
-<p>
-    If you have a question that isn't answered in the FAQ there are a number of places to
-    get help from the Runestone Community. Each of our books has a great community of
-    teachers who are willing to help new people get started.
-    <a href="https://runestoneinteractive.org/pages/support.html">Check This List</a> of
-    community resources!
-</p>
-If you are a new instructor there is a
-<a href="https://www.youtube.com/playlist?list=PLnjfglXW2QQSVCuOj4VsdmWTRAfQy6Zrb"
-    >very helpful playlist of videos</a
->
-on YouTube. In the summer of 2020 we did a 4 day virtual workshop for 200+ instructors. I
-can almost guarantee that one of these videos will answer your questions about running a
-class on Runestone.
-
-<h3>File a Report on GitHub</h3>
-<p>
-    OK, You don't have a question and are still running into some problem. Its time to
-    create an issue on our
-    <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues"
-        >Github Issue Tracker</a
+    <h3>Get help from the Community</h3>
+    <p>
+        If you have a question that isn't answered in the FAQ there are a number of
+        places to get help from the Runestone Community. Each of our books has a great
+        community of teachers who are willing to help new people get started.
+        <a href="https://runestoneinteractive.org/pages/support.html">Check This List</a>
+        of community resources!
+    </p>
+    If you are a new instructor there is a
+    <a href="https://www.youtube.com/playlist?list=PLnjfglXW2QQSVCuOj4VsdmWTRAfQy6Zrb"
+        >very helpful playlist of videos</a
     >
-    I regret that I am no longer able to respond to problems sent to me in email.
-    Runestone has just grown too big for that. Filing issues on Github creates a public
-    record that others can learn from and help with. Your own problem may already be on
-    Github, if so, you can add more evidence to the record that will help me (or someone
-    else) get to the bottom of the problem more quickly.
-</p>
+    on YouTube. In the summer of 2020 we did a 4 day virtual workshop for 200+
+    instructors. I can almost guarantee that one of these videos will answer your
+    questions about running a class on Runestone.
 
-<h3>Filing an effective Bug Report</h3>
+    <h3>File a Report on GitHub</h3>
+    <p>
+        OK, You don't have a question and are still running into some problem. Its time
+        to create an issue on our
+        <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues"
+            >Github Issue Tracker</a
+        >
+        I regret that I am no longer able to respond to problems sent to me in email.
+        Runestone has just grown too big for that. Filing issues on Github creates a
+        public record that others can learn from and help with. Your own problem may
+        already be on Github, if so, you can add more evidence to the record that will
+        help me (or someone else) get to the bottom of the problem more quickly.
+    </p>
 
-<p>
-    Telling me that X does not work doesn’t really help. The truth is runestone.academy
-    gets over 300,000 page views a day from people around the world. So most of the time
-    when someone says “X does not work” it does in fact work fine for most people. This
-    does not make it your fault, it just means I need more information to try to make
-    sense of what is going on. Here are a few tips
-</p>
+    <h3>Filing an effective Bug Report</h3>
 
-<ul>
-    <li>
-        What <strong>Task</strong> are you trying to accomplish? Understanding your goals
-        is really important as sometimes its not obvious how to do something on Runestone
-    </li>
-    <li>
-        What steps did you take to try to accomplish that task? Walking me through the
-        steps gives me valuable context and saves me TONS of time in trying to recreate
-        what went wrong.
-    </li>
-    <li>
-        Specifically what went wrong? What error message did you see? What exactly did
-        happen that you think should not have happened. You can speculate about what you
-        think is broken, but often you will be wrong. Just the facts.
-    </li>
-    <li>
-        What course are you in? What page of the course? Specifically what exercise does
-        not work? Each activity has a unique identifier. please include that.
-    </li>
-    <li>
-        If there is a traceback on this page, please copy it and include it in your
-        github issue.
-    </li>
-    <li>
-        Many many errors can be quickly diagnosed from the Javascript Console error log.
-        On Chrome this is View --> Developer --> Javascript Console, on Safari ⌥⌘i or
-        Develop --> Show Web Inspector on Firefox Tools --> Web Developer --> Toggle
-        Tools
-    </li>
-</ul>
-<p>
-    Please note, I'm not trying to be rude, but years of observation have taught me that
-    CS teachers are pretty bad bug reporters! Imagine if a student sent you the following
-    email
-</p>
-<div style="width: 50%; margin-left: auto; margin-right: auto">
-    <pre>
+    <p>
+        Telling me that X does not work doesn’t really help. The truth is
+        runestone.academy gets over 300,000 page views a day from people around the
+        world. So most of the time when someone says “X does not work” it does in fact
+        work fine for most people. This does not make it your fault, it just means I need
+        more information to try to make sense of what is going on. Here are a few tips
+    </p>
+
+    <ul>
+        <li>
+            What <strong>Task</strong> are you trying to accomplish? Understanding your
+            goals is really important as sometimes its not obvious how to do something on
+            Runestone
+        </li>
+        <li>
+            What steps did you take to try to accomplish that task? Walking me through
+            the steps gives me valuable context and saves me TONS of time in trying to
+            recreate what went wrong.
+        </li>
+        <li>
+            Specifically what went wrong? What error message did you see? What exactly
+            did happen that you think should not have happened. You can speculate about
+            what you think is broken, but often you will be wrong and misleading. Just
+            the facts is a great policy.
+        </li>
+        <li>
+            Give some context about your environment. What course are you in? What is
+            your username? What page of the course? Specifically what exercise does not
+            work? Each activity has a unique identifier. please include that. What
+            browser are you using? What version of the browser. (Runestone relies on many
+            modern features of Javascript that are only present in new-ish browsers) We
+            can not test every browser so if you are using something outside of Chrome,
+            Firefox, Safari, or maybe Edge it is likely that I have not tested it there.
+        </li>
+        <li>
+            If there is a traceback on this page, please copy it and include it in your
+            <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues"
+            >Github Issue</a>.
+        </li>
+        <li>
+            Many many errors can be quickly diagnosed from the Javascript Console error
+            log. On Chrome this is
+            <code>View --> Developer --> Javascript Console</code>, on Safari ⌥⌘i or
+            <code>Develop --> Show Web Inspector</code> on Firefox
+            <code>Tools --> Web Developer --> Toggle Tools</code>
+        </li>
+    </ul>
+    <p>
+        Please note, I'm not trying to be rude, but years of observation have taught me
+        that CS teachers are pretty bad bug reporters! Imagine if a student sent you the
+        following email
+    </p>
+    <div style="width: 50%; margin-left: auto; margin-right: auto">
+        <pre>
     Hey,
     
     You know problem 2 for the homework next week.  
@@ -97,21 +111,23 @@ class on Runestone.
     
     Student
 </pre
-    >
-</div>
-<p>
-    You wouldn't be able to help them very much, in fact you probably wouldn't have any
-    idea what program that student was even talking about without spending your own
-    valuable time figuring it out. Its a pretty good representation of thousands of bug
-    reports I've received. So please, take a few seconds and read or re-read Filing an
-    effective bug report. Thanks.
-</p>
+        >
+    </div>
+    <p>
+        You wouldn't be able to help this student very much, in fact you probably
+        wouldn't have any idea what program that student was even asking about without
+        spending your own valuable time figuring it out. Sadly, It is a pretty good
+        representation of thousands of bug reports I've received. So please, take a few
+        seconds and read or re-read Filing an effective bug report. Thanks.
+    </p>
 
-<div>
-    {{if ticket:}}
-    <pre>
+    <div>
+        {{if ticket:}}
+        <pre>
     ---------------- Traceback --------------
     {{=ticket}}
-    </pre>
-    {{ pass }}
+    </pre
+        >
+        {{ pass }}
+    </div>
 </div>
