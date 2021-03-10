@@ -1622,7 +1622,7 @@ def get_question_source():
     is_primary = request.vars.primary
     is_ab = request.vars.AB
     selector_id = request.vars["selector_id"]
-    toggle_first = request.vars["toggle_first"]
+    toggle = request.vars["toggle"]
 
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
@@ -1727,13 +1727,12 @@ def get_question_source():
             else:
                 questionid = random.choice(list(possible))
 
-    logger.debug(f"toggle_first is {toggle_first}")
-    if toggle_first:
-        if toggle_first in request.vars["questions"]:
-            questionid = toggle_first
-        else:
-            logger.error(f"Question ID '{toggle_first}' not found in select question list of '{selector_id}'.")
-            return json.dumps(f"<p>Question ID '{toggle_first}' not found in select question list of '{selector_id}'.</p>")
+    logger.debug(f"toggle is {toggle}")
+    if toggle:
+        questionid = request.vars["questions"].split(",")[0]
+    else:
+        logger.error(f"Question ID not found in select question list of '{selector_id}'.")
+        return json.dumps(f"<p>Question ID not found in select question list of '{selector_id}'.</p>")
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
