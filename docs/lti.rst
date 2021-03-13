@@ -35,7 +35,7 @@ Canvas
     :Custom Fields: Depends on the installation type:
 
         -   For a site-wide installation, or for installing the Runestone external app for use across multiple courses, leave this blank.
-        -   If installing for a single course, add ``custom_course_id=xxx``, where ``xxx`` is the ID of the course.
+        -   If installing for a single course, add ``custom_course_id=xxx``, where ``xxx`` is the Runestone ID of the course (visible in the upper lefthand corner of each page in your Runestone course).
     :Description: Interactive textbooks from Runestone Academy
 
 #.  Add an assignment in Canvas that uses the Runestone external tool:
