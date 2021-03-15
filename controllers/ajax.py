@@ -1136,9 +1136,10 @@ def _canonicalize_tz(tstring):
         return re.sub(r"(.*)\((.*)\)", r"\1({})".format(zstring), tstring)
 
 
+# .. _getAssessResults:
+#
 # getAssessResults
 # ----------------
-#
 def getAssessResults():
     if not auth.user:
         # can't query for user's answers if we don't know who the user is, so just load from local storage
