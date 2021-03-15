@@ -405,10 +405,7 @@ def _row_decode(row, question_type):
     elif question_type == "shortanswer":
         # Prefer data from the shortanswer table if we have it; otherwise, we can use useinfo's act.
         answer, ts = (
-            (
-                row.shortanswer_answers.answer,
-                ts_get(row.shortanswer_answers),
-            )
+            (row.shortanswer_answers.answer, ts_get(row.shortanswer_answers),)
             if "shortanswer_answers" in row
             else (row.useinfo.act, timestamp)
         )
