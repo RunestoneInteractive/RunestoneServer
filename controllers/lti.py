@@ -256,6 +256,16 @@ def index():
     elif assignment_id:
         # If the assignment is released, but this is the first time a student has visited the assignment, auto-upload the grade.
         _launch_assignment(assignment_id, user, result_source_did, outcome_url)
+        # If we got here, the assignment wasn't launched.
+        return dict(
+            logged_in=False,
+            lti_errors=[
+                f"Invalid assignment id {assignment_id}; please contact your instructor.",
+                request.vars,
+            ],
+            masterapp=masterapp,
+        )
+
 
     elif practice:
         _launch_practice(outcome_url, result_source_did, user, course_id)
@@ -292,6 +302,9 @@ def _launch_assignment(assignment_id, user, result_source_did, outcome_url):
     assignment = (
         db(db.assignments.id == assignment_id).select(db.assignments.released).first()
     )
+    # If the assignment isn't valid, return instead of redirecting. The caller will report the error.
+    if not assignment:
+        return
     grade = (
         db((db.grades.auth_user == user.id) & (db.grades.assignment == assignment_id))
         .select(db.grades.lis_result_sourcedid, db.grades.lis_outcome_url)
