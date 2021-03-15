@@ -266,7 +266,6 @@ def index():
             masterapp=masterapp,
         )
 
-
     elif practice:
         _launch_practice(outcome_url, result_source_did, user, course_id)
 
