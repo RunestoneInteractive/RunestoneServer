@@ -203,6 +203,7 @@ exclude_patterns = [
     "static/_static/codemirror.js",
     "static/_static/simplemodal.js",
     "static/_static/underscore.js",
+    "jobeinabox/include",
     # Ignore the Sphinx build directory output.
     "_build",
     # **CodeChat notes:**
