@@ -7,3 +7,4 @@ Test chapter 1
 
    subchapter_a
    subchapter_b
+   dynamicquestions
