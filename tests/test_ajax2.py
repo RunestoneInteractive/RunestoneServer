@@ -934,3 +934,19 @@ def test_get_datafile(test_client, test_user_1, runestone_db_tools):
     print(test_client.text)
     res = json.loads(test_client.text)
     assert res["data"] is None
+
+
+def test_get_question_source(test_client, test_user_1, runestone_db_tools):
+
+    # Create some datafile into the db and then read it out using the ajax/get_datafile()
+    db = runestone_db_tools.db
+
+    kwargs = dict(
+        selector_id="dynamic_q_1",
+        questions="test_activecode_1",
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "test_activecode_1" in res
+    rows = db(db.selected_questions.selector_id == "dynamic_q_1").select().first()
+    assert rows.selected_id == "test_activecode_1"
