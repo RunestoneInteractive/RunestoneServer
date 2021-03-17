@@ -1797,7 +1797,7 @@ def get_question_source():
         logger.error(
             f"HTML Source not found for {questionid} in course {auth.user.course_name} for {auth.user.username}"
         )
-        htmlsrc = "<p>No preview Available</p>"
+        htmlsrc = "<p>No Preview Available</p>"
     return json.dumps(htmlsrc)
 
 

@@ -950,3 +950,87 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
     assert "test_activecode_1" in res
     rows = db(db.selected_questions.selector_id == "dynamic_q_1").select().first()
     assert rows.selected_id == "test_activecode_1"
+
+    # Should get same thing back again.
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "test_activecode_1" in res
+
+    kwargs = dict(
+        selector_id="dynamic_q_2",
+        questions="thisquestiondoesnotexist",
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "No Preview Available" in res
+
+    kwargs = dict(metaid="dynamic_q_1", selected="foobar")
+    test_client.validate("ajax/update_selected_question", data=kwargs)
+    rows = db(db.selected_questions.selector_id == "dynamic_q_1").select().first()
+    assert rows.selected_id == "foobar"
+
+    # Now test the :ab: path
+    kwargs = dict(
+        selector_id="dynamic_q_3", questions="test_activecode_1, test_fitb_1", AB="exp1"
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    rows = db(db.selected_questions.selector_id == "dynamic_q_3").select().first()
+    if rows.selected_id == "test_activecode_1":
+        group = 0
+    else:
+        group = 1
+
+    kwargs = dict(
+        selector_id="dynamic_q_4", questions="test_fitb_1, test_activecode_1", AB="exp1"
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    rows = db(db.selected_questions.selector_id == "dynamic_q_4").select().first()
+    if group == 0:
+        assert rows.selected_id == "test_fitb_1"
+    else:
+        assert rows.selected_id == "test_activecode_1"
+
+    # test the not seen in an exam scenario
+    kwargs = dict(
+        selector_id="dynamic_q_5",
+        questions="test_fitb_1",
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "test_fitb_1" in res
+    rows = db(db.selected_questions.selector_id == "dynamic_q_5").select().first()
+    assert rows.selected_id == "test_fitb_1"
+
+    # test not seen ever
+    val = "red,away"
+    res = genericGetAssessResults(
+        test_client,
+        test_user_1,
+        event="fillb",
+        div_id="test_fitb_1",
+        answer=val,
+        act=val,
+        course=test_user_1.course.course_name,
+    )
+    kwargs = dict(
+        selector_id="dynamic_q_6",
+        questions="test_fitb_1, test_mchoice_1",
+        not_seen_ever=True,
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "test_mchoice_1" in res
+    rows = db(db.selected_questions.selector_id == "dynamic_q_6").select().first()
+    assert rows.selected_id == "test_mchoice_1"
+
+    # Even though test_mchoice_1 has been seen it must still be returned as our only option
+    kwargs = dict(
+        selector_id="dynamic_q_7",
+        questions="test_mchoice_1",
+        not_seen_ever=True,
+    )
+    test_client.validate("ajax/get_question_source", data=kwargs)
+    res = json.loads(test_client.text)
+    assert "test_mchoice_1" in res
+    rows = db(db.selected_questions.selector_id == "dynamic_q_7").select().first()
+    assert rows.selected_id == "test_mchoice_1"
