@@ -1648,10 +1648,10 @@ def get_question_source():
 
     # If the question has a :points: option then those points are the default
     # however sometimes questions are entered in the web ui without the :points:
-    # and potins are assigned in the UI instead.  If this is part of an
+    # and points are assigned in the UI instead.  If this is part of an
     # assignment or timed exam AND the points are set in the web UI we will
     # use the points from the UI over the :points:  If this is an assignment
-    # or exam that is totally written in RST then  the poitns in the UI will match
+    # or exam that is totally written in RST then  the points in the UI will match
     # the points from the assignment anyway.
     if assignment_name:
         ui_points = (
@@ -1770,23 +1770,32 @@ def get_question_source():
             if questionlist:
                 questionid = random.choice(questionlist)
             else:
+                # If there are no questions left we should still return a random question.
                 questionid = random.choice(list(possible))
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
-    if res and len(questionlist) > 0 and not prev_selection:
-        db.selected_questions.insert(
+    if res and not prev_selection:
+        qid = db.selected_questions.insert(
             selector_id=selector_id,
             sid=auth.user.username,
             selected_id=questionid,
             points=points,
+        )
+        if not qid:
+            logger.error(
+                f"Failed to insert a selected question for {selector_id} and {auth.user.username}"
+            )
+    else:
+        logger.debug(
+            f"Did not insert a record for {selector_id}, {questionid} Conditions are {res} QL: {questionlist} PREV: {prev_selection}"
         )
 
     if res and res.htmlsrc:
         htmlsrc = res.htmlsrc
     else:
         logger.error(
-            f"HTML Source not found for {questionid} in course {auth.user.course_name}"
+            f"HTML Source not found for {questionid} in course {auth.user.course_name} for {auth.user.username}"
         )
         htmlsrc = "<p>No preview Available</p>"
     return json.dumps(htmlsrc)
