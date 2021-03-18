@@ -39,11 +39,10 @@ def get_answer(db, expr, expected_len):
 # Tests
 # =====
 # Test server-side logic in FITB questions.
-def test_fitb(test_user_1, selenium_utils):
-    selenium_utils.login(test_user_1)
+def test_fitb(selenium_utils_user):
     # Browse to the page with a fitb question.
-    d = selenium_utils.driver
-    selenium_utils.get("books/published/test_course_1/index.html")
+    d = selenium_utils_user.driver
+    selenium_utils_user.get("books/published/test_course_1/index.html")
     id = "test_fitb_numeric"
     fitb = d.find_element_by_id(id)
     blank = fitb.find_elements_by_tag_name("input")[0]
@@ -56,7 +55,7 @@ def test_fitb(test_user_1, selenium_utils):
         blank.clear()
         blank.send_keys(val)
         check_me_button.click()
-        selenium_utils.wait.until(
+        selenium_utils_user.wait.until(
             EC.text_to_be_present_in_element((By.ID, feedback_id), feedback_str)
         )
 
@@ -66,15 +65,20 @@ def test_fitb(test_user_1, selenium_utils):
     # Ensure spaces don't prevent correct numeric parsing.
     check_val(" 10 ")
 
-    selenium_utils.logout()
 
-
-def test_poll_1(test_user_1, selenium_utils):
-    selenium_utils.login(test_user_1)
-    selenium_utils.get("books/published/test_course_1/index.html")
+def _test_poll_1(selenium_utils_user, runestone_db, relative_url):
+    selenium_utils_user.get(f"books/published/test_course_1/{relative_url}")
 
     id = "test_poll_1"
-    _test_poll(selenium_utils, id)
-    db = test_user_1.runestone_db_tools.db
+    _test_poll(selenium_utils_user, id)
+    db = runestone_db
     assert get_answer(db, (db.useinfo.div_id == id) & (db.useinfo.event == "poll"), 1)[0].act == "4"
 
+
+def test_poll_1(selenium_utils_user, runestone_db):
+    _test_poll_1(selenium_utils_user, runestone_db, "index.html")
+
+
+# Check rendering of selectquestion, which requires server-side support.
+def test_selectquestion_1(selenium_utils_user, runestone_db):
+    _test_poll_1(selenium_utils_user, runestone_db, "selectquestion.html")

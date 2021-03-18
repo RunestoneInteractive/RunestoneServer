@@ -969,3 +969,11 @@ class _SeleniumServerUtils(_SeleniumUtils):
 @pytest.fixture
 def selenium_utils(selenium_driver, web2py_server_address, runestone_name):  # noqa: F811
     return _SeleniumServerUtils(selenium_driver, f"{web2py_server_address}/{runestone_name}")
+
+
+# A fixture to login to the test_user_1 account using Selenium before testing, then logout when the tests complete.
+@pytest.fixture
+def selenium_utils_user(selenium_utils, test_user_1):
+    selenium_utils.login(test_user_1)
+    yield selenium_utils
+    selenium_utils.logout()
