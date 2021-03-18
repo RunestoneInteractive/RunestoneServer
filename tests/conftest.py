@@ -40,6 +40,9 @@ import gluon.shell
 from html5validator.validator import Validator
 import pytest
 from pyvirtualdisplay import Display
+
+# Import a shared fixture.
+from runestone.shared_conftest import _SeleniumUtils, selenium_driver  # noqa: F401
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import six
@@ -914,7 +917,7 @@ def test_assignment(test_client, test_user, runestone_db_tools):
 
 # Selenium
 # --------
-# Provide access to Runestone through a web browser using Selenium.
+# Provide access to Runestone through a web browser using Selenium. There's a lot of shared code between these tests and the Runestone Component tests using Selenium; see `shared_conftest.py` for details.
 #
 # Create an instance of Selenium once per testing session.
 @pytest.fixture(scope="session")
@@ -938,72 +941,31 @@ def selenium_driver_session():
     yield driver
 
     # Shut everything down.
+    driver.close()
     driver.quit()
     if display:
         display.stop()
 
 
-# Provide a way to reset the state of Selenium for each test, without exiting/restarting the driver (which is slow).
-@pytest.fixture()
-def selenium_driver(selenium_driver_session):
-    driver = selenium_driver_session
-    # Add an `implicit wait <https://selenium-python.readthedocs.io/waits.html#implicit-waits>`_.
-    driver.implicitly_wait(5)
-
-    yield driver
-
-    # Clear as much as possible, to present an almost-fresh instance of a browser for the next test. (Shutting down then starting up a browser is very slow.)
-    driver.execute_script("window.localStorage.clear();")
-    driver.execute_script("window.sessionStorage.clear();")
-    driver.delete_all_cookies()
-
-
-@pytest.fixture()
-def runestone_selenium_driver(selenium_driver, web2py_server_address, runestone_name):
-    # A helper function to attach to the Selenium driver: get from a URL relative to the Runestone application.
-    def _rs_get(self, relative_url):
-        return self.get(
-            "{}/{}/{}".format(web2py_server_address, runestone_name, relative_url)
-        )
-
-    # Add the rs_get function to the driver. See https://stackoverflow.com/a/28060251.
-    selenium_driver.rs_get = _rs_get.__get__(selenium_driver)
-    return selenium_driver
-
-
-# User
-# ^^^^
-# Provide basic Selenium-based user operations.
-class _SeleniumUser:
-    def __init__(
-        self,
-        # These are fixtures.
-        runestone_selenium_driver,
-        # The username for this user.
-        username,
-        # The password for this user.
-        password,
+# Provide additional server methods for Selenium.
+class _SeleniumServerUtils(_SeleniumUtils):
+    def login(self,
+        # A ``_TestUser`` instance.
+        test_user
     ):
 
-        self.driver = runestone_selenium_driver
-        self.username = username
-        self.password = password
-
-    def login(self):
-        self.driver.rs_get("default/user/login")
-        self.driver.find_element_by_id("auth_user_username").send_keys(self.username)
-        self.driver.find_element_by_id("auth_user_password").send_keys(self.password)
+        self.get("default/user/login")
+        self.driver.find_element_by_id("auth_user_username").send_keys(test_user.username)
+        self.driver.find_element_by_id("auth_user_password").send_keys(test_user.password)
         self.driver.find_element_by_id("login_button").click()
 
     def logout(self):
-        self.driver.rs_get("default/user/logout")
+        self.get("default/user/logout")
         # See https://selenium-python.readthedocs.io/api.html?highlight=page_source#selenium.webdriver.remote.webdriver.WebDriver.page_source.
         assert "Logged out" in self.driver.page_source
 
 
-# Present ``_SeleniumUser`` as a fixture. To use, provide it with a ``_TestUser`` instance.
+# Present ``_SeleniumServerUtils`` as a fixture.
 @pytest.fixture
-def selenium_user(runestone_selenium_driver):
-    return lambda test_user: _SeleniumUser(
-        runestone_selenium_driver, test_user.username, test_user.password
-    )
+def selenium_utils(selenium_driver, web2py_server_address, runestone_name):  # noqa: F811
+    return _SeleniumServerUtils(selenium_driver, f"{web2py_server_address}/{runestone_name}")
