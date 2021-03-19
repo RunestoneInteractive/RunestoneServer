@@ -15,6 +15,8 @@ pyvirtualdisplay
 pip-tools
 recommonmark
 sphinx_rtd_theme
+polling2
+pywin32; sys_platform == 'win32'
 
 # Because Runestone is a combination of javascript and python its not safe to
 # install directly from github.

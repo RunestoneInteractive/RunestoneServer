@@ -24,7 +24,8 @@ ActiveCode
        total = total + num
    print(total)
 
-.. activecode:: units2
+
+.. activecode:: test_activecode_2
    :nocodelens:
    :autograde: unittest
 
@@ -106,3 +107,12 @@ Short answers
 .. shortanswer:: test_short_answer_1
 
     Do you like interactive textbooks?
+
+
+Poll
+----
+.. poll:: test_poll_1
+   :scale: 10
+   :allowcomment:
+
+    On a scale from 1 to 10, how important do you think it is to have a polling directive in the Runestone Tools?
