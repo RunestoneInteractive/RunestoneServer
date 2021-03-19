@@ -949,14 +949,19 @@ def selenium_driver_session():
 
 # Provide additional server methods for Selenium.
 class _SeleniumServerUtils(_SeleniumUtils):
-    def login(self,
+    def login(
+        self,
         # A ``_TestUser`` instance.
-        test_user
+        test_user,
     ):
 
         self.get("default/user/login")
-        self.driver.find_element_by_id("auth_user_username").send_keys(test_user.username)
-        self.driver.find_element_by_id("auth_user_password").send_keys(test_user.password)
+        self.driver.find_element_by_id("auth_user_username").send_keys(
+            test_user.username
+        )
+        self.driver.find_element_by_id("auth_user_password").send_keys(
+            test_user.password
+        )
         self.driver.find_element_by_id("login_button").click()
 
     def logout(self):
@@ -967,8 +972,12 @@ class _SeleniumServerUtils(_SeleniumUtils):
 
 # Present ``_SeleniumServerUtils`` as a fixture.
 @pytest.fixture
-def selenium_utils(selenium_driver, web2py_server_address, runestone_name):  # noqa: F811
-    return _SeleniumServerUtils(selenium_driver, f"{web2py_server_address}/{runestone_name}")
+def selenium_utils(
+    selenium_driver, web2py_server_address, runestone_name
+):  # noqa: F811
+    return _SeleniumServerUtils(
+        selenium_driver, f"{web2py_server_address}/{runestone_name}"
+    )
 
 
 # A fixture to login to the test_user_1 account using Selenium before testing, then logout when the tests complete.

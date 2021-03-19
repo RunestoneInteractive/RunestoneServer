@@ -72,7 +72,12 @@ def _test_poll_1(selenium_utils_user, runestone_db, relative_url):
     id = "test_poll_1"
     _test_poll(selenium_utils_user, id)
     db = runestone_db
-    assert get_answer(db, (db.useinfo.div_id == id) & (db.useinfo.event == "poll"), 1)[0].act == "4"
+    assert (
+        get_answer(db, (db.useinfo.div_id == id) & (db.useinfo.event == "poll"), 1)[
+            0
+        ].act
+        == "4"
+    )
 
 
 def test_poll_1(selenium_utils_user, runestone_db):
