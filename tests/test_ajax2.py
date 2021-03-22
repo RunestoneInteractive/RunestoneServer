@@ -963,7 +963,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)
-    assert "No Preview Available" in res
+    assert "No preview available" in res
 
     kwargs = dict(metaid="dynamic_q_1", selected="foobar")
     test_client.validate("ajax/update_selected_question", data=kwargs)

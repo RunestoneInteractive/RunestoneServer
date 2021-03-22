@@ -97,7 +97,7 @@ def test_htmlsrc(test_client, test_user_1):
     test_user_1.login()
     test_client.validate("admin/htmlsrc", "Mary had a", data=dict(acid="subc_b_fitb"))
     test_client.validate(
-        "admin/htmlsrc", "No preview Available", data=dict(acid="non_existant_question")
+        "admin/htmlsrc", "No preview available", data=dict(acid="non_existant_question")
     )
 
 
