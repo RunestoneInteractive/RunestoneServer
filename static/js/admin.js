@@ -166,8 +166,9 @@ function autoGrade() {
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
-                        student
-                    )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
+                            student
+                        )}&assignment_id=${encodeURIComponent(assignment)}">${
+                        students[student]
                     }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
@@ -1361,6 +1362,8 @@ function assignmentInfo() {
             }
             if (assignmentData.from_source) {
                 $("#assign_is_timed").prop("disabled", true);
+            } else {
+                $("#assign_is_timed").prop("disabled", false);
             }
             $("#readings-points-to-award").val(assignmentData.points_to_award);
             $("#readings-autograder").val(assignmentData.readings_autograder);
@@ -1526,9 +1529,9 @@ function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON(
         "delete_assignment_question/?name=" +
-        question_name +
-        "&assignment_id=" +
-        assignment_id,
+            question_name +
+            "&assignment_id=" +
+            assignment_id,
         {
             variable: "variable",
         }
@@ -2174,7 +2177,11 @@ function updateCourse(widget, attr) {
     console.log(widget.value);
     data = {};
     data[attr] = widget.value;
-    if (attr == "downloads_enabled" || attr == "allow_pairs" || attr == "enable_compare_me") {
+    if (
+        attr == "downloads_enabled" ||
+        attr == "allow_pairs" ||
+        attr == "enable_compare_me"
+    ) {
         data[attr] = widget.checked;
     }
 
