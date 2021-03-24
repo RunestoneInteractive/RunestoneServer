@@ -194,6 +194,7 @@ def _scorable_useinfos(
     query = (db.useinfo.course_id == course_name) & (db.useinfo.sid == sid)
 
     if question_type == "page":
+        # TODO: refactor this so base_course comes as a parameter from two levels up.
         base_course = (
             db(db.courses.course_name == course_name)
             .select(db.courses.base_course)
@@ -208,7 +209,9 @@ def _scorable_useinfos(
             .select()
             .first()
         )
-        div_id = "{}/{}.html".format(quest.chapter, quest.subchapter)
+        if quest:
+            div_id = "{}/{}.html".format(quest.chapter, quest.subchapter)
+
         query = query & (db.useinfo.div_id.endswith(div_id))
     else:
         query = query & (db.useinfo.div_id == div_id)
