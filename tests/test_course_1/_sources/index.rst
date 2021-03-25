@@ -10,6 +10,7 @@ This book generates data for use with the test suite.
    test_chapter_1/toctree
    lp_demo.py
    lp_demo-test.py
+   selectquestion
 
 
 ActiveCode
@@ -116,3 +117,28 @@ Poll
    :allowcomment:
 
     On a scale from 1 to 10, how important do you think it is to have a polling directive in the Runestone Tools?
+
+
+Spreadsheet
+-----------
+.. spreadsheet:: test_spreadsheet_1
+    :mindimensions: 6,5
+    :colwidths: 200,100,100
+    :coltitles: 'name','year','price','foo'
+
+    Google, 1998, 807.80
+    Apple, 1976, 116.52
+    Yahoo, 1994, 38.66
+    ,,=sum(c1:c3)
+
+    ====
+    assert A3 == Yahoo
+    assert B3 == 1994
+
+
+.. spreadsheet:: test_spreadsheet_2
+    :fromcsv: Iris.csv
+    :colwidths: 50,100,100,100,100
+
+    ====
+    assert A151 == 150
