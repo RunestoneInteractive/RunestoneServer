@@ -2355,3 +2355,18 @@ function copyElementToClipboard(elid) {
     document.execCommand("copy");
     document.body.removeChild(el);
 }
+
+if (window.location.href.includes('runestone/admin/assignments')) {
+    $(document).ready(function() {
+        var totalPointsDiv = document.getElementById('totalPoints');
+        var totalPointsCopy = document.getElementById('totalPointsCopy');
+        var observer = new MutationObserver(function() {
+            totalPointsCopy.innerHTML = totalPointsDiv.innerHTML;
+        });
+        observer.observe(totalPointsDiv, {
+            attributes: true,
+            childList: true,
+            characterData: true
+        });
+    });
+}
