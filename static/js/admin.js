@@ -322,7 +322,13 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
     );
     //make an ajax call to get the htmlsrc for the given question
     let data = { acid: acid, sid: studentId };
-
+    if (typeof assignmentids !== "undefined") {
+        let selectedAssignment = document.getElementById("chaporassignselector").value;
+        let assignmentId = assignmentids[selectedAssignment];
+        if (assignmentId) {
+            data.assignmentId = assignmentId;
+        }
+    }
     $.getJSON("/runestone/admin/htmlsrc", data, function (result) {
         var htmlsrc = result;
         var enforceDeadline = $("#enforceDeadline").is(":checked");
@@ -1154,7 +1160,13 @@ function remove_assignment() {
 }
 
 // Update an assignment.
-async function updateAssignmentRaw(question_name, points, autograde, which_to_grade) {
+async function updateAssignmentRaw(
+    question_name,
+    question_id,
+    points,
+    autograde,
+    which_to_grade
+) {
     var assignmentid = getAssignmentId();
     if (!assignmentid || assignmentid == "undefined") {
         alert("No assignment selected");
@@ -1164,6 +1176,7 @@ async function updateAssignmentRaw(question_name, points, autograde, which_to_gr
         url: "add__or_update_assignment_question",
         data: {
             question: question_name,
+            question_id: question_id,
             assignment: assignmentid,
             points: points,
             autograde: autograde,
@@ -1921,8 +1934,8 @@ function questionBank(form) {
         $("#qbankselect").empty();
         for (i = 0; i < resp.length; i++) {
             var option = document.createElement("option");
-            option.text = resp[i];
-            option.value = resp[i];
+            option.text = resp[i][0];
+            option.value = resp[i][1];
             option.onclick = getQuestionInfo;
             select.add(option);
         }
@@ -1945,8 +1958,15 @@ async function addToAssignment(form) {
     var points = form.points.value;
     var select = document.getElementById("qbankselect");
     var question_name = select.options[select.selectedIndex].text;
+    var question_id = select.options[select.selectedIndex].value;
 
-    let resp = await updateAssignmentRaw(question_name, points, "manual", "last_answer");
+    let resp = await updateAssignmentRaw(
+        question_name,
+        question_id,
+        points,
+        "manual",
+        "last_answer"
+    );
     add_to_qtable(resp);
 }
 
@@ -1954,6 +1974,7 @@ async function addToAssignment(form) {
 function getQuestionInfo() {
     var select = document.getElementById("qbankselect");
     var question_name = select.options[select.selectedIndex].text;
+    var question_id = select.options[select.selectedIndex].value;
     var assignlist = document.getElementById("assignlist");
     var assignmentid = assignlist.options[assignlist.selectedIndex].value;
     var constrainbc = document.getElementById("qbankform").constrainbc.checked;
@@ -1963,6 +1984,7 @@ function getQuestionInfo() {
         question: question_name,
         assignment: assignmentid,
         constrainbc: constrainbc,
+        questionid: question_id,
     };
     jQuery.post(url, data, function (question_info, status, whatever) {
         var res = JSON.parse(question_info);

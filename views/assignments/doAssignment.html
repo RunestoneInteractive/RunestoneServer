@@ -29,9 +29,9 @@
                     <ul>
                     {{for r in readings[reading]['subchapters']:}}
                         {{ if origin == "Runestone": }}
-                        <li class="{{=r['status']}}"><a href="{{=get_course_url(r['chapter'], r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
+                        <li class="{{=r['status']}}"><a href="{{=get_course_url(r['chapter'], r['subchapter'] + '.html')}}">{{=r['name']}}</a>
                         {{ else: }}
-                        <li class="{{=r['status']}}"><a href="{{=get_course_url('', r['subchapter'] + '.html')}}">{{=r['subchapter_name']}}</a>
+                        <li class="{{=r['status']}}"><a href="{{=get_course_url('', r['subchapter'] + '.html')}}">{{=r['name']}}</a>
                         {{ pass }}
                         {{if r['points'] > 0:}}
                             {{if r['comment'] != 'ungraded':}}
@@ -121,6 +121,7 @@
 {{ pass }}
 </div>
 <script>
+    assignmentId = {{= assignment.id }};
     //console.log(document.getElementsByClassName('nav nav-tabs'))
     // This script renders the html into elements in the DOM
     // The html gets thrown into a script tag so javascript can mess with it without throwing errors all over the place
