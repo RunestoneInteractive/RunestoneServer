@@ -1489,7 +1489,7 @@ def htmlsrc():
         logger.error(
             "HTML Source not found for %s in course %s", acid, auth.user.course_name
         )
-        htmlsrc = "<p>No preview Available</p>"
+        htmlsrc = "<p>No preview available</p>"
     if (
         htmlsrc and htmlsrc[0:2] == "\\x"
     ):  # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
