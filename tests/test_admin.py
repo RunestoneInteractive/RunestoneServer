@@ -107,7 +107,7 @@ def test_qbank(test_client, test_user_1):
     qname = "subc_b_fitb"
     res = test_client.validate("admin/questionBank", data=dict(term=qname))
     res = json.loads(res)
-    assert qname in res
+    assert qname in res[0]
     res = test_client.validate(
         "admin/questionBank", data=dict(chapter="test_chapter_1")
     )
