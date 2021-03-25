@@ -1729,10 +1729,21 @@ def get_question_source():
 
     logger.debug(f"toggle is {toggle}")
     if toggle:
-        questionid = request.vars["questions"].split(",")[0]
+        prev_selection = (
+            db(
+                (db.selected_questions.sid == auth.user.username)
+                & (db.selected_questions.selector_id == selector_id)
+            )
+            .select()
+            .first()
+        )
+        if prev_selection:
+            questionid = prev_selection.selected_id
+        else:
+            questionid = request.vars["questions"].split(",")[0]
     else:
-        logger.error(f"Question ID not found in select question list of '{selector_id}'.")
-        return json.dumps(f"<p>Question ID not found in select question list of '{selector_id}'.</p>")
+        logger.error(f"Question ID '{questionid}' not found in select question list of '{selector_id}'.")
+        return json.dumps(f"<p>Question ID '{questionid}' not found in select question list of '{selector_id}'.</p>")
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 
