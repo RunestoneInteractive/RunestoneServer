@@ -15,13 +15,15 @@
 # Third-party imports
 # -------------------
 from polling2 import poll
+import pytest
 from runestone.poll.test.test_poll import _test_poll
-
-#
-# Local imports
-# -------------
+from runestone.spreadsheet.test.test_spreadsheet import _test_ss_autograde
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+
+# Local imports
+# -------------
+# None.
 
 
 # Utilities
@@ -84,6 +86,20 @@ def test_poll_1(selenium_utils_user, runestone_db):
     _test_poll_1(selenium_utils_user, runestone_db, "index.html")
 
 
+def _test_spreadsheet_1(selenium_utils_user, relative_url):
+    selenium_utils_user.get(f"books/published/test_course_1/{relative_url}")
+    _test_ss_autograde(selenium_utils_user)
+
+
+def test_spreadsheet_1(selenium_utils_user):
+    _test_spreadsheet_1(selenium_utils_user, "index.html")
+
+
 # Check rendering of selectquestion, which requires server-side support.
 def test_selectquestion_1(selenium_utils_user, runestone_db):
     _test_poll_1(selenium_utils_user, runestone_db, "selectquestion.html")
+
+
+@pytest.mark.skip(reason="The spreadsheet component doesn't support selectquestion.")
+def test_selectquestion_2(selenium_utils_user):
+    _test_spreadsheet_1(selenium_utils_user, "selectquestion.html")
