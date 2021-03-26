@@ -40,7 +40,9 @@ def get_answer(db, expr, expected_len):
 
 # Tests
 # =====
-# Test server-side logic in FITB questions.
+# Fitb
+# ----
+# Test server-side logic in FITB questions. TODO: lots of gaps in these tests.
 def test_fitb(selenium_utils_user):
     # Browse to the page with a fitb question.
     d = selenium_utils_user.driver
@@ -68,6 +70,49 @@ def test_fitb(selenium_utils_user):
     check_val(" 10 ")
 
 
+# Lp
+# --
+def test_lp_1(selenium_utils_user):
+    su = selenium_utils_user
+    href = "books/published/test_course_1/lp_demo.py.html"
+    su.get(href)
+    id = "test_lp_1"
+    su.wait_until_ready(id)
+
+    snippets = su.driver.find_elements_by_class_name("code_snippet")
+    assert len(snippets) == 1
+    check_button = su.driver.find_element_by_id(id)
+    result_id = "lp-result"
+    result_area = su.driver.find_element_by_id(result_id)
+
+    # Set snippets.
+    code = "def one(): return 1"
+    su.driver.execute_script(
+        f'LPList["{id}"].textAreas[0].setValue("{code}");'
+    )
+    assert not result_area.text
+
+    # Click the test button.
+    check_button.click()
+    su.wait.until(
+        EC.text_to_be_present_in_element_value((By.ID, "lp-result"), "Building...")
+    )
+
+    # Wait until the build finishes. To find this, I used the Chrome inspector; right-click on the element, then select "Copy > Copy full XPath".
+    su.wait.until(
+        EC.text_to_be_present_in_element((By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%")
+    )
+
+    # Refresh the page. See if saved snippets are restored.
+    su.get(href)
+    su.wait_until_ready(id)
+    assert (
+        su.driver.execute_script(f'return LPList["{id}"].textAreas[0].getValue();') == code
+    )
+
+
+# Poll
+# ----
 def _test_poll_1(selenium_utils_user, runestone_db, relative_url):
     selenium_utils_user.get(f"books/published/test_course_1/{relative_url}")
 
@@ -86,15 +131,8 @@ def test_poll_1(selenium_utils_user, runestone_db):
     _test_poll_1(selenium_utils_user, runestone_db, "index.html")
 
 
-def _test_spreadsheet_1(selenium_utils_user, relative_url):
-    selenium_utils_user.get(f"books/published/test_course_1/{relative_url}")
-    _test_ss_autograde(selenium_utils_user)
-
-
-def test_spreadsheet_1(selenium_utils_user):
-    _test_spreadsheet_1(selenium_utils_user, "index.html")
-
-
+# Selectquestion
+# --------------
 # Check rendering of selectquestion, which requires server-side support.
 def test_selectquestion_1(selenium_utils_user, runestone_db):
     _test_poll_1(selenium_utils_user, runestone_db, "selectquestion.html")

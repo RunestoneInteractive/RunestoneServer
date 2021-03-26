@@ -12,5 +12,5 @@ def one():
 
 # SOLUTION_END
 
-# .. lp_build:: lp_demo_1
+# .. lp_build:: test_lp_1
 #   :builder: unsafe-python
