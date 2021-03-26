@@ -1646,6 +1646,7 @@ def get_question_source():
     is_ab = request.vars.AB
     selector_id = request.vars["selector_id"]
     assignment_name = request.vars["timedWrapper"]
+    toggle = request.vars["toggle"]
 
     # If the question has a :points: option then those points are the default
     # however sometimes questions are entered in the web ui without the :points:
@@ -1773,6 +1774,28 @@ def get_question_source():
             else:
                 # If there are no questions left we should still return a random question.
                 questionid = random.choice(list(possible))
+
+    logger.debug(f"toggle is {toggle}")
+    if toggle:
+        prev_selection = (
+            db(
+                (db.selected_questions.sid == auth.user.username)
+                & (db.selected_questions.selector_id == selector_id)
+            )
+            .select()
+            .first()
+        )
+        if prev_selection:
+            questionid = prev_selection.selected_id
+        else:
+            questionid = request.vars["questions"].split(",")[0]
+    # else:
+    #     logger.error(
+    #         f"Question ID '{questionid}' not found in select question list of '{selector_id}'."
+    #     )
+    #     return json.dumps(
+    #         f"<p>Question ID '{questionid}' not found in select question list of '{selector_id}'.</p>"
+    #     )
 
     res = db((db.questions.name == questionid)).select(db.questions.htmlsrc).first()
 

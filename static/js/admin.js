@@ -2361,6 +2361,7 @@ function copyElementToClipboard(elid) {
     /* Copy the text inside the text field */
     document.execCommand("copy");
     document.body.removeChild(el);
+<<<<<<< HEAD
 }
 
 if (window.location.href.includes('runestone/admin/assignments')) {
@@ -2377,3 +2378,6 @@ if (window.location.href.includes('runestone/admin/assignments')) {
         });
     });
 }
+=======
+}
+>>>>>>> 1a171dfaf92e6eab0b5e8970ab508d738d2873b0
