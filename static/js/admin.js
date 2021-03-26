@@ -2361,23 +2361,19 @@ function copyElementToClipboard(elid) {
     /* Copy the text inside the text field */
     document.execCommand("copy");
     document.body.removeChild(el);
-<<<<<<< HEAD
 }
 
-if (window.location.href.includes('runestone/admin/assignments')) {
-    $(document).ready(function() {
-        var totalPointsDiv = document.getElementById('totalPoints');
-        var totalPointsCopy = document.getElementById('totalPointsCopy');
-        var observer = new MutationObserver(function() {
+if (window.location.href.includes("runestone/admin/assignments")) {
+    $(document).ready(function () {
+        var totalPointsDiv = document.getElementById("totalPoints");
+        var totalPointsCopy = document.getElementById("totalPointsCopy");
+        var observer = new MutationObserver(function () {
             totalPointsCopy.innerHTML = totalPointsDiv.innerHTML;
         });
         observer.observe(totalPointsDiv, {
             attributes: true,
             childList: true,
-            characterData: true
+            characterData: true,
         });
     });
 }
-=======
-}
->>>>>>> 1a171dfaf92e6eab0b5e8970ab508d738d2873b0
