@@ -87,9 +87,7 @@ def test_lp_1(selenium_utils_user):
 
     # Set snippets.
     code = "def one(): return 1"
-    su.driver.execute_script(
-        f'LPList["{id}"].textAreas[0].setValue("{code}");'
-    )
+    su.driver.execute_script(f'LPList["{id}"].textAreas[0].setValue("{code}");')
     assert not result_area.text
 
     # Click the test button.
@@ -100,14 +98,17 @@ def test_lp_1(selenium_utils_user):
 
     # Wait until the build finishes. To find this, I used the Chrome inspector; right-click on the element, then select "Copy > Copy full XPath".
     su.wait.until(
-        EC.text_to_be_present_in_element((By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%")
+        EC.text_to_be_present_in_element(
+            (By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%"
+        )
     )
 
     # Refresh the page. See if saved snippets are restored.
     su.get(href)
     su.wait_until_ready(id)
     assert (
-        su.driver.execute_script(f'return LPList["{id}"].textAreas[0].getValue();') == code
+        su.driver.execute_script(f'return LPList["{id}"].textAreas[0].getValue();')
+        == code
     )
 
 
