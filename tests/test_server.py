@@ -526,7 +526,7 @@ def test_lp(test_user_1):
     def assert_passing():
         ret = test_user_1.hsblog(
             event="lp_build",
-            div_id="lp_demo_1",
+            div_id="test_lp_1",
             course=test_user_1.course.course_name,
             builder="unsafe-python",
             answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
@@ -855,7 +855,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     mchoice_kwargs = dict(event="mChoice", div_id="test_mchoice_1", course=course_name)
     lp_kwargs = dict(
         event="lp_build",
-        div_id="lp_demo_1",
+        div_id="test_lp_1",
         course=course_name,
         builder="unsafe-python",
     )
@@ -1018,7 +1018,7 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
                 "test_short_answer_1",
                 "test_fitb_1",
                 "test_mchoice_1",
-                "lp_demo_1",
+                "test_lp_1",
                 "units2",
             ],
             [
