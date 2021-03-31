@@ -533,51 +533,23 @@ def doAssignment():
     # will not appear as a part of the assignment!  This also means that fore a
     # proficiency exam that you are writing as an rst page that the page containing
     # the exam should be linked to a toctree somewhere so that it gets added.
-    use_alt = False
+    #
+
     questions = db(
         (db.assignment_questions.assignment_id == assignment.id)
         & (db.assignment_questions.question_id == db.questions.id)
-        & (db.chapters.chapter_label == db.questions.chapter)
-        & (
-            (db.chapters.course_id == course.course_name)
-            | (db.chapters.course_id == course.base_course)
-        )
-        & (db.sub_chapters.chapter_id == db.chapters.id)
-        & (db.sub_chapters.sub_chapter_label == db.questions.subchapter)
     ).select(
         db.questions.name,
         db.questions.htmlsrc,
         db.questions.id,
         db.questions.chapter,
         db.questions.subchapter,
+        db.questions.base_course,
         db.assignment_questions.points,
         db.assignment_questions.activities_required,
         db.assignment_questions.reading_assignment,
-        db.chapters.chapter_name,
-        db.sub_chapters.sub_chapter_name,
         orderby=db.assignment_questions.sorting_priority,
     )
-
-    # Should we include the old query as a fallback?
-    # if only **some** questions from an assignment show up then chapter / subchapter
-    # is still likely an issue. But this will provide a nice fallback when NO
-    # questions appear.
-    if not questions:
-        use_alt = True
-        questions = db(
-            (db.assignment_questions.assignment_id == assignment.id)
-            & (db.assignment_questions.question_id == db.questions.id)
-        ).select(
-            db.questions.name,
-            db.questions.htmlsrc,
-            db.questions.id,
-            db.questions.chapter,
-            db.questions.subchapter,
-            db.assignment_questions.points,
-            db.assignment_questions.activities_required,
-            db.assignment_questions.reading_assignment,
-            orderby=db.assignment_questions.sorting_priority,
-        )
     try:
         db.useinfo.insert(
             sid=auth.user.username,
@@ -635,15 +607,11 @@ def doAssignment():
         if score is None:
             score = 0
 
-        if use_alt:
-            chap_name = q.questions.chapter
-            subchap_name = q.questions.subchapter
-            logger.error(
-                f"Probaly missing Exercises.rst for {chap_name}/{subchap_name} in {course.base_course}"
-            )
-        else:
-            chap_name = q.chapters.chapter_name
-            subchap_name = q.sub_chapters.sub_chapter_name
+        chap_name = q.questions.chapter
+        subchap_name = q.questions.subchapter
+        logger.error(
+            f"Probaly missing Exercises.rst for {chap_name}/{subchap_name} in {course.base_course}"
+        )
 
         info = dict(
             htmlsrc=htmlsrc,

@@ -1110,9 +1110,9 @@ def questionBank():
     questions = []
     for q_row in rows:
         if is_join:
-            questions.append(q_row.questions.name)
+            questions.append((q_row.questions.name, q_row.questions.id))
         else:
-            questions.append(q_row.name)
+            questions.append((q_row.name, q_row.id))
 
     return json.dumps(questions)
 
@@ -1458,18 +1458,37 @@ def createquestion():
 # replacing the above to allow any logged in account to access getToggleSrc and preview function
 @auth.requires_login()
 def htmlsrc():
+    """
+    Get the html source for a question.  If just the divid is included then assume that
+    the question must come from the current base course.  If an assignment_id is provided
+    then that question could come from any base course and so make sure it is part of the
+    current assignment_questions set.
+    """
     acid = request.vars["acid"]
+    assignment_id = request.vars.assignmentId
     studentId = request.vars.sid
     htmlsrc = ""
-    res = (
-        db(
-            (db.questions.name == acid)
-            & (db.questions.base_course == db.courses.base_course)
-            & (db.courses.course_name == auth.user.course_name)
+    if assignment_id:
+        logger.debug(f"assignment_id = {assignment_id}")
+        res = (
+            db(
+                (db.questions.name == acid)
+                & (db.assignment_questions.question_id == db.questions.id)
+                & (db.assignment_questions.assignment_id == assignment_id)
+            )
+            .select(db.questions.htmlsrc, db.questions.question_type)
+            .first()
         )
-        .select(db.questions.htmlsrc, db.questions.question_type)
-        .first()
-    )
+    else:
+        res = (
+            db(
+                (db.questions.name == acid)
+                & (db.questions.base_course == db.courses.base_course)
+                & (db.courses.course_name == auth.user.course_name)
+            )
+            .select(db.questions.htmlsrc, db.questions.question_type)
+            .first()
+        )
     if res and (res.htmlsrc or res.question_type == "selectquestion"):
         if res.question_type == "selectquestion":
             # Check the selected_questions table to see which actual question was chosen
@@ -1994,6 +2013,7 @@ def add__or_update_assignment_question():
     # The following fields should be provided in request.vars:
     # -- assignment (an integer)
     # -- question (the question_name)
+    # -- questionid
     # -- points
     # -- autograde
     # -- which_to_grade
@@ -2007,6 +2027,10 @@ def add__or_update_assignment_question():
 
     assignment_id = int(request.vars["assignment"])
     question_name = request.vars["question"]
+    question_id = request.vars.question_id
+    if question_id:
+        question_id = int(question_id)
+
     logger.debug(
         "adding or updating assign id {} question_name {}".format(
             assignment_id, question_name
@@ -2014,7 +2038,8 @@ def add__or_update_assignment_question():
     )
     # This assumes that question will always be in DB already, before an assignment_question is created
     logger.debug("course_id %s", auth.user.course_id)
-    question_id = _get_question_id(question_name, auth.user.course_id)
+    if not question_id:
+        question_id = _get_question_id(question_name, auth.user.course_id)
     if question_id is None:
         logger.error(
             "Question Not found for name = {} course = {}".format(
