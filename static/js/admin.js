@@ -1098,16 +1098,28 @@ function renameAssignment(form) {
         "json"
     );
 }
+// Updates the Duplicate From dropdown list to match the options available on the assignments page
+function duplicateAssignmentsList(duplicate) {
+    var assignmentList = document.getElementById('assignlist').innerHTML;
+    if (duplicate.innerHTML.split('<option value="">-- select an assignment --</option>')[1] == assignmentList) {
+        return;
+    }
+    else {
+        duplicate.innerHTML = '<option value="">-- select an assignment --</option>' + assignmentList;
+    }
+}
 // Invoked by the "Create" button of the "Create Assignment" dialog.
-function createAssignment(form) {
+async function createAssignment(form) {
     var name = form.name.value;
+    var duplicateSource = form.duplicate.value;
+    var newopt;
 
     $("#assign_visible").prop("checked", true);
     data = {
         name: name,
     };
     url = "/runestone/admin/createAssignment";
-    jQuery.post(
+    await jQuery.post(
         url,
         data,
         function (iserror, textStatus, whatever) {
@@ -1127,6 +1139,71 @@ function createAssignment(form) {
         },
         "json"
     );
+
+    if (duplicateSource) {
+        // Retrieve data of the source assignment
+        $.getJSON("get_assignment", {
+            assignmentid: duplicateSource,
+        }, function (data) {
+            // Set new assignment top-level data to match source
+            $.getJSON("save_assignment", {
+                assignment_id: newopt.value,
+                due: data.assignment_data.due_date,
+                visible: data.assignment_data.visible,
+                is_timed: data.assignment_data.is_timed,
+                timelimit: data.assignment_data.time_limit,
+                nofeedback: data.assignment_data.nofeedback,
+                nopause: data.assignment_data.nopause,
+                description: data.assignment_data.description,
+            }, function (result) {
+                alert("Assignment Duplicated");
+                assignmentInfo();
+            }).error(function () {
+                alert("huh??");
+            });
+
+            // Set new assignment readings to match source
+            for (i = 0; i < data.pages_data.length; i++) {
+                updateReading(
+                    data.pages_data[i]["name"],
+                    data.pages_data[i]["activities_required"],
+                    data.pages_data[i]["points"],
+                    data.pages_data[i]["autograde"],
+                    data.pages_data[i]["which_to_grade"]
+                )
+                // await $.getJSON("add__or_update_assignment_question", {
+                //     assignment: newopt.value,
+                //     question: pagesData[i]["name"],
+                //     activities_required: pagesData[i]["activities_required"],
+                //     points: pagesData[i]["points"],
+                //     autograde: pagesData[i]["autograde"],
+                //     which_to_grade: pagesData[i]["which_to_grade"],
+                //     assign_type: "reading",
+                // }, function (result) {
+                //     assignmentInfo();
+                // });
+            }
+            
+            // Set new assignment questions to match source
+            for (i = 0; i < data.questions_data.length; i++) {
+                updateAssignmentRaw(
+                    data.questions_data[i]["name"],
+                    data.questions_data[i]["points"],
+                    data.questions_data[i]["autograde"],
+                    data.questions_data[i]["which_to_grade"]
+                )
+                // await $.getJSON("add__or_update_assignment_question", {
+                //     assignment: newopt.value,
+                //     question: questionsData[i]["name"],
+                //     points: questionsData[i]["points"],
+                //     autograde: questionsData[i]["autograde"],
+                //     which_to_grade: questionsData[i]["which_to_grade"],
+                //     assign_type: "problems",
+                // });
+            }
+        });
+        document.getElementById("duplicate").selectedIndex = 0;
+    }
 }
 
 // Triggered by the ``-`` button on the assignments tab.
