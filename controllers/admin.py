@@ -982,18 +982,54 @@ def createAssignment():
     if name_existsQ > 0:
         return json.dumps("EXISTS")
 
-    try:
-        newassignID = db.assignments.insert(
-            course=course,
-            name=name,
-            duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7),
-        )
-        db.commit()
-    except Exception as ex:
-        logger.error("ERROR CREATING ASSIGNMENT", ex)
-        return json.dumps("ERROR")
+    duplicatesource = request.vars["duplicate"]
+    if not duplicatesource:
+        try:
+            newassignID = db.assignments.insert(
+                course=course,
+                name=name,
+                duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7),
+            )
+            db.commit()
+        except Exception as ex:
+            logger.error("ERROR CREATING ASSIGNMENT", ex)
+            return json.dumps("ERROR")
+    else:
+        old_assignment = db(db.assignments.id == int(duplicatesource)).select().first()
+        try:
+            newassignID = db.assignments.insert(
+                course=course,
+                name=name,
+                points=old_assignment.points,
+                threshold_pct=old_assignment.threshold_pct,
+                duedate=old_assignment.duedate,
+                released=old_assignment.released,
+                allow_self_autograde=old_assignment.allow_self_autograde,
+                visible=old_assignment.visible,
+                is_timed=old_assignment.is_timed,
+                time_limit=old_assignment.time_limit,
+                from_source=old_assignment.from_source,
+                nofeedback=old_assignment.nofeedback,
+                nopause=old_assignment.nopause,
+                description=old_assignment.description,
+            )
+            old_questions = db(
+                db.assignment_questions.assignment_id == old_assignment.id
+            ).select()
+            for q in old_questions:
+                dq = q.as_dict()
+                print(dq)
+                dq["assignment_id"] = newassignID
+                del dq["id"]
+                db.assignment_questions.insert(**dq)
+        except Exception as ex:
+            logger.error("ERROR DUPLICATING ASSIGNMENT", ex)
+            return json.dumps("ERROR")
 
-    returndict = {name: newassignID}
+    returndict = {
+        name: newassignID,
+        course: course
+    }
     return json.dumps(returndict)
 
 
