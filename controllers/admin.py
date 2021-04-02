@@ -1022,10 +1022,7 @@ def createAssignment():
             logger.error("ERROR DUPLICATING ASSIGNMENT", ex)
             return json.dumps("ERROR")
 
-    returndict = {
-        name: newassignID,
-        course: course
-    }
+    returndict = {name: newassignID}
     return json.dumps(returndict)
 
 
