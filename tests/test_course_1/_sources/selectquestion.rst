@@ -1,5 +1,13 @@
 Select question
 ---------------
+.. selectquestion:: select_question_4
+    :fromid: test_clickablearea_1
+
+
+.. selectquestion:: select_question_5
+    :fromid: test_clickablearea_2
+
+
 .. selectquestion:: select_question_1
     :fromid: test_poll_1
 

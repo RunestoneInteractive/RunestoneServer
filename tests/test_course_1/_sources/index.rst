@@ -47,27 +47,35 @@ ActiveCode
    myTests().main()
 
 
-Multiple Choice
----------------
-.. mchoice:: test_mchoice_1
+Clickable Area
+--------------
+.. clickablearea:: test_clickablearea_1
+    :question: Click the rainbow color(s)
+    :feedback: This is incorrect
+    :iscode:
 
-    What color is a stop sign?
+    :click-correct:Red:endclick:
+    :click-incorrect:Gold:endclick:
+    :click-correct:Blue:endclick:
+    :click-incorrect:Black:endclick:
 
-    -   red
 
-        +   Red it is.
+.. clickablearea:: test_clickablearea_2
+    :question: Click the rainbow color(s)
+    :feedback: This is incorrect
+    :table:
+    :correct: 1,0;2,2;3,1;3,3;4,2
+    :incorrect: 2,1;2,3;3,2;4,1;4,3
 
-    -   brown
-
-        -   Not brown.
-
-    -   blue
-
-        -   Not blue.
-
-    -   gray
-
-        -   Not gray.
+    +-------+---------+--------+
+    |  Red  |  Orange | Yellow |
+    +-------+---------+--------+
+    | White |  Green  | White  |
+    +-------+---------+--------+
+    |  Blue |  White  | Indigo |
+    +-------+---------+--------+
+    | White |  Violet | White  |
+    +-------+---------+--------+
 
 
 Fill in the Blank
@@ -103,11 +111,27 @@ Fill in the Blank
        :x: Nope.
 
 
-Short answers
--------------
-.. shortanswer:: test_short_answer_1
+Multiple Choice
+---------------
+.. mchoice:: test_mchoice_1
 
-    Do you like interactive textbooks?
+    What color is a stop sign?
+
+    -   red
+
+        +   Red it is.
+
+    -   brown
+
+        -   Not brown.
+
+    -   blue
+
+        -   Not blue.
+
+    -   gray
+
+        -   Not gray.
 
 
 Poll
@@ -117,6 +141,13 @@ Poll
    :allowcomment:
 
     On a scale from 1 to 10, how important do you think it is to have a polling directive in the Runestone Tools?
+
+
+Short answers
+-------------
+.. shortanswer:: test_short_answer_1
+
+    Do you like interactive textbooks?
 
 
 Spreadsheet

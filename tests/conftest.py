@@ -45,9 +45,10 @@ from pyvirtualdisplay import Display
 from runestone.shared_conftest import _SeleniumUtils, selenium_driver  # noqa: F401
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import six
-from six.moves.urllib.error import HTTPError, URLError
-from six.moves.urllib.request import urlopen
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from urllib.error import HTTPError, URLError
+from urllib.request import urlopen
 
 # Required to allow use of this class on a module-scoped fixture.
 from _pytest.monkeypatch import MonkeyPatch
@@ -471,9 +472,7 @@ def runestone_db_tools(runestone_db):
 #
 # Given the ``test_client.text``, prepare to write it to a file.
 def _html_prep(text_str):
-    _str = text_str.replace("\r\n", "\n")
-    # Deal with fun Python 2 encoding quirk.
-    return _str if six.PY2 else _str.encode("utf-8")
+    return text_str.replace("\r\n", "\n").encode("utf-8")
 
 
 # Create a client for accessing the Runestone server.
@@ -949,6 +948,10 @@ def selenium_driver_session():
 
 # Provide additional server methods for Selenium.
 class _SeleniumServerUtils(_SeleniumUtils):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = None
+
     def login(
         self,
         # A ``_TestUser`` instance.
@@ -963,18 +966,22 @@ class _SeleniumServerUtils(_SeleniumUtils):
             test_user.password
         )
         self.driver.find_element_by_id("login_button").click()
+        self.user = test_user
 
     def logout(self):
         self.get("default/user/logout")
-        # See https://selenium-python.readthedocs.io/api.html?highlight=page_source#selenium.webdriver.remote.webdriver.WebDriver.page_source.
-        assert "Logged out" in self.driver.page_source
+        self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div.flash"), "Logged out"))
+        self.user = None
+
+    def get_book_url(self, url):
+        return self.get(f"books/published/test_course_1/{url}")
 
 
 # Present ``_SeleniumServerUtils`` as a fixture.
 @pytest.fixture
 def selenium_utils(
-    selenium_driver, web2py_server_address, runestone_name
-):  # noqa: F811
+    selenium_driver, web2py_server_address, runestone_name  # noqa: F811
+):
     return _SeleniumServerUtils(
         selenium_driver, f"{web2py_server_address}/{runestone_name}"
     )
