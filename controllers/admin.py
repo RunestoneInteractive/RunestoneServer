@@ -105,8 +105,7 @@ def doc():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def assignments():
     """
@@ -152,8 +151,7 @@ def assignments():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def practice():
     response.title = "Practice"
@@ -400,8 +398,7 @@ def practice():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def add_practice_items():
     response.title = "Add Practice Items"
@@ -495,8 +492,7 @@ def add_practice_items():
 
 # This is the primary controller when the instructor goes to the admin page.
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def admin():
     response.title = "Admin"
@@ -617,8 +613,7 @@ def admin():
 # Called in admin.js from courseStudents to populate  the list of students
 # eBookConfig.getCourseStudentsURL
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def course_students():
     response.headers["content-type"] = "application/json"
@@ -641,8 +636,7 @@ def course_students():
 
 # Called when an instructor clicks on the grading tab
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def grading():
     response.title = "Grading"
@@ -751,8 +745,7 @@ def grading():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def removeStudents():
     """
@@ -849,8 +842,7 @@ def removeStudents():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def removeinstructor():
     """
@@ -872,8 +864,7 @@ def removeinstructor():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def addinstructor():
     """
@@ -894,8 +885,7 @@ def addinstructor():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def deletecourse():
     course_name = auth.user.course_name
@@ -929,8 +919,7 @@ def deletecourse():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def removeassign():
     response.headers["content-type"] = "application/json"
@@ -962,8 +951,7 @@ def removeassign():
 # This is only called by the create button in the popup where you give the assignment
 # its initial name.  We might be able to refactor save_assignment to work in all cases.
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def createAssignment():
     response.headers["content-type"] = "application/json"
@@ -1011,7 +999,9 @@ def createAssignment():
                 nopause=old_assignment.nopause,
                 description=old_assignment.description,
             )
-            old_questions = db(db.assignment_questions.assignment_id == old_assignment.id).select()
+            old_questions = db(
+                db.assignment_questions.assignment_id == old_assignment.id
+            ).select()
             for q in old_questions:
                 dq = q.as_dict()
                 dq["assignment_id"] = newassignID
@@ -1027,8 +1017,7 @@ def createAssignment():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def renameAssignment():
     response.headers["content-type"] = "application/json"
@@ -1061,8 +1050,7 @@ def renameAssignment():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def questionBank():
     """called by the questionBank function in admin.js
@@ -1148,16 +1136,14 @@ def questionBank():
 
 # Deprecated; use add__or_update_assignment_question instead
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def addToAssignment():
     return add__or_update_assignment_question()
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def getQuestionInfo():
     """
@@ -1211,8 +1197,7 @@ def getQuestionInfo():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def edit_question():
     """
@@ -1311,8 +1296,7 @@ def edit_question():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def question_text():
     qname = request.vars.question_name
@@ -1340,8 +1324,7 @@ def question_text():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def gettemplate():
     template = request.args[0]
@@ -1369,8 +1352,7 @@ def gettemplate():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def createquestion():
     """
@@ -1529,8 +1511,7 @@ def htmlsrc():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def getGradeComments():
 
@@ -1558,8 +1539,7 @@ def _get_lti_record(oauth_consumer_key):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def releasegrades():
     try:
@@ -1584,8 +1564,7 @@ def releasegrades():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def get_assignment_release_states():
     # return a dictionary with the release status of whether grades have been
@@ -1848,8 +1827,7 @@ def _add_q_meta_info(qrow):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def get_assignment():
     try:
@@ -1968,8 +1946,7 @@ def get_assignment():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def save_assignment():
     # This endpoint is for saving (updating) an assignment's top-level information, without any
@@ -2014,8 +1991,7 @@ def save_assignment():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def add__or_update_assignment_question():
     # This endpoint is for adding a question to an assignment, or updating an existing assignment_question
@@ -2201,8 +2177,7 @@ def _get_question_sorting_priority(assignment_id, question_id):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def delete_assignment_question():
     ## Deletes one assignment_question
@@ -2252,8 +2227,7 @@ def _set_assignment_max_points(assignment_id):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def reorder_assignment_questions():
     """Called when the questions are reordered in the instructor assignments interface.
@@ -2280,8 +2254,7 @@ def reorder_assignment_questions():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def copy_assignment():
     """
@@ -2345,8 +2318,7 @@ def _copy_one_assignment(course, oldid):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def courselog():
     thecourse = db(db.courses.id == auth.user.course_id).select().first()
@@ -2373,8 +2345,7 @@ def courselog():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def codelog():
     course = auth.user.course_name
@@ -2397,8 +2368,7 @@ def codelog():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def update_course():
     response.headers["Content-Type"] = "application/json"
@@ -2436,8 +2406,7 @@ def update_course():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def flag_question():
     qname = request.vars["question_name"]
@@ -2468,8 +2437,7 @@ def clear_flag():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def enroll_students():
     if "students" not in request.vars:
@@ -2565,8 +2533,7 @@ def _validateUser(username, password, fname, lname, email, course_name, line):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def resetpw():
     sid = int(request.vars.sid)
@@ -2652,8 +2619,7 @@ def manage_exercises():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def get_assignment_list():
     course_name = request.vars.course_name
@@ -2671,8 +2637,7 @@ def get_assignment_list():
 # Create LTI Keys
 # ---------------
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def create_lti_keys():
     """
@@ -2698,8 +2663,7 @@ def create_lti_keys():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def simulate_exam():
     """Simulate the distribution of questions on an exam"""
@@ -2799,8 +2763,7 @@ def get_proficiencies_for_qid(qid):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True,
 )
 def reset_exam():
     sid = request.vars.student_id
