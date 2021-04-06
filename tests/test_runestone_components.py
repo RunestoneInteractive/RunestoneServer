@@ -72,7 +72,9 @@ def test_clickable_area_1(selenium_utils_user_1, runestone_db):
     selenium_utils_user_1.wait_until_ready(div_id)
 
     def check_constant_ans(index):
-        ans = get_answer(db, (db.clickablearea_answers.div_id == div_id), index + 1)[index]
+        ans = get_answer(db, (db.clickablearea_answers.div_id == div_id), index + 1)[
+            index
+        ]
         assert ans.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
         assert ans.div_id == div_id
         assert ans.sid == selenium_utils_user_1.user.username

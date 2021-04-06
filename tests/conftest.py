@@ -970,7 +970,11 @@ class _SeleniumServerUtils(_SeleniumUtils):
 
     def logout(self):
         self.get("default/user/logout")
-        self.wait.until(EC.text_to_be_present_in_element((By.CSS_SELECTOR, "div.flash"), "Logged out"))
+        self.wait.until(
+            EC.text_to_be_present_in_element(
+                (By.CSS_SELECTOR, "div.flash"), "Logged out"
+            )
+        )
         self.user = None
 
     def get_book_url(self, url):
