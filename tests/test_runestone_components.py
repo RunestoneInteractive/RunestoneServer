@@ -10,13 +10,15 @@
 #
 # Standard library
 # ----------------
-# None.
-#
+import datetime
+
 # Third-party imports
 # -------------------
 from polling2 import poll
 import pytest
+from runestone.clickableArea.test import test_clickableArea
 from runestone.poll.test.test_poll import _test_poll
+from runestone.shortanswer.test import test_shortanswer
 from runestone.spreadsheet.test.test_spreadsheet import _test_ss_autograde
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -38,15 +40,69 @@ def get_answer(db, expr, expected_len):
     )
 
 
+# Tricky fixures
+# --------------
+# The URL to fetch in order to do testing varies by the type of test:
+#
+# #.    When performing client-side testing in Runestone Components, the URL is usually "/index.html". A fixture defined in client testing code handles this; see the ``selenium_utils_1`` fixture in ``test_clickableArea.py`` in the Runestone Component, for example. The client-side tests then use this fixture.
+# #.    When performing plain server-side testing, the URL is "/path/to/book/index.html"; see ``selenium_utils_user.get_book_url``. The fixture below handles this. Then, inside a plain server-side test, the test invokes the client test directly, meaning that it passes its already-run fixture (which fetched the plain server-side testing page) to the client test, bypassing the client fixture.
+# #.    When performing selectquestion server-side testing, the URL is "/path/to/book/selectquestion.html". The next figure handles this. It likewise calls the plain server-side text with its already-run fixture, which has fetched the selectquestion server-side testing page.
+#
+# A fixture for plain server-side testing.
+@pytest.fixture
+def selenium_utils_user_1(selenium_utils_user):
+    selenium_utils_user.get_book_url("index.html")
+    return selenium_utils_user
+
+
+# A fixture for selectquestion server-side testing.
+@pytest.fixture
+def selenium_utils_user_2(selenium_utils_user):
+    selenium_utils_user.get_book_url("selectquestion.html")
+    return selenium_utils_user
+
+
 # Tests
 # =====
+#
+# ClickableArea
+# -------------
+def test_clickable_area_1(selenium_utils_user_1, runestone_db):
+    div_id = "test_clickablearea_1"
+    selenium_utils_user_1.wait_until_ready(div_id)
+
+    def check_constant_ans(index):
+        ans = get_answer(db, (db.clickablearea_answers.div_id == div_id), index + 1)[
+            index
+        ]
+        assert ans.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
+        assert ans.div_id == div_id
+        assert ans.sid == selenium_utils_user_1.user.username
+        assert ans.course_name == selenium_utils_user_1.user.course.course_name
+        return ans
+
+    test_clickableArea.test_ca1(selenium_utils_user_1)
+    db = runestone_db
+    ans = check_constant_ans(0)
+    assert ans.answer == ""
+    assert ans.correct == False
+    assert ans.percent == None
+
+    test_clickableArea.test_ca2(selenium_utils_user_1)
+    ans = check_constant_ans(1)
+    assert ans.answer == "0;2"
+    assert ans.correct == True
+    assert ans.percent == 1.0
+
+    # TODO: There are a lot more clickable area tests that could be easily ported!
+
+
 # Fitb
 # ----
 # Test server-side logic in FITB questions. TODO: lots of gaps in these tests.
-def test_fitb(selenium_utils_user):
+def test_fitb(selenium_utils_user_1):
     # Browse to the page with a fitb question.
-    d = selenium_utils_user.driver
-    selenium_utils_user.get("books/published/test_course_1/index.html")
+    d = selenium_utils_user_1.driver
     id = "test_fitb_numeric"
     fitb = d.find_element_by_id(id)
     blank = fitb.find_elements_by_tag_name("input")[0]
@@ -59,7 +115,7 @@ def test_fitb(selenium_utils_user):
         blank.clear()
         blank.send_keys(val)
         check_me_button.click()
-        selenium_utils_user.wait.until(
+        selenium_utils_user_1.wait.until(
             EC.text_to_be_present_in_element((By.ID, feedback_id), feedback_str)
         )
 
@@ -114,11 +170,9 @@ def test_lp_1(selenium_utils_user):
 
 # Poll
 # ----
-def _test_poll_1(selenium_utils_user, runestone_db, relative_url):
-    selenium_utils_user.get(f"books/published/test_course_1/{relative_url}")
-
+def test_poll_1(selenium_utils_user_1, runestone_db):
     id = "test_poll_1"
-    _test_poll(selenium_utils_user, id)
+    _test_poll(selenium_utils_user_1, id)
     db = runestone_db
     assert (
         get_answer(db, (db.useinfo.div_id == id) & (db.useinfo.event == "poll"), 1)[
@@ -128,17 +182,23 @@ def _test_poll_1(selenium_utils_user, runestone_db, relative_url):
     )
 
 
-def test_poll_1(selenium_utils_user, runestone_db):
-    _test_poll_1(selenium_utils_user, runestone_db, "index.html")
-
-
 # Selectquestion
 # --------------
 # Check rendering of selectquestion, which requires server-side support.
-def test_selectquestion_1(selenium_utils_user, runestone_db):
-    _test_poll_1(selenium_utils_user, runestone_db, "selectquestion.html")
+def test_selectquestion_1(selenium_utils_user_2, runestone_db):
+    test_poll_1(selenium_utils_user_2, runestone_db)
 
 
 @pytest.mark.skip(reason="The spreadsheet component doesn't support selectquestion.")
-def test_selectquestion_2(selenium_utils_user):
-    _test_spreadsheet_1(selenium_utils_user, "selectquestion.html")
+def test_selectquestion_2(selenium_utils_user_2):
+    test_spreadsheet_1(selenium_utils_user_2)
+
+
+def test_selectquestion_3(selenium_utils_user_2, runestone_db):
+    test_clickable_area_1(selenium_utils_user_2, runestone_db)
+
+
+# Spreadsheet
+# -----------
+def test_spreadsheet_1(selenium_utils_user_1):
+    _test_ss_autograde(selenium_utils_user_1)
