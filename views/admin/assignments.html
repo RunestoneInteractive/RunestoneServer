@@ -36,7 +36,7 @@
   <div class="col-md-2"></div>
   <div class="col-md-8">
     <h4 style="text-align: center;">Assignment</h4>
-    <select class="form-control" id="assignlist" onchange="assignmentInfo();">
+    <select class="form-control" id="assignlist" onfocus="assignListAlpha(this);" onchange="assignmentInfo();">
       {{ for assignmentid in assignments: }}
       <option value="{{=assignmentid}}">{{=assignments[assignmentid]}}</option>
       {{ pass }}
