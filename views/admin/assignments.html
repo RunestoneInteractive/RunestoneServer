@@ -95,6 +95,12 @@
           <div class="form-group">
             <label for="name">Assignment Name</label> <input class="form-control" id="name" placeholder="Enter assignment name" type="text">
           </div>
+          <div class="form-group">
+            <label for="duplicate">Duplicate From</label>
+            <select class="form-control" id="duplicate" onfocus="duplicateAssignmentsList(this);">
+              <option value="">-- select an assignment --</option>
+            </select>
+          </div>
           <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
         </form>
       </div><!-- Modal Footer -->

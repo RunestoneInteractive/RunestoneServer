@@ -1104,13 +1104,25 @@ function renameAssignment(form) {
         "json"
     );
 }
+// Updates the Duplicate From dropdown list to match the options available on the assignments page
+function duplicateAssignmentsList(duplicate) {
+    var assignmentList = document.getElementById('assignlist').innerHTML;
+    if (duplicate.innerHTML.split('<option value="">-- select an assignment --</option>')[1] == assignmentList) {
+        return;
+    }
+    else {
+        duplicate.innerHTML = '<option value="">-- select an assignment --</option>' + assignmentList;
+    }
+}
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
+    var duplicateSource = form.duplicate.value;
 
     $("#assign_visible").prop("checked", true);
     data = {
         name: name,
+        duplicate: duplicateSource,
     };
     url = "/runestone/admin/createAssignment";
     jQuery.post(
@@ -1133,6 +1145,7 @@ function createAssignment(form) {
         },
         "json"
     );
+    document.getElementById("duplicate").selectedIndex = 0;
 }
 
 // Triggered by the ``-`` button on the assignments tab.
