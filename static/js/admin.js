@@ -1106,19 +1106,26 @@ function renameAssignment(form) {
 }
 // Updates the Duplicate From dropdown list to match the options available on the assignments page
 function duplicateAssignmentsList(duplicate) {
-    var assignmentList = document.getElementById('assignlist').innerHTML;
-    if (duplicate.innerHTML.split('<option value="">-- select an assignment --</option>')[1] == assignmentList) {
+    var assignmentList = document.getElementById("assignlist").innerHTML;
+    if (
+        duplicate.innerHTML.split(
+            '<option value="">-- select an assignment --</option>'
+        )[1] == assignmentList
+    ) {
         return;
-    }
-    else {
-        duplicate.innerHTML = '<option value="">-- select an assignment --</option>' + assignmentList;
+    } else {
+        duplicate.innerHTML =
+            '<option value="">-- select an assignment --</option>' + assignmentList;
     }
 }
 // Invoked by the "Create" button of the "Create Assignment" dialog.
 function createAssignment(form) {
     var name = form.name.value;
     var duplicateSource = form.duplicate.value;
-
+    if (!name) {
+        alert("Assignment Name cannot be blank");
+        return;
+    }
     $("#assign_visible").prop("checked", true);
     data = {
         name: name,
