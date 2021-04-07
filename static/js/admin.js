@@ -1293,6 +1293,18 @@ function getAssignmentId() {
     return assignlist.options[assignlist.selectedIndex].value;
 }
 
+function assignListAlpha(assignlist) {
+    var currentAssignment = assignlist.value;
+    var options = $(assignlist).children().toArray();
+    options.sort(function(a,b) {
+        if (a.text.toUpperCase() > b.text.toUpperCase()) return 1;
+        else if (a.text.toUpperCase() < b.text.toUpperCase()) return -1;
+        else return 0;
+    });
+    $(assignlist).empty().append(options);
+    $(assignlist).val(currentAssignment);
+}
+
 // Given a selected assignment, retrieve it from the server then display it.
 function assignmentInfo() {
     // If no assignment is selected, hide all assignment-related panels.
