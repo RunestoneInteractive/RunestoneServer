@@ -22,11 +22,11 @@ The following spreadsheet ``selectquestion`` components are commented out, since
     :fromid: test_spreasheet_2
 
 
-.. selectquestion::: select_question_4
+.. selectquestion:: select_question_6
     :fromid: test_mchoice_1
 
 
-.. selectquestion::: select_question_5
+.. selectquestion:: select_question_7
     :fromid: test_mchoice_2
 
 
