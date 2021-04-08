@@ -182,6 +182,34 @@ def test_poll_1(selenium_utils_user_1, runestone_db):
     )
 
 
+# Short answer
+# ------------
+def test_short_answer_1(selenium_utils_user_1, runestone_db):
+    id = "test_short_answer_1"
+    selenium_utils_user_1.wait_until_ready(id)
+
+    # The first test doesn't click the submit button.
+    db = runestone_db
+    expr = db.shortanswer_answers.div_id == id
+    test_shortanswer.test_sa1(selenium_utils_user_1)
+    s = get_answer(db, expr, 0)
+
+    # The second test clicks submit with no text.
+    test_shortanswer.test_sa2(selenium_utils_user_1)
+    s = get_answer(db, expr, 1)
+    assert s[0].answer == ""
+
+    # The third test types text then submits it.
+    test_shortanswer.test_sa3(selenium_utils_user_1)
+    s = get_answer(db, expr, 2)
+    assert s[1].answer == "My answer"
+
+    # The fourth test is just a duplicate of the third test.
+    test_shortanswer.test_sa4(selenium_utils_user_1)
+    s = get_answer(db, expr, 3)
+    assert s[2].answer == "My answer"
+
+
 # Selectquestion
 # --------------
 # Check rendering of selectquestion, which requires server-side support.
@@ -196,6 +224,10 @@ def test_selectquestion_2(selenium_utils_user_2):
 
 def test_selectquestion_3(selenium_utils_user_2, runestone_db):
     test_clickable_area_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_20(selenium_utils_user_2, runestone_db):
+    test_short_answer_1(selenium_utils_user_2, runestone_db)
 
 
 # Spreadsheet
