@@ -115,6 +115,27 @@ Multiple Choice
 ---------------
 .. mchoice:: test_mchoice_1
 
+    Which colors might be found in a rainbow (check all)?
+
+    -   red
+
+        +   Red it is.
+
+    -   brown
+
+        -   Not brown.
+
+    -   blue
+
+        +   Blue it is.
+
+    -   gray
+
+        -   Not gray.
+
+
+.. mchoice:: test_mchoice_2
+
     What color is a stop sign?
 
     -   red

@@ -17,9 +17,10 @@ import datetime
 from polling2 import poll
 import pytest
 from runestone.clickableArea.test import test_clickableArea
-from runestone.poll.test.test_poll import _test_poll
+from runestone.mchoice.test import test_assess
+from runestone.poll.test import test_poll
 from runestone.shortanswer.test import test_shortanswer
-from runestone.spreadsheet.test.test_spreadsheet import _test_ss_autograde
+from runestone.spreadsheet.test import test_spreadsheet
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -40,13 +41,28 @@ def get_answer(db, expr, expected_len):
     )
 
 
+# Check the fields common to the tables of most Runestone components.
+def check_common_fields(selenium_utils_user, db, query, index, div_id):
+    ans = get_answer(db, query, index + 1)[index]
+    assert ans.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
+    assert ans.div_id == div_id
+    assert ans.sid == selenium_utils_user.user.username
+    assert ans.course_name == selenium_utils_user.user.course.course_name
+    return ans
+
+
 # Tricky fixures
 # --------------
 # The URL to fetch in order to do testing varies by the type of test:
 #
 # #.    When performing client-side testing in Runestone Components, the URL is usually "/index.html". A fixture defined in client testing code handles this; see the ``selenium_utils_1`` fixture in ``test_clickableArea.py`` in the Runestone Component, for example. The client-side tests then use this fixture.
 # #.    When performing plain server-side testing, the URL is "/path/to/book/index.html"; see ``selenium_utils_user.get_book_url``. The fixture below handles this. Then, inside a plain server-side test, the test invokes the client test directly, meaning that it passes its already-run fixture (which fetched the plain server-side testing page) to the client test, bypassing the client fixture.
-# #.    When performing selectquestion server-side testing, the URL is "/path/to/book/selectquestion.html". The next figure handles this. It likewise calls the plain server-side text with its already-run fixture, which has fetched the selectquestion server-side testing page.
+# #.    When performing selectquestion server-side testing, the URL is "/path/to/book/selectquestion.html". The next fixture handles this. It likewise calls the plain server-side text with its already-run fixture, which has fetched the selectquestion server-side testing page.
+#
+# Both client-side and server-side tests must be structured carefully for this to work:
+# - Client-side tests must invoke ``selenium_utils.wait_until_ready(div_id)``.
+# - Client-side tests must **not** invoke ``selenium_utils.get`` in the body of the test, since this prevents server-side tests. Instead, invoke this in a fixture passed to the test, allow server-side tests to override this by passing a different fixture.
+# - The ``div_id`` of client-side tests must match the div_id of server-side tests, meaning the two ``.rst`` files containing tests must use the same ``div_id``.
 #
 # A fixture for plain server-side testing.
 @pytest.fixture
@@ -68,31 +84,30 @@ def selenium_utils_user_2(selenium_utils_user):
 # ClickableArea
 # -------------
 def test_clickable_area_1(selenium_utils_user_1, runestone_db):
+    db = runestone_db
     div_id = "test_clickablearea_1"
     selenium_utils_user_1.wait_until_ready(div_id)
 
-    def check_constant_ans(index):
-        ans = get_answer(db, (db.clickablearea_answers.div_id == div_id), index + 1)[
-            index
-        ]
-        assert ans.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
-        assert ans.div_id == div_id
-        assert ans.sid == selenium_utils_user_1.user.username
-        assert ans.course_name == selenium_utils_user_1.user.course.course_name
-        return ans
+    def ca_check_common_fields(index):
+        return check_common_fields(
+            selenium_utils_user_1,
+            db,
+            db.clickablearea_answers.div_id == div_id,
+            index,
+            div_id,
+        )
 
     test_clickableArea.test_ca1(selenium_utils_user_1)
-    db = runestone_db
-    ans = check_constant_ans(0)
-    assert ans.answer == ""
-    assert ans.correct == False
-    assert ans.percent == None
+    ca = ca_check_common_fields(0)
+    assert ca.answer == ""
+    assert ca.correct == False
+    assert ca.percent == None
 
     test_clickableArea.test_ca2(selenium_utils_user_1)
-    ans = check_constant_ans(1)
-    assert ans.answer == "0;2"
-    assert ans.correct == True
-    assert ans.percent == 1.0
+    ca = ca_check_common_fields(1)
+    assert ca.answer == "0;2"
+    assert ca.correct == True
+    assert ca.percent == 1
 
     # TODO: There are a lot more clickable area tests that could be easily ported!
 
@@ -130,8 +145,8 @@ def test_fitb(selenium_utils_user_1):
 # --
 def test_lp_1(selenium_utils_user):
     su = selenium_utils_user
-    href = "books/published/test_course_1/lp_demo.py.html"
-    su.get(href)
+    href = "lp_demo.py.html"
+    su.get_book_url(href)
     id = "test_lp_1"
     su.wait_until_ready(id)
 
@@ -160,7 +175,7 @@ def test_lp_1(selenium_utils_user):
     )
 
     # Refresh the page. See if saved snippets are restored.
-    su.get(href)
+    su.get_book_url(href)
     su.wait_until_ready(id)
     assert (
         su.driver.execute_script(f'return LPList["{id}"].textAreas[0].getValue();')
@@ -168,11 +183,38 @@ def test_lp_1(selenium_utils_user):
     )
 
 
+# Mchoice
+# -------
+def test_mchoice_1(selenium_utils_user_1, runestone_db):
+    su = selenium_utils_user_1
+    db = runestone_db
+    div_id = "test_mchoice_1"
+
+    def mc_check_common_fields(index):
+        return check_common_fields(
+            su, db, db.mchoice_answers.div_id == div_id, index, div_id
+        )
+
+    test_assess.test_ma1(selenium_utils_user_1)
+    mc = mc_check_common_fields(0)
+    assert mc.answer == ""
+    assert mc.correct == False
+    assert mc.percent == None
+
+    test_assess.test_ma2(selenium_utils_user_1)
+    mc = mc_check_common_fields(1)
+    assert mc.answer == "0,2"
+    assert mc.correct == True
+    assert mc.percent == 1
+
+    # TODO: There are a lot more multiple choice tests that could be easily ported!
+
+
 # Poll
 # ----
 def test_poll_1(selenium_utils_user_1, runestone_db):
     id = "test_poll_1"
-    _test_poll(selenium_utils_user_1, id)
+    test_poll.test_poll(selenium_utils_user_1)
     db = runestone_db
     assert (
         get_answer(db, (db.useinfo.div_id == id) & (db.useinfo.event == "poll"), 1)[
@@ -226,6 +268,10 @@ def test_selectquestion_3(selenium_utils_user_2, runestone_db):
     test_clickable_area_1(selenium_utils_user_2, runestone_db)
 
 
+def test_selectquestion_4(selenium_utils_user_2, runestone_db):
+    test_mchoice_1(selenium_utils_user_2, runestone_db)
+
+
 def test_selectquestion_20(selenium_utils_user_2, runestone_db):
     test_short_answer_1(selenium_utils_user_2, runestone_db)
 
@@ -233,4 +279,4 @@ def test_selectquestion_20(selenium_utils_user_2, runestone_db):
 # Spreadsheet
 # -----------
 def test_spreadsheet_1(selenium_utils_user_1):
-    _test_ss_autograde(selenium_utils_user_1)
+    test_spreadsheet.test_ss_autograde(selenium_utils_user_1)
