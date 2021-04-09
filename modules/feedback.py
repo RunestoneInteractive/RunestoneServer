@@ -117,8 +117,26 @@ def fitb_feedback(answer_json, feedback):
                 correct = False
                 displayFeed.append(feedback_for_blank[-1]["feedback"])
 
+    # Note that this isn't a percentage, but a ratio where 1.0 == all correct.
+    percent = (
+        isCorrectArray.count(True) / len(isCorrectArray) if len(isCorrectArray) else 0
+    )
+
     # Return grading results to the client for a non-test scenario.
-    res = dict(correct=correct, displayFeed=displayFeed, isCorrectArray=isCorrectArray)
+    if current.settings.is_testing:
+        res = dict(
+            correct=True,
+            displayFeed=["Response recorded."] * len(answer),
+            isCorrectArray=[True] * len(answer),
+            percent=1,
+        )
+    else:
+        res = dict(
+            correct=correct,
+            displayFeed=displayFeed,
+            isCorrectArray=isCorrectArray,
+            percent=percent,
+        )
     return "T" if correct else "F", res
 
 
