@@ -786,7 +786,8 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     # Test getAllCompletionStatus()
     test_client.validate("ajax/getAllCompletionStatus")
     res = json.loads(test_client.text)
-    assert len(res) == 5
+    # There are three subchapters
+    assert len(res) == 3
 
 
 def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
