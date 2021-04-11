@@ -945,7 +945,9 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
 
     # Now test the :ab: path
     kwargs = dict(
-        selector_id="dynamic_q_3", questions="test_activecode_1, test_fitb_string", AB="exp1"
+        selector_id="dynamic_q_3",
+        questions="test_activecode_1, test_fitb_string",
+        AB="exp1",
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     rows = db(db.selected_questions.selector_id == "dynamic_q_3").select().first()
@@ -955,7 +957,9 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
         group = 1
 
     kwargs = dict(
-        selector_id="dynamic_q_4", questions="test_fitb_string, test_activecode_1", AB="exp1"
+        selector_id="dynamic_q_4",
+        questions="test_fitb_string, test_activecode_1",
+        AB="exp1",
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     rows = db(db.selected_questions.selector_id == "dynamic_q_4").select().first()
