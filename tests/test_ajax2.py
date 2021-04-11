@@ -233,7 +233,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_1",
+        div_id="test_fitb_string",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -247,7 +247,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_1",
+        div_id="test_fitb_string",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -263,7 +263,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_1",
+        div_id="test_fitb_string",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -277,7 +277,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_1",
+        div_id="test_fitb_string",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -291,7 +291,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_regex",
+        div_id="test_fitb_regex_1",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -303,7 +303,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_regex",
+        div_id="test_fitb_regex_1",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -315,7 +315,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_regex",
+        div_id="test_fitb_regex_1",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
@@ -323,83 +323,58 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
     assert not res["correct"]
 
     # Test server-side grading of a range of numbers, using various bases.
-    val = '["10"]'
+    val = '["6.28"]'
     res = genericGetAssessResults(
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_numeric",
+        div_id="test_fitb_number",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
     )
     assert res["correct"]
     # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
-    assert res["displayFeed"] in (["Correct."], ["<p>Correct.</p>\n"])
-
-    val = '["0b1010"]'
-    res = genericGetAssessResults(
-        test_client,
-        test_user_1,
-        event="fillb",
-        div_id="test_fitb_numeric",
-        answer=val,
-        act=val,
-        course=test_user_1.course.course_name,
-    )
-    assert res["correct"]
-
-    val = '["0xA"]'
-    res = genericGetAssessResults(
-        test_client,
-        test_user_1,
-        event="fillb",
-        div_id="test_fitb_numeric",
-        answer=val,
-        act=val,
-        course=test_user_1.course.course_name,
-    )
-    assert res["correct"]
+    assert res["displayFeed"] == ["<p>Good job.</p>\n"]
 
     val = '["9"]'
     res = genericGetAssessResults(
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_numeric",
+        div_id="test_fitb_number",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
     )
     assert not res["correct"]
-    # Sphinx 1.8.5 and Sphinx 2.0 render text a bit differently.
-    assert res["displayFeed"] in (["Close."], ["<p>Close.</p>\n"])
+    assert res["displayFeed"] == ["<p>Try lower.</p>\n"]
 
-    val = '["11"]'
+    val = '["15"]'
     res = genericGetAssessResults(
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_numeric",
+        div_id="test_fitb_number",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
     )
     assert not res["correct"]
-    assert res["displayFeed"] in (["Close."], ["<p>Close.</p>\n"])
+    assert res["displayFeed"] == ["<p>Incorrect. Try again.</p>\n"]
 
-    val = '["8"]'
+    val = '["6"]'
     res = genericGetAssessResults(
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_numeric",
+        div_id="test_fitb_number",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
     )
     assert not res["correct"]
-    assert res["displayFeed"] in (["Nope."], ["<p>Nope.</p>\n"])
+    assert res["displayFeed"] == ["<p>Try higher.</p>\n"]
 
     # Test client-side grading.
     db = runestone_db_tools.db
@@ -411,7 +386,7 @@ def test_GetFITBAnswerResults(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_numeric",
+        div_id="test_fitb_number",
         answer=val,
         act=val,
         correct="F",
@@ -567,7 +542,7 @@ def test_GetTop10Answers(test_client, test_user_1, test_user):
         user.login()
 
         kwargs = dict(
-            event="fillb", course=user.course.course_name, div_id="test_fitb_1"
+            event="fillb", course=user.course.course_name, div_id="test_fitb_string"
         )
         if index % 2 == 1:
             kwargs["answer"] = "42"
@@ -811,9 +786,7 @@ def test_GetCompletionStatus(test_client, test_user_1, runestone_db_tools):
     # Test getAllCompletionStatus()
     test_client.validate("ajax/getAllCompletionStatus")
     res = json.loads(test_client.text)
-    print(res)
-    # There are three subchapters
-    assert len(res) == 3
+    assert len(res) == 5
 
 
 def test_updatelastpage(test_client, test_user_1, runestone_db_tools):
@@ -972,7 +945,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
 
     # Now test the :ab: path
     kwargs = dict(
-        selector_id="dynamic_q_3", questions="test_activecode_1, test_fitb_1", AB="exp1"
+        selector_id="dynamic_q_3", questions="test_activecode_1, test_fitb_string", AB="exp1"
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     rows = db(db.selected_questions.selector_id == "dynamic_q_3").select().first()
@@ -982,25 +955,25 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
         group = 1
 
     kwargs = dict(
-        selector_id="dynamic_q_4", questions="test_fitb_1, test_activecode_1", AB="exp1"
+        selector_id="dynamic_q_4", questions="test_fitb_string, test_activecode_1", AB="exp1"
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     rows = db(db.selected_questions.selector_id == "dynamic_q_4").select().first()
     if group == 0:
-        assert rows.selected_id == "test_fitb_1"
+        assert rows.selected_id == "test_fitb_string"
     else:
         assert rows.selected_id == "test_activecode_1"
 
     # test the not seen in an exam scenario
     kwargs = dict(
         selector_id="dynamic_q_5",
-        questions="test_fitb_1",
+        questions="test_fitb_string",
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)
-    assert "test_fitb_1" in res
+    assert "test_fitb_string" in res
     rows = db(db.selected_questions.selector_id == "dynamic_q_5").select().first()
-    assert rows.selected_id == "test_fitb_1"
+    assert rows.selected_id == "test_fitb_string"
 
     # test not seen ever
     val = "red,away"
@@ -1008,14 +981,14 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
         test_client,
         test_user_1,
         event="fillb",
-        div_id="test_fitb_1",
+        div_id="test_fitb_string",
         answer=val,
         act=val,
         course=test_user_1.course.course_name,
     )
     kwargs = dict(
         selector_id="dynamic_q_6",
-        questions="test_fitb_1, test_mchoice_1",
+        questions="test_fitb_string, test_mchoice_1",
         not_seen_ever=True,
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
