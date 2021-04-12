@@ -78,6 +78,18 @@ Clickable Area
     +-------+---------+--------+
 
 
+
+Drag and Drop
+=============
+.. dragndrop:: test_dnd_1
+    :feedback: Review your choice
+    :match_1: C++|||cpp
+    :match_2: Java|||java
+    :match_3: Python|||py
+
+    Match the language and the file extension.
+
+
 Fill in the Blank
 =================
 .. fillintheblank:: test_fitb_string
