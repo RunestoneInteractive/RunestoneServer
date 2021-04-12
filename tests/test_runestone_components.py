@@ -17,6 +17,7 @@ import json
 # -------------------
 from polling2 import poll
 import pytest
+from runestone.activecode.test import test_activecode
 from runestone.clickableArea.test import test_clickableArea
 from runestone.dragndrop.test import test_dragndrop
 from runestone.fitb.test import test_fitb
@@ -88,9 +89,40 @@ def selenium_utils_user_2(selenium_utils_user):
     return selenium_utils_user
 
 
+# A fixture for active code server-side testing.
+@pytest.fixture
+def selenium_utils_user_ac(selenium_utils_user):
+    selenium_utils_user.get_book_url("activecode.html")
+    return selenium_utils_user
+
+
 # Tests
 # =====
 #
+# Active code
+# -----------
+def test_activecode_1(selenium_utils_user_ac, runestone_db):
+    db = runestone_db
+
+    def ac_check_fields(index, div_id):
+        row = get_answer(db, db.code.acid == div_id, index + 1)[index]
+        assert row.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
+        assert row.acid == div_id
+        assert row.sid == selenium_utils_user_ac.user.username
+        # TODO: check row.course_id.
+        return row
+
+    test_activecode.test_history(selenium_utils_user_ac)
+    row = ac_check_fields(0, "test1")
+    assert row.emessage == "success"
+    assert row.code == "print('GoodBye')"
+    assert row.grade == None
+    assert row.comment == None
+    assert row.language == "python"
+
+    # TODO: There are a lot more activecode tests that could be easily ported!
+
+
 # ClickableArea
 # -------------
 def test_clickable_area_1(selenium_utils_user_1, runestone_db):
@@ -354,6 +386,12 @@ def test_selectquestion_6(selenium_utils_user_2, runestone_db):
 
 def test_selectquestion_7(selenium_utils_user_2, runestone_db):
     test_dnd_1(selenium_utils_user_2, runestone_db)
+
+
+# TODO: Debug needed. This fails, because the call to ``window.edList['test1'].editor.setValue("print('GoodBye')")`` in the Runestone Components activecode tests doesn't work. I assume it's due to the way that selectquestion loaded the editor dynamically.
+@pytest.mark.skip(reason="Cannot set editor text; see comment above this line.")
+def test_selectquestion_8(selenium_utils_user_2, runestone_db):
+    test_activecode_1(selenium_utils_user_2, runestone_db)
 
 
 def test_selectquestion_20(selenium_utils_user_2, runestone_db):
