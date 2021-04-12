@@ -2,12 +2,101 @@
 
 <h1>Assignments</h1>
 <table class="table table-striped">
-    <tr><th>Name</th><th>Due</th><th>Description</th></tr>
+    <tr>
+        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Name</th>
+        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Due ⯅</th>
+        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Description</th>
+        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Total Points</th>
+    </tr>
     {{for assignment in assignments:}}
         <tr>
             <td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
             <td>{{=assignment['duedate']}}</td>
             <td>{{=assignment['description']}}</td>
+            <td>{{=assignment['points']}}</td>
         </tr>
     {{pass}}
 </table>
+
+<script>
+function sortAssignments(header) {
+    var headers = header.parentElement.getElementsByTagName("th");
+    var column;
+    var currentSort;
+    var sortDirection;
+    for (i = 0; i < headers.length; i++) {
+        if (headers[i] == header) {
+            column = i;
+        }
+        if (headers[i].innerHTML.includes("⯅")) {
+            currentSort = headers[i].innerHTML.slice(0, -2);
+            sortDirection = "ascending";
+            headers[i].innerHTML = headers[i].innerHTML.slice(0, -2);
+        }
+        else if (headers[i].innerHTML.includes("⯆")) {
+            currentSort = headers[i].innerHTML.slice(0, -2);
+            sortDirection = "descending";
+            headers[i].innerHTML = headers[i].innerHTML.slice(0, -2);
+        }
+    }
+    var tableBody = header.parentElement.parentElement;
+    var switching = true;
+    var shouldSwitch;
+    var x;
+    var y;
+    // need to add handling of numerical values - currently 20 sorts above 3 because 2 is viewed as less than 3
+    // also 0 points is displayed as 'None' which could mess with sort
+    if ((header.innerHTML == currentSort) && (sortDirection == "ascending")) {
+        while (switching) {
+            switching = false;
+            rows = tableBody.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                if (column == 0) {
+                    x = rows[i].getElementsByTagName("td")[column].firstChild;
+                    y = rows[i + 1].getElementsByTagName("td")[column].firstChild;
+                }
+                else {
+                    x = rows[i].getElementsByTagName("td")[column];
+                    y = rows[i + 1].getElementsByTagName("td")[column];
+                }
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        header.innerHTML = header.innerHTML + " ⯆";
+    }
+    else {
+        while (switching) {
+            switching = false;
+            rows = tableBody.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                if (column == 0) {
+                    x = rows[i].getElementsByTagName("td")[column].firstChild;
+                    y = rows[i + 1].getElementsByTagName("td")[column].firstChild;
+                }
+                else {
+                    x = rows[i].getElementsByTagName("td")[column];
+                    y = rows[i + 1].getElementsByTagName("td")[column];
+                }
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        header.innerHTML = header.innerHTML + " ⯅";
+    }
+}
+</script>
