@@ -20,6 +20,7 @@ import pytest
 from runestone.clickableArea.test import test_clickableArea
 from runestone.fitb.test import test_fitb
 from runestone.mchoice.test import test_assess
+from runestone.parsons.test import test_parsons
 from runestone.poll.test import test_poll
 from runestone.shortanswer.test import test_shortanswer
 from runestone.spreadsheet.test import test_spreadsheet
@@ -34,10 +35,10 @@ from selenium.webdriver.support import expected_conditions as EC
 # Utilities
 # =========
 # Poll the database waiting for the client to perform an update via Ajax.
-def get_answer(db, expr, expected_len):
+def get_answer(db, expr, minimum_len):
     return poll(
         lambda: db(expr).select(),
-        check_success=lambda s: len(s) == expected_len,
+        check_success=lambda s: len(s) >= minimum_len,
         step=0.1,
         timeout=10,
     )
@@ -231,6 +232,35 @@ def test_mchoice_1(selenium_utils_user_1, runestone_db):
     # TODO: There are a lot more multiple choice tests that could be easily ported!
 
 
+# Parsons's problems
+# =================
+def test_parsons_1(selenium_utils_user_1, runestone_db):
+    su = selenium_utils_user_1
+    db = runestone_db
+
+    def pp_check_common_fields(index, div_id):
+        row = check_common_fields_raw(
+            su, db, db.parsons_answers.div_id == div_id, index, div_id
+        )
+        return row.answer, row.correct, row.percent, row.source
+
+    test_parsons.test_general(selenium_utils_user_1)
+    assert pp_check_common_fields(0, "test_parsons_1") == (
+        "-",
+        False,
+        None,
+        "0_0-1_2_0-3_4_0-6_0-5_0",
+    )
+    assert pp_check_common_fields(1, "test_parsons_1") == (
+        "0_0-1_2_1-3_4_1-5_1",
+        True,
+        1.0,
+        "6_0",
+    )
+
+    # TODO: There are several more Parsons's problems tests that could be easily ported.
+
+
 # Poll
 # ----
 def test_poll_1(selenium_utils_user_1, runestone_db):
@@ -294,6 +324,10 @@ def test_selectquestion_4(selenium_utils_user_2, runestone_db):
 
 def test_selectquestion_5(selenium_utils_user_2, runestone_db):
     test_mchoice_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_6(selenium_utils_user_2, runestone_db):
+    test_parsons_1(selenium_utils_user_2, runestone_db)
 
 
 def test_selectquestion_20(selenium_utils_user_2, runestone_db):

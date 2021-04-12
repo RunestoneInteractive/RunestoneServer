@@ -50,5 +50,9 @@ The following spreadsheet ``selectquestion`` components are commented out, since
     :fromid: test_fitb_regex_3
 
 
+.. selectquestion:: select_question_13
+    :fromid: test_parsons_1
+
+
 .. selectquestion:: select_question_20
     :fromid: test_short_answer_1
