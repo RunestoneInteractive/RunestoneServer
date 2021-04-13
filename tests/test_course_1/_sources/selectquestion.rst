@@ -54,5 +54,9 @@ The following spreadsheet ``selectquestion`` components are commented out, since
     :fromid: test_parsons_1
 
 
+.. selectquestion:: select_question_14
+    :fromid: test_dnd_1
+
+
 .. selectquestion:: select_question_20
     :fromid: test_short_answer_1

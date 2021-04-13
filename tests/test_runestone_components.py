@@ -18,6 +18,7 @@ import json
 from polling2 import poll
 import pytest
 from runestone.clickableArea.test import test_clickableArea
+from runestone.dragndrop.test import test_dragndrop
 from runestone.fitb.test import test_fitb
 from runestone.mchoice.test import test_assess
 from runestone.parsons.test import test_parsons
@@ -112,6 +113,27 @@ def test_clickable_area_1(selenium_utils_user_1, runestone_db):
     assert ca_check_common_fields(1) == ("0;2", True, 1)
 
     # TODO: There are a lot more clickable area tests that could be easily ported!
+
+
+# Drag-n-drop
+# -----------
+def test_dnd_1(selenium_utils_user_1, runestone_db):
+    db = runestone_db
+    div_id = "test_dnd_1"
+
+    def dnd_check_common_fields(index):
+        return check_common_fields(
+            selenium_utils_user_1,
+            db,
+            db.dragndrop_answers.div_id == div_id,
+            index,
+            div_id,
+        )
+
+    test_dragndrop.test_dnd1(selenium_utils_user_1)
+    assert dnd_check_common_fields(0) == ("-1;-1;-1", False, None)
+
+    # TODO: There are more dnd tests that could easily be ported!
 
 
 # Fitb
@@ -328,6 +350,10 @@ def test_selectquestion_5(selenium_utils_user_2, runestone_db):
 
 def test_selectquestion_6(selenium_utils_user_2, runestone_db):
     test_parsons_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_7(selenium_utils_user_2, runestone_db):
+    test_dnd_1(selenium_utils_user_2, runestone_db)
 
 
 def test_selectquestion_20(selenium_utils_user_2, runestone_db):
