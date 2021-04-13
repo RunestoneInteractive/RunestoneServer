@@ -113,7 +113,7 @@ def test_activecode_1(selenium_utils_user_ac, runestone_db):
         return row
 
     test_activecode.test_history(selenium_utils_user_ac)
-    row = ac_check_fields(0, "test1")
+    row = ac_check_fields(0, "test_activecode_2")
     assert row.emessage == "success"
     assert row.code == "print('GoodBye')"
     assert row.grade == None
@@ -388,8 +388,6 @@ def test_selectquestion_7(selenium_utils_user_2, runestone_db):
     test_dnd_1(selenium_utils_user_2, runestone_db)
 
 
-# TODO: Debug needed. This fails, because the call to ``window.edList['test1'].editor.setValue("print('GoodBye')")`` in the Runestone Components activecode tests doesn't work. I assume it's due to the way that selectquestion loaded the editor dynamically.
-@pytest.mark.skip(reason="Cannot set editor text; see comment above this line.")
 def test_selectquestion_8(selenium_utils_user_2, runestone_db):
     test_activecode_1(selenium_utils_user_2, runestone_db)
 
