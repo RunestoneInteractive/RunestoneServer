@@ -200,6 +200,7 @@ def hsblog():
         if do_server_feedback:
             correct, res_update = fitb_feedback(answer_json, feedback)
             res.update(res_update)
+            pct = res["percent"]
 
         # Save this data.
         db.fitb_answers.insert(

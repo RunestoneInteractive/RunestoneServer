@@ -11,13 +11,16 @@
 # Standard library
 # ----------------
 import datetime
+import json
 
 # Third-party imports
 # -------------------
 from polling2 import poll
 import pytest
 from runestone.clickableArea.test import test_clickableArea
+from runestone.fitb.test import test_fitb
 from runestone.mchoice.test import test_assess
+from runestone.parsons.test import test_parsons
 from runestone.poll.test import test_poll
 from runestone.shortanswer.test import test_shortanswer
 from runestone.spreadsheet.test import test_spreadsheet
@@ -32,23 +35,29 @@ from selenium.webdriver.support import expected_conditions as EC
 # Utilities
 # =========
 # Poll the database waiting for the client to perform an update via Ajax.
-def get_answer(db, expr, expected_len):
+def get_answer(db, expr, minimum_len):
     return poll(
         lambda: db(expr).select(),
-        check_success=lambda s: len(s) == expected_len,
+        check_success=lambda s: len(s) >= minimum_len,
         step=0.1,
         timeout=10,
     )
 
 
 # Check the fields common to the tables of most Runestone components.
+def check_common_fields_raw(selenium_utils_user, db, query, index, div_id):
+    row = get_answer(db, query, index + 1)[index]
+    assert row.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
+    assert row.div_id == div_id
+    assert row.sid == selenium_utils_user.user.username
+    assert row.course_name == selenium_utils_user.user.course.course_name
+    return row
+
+
+# Return the answer, correct, and percent fields after checking common fields.
 def check_common_fields(selenium_utils_user, db, query, index, div_id):
-    ans = get_answer(db, query, index + 1)[index]
-    assert ans.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
-    assert ans.div_id == div_id
-    assert ans.sid == selenium_utils_user.user.username
-    assert ans.course_name == selenium_utils_user.user.course.course_name
-    return ans
+    row = check_common_fields_raw(selenium_utils_user, db, query, index, div_id)
+    return row.answer, row.correct, row.percent
 
 
 # Tricky fixures
@@ -86,7 +95,6 @@ def selenium_utils_user_2(selenium_utils_user):
 def test_clickable_area_1(selenium_utils_user_1, runestone_db):
     db = runestone_db
     div_id = "test_clickablearea_1"
-    selenium_utils_user_1.wait_until_ready(div_id)
 
     def ca_check_common_fields(index):
         return check_common_fields(
@@ -98,47 +106,67 @@ def test_clickable_area_1(selenium_utils_user_1, runestone_db):
         )
 
     test_clickableArea.test_ca1(selenium_utils_user_1)
-    ca = ca_check_common_fields(0)
-    assert ca.answer == ""
-    assert ca.correct == False
-    assert ca.percent == None
+    assert ca_check_common_fields(0) == ("", False, None)
 
     test_clickableArea.test_ca2(selenium_utils_user_1)
-    ca = ca_check_common_fields(1)
-    assert ca.answer == "0;2"
-    assert ca.correct == True
-    assert ca.percent == 1
+    assert ca_check_common_fields(1) == ("0;2", True, 1)
 
     # TODO: There are a lot more clickable area tests that could be easily ported!
 
 
 # Fitb
 # ----
-# Test server-side logic in FITB questions. TODO: lots of gaps in these tests.
-def test_fitb(selenium_utils_user_1):
-    # Browse to the page with a fitb question.
-    d = selenium_utils_user_1.driver
-    id = "test_fitb_numeric"
-    fitb = d.find_element_by_id(id)
-    blank = fitb.find_elements_by_tag_name("input")[0]
-    check_me_button = fitb.find_element_by_tag_name("button")
-    feedback_id = id + "_feedback"
+# Test server-side logic in FITB questions.
+def test_fitb_1(selenium_utils_user_1, runestone_db):
+    db = runestone_db
 
-    # Enter a value and check it
-    def check_val(val, feedback_str="Correct"):
-        # Erase any previous answer text.
-        blank.clear()
-        blank.send_keys(val)
-        check_me_button.click()
-        selenium_utils_user_1.wait.until(
-            EC.text_to_be_present_in_element((By.ID, feedback_id), feedback_str)
+    def fitb_check_common_fields(index, div_id):
+        answer, correct, percent = check_common_fields(
+            selenium_utils_user_1,
+            db,
+            db.fitb_answers.div_id == div_id,
+            index,
+            div_id,
         )
+        return json.loads(answer), correct, percent
 
-    check_val("10")
-    # Check this next, since it expects a different answer -- two correct answers in a row are harder to distinguish (has the new text been updated yet or not?).
-    check_val("11", "Close")
-    # Ensure spaces don't prevent correct numeric parsing.
-    check_val(" 10 ")
+    test_fitb.test_fitb1(selenium_utils_user_1)
+    assert fitb_check_common_fields(0, "test_fitb_string") == (["", ""], False, 0)
+
+    test_fitb.test_fitb2(selenium_utils_user_1)
+    assert fitb_check_common_fields(1, "test_fitb_string") == (["red", ""], False, 0.5)
+
+    test_fitb.test_fitb3(selenium_utils_user_1)
+    assert fitb_check_common_fields(2, "test_fitb_string") == (["red", "away"], True, 1)
+
+    test_fitb.test_fitb4(selenium_utils_user_1)
+    assert fitb_check_common_fields(3, "test_fitb_string") == (["red", "away"], True, 1)
+
+    test_fitb.test_fitboneblank_too_low(selenium_utils_user_1)
+    assert fitb_check_common_fields(0, "test_fitb_number") == ([" 6"], False, 0)
+
+    test_fitb.test_fitboneblank_wildcard(selenium_utils_user_1)
+    assert fitb_check_common_fields(1, "test_fitb_number") == (["I give up"], False, 0)
+
+    test_fitb.test_fitbfillrange(selenium_utils_user_1)
+    assert fitb_check_common_fields(2, "test_fitb_number") == ([" 6.28 "], True, 1)
+
+    test_fitb.test_fitbregex(selenium_utils_user_1)
+    assert fitb_check_common_fields(0, "test_fitb_regex_1") == (
+        [" maire ", "LITTLE", "2"],
+        True,
+        1,
+    )
+
+    test_fitb.test_regexescapes1(selenium_utils_user_1)
+    assert fitb_check_common_fields(0, "test_fitb_regex_2") == (
+        [r"C:\windows\system"],
+        True,
+        1,
+    )
+
+    test_fitb.test_regexescapes2(selenium_utils_user_1)
+    assert fitb_check_common_fields(0, "test_fitb_regex_3") == (["[]"], True, 1)
 
 
 # Lp
@@ -170,7 +198,7 @@ def test_lp_1(selenium_utils_user):
     # Wait until the build finishes. To find this, I used the Chrome inspector; right-click on the element, then select "Copy > Copy full XPath".
     su.wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%"
+            (By.XPATH, "/html/body/div[4]/div[1]/div[3]/div"), "Correct. Grade: 100%"
         )
     )
 
@@ -196,18 +224,41 @@ def test_mchoice_1(selenium_utils_user_1, runestone_db):
         )
 
     test_assess.test_ma1(selenium_utils_user_1)
-    mc = mc_check_common_fields(0)
-    assert mc.answer == ""
-    assert mc.correct == False
-    assert mc.percent == None
+    assert mc_check_common_fields(0) == ("", False, None)
 
     test_assess.test_ma2(selenium_utils_user_1)
-    mc = mc_check_common_fields(1)
-    assert mc.answer == "0,2"
-    assert mc.correct == True
-    assert mc.percent == 1
+    assert mc_check_common_fields(1) == ("0,2", True, 1)
 
     # TODO: There are a lot more multiple choice tests that could be easily ported!
+
+
+# Parsons's problems
+# =================
+def test_parsons_1(selenium_utils_user_1, runestone_db):
+    su = selenium_utils_user_1
+    db = runestone_db
+
+    def pp_check_common_fields(index, div_id):
+        row = check_common_fields_raw(
+            su, db, db.parsons_answers.div_id == div_id, index, div_id
+        )
+        return row.answer, row.correct, row.percent, row.source
+
+    test_parsons.test_general(selenium_utils_user_1)
+    assert pp_check_common_fields(0, "test_parsons_1") == (
+        "-",
+        False,
+        None,
+        "0_0-1_2_0-3_4_0-6_0-5_0",
+    )
+    assert pp_check_common_fields(1, "test_parsons_1") == (
+        "0_0-1_2_1-3_4_1-5_1",
+        True,
+        1.0,
+        "6_0",
+    )
+
+    # TODO: There are several more Parsons's problems tests that could be easily ported.
 
 
 # Poll
@@ -228,7 +279,6 @@ def test_poll_1(selenium_utils_user_1, runestone_db):
 # ------------
 def test_short_answer_1(selenium_utils_user_1, runestone_db):
     id = "test_short_answer_1"
-    selenium_utils_user_1.wait_until_ready(id)
 
     # The first test doesn't click the submit button.
     db = runestone_db
@@ -269,7 +319,15 @@ def test_selectquestion_3(selenium_utils_user_2, runestone_db):
 
 
 def test_selectquestion_4(selenium_utils_user_2, runestone_db):
+    test_fitb_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_5(selenium_utils_user_2, runestone_db):
     test_mchoice_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_6(selenium_utils_user_2, runestone_db):
+    test_parsons_1(selenium_utils_user_2, runestone_db)
 
 
 def test_selectquestion_20(selenium_utils_user_2, runestone_db):
