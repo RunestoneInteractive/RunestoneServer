@@ -27,11 +27,6 @@ ActiveCode
    print(total)
 
 
-.. activecode:: test_activecode_2
-
-   print("Hello World")
-
-
 Clickable Area
 ==============
 .. clickablearea:: test_clickablearea_1

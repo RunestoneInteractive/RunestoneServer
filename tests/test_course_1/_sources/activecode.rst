@@ -1,17 +1,17 @@
 :orphan:
 
+This is copied directly from ``index.rst`` in the Runestone Components ActiveCode tests.
+
 ActiveCode Test
 ===============
+Note: an existing server-side test is named ``test_activecode_1``. So, we start numbering here at 2.
 
-
-.. activecode:: test1
+.. activecode:: test_activecode_2
 
    print("Hello World")
 
 
-End of test1
-
-.. activecode:: test1a
+.. activecode:: test_activecode_2a
 
    This question has multiple lines of explanatory
    text prior to the editing area or scaffolded code.
@@ -50,7 +50,7 @@ End of test1
         }
     }
 
-.. activecode:: test2
+.. activecode:: test_activecode_3
     :language: java
     :datafile: Shape.java
 
@@ -87,7 +87,7 @@ End of test1
     </script>
 
 
-.. activecode:: Picture
+.. activecode:: test_activecode_4
     :language: java
     :datafile: turtleClasses.jar, arch.jpg
 
@@ -213,9 +213,7 @@ End of test1
 
 Support for SQL in the browser ?  Yes!
 --------------------------------------
-
-
-.. activecode:: sql1
+.. activecode:: test_activecode_6
     :language: sql
     :autograde: unittest
     :dburl: /_static/test.db
@@ -230,7 +228,7 @@ Support for SQL in the browser ?  Yes!
 ..     :dburl: http://dev.runestoneinteractive.org:8080/_static/bikeshare.db
 
 
-.. activecode:: sql2
+.. activecode:: test_activecode_7
     :language: sql
     :autograde: unittest
     :dburl: /_static/test.db

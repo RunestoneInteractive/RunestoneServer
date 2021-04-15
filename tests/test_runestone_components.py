@@ -109,13 +109,14 @@ def test_activecode_1(selenium_utils_user_ac, runestone_db):
         assert row.timestamp - datetime.datetime.now() < datetime.timedelta(seconds=5)
         assert row.acid == div_id
         assert row.sid == selenium_utils_user_ac.user.username
-        # TODO: check row.course_id.
+        assert row.course_id == selenium_utils_user_ac.user.course.course_id
         return row
 
+    import pdb; pdb.set_trace()
     test_activecode.test_history(selenium_utils_user_ac)
     row = ac_check_fields(0, "test_activecode_2")
     assert row.emessage == "success"
-    assert row.code == "print('GoodBye')"
+    assert row.code == "print('Goodbye')"
     assert row.grade == None
     assert row.comment == None
     assert row.language == "python"
