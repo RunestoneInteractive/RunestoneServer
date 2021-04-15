@@ -644,6 +644,7 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     name_1 = "test_assignment_1"
     name_2 = "test_assignment_2"
     name_3 = "test_assignment_3"
+    name_4 = "test_assignment_4"
 
     # Create an assignment -- using createAssignment
     test_client.post("admin/createAssignment", data=dict(name=name_1))
@@ -658,6 +659,45 @@ def test_assignments(test_client, runestone_db_tools, test_user):
     )
     assert assign1
 
+    # Duplicate an assignment - using createAssignment
+    def add_to_assignment(question_kwargs, points):
+        assert (
+            test_instructor_1.test_client.post(
+                "admin/add__or_update_assignment_question",
+                data=dict(
+                    question=question_kwargs["div_id"],
+                    points=points,
+                    assignment=assign1.id
+                ),
+            )
+            != json.dumps("Error")
+        )
+
+    shortanswer_kwargs = dict(event="shortanswer", div_id="test_short_answer_1", course=course_3)
+    fitb_kwargs = dict(event="fillb", div_id="test_fitb_1", course=course_3)
+    mchoice_kwargs = dict(event="mChoice", div_id="test_mchoice_1", course=course_3)
+    lp_kwargs = dict(event="lp_build", div_id="test_lp_1", course=course_3, builder="unsafe-python")
+    unittest_kwargs = dict(event="unittest", div_id="units2", course=course_3)
+
+    add_to_assignment(shortanswer_kwargs, 0)
+    add_to_assignment(fitb_kwargs, 1)
+    add_to_assignment(mchoice_kwargs, 2)
+    add_to_assignment(lp_kwargs, 3)
+    add_to_assignment(unittest_kwargs, 4)
+    assert assign1
+
+    test_client.post("admin/createAssignment", data=dict(name=name_4, duplicate=assign1.id))
+    assign4 = (
+        db(
+            (db.assignments.name == name_4)
+            & (db.assignments.course == test_instructor_1.course.course_id)
+        )
+        .select()
+        .first()
+    )
+    assert assign4
+    assert assign4.points == assign1.points
+    
     # Make sure you can't create two assignments with the same name
     test_client.post("admin/createAssignment", data=dict(name=name_1))
     assert "EXISTS" in test_client.text
