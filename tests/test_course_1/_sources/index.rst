@@ -11,6 +11,7 @@ This book generates data for use with the test suite.
    lp_demo.py
    lp_demo-test.py
    selectquestion
+   activecode
 
 
 ActiveCode
@@ -24,27 +25,6 @@ ActiveCode
    for num in myList:
        total = total + num
    print(total)
-
-
-.. activecode:: test_activecode_2
-   :nocodelens:
-   :autograde: unittest
-
-   Fix the following code so that it always correctly adds two numbers.
-   ~~~~
-   def add(a,b):
-      return 4
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-       def testOne(self):
-           self.assertEqual(add(2,2),4,"A feedback string when the test fails")
-           self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Try adding your parameters")
-
-   myTests().main()
 
 
 Clickable Area
