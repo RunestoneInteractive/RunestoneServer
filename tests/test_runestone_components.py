@@ -112,7 +112,6 @@ def test_activecode_1(selenium_utils_user_ac, runestone_db):
         assert row.course_id == selenium_utils_user_ac.user.course.course_id
         return row
 
-    import pdb; pdb.set_trace()
     test_activecode.test_history(selenium_utils_user_ac)
     row = ac_check_fields(0, "test_activecode_2")
     assert row.emessage == "success"
