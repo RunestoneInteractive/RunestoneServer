@@ -26,6 +26,7 @@ from runestone.parsons.test import test_parsons
 from runestone.poll.test import test_poll
 from runestone.shortanswer.test import test_shortanswer
 from runestone.spreadsheet.test import test_spreadsheet
+from runestone.timed.test import test_timed
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -67,12 +68,11 @@ def check_common_fields(selenium_utils_user, db, query, index, div_id):
 # The URL to fetch in order to do testing varies by the type of test:
 #
 # #.    When performing client-side testing in Runestone Components, the URL is usually "/index.html". A fixture defined in client testing code handles this; see the ``selenium_utils_1`` fixture in ``test_clickableArea.py`` in the Runestone Component, for example. The client-side tests then use this fixture.
-# #.    When performing plain server-side testing, the URL is "/path/to/book/index.html"; see ``selenium_utils_user.get_book_url``. The fixture below handles this. Then, inside a plain server-side test, the test invokes the client test directly, meaning that it passes its already-run fixture (which fetched the plain server-side testing page) to the client test, bypassing the client fixture.
-# #.    When performing selectquestion server-side testing, the URL is "/path/to/book/selectquestion.html". The next fixture handles this. It likewise calls the plain server-side text with its already-run fixture, which has fetched the selectquestion server-side testing page.
+# #.    When performing server-side testing, the URL is "/path/to/book/<url_here>.html"; see ``selenium_utils_user.get_book_url``. The fixture below provides one example of this. Then, inside a server-side test, the test invokes the client test directly, meaning that it passes its already-run fixture (which fetched the plain server-side testing page) to the client test, bypassing the client fixture.
 #
 # Both client-side and server-side tests must be structured carefully for this to work:
 # - Client-side tests must invoke ``selenium_utils.wait_until_ready(div_id)``.
-# - Client-side tests must **not** invoke ``selenium_utils.get`` in the body of the test, since this prevents server-side tests. Instead, invoke this in a fixture passed to the test, allow server-side tests to override this by passing a different fixture.
+# - Client-side tests must **not** invoke ``selenium_utils.get`` in the body of the test, since this prevents server-side tests from fetching from the correct server-side location. Instead, invoke this in a fixture passed to the test, allow server-side tests to override this by passing a different fixture.
 # - The ``div_id`` of client-side tests must match the div_id of server-side tests, meaning the two ``.rst`` files containing tests must use the same ``div_id``.
 #
 # A fixture for plain server-side testing.
@@ -82,13 +82,11 @@ def selenium_utils_user_1(selenium_utils_user):
     return selenium_utils_user
 
 
-# A fixture for selectquestion server-side testing.
-@pytest.fixture
-def selenium_utils_user_2(selenium_utils_user):
-    selenium_utils_user.get_book_url("selectquestion.html")
-    return selenium_utils_user
-
-
+# Tests
+# =====
+#
+# Active code
+# -----------
 # A fixture for active code server-side testing.
 @pytest.fixture
 def selenium_utils_user_ac(selenium_utils_user):
@@ -96,11 +94,6 @@ def selenium_utils_user_ac(selenium_utils_user):
     return selenium_utils_user
 
 
-# Tests
-# =====
-#
-# Active code
-# -----------
 def test_activecode_1(selenium_utils_user_ac, runestone_db):
     db = runestone_db
 
@@ -289,12 +282,11 @@ def test_mchoice_1(selenium_utils_user_1, runestone_db):
 # Parsons's problems
 # =================
 def test_parsons_1(selenium_utils_user_1, runestone_db):
-    su = selenium_utils_user_1
     db = runestone_db
 
     def pp_check_common_fields(index, div_id):
         row = check_common_fields_raw(
-            su, db, db.parsons_answers.div_id == div_id, index, div_id
+            selenium_utils_user_1, db, db.parsons_answers.div_id == div_id, index, div_id
         )
         return row.answer, row.correct, row.percent, row.source
 
@@ -358,6 +350,13 @@ def test_short_answer_1(selenium_utils_user_1, runestone_db):
 
 # Selectquestion
 # --------------
+# A fixture for selectquestion server-side testing.
+@pytest.fixture
+def selenium_utils_user_2(selenium_utils_user):
+    selenium_utils_user.get_book_url("selectquestion.html")
+    return selenium_utils_user
+
+
 # Check rendering of selectquestion, which requires server-side support.
 def test_selectquestion_1(selenium_utils_user_2, runestone_db):
     test_poll_1(selenium_utils_user_2, runestone_db)
@@ -392,11 +391,45 @@ def test_selectquestion_8(selenium_utils_user_2, runestone_db):
     test_activecode_1(selenium_utils_user_2, runestone_db)
 
 
-def test_selectquestion_20(selenium_utils_user_2, runestone_db):
+def test_selectquestion_10(selenium_utils_user_2, runestone_db):
     test_short_answer_1(selenium_utils_user_2, runestone_db)
+
+
+def test_selectquestion_11(selenium_utils_user_2, runestone_db):
+    _test_timed_1(selenium_utils_user_2, runestone_db, "test_timed_2")
 
 
 # Spreadsheet
 # -----------
 def test_spreadsheet_1(selenium_utils_user_1):
     test_spreadsheet.test_ss_autograde(selenium_utils_user_1)
+
+
+# Timed questions
+# ---------------
+@pytest.fixture
+def selenium_utils_user_timed(selenium_utils_user):
+    selenium_utils_user.get_book_url("multiquestion.html")
+    return selenium_utils_user
+
+
+# Provide the ability to invoke tests with a specific div_id, since the selectquestion test is a different problem with a different div_id than the plain test.
+def _test_timed_1(selenium_utils_user_timed, runestone_db, timed_divid):
+    db = runestone_db
+
+    def tt_check_common_fields(index, div_id):
+        row = check_common_fields_raw(
+            selenium_utils_user_timed, db, db.timed_exam.div_id == div_id, index, div_id
+        )
+        # The tests should finish the timed exam in a few seconds.
+        assert row.time_taken < 10
+        return row.correct, row.incorrect, row.skipped, row.reset
+
+    test_timed._test_1(selenium_utils_user_timed, timed_divid)
+    #import pdb; pdb.set_trace()
+    assert tt_check_common_fields(0, timed_divid) == (0, 0, 0, None)
+    assert tt_check_common_fields(1, timed_divid) == (6, 0, 1, None)
+
+
+def xtest_timed_1(selenium_utils_user_timed, runestone_db):
+    _test_timed_1(selenium_utils_user_timed, runestone_db, "test_timed_1")
