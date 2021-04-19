@@ -1670,7 +1670,8 @@ def get_question_source():
         logger.debug(
             f"Assignment Points for {assignment_name}, {selector_id} = {ui_points}"
         )
-        points = ui_points.points
+        if points:
+            points = ui_points.points
 
     if request.vars["questions"]:
         questionlist = request.vars["questions"].split(",")
