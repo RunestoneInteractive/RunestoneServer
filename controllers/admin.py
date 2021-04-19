@@ -2485,10 +2485,10 @@ def _validateUser(username, password, fname, lname, email, course_name, line):
     uinfo = db(db.auth_user.username == username).count()
     if uinfo > 0:
         errors.append(f"Username {username} already exists on line {line}")
-
-    user_exists = db((db.auth_user.email == email) & (db.auth_user.first_name == fname) & 
-    (db.auth_user.last_name == lname)).select().first()
-    if user_exists:
+        row = db(db.auth_user.username == username).select(db.auth_user.email,
+        db.auth_user.first_name, db.auth_user.last_name)
+        if (row.auth_user.email == email) and 
+        (row.auth_user.first_name == fname) and (row.auth_user.last_name == lname):
         errors.append(f"User {username} already exists on line {line}")
         
     if password == "":
