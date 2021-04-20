@@ -88,7 +88,7 @@ def _route_book(is_published=True):
         # Ensure the base course in the URL agrees with the base course in ``course``.
         # If not, ask the user to select a course.
         if not course or course.base_course != base_course:
-            session.flash = "{} is not the course your are currently in,  switch to or add it to go there".format(
+            session.flash = "{} is not the course you are currently in,  switch to or add it to go there".format(
                 base_course
             )
             redirect(URL(c="default", f="courses"))

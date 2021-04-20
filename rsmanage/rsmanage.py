@@ -53,7 +53,11 @@ def cli(config, verbose, if_clean):
     config.conf = conf
     config.dbname = re.match(r"postgres.*//.*?@.*?/(.*)", config.dburl).group(1)
     config.dbhost = re.match(r"postgres.*//.*?@(.*?)/(.*)", config.dburl).group(1)
-    config.dbuser = re.match(r"postgres.*//(.*?):.*?@(.*?)/(.*)", config.dburl).group(1)
+    if conf  != "production":
+        config.dbuser = re.match(r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl).group(1)
+    else:
+        config.dbuser = re.match(r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl).group(1)
+
 
     if verbose:
         echoEnviron(config)

@@ -19,7 +19,7 @@ HOW_TO_SCORE = ["all_or_nothing", "pct_correct", "interact"]
     "div_id, event, good_answer, bad_answer, correct_scores, which_tg, grade_type",
     [
         (
-            "test_fitb_1",
+            "test_fitb_string",
             "fillb",
             ["red", "away"],
             ["blue", "green"],

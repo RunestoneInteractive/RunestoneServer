@@ -1,6 +1,6 @@
-=========
+*********
 Test book
-=========
+*********
 This book generates data for use with the test suite.
 
 .. toctree::
@@ -11,10 +11,11 @@ This book generates data for use with the test suite.
    lp_demo.py
    lp_demo-test.py
    selectquestion
+   activecode
 
 
 ActiveCode
-----------
+==========
 .. activecode:: test_activecode_1
    :caption: This is a caption
 
@@ -26,29 +27,8 @@ ActiveCode
    print(total)
 
 
-.. activecode:: test_activecode_2
-   :nocodelens:
-   :autograde: unittest
-
-   Fix the following code so that it always correctly adds two numbers.
-   ~~~~
-   def add(a,b):
-      return 4
-
-   ====
-   from unittest.gui import TestCaseGui
-
-   class myTests(TestCaseGui):
-
-       def testOne(self):
-           self.assertEqual(add(2,2),4,"A feedback string when the test fails")
-           self.assertAlmostEqual(add(2.0,3.0), 5.0, 5, "Try adding your parameters")
-
-   myTests().main()
-
-
 Clickable Area
---------------
+==============
 .. clickablearea:: test_clickablearea_1
     :question: Click the rainbow color(s)
     :feedback: This is incorrect
@@ -78,9 +58,21 @@ Clickable Area
     +-------+---------+--------+
 
 
+
+Drag and Drop
+=============
+.. dragndrop:: test_dnd_1
+    :feedback: Review your choice
+    :match_1: C++|||cpp
+    :match_2: Java|||java
+    :match_3: Python|||py
+
+    Match the language and the file extension.
+
+
 Fill in the Blank
------------------
-.. fillintheblank:: test_fitb_1
+=================
+.. fillintheblank:: test_fitb_string
 
     Fill in the blanks to make the following sentence: "The red car drove away."
 
@@ -92,27 +84,56 @@ Fill in the Blank
         :x: Incorrect. Try 'away'.
 
 
-.. fillintheblank:: test_fitb_numeric
+.. fillintheblank:: test_fitb_number
 
-   The answer is 10.
+    .. If this isn't treated as a comment, then it will cause a **syntax error, thus producing a test failure.
 
-   -  :10: Correct.
-      :10 1: Close.
-      :x: Nope.
+    What is the solution to the following:
+
+    :math:`2 * \pi =` |blank|.
+
+    - :6.28 0.005: Good job.
+      :3.27 3: Try higher.
+      :9.29 3: Try lower.
+      :.*: Incorrect. Try again.
 
 
-.. fillintheblank:: test_fitb_regex
+.. fillintheblank:: test_fitb_regex_1
    :casei:
 
-   Who had a little lamb?
+   Complete the sentence: |blank| had a |blank| lamb. One plus one is: (note that if there aren't enough blanks for the feedback given, they're added to the end of the problem. So, we don't **need** to specify a blank here.)
 
    -   :mary|Mair[a|e|i]: Correct.
        :Sue: Is wrong.
-       :x: Nope.
+       :wrong: Try again. (Note: the last item of feedback matches anything, regardless of the string it's given.)
+   -   :little: That's right.
+       :.*: Nope.
+   -   :0b10: Right on! Numbers can be given in decimal, hex (0x10 == 16), octal (0o10 == 8), binary (0b10 == 2), or using scientific notation (1e1 == 10), both here and by the user when answering the question.
+       :2 1: Close.... (The second number is a tolerance, so this matches 1 or 3.)
+       :x: Nope. (As earlier, this matches anything.)
+
+
+.. fillintheblank:: test_fitb_regex_2
+   :casei:
+
+   Windows system files are stored in: |blank|.
+
+   -   :C\:\\Windows\\system: Correct.
+       :program files: Third party applications are stored here, not system files.
+       :x: Try again.
+
+
+.. fillintheblank:: test_fitb_regex_3
+   :casei:
+
+   Python lists are declared using: |blank|.
+
+   -   :\[\]: Correct.
+       :x: Try again.
 
 
 Multiple Choice
----------------
+===============
 .. mchoice:: test_mchoice_1
 
     Which colors might be found in a rainbow (check all)?
@@ -155,8 +176,29 @@ Multiple Choice
         -   Not gray.
 
 
+Parsons
+=======
+.. parsonsprob:: test_parsons_1
+   :adaptive:
+   :order: 0 1 2 3 4
+
+   need some text ?
+   -----
+   def fib(num):
+   =====
+      if num == 0:
+          return 0:
+   =====
+      if num == 1:
+          return 1:
+   =====
+      return fib(num - 1) + fib(num - 2)
+   =====
+      return fib(num - 1) * fib(num - 2) #paired
+
+
 Poll
-----
+====
 .. poll:: test_poll_1
    :scale: 10
    :allowcomment:
@@ -165,14 +207,14 @@ Poll
 
 
 Short answers
--------------
+=============
 .. shortanswer:: test_short_answer_1
 
     Do you like interactive textbooks?
 
 
 Spreadsheet
------------
+===========
 .. spreadsheet:: test_spreadsheet_1
     :mindimensions: 6,5
     :colwidths: 200,100,100
