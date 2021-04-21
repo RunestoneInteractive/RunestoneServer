@@ -139,8 +139,6 @@ These are used in several places in the instructor interface. TODO: identify whe
   eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
   eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
   eBookConfig.course = "{{=course['course_name']}}";
-  eBookConfig.logLevel = 10;
-  eBookConfig.loginRequired = true;
   eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
   {{ if 'auth' in globals() and auth.user: }}
   eBookConfig.username = "{{=auth.user.username}}"
