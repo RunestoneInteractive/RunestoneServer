@@ -2484,12 +2484,21 @@ def _validateUser(username, password, fname, lname, email, course_name, line):
         )
     uinfo = db(db.auth_user.username == username).count()
     if uinfo > 0:
-        errors.append(f"Username {username} already exists on line {line}")
-        user_row = db(db.auth_user.username == username).select(db.auth_user.email,
-        db.auth_user.first_name, db.auth_user.last_name)
-        if (user_row.auth_user.email == email) and 
-        (user_row.auth_user.first_name == fname) and (user_row.auth_user.last_name == lname):
-            errors.append(f"User {username} already exists on line {line}")
+        user_row = db(db.auth_user.username == username).select(
+            db.auth_user.email,
+            db.auth_user.first_name,
+            db.auth_user.last_name
+        )
+        if (user_row.auth_user.email == email) and\
+        (user_row.auth_user.first_name == fname) and\
+        (user_row.auth_user.last_name == lname):
+            logger.warning(
+                "User {} {} on line {} already exists".format(
+                    fname, lname, line
+                )
+            )
+        else:
+            errors.append(f"Username {username} already exists on line {line}")
         
     if password == "":
         errors.append(f"password cannot be blank on line {line}")
