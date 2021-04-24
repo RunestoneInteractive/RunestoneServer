@@ -286,7 +286,11 @@ def test_parsons_1(selenium_utils_user_1, runestone_db):
 
     def pp_check_common_fields(index, div_id):
         row = check_common_fields_raw(
-            selenium_utils_user_1, db, db.parsons_answers.div_id == div_id, index, div_id
+            selenium_utils_user_1,
+            db,
+            db.parsons_answers.div_id == div_id,
+            index,
+            div_id,
         )
         return row.answer, row.correct, row.percent, row.source
 
@@ -426,7 +430,7 @@ def _test_timed_1(selenium_utils_user_timed, runestone_db, timed_divid):
         return row.correct, row.incorrect, row.skipped, row.reset
 
     test_timed._test_1(selenium_utils_user_timed, timed_divid)
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     assert tt_check_common_fields(0, timed_divid) == (0, 0, 0, None)
     assert tt_check_common_fields(1, timed_divid) == (6, 0, 1, None)
 
