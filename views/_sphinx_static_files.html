@@ -23,7 +23,7 @@
                        "/_static/webpack_static_imports.json"]),
              encoding="utf-8") as f:
       for js_import in json.loads(f.read()):
-        response.write(f"<script src='{base_static_url}/{js_import}'></script>\n", escape=False)
+        response.write(f"<script type='text/javascript' src='{base_static_url}/{js_import}'></script>\n", escape=False)
       pass
    pass
 }}
