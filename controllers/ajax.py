@@ -1646,7 +1646,7 @@ def get_question_source():
     is_ab = request.vars.AB
     selector_id = request.vars["selector_id"]
     assignment_name = request.vars["timedWrapper"]
-    toggle = request.vars["toggle"]
+    toggle = request.vars["toggleOptions"]
 
     # If the question has a :points: option then those points are the default
     # however sometimes questions are entered in the web ui without the :points:
