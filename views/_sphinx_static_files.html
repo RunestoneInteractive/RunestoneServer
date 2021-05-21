@@ -1,48 +1,68 @@
 {{ base_static_url = get_course_url('_static') }}
 
+<!--
+Sphinx includes
+===============
+These files are copied from a Sphinx build.
+-->
+<link rel="stylesheet" href="{{=base_static_url}}/pygments.css" type="text/css" />
+<link rel="stylesheet" href="{{=base_static_url}}/basic.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/accessibility.css?v=ACB8D062" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/CodeChat.css" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/matrixeq.css?v=EA7C0F6C" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webgldemo.css?v=4EB84728" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webglinteractive.css?v=21C88BC4" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/bootstrap-sphinx.css" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/theme-overrides.css?v=9D08EA4" />
+{{  import json
+    from pathlib import Path
+
+    # Import webpack CSS and JS.
+    with open(Path(
+        request.folder,
+        "books",
+        course["base_course"],
+        "published",
+        course["base_course"],
+        "_static/webpack_static_imports.json"
+    ), encoding="utf-8") as f:
+        wp_imports = json.load(f)
+    pass
+    for css_import in wp_imports["css"]:
+        response.write(f'<link rel="stylesheet" type="text/css" href="{base_static_url}/{css_import}" />\n', escape=False)
+    pass
+    for js_import in wp_imports["js"]:
+        response.write(f"<script src='{base_static_url}/{js_import}'></script>\n", escape=False)
+    pass
+}}
+<script id="documentation_options" data-url_root="./" src="{{=base_static_url}}/documentation_options.js"></script>
+<script src="{{=base_static_url}}/jquery.js"></script>
+<script src="{{=base_static_url}}/underscore.js"></script>
+<script src="{{=base_static_url}}/doctools.js"></script>
+<script src="{{=base_static_url}}/animationbase.js?v=B45130AE"></script>
+<script src="{{=base_static_url}}/html4css1.css?v=62F7CBB1"></script>
+<script src="{{=base_static_url}}/matrixeq.js?v=1FB22B23"></script>
+<script src="{{=base_static_url}}/webglinteractive.js?v=7D80F988"></script>
+<script src="{{=base_static_url}}/FileSaver.min.js?v=8B232E7A"></script>
+
+
+<!--
+Common includes
+===============
+These are used in several places in the instructor interface. TODO: identify where these are used.
+-->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.messagestore.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.fallbacks.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.parser.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@4.0.0-rc.2/build/vega.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@2.5.0/build/vega-lite.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@3.14.0/build/vega-embed.js"></script>
-{{ import json }}
-{{ with open("".join(["applications/",
-                       request.application,
-                       "/books/",
-                       course['base_course'],
-                       "/published/",
-                       course['base_course'],
-                       "/_static/webpack_static_imports.json"]),
-             encoding="utf-8") as f:
-      for js_import in json.loads(f.read()):
-        response.write(f"<script type='text/javascript' src='{base_static_url}/{js_import}'></script>\n", escape=False)
-      pass
-   pass
-}}
-<script type="text/javascript" src="{{=base_static_url}}/pytutor-embed.bundle.js?v={{=settings.components_version}}"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery.idle-timer.js"></script>
-<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
-<script src="{{=base_static_url}}/sql-wasm.js?v={{=settings.components_version}}" type="text/javascript"></script>
-<script type="text/javascript" src="/{{=request.application}}/static/js/superfish.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery.tablesorter.js"></script>
-<script type="text/javascript" src="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.js"></script>
 
+<!-- TODO: load this dynamically from the e-book's webpack instead. -->
 <script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
 
+<script type="text/javascript" src="{{=URL('static', 'js/superfish.js')}}"></script>
+
+<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
 <link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
-<link href="{{=base_static_url}}/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="{{=base_static_url}}/pygments.css" type="text/css"/>
-<link rel="stylesheet" href="{{=base_static_url}}/runestone-custom-sphinx-bootstrap.css?v={{=settings.components_version}}" type="text/css"/>
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/accessibility.css?v=DB047029"/>
 
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -124,7 +144,7 @@
   eBookConfig.username = "{{=auth.user.username}}"
   eBookConfig.email = "{{=auth.user.email}}"
     {{ if 'is_instructor' in globals(): }}
-    eBookConfig.isInstructor = {{ =is_instructor }};
+        eBookConfig.isInstructor = {{ =is_instructor }};
     {{pass}}
   {{pass}}
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
@@ -132,4 +152,3 @@
   eBookConfig.basecourse = "{{=course['base_course']}}";
   eBookConfig.gradeRecordingUrl = `${eBookConfig.app}/assignments/record_grade`;
 </script>
-
