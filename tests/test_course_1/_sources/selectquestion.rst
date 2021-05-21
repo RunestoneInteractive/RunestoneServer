@@ -61,6 +61,7 @@ The following spreadsheet ``selectquestion`` components are commented out, since
 .. selectquestion:: select_question_15
     :fromid: test_activecode_2
 
+There's math in the timed test loaded by the following selectquestion. Add some math here, so Sphinx will include MathJax on this page, enabling the selectquestion to render correctly: :math:`x^2`.
 
 A selectquestion can't contain a timed test; instead, create a timed test from selectquestions.
 
