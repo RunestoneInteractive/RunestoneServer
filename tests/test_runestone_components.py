@@ -245,7 +245,7 @@ def test_lp_1(selenium_utils_user):
     # Wait until the build finishes. To find this, I used the Chrome inspector; right-click on the element, then select "Copy > Copy full XPath".
     su.wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "/html/body/div[4]/div[1]/div[3]/div"), "Correct. Grade: 100%"
+            (By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%"
         )
     )
 
