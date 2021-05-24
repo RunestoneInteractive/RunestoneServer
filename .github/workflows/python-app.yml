@@ -51,7 +51,7 @@ jobs:
                   mkdir runestone
                   shopt -s extglob
                   mv !(runestone) runestone
-                  git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
+                  git clone https://github.com/bjones1/RunestoneComponents.git -b tmp
                   python -m pip install -e RunestoneComponents
                   cd RunestoneComponents
                   npm install
