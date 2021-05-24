@@ -628,10 +628,8 @@ def dbr_tester(test_client, test_user_1, is_logged_in):
 
     # Test static content.
     validate(
-        "books/published/{}/_static/runestone-custom-sphinx-bootstrap.css".format(
-            base_course
-        ),
-        "background-color: #fafafa;",
+        "books/published/{}/_static/basic.css".format(base_course),
+        "Sphinx stylesheet -- basic theme.",
     )
 
 
