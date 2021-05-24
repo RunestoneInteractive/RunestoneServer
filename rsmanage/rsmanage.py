@@ -50,6 +50,11 @@ def cli(config, verbose, if_clean):
         click.echo("Incorrect WEB2PY_CONFIG")
         sys.exit(1)
 
+    # DAL uses "postgres:", while SQLAlchemy (and the PostgreSQL spec) uses "postgresql:". Fix.
+    remove_prefix = "postgres://"
+    if config.dburl.startswith(remove_prefix):
+        config.dburl = "postgresql://" + config.dburl[len(remove_prefix) :]
+
     config.conf = conf
     config.dbname = re.match(r"postgres.*//.*?@.*?/(.*)", config.dburl).group(1)
     config.dbhost = re.match(r"postgres.*//.*?@(.*?)/(.*)", config.dburl).group(1)
