@@ -27,6 +27,15 @@ admin_logger(logger)
 # select acid, sid from code as T where timestamp = (select max(timestamp) from code where sid=T.sid and acid=T.acid);
 
 
+def _get_dburl():
+    # DAL uses "postgres:", while SQLAlchemy (and the PostgreSQL spec) uses "postgresql:". Fix.
+    dburl = settings.database_uri
+    remove_prefix = "postgres://"
+    if dburl.startswith(remove_prefix):
+        dburl = "postgresql://" + dburl[len(remove_prefix) :]
+    return dburl
+
+
 class ChapterGet:
     #    chapnum_map={}
     #    sub_chapters={}
@@ -376,12 +385,13 @@ def studentreport():
             pd_dict["questions_to_complete_day"],
         )
 
+    dburl = _get_dburl()
     if request.vars.action == "dlcsv":
         mtbl = pd.read_sql_query(
             """
         select * from useinfo where sid = %(sid)s and course_id = %(course)s
         """,
-            settings.database_uri,
+            dburl,
             params={"sid": sid, "course": auth.user.course_name},
         )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
@@ -396,7 +406,7 @@ def studentreport():
             """
         select * from code where sid = %(sid)s and course_id = %(course)s
         """,
-            settings.database_uri,
+            dburl,
             params={"sid": sid, "course": auth.user.course_id},
         )
         response.headers["Content-Type"] = "application/vnd.ms-excel"
@@ -714,6 +724,7 @@ def subchapoverview():
         session.flash = "Not Authorized for this page"
         return redirect(URL("default", "user"))
 
+    dburl = _get_dburl()
     data = pd.read_sql_query(
         """
     select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
@@ -721,7 +732,7 @@ def subchapoverview():
     where useinfo.course_id = '{}' and active='T' and useinfo.timestamp >= '{}'""".format(
             thecourse.base_course, course, thecourse.term_start_date
         ),
-        settings.database_uri,
+        dburl,
         parse_dates=["timestamp"],
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
@@ -772,7 +783,7 @@ def subchapoverview():
         """.format(
             thecourse.base_course
         ),
-        settings.database_uri,
+        dburl,
     )
 
     act_count = pd.read_sql_query(
@@ -784,7 +795,7 @@ def subchapoverview():
     """.format(
             thecourse.base_course
         ),
-        settings.database_uri,
+        dburl,
     )
 
     if request.vars.tablekind != "sccount":
