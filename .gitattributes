@@ -1,0 +1,2 @@
+# Declare files that must always have LF line endings on checkout so docker compose works on Windows
+*   eol=lf
