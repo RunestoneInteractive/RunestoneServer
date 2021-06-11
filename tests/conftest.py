@@ -191,11 +191,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
                 if retry == 99:
                     raise
         # Build the test book to add in db fields needed.
-        with pushd(
-            "{}/books/test_course_1".format(rs_path)
-        ), MonkeyPatch().context() as m:
-            # The runestone build process only looks at ``DBURL``.
-            m.setenv("DBURL", os.environ["TEST_DBURL"])
+        with pushd("{}/books/test_course_1".format(rs_path)):
             xqt(
                 "{} -m runestone build --all".format(sys.executable),
                 "{} -m runestone deploy".format(sys.executable),

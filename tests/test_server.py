@@ -84,14 +84,13 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # ----------------
         ("assignments/chooseAssignment", True, "Assignments", 1),
         ("assignments/doAssignment", True, "Bad Assignment ID", 1),
-        # TODO: Why 2 errors here? Was just 1.
         (
             "assignments/practice",
             True,
             "Practice tool is not set up for this course yet.",
-            2,
+            1,
         ),
-        ("assignments/practiceNotStartedYet", True, "test_course_1", 2),
+        ("assignments/practiceNotStartedYet", True, "test_course_1", 1),
         # **Default**
         # ------------
         # *User*
@@ -190,7 +189,8 @@ def test_validate_user_pages(
         # **Admin**
         # ----------
         ("admin/admin", "Course Settings", 1),
-        ("admin/course_students", '"test_user_1"', 2),
+        # This endpoint produces JSON, so don't check it.
+        ##("admin/course_students", '"test_user_1"', 2),
         ("admin/createAssignment", "ERROR", None),
         ("admin/grading", "assignment", 1),
         # TODO: This produces an exception.
@@ -628,10 +628,8 @@ def dbr_tester(test_client, test_user_1, is_logged_in):
 
     # Test static content.
     validate(
-        "books/published/{}/_static/runestone-custom-sphinx-bootstrap.css".format(
-            base_course
-        ),
-        "background-color: #fafafa;",
+        "books/published/{}/_static/basic.css".format(base_course),
+        "Sphinx stylesheet -- basic theme.",
     )
 
 

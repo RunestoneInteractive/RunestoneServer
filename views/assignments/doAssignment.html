@@ -1,6 +1,8 @@
 {{extend 'layout.html'}}
 
-{{include '_sphinx_static_files.html'}}
+{{block moreincludes}}
+    {{include '_sphinx_static_files.html'}}
+{{end}}
 
 <div class="hidden-content" style="display: none">
     \( {{= request.latex_preamble}} \)

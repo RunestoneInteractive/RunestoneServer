@@ -12,6 +12,7 @@ This book generates data for use with the test suite.
    lp_demo-test.py
    selectquestion
    activecode
+   multiquestion
 
 
 ActiveCode

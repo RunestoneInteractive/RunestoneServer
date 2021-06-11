@@ -1,55 +1,55 @@
 {{extend 'admin/instructors.html'}}
 
 {{ block moreincludes }}
-{{super}}
-<script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
+    {{super}}
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
 {{ end }}
 
 {{ block tabcontent }}
-<h2>{{=course_name}}</h2>
-<hr>
-{{ if request.vars.tablekind == 'sccount': }}
-    <p>This report shows you the number of activities on each page that your students have attempted.  Clicking on the number in the cell will let you drill down to see details on how  and when the student has interacted with each element on the page.</p>
-{{ pass }}
+    <h2>{{=course_name}}</h2>
+    <hr>
+    {{ if request.vars.tablekind == 'sccount': }}
+        <p>This report shows you the number of activities on each page that your students have attempted.  Clicking on the number in the cell will let you drill down to see details on how  and when the student has interacted with each element on the page.</p>
+    {{ pass }}
 
-<form action="/runestone/dashboard/subchapoverview" style="display: inline-block">
-    <select name="tablekind" id="tabselect" onchange="this.form.submit()">
-        <option value="sccount" {{if request.vars.tablekind == 'sccount':}}selected{{pass}}>Count of Subchapter Activities</option>
-        <option value="dividmin" {{if request.vars.tablekind == 'dividmin':}}selected{{pass}}>First Interaction with all Activities</option>
-        <option value="dividmax" {{if request.vars.tablekind == 'dividmax':}}selected{{pass}}>Last Interaction with all Activities</option>
-        <option value="dividnum" {{if request.vars.tablekind == 'dividnum':}}selected{{pass}}>Number of Interactions with each Activity</option>
-    </select>
+    <form action="/runestone/dashboard/subchapoverview" style="display: inline-block">
+        <select name="tablekind" id="tabselect" onchange="this.form.submit()">
+            <option value="sccount" {{if request.vars.tablekind == 'sccount':}}selected{{pass}}>Count of Subchapter Activities</option>
+            <option value="dividmin" {{if request.vars.tablekind == 'dividmin':}}selected{{pass}}>First Interaction with all Activities</option>
+            <option value="dividmax" {{if request.vars.tablekind == 'dividmax':}}selected{{pass}}>Last Interaction with all Activities</option>
+            <option value="dividnum" {{if request.vars.tablekind == 'dividnum':}}selected{{pass}}>Number of Interactions with each Activity</option>
+        </select>
 
-    <button type="submit" name="action" value="tocsv">Download CSV</button>
-</form>
-<div id="overtable"></div>
+        <button type="submit" name="action" value="tocsv">Download CSV</button>
+    </form>
+    <div id="overtable"></div>
 
-<script type="text/javascript">
-    var tbl_data = {{=XML(summary.replace(".000Z",""))}}
+    <script type="text/javascript">
+        var tbl_data = {{=XML(summary.replace(".000Z",""))}}
 
-    var container = document.getElementById('overtable');
-    var frozenColumns = 1;
-    if (window.location.href.search("sccount") < 0) {
-        frozenColumns = 2;
-    }
-    columns = [{data: 'chapter_label'}]
-    for (let k of Object.keys(tbl_data[0]).slice(1)) {
-        columns.push({data: k, renderer: "html"})
-    }
-    var hot = new Handsontable(container, {
-        data: tbl_data,
-        rowHeaders: false,
-        colHeaders: Object.keys(tbl_data[0]),
-        fixedColumnsLeft: frozenColumns,
-        height: 800,
-        width: 1200,
-        filters: true,
-        dropdownMenu: true,
-        licenseKey: 'non-commercial-and-evaluation',
-        columns:columns,
-      });
+        var container = document.getElementById('overtable');
+        var frozenColumns = 1;
+        if (window.location.href.search("sccount") < 0) {
+            frozenColumns = 2;
+        }
+        columns = [{data: 'chapter_label'}]
+        for (let k of Object.keys(tbl_data[0]).slice(1)) {
+            columns.push({data: k, renderer: "html"})
+        }
+        var hot = new Handsontable(container, {
+            data: tbl_data,
+            rowHeaders: false,
+            colHeaders: Object.keys(tbl_data[0]),
+            fixedColumnsLeft: frozenColumns,
+            height: 800,
+            width: 1200,
+            filters: true,
+            dropdownMenu: true,
+            licenseKey: 'non-commercial-and-evaluation',
+            columns:columns,
+        });
 
-</script>
+    </script>
 
 {{ end }}

@@ -23,6 +23,8 @@ cd books
 git clone https://github.com/RunestoneInteractive/thinkcspy.git
 ```
 
+A better method is to set the environment variable `BUILD_BOOKS` to no and then use the `dbuild` command found in the scripts folder to rebuild any books when you want them built.   Having runestone automatically rebuild all books upon startup makes the startup longer and is fragile. If a book fails to rebuild for any reason, then the runestone container will restart itself.  This will go on endlessly.
+
 After cloning the book edit the pavement.py file. It is **critical** that the `master_url` variable in that file is set correctly. If you are running docker and doing your development on the same machine then `http://localhost` will work. If you are running docker on a remote host then make sure to set it to the name of the remote host. `master_url` is the URL that the API calls in the browser will use to connect to the server running in the docker container.
 
 ### 2. Add Users
@@ -75,6 +77,9 @@ you can use the docker-compose file as is, **no changes are necessary**. You wil
 export RUNESTONE_HOST=localhost
 export POSTGRES_PASSWORD=runestone
 ```
+
+If you want to test using a secure port you can set the `CERTBOT_EMAIL` environment variable and we will automatically aquire a certificate.
+
 
 If you are doing **development work** You will want to install the RunestoneComponents in development mode as well. clone https://github.com/RunestoneInteractive/RunestoneComponents.git as a sibling of the RunestoneServer directory. As the components also use npm to build the runestone.js file you will want to **follow the directions** in the README for that. If you do not then you will be **missing runestone.js** and nothing is going to work right! If you are not developing the components then don't worry about it, docker will already have the latest released version of runestone installed.
 
@@ -274,6 +279,8 @@ $ docker exec -it $CONTAINER_ID bash
 root@60e279f00b2e:/srv/web2py#
 ```
 
+You can simplify this by using the `dshell` script found in the scripts folder.
+
 Remember that the folder under web2py applications/runestone is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change in permissions on the host.
 
@@ -289,13 +296,11 @@ File permissions can seem a little strange when you start this container on Linu
 
 If you are writing your own book you will want to get that book set up properly in the runestone system. You need to do the following:
 
-1. Shell in to the container (see above)
-2. `cd applications/runestone`
-3. Run the command `rsmanage addcourse` Use the project name you configured in `pavement.py` as the name of BOTH the course and the basecourse when it asks.
-4. Now that your course is registered rebuild it `cd .../books/yourbook` and run `runestone build --all deploy`
-5. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
+1. Run the command `dmanage addcourse` Use the project name you configured in `pavement.py` as the name of BOTH the course and the basecourse when it asks.  The dmanage command is in the scripts folder of RunestoneServer.
+2. Now that your course is registered rebuild it using the `dbuild` command found in the RunestoneServer `scripts` folder use the command `dbuild bookname`
+3. If this book is a PreTeXt book you will need to navigate to the directory that contains the `runestone-manifest.xml` file and run the command `runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml`
    **Note** if you are missing `runestone-manifest.xml` then you need to rebuild your PreTeXt book with `runestone` as the publisher. See the PreTeXt docs for how do do this.
-6. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book. Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
+4. If this book is a PreTeXt book you should put run `touch NOBUILD` in the root directory for this book. Otherwise when the container restarts it will try to build this book using runestone build and it will fail, causing an endless cycle of container restarts.
 
 ## Debugging
 

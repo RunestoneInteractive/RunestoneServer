@@ -1329,7 +1329,7 @@ function getAssignmentId() {
 function assignListAlpha(assignlist) {
     var currentAssignment = assignlist.value;
     var options = $(assignlist).children().toArray();
-    options.sort(function(a,b) {
+    options.sort(function (a, b) {
         if (a.text.toUpperCase() > b.text.toUpperCase()) return 1;
         else if (a.text.toUpperCase() < b.text.toUpperCase()) return -1;
         else return 0;
@@ -1802,7 +1802,7 @@ function preview_question(form, preview_div) {
 }
 
 // Render a question in the provided div.
-function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
+async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     /**
      *  The easy part is adding the componentSrc to the existing div.
      *  The tedious part is calling the right functions to turn the
@@ -1823,6 +1823,8 @@ function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data("component");
+    // Import all the js needed for this component before rendering
+    await runestone_import(componentKind);
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0];
     if (opt.orig) {
