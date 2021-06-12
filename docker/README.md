@@ -6,11 +6,10 @@ on the host.
 
 ## Setup
 
-### 0. Do Installations
+### 0. Install Docker
 
-1. Follow the [Docker installation guide](https://docs.docker.com/install/#supported-platforms).
-2. On Linux, make sure to also perform the [post-installation steps](https://docs.docker.com/install/linux/linux-postinstall/). On Linux, also [Install Docker Compose](https://docs.docker.com/compose/install/). (Docker Compose comes with the Docker Desktop installation on both Mac and Windows.)
-3. **If you are doing development work on Mac or Windows**, also [install Node.js](https://nodejs.org/en/download/current/).
+1. Follow the [Docker installation guide](https://docs.docker.com/install/#supported-platforms). On Linux, make sure to also perform the [post-installation steps](https://docs.docker.com/install/linux/linux-postinstall/).
+2. [Install Docker Compose](https://docs.docker.com/compose/install/).
 
 ### 1. Add Books
 
@@ -37,7 +36,7 @@ put them in a folder called `configs` in the root of the repository. The format 
 username,email,first_name,last_name,pw,course
 ```
 
-This will create usernames for each person and pre-register them for the course. In the case of instructors it register and make them instructors for the course. From the `$RUNESTONE_PATH` directory (top level of runestone) you can execute the following commands:
+This will create usernames for each person and pre-register them for the course. In the case of instructors it register and make them instructors for the course. From the `$RUNESTONE_PATH` directory (top level of runestone) you can exectue the following commands:
 
 ```bash
 $ mkdir -p configs
@@ -79,14 +78,12 @@ export RUNESTONE_HOST=localhost
 export POSTGRES_PASSWORD=runestone
 ```
 
-If you want to test using a secure port you can set the `CERTBOT_EMAIL` environment variable and we will automatically acquire a certificate.
+If you want to test using a secure port you can set the `CERTBOT_EMAIL` environment variable and we will automatically aquire a certificate.
 
 
 If you are doing **development work** You will want to install the RunestoneComponents in development mode as well. clone https://github.com/RunestoneInteractive/RunestoneComponents.git as a sibling of the RunestoneServer directory. As the components also use npm to build the runestone.js file you will want to **follow the directions** in the README for that. If you do not then you will be **missing runestone.js** and nothing is going to work right! If you are not developing the components then don't worry about it, docker will already have the latest released version of runestone installed.
 
-Create a docker-compose.override.yml in the same directory as the docker-compose.yml file.
-
-For Mac and Linux, it should look like this:
+Create a docker-compose.override.yml in the same directory as the docker-compose.yml file. It should look like this:
 
 ```yml
 version: "3"
@@ -95,19 +92,6 @@ services:
     runestone:
         volumes:
             - ../RunestoneComponents:/srv/RunestoneComponents
-```
-
-Windows sometimes reserves port 80. So, for Windows, docker-compose.override.yml should look like this in order to redirect from `http://localhost` to `http://localhost:8080`.
-
-```yml
-version: "3"
-
-services:
-    runestone:
-        volumes:
-            - ../RunestoneComponents:/srv/RunestoneComponents
-        ports:
-            - 8080:80
 ```
 
 The entrypoint.sh file will notice that you have this volume mounted and reinstall the development version of Runestone.
@@ -157,11 +141,7 @@ defaults), use docker-compose to bring the containers up.
 $ docker-compose up -d
 ```
 
-And go to [http://$RUNESTONE_HOST](http://localhost/runestone) or `http://localhost:8080` if developing in Windows to see the application.
-
-Note that if you are just starting development,
-you may see the runestone interface, but no books. This will by fixed by running the
-debuild script in the scripts folder.
+And go to [http://$RUNESTONE_HOST](http://localhost/runestone) to see the application.
 
 ## Development Tips
 
