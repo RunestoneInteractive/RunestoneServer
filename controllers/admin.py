@@ -1844,6 +1844,8 @@ def _add_q_meta_info(qrow):
         "shortanswer": "ShortAns",
         "actex": "ActiveCode",
         "fillintheblank": "FillB ✓",
+        "quizly": "Quizly ✓",
+        "khanex": "KhanAcademy ✓",
     }
     qt = qt.get(qrow.questions.question_type, "")
 
