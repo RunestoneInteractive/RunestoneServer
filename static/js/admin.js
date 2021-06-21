@@ -510,7 +510,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             var obj = new XMLHttpRequest();
             obj.open(
                 "GET",
-                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + studentId,
+                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + encodeURIComponent(studentId),
                 true
             );
             obj.send(
