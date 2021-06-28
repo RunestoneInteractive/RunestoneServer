@@ -510,7 +510,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             var obj = new XMLHttpRequest();
             obj.open(
                 "GET",
-                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + studentId,
+                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + encodeURIComponent(studentId),
                 true
             );
             obj.send(
@@ -1824,7 +1824,7 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
 
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data("component");
     // Import all the js needed for this component before rendering
-    await runestone_import(componentKind);
+    await runestoneComponents.runestone_import(componentKind);
     let opt = {};
     opt.orig = jQuery(`#${whereDiv} [data-component]`)[0];
     if (opt.orig) {
