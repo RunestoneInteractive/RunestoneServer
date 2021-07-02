@@ -599,7 +599,7 @@ def questiongrades():
     student = db(db.auth_user.username == sid).select(
         db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username
     )
-
+    student[0].username = urllib.parse.quote(student[0].username)
     query = """select questions.name, score, points
         from questions join assignment_questions on (questions.id = assignment_questions.question_id)
         left outer join question_grades on (questions.name = question_grades.div_id
