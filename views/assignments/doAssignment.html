@@ -158,6 +158,10 @@
     $("#gradeMeButton").on("click", function(){
         $('#gradeMeButton').css('visibility', 'hidden');
         selfGrade({{=assignment['id']}}, '{{=student_id}}')});
+    
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
 </script>
 <script src="/runestone/static/js/selfgrade.js" type="text/javascript"></script>
