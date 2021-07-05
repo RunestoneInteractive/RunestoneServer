@@ -135,7 +135,7 @@
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    <button class="btn btn-lg buttonAskCompletion" id="SubmitMeButton">
+    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
         {{if is_submit:}}
             Mark Incomplete
         {{else:}}
@@ -150,7 +150,7 @@
 {{ elif settings.coursera_mode: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    <button class="btn btn-lg buttonAskCompletion" id="SubmitMeButton">
+    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
         {{if is_submit:}}
             Mark Incomplete
         {{else:}}
@@ -192,9 +192,9 @@
     //     $div.append(change);
     // }
 
-    $("#SubmitMeButton").on("click", function(){
-        $('#SubmitMeButton').css('visibility', 'hidden');
-        markComplete({{=assignment['id']}}, {{=student_id}}, '{{is_submit}}')
+    $("#submitMeButton").on("click", function(){
+        $('#submitMeButton').css('visibility', 'hidden');
+        markComplete({{=assignment['id']}}, {{=student_num}})
     });
 
     $("#gradeMeButton").on("click", function(){
