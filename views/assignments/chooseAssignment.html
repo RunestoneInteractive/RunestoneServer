@@ -1,11 +1,14 @@
 {{extend 'layout.html'}}
 
-<h1>Assignments</h1>
+<h1>Assignments</h1><h2></h2>
 <table class="table table-striped">
-    <tr><th>Name</th><th>Due</th><th>Description</th></tr>
+    <tr><th>Name</th><th>Status</th><th>Due</th><th>Description</th></tr>
+    {{i=0}}
     {{for assignment in assignments:}}
         <tr>
             <td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+            <th>{{=is_submit[i]}}</th>
+            {{i+=1}}
             <td>{{=assignment['duedate']}}</td>
             <td>{{=assignment['description']}}</td>
         </tr>

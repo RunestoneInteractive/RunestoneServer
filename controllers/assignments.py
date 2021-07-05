@@ -487,16 +487,61 @@ def get_problem():
 
 
 @auth.requires_login()
+def update_submit():
+    ''' This function is ran from the Assignments page on the students view to change the 
+    status of their assignment to completed or not'''
+
+    assignment_id = request.vars.assignment_id #used to grab the data from jQuery request
+    student_id = request.vars.student_id
+    #pull the grades table for the current student
+    grade = (
+        db(
+            (db.grades.auth_user == auth.user.id)
+            & (db.grades.assignment == assignment_id)
+        )
+        .select()
+        .first()
+    )
+
+    res={}
+    if grade:
+    #toggles the is_submit variable from True to False
+        if grade.is_submit:
+            db.grades.update_or_insert(
+                (db.grades.auth_user == student_id)
+                &(db.grades.assignment == assignment_id),
+                auth_user = student_id,
+                assignment = assignment_id,
+                is_submit = False
+            )
+        else:
+            db.grades.update_or_insert(
+                (db.grades.auth_user == student_id)
+                &(db.grades.assignment == assignment_id),
+                auth_user = student_id,
+                assignment = assignment_id,
+                is_submit = True
+            )
+        res["success"]=True
+    # if can't find grades table for current user, return no success
+    else:
+        res["success"]=False
+
+    return json.dumps(res)
+
+
+@auth.requires_login()
 def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
-    assignment_id = request.vars.assignment_id
+    assignment_id = request.vars.assignment_id 
     if not assignment_id or assignment_id.isdigit() == False:  # noqa: E712
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
         session.flash = "Bad Assignment ID"
         return redirect(URL("assignments", "chooseAssignment"))
 
     logger.debug("COURSE = %s assignment %s", course, assignment_id)
+    #Web2Py documentation for querying databases is really helpful here.
     assignment = (
         db(
             (db.assignments.id == assignment_id)
@@ -712,7 +757,34 @@ def doAssignment():
         c_origin = "Runestone"
     print("ORIGIN", c_origin)
 
-    return dict(
+
+    #grabs the row for the current user and and assignment in the grades table
+    grade = (
+        db(
+            (db.grades.auth_user == auth.user.id)
+            & (db.grades.assignment == assignment_id)
+        )
+        .select()
+        .first()
+    )
+    #If cannot find the row in the grades folder, make one and set to not submitted
+    if not grade:
+        db.grades.update_or_insert(
+                auth_user = auth.user.id,
+                assignment = assignment_id,
+                is_submit = False
+            )
+        grade = (
+            db(
+                (db.grades.auth_user == auth.user.id)
+                & (db.grades.assignment == assignment_id)
+            )
+            .select()
+            .first()
+        )
+
+
+    return dict(#This is all the variables that will be used in the doAssignment.html document
         course=course,
         course_name=auth.user.course_name,
         assignment=assignment,
@@ -723,10 +795,12 @@ def doAssignment():
         readings_score=readings_score,
         # gradeRecordingUrl=URL('assignments', 'record_grade'),
         # calcTotalsURL=URL('assignments', 'calculate_totals'),
-        student_id=auth.user.username,
+        student_name=auth.user.username,
+        student_id=auth.user.id,
         released=assignment["released"],
         is_instructor=user_is_instructor,
         origin=c_origin,
+        is_submit=grade.is_submit,
     )
 
 
@@ -737,7 +811,27 @@ def chooseAssignment():
     assignments = db(
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
     ).select(orderby=db.assignments.duedate)
-    return dict(assignments=assignments)
+    
+    is_submit=[]
+
+    for assignment in assignments:
+                
+        grade = db(
+            (db.grades.auth_user == auth.user.id)
+            &(db.grades.assignment == assignment.id)
+        ).select().first()
+
+        if not grade:
+            is_submit.append("Not Completed")
+        elif grade.is_submit:
+            is_submit.append("Completed")
+        else:
+            is_submit.append("Not Completed")
+    
+    return dict(
+        assignments=assignments,
+        is_submit=is_submit,
+    )
 
 
 # The rest of the file is about the the spaced practice:
