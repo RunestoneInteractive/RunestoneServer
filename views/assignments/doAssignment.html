@@ -22,15 +22,18 @@
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
     </div>
     <div>
-        {{if is_submit:}}
+        {{if is_submit == "Complete":}}
             <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
                 <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment has been Submitted</p>
             </div>
+        {{elif is_submit == "In Progress":}}
+            <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment is in Progress</p>
+            </div>
         {{else:}}
             <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
-                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment has not been Submitted</p>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment has not been Started</p>
             </div>
-
         {{pass}}
     </div>
 
@@ -120,15 +123,18 @@
     {{pass}}
 </div>
 <div>
-    {{if is_submit:}}
+    {{if is_submit == "Complete":}}
         <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
-            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment has been Submitted</p>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+        </div>
+    {{elif is_submit == "In Progress":}}
+        <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
         </div>
     {{else:}}
         <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
-            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This Assignment has not been Submitted</p>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been started</p>
         </div>
-
     {{pass}}
 </div>
 
@@ -136,10 +142,12 @@
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
-        {{if is_submit:}}
-            Mark Incomplete
-        {{else:}}
+        {{if is_submit == "Not Started":}}
+            Mark In Progress
+        {{elif is_submit == "In Progress":}}
             Mark Complete
+        {{else:}}
+            Mark Incomplete
         {{pass}}
     </button>
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
@@ -151,10 +159,12 @@
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
-        {{if is_submit:}}
-            Mark Incomplete
-        {{else:}}
+        {{if is_submit == "Not Started":}}
+            Mark In Progress
+        {{elif is_submit == "In Progress":}}
             Mark Complete
+        {{else:}}
+            Mark Incomplete
         {{pass}}
     </button>
 </div>

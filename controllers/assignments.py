@@ -496,7 +496,7 @@ def update_submit():
     #pull the grades table for the current student
     grade = (
         db(
-            (db.grades.auth_user == auth.user.id)
+            (db.grades.auth_user == student_id)
             & (db.grades.assignment == assignment_id)
         )
         .select()
@@ -506,13 +506,21 @@ def update_submit():
     res={}
     if grade:
     #toggles the is_submit variable from True to False
-        if grade.is_submit:
+        if grade.is_submit == "Not Started":
             db.grades.update_or_insert(
                 (db.grades.auth_user == student_id)
                 &(db.grades.assignment == assignment_id),
                 auth_user = student_id,
                 assignment = assignment_id,
-                is_submit = False
+                is_submit = "In Progress"
+            )
+        elif grade.is_submit == "In Progress":
+            db.grades.update_or_insert(
+                (db.grades.auth_user == student_id)
+                &(db.grades.assignment == assignment_id),
+                auth_user = student_id,
+                assignment = assignment_id,
+                is_submit = "Complete"
             )
         else:
             db.grades.update_or_insert(
@@ -520,7 +528,7 @@ def update_submit():
                 &(db.grades.assignment == assignment_id),
                 auth_user = student_id,
                 assignment = assignment_id,
-                is_submit = True
+                is_submit = "Not Started"
             )
         res["success"]=True
     # if can't find grades table for current user, return no success
@@ -772,7 +780,7 @@ def doAssignment():
         db.grades.update_or_insert(
                 auth_user = auth.user.id,
                 assignment = assignment_id,
-                is_submit = False
+                is_submit = "Not Started" #set is_submit variable to incomplete
             )
         grade = (
             db(
@@ -821,12 +829,10 @@ def chooseAssignment():
             &(db.grades.assignment == assignment.id)
         ).select().first()
 
-        if not grade:
-            is_submit.append("Not Completed")
-        elif grade.is_submit:
-            is_submit.append("Completed")
+        if grade:
+            is_submit.append(grade.is_submit)
         else:
-            is_submit.append("Not Completed")
+            is_submit.append("Not Started")
     
     return dict(
         assignments=assignments,
