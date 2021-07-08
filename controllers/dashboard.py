@@ -452,7 +452,7 @@ def grades():
     duedates = []
     for assign in assignments:
         assign.points = update_total_points(assign.id)
-        duedates.append(to_string(assign.duedate))
+        duedates.append(date2String(assign.duedate))
 
     students = db(
         (db.user_courses.course_id == auth.user.course_id)
@@ -575,7 +575,7 @@ def grades():
         duedates=duedates,
     )
 
-def to_string(date_time):
+def date2String(date_time):
     day = str(date_time.strftime("%b")) + " " + str(date_time.day)
     time = date_time.strftime("%I:%M %p")
     displayDate = day + ", " + time

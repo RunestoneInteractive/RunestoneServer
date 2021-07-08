@@ -826,16 +826,19 @@ def chooseAssignment():
     ).select(orderby=db.assignments.duedate)
     
     status=[]
+    duedates=[]
 
     for assignment in assignments:
-                
+
+        duedates.append(date2String(assignment.duedate))        
+        
         grade = db(
             (db.grades.auth_user == auth.user.id)
             &(db.grades.assignment == assignment.id)
         ).select().first()
 
         if grade:
-            if grade.score:
+            if (grade.score is not None) and (assignment.points > 0):
                 percent_grade = 100*grade.score/assignment.points
                 if percent_grade % 10==0:
                     status.append(str(int(percent_grade))+"%")
@@ -852,11 +855,17 @@ def chooseAssignment():
     return dict(
         assignments=assignments,
         status=status,
+        duedates=duedates,
     )
+
+def date2String(date_time):
+    day = str(date_time.strftime("%b")) + " " + str(date_time.day)
+    time = date_time.strftime("%I:%M %p")
+    displayDate = day + ", " + time
+    return displayDate
 
 
 # The rest of the file is about the the spaced practice:
-
 
 def _get_course_practice_record(course_name):
     return db(db.course_practice.course_name == course_name).select().first()

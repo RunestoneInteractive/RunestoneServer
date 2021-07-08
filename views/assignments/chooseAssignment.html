@@ -8,9 +8,9 @@
         <tr>
             <td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
             <th>{{=status[i]}}</th>
-            {{i+=1}}
-            <td>{{=assignment['duedate']}}</td>
+            <td>{{=duedates[i]}}</td>
             <td>{{=assignment['description']}}</td>
+            {{i+=1}}
         </tr>
     {{pass}}
 </table>
