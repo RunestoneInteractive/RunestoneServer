@@ -791,6 +791,10 @@ def doAssignment():
             .first()
         )
 
+    if grade.score:
+        is_graded=True
+    else:
+        is_graded=False
 
     return dict(#This is all the variables that will be used in the doAssignment.html document
         course=course,
@@ -809,6 +813,7 @@ def doAssignment():
         is_instructor=user_is_instructor,
         origin=c_origin,
         is_submit=grade.is_submit,
+        is_graded=is_graded,
     )
 
 

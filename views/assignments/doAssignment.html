@@ -22,7 +22,7 @@
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
     </div>
     <div>
-        {{if is_submit == "Complete":}}
+        {{if is_submit == "Complete" or is_graded:}}
             <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
                 <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
             </div>
@@ -123,10 +123,16 @@
     {{pass}}
 </div>
 <div>
-    {{if is_submit == "Complete":}}
+    {{if is_submit == "Complete" or is_graded:}}
         <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
             <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
         </div>
+        {{if is_graded:}}
+            <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is graded and is no longer
+                accepting submissions</p>
+            </div>
+        {{pass}}
     {{elif is_submit == "In Progress":}}
         <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
             <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
@@ -141,15 +147,17 @@
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
-        {{if is_submit == "Not Started":}}
-            Mark In Progress
-        {{elif is_submit == "In Progress":}}
-            Mark Complete
-        {{else:}}
-            Mark Incomplete
-        {{pass}}
-    </button>
+    {{if not is_graded:}}
+        <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
+            {{if is_submit == "Not Started":}}
+                Mark In Progress
+            {{elif is_submit == "In Progress":}}
+                Mark Complete
+            {{else:}}
+                Mark Incomplete
+            {{pass}}
+        </button>
+    {{pass}}
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
         Some problems will need to be manually graded, and your instructor may have requirements that cannot be autograded.
         No deadlines are enforced when self grading, but your instructor may penalize you
@@ -158,6 +166,7 @@
 {{ elif settings.coursera_mode: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+    {{if not is_graded:}}
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
         {{if is_submit == "Not Started":}}
             Mark In Progress
@@ -167,6 +176,7 @@
             Mark Incomplete
         {{pass}}
     </button>
+    {{pass}}
 </div>
 {{ pass }}
 </div>
