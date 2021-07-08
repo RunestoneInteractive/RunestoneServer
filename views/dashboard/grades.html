@@ -82,7 +82,7 @@
                             {{elif item <= 4:}}
                                 <td class="roguecol">{{= urllib.parse.unquote(gradetable[row][item])}}</td>
                             {{else:}}
-                                <td class="{{=assignments[item-5]['name']}}"></td>
+                                <td class="{{=assignments[item-5]['name']}}">Not Started</td>
                             {{pass}}
                         {{pass}}
                     </tr>

@@ -820,7 +820,7 @@ def chooseAssignment():
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
     ).select(orderby=db.assignments.duedate)
     
-    is_submit=[]
+    status=[]
 
     for assignment in assignments:
                 
@@ -830,13 +830,23 @@ def chooseAssignment():
         ).select().first()
 
         if grade:
-            is_submit.append(grade.is_submit)
+            if grade.score:
+                percent_grade = 100*grade.score/assignment.points
+                if percent_grade % 10==0:
+                    status.append(str(int(percent_grade))+"%")
+                else:
+                    status.append("{0:.1f}%".format(percent_grade))
+            elif grade.is_submit:
+                status.append(grade.is_submit)
+            else:
+                status.append("Not Started")
         else:
-            is_submit.append("Not Started")
+            status.append("Not Started")
+        
     
     return dict(
         assignments=assignments,
-        is_submit=is_submit,
+        status=status,
     )
 
 
