@@ -491,9 +491,9 @@ def update_submit():
     ''' This function is ran from the Assignments page on the students view to change the 
     status of their assignment to completed or not'''
 
-    assignment_id = request.vars.assignment_id #used to grab the data from jQuery request
+    assignment_id = request.vars.assignment_id # used to grab the data from jQuery request
     student_id = request.vars.student_id
-    #pull the grades table for the current student
+    # pull the grades table for the current student
     grade = (
         db(
             (db.grades.auth_user == student_id)
@@ -504,32 +504,23 @@ def update_submit():
     )
 
     res={}
+    
     if grade:
-    #toggles the is_submit variable from True to False
+    # toggles the is_submit variable from True to False
         if grade.is_submit == "Not Started":
-            db.grades.update_or_insert(
-                (db.grades.auth_user == student_id)
-                &(db.grades.assignment == assignment_id),
-                auth_user = student_id,
-                assignment = assignment_id,
-                is_submit = "In Progress"
-            )
+            is_submit = "In Progress"
         elif grade.is_submit == "In Progress":
-            db.grades.update_or_insert(
-                (db.grades.auth_user == student_id)
-                &(db.grades.assignment == assignment_id),
-                auth_user = student_id,
-                assignment = assignment_id,
-                is_submit = "Complete"
-            )
+            is_submit = "Complete"
         else:
-            db.grades.update_or_insert(
-                (db.grades.auth_user == student_id)
-                &(db.grades.assignment == assignment_id),
-                auth_user = student_id,
-                assignment = assignment_id,
-                is_submit = "Not Started"
-            )
+            is_submit = "Not Started"
+
+        db.grades.update_or_insert(
+            (db.grades.auth_user == student_id)
+            &(db.grades.assignment == assignment_id),
+            auth_user = student_id,
+            assignment = assignment_id,
+            is_submit = is_submit
+        )
         res["success"]=True
     # if can't find grades table for current user, return no success
     else:
@@ -549,7 +540,7 @@ def doAssignment():
         return redirect(URL("assignments", "chooseAssignment"))
 
     logger.debug("COURSE = %s assignment %s", course, assignment_id)
-    #Web2Py documentation for querying databases is really helpful here.
+    # Web2Py documentation for querying databases is really helpful here.
     assignment = (
         db(
             (db.assignments.id == assignment_id)
@@ -766,7 +757,7 @@ def doAssignment():
     print("ORIGIN", c_origin)
 
 
-    #grabs the row for the current user and and assignment in the grades table
+    # grabs the row for the current user and and assignment in the grades table
     grade = (
         db(
             (db.grades.auth_user == auth.user.id)
@@ -775,12 +766,12 @@ def doAssignment():
         .select()
         .first()
     )
-    #If cannot find the row in the grades folder, make one and set to not submitted
+    # If cannot find the row in the grades folder, make one and set to not submitted
     if not grade:
         db.grades.update_or_insert(
                 auth_user = auth.user.id,
                 assignment = assignment_id,
-                is_submit = "Not Started" #set is_submit variable to incomplete
+                is_submit = "Not Started" # set is_submit variable to incomplete
             )
         grade = (
             db(
@@ -791,12 +782,13 @@ def doAssignment():
             .first()
         )
 
+    # Makes variable that will not allow student to change status if assignment is graded.
     if grade.score:
         is_graded=True
     else:
         is_graded=False
 
-    return dict(#This is all the variables that will be used in the doAssignment.html document
+    return dict(# This is all the variables that will be used in the doAssignment.html document
         course=course,
         course_name=auth.user.course_name,
         assignment=assignment,
@@ -825,18 +817,20 @@ def chooseAssignment():
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
     ).select(orderby=db.assignments.duedate)
     
-    status=[]
-    duedates=[]
+    status=[]   # This will be used to show the status of each assignment on html file
+    duedates=[]  # This will be used to display the due date for each assignment
 
     for assignment in assignments:
 
         duedates.append(date2String(assignment.duedate))        
         
+        # Finds the grade table for each assignment
         grade = db(
             (db.grades.auth_user == auth.user.id)
             &(db.grades.assignment == assignment.id)
         ).select().first()
 
+        # Creates a list of statuses that will display the grade or the is_submit variable
         if grade:
             if (grade.score is not None) and (assignment.points > 0):
                 percent_grade = 100*grade.score/assignment.points
@@ -859,6 +853,8 @@ def chooseAssignment():
     )
 
 def date2String(date_time):
+    '''This function is used to take a datetime object and convert it to a string
+    representing the month, day, and time in 12 hour form'''
     day = str(date_time.strftime("%b")) + " " + str(date_time.day)
     time = date_time.strftime("%I:%M %p")
     displayDate = day + ", " + time
