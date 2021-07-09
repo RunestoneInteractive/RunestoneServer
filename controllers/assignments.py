@@ -788,6 +788,18 @@ def doAssignment():
     else:
         is_graded=False
 
+    date_enforced = False
+    timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    timestamp = datetime.datetime.utcnow()
+    deadline = assignment.duedate
+    if timezoneoffset:
+        deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
+    
+    enforce_pastdue = False
+    if date_enforced and timestamp > deadline:
+        enforce_pastdue = True
+    
+
     return dict(# This is all the variables that will be used in the doAssignment.html document
         course=course,
         course_name=auth.user.course_name,
@@ -806,25 +818,30 @@ def doAssignment():
         origin=c_origin,
         is_submit=grade.is_submit,
         is_graded=is_graded,
+        enforce_pastdue=enforce_pastdue,
     )
 
 
 @auth.requires_login()
 def chooseAssignment():
 
+    timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    status=[]   # This will be used to show the status of each assignment on html file
+    duedates=[]  # This will be used to display the due date for each assignment
+
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
     ).select(orderby=db.assignments.duedate)
     
-    status=[]   # This will be used to show the status of each assignment on html file
-    duedates=[]  # This will be used to display the due date for each assignment
-
     for assignment in assignments:
-
-        duedates.append(date2String(assignment.duedate))        
         
-        # Finds the grade table for each assignment
+        timestamp = datetime.datetime.utcnow()
+        deadline = assignment.duedate
+        if timezoneoffset:
+            deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
+         
+        # Finds the grades table for each assignment
         grade = db(
             (db.grades.auth_user == auth.user.id)
             &(db.grades.assignment == assignment.id)
@@ -838,13 +855,19 @@ def chooseAssignment():
                     status.append(str(int(percent_grade))+"%")
                 else:
                     status.append("{0:.1f}%".format(percent_grade))
+            elif timestamp > deadline:
+                status.append("Past Due")
             elif grade.is_submit:
                 status.append(grade.is_submit)
             else:
                 status.append("Not Started")
+        elif timestamp > deadline:
+            status.append("Past Due")
         else:
             status.append("Not Started")
-        
+
+        # Convert the duedate for current assignment to string    
+        duedates.append(date2String(deadline))
     
     return dict(
         assignments=assignments,
