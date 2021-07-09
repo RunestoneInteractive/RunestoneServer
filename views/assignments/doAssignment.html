@@ -22,7 +22,7 @@
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
     </div>
     <div>
-        {{if is_submit == "Complete" or is_graded:}}
+        {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
             <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
                 <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
             </div>
@@ -123,7 +123,7 @@
     {{pass}}
 </div>
 <div>
-    {{if is_submit == "Complete" or is_graded:}}
+    {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
         <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
             <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
         </div>
@@ -131,6 +131,11 @@
             <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
                 <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is graded and is no longer
                 accepting submissions</p>
+            </div>
+        {{elif enforce_pastdue:}}
+            <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>The due date has passed for this assignment
+                and is no longer accepting submissions</p>
             </div>
         {{pass}}
     {{elif is_submit == "In Progress":}}
@@ -147,7 +152,7 @@
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    {{if not is_graded:}}
+    {{if not is_graded and not enforce_pastdue:}}
         <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
             {{if is_submit == "Not Started":}}
                 Mark In Progress
@@ -166,7 +171,7 @@
 {{ elif settings.coursera_mode: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    {{if not is_graded:}}
+    {{if not is_graded and not enforce_pastdue:}}
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
         {{if is_submit == "Not Started":}}
             Mark In Progress
