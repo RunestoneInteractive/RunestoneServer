@@ -22,6 +22,22 @@
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
     </div>
 
+    <div>
+        {{if is_submitted == "Completed":}}
+            <div style='background-color:rgb(133, 190, 150); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+            </div>
+        {{elif is_submitted == "In progress":}}
+            <div style='background-color:rgb(133, 188, 190); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
+            </div>
+        {{else:}}
+            <div style='background-color:rgb(224, 135, 135); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been submitted</p>
+            </div> 
+        {{pass}}
+    </div>
+
     {{if len(readings) > 0:}}
         <div id='readings' style='margin-left:15%;'>
             <h3>Readings</h3>
@@ -111,6 +127,8 @@
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">Submit Me</button>
+<div style="text-align:center"> 
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
         Some problems will need to be manually graded, and your instructor may have requirements that cannot be autograded.
         No deadlines are enforced when self grading, but your instructor may penalize you
@@ -119,6 +137,8 @@
 {{ elif settings.coursera_mode: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">Submit Me</button>
+<div style="text-align:center">
 </div>
 {{ pass }}
 </div>
@@ -145,7 +165,7 @@
     }
 
 
-
+    // change save to submit
 
     // for (let i=0; i<questionHtmlCode.length; i++) {
     //     let $div = $('#' + i);
@@ -159,5 +179,10 @@
         $('#gradeMeButton').css('visibility', 'hidden');
         selfGrade({{=assignment['id']}}, '{{=student_id}}')});
 
+    $("#submitMeButton").on("click", function(){
+        $('#submitMeButton').css('visibility', 'hidden');
+        selfSave({{=assignment['id']}}, '{{=student_num}}')});
+
 </script>
 <script src="/runestone/static/js/selfgrade.js" type="text/javascript"></script>
+<script src="/runestone/static/js/selfsave.js" type="text/javascript"></script>

@@ -485,9 +485,72 @@ def get_problem():
         ]
     return json.dumps(res)
 
+@auth.requires_login()
+def update_submit_button():
+
+    assignment_id = request.vars.assignment_id
+    student_num = request.vars.student_num
+
+    # storing/accessing variables
+
+    grades = (
+        db(
+            (db.grades.auth_user == student_num)
+            & (db.grades.assignment == assignment_id)
+        )
+        .select()
+        .first()
+    )
+
+    # grades is a database variable that allows you to access and edit the grades table 
+    # grades checks to see if auth_user and user id is the same and selects the 1st instance 
+    # grades does the same for the assignment and assignment id
+
+    res={}
+
+    # dictionary variable
+
+    if grades:
+
+        if grades.is_submitted == "Not started":
+            db.grades.update_or_insert(
+                (db.grades.auth_user == student_num) &
+                (db.grades.assignment == assignment_id),
+                auth_user = student_num,
+                assignment = assignment_id,
+                is_submitted="In progress"  # This means it has not been completed
+            )
+    # if grades means that auth_user and assignment id are a match / are true
+    # then grades.is_submitted will execute where the the selcted user's row 
+    # is_submitted's value will be changed to false 
+        elif grades.is_submitted == "In progress":
+            db.grades.update_or_insert(
+                (db.grades.auth_user == student_num) &
+                (db.grades.assignment == assignment_id),
+                auth_user = student_num,
+                assignment = assignment_id,
+                is_submitted="Completed"  
+            )
+        res["success"]=True     # don't really know what this is doing
+    else: 
+        res["success"]=False    # same for this one
+
+    return json.dumps(res)    
+    # the auth_user = student_num is important because now grades will be false
+    # because db.grades.auth_user will not be equal to student num because now it's
+    # auth_user = student num meaning it's already been submitted because the student
+    # get's directed to the grades table when they click the submit button and the 
+    # auth_user and assignment value has been changed so when it comes to this function
+    # it gets checked to see if the button has been pushed aka submitted by checking if
+    # the two variable match because that's their default in the table. 
+
 
 @auth.requires_login()
 def doAssignment():
+
+    # doAssignment gets executed first because of the html page but it also
+    # calls the selfSave file and that executes the update_or_submit 
+    # function.
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
@@ -712,6 +775,45 @@ def doAssignment():
         c_origin = "Runestone"
     print("ORIGIN", c_origin)
 
+    grades = (
+        db(
+            (db.grades.auth_user == auth.user.id)
+            & (db.grades.assignment == assignment_id)
+        )
+        .select()
+        .first()
+    )
+
+    # grades is a database variable that allows you to access and edit the grades table 
+    # grades checks to see if auth_user and user id is the same and selects the 1st instance 
+    # grades does the same for the assignment and assignment id
+    # it's set first because you will use and create a if statement for a check for the 
+    # variable which is used to determine the submission status 
+
+    if not grades: 
+        db.grades.update_or_insert((db.grades.auth_user == auth.user.id) &
+         (db.grades.assignment == assignment_id),
+
+            auth_user = auth.user.id,
+            assignment = assignment_id,
+            is_submitted = "Not started")
+        grades = (
+            db(
+                (db.grades.auth_user == auth.user.id)
+                & (db.grades.assignment == assignment_id)
+            )
+            .select()
+            .first()
+        )
+
+    # if not grades means that if the auth_user and assignment id does not match then 
+    # insert a row into the grades table with an auth_user and assignment id and set 
+    # is submitted equal to False
+
+    # then if not grades uses the grades variable to check for more auth_user and 
+    # assignment id and selects the first instance 
+
+
     return dict(
         course=course,
         course_name=auth.user.course_name,
@@ -724,9 +826,11 @@ def doAssignment():
         # gradeRecordingUrl=URL('assignments', 'record_grade'),
         # calcTotalsURL=URL('assignments', 'calculate_totals'),
         student_id=auth.user.username,
+        student_num= auth.user.id,
         released=assignment["released"],
         is_instructor=user_is_instructor,
         origin=c_origin,
+        is_submitted=grades.is_submitted,
     )
 
 
