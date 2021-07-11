@@ -15,8 +15,8 @@
         <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
         <link rel="shortcut icon"
             href="{{=URL('static','favicon.ico')}}" type="image/ico" />
-        {{ base_static_url = get_course_url('_static') }}
-        <script src="{{=base_static_url}}/jquery.js"></script>
+
+        <script src="{{=URL('static', 'js/jquery.js')}}></script>
 
         <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
         <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -35,6 +35,7 @@
             eBookConfig.logLevel = 10;
             eBookConfig.loginRequired = true;
         </script>
+	<script data-ad-client="ca-pub-8347101402675282" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </head>
     <body>
         {{ block navbar }}
