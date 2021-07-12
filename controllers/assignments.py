@@ -788,7 +788,6 @@ def doAssignment():
     else:
         is_graded=False
 
-    date_enforced = False
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
     timestamp = datetime.datetime.utcnow()
     deadline = assignment.duedate
@@ -796,7 +795,7 @@ def doAssignment():
         deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
     
     enforce_pastdue = False
-    if date_enforced and timestamp > deadline:
+    if assignment.enforce_due and timestamp > deadline:
         enforce_pastdue = True
     
 
@@ -855,13 +854,13 @@ def chooseAssignment():
                     status.append(str(int(percent_grade))+"%")
                 else:
                     status.append("{0:.1f}%".format(percent_grade))
-            elif timestamp > deadline:
+            elif timestamp > deadline and assignment.enforce_due:
                 status.append("Past Due")
             elif grade.is_submit:
                 status.append(grade.is_submit)
             else:
                 status.append("Not Started")
-        elif timestamp > deadline:
+        elif timestamp > deadline and assignment.enforce_due:
             status.append("Past Due")
         else:
             status.append("Not Started")
