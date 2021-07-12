@@ -10,7 +10,6 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="description" content="Learning Python should be fun and easy.  We provide an interactive Python textbook that helps you learn to program in Python right in your browser.">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="{{=URL('static', 'bootstrap-sphinx.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{=URL('static', 'runestone-custom-sphinx-bootstrap.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
         <link rel="shortcut icon"
@@ -20,7 +19,7 @@
         <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
         <script src="{{=URL('static', 'js/web2py.js')}}"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"  crossorigin="anonymous"></script>
-<!--        <script src="{{=URL('static', 'bootstrap-sphinx.js')}}"></script> -->
+
         {{ block moreincludes }}
         {{ end }}
         <script type="text/javascript">
@@ -173,7 +172,7 @@
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
                         {{ if settings.academy_mode: }}
-                        <li id="scratch_ac_link" class="dropdown"><a href="javascript:ACFactory.toggleScratchActivecode()">
+                        <li id="scratch_ac_link" class="dropdown"><a href="javascript:window.ACFactory.toggleScratchActivecode()">
                             <i class="glyphicon glyphicon-pencil" style="opacity:0.9;"><span aria-label="Scratch Activecode" class="visuallyhidden">Scratch Activecode</span></i></a></li>
                         <!-- help menu dropdown -->
                         <li class="dropdown">
@@ -279,5 +278,8 @@
                 })();
             </script>
         {{ pass }}
+        <script type="text/javascript">
+            $(document).ready(() => window.runestoneComponents.runestone_import("activecode"))
+        </script>
     </body>
 </html>
