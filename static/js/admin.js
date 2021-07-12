@@ -1295,6 +1295,11 @@ function update_assignment(form) {
     } else {
         data.visible = "F";
     }
+    if (form.enforce_due.checked) {
+        data.enforce_due = "T";
+    } else {
+        data.enforce_due = "F";
+    }
     if (form.is_timed.checked) {
         data.is_timed = "T";
     } else {
@@ -1366,6 +1371,7 @@ function assignmentInfo() {
             $("#assignment_description").val(assignmentData.description);
             $("#readings-threshold").val(assignmentData.threshold);
             $("#assign_visible").val(assignmentData.visible);
+            $("#date_enforce").val(assignmentData.enforce_due);
             $("#assign_is_timed").val(assignmentData.is_timed);
             $("#timelimit").val(assignmentData.time_limit);
             $("#nopause").val(assignmentData.nopause);
@@ -1374,6 +1380,11 @@ function assignmentInfo() {
                 $("#assign_visible").prop("checked", true);
             } else {
                 $("#assign_visible").prop("checked", false);
+            }
+            if (assignmentData.enforce_due === true) {
+                $("#date_enforce").prop("checked", true);
+            } else {
+                $("#date_enforce").prop("checked", false);
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);

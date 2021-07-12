@@ -18,7 +18,7 @@ db.define_table(
     ),  # if True, when student clicks to autograde assignment, it calculates totals; otherwise it only scores individual questions but doesn't calculate score for the assignment
     Field("description", "text"),
     Field("duedate", "datetime"),
-    Field("duedate_enforced", "boolean"),
+    Field("enforce_due", "boolean"),
     Field("visible", "boolean"),
     Field("is_timed", "boolean", default=False),
     Field("time_limit", "integer"),

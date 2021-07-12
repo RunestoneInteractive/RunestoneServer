@@ -1011,6 +1011,7 @@ def createAssignment():
                 duedate=old_assignment.duedate,
                 allow_self_autograde=old_assignment.allow_self_autograde,
                 visible=old_assignment.visible,
+                enforce_due=old_assignment.enforce_due,
                 is_timed=old_assignment.is_timed,
                 time_limit=old_assignment.time_limit,
                 nofeedback=old_assignment.nofeedback,
@@ -1909,6 +1910,7 @@ def get_assignment():
         assignment_data["due_date"] = None
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
+    assignment_data["enforce_due"] = assignment_row.enforce_due
     assignment_data["is_timed"] = assignment_row.is_timed
     assignment_data["time_limit"] = assignment_row.time_limit
     assignment_data["from_source"] = assignment_row.from_source
@@ -2012,6 +2014,7 @@ def save_assignment():
 
     assignment_id = request.vars.get("assignment_id")
     isVisible = request.vars["visible"]
+    isEnforced = request.vars["enforce_due"]
     is_timed = request.vars["is_timed"]
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
@@ -2032,6 +2035,7 @@ def save_assignment():
             duedate=due,
             is_timed=is_timed,
             visible=isVisible,
+            enforce_due=isEnforced,
             time_limit=time_limit,
             nofeedback=nofeedback,
             nopause=nopause,
