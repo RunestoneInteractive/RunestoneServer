@@ -507,12 +507,12 @@ def update_submit():
     
     if grade:
     # toggles the is_submit variable from True to False
-        if grade.is_submit == "Not Started":
-            is_submit = "In Progress"
-        elif grade.is_submit == "In Progress":
+        if grade.is_submit == "In Progress":
             is_submit = "Complete"
-        else:
+        elif grade.is_submit == "Complete":
             is_submit = "Not Started"
+        else:
+            is_submit = "In Progress"
 
         db.grades.update_or_insert(
             (db.grades.auth_user == student_id)

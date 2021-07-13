@@ -1296,9 +1296,9 @@ function update_assignment(form) {
         data.visible = "F";
     }
     if (form.enforce_due.checked) {
-        data.enforce_due = "T";
-    } else {
         data.enforce_due = "F";
+    } else {
+        data.enforce_due = "T";
     }
     if (form.is_timed.checked) {
         data.is_timed = "T";
@@ -1382,9 +1382,9 @@ function assignmentInfo() {
                 $("#assign_visible").prop("checked", false);
             }
             if (assignmentData.enforce_due === true) {
-                $("#date_enforce").prop("checked", true);
-            } else {
                 $("#date_enforce").prop("checked", false);
+            } else {
+                $("#date_enforce").prop("checked", true);
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);
