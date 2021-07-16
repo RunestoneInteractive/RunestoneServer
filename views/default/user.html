@@ -105,6 +105,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <span class="col-sm-offset-2">
+                                    <button type="submit" class="btn btn-default" id="login_button">Login</button>
+                                </span>
+                                <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-2">
                                     <div class="checkbox">
                                         <label>
@@ -113,10 +119,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-4">
-                                    <button type="submit" class="btn btn-default" id="login_button">Login</button>
-                                </div>
+                            <div class="col-sm-offset-2">
+                                <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
+                            </div>
+                            <div class="col-sm-offset-2">
+                                <a href="{{=URL(args='retrieve_username')}}">{{=T('Forgot Username')}}</a>
                             </div>
                         {{else:}}
                             <div class="form-group">
@@ -127,21 +134,22 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-4">
+                                <span class="col-sm-offset-2">
                                     <button type="submit" class="btn btn-default" id="login_button">Login</button>
-                                </div>
+                                </span>
+                                <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                             </div>
+                            {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+                            <div class="col-sm-offset-2">
+                                <a href="{{=URL(args='request_reset_password')}}">{{=T('Lost Password')}}</a>
+                            </div>
+                            <div class="col-sm-offset-2">
+                                <a href="{{=URL(args='retrieve_username')}}">{{=T('Forgot Username')}}</a>
+                            </div>
+                            {{pass}}
                         {{pass}}
                     {{=form.custom.end}}
                     <!-- Must use this to get all the good defaults for the form -->
-                    <div id='auth-actions' style="margin-left: 20px;">
-                        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-                            <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
-                                role="button">{{=T('Lost Password')}}</a>
-                            <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
-                                role="button">{{=T('Forgot Username')}}</a>
-                        {{pass}}
-                    </div>
                 </div>
             {{pass}}
 
