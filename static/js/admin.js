@@ -329,11 +329,11 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             data.assignmentId = assignmentId;
         }
     }
-    $.getJSON("/runestone/admin/htmlsrc", data, function (result) {
+    $.getJSON("/runestone/admin/htmlsrc", data, async function (result) {
         var htmlsrc = result;
         var enforceDeadline = $("#enforceDeadline").is(":checked");
         var dl = showDeadline();
-        renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
+        await renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
             sid: studentId,
             graderactive: true,
             enforceDeadline: enforceDeadline,
@@ -1790,10 +1790,10 @@ function preview_question(form, preview_div) {
     var data = {
         code: JSON.stringify(code),
     };
-    $.post("/runestone/ajax/preview_question", data, function (result, status) {
+    $.post("/runestone/ajax/preview_question", data, async function (result, status) {
         let code = JSON.parse(result);
         $(form.qrawhtml).val(code); // store the un-rendered html for submission
-        renderRunestoneComponent(code, preview_div);
+        await renderRunestoneComponent(code, preview_div);
     });
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
@@ -2020,7 +2020,7 @@ function getQuestionInfo() {
         constrainbc: constrainbc,
         questionid: question_id,
     };
-    jQuery.post(url, data, function (question_info, status, whatever) {
+    jQuery.post(url, data, async function (question_info, status, whatever) {
         var res = JSON.parse(question_info);
         var data = {};
         var i;
@@ -2041,7 +2041,7 @@ function getQuestionInfo() {
             q_difficulty.innerHTML = "Difficulty: " + difficulty;
         }
 
-        renderRunestoneComponent(data.htmlsrc, "component-preview", {
+        await renderRunestoneComponent(data.htmlsrc, "component-preview", {
             acid: question_name,
         });
 
