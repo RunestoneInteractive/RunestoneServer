@@ -150,6 +150,19 @@ def _score_one_lp(row, points, autograde):
     # If row.correct is None, score this as a 0.
     return _score_from_pct_correct(row.correct or 0, points, autograde)
 
+# for now
+def _score_one_quizly(row, points, autograde):
+    if row.act and "correct" in row.act:
+       pct_correct = 100
+    else:
+        pct_correct = 0
+    
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+def _score_one_khanex(row, points, autograde):
+    ...
+
+
 
 def _scorable_mchoice_answers(
     course_name,
@@ -322,6 +335,28 @@ def _scorable_dragndrop_answers(
             query = query & (db.dragndrop_answers.timestamp <= now)
     return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
+def _scorable_quizly_answers(
+    course_name,
+    sid,
+    question_name,
+    points,
+    deadline,
+    practice_start_time=None,
+    db=None,
+    now=None,
+):
+    query = (
+        (db.dragndrop_answers.course_name == course_name)
+        & (db.dragndrop_answers.sid == sid)
+        & (db.dragndrop_answers.div_id == question_name)
+    )
+    if deadline:
+        query = query & (db.dragndrop_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.dragndrop_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.dragndrop_answers.timestamp <= now)
+    return db(query).select(orderby=db.dragndrop_answers.timestamp)
 
 def _scorable_codelens_answers(
     course_name,
@@ -562,6 +597,19 @@ def _autograde_one_q(
             now=now,
         )
         scoring_fn = _score_one_dragndrop
+    elif question_type == "quizly":
+        results = _scorable_useinfos(
+            course_name,
+            sid,
+            question_name,
+            points,
+            deadline,
+            practice_start_time,
+            db=db,
+            now=now,
+        )
+        scoring_fn = _score_one_quizly
+
     elif question_type == "codelens":
         if (
             autograde == "interact"
