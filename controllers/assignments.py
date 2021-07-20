@@ -831,7 +831,7 @@ def chooseAssignment():
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
-    ).select(orderby=db.assignments.duedate)
+    ).select(orderby=~db.assignments.duedate)
     
     for assignment in assignments:
         
