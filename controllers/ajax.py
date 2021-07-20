@@ -1618,6 +1618,8 @@ auto_gradable_q = [
     "parsonsprob",
     "dragndrop",
     "fillintheblank",
+    "quizly",
+    "khanex",
 ]
 
 
