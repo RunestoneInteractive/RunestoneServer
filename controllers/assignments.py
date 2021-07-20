@@ -488,10 +488,12 @@ def get_problem():
 
 @auth.requires_login()
 def update_submit():
-    ''' This function is ran from the Assignments page on the students view to change the 
-    status of their assignment to completed or not'''
+    """This function is ran from the Assignments page on the students view to change the
+    status of their assignment to completed or not"""
 
-    assignment_id = request.vars.assignment_id # used to grab the data from jQuery request
+    assignment_id = (
+        request.vars.assignment_id
+    )  # used to grab the data from jQuery request
     student_id = request.vars.student_id
     # pull the grades table for the current student
     grade = (
@@ -503,10 +505,10 @@ def update_submit():
         .first()
     )
 
-    res={}
-    
+    res = {}
+
     if grade:
-    # toggles the is_submit variable from True to False
+        # toggles the is_submit variable from True to False
         if grade.is_submit == "In Progress":
             is_submit = "Complete"
         elif grade.is_submit == "Complete":
@@ -516,15 +518,15 @@ def update_submit():
 
         db.grades.update_or_insert(
             (db.grades.auth_user == student_id)
-            &(db.grades.assignment == assignment_id),
-            auth_user = student_id,
-            assignment = assignment_id,
-            is_submit = is_submit
+            & (db.grades.assignment == assignment_id),
+            auth_user=student_id,
+            assignment=assignment_id,
+            is_submit=is_submit,
         )
-        res["success"]=True
+        res["success"] = True
     # if can't find grades table for current user, return no success
     else:
-        res["success"]=False
+        res["success"] = False
 
     return json.dumps(res)
 
@@ -533,7 +535,7 @@ def update_submit():
 def doAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
-    assignment_id = request.vars.assignment_id 
+    assignment_id = request.vars.assignment_id
     if not assignment_id or assignment_id.isdigit() == False:  # noqa: E712
         logger.error("BAD ASSIGNMENT = %s assignment %s", course, assignment_id)
         session.flash = "Bad Assignment ID"
@@ -756,7 +758,6 @@ def doAssignment():
         c_origin = "Runestone"
     print("ORIGIN", c_origin)
 
-
     # grabs the row for the current user and and assignment in the grades table
     grade = (
         db(
@@ -769,10 +770,10 @@ def doAssignment():
     # If cannot find the row in the grades folder, make one and set to not submitted
     if not grade:
         db.grades.update_or_insert(
-                auth_user = auth.user.id,
-                assignment = assignment_id,
-                is_submit = "Not Started" # set is_submit variable to incomplete
-            )
+            auth_user=auth.user.id,
+            assignment=assignment_id,
+            is_submit="Not Started",  # set is_submit variable to incomplete
+        )
         grade = (
             db(
                 (db.grades.auth_user == auth.user.id)
@@ -784,22 +785,21 @@ def doAssignment():
 
     # Makes variable that will not allow student to change status if assignment is graded.
     if grade.score:
-        is_graded=True
+        is_graded = True
     else:
-        is_graded=False
+        is_graded = False
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
     timestamp = datetime.datetime.utcnow()
     deadline = assignment.duedate
     if timezoneoffset:
         deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
-    
+
     enforce_pastdue = False
     if assignment.enforce_due and timestamp > deadline:
         enforce_pastdue = True
-    
 
-    return dict(# This is all the variables that will be used in the doAssignment.html document
+    return dict(  # This is all the variables that will be used in the doAssignment.html document
         course=course,
         course_name=auth.user.course_name,
         assignment=assignment,
@@ -825,33 +825,37 @@ def doAssignment():
 def chooseAssignment():
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
-    status=[]   # This will be used to show the status of each assignment on html file
-    duedates=[]  # This will be used to display the due date for each assignment
+    status = []  # This will be used to show the status of each assignment on html file
+    duedates = []  # This will be used to display the due date for each assignment
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
         (db.assignments.course == course.id) & (db.assignments.visible == "T")
     ).select(orderby=~db.assignments.duedate)
-    
+
     for assignment in assignments:
-        
+
         timestamp = datetime.datetime.utcnow()
         deadline = assignment.duedate
         if timezoneoffset:
             deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
-         
+
         # Finds the grades table for each assignment
-        grade = db(
-            (db.grades.auth_user == auth.user.id)
-            &(db.grades.assignment == assignment.id)
-        ).select().first()
+        grade = (
+            db(
+                (db.grades.auth_user == auth.user.id)
+                & (db.grades.assignment == assignment.id)
+            )
+            .select()
+            .first()
+        )
 
         # Creates a list of statuses that will display the grade or the is_submit variable
         if grade:
             if (grade.score is not None) and (assignment.points > 0):
-                percent_grade = 100*grade.score/assignment.points
-                if percent_grade % 10==0:
-                    status.append(str(int(percent_grade))+"%")
+                percent_grade = 100 * grade.score / assignment.points
+                if percent_grade % 10 == 0:
+                    status.append(str(int(percent_grade)) + "%")
                 else:
                     status.append("{0:.1f}%".format(percent_grade))
             elif timestamp > deadline and assignment.enforce_due:
@@ -865,18 +869,19 @@ def chooseAssignment():
         else:
             status.append("Not Started")
 
-        # Convert the duedate for current assignment to string    
+        # Convert the duedate for current assignment to string
         duedates.append(date2String(deadline))
-    
+
     return dict(
         assignments=assignments,
         status=status,
         duedates=duedates,
     )
 
+
 def date2String(date_time):
-    '''This function is used to take a datetime object and convert it to a string
-    representing the month, day, and time in 12 hour form'''
+    """This function is used to take a datetime object and convert it to a string
+    representing the month, day, and time in 12 hour form"""
     day = str(date_time.strftime("%b")) + " " + str(date_time.day)
     time = date_time.strftime("%I:%M %p")
     displayDate = day + ", " + time
@@ -884,6 +889,7 @@ def date2String(date_time):
 
 
 # The rest of the file is about the the spaced practice:
+
 
 def _get_course_practice_record(course_name):
     return db(db.course_practice.course_name == course_name).select().first()

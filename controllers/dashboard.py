@@ -575,11 +575,13 @@ def grades():
         duedates=duedates,
     )
 
+
 def date2String(date_time):
     day = str(date_time.strftime("%b")) + " " + str(date_time.day)
     time = date_time.strftime("%I:%M %p")
     displayDate = day + ", " + time
     return displayDate
+
 
 # This is meant to be called from a form submission, not as a bare controller endpoint
 @auth.requires(
