@@ -166,9 +166,8 @@ function autoGrade() {
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
-                            student
-                        )}&assignment_id=${encodeURIComponent(assignment)}">${
-                        students[student]
+                        student
+                    )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
                     }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
@@ -1585,9 +1584,9 @@ function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON(
         "delete_assignment_question/?name=" +
-            question_name +
-            "&assignment_id=" +
-            assignment_id,
+        question_name +
+        "&assignment_id=" +
+        assignment_id,
         {
             variable: "variable",
         }
@@ -1819,6 +1818,10 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
+    if (!componentSrc) {
+        jQuery(`#${whereDiv}`).html(`<p>Sorry, no source is available for preview or grading</p>`);
+        return;
+    }
     if (typeof moreOpts === "undefined") {
         moreOpts = {};
     }
