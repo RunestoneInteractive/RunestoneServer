@@ -1528,7 +1528,7 @@ def htmlsrc():
             .first()
         )
     if res and (res.htmlsrc or res.question_type == "selectquestion"):
-        if res.question_type == "selectquestion":
+        if res.question_type == "selectquestion" and studentId:
             # Check the selected_questions table to see which actual question was chosen
             # then get that question.
             realq = (
