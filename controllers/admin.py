@@ -37,59 +37,65 @@ admin_logger(logger)
 
 ALL_AUTOGRADE_OPTIONS = ["manual", "all_or_nothing", "pct_correct", "interact"]
 AUTOGRADE_POSSIBLE_VALUES = dict(
+    actex=ALL_AUTOGRADE_OPTIONS,
+    activecode=ALL_AUTOGRADE_OPTIONS,
     clickablearea=["manual", "all_or_nothing", "interact"],
+    codelens=ALL_AUTOGRADE_OPTIONS,
+    datafile=[],
+    dragndrop=["manual", "all_or_nothing", "interact"],
     external=[],
     fillintheblank=ALL_AUTOGRADE_OPTIONS,
-    activecode=ALL_AUTOGRADE_OPTIONS,
-    actex=ALL_AUTOGRADE_OPTIONS,
-    dragndrop=["manual", "all_or_nothing", "interact"],
-    shortanswer=ALL_AUTOGRADE_OPTIONS,
+    khanex=ALL_AUTOGRADE_OPTIONS,
+    lp_build=ALL_AUTOGRADE_OPTIONS,
     mchoice=ALL_AUTOGRADE_OPTIONS,
-    codelens=ALL_AUTOGRADE_OPTIONS,
+    page=["interact"],
     parsonsprob=ALL_AUTOGRADE_OPTIONS,
+    poll=["interact"],
+    quizly=ALL_AUTOGRADE_OPTIONS,
+    reveal=[],
     selectquestion=ALL_AUTOGRADE_OPTIONS,
+    shortanswer=ALL_AUTOGRADE_OPTIONS,
+    showeval=["interact"],
     video=["interact"],
     youtube=["interact"],
-    poll=["interact"],
-    page=["interact"],
-    showeval=["interact"],
-    lp_build=ALL_AUTOGRADE_OPTIONS,
-    reveal=[],
-    datafile=[],
 )
 
 AUTOGRADEABLE = set(
     [
         "clickablearea",
-        "fillintheblank",
         "dragndrop",
+        "fillintheblank",
+        "khanex",
         "mchoice",
         "parsonsprob",
+        "quizly",
         "selectquestion",
     ]
 )
 
 ALL_WHICH_OPTIONS = ["first_answer", "last_answer", "best_answer"]
 WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
+    actex=ALL_WHICH_OPTIONS,
+    activecode=ALL_WHICH_OPTIONS,
     clickablearea=ALL_WHICH_OPTIONS,
+    codelens=ALL_WHICH_OPTIONS,
+    datafile=[],
+    dragndrop=ALL_WHICH_OPTIONS,
     external=[],
     fillintheblank=ALL_WHICH_OPTIONS,
-    activecode=ALL_WHICH_OPTIONS,
-    actex=ALL_WHICH_OPTIONS,
-    dragndrop=ALL_WHICH_OPTIONS,
-    shortanswer=ALL_WHICH_OPTIONS,
+    khanex=ALL_WHICH_OPTIONS,
+    lp_build=ALL_WHICH_OPTIONS,
     mchoice=ALL_WHICH_OPTIONS,
-    codelens=ALL_WHICH_OPTIONS,
+    page=ALL_WHICH_OPTIONS,
     parsonsprob=ALL_WHICH_OPTIONS,
+    poll=[],
+    quizly=ALL_WHICH_OPTIONS,
+    reveal=[],
     selectquestion=ALL_WHICH_OPTIONS,
+    shortanswer=ALL_WHICH_OPTIONS,
+    showeval=ALL_WHICH_OPTIONS,
     video=[],
     youtube=[],
-    poll=[],
-    reveal=[],
-    datafile=[],
-    showeval=ALL_WHICH_OPTIONS,
-    page=ALL_WHICH_OPTIONS,
-    lp_build=ALL_WHICH_OPTIONS,
 )
 
 
@@ -1005,6 +1011,7 @@ def createAssignment():
                 duedate=old_assignment.duedate,
                 allow_self_autograde=old_assignment.allow_self_autograde,
                 visible=old_assignment.visible,
+                enforce_due=old_assignment.enforce_due,
                 is_timed=old_assignment.is_timed,
                 time_limit=old_assignment.time_limit,
                 nofeedback=old_assignment.nofeedback,
@@ -1521,7 +1528,7 @@ def htmlsrc():
             .first()
         )
     if res and (res.htmlsrc or res.question_type == "selectquestion"):
-        if res.question_type == "selectquestion":
+        if res.question_type == "selectquestion" and studentId:
             # Check the selected_questions table to see which actual question was chosen
             # then get that question.
             realq = (
@@ -1903,6 +1910,7 @@ def get_assignment():
         assignment_data["due_date"] = None
     assignment_data["description"] = assignment_row.description
     assignment_data["visible"] = assignment_row.visible
+    assignment_data["enforce_due"] = assignment_row.enforce_due
     assignment_data["is_timed"] = assignment_row.is_timed
     assignment_data["time_limit"] = assignment_row.time_limit
     assignment_data["from_source"] = assignment_row.from_source
@@ -2006,6 +2014,7 @@ def save_assignment():
 
     assignment_id = request.vars.get("assignment_id")
     isVisible = request.vars["visible"]
+    isEnforced = request.vars["enforce_due"]
     is_timed = request.vars["is_timed"]
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
@@ -2026,6 +2035,7 @@ def save_assignment():
             duedate=due,
             is_timed=is_timed,
             visible=isVisible,
+            enforce_due=isEnforced,
             time_limit=time_limit,
             nofeedback=nofeedback,
             nopause=nopause,

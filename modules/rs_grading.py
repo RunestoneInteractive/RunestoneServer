@@ -151,6 +151,25 @@ def _score_one_lp(row, points, autograde):
     return _score_from_pct_correct(row.correct or 0, points, autograde)
 
 
+# for now
+def _score_one_quizly(row, points, autograde):
+    if row.act and "correct" in row.act:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+
+def _score_one_khanex(row, points, autograde):
+    if row.act and "correct" in row.act:
+        pct_correct = 100
+    else:
+        pct_correct = 0
+
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+
 def _scorable_mchoice_answers(
     course_name,
     sid,
@@ -562,6 +581,32 @@ def _autograde_one_q(
             now=now,
         )
         scoring_fn = _score_one_dragndrop
+    elif question_type == "quizly":
+        results = _scorable_useinfos(
+            course_name,
+            sid,
+            question_name,
+            points,
+            deadline,
+            practice_start_time,
+            db=db,
+            now=now,
+        )
+        scoring_fn = _score_one_quizly
+    elif question_type == "khanex":
+        logger.debug("grading a khanex")
+        results = _scorable_useinfos(
+            course_name,
+            sid,
+            question_name,
+            points,
+            deadline,
+            practice_start_time,
+            db=db,
+            now=now,
+        )
+        scoring_fn = _score_one_khanex
+
     elif question_type == "codelens":
         if (
             autograde == "interact"
