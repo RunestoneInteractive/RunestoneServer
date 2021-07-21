@@ -24,6 +24,7 @@ def user():
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
         db.auth_user.course_id.default = ""
+        # this looks to be important 
 
         # Otherwise, use the referer URL to try to pre-populate
         ref = request.env.http_referer
@@ -85,6 +86,46 @@ def user():
     ):  # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
     return dict(form=form)
+
+def registerinstructor():
+    try:
+        # After the registration form is submitted the registration is processed here
+        # this function will not return in that case, but instead continue on and end up
+        # redirecting to index.
+        # through db.auth_user._after_insert.append(some_function)
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+    return dict ()
+
+def copyofuser():    
+
+    try:
+        # After the registration form is submitted the registration is processed here
+        # this function will not return in that case, but instead continue on and end up
+        # redirecting to index.
+        # through db.auth_user._after_insert.append(some_function)
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+    
+    test=form.vars.institution_name
+
+    request.inputForm['institution_name'] 
+
+    return dict (test=test)
+
+
+
+# def new_instructor_user():
+#     print 
+
 
 
 # Can use db.auth_user._after_insert.append(make_section_entries)

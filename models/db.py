@@ -227,6 +227,9 @@ def getCourseAttributesDict(course_id):
     attrdict = {row.attr: row.value for row in attributes}
     return attrdict
 
+###############################################
+#############################################
+###########################################
 
 def verifyInstructorStatus(course, instructor):
     """
@@ -261,6 +264,9 @@ def verifyInstructorStatus(course, instructor):
         )
 
     return res
+
+# def verifyInstructorStatus2():
+#     return 0
 
 
 def is_editor(userid):
@@ -314,6 +320,8 @@ class HAS_NO_DOTS:
         return value
 
 
+###############################################################################
+
 db.define_table(
     "auth_user",
     Field("username", type="string", label=T("Username")),
@@ -325,6 +333,9 @@ db.define_table(
         requires=IS_EMAIL(banned="^.*shoeonlineblog\\.com$"),
         label=T("Email"),
     ),
+    Field("instructor_URL", type="string", label=("Instructor URL")),
+    # # Do I need to keep email in?
+    Field("institution_name", type="string", label=T("Institution Name")),
     Field("password", type="password", readable=False, label=T("Password")),
     Field(
         "created_on",
@@ -350,7 +361,7 @@ db.define_table(
         "course_id",
         "reference courses",
         label=T("Course Name"),
-        required=True,
+        required=False,
         default=1,
     ),
     Field(
@@ -378,11 +389,11 @@ db.auth_user.username.requires = (
     IS_NOT_IN_DB(db, db.auth_user.username),
 )
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
-db.auth_user.email.requires = (
-    IS_EMAIL(error_message=auth.messages.invalid_email),
-    IS_NOT_IN_DB(db, db.auth_user.email),
-)
-db.auth_user.course_id.requires = IS_COURSE_ID()
+# db.auth_user.email.requires = (
+#     IS_EMAIL(error_message=auth.messages.invalid_email),
+#     IS_NOT_IN_DB(db, db.auth_user.email),
+# )
+# db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
@@ -545,6 +556,8 @@ def admin_logger(logger):
         except Exception as e:
             logger.error(f"failed to insert log record for practice: {e}")
 
+
+# think I need to edit this
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
