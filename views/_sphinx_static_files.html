@@ -12,10 +12,11 @@ These files are copied from a Sphinx build.
 <link rel="stylesheet" type="text/css" href="{{=base_static_url}}/matrixeq.css?v=EA7C0F6C" />
 <link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webgldemo.css?v=4EB84728" />
 <link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webglinteractive.css?v=21C88BC4" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/bootstrap-sphinx.css" />
 <link rel="stylesheet" type="text/css" href="{{=base_static_url}}/theme-overrides.css?v=9D08EA4" />
-
 <script src="{{=base_static_url}}/jquery.js"></script>
+<script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
+
+
 {{  import json
     from pathlib import Path
 
@@ -37,6 +38,7 @@ These files are copied from a Sphinx build.
         response.write(f"<script src='{base_static_url}/{js_import}'></script>\n", escape=False)
     pass
 }}
+
 <script id="documentation_options" data-url_root="./" src="{{=base_static_url}}/documentation_options.js"></script>
 
 <script src="{{=base_static_url}}/underscore.js"></script>

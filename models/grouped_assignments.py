@@ -18,6 +18,7 @@ db.define_table(
     ),  # if True, when student clicks to autograde assignment, it calculates totals; otherwise it only scores individual questions but doesn't calculate score for the assignment
     Field("description", "text"),
     Field("duedate", "datetime"),
+    Field("enforce_due", "boolean"),
     Field("visible", "boolean"),
     Field("is_timed", "boolean", default=False),
     Field("time_limit", "integer"),
@@ -45,7 +46,11 @@ db.define_table(
     #
     # Per the `LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
     Field("lis_outcome_url", "string", length=1024),
+<<<<<<< HEAD
     Field("is_submitted", "string"),
+=======
+    Field("is_submit", "string"),
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
     migrate=table_migrate_prefix + "grades.table",
 )
 

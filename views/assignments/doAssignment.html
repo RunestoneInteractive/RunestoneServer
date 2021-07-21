@@ -11,15 +11,30 @@
 <div id='part1'>
     <h1 id="assignment_name" style='text-align:center'>{{=assignment['name']}}</h1>
     <h2 style='margin-left:1cm;'>Due: {{=assignment['duedate']}}</h2>
-    <span style="float:right; margin-right:1cm;">
+    <span style="float:right; margin-right:2cm;">
         {{if assignment['points'] > 0:}}
-            {{='Score: {} of {} = {:2.1f}%'.format(questions_score + readings_score, assignment['points'], 100*(questions_score + readings_score)/assignment['points'])}}
+            {{='Self Grade: {} of {} = {:2.1f}%'.format(questions_score + readings_score, assignment['points'], 100*(questions_score + readings_score)/assignment['points'])}}
         {{else:}}
             This assignment is ungraded
         {{pass}}
     </span>
     <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
         <p style='margin-left:0.5cm; margin-right:0.5cm;'>Description: {{=assignment['description']}}</p>
+    </div>
+    <div>
+        {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
+            <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+            </div>
+        {{elif is_submit == "In Progress":}}
+            <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
+            </div>
+        {{else:}}
+            <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been started</p>
+            </div>
+        {{pass}}
     </div>
 
     <div>
@@ -123,12 +138,52 @@
         </div>
     {{pass}}
 </div>
+<div>
+    {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
+        <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+        </div>
+        {{if is_graded:}}
+            <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is graded and is no longer
+                accepting submissions</p>
+            </div>
+        {{elif enforce_pastdue:}}
+            <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>The due date has passed for this assignment
+                and is no longer accepting submissions</p>
+            </div>
+        {{pass}}
+    {{elif is_submit == "In Progress":}}
+        <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
+        </div>
+    {{else:}}
+        <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been started</p>
+        </div>
+    {{pass}}
+</div>
 
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+<<<<<<< HEAD
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">Submit Me</button>
 <div style="text-align:center"> 
+=======
+    {{if not is_graded and not enforce_pastdue:}}
+        <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
+            {{if is_submit == "Not Started":}}
+                Mark In Progress
+            {{elif is_submit == "In Progress":}}
+                Mark Complete
+            {{else:}}
+                Mark Incomplete
+            {{pass}}
+        </button>
+    {{pass}}
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
         Some problems will need to be manually graded, and your instructor may have requirements that cannot be autograded.
         No deadlines are enforced when self grading, but your instructor may penalize you
@@ -137,8 +192,22 @@
 {{ elif settings.coursera_mode: }}
 <div style="text-align:center">
     <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
+<<<<<<< HEAD
     <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">Submit Me</button>
 <div style="text-align:center">
+=======
+    {{if not is_graded and not enforce_pastdue:}}
+    <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
+        {{if is_submit == "Not Started":}}
+            Mark In Progress
+        {{elif is_submit == "In Progress":}}
+            Mark Complete
+        {{else:}}
+            Mark Incomplete
+        {{pass}}
+    </button>
+    {{pass}}
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
 </div>
 {{ pass }}
 </div>
@@ -174,10 +243,19 @@
     //     $div.append(change);
     // }
 
+    $("#submitMeButton").on("click", function(){
+        $('#submitMeButton').css('visibility', 'hidden');
+        markComplete({{=assignment['id']}}, {{=student_num}})
+    });
 
     $("#gradeMeButton").on("click", function(){
         $('#gradeMeButton').css('visibility', 'hidden');
-        selfGrade({{=assignment['id']}}, '{{=student_id}}')});
+        selfGrade({{=assignment['id']}})
+    });
+    
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
     $("#submitMeButton").on("click", function(){
         $('#submitMeButton').css('visibility', 'hidden');
@@ -185,4 +263,8 @@
 
 </script>
 <script src="/runestone/static/js/selfgrade.js" type="text/javascript"></script>
+<<<<<<< HEAD
 <script src="/runestone/static/js/selfsave.js" type="text/javascript"></script>
+=======
+<script src="/runestone/static/js/markcomplete.js" type="text/javascript"></script>
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd

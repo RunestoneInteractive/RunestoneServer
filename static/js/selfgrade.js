@@ -1,4 +1,4 @@
-function selfGrade(assignment_id, student_id) {
+function selfGrade(assignment_id) {
     jQuery.ajax({
         url: eBookConfig.app + '/assignments/student_autograde',
         type: "POST",

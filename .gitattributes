@@ -1,2 +1,10 @@
+<<<<<<< HEAD
 # Declare files that must always have LF line endings on checkout so docker compose works on Windows
 *   eol=lf
+=======
+# Ensure files that must always have LF line endings on checkout will by ensuring Docker build and bash scripts will work regardless of OS
+
+Dockerfile text eol=lf
+*.sh text eol=lf
+scripts/* text eol=lf
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
