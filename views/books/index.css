@@ -40,7 +40,7 @@
     } 
 
     .book_descript:hover{
-        height: 3cm;
+        height:unset;
         overflow: visible;
         overflow-wrap: break-word; 
 
@@ -59,4 +59,22 @@
     z-index: 1;
     }
 
+    .searchbar{
+        
+
+        background-image:url('images/searchicon.png');
+        background-position: 10px 12px;
+        background-repeat: no-repeat;
+        border-image-width: 3mm;
+        width: 100%; 
+        font-size: 15px; 
+        padding: 12px 20px 12px 40px; 
+        border: 0.1px solid #ddd; 
+        margin-bottom: 12px;
+    }
+
+    input[type=text]{
+
+        width: 100%;
+    }
 
