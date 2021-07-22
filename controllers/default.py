@@ -115,7 +115,7 @@ def registerstudent():
     return dict(form=form)
 
 def DELETE():
-    student=request.vars.       # how to access database info????
+    #student=request.vars.       # how to access database info????
     return dict()
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
