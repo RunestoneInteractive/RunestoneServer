@@ -319,6 +319,7 @@ db.define_table(
     Field("username", type="string", label=T("Username")),
     Field("first_name", type="string", label=T("First Name")),
     Field("last_name", type="string", label=T("Last Name")),
+    Field("school", type="string", label=T("School")),
     Field(
         "email",
         type="string",
@@ -366,8 +367,8 @@ db.define_table(
     Field("donated", type="boolean", writable=False, readable=False, default=False),
     #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ""),
-    migrate=table_migrate_prefix + "auth_user.table",
-)
+    migrate=table_migrate_prefix + "auth_user.table",       # add new field for school
+)# how to update def of table overtime (not actually tranferring data)
 
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -382,6 +383,7 @@ db.auth_user.email.requires = (
     IS_EMAIL(error_message=auth.messages.invalid_email),
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
+#db.auth_user.school.requires = IS_NOT_EMPTY(error_message=auth.message.is_empty)
 db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
@@ -459,6 +461,7 @@ db.define_table(
 ## >>> for row in rows: print(row.id, row.myfield)
 #########################################################################
 
+#db.define_table('student', Field('school', 'string'), migrate=table_migrate_prefix + "user_school.table")
 
 # mail.settings.server = settings.email_server
 # mail.settings.sender = settings.email_sender
@@ -546,7 +549,7 @@ def admin_logger(logger):
             logger.error(f"failed to insert log record for practice: {e}")
 
 
-def createUser(username, password, fname, lname, email, course_name, instructor=False):
+def createUser(username, password, fname, lname, email, course_name, school, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
     if not cinfo:
         raise ValueError("Course {} does not exist".format(course_name))
@@ -559,11 +562,12 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
         email=email,
         course_id=cinfo.id,
         course_name=course_name,
+        school=school,
         active="T",
         created_on=datetime.datetime.now(),
     )
 
-    db.user_courses.insert(user_id=uid, course_id=cinfo.id)
+    db.user_courses.insert(user_id=uid, course_id=cinfo.id)     #is this where the school can be placed instead??
 
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()

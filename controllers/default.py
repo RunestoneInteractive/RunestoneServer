@@ -52,7 +52,7 @@ def user():
         )
         redirect(URL("default", "index"))
 
-    if "profile" in request.args(0):
+    if "profile" in request.args(0):        # editing profile
         # Make the username read-only.
         form.element("#auth_user_username")["_readonly"] = True
 
@@ -67,9 +67,14 @@ def user():
             redirect(URL("default", "index"))
 
     if "register" in request.args(0):
-        # The validation function ``IS_COURSE_ID`` in ``models/db.py`` changes the course name supplied to a course ID. If the overall form doesn't validate, the value when the form is re-displayed with errors will contain the ID instead of the course name. Change it back to the course name. Note: if the user enters a course for the course name, it will be displayed as the corresponding course name after a failed validation. I don't think this case is important enough to fix.
+        # The validation function ``IS_COURSE_ID`` in ``models/db.py`` changes the course name 
+        # supplied to a course ID. If the overall form doesn't validate, the value when the form 
+        # is re-displayed with errors will contain the ID instead of the course name. 
+        # Change it back to the course name. Note: if the user enters a course for the course name, 
+        # it will be displayed as the corresponding course name after a failed validation. 
+        # I don't think this case is important enough to fix.
         try:
-            course_id = int(form.vars.course_id)
+            course_id = int(form.vars.course_id) # why is this an int?
         except Exception:
             pass
         else:
@@ -86,6 +91,32 @@ def user():
         pass
     return dict(form=form)
 
+def registerstudent():
+    # form = auth()     # maybe this has to go within the actual code in register student?
+    # if form.process().accepted:
+    #     session.flash = 'form accepted'
+    #     redirect(URL('runestone/default/DELETE'))
+    # elif form.errors:
+    #     response.flash = 'form has errors'
+    # else:
+    #     response.flash = 'please fill the form'
+    # return dict(form=form)
+    try:
+        # After the registration form is submitted the registration is processed here
+        # this function will not return in that case, but instead continue on and end up
+        # redirecting to index.
+        # through db.auth_user._after_insert.append(some_function)
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+    return dict(form=form)
+
+def DELETE():
+    student=request.vars.       # how to access database info????
+    return dict()
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
