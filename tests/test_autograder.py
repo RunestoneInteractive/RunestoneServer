@@ -394,7 +394,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
     student1.login()
     res = student1.test_client.validate(
         "assignments/doAssignment".format(assignment_id),
-        "Score: 0 of 2 = 0.0%",
+        "Grade: 0 of 2 = 0.0%",
         data=dict(assignment_id=assignment_id),
     )
 
@@ -436,7 +436,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
     # check if score is now 50%
     res = student1.test_client.validate(
         "assignments/doAssignment".format(assignment_id),
-        "Score: 1.0 of 2 = 50.0%",
+        "Grade: 1.0 of 2 = 50.0%",
         data=dict(assignment_id=assignment_id),
     )
     # and that the grade has still *not* been written into the db
@@ -448,7 +448,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
         .select()
         .first()
     )
-    assert not grade
+    assert not grade.score
 
     # ******** change the settings and try again,
     # the total should be calculated and stored in db now ***********
@@ -463,7 +463,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
         # check if score is still 50%
         res = student1.test_client.validate(
             "assignments/doAssignment".format(assignment_id),
-            "Score: 1.0 of 2 = 50.0%",
+            "Grade: 1.0 of 2 = 50.0%",
             data=dict(assignment_id=assignment_id),
         )
         # and that the grade **has** been written into the db
