@@ -92,31 +92,13 @@ def user():
     return dict(form=form)
 
 def registerstudent():
-    # form = auth()     # maybe this has to go within the actual code in register student?
-    # if form.process().accepted:
-    #     session.flash = 'form accepted'
-    #     redirect(URL('runestone/default/DELETE'))
-    # elif form.errors:
-    #     response.flash = 'form has errors'
-    # else:
-    #     response.flash = 'please fill the form'
-    # return dict(form=form)
-    try:
-        # After the registration form is submitted the registration is processed here
-        # this function will not return in that case, but instead continue on and end up
-        # redirecting to index.
-        # through db.auth_user._after_insert.append(some_function)
-        form = auth()
-    except HTTPError:
-        session.flash = (
-            "Sorry, that service failed.  Try a different service or file a bug"
-        )
-        redirect(URL("default", "index"))
-    return dict(form=form)
-
-def DELETE():
-    #student=request.vars.       # how to access database info????
     return dict()
+
+def formcompletion():
+    firstname=request.vars.first_name       # how to access database info????
+    school=request.vars.school
+    # will include more information here maybe, somehow
+    return dict(fname=firstname, school=school)
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
