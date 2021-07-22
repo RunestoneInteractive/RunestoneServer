@@ -1,6 +1,9 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
+<head>
 
+    <link rel="stylesheet" href="index.css">
+</head>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
         <h1>Runestone Interactive Library of Books</h1>
@@ -12,12 +15,37 @@
             before you make a course.
         </p>
 
-        <ul>
+        <!-- <ul>
             {{ for book in book_list: }}
                 <li>
                     <a href="{{=book['url']}}" style='font-size: 2.0vh;'>{{=book['title']}}</a> Use <code>{{=book['regname']}}</code> to register for this title.
                 </li>
             {{pass}}
+        </ul> -->
+
+        
+        <ul> 
+            <h2>Computer Science Textbooks:</h2>
+            {{ for book in book_list: }}
+                <th>
+                    <div class="book_title">{{=book['title']}}
+                        <a href="{{=book['url']}}"> 
+                        <span class="link1"></span> 
+                        </a>
+                        
+                    </div>
+                    <div class="book_descript"> <b>Course Description:</b> {{=book['course_description']}}  
+                        <!-- <a href="{{=book['url']}}">  -->
+                        <!-- <span class="link1"></span>  -->
+                        </a>
+                    </div>
+                </th>
+                <br>
+                
+            {{pass}}
+            <h3>Mathematics Textbook:</h3>
+           
+    
         </ul>
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY

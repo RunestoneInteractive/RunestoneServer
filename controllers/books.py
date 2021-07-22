@@ -418,8 +418,9 @@ def index():
             )
         except Exception as e:
             logger.error("Error in book list: {}".format(e))
-            continue
+            continue 
         book_info = {}
+        book_info.update(course_description = "")
         if hasattr(config, "navbar_title"):
             book_info["title"] = config.navbar_title
         elif hasattr(config, "html_title"):
@@ -429,11 +430,14 @@ def index():
         else:
             book_info["title"] = "Runestone Book"
 
+        if hasattr(config, "course_description"):
+            book_info.update(course_description = config.course_description)
+
         book_info["url"] = "/{}/books/published/{}/index.html".format(
             request.application, book
         )
         book_info["regname"] = book
-
+        
         res.append(book_info)
 
     return dict(book_list=res)
