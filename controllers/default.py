@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+#from models.db.py import createUser
 import os
 import requests
 from six.moves.urllib.parse import unquote
@@ -92,13 +93,33 @@ def user():
     return dict(form=form)
 
 def registerstudent():
+    # will include more information here maybe, somehow
+    username=request.vars.username
+    firstname=request.vars.first_name       # will be using the request.vars to get all the information and then use it to call createUser
+    school=request.vars.school
+    password=request.vars.password
+    lastname=request.vars.last_name
+    email=request.vars.email
+    if username:
+        createUser(username, password, firstname, lastname, email, school, instructor=False) # hopefully row is created in database here
+        redirect(URL('default','formcompletion'))
     return dict()
 
 def formcompletion():
-    firstname=request.vars.first_name       # how to access database info????
-    school=request.vars.school
-    # will include more information here maybe, somehow
-    return dict(fname=firstname, school=school)
+    rows = db(db.auth_user.username).select()
+    testlist=[]
+    for row in rows:
+        testlist.append(row.username)       ## don't pull all up, just current
+    return dict(testlist=testlist)
+    # return dict()
+    # username=request.vars.username          # pulling database instead of form. web2py, .select() method
+    # firstname=request.vars.first_name       # will be using the request.vars to get all the information and then use it to call createUser
+    # school=request.vars.school
+    # lastname=request.vars.last_name
+    # return dict(username=username,
+    #     fname=firstname, 
+    #     school=school,
+    #     lname=lastname)
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course

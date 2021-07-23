@@ -373,6 +373,7 @@ db.define_table(
 
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 db.auth_user.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
+db.auth_user.school.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 db.auth_user.password.requires = CRYPT(key=auth.settings.hmac_key)
 db.auth_user.username.requires = (
     HAS_NO_DOTS(),
@@ -384,7 +385,7 @@ db.auth_user.email.requires = (
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
 #db.auth_user.school.requires = IS_NOT_EMPTY(error_message=auth.message.is_empty)
-db.auth_user.course_id.requires = IS_COURSE_ID()
+#db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
@@ -549,10 +550,7 @@ def admin_logger(logger):
             logger.error(f"failed to insert log record for practice: {e}")
 
 
-def createUser(username, password, fname, lname, email, course_name, school, instructor=False):
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        raise ValueError("Course {} does not exist".format(course_name))
+def createUser(username, password, fname, lname, email, school, instructor=False):
     pw = CRYPT(auth.settings.hmac_key)(password)[0]
     uid = db.auth_user.insert(
         username=username,
@@ -560,16 +558,11 @@ def createUser(username, password, fname, lname, email, course_name, school, ins
         first_name=fname,
         last_name=lname,
         email=email,
-        course_id=cinfo.id,
-        course_name=course_name,
         school=school,
         active="T",
         created_on=datetime.datetime.now(),
     )
 
-    db.user_courses.insert(user_id=uid, course_id=cinfo.id)     #is this where the school can be placed instead??
-
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=uid, group_id=irole)
-        db.course_instructor.insert(course=cinfo.id, instructor=uid)
