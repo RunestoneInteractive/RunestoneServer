@@ -1,7 +1,8 @@
 
 .front_page_button {
-    background-color:rgb(30, 30, 216);
+    background-color:rgb(206, 72, 31);
     color:white;
-    border-radius:5px;
+    border-radius:3px;
+    margin: 10px;
 
 }

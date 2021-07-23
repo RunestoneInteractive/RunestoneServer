@@ -69,28 +69,17 @@
     <a class="left carousel-control" data-slide="prev" href="#myCarousel"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" data-slide="next" href="#myCarousel"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 
-
-<!-- <style type="text/css">
- .front_page_button {
-    background-color:rgb(6, 6, 7);
-    color:white;
-    border-radius:5px;
-
-}
-</style> -->
 <link rel="stylesheet" href="/runestone/static/css/frontpage.css">
 {{if auth.user:}}
-    <div id="container" class="col-md-4">
-        <h2 text-align="center";> Welcome, {{=auth.user.first_name}}!</h2>
-        <p text-align="center"> Where would you like to go?</p>
+    <div class="col-md-3">
+        <div class="welcome">Welcome, {{=auth.user.first_name}}!</div>
+        <p style="text-align: center; font-size: large;" >Where would you like to go?</p>
+        <div class="button_holder"><form action="/runestone/default/frontpage"><input type=submit class="front_page_button" value='Front Page'/></form></div>
+        <div class="button_holder"><form action="/runestone/default/donate"><input type=submit class="front_page_button" value='Donate'/></form></div>
+        <div class="button_holder"><form action="/runestone/default/courses"><input type=submit class="front_page_button" value='My Bookshelf'/></form></div>
+        <div class="button_holder"><form action="/runestone/default/frontpage/logout"><input type=submit class="front_page_button" value='Logout'/></form></div>  
     </div>
-    
-    <div id="container" class="col-md-4">
-        <div><a href="/runestone/default/frontpage" class="front_page_button">Front Page</a></div>
-        <div><a href="/runestone/default/donate" class="btn btn-primary navbar-btn" >Donate</a></div>
-        <div><a href="/runestone/default/courses" class="btn btn-primary navbar-btn" >My Bookshelf</a></div>
-        <div><a href="/runestone/default/frontpage/logout" class="btn btn-primary navbar-btn">Log Out</a></div>
-    </div>
+
 {{elif request.args(0) in ['retrieve_username', 'request_reset_password']:}}
     <div class="content row">
         <p class="col-md-4 col-sm-6 col-xs-12">
