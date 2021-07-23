@@ -418,7 +418,7 @@ mail.settings.login = settings.email_login
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
-
+auth.settings.logout_next = URL("default", "frontpage")
 auth.settings.register_next = URL("default", "index")
 
 # change default session login time from 1 hour to 24 hours

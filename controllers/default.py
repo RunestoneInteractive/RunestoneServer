@@ -13,7 +13,6 @@ from stripe_form import StripeForm
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
-
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
@@ -85,6 +84,44 @@ def user():
     ):  # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
     return dict(form=form)
+
+
+def frontpage():
+    if request.args(0) == "logout":
+        auth.logout()
+
+    try:
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+    
+    return dict(form=form)
+
+def register_init():
+
+    db.define_table('person',
+        Field('name', requires=IS_NOT_EMPTY()),
+        Field('married', 'boolean'),
+        Field('gender', requires=IS_IN_SET(['Male', 'Female', 'Other'])),
+        Field('profile', 'text'),
+        Field('image', 'upload'))
+        
+    form = SQLFORM(db.person, submit_button="I'm here")
+    
+    if form.accepts(request, session):
+        response.flash = 'form accepted'
+    elif form.errors.name:
+        form.errors.name = "Cannot be empty!"
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'
+    return dict(form=form)
+
+def registerother():
+    return dict()
 
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
