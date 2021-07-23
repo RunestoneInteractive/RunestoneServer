@@ -102,24 +102,17 @@ def registerstudent():
     email=request.vars.email
     if username:
         createUser(username, password, firstname, lastname, email, school, instructor=False) # hopefully row is created in database here
-        redirect(URL('default','formcompletion'))
+        redirect(URL('formcompletion?username=' + username))
     return dict()
 
 def formcompletion():
-    rows = db(db.auth_user.username).select()
+    username=request.vars.username
     testlist=[]
-    for row in rows:
-        testlist.append(row.username)       ## don't pull all up, just current
+    testlist.append(username)
     return dict(testlist=testlist)
-    # return dict()
-    # username=request.vars.username          # pulling database instead of form. web2py, .select() method
-    # firstname=request.vars.first_name       # will be using the request.vars to get all the information and then use it to call createUser
-    # school=request.vars.school
-    # lastname=request.vars.last_name
-    # return dict(username=username,
-    #     fname=firstname, 
-    #     school=school,
-    #     lname=lastname)
+ ## don't pull all up, just current# pulling database instead of form. web2py, .select() method   
+ # # will be using the request.vars to get all the information and then use it to call createUser
+
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
