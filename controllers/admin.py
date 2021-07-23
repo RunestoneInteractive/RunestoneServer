@@ -2286,6 +2286,8 @@ def _set_assignment_max_points(assignment_id):
         .select(sum_op)
         .first()[sum_op]
     )
+    if sum_op is None:
+        total = 0
     db(db.assignments.id == assignment_id).update(points=total)
     return total
 
