@@ -880,7 +880,7 @@ def chooseAssignment():
         assignments=assignments,
         status=status,
         duedates=duedates,
-        course_id=auth.user.course_name, 
+        course_id=auth.user.course_name,
         course=course,
     )
 
