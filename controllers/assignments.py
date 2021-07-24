@@ -830,7 +830,9 @@ def chooseAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
-        (db.assignments.course == course.id) & (db.assignments.visible == "T")
+        (db.assignments.course == course.id)
+        & (db.assignments.visible == "T")
+        & ((db.assignments.is_peer == False) | (db.assignments.is_peer == None))
     ).select(orderby=~db.assignments.duedate)
 
     for assignment in assignments:

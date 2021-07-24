@@ -21,6 +21,8 @@ db.define_table(
     Field("enforce_due", "boolean"),
     Field("visible", "boolean"),
     Field("is_timed", "boolean", default=False),
+    Field("is_peer", "boolean", default=False),
+    Field("current_index", "integer", default=0),
     Field("time_limit", "integer"),
     Field("from_source", "boolean"),
     Field("nofeedback", "boolean"),
