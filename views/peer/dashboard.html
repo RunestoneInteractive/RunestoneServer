@@ -1,0 +1,48 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+<h2>Peer Instruction Dashboard</h2>
+<div class="row">
+    <div class='oneq col-md-6'>
+        {{=XML(current_question['htmlsrc'])}}
+    </div>
+    <div class='col-md-6'>
+        Graphs go here
+        <div id="first_answer"></div>
+        <div id="second_answer"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+<script>
+    // Every five seconds get the graph data
+    var opt = { "renderer": "canvas", "actions": false };
+    let data = {
+        "div_id": "{{=XML(current_question['name'])}}",
+        "answer_num": 1
+    }
+    let headers = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/chartdata", {
+        method: "POST",
+        headers: headers,
+        body: data,
+    });
+    let resp = await fetch(request);
+    let spec = await resp.json()
+
+    vegaEmbed("#first_answer", spec, opt);
+
+    //vegaEmbed("#second_answer", spec, opt);
+
+</script>
+<script type="text/javascript">
+    $(".dashboardnav").removeClass("active");
+    $("#doctab").addClass("active");
+</script>
+{{ end }}
