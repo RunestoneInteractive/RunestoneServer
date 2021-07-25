@@ -1,58 +1,38 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
 <head>
-
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/runestone/static/css/index.css">
 </head>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
         <h1>Runestone Interactive Library of Books</h1>
-
         <p>The books on Runestone.Academy are all free and open source textbooks.
             We encourage you to browse the library and make use of these books in your courses.
             If you are a new instructor and want to do this, please take a look at the
             <a href="/{{=request.application}}/books/published/instructorguide/index.html">Help for Instructors page</a>
             before you make a course.
         </p>
-
-        <!-- <ul>
-            {{ for book in book_list: }}
-                <li>
-                    <a href="{{=book['url']}}" style='font-size: 2.0vh;'>{{=book['title']}}</a> Use <code>{{=book['regname']}}</code> to register for this title.
-                </li>
-            {{pass}}
-        </ul> -->
-
-        
-
         <div class="searchbar">
-            <input type="text" onkeyup="myFunction()" placeholder="Search by topic..">
+            <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
         <ul> 
-        
-            
-
             <h2>Computer Science Textbooks:</h2>
             {{ for book in book_list: }}
-                <th>
-                    <div class="book_title">{{=book['title']}}
+                <th id='list'>
+                    <div class="book_title"> {{=book['title']}}
                         <a href="{{=book['url']}}"> 
                         <span class="link1"></span> 
                         </a>
-                        
                     </div>
-                    <div class="book_descript"> <b>Course Description:</b> {{=book['course_description']}}  
-                        <!-- <a href="{{=book['url']}}">  -->
-                        <!-- <span class="link1"></span>  -->
+                    <div class="book_descript"><b>Description:</b> {{=book['course_description']}}  
                         </a>
                     </div>
                 </th>
-                <br>
-                
+                <br> 
             {{pass}}
             <h3>Mathematics Textbook:</h3>
-           
-    
+
+            <script  src="../static/js/books.js"></script>
         </ul>
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY
