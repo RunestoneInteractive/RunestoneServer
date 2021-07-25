@@ -166,9 +166,8 @@ function autoGrade() {
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
-                            student
-                        )}&assignment_id=${encodeURIComponent(assignment)}">${
-                        students[student]
+                        student
+                    )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
                     }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
@@ -1295,6 +1294,11 @@ function update_assignment(form) {
     } else {
         data.visible = "F";
     }
+    if (form.enforce_due.checked) {
+        data.enforce_due = "F";
+    } else {
+        data.enforce_due = "T";
+    }
     if (form.is_timed.checked) {
         data.is_timed = "T";
     } else {
@@ -1366,6 +1370,7 @@ function assignmentInfo() {
             $("#assignment_description").val(assignmentData.description);
             $("#readings-threshold").val(assignmentData.threshold);
             $("#assign_visible").val(assignmentData.visible);
+            $("#date_enforce").val(assignmentData.enforce_due);
             $("#assign_is_timed").val(assignmentData.is_timed);
             $("#timelimit").val(assignmentData.time_limit);
             $("#nopause").val(assignmentData.nopause);
@@ -1374,6 +1379,11 @@ function assignmentInfo() {
                 $("#assign_visible").prop("checked", true);
             } else {
                 $("#assign_visible").prop("checked", false);
+            }
+            if (assignmentData.enforce_due === true) {
+                $("#date_enforce").prop("checked", false);
+            } else {
+                $("#date_enforce").prop("checked", true);
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);
@@ -1574,9 +1584,9 @@ function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON(
         "delete_assignment_question/?name=" +
-            question_name +
-            "&assignment_id=" +
-            assignment_id,
+        question_name +
+        "&assignment_id=" +
+        assignment_id,
         {
             variable: "variable",
         }
@@ -1808,6 +1818,10 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
+    if (!componentSrc) {
+        jQuery(`#${whereDiv}`).html(`<p>Sorry, no source is available for preview or grading</p>`);
+        return;
+    }
     if (typeof moreOpts === "undefined") {
         moreOpts = {};
     }
