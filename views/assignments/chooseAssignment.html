@@ -1,5 +1,9 @@
 {{extend 'layout.html'}}
 
+{{block moreincludes}}
+    {{include '_sphinx_static_files.html'}}
+{{end}}
+
 <h1>Assignments</h1><h2></h2>
 <table class="table table-striped">
     <tr><th>Name</th><th>Status</th><th>Due</th><th>Description</th></tr>
