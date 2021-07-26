@@ -33,7 +33,7 @@
             eBookConfig.logLevel = 10;
             eBookConfig.loginRequired = true;
         </script>
-	<script data-ad-client="ca-pub-8347101402675282" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
     </head>
     <body>
         {{ block navbar }}
@@ -54,7 +54,7 @@
                        {{ if settings.lti_only_mode: }}
                             <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;'">&nbsp;</a>
                         {{ else: }}
-                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'user/login')}}">&nbsp; </a>
+                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'frontpage')}}">&nbsp; </a>
                         {{ pass }}
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                                     <li><a href="{{=URL('assignments','practice')}}">Practice</a></li>
                                     <li class="divider"></li>
                                     {{ if settings.academy_mode: }}
-                                    <li><a href='/{{=request.application}}/default/courses'>Change Course</a></li>
+                                    <li><a href='/{{=request.application}}/default/courses'>My BookShelf</a></li>
                                     {{ pass }}
                                 {{ pass }}
                                 <!---
@@ -208,9 +208,6 @@
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
-                        <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
-                    {{pass}}
                 </div>
             </div>
         </div>

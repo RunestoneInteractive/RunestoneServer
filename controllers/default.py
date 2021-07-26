@@ -13,7 +13,6 @@ from stripe_form import StripeForm
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
-
 def user():
     # this is kinda hacky but it's the only way I can figure out how to pre-populate
     # the course_id field
@@ -85,6 +84,40 @@ def user():
     ):  # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
     return dict(form=form)
+
+
+def frontpage():
+    # if logout button is pressed on frontpage
+    if request.args(0) == "logout":
+        auth.logout()
+    
+    #if signup button is pressed on frontpage
+    if request.args(0) == "register":
+        #check to see if radio button has been pressed, and if so redirect to the correct register page
+        if request.vars.register_type:
+            new_page = request.vars.register_type
+            redirect(URL('default', new_page))
+    
+    # else, grab database form information for login and send it in return statement
+    try:
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+    
+    return dict(form=form)
+
+def registerinstructor():
+    return dict()
+
+def registerstudent():
+    return dict()
+
+def registerother():
+    return dict()
+
 
 
 # Can use db.auth_user._after_insert.append(make_section_entries)

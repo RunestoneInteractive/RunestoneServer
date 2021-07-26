@@ -1,0 +1,243 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+<!-- This block includes all styling -->
+{{block moreincludes}}
+    <link rel="stylesheet" href="/runestone/static/css/frontpage.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+        .rscontainer {
+            padding-left: 20px;
+            padding-right:20px;
+            padding-top: 20px;
+        }
+    </style>
+{{end}}
+
+{{block statusbar}}
+{{end}}
+
+<div class="container rscontainer">
+
+    <!-- Carousel
+    ================================================== -->
+    <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
+    <div class="carousel slide col-md-8" data-ride="carousel" id="myCarousel">
+
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h3>Welcome to Runestone Academy</h3>
+                    <p>We host a growing number of open source, interactive textbooks, written by award winning authors. Used by thousands of schools</p>
+                    <p><a class="btn btn-lg btn-primary" href="http://runestoneinteractive.org/pages/library.html" role="button">See the List</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/books/published/overview/overview.html" role="button">Take a Tour</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h2>New Instructors</h2>
+                    <p>Here is a Video that will help you get started. Or, take a tour of the unique interactive features of our books!</p>
+                    <p><a class="btn btn-lg btn-primary" href="https://youtu.be/t78ktTWrGkc" role="button">Watch Video</a> <a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/books/published/instructorguide/index.html" role="button">Instructors Guide</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h2>Fall 2021 Runestone Facts</h2>
+                    <p>38,250 Students registered! 1,120 Courses Created! 30 Titles Available!</p>
+                    <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/default/donate" role="button">Support Runestone</a> </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h2>High School Teachers</h2>
+                    <p>We want you to use Runestone!  But before your school district sends us a contract to sign, please read <a href="https://runestoneinteractive.org/2021/05/28/data_privacy_agreements.html">This letter</a></p>
+                    <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/default/donate" role="button">Support Runestone</a> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" data-slide="prev" href="#myCarousel"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" data-slide="next" href="#myCarousel"><span class="glyphicon glyphicon-chevron-right"></span></a>
+</div>
+
+<!-- If user is already logged in, show them these options -->
+{{if auth.user:}}
+    <div class="col-md-4">
+        <br>
+        <div class="welcome">Welcome, {{=auth.user.first_name}}!</div>
+        <p style="text-align: center; font-size: large;" >Where would you like to go?</p>
+        <div class="button_holder"><form action="/runestone/default/courses"><input type=submit class="front_page_button" value='My Bookshelf'/></form></div>
+        <div class="button_holder"><form action="/runeston/books/index"><input type=submit class="front_page_button" value="View Our Library"/></form></div>
+        <div class="button_holder"><form action="/runestone/default/donate"><input type=submit class="front_page_button" value='Donate'/></form></div>
+        <div class="button_holder"><form action="/runestone/default/frontpage/logout"><input type=submit class="front_page_button" value='Logout'/></form></div>  
+    </div>
+
+<!-- If user is not logged in and presses either button for "retrive username" or "request reset password" -->
+{{elif request.args(0) in ['retrieve_username', 'request_reset_password']:}}
+    <div class="content row">
+        <p class="col-md-4 col-sm-6 col-xs-12">
+            <strong>Important:</strong>  Some school email systems block all external emails, filter 
+            "password reset" type emails, or use other filters that may prevent you from getting this email! 
+            <strong>Your instructor can reset your password.</strong>
+        </p>
+        <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
+            {{=form}}
+            <p> 
+                You should receive an email from Runestone with your username.  If you don't see it right away 
+                check your spam folder.
+            </p>
+        </div>
+    </div>
+
+<!-- If user presses sign up button -->
+{{elif request.args(0) == 'register':}}
+<div class="col-md-4">
+    <!-- Asks user what type of user they will be -->
+
+    <!-- THE UNCOMMENTED LINE WILL TAKE USER TO CURRENT REGISTER PAGE!!! 
+    AFTER REST OF REGISTER PAGES ARE COMPLETED 
+            -registerother.html
+            -registerinstructor.html
+            -registerstudent.html
+    DELETE THIS COMMENT AND THE FIRST LINE, THEN UNCOMMENT THE 
+    SECOND LINE AND THE REDIRECTION WILL WORK CORRECTLY ~Bryar Frank -->
+
+    <form method="post" action="/{{=request.application}}/default/user/register">
+    <!-- <form method="post"> -->
+
+
+        <p style="text-align: center; font-size: large;" >You are:</p>
+        <input type="radio" id="instructor" name="register_type" value="registerinstructor">
+        <label for="Instructor">Instructor</label><br>
+        <p class='tab'>
+            Select <strong>ONLY</strong> if you are an instructor/teacher, and will need to provide proof. This will 
+            allow you to create courses and manage your students.
+        </p>
+        <input type="radio" id="student" name="register_type" value="registerstudent">
+        <label for="student">Student</label><br>
+        <p class='tab'>
+            Select <strong>ONLY</strong> if your instructor will be using a Runestone book for a course you are 
+            enrolled in. This will allow your instructor to see your work and track your progress.
+        </p>
+        <input type="radio" id="other" name="register_type" value="registerother">
+        <label for="other">Other</label>
+        <p class='tab'>
+            Select this is you’re using Runestone for any other reason. This option is great for independent students wishing to 
+            study books on their own.
+        </p>
+        <div><input type=submit class="btn btn-primary navbar-btn" value='Continue'/></div>
+    </form>
+</div>
+
+{{else:}}
+    <!--  LOGIN -->
+    <div id="web2py_user_form" class="col-md-4">
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <label for="auth_user_username" class="control-label">Username</label>
+                    <input type="text" class="form-control col-xs-4" id="auth_user_username" name="username"
+                            placeholder="Enter username" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <label for="auth_user_password" class="control-label">Password</label>
+                    <div>
+                        <input type="password" class="form-control" id="auth_user_password" name="password"
+                            placeholder="Enter password">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-offset-2">
+                    <button type="submit" class="btn btn-default" id="login_button">Login</button>
+                </span>
+                <a href="/runestone/default/frontpage/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2">
+                    <div class="checkbox">
+                        <label>
+                            <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
+                        </label>
+                    </div>
+                </div>
+            </div>
+        {{=form.custom.end}}
+        <div id='auth-actions' style="margin-left: 20px;">
+            {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+                <div>
+                    <a href="{{=URL(args='request_reset_password')}}"
+                    role="button">{{=T('Lost Password')}}</a>
+                </div>
+                <div>
+                    <a href="{{=URL(args='retrieve_username')}}"
+                    role="button">{{=T('Forgot Username')}}</a>
+                </div>
+            {{pass}}
+        </div>
+    </div>
+{{pass}}
+
+<!-- Start of bottom half of front page -->
+<div class="row">
+    <div class='col-md-6 col-sm-12 col-xs-12'>
+        <h2>About Runestone</h2>
+        <p>
+            The mission of Runestone Interactive is to democratize textbooks for the 21st century.  Textbook prices are too 
+            high, and paper textbooks are too old fashioned.  We are changing that.
+        </p>
+        <ul>
+            <li>Freely available open source books</li>
+            <li>Easy to use authoring tools to create Runestone books</li>
+            <li>Hosting services for your course - See our <a href="https://runestone.academy/runestone/books/published/instructorguide/index.html">Instructor Guide</a></li>
+        </ul>
+        <p>
+            To learn more about this project, <a href="https://runestone.academy/runestone/books/published/overview/overview.html">see 
+            this overview</a>. For more information about the whole <b>Runestone Interactive</b> community and project, including how 
+            to contribute, please <a href="http://runestoneinteractive.org">click here</a>!
+        </p>
+        
+        <h2>Your Privacy</h2>
+        <p>
+            The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
+            of our educational mission we do collect usage data to help us better understand how you learn and how you
+            use our books. In exchange, we may use this data to make decisions about revisions to the content, and we may
+            use this data to publish academic papers. We would never publish anything that revealed your identity. We may 
+            share this data with fellow educational researchers, but rest assured that all personally identifying 
+            information will be anonymized before we do. If you have questions about this please feel free to 
+            <a href="mailto:runestoneinteractive@gmail.com">contact</a> us.
+        </p>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-6">
+        <h2>Partners and Supporters</h2>
+        <p><a href="https://pretextbook.org"><img src="/runestone/static/_images/ptx-logo.png" width=64 alt="PreTeXt Logo"> <span style="font-size: x-large">PreTeXt</span></a></p>
+        <p><a href="https://www.si.umich.edu"><img src="/runestone/static/_images/U-M-logo-preview.jpg" width=64 alt="UMSI Logo"></a>School of Information</p>
+        <p><img src="/runestone/static/_images/SIGCSE-logo-large.jpg" width=64 alt="SIGCSE logo"> Special Projects Grant 2013</p>
+        <p><img src="/runestone/static/_images/nsf-logo.png" width=64 alt="NSF Logo"> REU Support Summers 2014-2017</p>
+        <p><a href="https://www.luther.edu"><img src="/runestone/static/_images/luther_college_vertical_blue.png" width=64 alt="Luther Logo (Go Norse!)"></a> Summer Student Faculty Research</p>
+
+        <h2>How can I help?</h2>
+        <p>
+            This project is Open Source, but it does take time and resources. Especially as our popularity has grown we have server
+            costs. We welcome your help with code, editing, bug fixes almost anything you can think of.  Join us on 
+            <a href="https://github.com/RunestoneInteractive">GitHub</a> 
+        </p>
+        <p> If these books have helped you, if you liked them, please consider making a small donation.</p>
+        <a href="https://www.patreon.com/bePatron?u=19581921" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+        <p style="margin-top: 15px;">Or...</p>
+        Make a one-time donation <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a>
+    </div>
+</div>
