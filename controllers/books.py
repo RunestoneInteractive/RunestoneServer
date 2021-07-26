@@ -430,7 +430,7 @@ def index():
             book_info["title"] = config.html_short_title
         else:
             book_info["title"] = "Runestone Book"
-        # update course discription if found in the book's conf.py
+        # update course description if found in the book's conf.py
         if hasattr(config, "course_description"):
             book_info.update(course_description = config.course_description)
 
