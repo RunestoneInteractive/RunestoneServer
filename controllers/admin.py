@@ -2286,6 +2286,8 @@ def _set_assignment_max_points(assignment_id):
         .select(sum_op)
         .first()[sum_op]
     )
+    if total is None:
+        total = 0
     db(db.assignments.id == assignment_id).update(points=total)
     return total
 
@@ -2576,31 +2578,6 @@ def enroll_students():
         session.flash = "created {} new users".format(counter)
 
     return redirect(URL("admin", "admin"))
-
-
-def _validateUser(username, password, fname, lname, email, course_name, line):
-    errors = []
-
-    if auth.user.course_name != course_name:
-        errors.append(f"Course name does not match your course on line {line}")
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        errors.append(f"Course {course_name} does not exist on line {line}")
-    match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
-    if match:
-        errors.append(
-            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line {line}"""
-        )
-    uinfo = db(db.auth_user.username == username).count()
-    if uinfo > 0:
-        errors.append(f"Username {username} already exists on line {line}")
-
-    if password == "":
-        errors.append(f"password cannot be blank on line {line}")
-    if "@" not in email:
-        errors.append(f"Email address missing @ on line {line}")
-
-    return errors
 
 
 @auth.requires(

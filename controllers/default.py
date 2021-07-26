@@ -90,26 +90,27 @@ def user():
         TypeError,
     ):  # not all auth methods actually have a submit button (e.g. user/not_authorized)
         pass
-    return dict(form=form)
+    return dict(form=form)      # this is what i am not doing - dont want to?
 
 def registerstudent():
-    # will include more information here maybe, somehow
     username=request.vars.username
-    firstname=request.vars.first_name       # will be using the request.vars to get all the information and then use it to call createUser
+    firstname=request.vars.first_name       # using request.vars to get all info from form, then send it to createUser()
     school=request.vars.school
     password=request.vars.password
     lastname=request.vars.last_name
     email=request.vars.email
     if username:
-        createUser(username, password, firstname, lastname, email, school, instructor=False) # hopefully row is created in database here
-        redirect(URL('formcompletion?username=' + username))
+        createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
+        redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname))
     return dict()
 
 def formcompletion():
-    username=request.vars.username
-    testlist=[]
-    testlist.append(username)
-    return dict(testlist=testlist)
+    school=request.vars.school
+    fname=request.vars.firstname
+    studentinfo=[]         # currently passing through as a list - way to make it a string??
+    studentinfo.append(school)
+    studentinfo.append(fname)
+    return dict(studentinfo=studentinfo)
  ## don't pull all up, just current# pulling database instead of form. web2py, .select() method   
  # # will be using the request.vars to get all the information and then use it to call createUser
 

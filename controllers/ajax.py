@@ -1650,7 +1650,7 @@ def get_question_source():
     selector_id = request.vars["selector_id"]
     assignment_name = request.vars["timedWrapper"]
     toggle = request.vars["toggleOptions"]
-
+    questionlist = []
     # If the question has a :points: option then those points are the default
     # however sometimes questions are entered in the web ui without the :points:
     # and points are assigned in the UI instead.  If this is part of an
@@ -1707,9 +1707,12 @@ def get_question_source():
     if not auth.user:
         # user is not logged in so just give them a random question from questions list
         # and be done with it.
-        q = random.choice(questionlist)
-        res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
-        return json.dumps(res.htmlsrc)
+        if questionlist:
+            q = random.choice(questionlist)
+            res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
+            return json.dumps(res.htmlsrc)
+        else:
+            return json.dumps(f"<p>No Questions available</p>")
 
     logger.debug(f"is_ab is {is_ab}")
     if is_ab:

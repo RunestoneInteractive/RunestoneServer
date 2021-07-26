@@ -563,7 +563,6 @@ def createUser(username, password, fname, lname, email, school, instructor=False
         active="T",
         created_on=datetime.datetime.now(),
     )
-
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=uid, group_id=irole)
