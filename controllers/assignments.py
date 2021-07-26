@@ -826,7 +826,11 @@ def doAssignment():
 =======
     # grabs the row for the current user and and assignment in the grades table
     grade = (
+<<<<<<< HEAD
 >>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
+=======
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
+>>>>>>> RunestoneInteractive-master
         db(
             (db.grades.auth_user == auth.user.id)
             & (db.grades.assignment == assignment_id)
@@ -859,7 +863,11 @@ def doAssignment():
             is_submit="Not Started",  # set is_submit variable to incomplete
         )
         grade = (
+<<<<<<< HEAD
 >>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
+=======
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
+>>>>>>> RunestoneInteractive-master
             db(
                 (db.grades.auth_user == auth.user.id)
                 & (db.grades.assignment == assignment_id)
@@ -896,7 +904,11 @@ def doAssignment():
         enforce_pastdue = True
 
     return dict(  # This is all the variables that will be used in the doAssignment.html document
+<<<<<<< HEAD
 >>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
+=======
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
+>>>>>>> RunestoneInteractive-master
         course=course,
         course_name=auth.user.course_name,
         assignment=assignment,
@@ -922,7 +934,11 @@ def doAssignment():
         is_submit=grade.is_submit,
         is_graded=is_graded,
         enforce_pastdue=enforce_pastdue,
+<<<<<<< HEAD
 >>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
+=======
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
+>>>>>>> RunestoneInteractive-master
     )
 
 

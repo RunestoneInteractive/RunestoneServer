@@ -7,4 +7,8 @@
 Dockerfile text eol=lf
 *.sh text eol=lf
 scripts/* text eol=lf
+<<<<<<< HEAD
 >>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
+=======
+>>>>>>> b5a4e0424297a1be3a5fae2f49a03faa076538bd
+>>>>>>> RunestoneInteractive-master
