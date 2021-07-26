@@ -46,11 +46,7 @@ db.define_table(
     #
     # Per the `LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
     Field("lis_outcome_url", "string", length=1024),
-<<<<<<< HEAD
     Field("is_submitted", "string"),
-=======
-    Field("is_submit", "string"),
->>>>>>> 12afe50a911e4e8a8d0727ee014519a561202ed6
     migrate=table_migrate_prefix + "grades.table",
 )
 
