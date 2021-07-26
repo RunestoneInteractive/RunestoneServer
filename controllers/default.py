@@ -116,7 +116,8 @@ def registerstudent():
     return dict()
 
 def registerother():
-    return dict()
+    form=auth()
+    return dict(form=form)
 
 
 
