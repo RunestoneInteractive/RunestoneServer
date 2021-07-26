@@ -568,26 +568,32 @@ def createUser(username, password, fname, lname, email, school, instructor=False
         db.auth_membership.insert(user_id=uid, group_id=irole)
 
 
-def _validateUser(username, password, fname, lname, email, course_name, line):
+def validateUser(username, password, fname, lname, email, school):
     errors = []
 
-    if auth.user.course_name != course_name:
-        errors.append(f"Course name does not match your course on line {line}")
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        errors.append(f"Course {course_name} does not exist on line {line}")
+    # if auth.user.course_name != course_name:
+    #     errors.append(f"Course name does not match your course on line {line}")
+    # cinfo = db(db.courses.course_name == course_name).select().first()
+    # if not cinfo:
+    #     errors.append(f"Course {course_name} does not exist on line {line}")
     match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
     if match:
         errors.append(
-            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line {line}"""
+            f"""Username cannot contain a {match.group(0).replace(" ", "space")} """
         )
     uinfo = db(db.auth_user.username == username).count()
     if uinfo > 0:
-        errors.append(f"Username {username} already exists on line {line}")
+        errors.append(f"Username {username} already exists on line ")
 
     if password == "":
-        errors.append(f"password cannot be blank on line {line}")
+        errors.append(f"password cannot be blank on line ")
     if "@" not in email:
-        errors.append(f"Email address missing @ on line {line}")
+        errors.append(f"Email address missing @ on line ")
+    if school == "":
+        errors.append(f"password cannot be blank on line ")
+    if fname == "":
+        errors.append(f"password cannot be blank on line ")
+    if lname == "":
+        errors.append(f"password cannot be blank on line ")
 
     return errors

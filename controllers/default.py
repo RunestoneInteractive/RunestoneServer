@@ -99,17 +99,20 @@ def registerstudent():
     password=request.vars.password
     lastname=request.vars.last_name
     email=request.vars.email
-    if username:
+    if username and password and firstname and lastname and email and school:       # hacky, but it makes the fields required
         createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
-        redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname))
+        validateUser(username, password, firstname, lastname, email, school)
+        redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname + '&username=' + username))
     return dict()
 
 def formcompletion():
     school=request.vars.school
     fname=request.vars.firstname
+    username=request.vars.username
     studentinfo=[]         # currently passing through as a list - way to make it a string??
     studentinfo.append(school)
     studentinfo.append(fname)
+    studentinfo.append(username)
     return dict(studentinfo=studentinfo)
  ## don't pull all up, just current# pulling database instead of form. web2py, .select() method   
  # # will be using the request.vars to get all the information and then use it to call createUser
