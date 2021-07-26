@@ -316,17 +316,18 @@ class HAS_NO_DOTS:
 
 db.define_table(
     "auth_user",
-    Field("username", type="string", label=T("Username")),
-    Field("first_name", type="string", label=T("First Name")),
-    Field("last_name", type="string", label=T("Last Name")),
-    Field("school", type="string", label=T("School")),
+    Field("username", required=True, type="string", label=T("Username")),
+    Field("first_name", required=True, type="string", label=T("First Name")),
+    Field("last_name", required=True, type="string", label=T("Last Name")),
+    Field("school", required=True, type="string", label=T("School")),
     Field(
-        "email",
+        "email", 
+        required=True,
         type="string",
         requires=IS_EMAIL(banned="^.*shoeonlineblog\\.com$"),
         label=T("Email"),
     ),
-    Field("password", type="password", readable=False, label=T("Password")),
+    Field("password", required=True, type="password", readable=False, label=T("Password")),
     Field(
         "created_on",
         "datetime",
