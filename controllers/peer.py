@@ -40,7 +40,7 @@ def dashboard():
 
 
 def _get_current_question(assignment_id, get_next):
-    current_question = db(db.questions.name == "question1_1").select().first()
+
     assignment = db(db.assignments.id == assignment_id).select().first()
     idx = 0
     if get_next:
@@ -48,9 +48,12 @@ def _get_current_question(assignment_id, get_next):
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=db.assignment_questions.sorting_priority
     )
+    logger.debug(f"{idx=} {len(a_qs)=}")
     if idx > len(a_qs) - 1:
         idx = len(a_qs) - 1
-    current_question = a_qs[idx]
+    current_question_id = a_qs[idx].question_id
+    current_question = db(db.questions.id == current_question_id).select().first()
+
     return current_question
 
 

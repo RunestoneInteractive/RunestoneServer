@@ -5,11 +5,16 @@
 <h2>Peer Instruction Dashboard</h2>
 
 <div class="row">
-    <form action="/runestone/peer/dashboard" method="GET">
-        <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-        <input type="submit" name="next" value="Next">
-    </form>
+    <div class="col-md-6">
+        <form action="/runestone/peer/dashboard" method="GET">
+            <input type="hidden" name="assignment_id" value={{=assignment_id}}>
+            <button type="submit" name="next" value="Next">Next Question</button>
+            <button type="submit" name="next" value="Reset">Start Over</button>
+        </form>
+    </div>
+</div>
 
+<div class="row">
     <div class='oneq col-md-6'>
         {{=XML(current_question['htmlsrc'])}}
     </div>
