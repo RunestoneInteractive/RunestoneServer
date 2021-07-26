@@ -87,14 +87,18 @@ def user():
 
 
 def frontpage():
+    # if logout button is pressed on frontpage
     if request.args(0) == "logout":
         auth.logout()
     
+    #if signup button is pressed on frontpage
     if request.args(0) == "register":
+        #check to see if radio button has been pressed, and if so redirect to the correct register page
         if request.vars.register_type:
             new_page = request.vars.register_type
             redirect(URL('default', new_page))
     
+    # else, grab database form information for login and send it in return statement
     try:
         form = auth()
     except HTTPError:
@@ -112,29 +116,7 @@ def registerstudent():
     return dict()
 
 def registerother():
-    form=auth()
-    return dict(form=form)
-
-def register_init():
-
-    db.define_table('person',
-        Field('name', requires=IS_NOT_EMPTY()),
-        Field('married', 'boolean'),
-        Field('gender', requires=IS_IN_SET(['Male', 'Female', 'Other'])),
-        Field('profile', 'text'),
-        Field('image', 'upload'))
-        
-    form = SQLFORM(db.person, submit_button="I'm here")
-    
-    if form.accepts(request, session):
-        response.flash = 'form accepted'
-    elif form.errors.name:
-        form.errors.name = "Cannot be empty!"
-        response.flash = 'form has errors'
-    else:
-        response.flash = 'please fill the form'
-    return dict(form=form)
-
+    return dict()
 
 
 

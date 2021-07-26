@@ -1,6 +1,7 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
 
+<!-- This block includes all styling -->
 {{block moreincludes}}
     <link rel="stylesheet" href="/runestone/static/css/frontpage.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -70,7 +71,7 @@
     <a class="left carousel-control" data-slide="prev" href="#myCarousel"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" data-slide="next" href="#myCarousel"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 
-
+<!-- If user is already logged in, show them these options -->
 {{if auth.user:}}
     <div class="col-md-3">
         <div class="welcome">Welcome, {{=auth.user.first_name}}!</div>
@@ -81,6 +82,7 @@
         <div class="button_holder"><form action="/runestone/default/frontpage/logout"><input type=submit class="front_page_button" value='Logout'/></form></div>  
     </div>
 
+<!-- If user is not logged in and presses either button for "retrive username" or "request reset password" -->
 {{elif request.args(0) in ['retrieve_username', 'request_reset_password']:}}
     <div class="content row">
         <p class="col-md-4 col-sm-6 col-xs-12">
@@ -96,13 +98,24 @@
             </p>
         </div>
     </div>
+
+<!-- If user presses sign up button -->
 {{elif request.args(0) == 'register':}}
-<style type="text/css">
-    .tab { margin-left: 30px; }
-</style>
 <div class="col-md-4">
+    <!-- Asks user what type of user they will be -->
+
+    <!-- THE UNCOMMENTED LINE WILL TAKE USER TO CURRENT REGISTER PAGE!!! 
+    AFTER REST OF REGISTER PAGES ARE COMPLETED 
+            -registerother.html
+            -registerinstructor.html
+            -registerstudent.html
+    DELETE THIS COMMENT AND THE FIRST LINE, THEN UNCOMMENT THE 
+    SECOND LINE AND THE REDIRECTION WILL WORK CORRECTLY ~Bryar Frank -->
+
     <form method="post" action="/{{=request.application}}/default/user/register">
     <!-- <form method="post"> -->
+
+
         <p style="text-align: center; font-size: large;" >You are:</p>
         <input type="radio" id="instructor" name="register_type" value="registerinstructor">
         <label for="Instructor">Instructor</label><br>
@@ -125,11 +138,6 @@
         <div><input type=submit class="btn btn-primary navbar-btn" value='Continue'/></div>
     </form>
 </div>
-
-
-
-
-
 
 {{else:}}
     <!--  LOGIN -->
@@ -182,6 +190,7 @@
     </div>
 {{pass}}
 
+<!-- Start of bottom half of front page -->
 <div class="row">
     <div class='col-md-6 col-sm-12 col-xs-12'>
         <h2>About Runestone</h2>
