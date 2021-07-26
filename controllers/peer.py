@@ -22,6 +22,26 @@ logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
 
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
+def instructor():
+    assignments = db(db.assignments.is_peer == True).select(
+        orderby=~db.assignments.duedate
+    )
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        assignments=assignments,
+    )
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
 def dashboard():
 
     assignment_id = request.vars.assignment_id
@@ -105,3 +125,33 @@ def chartdata():
     d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="count()")
 
     return alt.vconcat(c, d).to_json()
+
+
+#
+# Student Facing pages
+#
+@auth.requires_login()
+def student():
+    assignments = db(db.assignments.is_peer == True).select(
+        orderby=~db.assignments.duedate
+    )
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        assignments=assignments,
+    )
+
+
+@auth.requires_login()
+def peer_question():
+    assignment_id = request.vars.assignment_id
+
+    current_question = _get_current_question(assignment_id, False)
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        current_question=current_question,
+        assignment_id=assignment_id,
+    )
