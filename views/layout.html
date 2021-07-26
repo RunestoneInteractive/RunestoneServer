@@ -51,11 +51,7 @@
                     <span class="icon-bar"></span>
                     </button>
                     <div>
-                       {{ if settings.lti_only_mode: }}
-                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;'">&nbsp;</a>
-                        {{ else: }}
-                            <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'frontpage')}}">&nbsp; </a>
-                        {{ pass }}
+                        <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'frontpage')}}">&nbsp; </a>
                     </div>
                 </div>
                 <div class="navbar-collapse collapse navbar-ex1-collapse">
@@ -158,11 +154,11 @@
                                         <li><a href="{{=URL('dashboard','studentreport')}}">Progress Page</a></li>
                                         <li class="divider"></li>
                                         <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
-                                        <li><a href="/{{=request.application}}/default/user/change_password">Change Password</a>
-                                        <li class='loginout'><a href='{{=URL("default", "user/logout")}}'>Log Out</a></li>
+                                        <li><a href="/{{=request.application}}/default/frontpage/change_password">Change Password</a>
+                                        <li class='loginout'><a href='{{=URL("default", "frontpage/logout")}}'>Log Out</a></li>
                                     {{ else: }}
                                         <li><a href='{{=URL("default", "user/register")}}'>Register</a></li>
-                                        <li class='loginout'><a href='{{=URL("default", "user/login")}}'>Login</a></li>
+                                        <li class='loginout'><a href='{{=URL("default", "frontpage/login")}}'>Login</a></li>
                                     {{ pass }}
                                 {{ else: }}
                                     <li><a href="{{=URL('assignments','index')}}">Progress Page</a></li>
