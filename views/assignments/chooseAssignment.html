@@ -1,13 +1,20 @@
 {{extend 'layout.html'}}
 
-<h1>Assignments</h1>
+{{block moreincludes}}
+    {{include '_sphinx_static_files.html'}}
+{{end}}
+
+<h1>Assignments</h1><h2></h2>
 <table class="table table-striped">
-    <tr><th>Name</th><th>Due</th><th>Description</th></tr>
+    <tr><th>Name</th><th>Status</th><th>Due</th><th>Description</th></tr>
+    {{i=0}}
     {{for assignment in assignments:}}
         <tr>
             <td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
-            <td>{{=assignment['duedate']}}</td>
+            <th>{{=status[i]}}</th>
+            <td>{{=duedates[i]}}</td>
             <td>{{=assignment['description']}}</td>
+            {{i+=1}}
         </tr>
     {{pass}}
 </table>
