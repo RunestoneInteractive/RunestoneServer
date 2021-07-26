@@ -18,27 +18,27 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <script>
-    // Every five seconds get the graph data
-    var opt = { "renderer": "canvas", "actions": false };
-    let data = {
-        "div_id": "{{=XML(current_question['name'])}}",
-        "answer_num": 1
+    async function updateGraphs() {// Every five seconds get the graph data
+        var opt = { "renderer": "canvas", "actions": false };
+        let data = {
+            "div_id": "{{=XML(current_question['name'])}}",
+            "answer_num": 1
+        }
+        let jsheaders = new Headers({
+            "Content-type": "application/json; charset=utf-8",
+            Accept: "application/json",
+        });
+        let request = new Request("/runestone/peer/chartdata", {
+            method: "POST",
+            headers: jsheaders,
+            body: JSON.stringify(data),
+        });
+        let resp = await fetch(request);
+        let spec = await resp.json();
+
+        vegaEmbed("#first_answer", spec, opt);
     }
-    let headers = new Headers({
-        "Content-type": "application/json; charset=utf-8",
-        Accept: "application/json",
-    });
-    let request = new Request("/runestone/peer/chartdata", {
-        method: "POST",
-        headers: headers,
-        body: data,
-    });
-    let resp = await fetch(request);
-    let spec = await resp.json()
-
-    vegaEmbed("#first_answer", spec, opt);
-
-    //vegaEmbed("#second_answer", spec, opt);
+    setInterval(updateGraphs, 5000);
 
 </script>
 <script type="text/javascript">
