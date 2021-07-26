@@ -1,0 +1,94 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+        .rscontainer {
+            padding-left: 50px;
+            padding-right:50px;
+            padding-top: 20px;
+        }
+    </style>
+
+<div class="container rscontainer">
+
+    <h2> Runestone Instructor's Registration</h2>
+
+    <div id="web2py_user_form">
+        <script type="text/javascript">
+            function checkTcp() {       // checking if accepted privacy policies
+                let cb = document.getElementById("auth_user_accept_tcp");
+                if (cb.checked) {
+                    return true;
+                } else {
+                    alert("You must accept our privacy policy to register.");
+                    return false;
+                }
+            }
+        </script>
+
+        <h5><strong>**Make sure to only use this registration if you are an instructor**</strong></h5>
+
+        <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()">
+            <table>
+                <tr id="auth_user_username__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_username" id="auth_user_username__label">Username: </label></td>
+                    <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_first_name__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_first_name" id="auth_user_first_name__label">First Name: </label></td>
+                    <td class="w2p_fw"><input class="string" id="auth_user_first_name" name="first_name" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_last_name__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_last_name" id="auth_user_last_name__label">Last Name: </label></td>
+                    <td class="w2p_fw"><input class="string" id="auth_user_last_name" name="last_name" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_faculty_url__row">
+                    <td class="w2p_fl"><label class="" for="faculty__URL" id="faculty_url">Faculty URL: </label></td>
+                    <td class="w2p_fw"><input class="string" id="faculty_url" name="faculty_url" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_institution__row">
+                    <td class="w2p_fl"><label class="" for="institution" id="institution">Institution Name: </label></td>
+                    <td class="w2p_fw"><input class="string" id="institution" name="institution" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_email__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_email" id="auth_user_email__label">Institution Email: </label></td>
+                    <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_password__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_password" id="auth_user_password__label">Password: </label></td>
+                    <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_password_two__row">
+                    <td class="w2p_fl"><label class="" for="auth_user_password_two" id="auth_user_password_two__label">Confirm Password: </label></td>
+                    <td class="w2p_fw"><input class="password" id="auth_user_password_two" name="password_two" type="password" value=""></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="auth_user_accept_tcp__row">
+                    <td class="w2p_fl">
+                        <label for="auth_user_accept_tcp">I Agree:</label>
+                    </td>
+                    <td class="w2p_fw ui-widget">
+                        <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp"> <label for="auth_user_accept_tcp" style="font-weight: initial; display: inline;">I have read and accepted your </label><a href="/{{=request.application}}/default/privacy">privacy policy</a>, <a href="/{{=request.application}}/default/terms">terms, and conditions</a>.
+                    </td>
+                    <td class="w2p_fc"></td>
+                </tr>
+                <tr id="submit_record__row">
+                    <td class="w2p_fl"></td>
+                    <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>
+                    <td class="w2p_fc"></td>
+                </tr>
+            </table>
+
+        
+        </form> 
+        
+    </div>
+</div>

@@ -87,50 +87,51 @@ def user():
         pass
     return dict(form=form)
 
-def registerinstructor():
-    try:
-        # After the registration form is submitted the registration is processed here
-        # this function will not return in that case, but instead continue on and end up
-        # redirecting to index.
-        # through db.auth_user._after_insert.append(some_function)
-        form = auth()
-    except HTTPError:
-        session.flash = (
-            "Sorry, that service failed.  Try a different service or file a bug"
-        )
-        redirect(URL("default", "index"))
-    return dict ()
-
-def copyofuser():    
-
-    try:
-        # After the registration form is submitted the registration is processed here
-        # this function will not return in that case, but instead continue on and end up
-        # redirecting to index.
-        # through db.auth_user._after_insert.append(some_function)
-        form = auth()
-    except HTTPError:
-        session.flash = (
-            "Sorry, that service failed.  Try a different service or file a bug"
-        )
-        redirect(URL("default", "index"))
-    
-    test=form.vars.institution_name
-
-    request.inputForm['institution_name'] 
-
-    return dict (test=test)
-
-
-
-# def new_instructor_user():
-#     print 
-
-
-
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
 # May have to disable auto_login ??
+
+# def registerinstructor():
+
+#     username = request.vars.username
+#     fname = request.vars.first_name
+#     lname = request.vars.last_name
+#     faculty_URL = request.vars.faculty_URL
+#     institution = request.vars.institution
+#     email = request.vars.email
+#     password = request.vars.password
+
+#     if username:
+#         createUser(username, password, fname, lname, email, faculty_URL, institution, instructor=True)
+#         redirect(URL('default','copyofuser'))
+#         # redirect(URL('runestone/default/copyofuser'))
+
+#     return dict()
+
+# def copyofuser():    
+    
+#     username = request.vars.username
+#     first_name = request.vars.first_name
+#     last_name = request.vars.last_name
+#     faculty_URL = request.vars.faculty_URL
+#     institution = request.vars.institution
+#     email = request.vars.email
+#     password = request.vars.password
+
+#     for username in db(db.auth_user).select():
+#         print(username)
+    
+#     #things = db(db.thing).select()
+
+#     return dict(
+#         uname=username,
+#         fname=first_name,
+#         lname=last_name,
+#         faculty_URL=faculty_URL,
+#         institution=institution,
+#         email=email,
+#         password=password,
+#         )
 
 
 def download():
