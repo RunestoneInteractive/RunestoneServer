@@ -10,13 +10,13 @@
 #
 # Standard library
 # ----------------
-import os
 import logging
 
 # Third Party
 # -----------
-import pandas as pd
 import altair as alt
+import pandas as pd
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -24,12 +24,34 @@ logger.setLevel(settings.log_level)
 
 def dashboard():
 
-    current_question = db(db.questions.name == "question1_1").select().first()
+    assignment_id = request.vars.assignment_id
+    if request.vars.next == "Next":
+        next = True
+    else:
+        next = False
+    current_question = _get_current_question(assignment_id, next)
+
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
         current_question=current_question,
+        assignment_id=assignment_id,
     )
+
+
+def _get_current_question(assignment_id, get_next):
+    current_question = db(db.questions.name == "question1_1").select().first()
+    assignment = db(db.assignments.id == assignment_id).select().first()
+    idx = 0
+    if get_next:
+        idx = assignment.current_index + 1
+    a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
+        orderby=db.assignment_questions.sorting_priority
+    )
+    if idx > len(a_qs) - 1:
+        idx = len(a_qs) - 1
+    current_question = a_qs[idx]
+    return current_question
 
 
 @auth.requires(
