@@ -89,7 +89,12 @@ def user():
 def frontpage():
     if request.args(0) == "logout":
         auth.logout()
-
+    
+    if request.args(0) == "register":
+        if request.vars.register_type:
+            new_page = request.vars.register_type
+            redirect(URL('default', new_page))
+    
     try:
         form = auth()
     except HTTPError:
@@ -99,6 +104,15 @@ def frontpage():
         redirect(URL("default", "index"))
     
     return dict(form=form)
+
+def registerinstructor():
+    return dict()
+
+def registerstudent():
+    return dict()
+
+def registerother():
+    return dict()
 
 def register_init():
 
@@ -120,8 +134,7 @@ def register_init():
         response.flash = 'please fill the form'
     return dict(form=form)
 
-def registerother():
-    return dict()
+
 
 
 # Can use db.auth_user._after_insert.append(make_section_entries)

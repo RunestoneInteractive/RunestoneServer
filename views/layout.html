@@ -208,11 +208,6 @@
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
-                        <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
-                    {{pass}}
-                    <a href="/runestone/default/frontpage" class="btn btn-primary navbar-btn" >Front Page</a>
-                    <a href="/runestone/default/register_init" class="btn btn-primary navbar-btn" >Test Page </a>
                 </div>
             </div>
         </div>

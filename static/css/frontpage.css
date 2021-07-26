@@ -1,8 +1,23 @@
 
-.front_page_button {
-    background-color:rgb(206, 72, 31);
-    color:white;
-    border-radius:3px;
-    margin: 10px;
+    .front_page_button {
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        color:white;
+        width: 175px;
+        height: 35px;
+        border-radius:5px;
+        margin-top: 20px;
 
-}
+    }
+    .front_page_button:hover {
+        background-color: #2e6ca1;
+    }
+    .button_holder {
+        text-align: center;
+    }
+
+    .welcome{
+        text-align: center;
+        font-size: xx-large;
+    }
+
