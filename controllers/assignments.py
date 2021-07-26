@@ -957,7 +957,11 @@ def chooseAssignment():
 
         # Creates a list of statuses that will display the grade or the is_submit variable
         if grade:
-            if (grade.score is not None) and (assignment.points > 0):
+            if (grade.score is not None) and assignment.points:
+                if assignment.points:
+                    percent_grade = 100 * grade.score / assignment.points
+                else:
+                    percent_grade = 0.0
                 percent_grade = 100 * grade.score / assignment.points
                 if percent_grade % 10 == 0:
                     status.append(str(int(percent_grade)) + "%")
@@ -981,6 +985,8 @@ def chooseAssignment():
         assignments=assignments,
         status=status,
         duedates=duedates,
+        course_id=auth.user.course_name,
+        course=course,
     )
 
 
