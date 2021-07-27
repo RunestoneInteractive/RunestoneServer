@@ -257,7 +257,7 @@ requests==2.25.1
     #   runestone
     #   sphinx
     #   stripe
-runestone==5.7.0
+runestone==5.8.1
     # via -r requirements.in
 selenium==3.141.0
     # via

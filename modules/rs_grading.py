@@ -716,6 +716,17 @@ def _autograde_one_q(
 def _save_question_grade(
     sid, course_name, question_name, score, answer_id=None, deadline=None, db=None
 ):
+    res = (
+        db(
+            (db.question_grades.sid == sid)
+            & (db.question_grades.course_name == course_name)
+            & (db.question_grades.div_id == question_name)
+        )
+        .select()
+        .first()
+    )
+    if res and res.comment != "autograded":
+        return
     try:
         db.question_grades.update_or_insert(
             (
