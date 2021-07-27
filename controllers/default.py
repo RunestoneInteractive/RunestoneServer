@@ -116,7 +116,18 @@ def registerstudent():
     return dict()
 
 def registerother():
-    form=auth()
+    try:
+        form = auth()
+    except HTTPError:
+        session.flash = (
+            "Sorry, that service failed.  Try a different service or file a bug"
+        )
+        redirect(URL("default", "index"))
+
+    if form.errors:
+        response.flash = form.errors
+
+        
     return dict(form=form)
 
 

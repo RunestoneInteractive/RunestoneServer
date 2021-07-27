@@ -1,120 +1,103 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
 
-<body>
-<<<<<<< HEAD
-    <!-- REGISTRATION -->
-    <div id="registration_div">
-        <div class="col-md-6 col-sm-12 col-xs-12">
-            <h2>Runestone Registration</h2>
-            <div id="web2py_user_form">
-                <script type="text/javascript">
-                    function checkTcp() {
-                        let cb = document.getElementById("auth_user_accept_tcp");
-                        if (cb.checked) {
-                            return true;
-                        } else {
-                            alert("You must accept our privacy policy to register.");
-                            return false;
-                        }
+<!-- REGISTRATION -->
+<div id="registration_div">
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <h2>Runestone Registration</h2>
+        <div id="web2py_user_form">
+            <script type="text/javascript">
+                function checkTcp() {
+                    let cb = document.getElementById("auth_user_accept_tcp");
+                    if (cb.checked) {
+                        return true;
+                    } else {
+                        alert("You must accept our privacy policy to register.");
+                        return false;
                     }
-                </script>
+                }
+            </script>
 
-                <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()">
-                    <table>
-                        <tr id="auth_user_username__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_username" id="auth_user_username__label">Username: </label></td>
-                            <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value="{{=form.vars.username if form.vars.username else ""}}"/></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_first_name__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_first_name" id="auth_user_first_name__label">First Name: </label></td>
-                            <td class="w2p_fw"><input class="string" id="auth_user_first_name" name="first_name" type="text" value="{{=form.vars.first_name if form.vars.first_name else ""}}"/></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_last_name__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_last_name" id="auth_user_last_name__label">Last Name: </label></td>
-                            <td class="w2p_fw"><input class="string" id="auth_user_last_name" name="last_name" type="text" value="{{=form.vars.last_name if form.vars.last_name else ""}}"/></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_email__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_email" id="auth_user_email__label">Email: </label></td>
-                            <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value="{{=form.vars.email if form.vars.email else ""}}"/></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_password__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_password" id="auth_user_password__label">Password: </label></td>
-                            <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password" value=""></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_password_two__row">
-                            <td class="w2p_fl"><label class="" for="auth_user_password_two" id="auth_user_password_two__label">Confirm Password: </label></td>
-                            <td class="w2p_fw"><input class="password" id="auth_user_password_two" name="password_two" type="password" value=""></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        <tr id="auth_user_accept_tcp__row">
-                            <td class="w2p_fl">
-                                <label for="auth_user_accept_tcp">I Agree:</label>
+            <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()">
+                <table>
+                    <tr id="auth_user_username__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_username" id="auth_user_username__label">Username: </label></td>
+                        <td class="w2p_fw"><input class="string" id="auth_user_username" name="username" type="text" value="{{=form.vars.username if form.vars.username else ""}}"/></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_first_name__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_first_name" id="auth_user_first_name__label">First Name: </label></td>
+                        <td class="w2p_fw"><input class="string" id="auth_user_first_name" name="first_name" type="text" value="{{=form.vars.first_name if form.vars.first_name else ""}}"/></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_last_name__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_last_name" id="auth_user_last_name__label">Last Name: </label></td>
+                        <td class="w2p_fw"><input class="string" id="auth_user_last_name" name="last_name" type="text" value="{{=form.vars.last_name if form.vars.last_name else ""}}"/></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_email__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_email" id="auth_user_email__label">Email: </label></td>
+                        <td class="w2p_fw"><input class="string" id="auth_user_email" name="email" type="text" value="{{=form.vars.email if form.vars.email else ""}}"/></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_password__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_password" id="auth_user_password__label">Password: </label></td>
+                        <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password" value=""></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_password_two__row">
+                        <td class="w2p_fl"><label class="" for="auth_user_password_two" id="auth_user_password_two__label">Confirm Password: </label></td>
+                        <td class="w2p_fw"><input class="password" id="auth_user_password_two" name="password_two" type="password" value=""></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    <tr id="auth_user_accept_tcp__row">
+                        <td class="w2p_fl">
+                            <label for="auth_user_accept_tcp">I Agree:</label>
+                        </td>
+                        <td class="w2p_fw ui-widget">
+                            <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp"> <label for="auth_user_accept_tcp" style="font-weight: initial; display: inline;">I have read and accepted your </label><a href="/{{=request.application}}/default/privacy">privacy policy</a>, <a href="/{{=request.application}}/default/terms">terms, and conditions</a>.
+                        </td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                    {{if settings.enable_captchas: }}
+                        <tr id="captcha__row">
+                            <td class="w2p_fl"><label>Verify:</label></td>
+                            <td class="w2p_fw">
+                                <div id="recaptcha">
+                                    <script type="text/css"><!--
+                                        var RecaptchaOptions = {theme: 'blackglass'};
+                                    //-->
+                                    </script>
+                                    <script src="http://www.google.com/recaptcha/api/challenge?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD" type="text/javascript"></script>
+                                    <noscript>
+                                        <iframe frameborder="0" height="300"
+                                                src="http://www.google.com/recaptcha/api/noscript?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD"
+                                                width="500"></iframe>
+                                        <br/><input name="recaptcha_response_field" type="hidden" value="manual_challenge"/>
+                                    </noscript>
+                                </div>
                             </td>
-                            <td class="w2p_fw ui-widget">
-                                <input type="checkbox" id="auth_user_accept_tcp" name="accept_tcp"> <label for="auth_user_accept_tcp" style="font-weight: initial; display: inline;">I have read and accepted your </label><a href="/{{=request.application}}/default/privacy">privacy policy</a>, <a href="/{{=request.application}}/default/terms">terms, and conditions</a>.
-                            </td>
                             <td class="w2p_fc"></td>
                         </tr>
-                        <tr id="create_course_row">
-                            <td class="w2p_fl"><label for="ccn_checkbox">Create Course:</label></td>
-                            <td class="w2p_fw ui-widget"><input type="checkbox" id="ccn_checkbox" name="ccn_checkbox"> <label for="ccn_checkbox" style="font-weight: initial; display: inline;">Make course after registering (instructors only)</label></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                        {{if settings.enable_captchas: }}
-                            <tr id="captcha__row">
-                                <td class="w2p_fl"><label>Verify:</label></td>
-                                <td class="w2p_fw">
-                                    <div id="recaptcha">
-                                        <script type="text/css"><!--
-                                            var RecaptchaOptions = {theme: 'blackglass'};
-                                        //-->
-                                        </script>
-                                        <script src="http://www.google.com/recaptcha/api/challenge?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD" type="text/javascript"></script>
-                                        <noscript>
-                                            <iframe frameborder="0" height="300"
-                                                    src="http://www.google.com/recaptcha/api/noscript?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD"
-                                                    width="500"></iframe>
-                                            <br/><input name="recaptcha_response_field" type="hidden" value="manual_challenge"/>
-                                        </noscript>
-                                    </div>
-                                </td>
-                                <td class="w2p_fc"></td>
-                            </tr>
+                    {{pass}}
+                    <tr id="submit_record__row">
+                        <td class="w2p_fl"></td>
+                        <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>
+                        <td class="w2p_fc"></td>
+                    </tr>
+                </table>
+            {{=form.custom.end}}
+            {{if form.errors: }}
+                <div class="warning">
+                    <p><b>Please fix the following errors in your registration</b></p>
+                    <ul>
+                        {{ for error in form.errors:}}
+                            <li>{{=error}}:  {{=form.errors[error]}}</li>
                         {{pass}}
-                        <tr id="submit_record__row">
-                            <td class="w2p_fl"></td>
-                            <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>
-                            <td class="w2p_fc"></td>
-                        </tr>
-                    </table>
-                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
-                    <script type="text/javascript">
-                        $("#auth_user_course_id").autocomplete({
-                            source: ['thinkcspy', 'pythonds']
-                        });
-                    </script>
-                {{=form.custom.end}}
-                {{if form.errors: }}
-                    <div class="warning">
-                        <p><b>Please fix the following errors in your registration</b></p>
-                        <ul>
-                            {{ for error in form.errors:}}
-                                <li>{{=error}}:  {{=form.errors[error]}}</li>
-                            {{pass}}
-                        </ul>
-                    </div>
-                {{pass}}
-            </div> <!-- end form div -->
-        </div>
-    </div> 
- <!-- end register page -->
-=======
-    <h1>This is the Registration Form for Others</h1>
->>>>>>> FrontPage
-</body>
+                    </ul>
+                </div>
+            {{pass}}
+        </div> <!-- end form div -->
+    </div>
+</div> 
+<!-- end register page -->

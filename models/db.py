@@ -382,7 +382,7 @@ db.auth_user.email.requires = (
     IS_EMAIL(error_message=auth.messages.invalid_email),
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
-db.auth_user.course_id.requires = IS_COURSE_ID()
+#db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
