@@ -5,7 +5,7 @@
 </head>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <h1>Runestone Interactive Library of Books</h1>
+        <h2>Runestone Interactive Library of Books</h2>
         <p>The books on Runestone.Academy are all free and open source textbooks.
             We encourage you to browse the library and make use of these books in your courses.
             If you are a new instructor and want to do this, please take a look at the
@@ -16,7 +16,7 @@
             <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
         <ul> 
-            <h2>Computer Science Textbooks:</h2>
+            <h1>Computer Science Textbooks:</h1>
             {{ for book in book_list: }}
                 <th id='list'>
                     <div class="book_title"> {{=book['title']}}
@@ -30,8 +30,6 @@
                 </th>
                 <br> 
             {{pass}}
-            <!-- <h3>Mathematics Textbook:</h3> -->
-
             <script  src="../static/js/books.js"></script>
         </ul>
         <p>
@@ -42,5 +40,4 @@
             the Github issues page for each book.
         </p>
     </div>
-
 </div>
