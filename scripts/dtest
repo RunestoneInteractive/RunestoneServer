@@ -2,7 +2,7 @@
 # bash -c "clear && docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'"
 
 echo "$@"
-container=`docker ps -a | grep runestone/server | awk '{print $1}'`
+container=`docker ps -a | egrep 'runestone/server|runestone_runestone' | awk '{print $1}'`
 basecomm="cp applications/runestone/tests/.coveragerc .; pytest applications/runestone/tests"
 dcomm="$basecomm $@"
 docker exec -it $container bash -c "$dcomm"

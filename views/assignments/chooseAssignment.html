@@ -1,19 +1,20 @@
 {{extend 'layout.html'}}
 
-<h1>Assignments</h1>
+{{block moreincludes}}
+    {{include '_sphinx_static_files.html'}}
+{{end}}
+
+<h1>Assignments</h1><h2></h2>
 <table class="table table-striped">
-    <tr>
-        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Name</th>
-        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Due ⯅</th>
-        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Description</th>
-        <th onclick="sortAssignments(this);" onmouseover="style='cursor: pointer;'">Total Points</th>
-    </tr>
+    <tr><th>Name</th><th>Status</th><th>Due</th><th>Description</th></tr>
+    {{i=0}}
     {{for assignment in assignments:}}
         <tr>
             <td><a href="doAssignment?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
-            <td>{{=assignment['duedate']}}</td>
+            <th>{{=status[i]}}</th>
+            <td>{{=duedates[i]}}</td>
             <td>{{=assignment['description']}}</td>
-            <td>{{=assignment['points']}}</td>
+            {{i+=1}}
         </tr>
     {{pass}}
 </table>

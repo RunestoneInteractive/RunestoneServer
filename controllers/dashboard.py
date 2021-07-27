@@ -449,8 +449,10 @@ def grades():
 
     # recalculate total points for each assignment in case the stored
     # total is out of sync.
+    duedates = []
     for assign in assignments:
         assign.points = update_total_points(assign.id)
+        duedates.append(date2String(assign.duedate))
 
     students = db(
         (db.user_courses.course_id == auth.user.course_id)
@@ -465,7 +467,7 @@ def grades():
         orderby=(db.auth_user.last_name, db.auth_user.first_name),
     )
 
-    query = """select score, points, assignments.id, auth_user.id
+    query = """select score, points, assignments.id, auth_user.id, is_submit
         from auth_user join grades on (auth_user.id = grades.auth_user)
         join assignments on (grades.assignment = assignments.id)
         where points is not null and assignments.course = %s and auth_user.id in
@@ -528,12 +530,14 @@ def grades():
     for k in gradebook:
         gradebook[k] = OrderedDict((assign.id, "n/a") for assign in assignments)
 
-    for score, points, assignments_id, auth_user_id in rows:
+    for score, points, assignments_id, auth_user_id, is_submit in rows:
         if (score is not None) and (points > 0):
             percent_grade = 100 * score / points
             gradebook_entry = "{0:.2f}".format(percent_grade)
             avgs[assignments_id]["total"] += percent_grade
             avgs[assignments_id]["count"] += 1
+        elif is_submit:
+            gradebook_entry = is_submit
         else:
             gradebook_entry = "n/a"
         gradebook[auth_user_id][assignments_id] = gradebook_entry
@@ -568,7 +572,15 @@ def grades():
         gradetable=gradetable,
         averagerow=averagerow,
         practice_average=practice_average,
+        duedates=duedates,
     )
+
+
+def date2String(date_time):
+    day = str(date_time.strftime("%b")) + " " + str(date_time.day)
+    time = date_time.strftime("%I:%M %p")
+    displayDate = day + ", " + time
+    return displayDate
 
 
 # This is meant to be called from a form submission, not as a bare controller endpoint
@@ -624,6 +636,8 @@ def update_total_points(assignment_id):
         .select(sum_op)
         .first()[sum_op]
     )
+    if total is None:
+        total = 0
     db(db.assignments.id == assignment_id).update(points=total)
     return total
 

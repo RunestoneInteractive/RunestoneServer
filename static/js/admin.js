@@ -166,9 +166,8 @@ function autoGrade() {
                 $("#autogradingprogress").append(
                     `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
-                            student
-                        )}&assignment_id=${encodeURIComponent(assignment)}">${
-                        students[student]
+                        student
+                    )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
                     }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
@@ -329,11 +328,11 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             data.assignmentId = assignmentId;
         }
     }
-    $.getJSON("/runestone/admin/htmlsrc", data, function (result) {
+    $.getJSON("/runestone/admin/htmlsrc", data, async function (result) {
         var htmlsrc = result;
         var enforceDeadline = $("#enforceDeadline").is(":checked");
         var dl = showDeadline();
-        renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
+        await renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
             sid: studentId,
             graderactive: true,
             enforceDeadline: enforceDeadline,
@@ -985,7 +984,7 @@ function configure_tree_picker(
                     num_ex = "A LOT OF";
                 }
                 let resp = confirm(
-                    `Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`
+                    `Warning!  You are about to add ${num_ex} Exercises (without even looking at them) to this assignment.  Do you Really want to do that??`
                 );
                 if (!resp) {
                     $("#tree-question-picker").jstree("uncheck_node", data.node.id);
@@ -1295,6 +1294,11 @@ function update_assignment(form) {
     } else {
         data.visible = "F";
     }
+    if (form.enforce_due.checked) {
+        data.enforce_due = "F";
+    } else {
+        data.enforce_due = "T";
+    }
     if (form.is_timed.checked) {
         data.is_timed = "T";
     } else {
@@ -1366,6 +1370,7 @@ function assignmentInfo() {
             $("#assignment_description").val(assignmentData.description);
             $("#readings-threshold").val(assignmentData.threshold);
             $("#assign_visible").val(assignmentData.visible);
+            $("#date_enforce").val(assignmentData.enforce_due);
             $("#assign_is_timed").val(assignmentData.is_timed);
             $("#timelimit").val(assignmentData.time_limit);
             $("#nopause").val(assignmentData.nopause);
@@ -1374,6 +1379,11 @@ function assignmentInfo() {
                 $("#assign_visible").prop("checked", true);
             } else {
                 $("#assign_visible").prop("checked", false);
+            }
+            if (assignmentData.enforce_due === true) {
+                $("#date_enforce").prop("checked", false);
+            } else {
+                $("#date_enforce").prop("checked", true);
             }
             if (assignmentData.nofeedback === true) {
                 $("#nofeedback").prop("checked", true);
@@ -1574,9 +1584,9 @@ function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON(
         "delete_assignment_question/?name=" +
-            question_name +
-            "&assignment_id=" +
-            assignment_id,
+        question_name +
+        "&assignment_id=" +
+        assignment_id,
         {
             variable: "variable",
         }
@@ -1790,10 +1800,10 @@ function preview_question(form, preview_div) {
     var data = {
         code: JSON.stringify(code),
     };
-    $.post("/runestone/ajax/preview_question", data, function (result, status) {
+    $.post("/runestone/ajax/preview_question", data, async function (result, status) {
         let code = JSON.parse(result);
         $(form.qrawhtml).val(code); // store the un-rendered html for submission
-        renderRunestoneComponent(code, preview_div);
+        await renderRunestoneComponent(code, preview_div);
     });
     // get the text as above
     // send the text to an ajax endpoint that will insert it into
@@ -1808,6 +1818,10 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  The tedious part is calling the right functions to turn the
      *  source into the actual component.
      */
+    if (!componentSrc) {
+        jQuery(`#${whereDiv}`).html(`<p>Sorry, no source is available for preview or grading</p>`);
+        return;
+    }
     if (typeof moreOpts === "undefined") {
         moreOpts = {};
     }
@@ -2020,7 +2034,7 @@ function getQuestionInfo() {
         constrainbc: constrainbc,
         questionid: question_id,
     };
-    jQuery.post(url, data, function (question_info, status, whatever) {
+    jQuery.post(url, data, async function (question_info, status, whatever) {
         var res = JSON.parse(question_info);
         var data = {};
         var i;
@@ -2041,7 +2055,7 @@ function getQuestionInfo() {
             q_difficulty.innerHTML = "Difficulty: " + difficulty;
         }
 
-        renderRunestoneComponent(data.htmlsrc, "component-preview", {
+        await renderRunestoneComponent(data.htmlsrc, "component-preview", {
             acid: question_name,
         });
 

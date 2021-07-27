@@ -15,6 +15,7 @@ import logging
 from lxml import html
 import math
 import os
+import random
 import re
 import subprocess
 from textwrap import dedent
@@ -1617,10 +1618,11 @@ auto_gradable_q = [
     "parsonsprob",
     "dragndrop",
     "fillintheblank",
+    "quizly",
+    "khanex",
 ]
 
 
-@auth.requires_login()
 def get_question_source():
     """Called from the selectquestion directive
     There are 4 cases:
@@ -1648,7 +1650,7 @@ def get_question_source():
     selector_id = request.vars["selector_id"]
     assignment_name = request.vars["timedWrapper"]
     toggle = request.vars["toggleOptions"]
-
+    questionlist = []
     # If the question has a :points: option then those points are the default
     # however sometimes questions are entered in the web ui without the :points:
     # and points are assigned in the UI instead.  If this is part of an
@@ -1701,6 +1703,16 @@ def get_question_source():
             questionlist = []
             logger.error(f"No questions found for proficiency {prof}")
             return json.dumps(f"<p>No Questions found for proficiency: {prof}</p>")
+
+    if not auth.user:
+        # user is not logged in so just give them a random question from questions list
+        # and be done with it.
+        if questionlist:
+            q = random.choice(questionlist)
+            res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
+            return json.dumps(res.htmlsrc)
+        else:
+            return json.dumps(f"<p>No Questions available</p>")
 
     logger.debug(f"is_ab is {is_ab}")
     if is_ab:
