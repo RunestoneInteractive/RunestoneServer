@@ -116,16 +116,15 @@
     <form method="post" action="/{{=request.application}}/default/user/register">
     <!-- <form method="post"> -->
 
-
-        <p style="text-align: center; font-size: large;" >You are:</p>
+        
         <input type="radio" id="instructor" name="register_type" value="registerinstructor">
-        <label for="Instructor">Instructor</label><br>
+        <label for="Instructor">I am an instructor</label><br>
         <p class='tab'>
-            Select <strong>ONLY</strong> if you are an instructor/teacher, and will need to provide proof. This will 
+            Select <strong>ONLY</strong> if you are an instructor or teacher. You will need to provide proof, which will 
             allow you to create courses and manage your students.
         </p>
         <input type="radio" id="student" name="register_type" value="registerstudent">
-        <label for="student">Student</label><br>
+        <label for="student">I am a student</label><br>
         <p class='tab'>
             Select <strong>ONLY</strong> if your instructor will be using a Runestone book for a course you are 
             enrolled in. This will allow your instructor to see your work and track your progress.
@@ -133,7 +132,7 @@
         <input type="radio" id="other" name="register_type" value="registerother">
         <label for="other">Other</label>
         <p class='tab'>
-            Select this is you’re using Runestone for any other reason. This option is great for independent students wishing to 
+            Select this if you are using Runestone for any other reason. This option is great for independent students wishing to 
             study books on their own.
         </p>
         <div><input type=submit class="btn btn-primary navbar-btn" value='Continue'/></div>
