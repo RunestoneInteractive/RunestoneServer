@@ -27,11 +27,11 @@
                 } 
                 </script>
             <p>Note: You will be able to register for books in the next page.</p>
-            <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()"> <center>
+            <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()"><center>
                 <table>
                     <tr id="auth_user_username__row">
                         <td class="w2p_fl"><label for="auth_user_username" id="auth_user_username__label">Username: </label></td>
-                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username"></td>
+                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username"></td>    
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_first_name__row">
@@ -75,10 +75,13 @@
                     </tr>
                     <tr id="submit_record__row">
                         <td class="w2p_fl"></td>
-                        <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Sign Up"/></td>
+                        <td class="w2p_fw"><input class="btn btn-default" type="submit" name="submit" value="Sign Up"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                 </table>
+                {{if errors:}}
+                {{=errors}}
+                {{pass}}
             </center></form> 
         </div>  <!--end form div -->
     </div> 

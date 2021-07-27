@@ -570,7 +570,6 @@ def createUser(username, password, fname, lname, email, school, instructor=False
 
 def validateUser(username, password, fname, lname, email, school):
     errors = []
-
     # if auth.user.course_name != course_name:
     #     errors.append(f"Course name does not match your course on line {line}")
     # cinfo = db(db.courses.course_name == course_name).select().first()
@@ -585,15 +584,18 @@ def validateUser(username, password, fname, lname, email, school):
     if uinfo > 0:
         errors.append(f"Username {username} already exists on line ")
 
-    if password == "":
-        errors.append(f"password cannot be blank on line ")
+    empty = re.search(r"", password)
+    if empty:
+        errors.append(f"""Password cannot be empty""")
+
+    # if password == "":
+    #     errors.append(f"password cannot be blank on line ")
     if "@" not in email:
         errors.append(f"Email address missing @ on line ")
     if school == "":
-        errors.append(f"password cannot be blank on line ")
+        errors.append(f"school cannot be blank on line ")
     if fname == "":
-        errors.append(f"password cannot be blank on line ")
+        errors.append(f"name cannot be blank on line ")
     if lname == "":
-        errors.append(f"password cannot be blank on line ")
-
+        errors.append(f"last name cannot be blank on line ")
     return errors
