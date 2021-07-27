@@ -96,7 +96,7 @@ def frontpage():
         #check to see if radio button has been pressed, and if so redirect to the correct register page
         if request.vars.register_type:
             new_page = request.vars.register_type
-            redirect(URL('default', new_page))
+            redirect(URL('default', '{}/register'.format(new_page)))
     
     # else, grab database form information for login and send it in return statement
     try:
@@ -116,6 +116,7 @@ def registerstudent():
     return dict()
 
 def registerother():
+
     try:
         form = auth()
     except HTTPError:
@@ -123,9 +124,6 @@ def registerother():
             "Sorry, that service failed.  Try a different service or file a bug"
         )
         redirect(URL("default", "index"))
-
-    if form.errors:
-        response.flash = form.errors
 
         
     return dict(form=form)

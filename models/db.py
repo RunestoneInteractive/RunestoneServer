@@ -350,7 +350,7 @@ db.define_table(
         "course_id",
         "reference courses",
         label=T("Course Name"),
-        required=True,
+        required=False,
         default=1,
     ),
     Field(
@@ -425,7 +425,7 @@ auth.settings.register_next = URL("default", "index")
 auth.settings.expiration = 3600 * 24
 
 
-janrain_url = "http://%s/%s/default/user/login" % (
+janrain_url = "http://%s/%s/default/frontpage" % (
     request.env.http_host,
     request.application,
 )
@@ -574,11 +574,6 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
 def _validateUser(username, password, fname, lname, email, course_name, line):
     errors = []
 
-    if auth.user.course_name != course_name:
-        errors.append(f"Course name does not match your course on line {line}")
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        errors.append(f"Course {course_name} does not exist on line {line}")
     match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
     if match:
         errors.append(
