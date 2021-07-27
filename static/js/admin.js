@@ -984,7 +984,7 @@ function configure_tree_picker(
                     num_ex = "A LOT OF";
                 }
                 let resp = confirm(
-                    `Warning!  You are about to add ${num_ex} Excercises (without even looking at them) to this assignment.  Do you Really want to do that??`
+                    `Warning!  You are about to add ${num_ex} Exercises (without even looking at them) to this assignment.  Do you Really want to do that??`
                 );
                 if (!resp) {
                     $("#tree-question-picker").jstree("uncheck_node", data.node.id);
