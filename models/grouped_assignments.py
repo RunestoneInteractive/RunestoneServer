@@ -7,7 +7,7 @@ db.define_table(
     Field("course", db.courses),
     Field("name", "string"),
     Field(
-        "points", "integer", default=0, notnull=True
+        "points", "integer", default=0
     ),  # max possible points on the assignment, cached sum of assignment_question points
     Field(
         "threshold_pct", "float"
