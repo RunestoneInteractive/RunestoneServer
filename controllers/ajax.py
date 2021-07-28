@@ -1710,7 +1710,10 @@ def get_question_source():
         if questionlist:
             q = random.choice(questionlist)
             res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
-            return json.dumps(res.htmlsrc)
+            if res:
+                return json.dumps(res.htmlsrc)
+            else:
+                return json.dumps(f"<p>Question {q} is not in the database.</p>")
         else:
             return json.dumps(f"<p>No Questions available</p>")
 
