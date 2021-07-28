@@ -1,8 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Runestone Library</title>
+    </head>
+
 {{user_navs = True}}
 {{extend 'layout.html'}}
-<head>
-    <link rel="stylesheet" href="/runestone/static/css/index.css">
-</head>
+<link rel="stylesheet" href="/runestone/static/css/index.css">
+
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
         <h2>Runestone Interactive Library of Books</h2>
@@ -16,7 +21,8 @@
             <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
         <ul> 
-            <h1>Computer Science Textbooks:</h1>
+            <li>
+                <b style="font-size: 25px;">Computer Science Textbooks:</b>
             {{ for book in book_list: }}
                 <th id='list'>
                     <div class="book_title"> {{=book['title']}}
@@ -31,6 +37,7 @@
                 <br> 
             {{pass}}
             <script  src="../static/js/books.js"></script>
+            </li>
         </ul>
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY
@@ -41,3 +48,4 @@
         </p>
     </div>
 </div>
+</html>
