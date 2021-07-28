@@ -58,7 +58,9 @@ def one_exam_competency():
     WHERE assignments.name='{assignment_name}' AND course={course_id};
     """
 
-    clx = pd.read_sql_query(query, settings.database_uri)
+    clx = pd.read_sql_query(
+        query, settings.database_uri.replace("postgres://", "postgresql://")
+    )
     clx["pct"] = clx.score / clx.points
     clx["correct"] = clx.pct.map(lambda x: 1 if x > 0.9 else 0)
 
