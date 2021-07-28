@@ -96,7 +96,11 @@ def frontpage():
         #check to see if radio button has been pressed, and if so redirect to the correct register page
         if request.vars.register_type:
             new_page = request.vars.register_type
-            redirect(URL('default', '{}/register'.format(new_page)))
+
+            if new_page in []: #['registerother','registerinstructor','registerstudent'] !!! THIS LINE SHOULD BE UPDATED AS MORE REGISTER PAGES ARE MADE
+                redirect(URL('default', '{}/register'.format(new_page)))
+            else:
+                redirect(URL('default', 'user/register'))
     
     # else, grab database form information for login and send it in return statement
     try:
