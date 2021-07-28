@@ -281,7 +281,10 @@ class IS_COURSE_ID:
     """used to validate that a course name entered (e.g. devcourse) corresponds to a
     valid course ID (i.e. db.courses.id)"""
 
-    def __init__(): #error handling was removed since course sign up isn't required on registration
+    def __init__( #error handling was removed since course sign up isn't required on registration
+        self, error_message="Unknown course name. Please see your instructor."
+    ):
+        self.e = error_message
 
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
