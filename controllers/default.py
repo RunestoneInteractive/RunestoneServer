@@ -75,7 +75,7 @@ def user():
         # it will be displayed as the corresponding course name after a failed validation. 
         # I don't think this case is important enough to fix.
         try:
-            course_id = int(form.vars.course_id) # why is this an int?
+            course_id = int(form.vars.course_id)
         except Exception:
             pass
         else:
@@ -101,12 +101,13 @@ def registerstudent():
     password=request.vars.password
     lastname=request.vars.last_name
     email=request.vars.email
-    if request.vars.submit:       # hacky, but it makes the fields required
+    if request.vars.submit:
         errors = validateUser(username, password, firstname, lastname, email, school)
         if len(errors) > 0:
             return dict(errors=errors)
         else:
             createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
+            #redirect(URL('runestone','default','courses'))
             redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname + '&username=' + username))
     return dict(errors=None)
 

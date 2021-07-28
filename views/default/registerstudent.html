@@ -31,27 +31,27 @@
                 <table>
                     <tr id="auth_user_username__row">
                         <td class="w2p_fl"><label for="auth_user_username" id="auth_user_username__label">Username: </label></td>
-                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username"></td>    
+                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username" value={{=request.vars.username}}></td>    <!-- add-->
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_first_name__row">
                         <td class="w2p_fl"><label for="auth_user_first_name" id="auth_user_first_name__label">First Name: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_first_name" name="first_name" type="text" ></td>
+                        <td class="w2p_fw"><input id="auth_user_first_name" name="first_name" type="text" value={{=request.vars.first_name}}></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_last_name__row">
                         <td class="w2p_fl"><label for="auth_user_last_name" id="auth_user_last_name__label">Last Name: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_last_name" name="last_name" type="text" ></td>
+                        <td class="w2p_fw"><input id="auth_user_last_name" name="last_name" type="text" value={{=request.vars.last_name}}></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_email__row">
                         <td class="w2p_fl"><label for="auth_user_email" id="auth_user_email__label">Email: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_email" name="email" type="text" ></td>
+                        <td class="w2p_fw"><input id="auth_user_email" name="email" type="text" value={{=request.vars.email}}></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_password__row">
                         <td class="w2p_fl"><label for="auth_user_password" id="auth_user_password__label">Password: </label></td>
-                        <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password" ></td>
+                        <td class="w2p_fw"><input class="password" id="auth_user_password" name="password" type="password"></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_password_two__row">
@@ -61,7 +61,7 @@
                     </tr>
                     <tr id="auth_user_school__row">
                         <td class="w2p_fl"><label for="auth_user_school" id="auth_user_school__label">School Name: </label></td>
-                        <td class="w2p_fw ui-widget"><input id="auth_user_school" name="school" type="text"></td>
+                        <td class="w2p_fw ui-widget"><input id="auth_user_school" name="school" type="text" value={{=request.vars.school}}></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_accept_tcp__row">

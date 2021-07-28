@@ -563,9 +563,10 @@ def createUser(username, password, fname, lname, email, school, instructor=False
         active="T",
         created_on=datetime.datetime.now(),
     )
+    auth.login_user(db.auth_user(uid))          # signs user in when user registers
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
-        db.auth_membership.insert(user_id=uid, group_id=irole)
+        db.auth_membership.insert(user_id=uid, group_id=irole)                                  # is this logging them in?
 
 
 def validateUser(username, password, fname, lname, email, school):
@@ -584,12 +585,8 @@ def validateUser(username, password, fname, lname, email, school):
     if uinfo > 0:
         errors.append(f"Username {username} already exists on line ")
 
-    empty = re.search(r"", password)
-    if empty:
-        errors.append(f"""Password cannot be empty""")
-
-    # if password == "":
-    #     errors.append(f"password cannot be blank on line ")
+    if password == "":
+        errors.append(f"password cannot be blank on line ")
     if "@" not in email:
         errors.append(f"Email address missing @ on line ")
     if school == "":
