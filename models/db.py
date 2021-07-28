@@ -202,7 +202,7 @@ def get_course_url(*args):
 ########################################
 
 
-def getCourseNameFromId(courseid=None):
+def getCourseNameFromId(courseid):
     """ used to compute auth.user.course_name field """
     q = db.courses.id == courseid
     row = db(q).select().first()
@@ -281,14 +281,14 @@ class IS_COURSE_ID:
     """used to validate that a course name entered (e.g. devcourse) corresponds to a
     valid course ID (i.e. db.courses.id)"""
 
-    def __init__(
-        self, error_message="Unknown course name. Please see your instructor."
-    ):
-        self.e = error_message
+    def __init__(): #error handling was removed since course sign up isn't required on registration
 
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
             return (db(db.courses.course_name == value).select()[0].id, None)
+    #Since users are no longer required to sign up for course, this code will sign them up for bogus
+    #course instead of creating an error message
+
         return (db(db.courses.course_name == 'boguscourse'), None)
 
 
