@@ -97,7 +97,7 @@ def frontpage():
         if request.vars.register_type:
             new_page = request.vars.register_type
 
-            if new_page in []: #['registerother','registerinstructor','registerstudent'] !!! THIS LINE SHOULD BE UPDATED AS MORE REGISTER PAGES ARE MADE
+            if new_page in ['registerother']: #['registerinstructor','registerstudent'] !!! THIS LINE SHOULD BE UPDATED AS MORE REGISTER PAGES ARE MADE
                 redirect(URL('default', '{}/register'.format(new_page)))
             else:
                 redirect(URL('default', 'user/register'))
