@@ -73,14 +73,16 @@
 
 <!-- If user is already logged in, show them these options -->
 {{if auth.user:}}
-    <div class="col-md-4">
+    <div class="col-md-3">
         <br>
         <div class="welcome">Welcome, {{=auth.user.first_name}}!</div>
-        <p style="text-align: center; font-size: large;" >Where would you like to go?</p>
-        <div class="button_holder"><form action="/runestone/default/courses"><input type=submit class="front_page_button" value='My Bookshelf'/></form></div>
+        <p style="text-align: center; font-size: large;" >What would you like to do?</p>
+        <div class="button_holder"><form action="/runestone/default/courses"><input type=submit class="front_page_button" value='View My Bookshelf'/></form></div>
+        <div class="button_holder"><form action="/runestone/default/user/profile"><input type=submit class="front_page_button" value='Enroll in a Course'/></form></div>
         <div class="button_holder"><form action="/runestone/books/index"><input type=submit class="front_page_button" value="View Our Library"/></form></div>
         <div class="button_holder"><form action="/runestone/default/donate"><input type=submit class="front_page_button" value='Donate'/></form></div>
-        <div class="button_holder"><form action="/runestone/default/frontpage/logout"><input type=submit class="front_page_button" value='Logout'/></form></div>  
+        <div class="button_holder"><form action="/runestone/default/frontpage/logout"><input type=submit class="front_page_button" value='Logout'/></form></div>
+          
     </div>
 
 <!-- If user is not logged in and presses either button for "retrive username" or "request reset password" -->
