@@ -202,7 +202,7 @@ def get_course_url(*args):
 ########################################
 
 
-def getCourseNameFromId(courseid):
+def getCourseNameFromId(courseid=None):
     """ used to compute auth.user.course_name field """
     q = db.courses.id == courseid
     row = db(q).select().first()
@@ -289,7 +289,7 @@ class IS_COURSE_ID:
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
             return (db(db.courses.course_name == value).select()[0].id, None)
-        return (value, self.e)
+        return (db(db.courses.course_name == 'boguscourse'), None)
 
 
 # Do not allow any of the reserved CSS characters in a username.
@@ -382,7 +382,7 @@ db.auth_user.email.requires = (
     IS_EMAIL(error_message=auth.messages.invalid_email),
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
-#db.auth_user.course_id.requires = IS_COURSE_ID()
+db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 

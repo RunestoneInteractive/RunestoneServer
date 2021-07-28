@@ -116,7 +116,7 @@ def registerstudent():
     return dict()
 
 def registerother():
-
+    
     try:
         form = auth()
     except HTTPError:

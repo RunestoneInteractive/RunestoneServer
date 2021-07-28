@@ -85,6 +85,7 @@ def make_progress_entries(field_dict, id_of_insert):
         (id_of_insert, cname),
     )
 
+# This code is no longer necessary if users will not be required to sign up for course at registration
 
-if "auth_user" in db:
-    db.auth_user._after_insert.append(make_progress_entries)
+# if "auth_user" in db:
+#     db.auth_user._after_insert.append(make_progress_entries)
