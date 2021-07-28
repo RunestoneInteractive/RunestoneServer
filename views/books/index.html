@@ -16,9 +16,8 @@
         <div class="searchbar">
             <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
+        <b style="font-size: 25px;">Computer Science Textbooks:</b>
         <ul> 
-            <li>
-                <b style="font-size: 25px;">Computer Science Textbooks:</b>
             {{ for book in book_list: }}
                 <th id='list'>
                     <div class="book_title"> {{=book['title']}}
@@ -33,7 +32,7 @@
                 <br> 
             {{pass}}
             <script  src="../static/js/books.js"></script>
-            </li>
+    
         </ul>
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY
