@@ -17,23 +17,25 @@
             <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
         <b style="font-size: 25px;">Computer Science Textbooks:</b>
-        <ul> 
+        
             {{ for book in book_list: }}
-                <th id='list'>
-                    <div class="book_title"> {{=book['title']}}
-                        <a href="{{=book['url']}}"> 
-                        <span class="link1"></span> 
-                        </a>
-                    </div>
-                    <div class="book_descript"><b>Description:</b> {{=book['course_description']}} <br> <h8 style="display: none;"> keywords: {{=book['key_words']}}</h8>  
-                        </a>
-                    </div>
-                </th>
-                <br> 
+            
+            <table id='list'>
+                <div class="book_title"> {{=book['title']}}
+                    <a href="{{=book['url']}}"> 
+                    <span class="link1"></span> 
+                    </a>
+                </div>
+                <div class="book_descript"><b>Description:</b> {{=book['course_description']}} <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                    </a>
+                </div>
+            </table>
+        
+            <br> 
             {{pass}}
             <script  src="../static/js/books.js"></script>
     
-        </ul>
+        
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY
             license or the GNU Free Documentation license.  The source code for each book can be found on
