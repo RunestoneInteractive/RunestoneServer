@@ -282,7 +282,7 @@ def index():
 
         if session.request_donation:
             del session.request_donation
-            redirect(URL(c="default", f="frontpage"))
+            redirect(URL(c="default", f="donate"))
 
         if session.build_course:
             del session.build_course

@@ -292,7 +292,7 @@ class IS_COURSE_ID:
     #Since users are no longer required to sign up for course, this code will sign them up for bogus
     #course instead of creating an error message
 
-        return (db(db.courses.course_name == 'boguscourse'), None)
+        return (db(db.courses.course_name == 'boguscourse').select()[0].id, None)
 
 
 # Do not allow any of the reserved CSS characters in a username.
