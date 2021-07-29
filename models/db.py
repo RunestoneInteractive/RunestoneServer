@@ -289,7 +289,7 @@ class IS_COURSE_ID:
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
             return (db(db.courses.course_name == value).select()[0].id, None)
-        return (db(db.courses.course_name == 'boguscourse'), None)
+        return (db(db.courses.course_name == 'boguscourse').select()[0].id, None)       # only returning the ID of bogus course
 
 
 # Do not allow any of the reserved CSS characters in a username.
