@@ -20,7 +20,7 @@
         
             {{ for book in book_list: }}
             
-            <table id='list'>
+            <div id='list'>
                 <div class="book_title"> {{=book['title']}}
                     <a href="{{=book['url']}}"> 
                     <span class="link1"></span> 
@@ -29,7 +29,7 @@
                 <div class="book_descript"><b>Description:</b> {{=book['course_description']}} <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
                     </a>
                 </div>
-            </table>
+            </div>
         
             <br> 
             {{pass}}
