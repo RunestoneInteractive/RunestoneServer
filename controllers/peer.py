@@ -155,3 +155,8 @@ def peer_question():
         current_question=current_question,
         assignment_id=assignment_id,
     )
+
+
+@auth.requires_login()
+def home():
+    return dict()
