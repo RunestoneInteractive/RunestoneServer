@@ -117,6 +117,10 @@ def formcompletion():
  ## don't pull all up, just current# pulling database instead of form. web2py, .select() method   
  # # will be using the request.vars to get all the information and then use it to call createUser
 
+def coursesignup():     #use auth_user
+    form=auth()             # different forms
+    return dict(form=form)
+
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
