@@ -289,7 +289,7 @@ class IS_COURSE_ID:
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
             return (db(db.courses.course_name == value).select()[0].id, None)
-        return (value, self.e)
+        return (db(db.courses.course_name == 'boguscourse'), None)
 
 
 # Do not allow any of the reserved CSS characters in a username.
@@ -386,7 +386,7 @@ db.auth_user.email.requires = (
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
 #db.auth_user.school.requires = IS_NOT_EMPTY(error_message=auth.message.is_empty)
-#db.auth_user.course_id.requires = IS_COURSE_ID()
+db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
@@ -552,8 +552,8 @@ def admin_logger(logger):
 
 
 def createUser(username, password, fname, lname, email, school, instructor=False):
-    pw = CRYPT(auth.settings.hmac_key)(password)[0]
-    uid = db.auth_user.insert(
+    pw = CRYPT(auth.settings.hmac_key)(password)[0]         # encrypts password for security
+    uid = db.auth_user.insert(                              # makes id for user by passing information to the database
         username=username,
         password=pw,
         first_name=fname,
@@ -583,16 +583,16 @@ def validateUser(username, password, fname, lname, email, school):
         )
     uinfo = db(db.auth_user.username == username).count()
     if uinfo > 0:
-        errors.append(f"Username {username} already exists on line ")
+        errors.append(f"Username {username} already exists")
 
     if password == "":
-        errors.append(f"password cannot be blank on line ")
+        errors.append(f"password cannot be blank")
     if "@" not in email:
-        errors.append(f"Email address missing @ on line ")
+        errors.append(f"Email address missing @")
     if school == "":
-        errors.append(f"school cannot be blank on line ")
+        errors.append(f"school cannot be blank")
     if fname == "":
-        errors.append(f"name cannot be blank on line ")
+        errors.append(f"name cannot be blank")
     if lname == "":
-        errors.append(f"last name cannot be blank on line ")
+        errors.append(f"last name cannot be blank")
     return errors

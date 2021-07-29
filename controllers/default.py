@@ -93,8 +93,6 @@ def user():
     return dict(form=form)      # this is what i am not doing - dont want to?
 
 def registerstudent():
-    #form=request.form
-    # if form:                   # calls entire form, completed
     username=request.vars.username      # using request.vars to get all info from form, then send it to createUser()
     firstname=request.vars.first_name
     school=request.vars.school

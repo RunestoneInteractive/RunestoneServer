@@ -1,18 +1,10 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style type="text/css">
-        .rscontainer {
-            padding-left: 50px;
-            padding-right:50px;
-            padding-top: 20px;
-        }
-    </style>
 
-<div class="container rscontainer">
+<div class="container rscontainer" style='width: 100%; margin: auto; '>
     <!--REGISTRATION-->
     <div id="registration_div">
-    <div class="col-md-6 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
         <h2>Runestone Registration - Student</h2>
         <div id="web2py_user_form">
             <script type="text/javascript">
@@ -27,26 +19,26 @@
                 } 
                 </script>
             <p>Note: You will be able to register for books in the next page.</p>
-            <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()"><center>
+            <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkTcp()">
                 <table>
                     <tr id="auth_user_username__row">
                         <td class="w2p_fl"><label for="auth_user_username" id="auth_user_username__label">Username: </label></td>
-                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username" value={{=request.vars.username}}></td>    <!-- add-->
+                        <td class="w2p_fw"><input type="text" id="auth_user_username" name="username" value="{{=request.vars.username if request.vars.username else '' }}"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_first_name__row">
                         <td class="w2p_fl"><label for="auth_user_first_name" id="auth_user_first_name__label">First Name: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_first_name" name="first_name" type="text" value={{=request.vars.first_name}}></td>
+                        <td class="w2p_fw"><input id="auth_user_first_name" name="first_name" type="text" value="{{=request.vars.first_name if request.vars.first_name else '' }}"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_last_name__row">
                         <td class="w2p_fl"><label for="auth_user_last_name" id="auth_user_last_name__label">Last Name: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_last_name" name="last_name" type="text" value={{=request.vars.last_name}}></td>
+                        <td class="w2p_fw"><input id="auth_user_last_name" name="last_name" type="text" value="{{=request.vars.last_name if request.vars.last_name else '' }}"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_email__row">
                         <td class="w2p_fl"><label for="auth_user_email" id="auth_user_email__label">Email: </label></td>
-                        <td class="w2p_fw"><input id="auth_user_email" name="email" type="text" value={{=request.vars.email}}></td>
+                        <td class="w2p_fw"><input id="auth_user_email" name="email" type="text" value="{{=request.vars.email if request.vars.email else '' }}"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_password__row">
@@ -61,7 +53,7 @@
                     </tr>
                     <tr id="auth_user_school__row">
                         <td class="w2p_fl"><label for="auth_user_school" id="auth_user_school__label">School Name: </label></td>
-                        <td class="w2p_fw ui-widget"><input id="auth_user_school" name="school" type="text" value={{=request.vars.school}}></td>
+                        <td class="w2p_fw ui-widget"><input id="auth_user_school" name="school" type="text" value="{{=request.vars.school if request.vars.school else '' }}"/></td>
                         <td class="w2p_fc"></td>
                     </tr>
                     <tr id="auth_user_accept_tcp__row">
@@ -79,10 +71,13 @@
                         <td class="w2p_fc"></td>
                     </tr>
                 </table>
-                {{if errors:}}
-                {{=errors}}
+                {{if errors != None:}}
+                <p> <strong> You have errors: </strong></p>
+                {{for i in range(len(errors)):}}
+                <p>{{=errors[i]}}</p>
                 {{pass}}
-            </center></form> 
+                {{pass}}
+            </form> 
         </div>  <!--end form div -->
     </div> 
     </div> <!--end register div -->
