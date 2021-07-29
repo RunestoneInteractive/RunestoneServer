@@ -2193,16 +2193,28 @@ def add__or_update_assignment_question():
         return json.dumps("Error")
 
 
+# As we move toward a question bank model for questions, this relaxes the
+# question belongs to a course idea by first simply searching for the question
+# by name.  If there is only one match then no problem.  If there is more than one
+# then the base course of the current user should be preferred to ensure
+# backward compatibility.
 def _get_question_id(question_name, course_id):
-    question = (
-        db(
-            (db.questions.name == question_name)
-            & (db.questions.base_course == db.courses.base_course)
-            & (db.courses.id == course_id)
+    # first try to just get the question by name.
+    question = db((db.questions.name == question_name)).select(db.questions.id)
+    # if there is more than one then use the course_id
+    if len(question) > 1:
+        question = (
+            db(
+                (db.questions.name == question_name)
+                & (db.questions.base_course == db.courses.base_course)
+                & (db.courses.id == course_id)
+            )
+            .select(db.questions.id)
+            .first()
         )
-        .select(db.questions.id)
-        .first()
-    )
+    else:
+        question = question[0]
+
     if question:
         return int(question.id)
     else:
@@ -2402,7 +2414,7 @@ def courselog():
     """.format(
             thecourse.base_course, course
         ),
-        settings.database_uri,
+        settings.database_uri.replace("postgres://", "postgresql://"),
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
 
@@ -2426,7 +2438,7 @@ def codelog():
     """.format(
             auth.user.course_id
         ),
-        settings.database_uri,
+        settings.database_uri.replace("postgres://", "postgresql://"),
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
 
