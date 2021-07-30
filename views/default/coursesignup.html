@@ -1,0 +1,43 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+        .rscontainer {
+            padding-left: 50px;
+            padding-right:50px;
+            padding-top: 20px;
+        }
+    </style>
+
+<h2>Course Registration</h2>
+<div id="web2py_user_form">         <!-- helps it look pretty and connect system for button to communicate-->
+    <form class="form-vertical" enctype="multipart/form-data" method="post">
+    <table>
+        <tr id="auth_user_course_id__row">
+            <td class="w2p_fl"><label class="" for="auth_user_course_id" id="auth_user_course_id__label">Course Name: </label></td>
+            <td class="w2p_fw ui-widget">
+                <input class="string" id="auth_user_course_id" name="course_id" type="text"
+                    value="{{=form.vars.course_id if form.vars.course_id else ""}}"/>
+            </td>
+            <td class="w2p_fc"></td>
+        </tr>
+        <!--add course to bookshelf button-->
+        <tr id="submit_record__row">
+            <td class="w2p_fl"></td>
+            <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Add Course"/></td>
+            <td class="w2p_fc"></td>
+        </tr>
+    </table>
+    {{=form.custom.end}}
+</div>
+
+<script language="javascript" type="text/javascript">
+// prepopulate with blank if "boguscourse"
+    var cur_course = $('#auth_user_course_id').val();
+    if (cur_course == '') {
+        $('#auth_user_course_id').val('thinkcspy, pythonds, ... See Hints!')
+    }
+    $("#auth_user_course_id").on("click", function () {
+       $(this).select();
+    });
+</script>
