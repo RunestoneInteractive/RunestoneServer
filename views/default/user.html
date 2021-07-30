@@ -157,12 +157,14 @@
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
                 {{if request.args(0) == 'profile':}}                
-                    <div class="what content row col-md-12">
-                        <h1>Profile Information</h1>
-                        <p>
-                            This is where you can change your profile information or enroll in a new course. If you would like to enroll in a new 
-                            course, put the Course ID in the <strong>Course Name</strong> field. 
-                        </p>
+                    <div class="content row col-md-12">
+                        <div class="what">
+                            <h1>Profile Information</h1>
+                            <p>
+                                This is where you can change your profile information or enroll in a new course. If you would like to enroll in a new 
+                                course, put the Course ID in the <strong>Course Name</strong> field. 
+                            </p>
+                        </div>
                     </div><br>
                 
                     <div id="web2py_user_form" class="col-md-6 col-sm-6 col-xs-12">

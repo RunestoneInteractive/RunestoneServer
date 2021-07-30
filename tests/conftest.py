@@ -574,7 +574,7 @@ class _TestClient(WebClient):
             raise
 
     def logout(self):
-        self.validate("default/user/logout", "Logged out")
+        self.validate("default/user/logout", "Login")
 
     # Always logout after a test finishes.
     def tearDown(self):
