@@ -52,6 +52,21 @@
                     </button>
                     <div>
                         <a class="brand-logo" style='background: transparent url("{{=URL('static', 'images/logo_small.png')}}") no-repeat 0px 0px;' href="{{=URL('default', 'frontpage')}}">&nbsp; </a>
+                        <span> &nbsp
+                            {{ if request.controller == "default" and settings.academy_mode:}}
+                                <a href="/{{=request.application}}/books/index" class="btn btn-primary navbar-btn">Our Library</a>
+                            {{ elif auth.user and auth.user.course_name != 'boguscourse': }}
+                                <a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a>
+                            {{ pass }}
+                            {{if 'user_navs' in globals() and user_navs: }}
+                                {{if 'auth' in globals() and not auth.user and request.args(0) != 'login' and not settings.lti_only_mode:}}
+                                    <a href="/{{=request.application}}/default/frontpage/login" class="btn btn-primary navbar-btn" >Login</a>
+                                {{pass}}
+                            {{pass}}
+                            {{if auth.user and request.args(0) != 'login':}}
+                                <a href="/runestone/default/donate" class="btn btn-primary navbar-btn" >Donate</a>
+                            {{pass}}
+                        </span>
                     </div>
                 </div>
                 <div class="navbar-collapse collapse navbar-ex1-collapse">
@@ -188,21 +203,9 @@
                     </ul>
                     <ul class="nav navbar-nav">
                         <li class="divider-vertical"></li>
-                        {{ if request.controller == "default" and settings.academy_mode:}}
-                            <li><a href="/{{=request.application}}/books/index">Our Library</a> </li>
-                        {{ elif auth.user: }}
-                            <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
-                        {{ pass }}
-                        <li class="divider-vertical"></li>
-                        {{if 'user_navs' in globals() and user_navs: }}
-                            {{if 'auth' in globals() and auth.user:}}
-                                <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
-                            {{pass}}
-                            {{if 'auth' in globals() and not auth.user and request.args(0) != 'login' and not settings.lti_only_mode:}}
-                                <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
-                            {{pass}}
+                        {{if 'auth' in globals() and auth.user:}}
+                            <li><a href="/{{=request.application}}/designer/index">Create a Course</a></li>
                         {{pass}}
-                        <li class="divider-vertical"></li>
                     </ul>
                 </div>
             </div>
