@@ -631,7 +631,7 @@ class _TestUser(object):
         # Now, post the registration.
         self.test_client.validate(
             "default/user/register",
-            "Support Runestone Interactive" if self.is_free else "Payment Amount",
+            "Welcome" if self.is_free else "Payment Amount",
             data=dict(
                 username=self.username,
                 first_name=self.first_name,
@@ -699,9 +699,7 @@ class _TestUser(object):
             if is_free is None:
                 expected_string = "Course Selection"
             else:
-                expected_string = (
-                    "Support Runestone Interactive" if is_free else "Payment Amount"
-                )
+                expected_string = "Welcome" if is_free else "Payment Amount"
         username = username or self.username
         first_name = first_name or self.first_name
         last_name = last_name or self.last_name
@@ -971,7 +969,7 @@ class _SeleniumServerUtils(_SeleniumUtils):
         try:
             self.wait.until(
                 EC.text_to_be_present_in_element(
-                    (By.CSS_SELECTOR, "div.flash"), "Logged out"
+                    (By.CSS_SELECTOR, "button.btn-default"), "Login"
                 )
             )
         except TimeoutException:
