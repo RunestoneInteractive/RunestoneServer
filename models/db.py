@@ -423,6 +423,8 @@ auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 auth.settings.logout_next = URL("default", "frontpage")
 auth.settings.register_next = URL("default", "index")
+auth.settings.request_reset_password_next = URL('frontpage', args='login')
+auth.settings.reset_password_next = URL('frontpage', args='login')
 
 # change default session login time from 1 hour to 24 hours
 auth.settings.expiration = 3600 * 24

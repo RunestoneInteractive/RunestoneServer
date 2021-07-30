@@ -159,15 +159,15 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2">
-                        <div class="checkbox">
-                            <label>
+                        <div class="checkbox" style="margin-left: 5px;">
+                            <label >
                                 <input id="auth_user_remember_me" name="remember_me" type="checkbox"> Remember me
                             </label>
                         </div>
                     </div>
                 </div>
             {{=form.custom.end}}
-            <div id='auth-actions' style="margin-left: 20px;">
+            <div id='auth-actions' style="margin-left: 30px;">
                 {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
                     <div>
                         <a href="{{=URL(args='request_reset_password')}}"
