@@ -127,6 +127,7 @@ def coursesignup():     #use auth_user
         form.record.update_record(**dict(form.vars))
         # auth.user session object doesn't automatically update when the DB gets updated
         auth.user.update(form.vars)
+        response.flash = 'record updated'
         redirect(URL("default", "index"))
     return dict(form=form)
 
@@ -210,93 +211,84 @@ def index():
         .select(db.courses.course_name, db.courses.base_course)
         .first()
     )
-
-    if not course or "boguscourse" in course.course_name:
-        # if login was handled by Janrain, user didn't have a chance to choose the course_id;
-        # redirect them to the profile page to choose one
-        redirect(
-            "/%s/default/user/profile?_next=/%s/default/index"
-            % (request.application, request.application)
+    in_db = db(
+        (db.user_courses.user_id == auth.user.id)
+        & (db.user_courses.course_id == auth.user.course_id)
+    ).select()
+    db_check = []
+    for row in in_db:
+        db_check.append(row)
+    if not db_check:
+        # The user hasn't been enrolled in this course yet. Check the price for the course.
+        price = _course_price(auth.user.course_id)
+        # If the price is non-zero, then require a payment. Otherwise, ask for a donation.
+        if price > 0:
+            redirect(URL("payment"))
+        else:
+            session.request_donation = True
+        db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
+        db(db.auth_user.id == auth.user.id).update(active="T")
+    try:
+        logger.debug(
+            f"INDEX - checking for progress table for {course.base_course}"
         )
-    else:
-        in_db = db(
-            (db.user_courses.user_id == auth.user.id)
-            & (db.user_courses.course_id == auth.user.course_id)
-        ).select()
-        db_check = []
-        for row in in_db:
-            db_check.append(row)
-        if not db_check:
-            # The user hasn't been enrolled in this course yet. Check the price for the course.
-            price = _course_price(auth.user.course_id)
-            # If the price is non-zero, then require a payment. Otherwise, ask for a donation.
-            if price > 0:
-                redirect(URL("payment"))
-            else:
-                session.request_donation = True
-            db.user_courses.insert(user_id=auth.user.id, course_id=auth.user.course_id)
-            db(db.auth_user.id == auth.user.id).update(active="T")
-        try:
-            logger.debug(
-                f"INDEX - checking for progress table for {course.base_course}"
+        chapter_label = (
+            db(db.chapters.course_id == course.base_course)
+            .select()
+            .first()
+            .chapter_label
+        )
+        logger.debug(
+            "LABEL = %s user_id = %s course_name = %s",
+            chapter_label,
+            auth.user.id,
+            auth.user.course_name,
+        )
+        if (
+            db(
+                (db.user_sub_chapter_progress.user_id == auth.user.id)
+                & (db.user_sub_chapter_progress.chapter_id == chapter_label)
+                & (db.user_sub_chapter_progress.course_name == course.course_name)
+            ).count()
+            == 0
+        ):
+            db.executesql(
+                """
+                INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status, start_date, course_name)
+                SELECT %(userid)s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1, now(), %(course_name)s
+                FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %(base_course)s
+            """,
+                dict(
+                    userid=auth.user.id,
+                    course_name=course.course_name,
+                    base_course=course.base_course,
+                ),
             )
-            chapter_label = (
-                db(db.chapters.course_id == course.base_course)
-                .select()
-                .first()
-                .chapter_label
-            )
-            logger.debug(
-                "LABEL = %s user_id = %s course_name = %s",
-                chapter_label,
-                auth.user.id,
-                auth.user.course_name,
-            )
-            if (
-                db(
-                    (db.user_sub_chapter_progress.user_id == auth.user.id)
-                    & (db.user_sub_chapter_progress.chapter_id == chapter_label)
-                    & (db.user_sub_chapter_progress.course_name == course.course_name)
-                ).count()
-                == 0
-            ):
-                db.executesql(
-                    """
-                    INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status, start_date, course_name)
-                    SELECT %(userid)s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1, now(), %(course_name)s
-                    FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %(base_course)s
-                """,
-                    dict(
-                        userid=auth.user.id,
-                        course_name=course.course_name,
-                        base_course=course.base_course,
-                    ),
-                )
-        except Exception as e:
-            logger.error(f"Select Course got Error {e}")
-            session.flash = f"{course.course_name} is not set up to track your progress"
-        # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
+    except Exception as e:
+        logger.error(f"Select Course got Error {e}")
+        session.flash = f"{course.course_name} is not set up to track your progress"
+    # todo:  check course.course_name make sure it is valid if not then redirect to a nicer page.
 
-        if session.request_donation:
-            del session.request_donation
-            redirect(URL(c="default", f="donate"))
+    if session.request_donation:
+        del session.request_donation
+        redirect(URL(c="default", f="donate"))
 
-        if session.build_course:
-            del session.build_course
-            redirect(URL(c="designer", f="index"))
+    if session.build_course:
+        del session.build_course
+        redirect(URL(c="designer", f="index"))
 
-        # See if we need to do a redirect from LTI.
-        if session.lti_url_next:
-            # This is a one-time redirect.
-            del session.lti_url_next
-            redirect(session.lti_url_next)
+    # See if we need to do a redirect from LTI.
+    if session.lti_url_next:
+        # This is a one-time redirect.
+        del session.lti_url_next
+        redirect(session.lti_url_next)
 
-        # check number of classes, if more than 1, send to course selection, if only 1, send to book
-        num_courses = db(db.user_courses.user_id == auth.user.id).count()
-        # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
-        if num_courses == 1 and os.environ.get("WEB2PY_CONFIG") != "test":
-            redirect(get_course_url("index.html"))
-        redirect(URL(c="default", f="courses"))
+    # check number of classes, if more than 1, send to course selection, if only 1, send to book
+    num_courses = db(db.user_courses.user_id == auth.user.id).count()
+    # Don't redirect when there's only one course for testing. Since the static files don't exist, this produces a server error ``invalid file``.
+    if num_courses == 1 and os.environ.get("WEB2PY_CONFIG") != "test":
+        redirect(get_course_url("index.html"))
+    redirect(URL(c="default", f="courses"))
 
 
 def error():
