@@ -106,10 +106,10 @@ def registerstudent():
         else:
             createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
             #redirect(URL('runestone','default','courses'))
-            redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname + '&username=' + username))
+            redirect(URL('coursesignup?school=' + school + '&firstname=' + firstname + '&username=' + username))
     return dict(errors=None)
 
-def formcompletion():
+def formcompletion():                   # this is what we used
     school=request.vars.school
     fname=request.vars.firstname
     username=request.vars.username
@@ -125,16 +125,19 @@ def coursesignup():     #use auth_user
     form=auth()             # different forms
     form.vars.course_id=request.vars.course_id           # not finding this
     # form.vars.course_id = auth.user.course_id
-    if form.validate():
-        # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
-        del form.vars.username
-        form.record.update_record(**dict(form.vars))
-        # auth.user session object doesn't automatically update when the DB gets updated
-        auth.user.update(form.vars)
-        response.flash = 'record updated'
-        redirect(URL("default", "index"))
+    if request.vars.submit:
+        if form.validate():
+            # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
+            del form.vars.username
+            form.record.update_record(**dict(form.vars))
+            # auth.user session object doesn't automatically update when the DB gets updated
+            auth.user.update(form.vars)
+            response.flash = 'record updated'
+            redirect(URL("default", "index"))
     return dict(form=form)
 
+def testingcourseadd():
+    return dict()
 
 # Can use db.auth_user._after_insert.append(make_section_entries)
 # to add a custom function to deal with donation and/or creating a course
