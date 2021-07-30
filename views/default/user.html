@@ -20,7 +20,7 @@
     {{if (request.args(0) != 'register'):}}
 
         <div class="row">
-          {{ if settings.academy_mode: }}
+          {{ if settings.academy_mode and request.args(0) != 'profile': }}
             <!-- Carousel
             ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
@@ -145,53 +145,75 @@
                 </div>
             {{pass}}
 
+                
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
-                <div class="content row">
-                    <p class="col-md-4 col-sm-6 col-xs-12"><strong>Important:</strong>  Some school email systems block all external emails, filter "password reset" type emails, or use other filters that may prevent you from getting this email! <strong>Your instructor can reset your password.</strong></p>
-                <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
-                    {{=form}}
-                    {{ if settings.academy_mode and request.args(0) == 'profile':}}
-                    <form action="{{=URL('default','delete')}}" onsubmit="return confirm('Are you sure?')">
-		                <div class="checkbox">
-                        <label>
-                          <input type=checkbox name="deleteaccount" id="delacct">
-			              <span>Delete my account and all data. Cannot be undone!</span>
-                        </label>
-                        </div>
-                        <input type="submit" value="Delete" class="btn btn-primary">
-                    </form>
-                    {{ pass }}
-                    {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
-                        <p> You should receive an email from Runestone with your username.  If you don't see it right away check your spam folder.</p>
-                    {{pass}}
+            <style>
+                .what{
+                    text-align: center;
+                    margin-left: 20%;
+                    margin-right: 20%;
+                }
+                .warning{
+                    color:rgb(173, 3, 3);
+                }
+            </style>
+                <div class="content row col-md-12">
+                    <div class="what">
+                        <h1>Profile Information</h1>
+                        <p>
+                            This is where you can change your profile information or enroll in a new course. If you would like to enroll in a new 
+                            course, put the Course ID in the <strong>Course Name</strong> field. 
+                        </p>
+                    </div><br>
+                    <div id="web2py_user_form" class="col-md-6 col-sm-6 col-xs-12">
+                        {{=form}}
+                        {{ if settings.academy_mode and request.args(0) == 'profile':}}
+                        <form action="{{=URL('default','delete')}}" onsubmit="return confirm('Are you sure?')">
+                            <div class="checkbox">
+                            <label>
+                            <input type=checkbox name="deleteaccount" id="delacct">
+                            <span>Delete my account and all data. Cannot be undone!</span>
+                            </label>
+                            </div>
+                            <input type="submit" value="Delete" class="btn btn-primary">
+                        </form>
+                        {{ pass }}
+                        {{ if request.args(0) not in ['profile', 'reset_password', 'change_password']: }}
+                            <p> You should receive an email from Runestone with your username.  If you don't see it right away check your spam folder.</p>
+                        {{pass}}
 
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <h4>Course IDs for open courses</h4>
-                    <p>If your instructor gave you the name of a course to register for, type that into the Course Name box. If you are learning on your own you can use one of the courses listed below. All are welcome!</p>
-                    <ul>
-                            <li>apcsareview</li>
-                            <li>authorguide</li>
-                            <li>cpp4python</li>
-                            <li>cppds</li>
-                            <li>csawesome</li>
-                            <li>fopp</li>
-                            <li>httlads</li>
-                            <li>instructorguide</li>
-                            <li>java4python</li>
-                            <li>JS4Python</li>
-                            <li>learnwebgl2</li>
-                            <li>MasteringDatabases</li>
-                            <li>overview</li>
-                            <li>pythonds</li>
-                            <li>pythoned</li>
-                            <li>StudentCSP</li>
-                            <li>TeacherCSP</li>
-                            <li>thinkcspy</li>
-                            <li>webfundamentals</li>
-                    </ul>
-                </div>
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-xs-12">
+                        <h4>Course IDs for base courses</h4>
+                        <p class="warning">
+                            If you are signing up for your instructor's course, <strong>DO NOT</strong> put the name of the base courses listed here. 
+                            If you do, your instructor will not be able to see your work or track your progress.
+                        </p>
+                        <ul class="col-md-5 col-sm-6 col-xs-12">
+                                <li>apcsareview</li>
+                                <li>authorguide</li>
+                                <li>cpp4python</li>
+                                <li>cppds</li>
+                                <li>csawesome</li>
+                                <li>fopp</li>
+                                <li>httlads</li>
+                                <li>instructorguide</li>
+                                <li>java4python</li>
+                                <li>JS4Python</li>
+                        </ul>
+                        <ul class="col-md-5 col-sm-6 col-xs-12">
+                                <li>learnwebgl2</li>
+                                <li>MasteringDatabases</li>
+                                <li>overview</li>
+                                <li>pythonds</li>
+                                <li>pythoned</li>
+                                <li>StudentCSP</li>
+                                <li>TeacherCSP</li>
+                                <li>thinkcspy</li>
+                                <li>webfundamentals</li>
+                        </ul>
+                    </div>
                 </div>
             {{pass}}
           {{else:}}

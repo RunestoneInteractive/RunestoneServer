@@ -56,6 +56,9 @@ def user():
         form.element("#auth_user_username")["_readonly"] = True
 
         form.vars.course_id = auth.user.course_name
+        if form.vars.course_id == "boguscourse":
+            form.vars.course_id = ''
+
         if form.validate():
             # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
             del form.vars.username
