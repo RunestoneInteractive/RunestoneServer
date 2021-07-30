@@ -351,7 +351,7 @@ db.define_table(
     Field(
         "course_id",
         "reference courses",
-        label=T("Course Name"),
+        label=T("Apples"),
         required=True,
         default=1,
     ),
