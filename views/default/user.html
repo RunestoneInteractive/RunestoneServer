@@ -9,6 +9,14 @@
             padding-right:20px;
             padding-top: 20px;
         }
+        .what{
+            text-align: center;
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+        .warning{
+            color:rgb(173, 3, 3);
+        }
     </style>
 {{end}}
 
@@ -148,16 +156,7 @@
                 
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
-            <style>
-                .what{
-                    text-align: center;
-                    margin-left: 20%;
-                    margin-right: 20%;
-                }
-                .warning{
-                    color:rgb(173, 3, 3);
-                }
-            </style>
+
                 <div class="content row col-md-12">
                     <div class="what">
                         <h1>Profile Information</h1>
