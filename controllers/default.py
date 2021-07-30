@@ -75,7 +75,7 @@ def user():
         # it will be displayed as the corresponding course name after a failed validation. 
         # I don't think this case is important enough to fix.
         try:
-            course_id = int(form.vars.course_id) # why is this an int?
+            course_id = int(form.vars.course_id)
         except Exception:
             pass
         else:
@@ -93,23 +93,27 @@ def user():
     return dict(form=form)      # this is what i am not doing - dont want to?
 
 def registerstudent():
-    username=request.vars.username
-    firstname=request.vars.first_name       # using request.vars to get all info from form, then send it to createUser()
+    username=request.vars.username      # using request.vars to get all info from form, then send it to createUser()
+    firstname=request.vars.first_name
     school=request.vars.school
     password=request.vars.password
     lastname=request.vars.last_name
     email=request.vars.email
-    if username and password and firstname and lastname and email and school:       # hacky, but it makes the fields required
-        createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
-        validateUser(username, password, firstname, lastname, email, school)
-        redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname + '&username=' + username))
-    return dict()
+    if request.vars.submit:
+        errors = validateUser(username, password, firstname, lastname, email, school)
+        if len(errors) > 0:
+            return dict(errors=errors)
+        else:
+            createUser(username, password, firstname, lastname, email, school, instructor=False) # creates row in database here
+            #redirect(URL('runestone','default','courses'))
+            redirect(URL('formcompletion?school=' + school + '&firstname=' + firstname + '&username=' + username))
+    return dict(errors=None)
 
 def formcompletion():
     school=request.vars.school
     fname=request.vars.firstname
     username=request.vars.username
-    studentinfo=[]         # currently passing through as a list - way to make it a string??
+    studentinfo=[]         # passing through as a list - but converted to single strings in html
     studentinfo.append(school)
     studentinfo.append(fname)
     studentinfo.append(username)

@@ -86,5 +86,5 @@ def make_progress_entries(field_dict, id_of_insert):
     )
 
 
-if "auth_user" in db:
-    db.auth_user._after_insert.append(make_progress_entries)
+# if "auth_user" in db:
+#     db.auth_user._after_insert.append(make_progress_entries)
