@@ -156,16 +156,19 @@
                 
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
-
-                <div class="content row col-md-12">
-                    <div class="what">
+                {{if request.args(0) == 'profile':}}                
+                    <div class="what content row col-md-12">
                         <h1>Profile Information</h1>
                         <p>
                             This is where you can change your profile information or enroll in a new course. If you would like to enroll in a new 
                             course, put the Course ID in the <strong>Course Name</strong> field. 
                         </p>
                     </div><br>
+                
                     <div id="web2py_user_form" class="col-md-6 col-sm-6 col-xs-12">
+                {{else:}}
+                    <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
+                {{pass}}
                         {{=form}}
                         {{ if settings.academy_mode and request.args(0) == 'profile':}}
                         <form action="{{=URL('default','delete')}}" onsubmit="return confirm('Are you sure?')">
@@ -183,12 +186,14 @@
                         {{pass}}
 
                     </div>
+                {{if request.args(0) == 'profile':}}
                     <div class="col-md-5 col-sm-6 col-xs-12">
                         <h4>Course IDs for base courses</h4>
                         <p class="warning">
                             If you are signing up for your instructor's course, <strong>DO NOT</strong> put the name of the base courses listed here. 
                             If you do, your instructor will not be able to see your work or track your progress.
                         </p>
+                    
                         <ul class="col-md-5 col-sm-6 col-xs-12">
                                 <li>apcsareview</li>
                                 <li>authorguide</li>
@@ -213,7 +218,7 @@
                                 <li>webfundamentals</li>
                         </ul>
                     </div>
-                </div>
+                {{pass}}
             {{pass}}
           {{else:}}
             Please login via your learning management system (Coursera, Canvas, Blackboard, etc.)
