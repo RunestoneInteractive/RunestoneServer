@@ -11,18 +11,38 @@
 
 <h2>Course Registration</h2>
 <div id="web2py_user_form">         <!-- helps it look pretty and connect system for button to communicate-->
-    <form class="form-vertical" enctype="multipart/form-data" method="post">
+    <script type="text/javascript">
+        function checkca() {       // checking if accepted privacy policies
+            let cb = document.getElementById("auth_user_accept_ca");
+            if (cb.checked) {
+                return true;
+            } else {
+                alert("You must accept our course agreement to register.");
+                return false;
+            }
+        } 
+    </script>
+    <form class="form-vertical" enctype="multipart/form-data" method="post" onsubmit="return checkca()">
     <table>
         <tr id="auth_user_course_id__row">
             <td class="w2p_fl"><label class="" for="auth_user_course_id" id="auth_user_course_id__label">Course Name: </label></td>
             <td class="w2p_fw ui-widget">
-                <input class="string" id="auth_user_course_id" name="course_id" type="text"
-                    value="{{=form.vars.course_id if form.vars.course_id else ""}}"/>
+                <input class="string" id="auth_user_course_id" name="course_id" type="text"/>
+            </td>
+            <td class="w2p_fc"></td>
+        </tr>
+        <!--making sure they type in the correct course name with Course Agreement - ca-->
+        <tr id="auth_user_accept_ca__row">      
+            <td class="w2p_fl">
+                <label for="auth_user_accept_ca">I Agree:</label>
+            </td>
+            <td class="w2p_fw ui-widget">
+                <input type="checkbox" id="auth_user_accept_ca" name="accept_ca"> <label for="auth_user_accept_ca" style="font-weight: initial; display: inline;">I am <strong>sure</strong> this is the name of the course my instructor wants me in.</label>
             </td>
             <td class="w2p_fc"></td>
         </tr>
         <!--add course to bookshelf button-->
-        <tr id="submit_record__row">
+        <tr id="submit_course__row">
             <td class="w2p_fl"></td>
             <td class="w2p_fw"><input class="btn btn-default" type="submit" value="Add Course"/></td>
             <td class="w2p_fc"></td>

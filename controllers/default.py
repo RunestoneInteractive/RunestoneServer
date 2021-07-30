@@ -119,7 +119,8 @@ def formcompletion():
 
 def coursesignup():     #use auth_user
     form=auth()             # different forms
-    # form.vars.course_id = auth.user.course_name
+    form.vars.course_id=request.vars.course_id           # not finding this
+    # form.vars.course_id = auth.user.course_id
     if form.validate():
         # Prevent the username from being changed by deleting it before the update. See http://web2py.com/books/default/chapter/29/07/forms-and-validators#SQLFORM-without-database-IO.
         del form.vars.username
