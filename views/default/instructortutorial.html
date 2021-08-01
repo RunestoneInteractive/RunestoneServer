@@ -1,0 +1,66 @@
+<html>
+
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+        .rscontainer {
+            padding-left: 50px;
+            padding-right:50px;
+            padding-top: 50px;
+        }
+        h1 {text-align: center;}
+        h4 {text-align: center;}
+        p {text-align: center;}
+        p1 {text-align: center; color: red}
+
+    </style>
+
+    <h1> Welcome Instructor!</h1>
+    <div class="col-md-6 col-sm-6 col-xs-6">
+        <br/>
+        <br/>
+
+        <h4><strong>Watch the video below for a tutorial on creating your first course</strong></h4>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/t78ktTWrGkc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <h4>Would you like to create a course?</h4>
+    <br/>
+
+    <p>
+    <a class="btn btn-sm btn-primary" style="width:60px;height:30px;border-radius:5px;" href="{{=URL('designer','index')}}"
+        role="button"><strong>{{=T('Yes')}}</strong></a>
+    <a class="btn btn-sm btn-primary" style="width:60px;height:30px;border-radius:5px;" href="{{=URL('default','user')}}"
+        role="button"><strong>{{=T('No')}}</strong></a>
+    </p>
+
+    <br/>
+
+    <p>
+    <p1>**Selecting no will take you to the homescreen**</p1> 
+    </p>
+
+</html>
+
+<br/>
+<br/>
+<br/>
+<br/>

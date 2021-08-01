@@ -14,18 +14,21 @@
             by typing the name of the course into the Course Name box.</p>
         <p>Choose your course. If you want to add a new course, click Add Another Course then change the course name in
             your profile.</p>
-        {{ for course in courses: }}
-        <form action="/{{=request.application}}/default/coursechooser/{{=course}}" method="post">
-            <button class="ac_opt book-btn btn btn-default" type="submit" name=course
-                value={{=course}}>{{=course}}</button><br />
-        </form>
+        {{for course in courses:}}
+            {{if course != 'boguscourse':}}
+            <form action="/{{=request.application}}/default/coursechooser/{{=course}}" method="post">
+                <button class="ac_opt book-btn btn btn-default" type="submit" name=course
+                    value={{=course}}>{{=course}}</button><br />
+            </form>
+            {{pass}}
         {{pass}}
         <form action="/{{=request.application}}/default/user/profile">
-            <button class="ac_opt course-btn btn btn-default">Enroll in a Course</button>
+            <button class="ac_opt course-btn btn btn-default"> Enroll in a Course</button>
         </form>
         <form action="/{{=request.application}}/default/remove" method="post">
             <button class="ac_opt course-btn btn btn-default" name="remove" type="submit">Drop a Course</button>
         </form>
-
+            {{pass}}
+        {{pass}}
     </div>
 </div>

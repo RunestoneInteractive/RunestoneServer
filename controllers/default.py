@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# from RunestoneServer.controllers.remakeofmyform import validateUser
+# from RunestoneServer.models.db import login_user
 import json
 import os
 import requests
@@ -24,7 +26,6 @@ def user():
         # If we can't pre-populate, just set it to blank.
         # This will force the user to choose a valid course name
         db.auth_user.course_id.default = ""
-        # this looks to be important 
 
         # Otherwise, use the referer URL to try to pre-populate
         ref = request.env.http_referer
@@ -87,52 +88,49 @@ def user():
         pass
     return dict(form=form)
 
-# Can use db.auth_user._after_insert.append(make_section_entries)
-# to add a custom function to deal with donation and/or creating a course
-# May have to disable auto_login ??
+def registerinstructor():
+    """used to request an instructors input from registration page, returns
+    errors if any and redirects page after the account is created"""
 
-# def registerinstructor():
+    username = request.vars.username
+    fname = request.vars.first_name
+    lname = request.vars.last_name
+    institution = request.vars.institution
+    faculty_url = request.vars.faculty_url
+    email = request.vars.email
+    password = request.vars.password
 
-#     username = request.vars.username
-#     fname = request.vars.first_name
-#     lname = request.vars.last_name
-#     faculty_URL = request.vars.faculty_URL
-#     institution = request.vars.institution
-#     email = request.vars.email
-#     password = request.vars.password
+    if request.vars.submit:
+        errors = validateUser(username, password, fname, lname, email, institution, faculty_url)
+        if len(errors) > 0:
+            return dict(errors=errors)
+        else: 
+            createUser(username, password, fname, lname, email, institution, faculty_url=faculty_url, instructor=True)
+            redirect(URL('default','instructortutorial'))    
+    return dict(errors=None)
 
-#     if username:
-#         createUser(username, password, fname, lname, email, faculty_URL, institution, instructor=True)
-#         redirect(URL('default','copyofuser'))
-#         # redirect(URL('runestone/default/copyofuser'))
+def instructortutorial():
+    """used to send user information to complete log in process"""
 
-#     return dict()
+    username=request.vars.username
+    fname=request.vars.first_name
+    lname = request.vars.last_name
+    institution = request.vars.institution
+    faculty_url = request.vars.faculty_url
+    email = request.vars.email
+    password = request.vars.password
 
-# def copyofuser():    
-    
-#     username = request.vars.username
-#     first_name = request.vars.first_name
-#     last_name = request.vars.last_name
-#     faculty_URL = request.vars.faculty_URL
-#     institution = request.vars.institution
-#     email = request.vars.email
-#     password = request.vars.password
+    users=[]
 
-#     for username in db(db.auth_user).select():
-#         print(username)
-    
-#     #things = db(db.thing).select()
+    users.append(username)
+    users.append(fname)
+    users.append(lname)
+    users.append(institution)
+    users.append(faculty_url)
+    users.append(email)
+    users.append(password)
 
-#     return dict(
-#         uname=username,
-#         fname=first_name,
-#         lname=last_name,
-#         faculty_URL=faculty_URL,
-#         institution=institution,
-#         email=email,
-#         password=password,
-#         )
-
+    return dict(users=users)
 
 def download():
     return response.download(request, db)

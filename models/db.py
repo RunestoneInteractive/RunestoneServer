@@ -292,7 +292,8 @@ class IS_COURSE_ID:
     def __call__(self, value):
         if db(db.courses.course_name == value).select():
             return (db(db.courses.course_name == value).select()[0].id, None)
-        return (value, self.e)
+        return (db(db.courses.course_name == 'boguscourse').select()[0].id, None)
+
 
 
 # Do not allow any of the reserved CSS characters in a username.
@@ -391,7 +392,7 @@ db.auth_user.email.requires = (
     IS_EMAIL(error_message=auth.messages.invalid_email),
     IS_NOT_IN_DB(db, db.auth_user.email),
 )
-# db.auth_user.course_id.requires = IS_COURSE_ID()
+db.auth_user.course_id.requires = IS_COURSE_ID()
 
 auth.define_tables(username=True, signature=False, migrate=table_migrate_prefix + "")
 
@@ -555,9 +556,10 @@ def admin_logger(logger):
             logger.error(f"failed to insert log record for practice: {e}")
 
 
-# Include try catch error 
-
-def createUser(username, password, fname, lname, email, institution, faculty_url, instructor=False):
+def createUser(username, password, fname, lname, email, institution, faculty_url='', course_name='boguscourse', instructor=False):
+    cinfo = db(db.courses.course_name == course_name).select().first()
+    if not cinfo:
+        raise ValueError("Course {} does not exist".format(course_name))
     pw = CRYPT(auth.settings.hmac_key)(password)[0]
     uid = db.auth_user.insert(
         username=username,
@@ -566,11 +568,45 @@ def createUser(username, password, fname, lname, email, institution, faculty_url
         last_name=lname,
         email=email,
         institution=institution,
+        course_name=course_name,
         faculty_url=faculty_url,
         active="T",
         created_on=datetime.datetime.now(),
+        course_id=cinfo.id,
     )
 
+
+    db.user_courses.insert(user_id=uid, course_id=cinfo.id)
+    
     if instructor:
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=uid, group_id=irole)
+        auth.login_user(db.auth_user(uid))
+    
+def validateUser(username, password, fname, lname, email, institution, faculty_url):
+    """used to validate user's credentials and create a list of errors"""
+
+    errors = []
+
+    match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
+    if match:
+        errors.append(
+            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line """
+        )
+    uinfo = db(db.auth_user.username == username).count()
+    if uinfo > 0:
+        errors.append("Username {username} already exists on line ")
+    if fname == "":
+        errors.append("First name cannot be blank on line ")
+    if lname == "":
+        errors.append(f"Last name cannot be blank on line ")
+    if institution == "":
+        errors.append(f"Institution name cannot be blank on line ")
+    if faculty_url == "":
+        errors.append(f"Faculty URL cannot be blank on line ")
+    if password == "":
+        errors.append(f"Password cannot be blank on line ")
+    if "@" not in email:
+        errors.append(f"Email address missing @ on line ")
+
+    return errors
