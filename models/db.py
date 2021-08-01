@@ -574,8 +574,6 @@ def createUser(username, password, fname, lname, email, institution, faculty_url
         created_on=datetime.datetime.now(),
         course_id=cinfo.id,
     )
-
-
     db.user_courses.insert(user_id=uid, course_id=cinfo.id)
     
     if instructor:

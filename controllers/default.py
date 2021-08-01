@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# from RunestoneServer.controllers.remakeofmyform import validateUser
-# from RunestoneServer.models.db import login_user
 import json
 import os
 import requests
