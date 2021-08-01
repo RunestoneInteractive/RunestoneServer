@@ -1,24 +1,40 @@
+
 {{user_navs = True}}
 {{extend 'layout.html'}}
 
+<link rel="stylesheet" href="/runestone/static/css/index.css">
+
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <h1>Runestone Interactive Library of Books</h1>
-
+        <h2>Runestone Interactive Library of Books</h2>
         <p>The books on Runestone.Academy are all free and open source textbooks.
             We encourage you to browse the library and make use of these books in your courses.
             If you are a new instructor and want to do this, please take a look at the
             <a href="/{{=request.application}}/books/published/instructorguide/index.html">Help for Instructors page</a>
             before you make a course.
         </p>
-
-        <ul>
+        <div class="searchbar">
+            <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+        </div>
+        <b style="font-size: 25px;">Computer Science Textbooks:</b>
+        
             {{ for book in book_list: }}
-                <li>
-                    <a href="{{=book['url']}}" style='font-size: 2.0vh;'>{{=book['title']}}</a> Use <code>{{=book['regname']}}</code> to register for this title.
-                </li>
+            
+            <div id='list'>
+                <div class="book_title"> {{=book['title']}}
+                    <a href="{{=book['url']}}"> 
+                    <span class="link1"></span> 
+                    </a>
+                </div>
+                <div class="book_descript"><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                </div>
+            </div>
+        
+            <br> 
             {{pass}}
-        </ul>
+            <script  src="../static/js/books.js"></script>
+    
+        
         <p>
             The books published on Runestone are all licensed under the Creative Commons CC-BY
             license or the GNU Free Documentation license.  The source code for each book can be found on
@@ -27,5 +43,4 @@
             the Github issues page for each book.
         </p>
     </div>
-
 </div>

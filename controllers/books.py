@@ -420,6 +420,8 @@ def index():
             logger.error("Error in book list: {}".format(e))
             continue
         book_info = {}
+        book_info.update(course_description="")
+        book_info.update(key_words="")
         if hasattr(config, "navbar_title"):
             book_info["title"] = config.navbar_title
         elif hasattr(config, "html_title"):
@@ -428,12 +430,15 @@ def index():
             book_info["title"] = config.html_short_title
         else:
             book_info["title"] = "Runestone Book"
-
+        # update course description if found in the book's conf.py
+        if hasattr(config, "course_description"):
+            book_info.update(course_description=config.course_description)
+        # update course key_words if found in book's conf.py
+        if hasattr(config, "key_words"):
+            book_info.update(key_words=config.key_words)
         book_info["url"] = "/{}/books/published/{}/index.html".format(
             request.application, book
         )
         book_info["regname"] = book
-
         res.append(book_info)
-
     return dict(book_list=res)
