@@ -82,5 +82,8 @@
 
     input {
         outline-style:none;   
-      }
-      
+    }
+
+    .library_entry {
+        margin-bottom: 5pt;
+    }
