@@ -584,7 +584,7 @@ def createUser(username, password, fname, lname, email, institution, faculty_url
 def validateUser(username, password, fname, lname, email, institution, faculty_url):
     """used to validate user's credentials and create a list of errors"""
 
-    errors = []
+    errors = [] 
 
     match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
     if match:

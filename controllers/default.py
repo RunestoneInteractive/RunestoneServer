@@ -95,7 +95,7 @@ def registerinstructor():
     institution = request.vars.institution
     faculty_url = request.vars.faculty_url
     email = request.vars.email
-    password = request.vars.password
+    password = request.vars.password 
 
     if request.vars.submit:
         errors = validateUser(username, password, fname, lname, email, institution, faculty_url)
