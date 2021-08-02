@@ -9,7 +9,9 @@
 </script>
 
 <h2>Peer Instruction Question</h2>
+<div id="imessage">
 
+</div>
 <div class="row">
     <div class="col-md-6">
         <form action="/runestone/peer/dashboard" method="GET">
@@ -24,16 +26,17 @@
         {{=XML(current_question['htmlsrc'])}}
     </div>
     <div class='col-md-6'>
+        <p>Your first answer <span id="first_answer"></span></p>
         <p>Answer Reasoning</p>
-        <textarea rows="5" cols="33">
-
+        <textarea id="messageText" rows="5" cols="33">
         </textarea>
+        <button type="button" onclick="sendMessage()">Send</button>
+        <button onclick="connect(event)">Connect</button>
+        <div>
+            <ul id="messages">
 
-        <p>Partner's Reasoning</p>
-        <textarea rows="5" cols="33">
-
-        </textarea>
-
+            </ul>
+        </div>
         <form>
             <div class="form-group">
                 Rate Peer's Explanation<br />
@@ -49,5 +52,10 @@
     </div>
 </div>
 
+<script src="/runestone/static/js/peer.js"></script>
+<script>
+    var user = '{{=auth.user.username}}';
+    var currentQuestion = '{{=XML(current_question.name)}}';
+</script>
 
 {{ end }}

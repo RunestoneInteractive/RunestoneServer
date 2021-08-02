@@ -8,6 +8,9 @@
     <div class="col-md-6">
         <form action="/runestone/peer/dashboard" method="GET">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
+            <button type="button" onclick="connect(event)">connect</button>
+            <button type="button" onclick="warnAndStopVote(event)">Stop Vote 1</button>
+            <button type="button" onclick="startVote2(event)">Start Vote 2</button>
             <button type="submit" name="next" value="Next">Next Question</button>
             <button type="submit" name="next" value="Reset">Start Over</button>
         </form>
@@ -20,8 +23,9 @@
     </div>
     <div class='col-md-6'>
         Graphs go here
-        <div id="first_answer"></div>
+        <div id="first_answer" style="display:none"></div>
         <div id="second_answer"></div>
+        <button type="button" onclick="hideShowGraph()">Hide/Show Graph</button>
     </div>
 </div>
 
@@ -49,8 +53,25 @@
 
         vegaEmbed("#first_answer", spec, opt);
     }
-    setInterval(updateGraphs, 5000);
 
+    function hideShowGraph() {
+        let graph = document.getElementById("first_answer");
+        if (graph.style.display == "none") {
+            graph.style.display = "block";
+        }
+        else {
+            graph.style.display = "none";
+        }
+        updateGraphs();
+        setInterval(updateGraphs, 5000);
+    }
+
+
+</script>
+<script src="/runestone/static/js/peer.js"></script>
+<script>
+    var user = '{{=auth.user.username}}';
+    var currentQuestion = '{{=XML(current_question.name)}}';
 </script>
 <script type="text/javascript">
     $(".dashboardnav").removeClass("active");
