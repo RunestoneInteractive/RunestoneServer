@@ -3,6 +3,9 @@
 {{ block tabcontent }}
 
 <h2>Peer Instruction Dashboard</h2>
+<div id="imessage">
+
+</div>
 
 <div class="row">
     <div class="col-md-6">
@@ -10,8 +13,10 @@
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
             <button type="button" onclick="connect(event)">connect</button>
             <button type="button" onclick="warnAndStopVote(event)">Stop Vote 1</button>
+            <button type="button" onclick="makePartners(event)">Make Partners</button>
             <button type="button" onclick="startVote2(event)">Start Vote 2</button>
             <button type="submit" name="next" value="Next">Next Question</button>
+            <button type="button" onclick="clearPartners(event)">Clear Partners</button>
             <button type="submit" name="next" value="Reset">Start Over</button>
         </form>
     </div>

@@ -10,10 +10,11 @@ function connect(event) {
             message.appendChild(content)
             messages.appendChild(message)
         } else if (mess.type === "control") {
+            let messarea;
             switch (mess.message) {
                 // This will be some kind of control message for the page
                 case "countDownAndStop":
-                    let messarea = document.getElementById("imessage");
+                    messarea = document.getElementById("imessage");
                     let count = 10;
                     let itimerid = setInterval(function () {
                         if (count > 0) {
@@ -28,7 +29,7 @@ function connect(event) {
                     break;
                 case "enableVote":
                     window.mcList[currentQuestion].submitButton.disabled = false;
-                    let messarea = document.getElementById("imessage");
+                    messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make you 2nd vote</h3>`
                     break;
                 default:
@@ -64,6 +65,23 @@ function warnAndStopVote(event) {
     ws.send(JSON.stringify(mess))
 }
 
+async function makePartners() {
+    let data = {
+        div_id: currentQuestion
+    }
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/make_pairs", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    let resp = await fetch(request);
+    let spec = await resp.json();
+}
+
 function startVote2(event) {
     let mess = {
         type: "control",
@@ -73,4 +91,21 @@ function startVote2(event) {
     }
     ws.send(JSON.stringify(mess));
 
+}
+
+async function clearPartners(event) {
+    let data = {
+        div_id: currentQuestion
+    }
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/clear_pairs", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    let resp = await fetch(request);
+    let spec = await resp.json();
 }

@@ -10,12 +10,15 @@
 #
 # Standard library
 # ----------------
+import json
 import logging
+import os
 
 # Third Party
 # -----------
 import altair as alt
 import pandas as pd
+import redis
 
 
 logger = logging.getLogger(settings.logger)
@@ -77,17 +80,9 @@ def _get_current_question(assignment_id, get_next):
     return current_question
 
 
-@auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
-)
-def chartdata():
-    response.headers["content-type"] = "application/json"
-    div_id = request.vars.div_id
-    qnum = request.vars.answer_num
-    course_name = auth.user.course_name
+def _get_n_answers(num_answer, div_id, course_name):
     dburl = settings.database_uri.replace("postgres://", "postgresql://")
-    logger.debug(f"divid = {div_id}")
+
     df = pd.read_sql_query(
         f"""
     WITH first_answer AS (
@@ -116,10 +111,23 @@ def chartdata():
     """,
         dburl,
     )
-
     df = df.dropna(subset=["answer"])
     logger.debug(df.head())
     df["answer"] = df.answer.astype("int64")
+
+    return df
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
+def chartdata():
+    response.headers["content-type"] = "application/json"
+    div_id = request.vars.div_id
+    course_name = auth.user.course_name
+    logger.debug(f"divid = {div_id}")
+    df = _get_n_answers(2, div_id, course_name)
     df["letter"] = df.answer.map(lambda x: chr(65 + x))
     c = alt.Chart(df[df.rn == 1]).mark_bar().encode(x="letter", y="count()")
     d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="count()")
@@ -157,6 +165,40 @@ def peer_question():
     )
 
 
-@auth.requires_login()
-def home():
-    return dict()
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
+def make_pairs():
+    response.headers["content-type"] = "application/json"
+    div_id = request.vars.div_id
+    df = _get_n_answers(1, div_id, auth.user.course_name)
+    answers = list(df.answer.unique())
+    correct = df[df.correct == "T"][["sid", "answer"]]
+    answers.remove(correct.iloc[0].answer)
+    correct_list = correct.sid.to_list()
+    incorrect = df[df.correct == "F"][["sid", "answer"]]
+    incorrect_list = incorrect.sid.to_list()
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    for i in range(min(len(correct_list), len(incorrect_list))):
+        r.hset("partnerdb", incorrect_list.pop(), correct_list.pop())
+
+    remaining = correct_list or incorrect_list
+    if remaining:
+        done = False
+        while not done:
+            try:
+                p1 = remaining.pop()
+                p2 = remaining.pop()
+                r.hset("partnerdb", p1, p2)
+            except IndexError():
+                done = True
+
+    return json.dumps("success")
+
+
+def clear_pairs():
+    response.headers["content-type"] = "application/json"
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    r.delete("partnerdb")
+    return json.dumps("success")
