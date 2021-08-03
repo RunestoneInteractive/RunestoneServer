@@ -20,7 +20,7 @@
         
             {{ for book in book_list: }}
             
-            <div id='list'>
+            <div id='list' class='library_entry'>
                 <div class="book_title"> {{=book['title']}}
                     <a href="{{=book['url']}}"> 
                     <span class="link1"></span> 
@@ -30,7 +30,6 @@
                 </div>
             </div>
         
-            <br> 
             {{pass}}
             <script  src="../static/js/books.js"></script>
     
