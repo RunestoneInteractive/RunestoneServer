@@ -104,7 +104,7 @@ def _get_n_answers(num_answer, div_id, course_name):
     FROM
         first_answer
     WHERE
-        rn <= 2
+        rn <= {num_answer}
     ORDER BY
         sid
     limit 4000    
@@ -179,9 +179,14 @@ def make_pairs():
     correct_list = correct.sid.to_list()
     incorrect = df[df.correct == "F"][["sid", "answer"]]
     incorrect_list = incorrect.sid.to_list()
+    logger.debug(f"{correct_list=}")
+    logger.debug(f"{incorrect_list=}")
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     for i in range(min(len(correct_list), len(incorrect_list))):
-        r.hset("partnerdb", incorrect_list.pop(), correct_list.pop())
+        p1 = incorrect_list.pop()
+        p2 = correct_list.pop()
+        r.hset("partnerdb", p1, p2)
+        r.hset("partnerdb", p2, p1)
 
     remaining = correct_list or incorrect_list
     if remaining:
@@ -191,6 +196,7 @@ def make_pairs():
                 p1 = remaining.pop()
                 p2 = remaining.pop()
                 r.hset("partnerdb", p1, p2)
+                r.hset("partnerdb", p2, p1)
             except IndexError():
                 done = True
 
