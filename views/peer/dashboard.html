@@ -11,7 +11,6 @@
     <div class="col-md-6">
         <form action="/runestone/peer/dashboard" method="GET">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-            <button type="button" onclick="connect(event)">connect</button>
             <button type="button" onclick="warnAndStopVote(event)">Stop Vote 1</button>
             <button type="button" onclick="makePartners(event)">Make Partners</button>
             <button type="button" onclick="startVote2(event)">Start Vote 2</button>
@@ -27,7 +26,7 @@
         {{=XML(current_question['htmlsrc'])}}
     </div>
     <div class='col-md-6'>
-        Graphs go here
+        <div id="counter">Graphs Here</div>
         <div id="first_answer" style="display:none"></div>
         <div id="second_answer"></div>
         <button type="button" onclick="hideShowGraph()">Hide/Show Graph</button>
@@ -71,15 +70,36 @@
         setInterval(updateGraphs, 5000);
     }
 
+    async function updateCount() {// Every five seconds get the graph data
+        let data = {
+            "div_id": "{{=XML(current_question['name'])}}",
+        }
+        let jsheaders = new Headers({
+            "Content-type": "application/json; charset=utf-8",
+            Accept: "application/json",
+        });
+        let request = new Request("/runestone/peer/num_answers", {
+            method: "POST",
+            headers: jsheaders,
+            body: JSON.stringify(data),
+        });
+        let resp = await fetch(request);
+        let spec = await resp.json();
+
+        let counterel = document.querySelector("#counter")
+        counterel.innerHTML = `<p>Number of Answers ${spec.count}</p>`;
+    }
+
 
 </script>
 <script src="/runestone/static/js/peer.js"></script>
 <script>
     var user = '{{=auth.user.username}}';
     var currentQuestion = '{{=XML(current_question.name)}}';
-</script>
-<script type="text/javascript">
-    $(".dashboardnav").removeClass("active");
-    $("#doctab").addClass("active");
+    document.addEventListener("DOMContentLoaded", function (event) {
+        setTimeout(connect, 1000);
+        setInterval(updateCount, 2000);
+    });
+
 </script>
 {{ end }}

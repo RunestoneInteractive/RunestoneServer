@@ -14,7 +14,7 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <form action="/runestone/peer/dashboard" method="GET">
+        <form action="/runestone/peer/peer_question" method="GET">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
             <button type="submit" name="next" value="Next">Next Question</button>
         </form>
@@ -31,7 +31,6 @@
         <textarea id="messageText" rows="5" cols="33">
         </textarea>
         <button type="button" onclick="sendMessage()">Send</button>
-        <button onclick="connect(event)">Connect</button>
         <div>
             <ul id="messages">
 

@@ -65,9 +65,11 @@ def dashboard():
 def _get_current_question(assignment_id, get_next):
 
     assignment = db(db.assignments.id == assignment_id).select().first()
-    idx = 0
+    idx = assignment.id
     if get_next:
         idx = assignment.current_index + 1
+        db(db.assignments.id == assignment_id).update(current_index=idx)
+
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=db.assignment_questions.sorting_priority
     )
@@ -133,6 +135,21 @@ def chartdata():
     d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="count()")
 
     return alt.vconcat(c, d).to_json()
+
+
+@auth.requires(
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
+    requires_login=True,
+)
+def num_answers():
+    response.headers["content-type"] = "application/json"
+    div_id = request.vars.div_id
+    acount = db(
+        (db.mchoice_answers.div_id == div_id)
+        & (db.mchoice_answers.course_name == auth.user.course_name)
+    ).count(distinct=db.mchoice_answers.sid)
+
+    return json.dumps({"count": acount})
 
 
 #
