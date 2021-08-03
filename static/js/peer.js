@@ -63,9 +63,14 @@ function warnAndStopVote(event) {
         broadcast: true
     }
     ws.send(JSON.stringify(mess))
+    let butt = document.querySelector("#vote1")
+    butt.classList.replace("btn-info", "btn-secondary")
 }
 
 async function makePartners() {
+    let butt = document.querySelector("#makep")
+    butt.classList.replace("btn-info", "btn-secondary")
+
     let data = {
         div_id: currentQuestion
     }
@@ -83,6 +88,9 @@ async function makePartners() {
 }
 
 function startVote2(event) {
+    let butt = document.querySelector("#vote2")
+    butt.classList.replace("btn-info", "btn-secondary")
+
     let mess = {
         type: "control",
         from: `${user}`,
@@ -94,6 +102,10 @@ function startVote2(event) {
 }
 
 async function clearPartners(event) {
+
+    let butt = document.querySelector("#clearp")
+    butt.classList.replace("btn-info", "btn-secondary")
+
     let data = {
         div_id: currentQuestion
     }

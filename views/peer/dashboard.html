@@ -2,6 +2,10 @@
 
 {{ block tabcontent }}
 
+<script>
+    eBookConfig.peer = true;
+</script>
+
 <h2>Peer Instruction Dashboard</h2>
 <div id="imessage">
 
@@ -11,12 +15,12 @@
     <div class="col-md-6">
         <form action="/runestone/peer/dashboard" method="GET">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-            <button type="button" onclick="warnAndStopVote(event)">Stop Vote 1</button>
-            <button type="button" onclick="makePartners(event)">Make Partners</button>
-            <button type="button" onclick="startVote2(event)">Start Vote 2</button>
-            <button type="submit" name="next" value="Next">Next Question</button>
-            <button type="button" onclick="clearPartners(event)">Clear Partners</button>
-            <button type="submit" name="next" value="Reset">Start Over</button>
+            <button type="button" id="vote1" class="btn btn-info" onclick="warnAndStopVote(event)">Stop Vote 1</button>
+            <button type="button" id="makep" class="btn btn-info" onclick="makePartners(event)">Make Partners</button>
+            <button type="button" id="vote2" class="btn btn-info" onclick="startVote2(event)">Start Vote 2</button>
+            <button type="button" id="clear" class="btn btn-info" onclick="clearPartners(event)">Clear Partners</button>
+            <button type="submit" id="nextq" class="btn btn-info" name="next" value="Next">Next Question</button>
+            <button type="submit" id="restart" class="btn btn-danger" name="next" value="Reset">Start Over</button>
         </form>
     </div>
 </div>

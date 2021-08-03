@@ -50,6 +50,8 @@ def dashboard():
     assignment_id = request.vars.assignment_id
     if request.vars.next == "Next":
         next = True
+    elif request.vars.next == "Reset":
+        next = "Reset"
     else:
         next = False
     current_question = _get_current_question(assignment_id, next)
@@ -65,10 +67,15 @@ def dashboard():
 def _get_current_question(assignment_id, get_next):
 
     assignment = db(db.assignments.id == assignment_id).select().first()
-    idx = assignment.id
-    if get_next:
+
+    if get_next == "Reset":
+        idx = 0
+        db(db.assignments.id == assignment_id).update(current_index=idx)
+    elif get_next is True:
         idx = assignment.current_index + 1
         db(db.assignments.id == assignment_id).update(current_index=idx)
+    else:
+        idx = assignment.current_index
 
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=db.assignment_questions.sorting_priority
