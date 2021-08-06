@@ -55,6 +55,10 @@
 <script>
     var user = '{{=auth.user.username}}';
     var currentQuestion = '{{=XML(current_question.name)}}';
+    document.addEventListener("DOMContentLoaded", function (event) {
+        setTimeout(connect, 1000);
+    });
+
 </script>
 
 {{ end }}
