@@ -197,15 +197,23 @@ def make_pairs():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
     df = _get_n_answers(1, div_id, auth.user.course_name)
-    answers = list(df.answer.unique())
+    logger.debug("HELLO")
+    # answers = list(df.answer.unique())
     correct = df[df.correct == "T"][["sid", "answer"]]
-    answers.remove(correct.iloc[0].answer)
+    # answers.remove(correct.iloc[0].answer)
     correct_list = correct.sid.to_list()
     incorrect = df[df.correct == "F"][["sid", "answer"]]
     incorrect_list = incorrect.sid.to_list()
+    logger.debug(f"CL = {correct_list}")
+    logger.debug(f"ICL = {incorrect_list}")
+    if auth.user.username in correct_list:
+        correct_list.remove(auth.user.username)
+    if auth.user.username in incorrect_list:
+        incorrect_list.remove(auth.user.username)
+    logger.debug("TTT")
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     logger.debug(f"{correct_list=}")
     logger.debug(f"{incorrect_list=}")
-    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     for i in range(min(len(correct_list), len(incorrect_list))):
         p1 = incorrect_list.pop()
         p2 = correct_list.pop()
@@ -221,7 +229,7 @@ def make_pairs():
                 p2 = remaining.pop()
                 r.hset("partnerdb", p1, p2)
                 r.hset("partnerdb", p2, p1)
-            except IndexError():
+            except IndexError:
                 done = True
 
     return json.dumps("success")
