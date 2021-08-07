@@ -122,6 +122,7 @@ def _get_n_answers(num_answer, div_id, course_name):
     )
     df = df.dropna(subset=["answer"])
     logger.debug(df.head())
+    # FIXME: this breaks for multiple answer mchoice!
     df["answer"] = df.answer.astype("int64")
 
     return df
