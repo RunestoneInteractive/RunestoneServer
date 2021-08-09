@@ -172,22 +172,25 @@
                         <!-- end user account dropdown -->
                         <li class="divider-vertical"></li>
                         {{ if settings.academy_mode: }}
-                        <li id="scratch_ac_link" class="dropdown"><a href="javascript:runestoneComponents.popupScratchAC()">
-                            <i class="glyphicon glyphicon-pencil" style="opacity:0.9;"><span aria-label="Scratch Activecode" class="visuallyhidden">Scratch Activecode</span></i></a></li>
-                        <!-- help menu dropdown -->
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
-                            </a>
-                            <ul class="dropdown-menu user-menu">
-                                <li><a href='http://runestoneinteractive.org/pages/faq.html'>FAQ</a></li>
-                                <li><a href='https://runestone.academy/runestone/books/published/instructorguide/index.html'>Instructors Guide</a></li>
-                                <li class="divider"></li>
-                                <li><a href='http://www.runestoneinteractive.org/pages/about.html'>About Runestone</a></li>
-                                <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
-                            </ul>
-                        </li>
-                        <li class="divider-vertical"></li>
+                            <!-- Omit the scratch activecode icon if ``no_scratch_activecode`` is True. Otherwise, include it. -->
+                            {{ if "no_scratch_activecode" not in globals() or not no_scratch_activecode: }}
+                                <li id="scratch_ac_link" class="dropdown"><a href="javascript:runestoneComponents.popupScratchAC()">
+                                    <i class="glyphicon glyphicon-pencil" style="opacity:0.9;"><span aria-label="Scratch Activecode" class="visuallyhidden">Scratch Activecode</span></i></a></li>
+                            {{pass}}
+                            <!-- help menu dropdown -->
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
+                                </a>
+                                <ul class="dropdown-menu user-menu">
+                                    <li><a href='http://runestoneinteractive.org/pages/faq.html'>FAQ</a></li>
+                                    <li><a href='https://runestone.academy/runestone/books/published/instructorguide/index.html'>Instructors Guide</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href='http://www.runestoneinteractive.org/pages/about.html'>About Runestone</a></li>
+                                    <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
+                                </ul>
+                            </li>
+                            <li class="divider-vertical"></li>
                         {{pass}}
                     </ul>
                     <ul class="nav navbar-nav">
@@ -278,8 +281,5 @@
                 })();
             </script>
         {{ pass }}
-        <script type="text/javascript">
-            $(document).ready(() => window.runestoneComponents.runestone_import("activecode"))
-        </script>
     </body>
 </html>
