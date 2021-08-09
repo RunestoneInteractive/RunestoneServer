@@ -932,7 +932,10 @@ def selenium_driver_session():
     # When run as root, Chrome complains ``Running as root without --no-sandbox is not supported. See https://crbug.com/638180.`` Here's a `crude check for being root <https://stackoverflow.com/a/52621917>`_.
     if is_linux and os.geteuid() == 0:
         options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(options=options)
+    # _`selenium_logging`: Ask Chrome to save the logs from the JavaScript console. Copied from `SO <https://stackoverflow.com/a/63625977/16038919>`__.
+    caps = webdriver.DesiredCapabilities.CHROME.copy()
+    caps["goog:loggingPrefs"] = {"browser": "ALL"}
+    driver = webdriver.Chrome(options=options, desired_capabilities=caps)
 
     yield driver
 
