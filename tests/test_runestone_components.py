@@ -242,10 +242,10 @@ def test_lp_1(selenium_utils_user):
         EC.text_to_be_present_in_element_value((By.ID, "lp-result"), "Building...")
     )
 
-    # Wait until the build finishes. To find this, I used the Chrome inspector; right-click on the element, then select "Copy > Copy full XPath".
+    # Wait until the build finishes.
     su.wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "/html/body/div[3]/div[1]/div[3]/div"), "Correct. Grade: 100%"
+            (By.CSS_SELECTOR, "#lp-result ~ div"), "Correct. Grade: 100%"
         )
     )
 
