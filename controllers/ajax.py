@@ -595,7 +595,7 @@ def updatelastpage():
             try:
                 db(
                     (db.user_state.user_id == auth.user.id)
-                    & (db.user_state.course_id == course)
+                    & (db.user_state.course_name == course)
                 ).update(
                     last_page_url=lastPageUrl,
                     last_page_chapter=lastPageChapter,
@@ -774,7 +774,7 @@ def getlastpage():
 
     result = db(
         (db.user_state.user_id == auth.user.id)
-        & (db.user_state.course_id == course.course_name)
+        & (db.user_state.course_name == course.course_name)
         & (db.chapters.course_id == course.base_course)
         & (db.user_state.last_page_chapter == db.chapters.chapter_label)
         & (db.sub_chapters.chapter_id == db.chapters.id)
