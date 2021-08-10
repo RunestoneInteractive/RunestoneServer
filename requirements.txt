@@ -140,6 +140,8 @@ pygments==2.8.1
     #   codechat
     #   runestone
     #   sphinx
+pyjwt==2.0.1
+    # via -r requirements.in
 pylint==2.6.0
     # via -r requirements.in
 pyparsing==2.4.7
