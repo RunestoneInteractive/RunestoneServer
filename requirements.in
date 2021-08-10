@@ -22,4 +22,5 @@ pathlib2
 stripe
 pandas
 altair
+jwt
 -e file:./rsmanage

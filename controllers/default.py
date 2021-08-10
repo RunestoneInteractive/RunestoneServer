@@ -2,6 +2,7 @@
 import json
 import os
 import requests
+import datetime
 from six.moves.urllib.parse import unquote
 from six.moves.urllib.error import HTTPError
 import logging
@@ -9,6 +10,7 @@ import subprocess
 
 from gluon.restricted import RestrictedError
 from stripe_form import StripeForm
+import jwt
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -175,6 +177,16 @@ def index():
             % (request.application, request.application)
         )
     else:
+        # At this point the user has logged in
+        # add a jwt cookie for compatibility with bookserver
+        token = _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(hours=24 * 30)
+        )
+        # set cookie
+        response.cookies["access_token"] = token
+        response.cookies["access_token"]["expires"] = 24 * 3600 * 90
+        response.cookies["access_token"]["path"] = "/"
+
         # check to see if there is an entry in user_courses for
         # this user,course configuration
         in_db = db(
@@ -610,3 +622,40 @@ def delete():
         auth.logout()  # logout user and redirect to home page
     else:
         redirect(URL("default", "user/profile"))
+
+
+def _create_access_token(data: dict, expires=None, scopes=None) -> str:
+    """
+    Helper function to create the encoded access token using
+    the provided secret and the algorithm of the LoginManager instance
+
+    Args:
+        data (dict): The data which should be stored in the token
+        expires (datetime.timedelta):  An optional timedelta in which the token expires.
+            Defaults to 15 minutes
+        scopes (Collection): Optional scopes the token user has access to.
+
+    Returns:
+        The encoded JWT with the data and the expiry. The expiry is
+        available under the 'exp' key
+    """
+
+    to_encode = data.copy()
+
+    if expires:
+        expires_in = datetime.datetime.utcnow() + expires
+    else:
+        # default to 15 minutes expiry times
+        expires_in = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+
+    to_encode.update({"exp": expires_in})
+
+    if scopes is not None:
+        unique_scopes = set(scopes)
+        to_encode.update({"scopes": list(unique_scopes)})
+
+    algorithm = "HS256"  # normally set in constructor
+    secret = "supersecret"  # set in settings.secret
+    encoded_jwt = jwt.encode(to_encode, secret, algorithm)
+    # decode here decodes the byte str to a normal str not the token
+    return encoded_jwt
