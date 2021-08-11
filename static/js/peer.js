@@ -30,7 +30,7 @@ function connect(event) {
                 case "enableVote":
                     window.mcList[currentQuestion].submitButton.disabled = false;
                     messarea = document.getElementById("imessage");
-                    messarea.innerHTML = `<h3>Time to make you 2nd vote</h3>`
+                    messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`
                     break;
                 default:
                     console.log("unknown control message");
@@ -43,7 +43,14 @@ function connect(event) {
 // specific user
 function sendMessage(event) {
     var input = document.getElementById("messageText")
-    let mess = { type: "text", from: `${user}`, message: input.value, broadcast: false };
+    let mess = {
+        type: "text",
+        from: `${user}`,
+        message: input.value,
+        broadcast: false,
+        course_name: eBookConfig.course,
+        div_id: currentQuestion
+    };
 
     ws.send(JSON.stringify(mess))
     var messages = document.getElementById('messages')
