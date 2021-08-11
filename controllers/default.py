@@ -180,12 +180,13 @@ def index():
         # At this point the user has logged in
         # add a jwt cookie for compatibility with bookserver
         token = _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(hours=24 * 30)
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
         )
         # set cookie
-        response.cookies["access_token"] = token
-        response.cookies["access_token"]["expires"] = 24 * 3600 * 90
-        response.cookies["access_token"]["path"] = "/"
+        if token:
+            response.cookies["access_token"] = token
+            response.cookies["access_token"]["expires"] = 24 * 3600 * 30
+            response.cookies["access_token"]["path"] = "/"
 
         # check to see if there is an entry in user_courses for
         # this user,course configuration
@@ -624,7 +625,10 @@ def delete():
         redirect(URL("default", "user/profile"))
 
 
-def _create_access_token(data: dict, expires=None, scopes=None) -> str:
+# This function is basically copied from the fastapi_login plugin
+# see `their github repo <https://github.com/MushroomMaula/fastapi_login>`_
+#
+def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
     """
     Helper function to create the encoded access token using
     the provided secret and the algorithm of the LoginManager instance
@@ -655,7 +659,17 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> str:
         to_encode.update({"scopes": list(unique_scopes)})
 
     algorithm = "HS256"  # normally set in constructor
-    secret = "supersecret"  # set in settings.secret
-    encoded_jwt = jwt.encode(to_encode, secret, algorithm)
+
+    # the secret key value should be set in 1.py as part of the
+    # web2py installation.
+    secret = settings.secret
+
+    try:
+        encoded_jwt = jwt.encode(to_encode, secret, algorithm)
+    except:
+        logger.error(f"failed to create a JWT Token for {to_encode}")
+        if not secret:
+            logger.error("Please set a secret key value in models/1.py")
+        encoded_jwt = None
     # decode here decodes the byte str to a normal str not the token
     return encoded_jwt
