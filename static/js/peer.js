@@ -16,7 +16,7 @@ function connect(event) {
                 case "countDownAndStop":
                     messarea = document.getElementById("imessage");
                     let count = 10;
-                    let itimerid = setInterval(function () {
+                    let itimerid = setInterval(async function () {
                         if (count > 0) {
                             messarea.innerHTML = `<h3>Finish Up only ${count} seconds remaining</h3>`;
                             count = count - 1;
@@ -24,6 +24,10 @@ function connect(event) {
                             messarea.innerHTML = `<h3>Time is up</h3>`;
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             clearInterval(itimerid);
+                            // send log message to indicate voting is over
+                            if (voteNum == 2) {
+                                await logStopVote();
+                            }
                         }
                     }, 1000);
                     break;
@@ -36,6 +40,33 @@ function connect(event) {
                     console.log("unknown control message");
             }
         }
+    }
+}
+
+async function logStopVote() {
+    // This can be refactored to take some parameters if peer grows
+    // to require more logging functionality.
+    let eventInfo = {
+        sid: eBookConfig.username,
+        div_id: currentQuestion,
+        event: "peer",
+        act: "stop_question",
+        course_id: eBookConfig.course,
+    }
+    let request = new Request(eBookConfig.ajaxURL + "hsblog", {
+        method: "POST",
+        headers: this.jsonHeaders,
+        body: JSON.stringify(eventInfo),
+    });
+    try {
+        let response = await fetch(request);
+        if (!response.ok) {
+            throw new Error("Failed to save the log entry");
+        }
+        post_return = response.json();
+    } catch (e) {
+        alert(`Error: Your action was not saved! The error was ${e}`);
+        console.log(`Error: ${e}`);
     }
 }
 // Send a message to the websocket server
@@ -70,8 +101,14 @@ function warnAndStopVote(event) {
         broadcast: true
     }
     ws.send(JSON.stringify(mess))
-    let butt = document.querySelector("#vote1")
-    butt.classList.replace("btn-info", "btn-secondary")
+    if (event.srcElement.id == "vote1") {
+        let butt = document.querySelector("#vote1")
+        butt.classList.replace("btn-info", "btn-secondary")
+    } else {
+        let butt = document.querySelector("#vote3")
+        butt.classList.replace("btn-info", "btn-secondary")
+
+    }
 }
 
 async function makePartners() {
@@ -97,7 +134,7 @@ async function makePartners() {
 function startVote2(event) {
     let butt = document.querySelector("#vote2")
     butt.classList.replace("btn-info", "btn-secondary")
-
+    voteNum += 1;
     let mess = {
         type: "control",
         from: `${user}`,
