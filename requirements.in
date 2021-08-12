@@ -23,4 +23,5 @@ stripe
 pandas
 altair
 pyjwt==2.0.1
+cryptography
 -e file:./rsmanage
