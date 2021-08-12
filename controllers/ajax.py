@@ -799,7 +799,7 @@ def getlastpage():
             rowarray_list.append(res)
         return json.dumps(rowarray_list)
     else:
-        db.user_state.insert(user_id=auth.user.id, course_id=course.course_name)
+        db.user_state.insert(user_id=auth.user.id, course_name=course.course_name)
 
 
 def _getCorrectStats(miscdata, event):
