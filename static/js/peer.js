@@ -43,9 +43,11 @@ function connect(event) {
 // specific user
 function sendMessage(event) {
     var input = document.getElementById("messageText")
-    let mess = { type: "text", from: `${user}`, message: input.value, broadcast: false };
+    let mess = { type: "text", sender: `${user}`, message: input.value, broadcast: false };
 
-    ws.send(JSON.stringify(mess))
+    //#ws.send(JSON.stringify(mess))
+    publishMessage(mess)
+
     var messages = document.getElementById('messages')
     var message = document.createElement('li')
     var content = document.createTextNode(input.value)
@@ -58,11 +60,12 @@ function sendMessage(event) {
 function warnAndStopVote(event) {
     let mess = {
         type: "control",
-        from: `${user}`,
+        sender: `${user}`,
         message: "countDownAndStop",
         broadcast: true
     }
-    ws.send(JSON.stringify(mess))
+    //ws.send(JSON.stringify(mess))
+    publishMessage(mess);
     let butt = document.querySelector("#vote1")
     butt.classList.replace("btn-info", "btn-secondary")
 }
@@ -93,11 +96,12 @@ function startVote2(event) {
 
     let mess = {
         type: "control",
-        from: `${user}`,
+        sender: `${user}`,
         message: "enableVote",
         broadcast: true
     }
-    ws.send(JSON.stringify(mess));
+    //ws.send(JSON.stringify(mess));
+    publishMessage(mess)
 
 }
 
@@ -114,6 +118,20 @@ async function clearPartners(event) {
         Accept: "application/json",
     });
     let request = new Request("/runestone/peer/clear_pairs", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    let resp = await fetch(request);
+    let spec = await resp.json();
+}
+
+async function publishMessage(data) {
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/publish_message", {
         method: "POST",
         headers: jsheaders,
         body: JSON.stringify(data),
