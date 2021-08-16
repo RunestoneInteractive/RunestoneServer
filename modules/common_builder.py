@@ -146,7 +146,7 @@ def get_sim_run_str_mdb(
         "{}"
         # Run the program. Wait a time in ms for it to finish.
         "run\n"
-        "wait 6000\n"
+        "wait 12000\n"
         # In case the wait time expired before encountering a breakpoint, halt the simulation.
         "halt\n"
         # Remove all breakpoints.

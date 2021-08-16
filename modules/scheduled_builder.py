@@ -59,13 +59,36 @@ def _scheduled_builder(
 
     if builder == "unsafe-python" and os.environ.get("WEB2PY_CONFIG") == "test":
         # Run the test in Python. This is for testing only, and should never be used in production; instead, this should be run in a limited Docker container. For simplicity, it lacks a timeout.
-        return python_builder()
-    elif builder != "pic24-xc16-bullylib":
+        return python_builder(
+            file_path,
+            sphinx_base_path,
+            sphinx_source_path,
+            sphinx_out_path,
+            source_path,
+        )
+    elif builder == "pic24-xc16-bullylib":
+        return xc16_builder(
+            file_path,
+            sphinx_base_path,
+            sphinx_source_path,
+            sphinx_out_path,
+            source_path,
+        )
+    elif builder == "armv7-newlib-sim":
+        return armv7_builder(
+            file_path,
+            sphinx_base_path,
+            sphinx_source_path,
+            sphinx_out_path,
+            source_path,
+        )
+    else:
         raise RuntimeError("Unknown builder {}".format(builder))
-    return xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path)
 
 
-def python_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path):
+def python_builder(
+    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+):
     cwd = os.path.dirname(file_path)
 
     # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
@@ -92,7 +115,9 @@ def python_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_p
         return e.output, 0
 
 
-def xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path):
+def xc16_builder(
+    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+):
     cwd = os.path.dirname(file_path)
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
@@ -100,7 +125,7 @@ def xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_pat
     # Compile in the temporary directory, in which ``file_path`` resides.
     sp_args = dict(
         stderr=subprocess.STDOUT,
-        universal_newlines=True,
+        text=True,
         cwd=cwd,
     )
     o_path = file_path + ".o"
@@ -262,6 +287,145 @@ def xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_pat
             out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
         # Put the timeout string at the end of all the simulator output.
         out += timeout_str
+
+    return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
+
+
+def armv7_builder(
+    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+):
+    cwd = os.path.dirname(file_path)
+    # Build the test code with a random verification code.
+    verification_code = get_verification_code()
+
+    # Assemble or compile the source. We assume that the binaries are already in the path.
+    #
+    # Compile in the temporary directory, in which ``file_path`` resides.
+    sp_args = dict(
+        stderr=subprocess.STDOUT,
+        text=True,
+        cwd=cwd,
+    )
+    elf_path = file_path + ".elf"
+    lib_path = os.path.join(
+        sphinx_base_path,
+        sphinx_source_path,
+    )
+    test_file_path = os.path.join(
+        lib_path,
+        os.path.splitext(source_path)[0] + "-test.c",
+    )
+
+    # Compile and link the source file. The most helpful resource I've found on bare-metal ARM with newlib: https://jasonblog.github.io/note/arm_emulation/simplest_bare_metal_program_for_arm.html. However, I prefer this (simpler) approach.
+    args = [
+        "arm-none-eabi-gcc",
+        # The student source.
+        file_path,
+        # The test code.
+        test_file_path,
+        # Output args.
+        "-o",
+        elf_path,
+        # Pass the verification code.
+        "-DVERIFICATION_CODE=({}u)".format(verification_code),
+        # Provide picky warnings, etc.
+        "-g",
+        "-O0",
+        "-Wall",
+        "-Wextra",
+        "-Wdeclaration-after-statement",
+        # Include paths for the book.
+        "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "lib/include"),
+        "-I" + os.path.join(sphinx_base_path, sphinx_source_path, "tests"),
+        "-I"
+        + os.path.join(
+            sphinx_base_path, sphinx_source_path, "tests/platform/ARMv7-A_ARMv7-R"
+        ),
+        "-I"
+        + os.path.join(
+            sphinx_base_path, sphinx_source_path, os.path.dirname(source_path)
+        ),
+        # Book library files. TODO: compile these into a library and link with that instead for efficiency.
+        os.path.join(lib_path, "tests/test_utils.c"),
+        os.path.join(lib_path, "tests/test_assert.c"),
+        os.path.join(lib_path, "tests/platform/ARMv7-A_ARMv7-R/platform.c"),
+        # The ARM needs an interrupt vector table defined for this specific processor.
+        os.path.join(
+            sphinx_base_path,
+            sphinx_source_path,
+            "tests/platform/ARMv7-A_ARMv7-R/interrupts.S",
+        ),
+        # The custom linker file defines a section to correctly place these interrupt vectors.
+        "-T",
+        os.path.join(
+            sphinx_base_path,
+            sphinx_source_path,
+            "tests/platform/ARMv7-A_ARMv7-R/redboot.ld",
+        ),
+        # Use the RDIMON semihosting tools to provide the standard library (write, exit, etc.).
+        "--specs=/usr/lib/arm-none-eabi/newlib/aprofile-ve.specs",
+        # The specific chip we use has a different RAM address than the linker file. Override it here.
+        "-Wl,--section-start=.text=0x60010000",
+    ]
+
+    out = _subprocess_string(args, **sp_args)
+    try:
+        out += subprocess.check_output(args, **sp_args)
+    except subprocess.CalledProcessError as e:
+        out += e.output
+        return out, 0
+
+    # Transform to a bin file.
+    bin_path = file_path + ".bin"
+    args = ["arm-none-eabi-objcopy", "-O", "binary", elf_path, bin_path]
+    out += _subprocess_string(args, **sp_args)
+    try:
+        out += subprocess.check_output(args, **sp_args)
+    except subprocess.CalledProcessError as e:
+        out += e.output
+        return out, 0
+
+    # Simulate.
+    args = [
+        # QEMU provides `fairly good simulation for ARM <https://qemu-project.gitlab.io/qemu/system/target-arm.html>`_. For more of the following options, search the `QEMU invocation <https://qemu-project.gitlab.io/qemu/system/invocation.html>`_ page.
+        "qemu-system-arm",
+        # Pick a specific system, in this case the `ARM Versatile Express-A9 <https://qemu-project.gitlab.io/qemu/system/arm/vexpress.html>`_
+        "-M",
+        "vexpress-a9",
+        # Give the processor 32 MB of RAM. Search for ``-m [size=]`` on the `QEMU invocation`_ page.
+        "-m",
+        "32M",
+        # Does this even matter?
+        "-no-reboot",
+        # Run only from the command line instead of displaying a QEMU GUI plus graphics from the emulated system.
+        "-nographic",
+        # Even with this option, QEMU complains about command-line options. ???
+        "-audiodev",
+        "id=none,driver=none",
+        # Reserve stdio for I/O from the emulated system, instead of the monitor.
+        "-monitor",
+        "none",
+        # The binary is loaded as if it's a Linux kernel.
+        "-kernel",
+        bin_path,
+        # Send all ARM I/O to the console.
+        "-serial",
+        "stdio",
+        # Enable semihosting, so that newlib can easily exit the simulator, produce stdio, etc.
+        "-semihosting",
+    ]
+    out += _subprocess_string(args, **sp_args)
+    timeout_str = ""
+    try:
+        cp = subprocess.run(args, stdout=subprocess.PIPE, timeout=10, **sp_args)
+        sim_ret = cp.returncode
+        out += cp.stdout
+    except subprocess.TimeoutExpired:
+        sim_ret = 1
+        timeout_str = "\n\nTimeout."
+
+    # Put the timeout string at the end of all the simulator output.
+    out += timeout_str
 
     return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
 

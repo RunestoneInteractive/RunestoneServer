@@ -11,6 +11,7 @@ LABEL authors="@bnmnetp,@vsoch,@yarikoptic"
 ARG WEB2PY_PATH=/srv/web2py
 ARG WEB2PY_APPS_PATH=${WEB2PY_PATH}/applications
 ARG WEB2PY_PORT=8080
+ARG INSTALL_ARM
 
 # And export some as env vars so they could be available at run time
 ENV WEB2PY_PATH=${WEB2PY_PATH}
@@ -61,6 +62,15 @@ RUN apt-get update && \
         openjdk-11-jre-headless \
         rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install the ARM toolset and emulator if requested. Run the build using ``docker build --build-arg INSTALL_ARM=1``. Notes:
+#
+# - Since we're using sh by default, we can't use bash's nicer options. So, use the ``test`` program to check env vars.
+# - The dockerfile `RUN <https://docs.docker.com/engine/reference/builder/#run>`_ command supports env var substitution in this form.
+RUN if test "${INSTALL_ARM}" = "1"; then \
+        eatmydata add-apt-repository ppa:canonical-server/server-backports && \
+        eatmydata apt-get install -y qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential; \
+    fi
 
 # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
 RUN wget https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip && \
