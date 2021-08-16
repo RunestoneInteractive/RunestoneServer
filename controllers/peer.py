@@ -46,7 +46,10 @@ def instructor():
     requires_login=True,
 )
 def dashboard():
-
+    """
+    We track through questions by "submitting" the form that causes us
+    to go to the next question.
+    """
     assignment_id = request.vars.assignment_id
     if request.vars.next == "Next":
         next = True
@@ -55,7 +58,14 @@ def dashboard():
     else:
         next = False
     current_question = _get_current_question(assignment_id, next)
-
+    db.useinfo.insert(
+        course_id=auth.user.course_name,
+        sid=auth.user.username,
+        div_id=current_question.name,
+        event="peer",
+        act="start_question",
+        timestamp=datetime.datetime.utcnow(),
+    )
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
@@ -122,6 +132,7 @@ def _get_n_answers(num_answer, div_id, course_name):
     )
     df = df.dropna(subset=["answer"])
     logger.debug(df.head())
+    # FIXME: this breaks for multiple answer mchoice!
     df["answer"] = df.answer.astype("int64")
 
     return df
