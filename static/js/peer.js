@@ -72,7 +72,7 @@ async function logStopVote() {
 // Send a message to the websocket server
 // the server can then broadcast the message or send it to a
 // specific user
-function sendMessage(event) {
+async function sendMessage(event) {
     var input = document.getElementById("messageText")
     //#ws.send(JSON.stringify(mess))
     let mess = {
