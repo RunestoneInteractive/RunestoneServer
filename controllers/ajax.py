@@ -595,7 +595,7 @@ def updatelastpage():
             try:
                 db(
                     (db.user_state.user_id == auth.user.id)
-                    & (db.user_state.course_id == course)
+                    & (db.user_state.course_name == course)
                 ).update(
                     last_page_url=lastPageUrl,
                     last_page_chapter=lastPageChapter,
@@ -774,7 +774,7 @@ def getlastpage():
 
     result = db(
         (db.user_state.user_id == auth.user.id)
-        & (db.user_state.course_id == course.course_name)
+        & (db.user_state.course_name == course.course_name)
         & (db.chapters.course_id == course.base_course)
         & (db.user_state.last_page_chapter == db.chapters.chapter_label)
         & (db.sub_chapters.chapter_id == db.chapters.id)
@@ -799,7 +799,7 @@ def getlastpage():
             rowarray_list.append(res)
         return json.dumps(rowarray_list)
     else:
-        db.user_state.insert(user_id=auth.user.id, course_id=course.course_name)
+        db.user_state.insert(user_id=auth.user.id, course_name=course.course_name)
 
 
 def _getCorrectStats(miscdata, event):
@@ -1710,7 +1710,14 @@ def get_question_source():
         if questionlist:
             q = random.choice(questionlist)
             res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
+<<<<<<< HEAD
             return json.dumps(res.htmlsrc)
+=======
+            if res:
+                return json.dumps(res.htmlsrc)
+            else:
+                return json.dumps(f"<p>Question {q} is not in the database.</p>")
+>>>>>>> upstream/master
         else:
             return json.dumps(f"<p>No Questions available</p>")
 

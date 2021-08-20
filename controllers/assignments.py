@@ -837,9 +837,15 @@ def chooseAssignment():
 
         timestamp = datetime.datetime.utcnow()
         deadline = assignment.duedate
+<<<<<<< HEAD
         if timezoneoffset:
             deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
 
+=======
+        # TODO:  assignment deadlines should be stored in UTC and converted but they are not
+        # if timezoneoffset:
+        #     deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
+>>>>>>> upstream/master
         # Finds the grades table for each assignment
         grade = (
             db(
