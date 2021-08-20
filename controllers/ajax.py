@@ -97,6 +97,9 @@ def hsblog():
         setCookie = True  # we set our own cookie anyway to eliminate many of the extraneous anonymous
         # log entries that come from auth timing out even but the user hasn't reloaded
         # the page.
+        # If the incoming data contains an sid then prefer that.
+        if request.vars.sid:
+            sid = request.vars.sid
     else:
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
@@ -369,8 +372,12 @@ def runlog():  # Log errors and runs with code
                     message="You appear to have changed courses in another tab.  Please switch to this course",
                 )
             )
-        sid = auth.user.username
+        if request.vars.sid:
+            sid = request.vars.sid
+        else:
+            sid = auth.user.username
         setCookie = True
+
     else:
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
