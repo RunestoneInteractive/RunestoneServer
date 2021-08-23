@@ -97,6 +97,9 @@ def hsblog():
         setCookie = True  # we set our own cookie anyway to eliminate many of the extraneous anonymous
         # log entries that come from auth timing out even but the user hasn't reloaded
         # the page.
+        # If the incoming data contains an sid then prefer that.
+        if request.vars.sid:
+            sid = request.vars.sid
     else:
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
@@ -369,8 +372,12 @@ def runlog():  # Log errors and runs with code
                     message="You appear to have changed courses in another tab.  Please switch to this course",
                 )
             )
-        sid = auth.user.username
+        if request.vars.sid:
+            sid = request.vars.sid
+        else:
+            sid = auth.user.username
         setCookie = True
+
     else:
         if request.vars.clientLoginStatus == "true":
             logger.error("Session Expired")
@@ -595,7 +602,7 @@ def updatelastpage():
             try:
                 db(
                     (db.user_state.user_id == auth.user.id)
-                    & (db.user_state.course_id == course)
+                    & (db.user_state.course_name == course)
                 ).update(
                     last_page_url=lastPageUrl,
                     last_page_chapter=lastPageChapter,
@@ -774,7 +781,7 @@ def getlastpage():
 
     result = db(
         (db.user_state.user_id == auth.user.id)
-        & (db.user_state.course_id == course.course_name)
+        & (db.user_state.course_name == course.course_name)
         & (db.chapters.course_id == course.base_course)
         & (db.user_state.last_page_chapter == db.chapters.chapter_label)
         & (db.sub_chapters.chapter_id == db.chapters.id)
@@ -799,7 +806,7 @@ def getlastpage():
             rowarray_list.append(res)
         return json.dumps(rowarray_list)
     else:
-        db.user_state.insert(user_id=auth.user.id, course_id=course.course_name)
+        db.user_state.insert(user_id=auth.user.id, course_name=course.course_name)
 
 
 def _getCorrectStats(miscdata, event):
@@ -1710,7 +1717,10 @@ def get_question_source():
         if questionlist:
             q = random.choice(questionlist)
             res = db(db.questions.name == q).select(db.questions.htmlsrc).first()
-            return json.dumps(res.htmlsrc)
+            if res:
+                return json.dumps(res.htmlsrc)
+            else:
+                return json.dumps(f"<p>Question {q} is not in the database.</p>")
         else:
             return json.dumps(f"<p>No Questions available</p>")
 

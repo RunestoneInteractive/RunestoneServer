@@ -13,7 +13,7 @@ flake8
 selenium>=2.53.6
 pyvirtualdisplay
 pip-tools
-recommonmark
+myst-parser
 sphinx_rtd_theme
 polling2
 pywin32; sys_platform == 'win32'

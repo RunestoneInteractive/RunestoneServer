@@ -1155,7 +1155,6 @@ def test_lockdown(test_client, test_user_1):
     base_course = test_user_1.course.base_course
 
     res = test_client.validate("books/published/{}/index.html".format(base_course))
-    assert '/default/user/login">&nbsp; </a>' in res
     assert "Runestone in social media:" in res
     assert ">Change Course</a></li>" in res
     assert 'id="profilelink">Edit' in res

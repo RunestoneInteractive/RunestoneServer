@@ -175,6 +175,8 @@ def index():
             % (request.application, request.application)
         )
     else:
+        # check to see if there is an entry in user_courses for
+        # this user,course configuration
         in_db = db(
             (db.user_courses.user_id == auth.user.id)
             & (db.user_courses.course_id == auth.user.course_id)
