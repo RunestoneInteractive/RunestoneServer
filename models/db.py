@@ -166,7 +166,7 @@ db.define_table(
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
     Field("courselevel", type="string"),
-    migrate=table_migrate_prefix + "courses.table",
+    migrate=False,
 )
 
 
@@ -366,7 +366,7 @@ db.define_table(
     Field("donated", type="boolean", writable=False, readable=False, default=False),
     #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ""),
-    migrate=table_migrate_prefix + "auth_user.table",
+    migrate=False,
 )
 
 
@@ -436,7 +436,7 @@ db.define_table(
     Field("course_id", db.courses, ondelete="CASCADE"),
     Field("user_id", db.auth_user),
     Field("course_id", db.courses),
-    migrate=table_migrate_prefix + "user_courses.table",
+    migrate=False,
 )
 # For whatever reason the automatic migration of this table failed.  Need the following manual statements
 # alter table user_courses alter column user_id type integer using user_id::integer;
@@ -471,7 +471,7 @@ Hello,
 <p>We received your request to retrieve your username.  According to our files
 Your username is: %(username)s </p>
 
-<p>If you have any trouble with this automated system you can also ask your instructor 
+<p>If you have any trouble with this automated system you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on  <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
@@ -488,7 +488,7 @@ Hello, <br>
 
 <p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
 
-<p>If you have any trouble with the link you can also ask your instructor 
+<p>If you have any trouble with the link you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>

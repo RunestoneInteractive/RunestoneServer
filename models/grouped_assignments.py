@@ -26,7 +26,7 @@ db.define_table(
     Field("nofeedback", "boolean"),
     Field("nopause", "boolean"),
     format="%(name)s",
-    migrate=table_migrate_prefix + "assignments.table",
+    migrate=False,
 )
 
 
@@ -47,7 +47,7 @@ db.define_table(
     # Per the `LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
     Field("lis_outcome_url", "string", length=1024),
     Field("is_submit", "string"),
-    migrate=table_migrate_prefix + "grades.table",
+    migrate=False,
 )
 
 db.define_table(
@@ -78,5 +78,5 @@ db.define_table(
     Field("deadline", "datetime"),
     Field("score", type="double"),
     Field("comment", type="text"),
-    migrate=table_migrate_prefix + "question_grades.table",
+    migrate=False,
 )
