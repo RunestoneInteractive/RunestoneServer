@@ -33,7 +33,6 @@ settings.server_type = "http://"
 settings.academy_mode = True
 settings.lti_only_mode = False
 settings.coursera_mode = False
-settings.secret = "supersecret"
 
 # Do not control this with hostnames
 config = environ.get("WEB2PY_CONFIG", "NOT SET")
