@@ -741,7 +741,7 @@ def subchapoverview():
     dburl = _get_dburl()
     data = pd.read_sql_query(
         """
-    select sid, useinfo.timestamp, div_id, chapter, subchapter from useinfo
+    select sid, first_name, last_name, useinfo.timestamp, div_id, chapter, subchapter from useinfo
     join questions on div_id = name and base_course = '{}' join auth_user on username = useinfo.sid
     where useinfo.course_id = '{}' and active='T' and useinfo.timestamp >= '{}'""".format(
             thecourse.base_course, course, thecourse.term_start_date
@@ -750,6 +750,9 @@ def subchapoverview():
         parse_dates=["timestamp"],
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
+    data["sid"] = data.last_name + ", " + data.first_name
+    data.drop(["first_name", "last_name"], axis=1)
+
     tdoff = pd.Timedelta(
         hours=float(session.timezoneoffset) if "timezoneoffset" in session else 0
     )
