@@ -622,10 +622,7 @@ def admin():
 
 # Called in admin.js from courseStudents to populate  the list of students
 # eBookConfig.getCourseStudentsURL
-@auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
-)
+@auth.requires_login()
 def course_students():
     response.headers["content-type"] = "application/json"
     cur_students = db(

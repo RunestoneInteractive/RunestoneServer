@@ -60,8 +60,8 @@
                     <div class="item">
                         <div class="container">
                             <div class="carousel-caption">
-                                <h2>Fall 2021 Runestone Facts</h2>
-                                <p>38,250 Students registered! 1,120 Courses Created! 30 Titles Available!</p>
+                                <h2>August 2021 Runestone Facts</h2>
+                                <p> 12,147 Students registered! 1,100 Courses Created! 30 Titles Available!</p>
                                 <p><a class="btn btn-lg btn-primary" href="https://runestone.academy/runestone/default/donate" role="button">Support Runestone</a> </p>
                             </div>
                         </div>
@@ -151,15 +151,16 @@
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
                 <div class="content row">
-                    <p class="col-md-4 col-sm-6 col-xs-12"><strong>Important:</strong>  Some school email systems block all external emails, filter "password reset" type emails, or use other filters that may prevent you from getting this email! <strong>Your instructor can reset your password.</strong></p>
-                <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12">
+                    
+                <div id="web2py_user_form" class="col-md-6 col-sm-6 col-xs-12">
+                    <p><strong>Important:</strong>  Some school email systems block all external emails, filter "password reset" type emails, or use other filters that may prevent you from getting this email! <strong>Your instructor can reset your password.</strong></p>
                     {{=form}}
                     {{ if settings.academy_mode and request.args(0) == 'profile':}}
                     <form action="{{=URL('default','delete')}}" onsubmit="return confirm('Are you sure?')">
 		                <div class="checkbox">
                         <label>
                           <input type=checkbox name="deleteaccount" id="delacct">
-			              <span>Delete my account and all data. Cannot be undone!</span>
+			              <span><strong>Delete my account</strong> and all data. Cannot be undone!</span>
                         </label>
                         </div>
                         <input type="submit" value="Delete" class="btn btn-primary">
