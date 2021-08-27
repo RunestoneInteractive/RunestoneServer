@@ -160,6 +160,7 @@ db.define_table(
     Field("term_start_date", "date"),
     Field("institution", "string"),
     Field("base_course", "string"),
+    Field("python3", type="boolean", default=True),
     Field("login_required", type="boolean", default=True),
     Field("allow_pairs", type="boolean", default=False),
     Field("student_price", type="integer"),
