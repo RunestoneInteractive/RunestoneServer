@@ -245,36 +245,37 @@ def _platform_edit(
     source_path,
 ):
 
-    # Prepend a line number directive to each snippet. I can't get this to work
-    # in the assembler. I tried:
-    #
-    # - From Section 4.11 (Misc directives):
-    #
-    #   -   ``.appline 1``
-    #   -   ``.ln 1`` (produces the message ``Error: unknown pseudo-op: `.ln'``.
-    #       But if I use the assembly option ``-a``, the listing file shows that
-    #       this directive inserts line 1 of the source .s file into the listing
-    #       file. ???
-    #   -   ``.loc 1 1`` (trying ``.loc 1, 1`` produces ``Error: rest of line
-    #       ignored; first ignored character is `,'``)
-    #
-    # - From Section 4.12 (directives for debug information):
-    #
-    #   -   ``.line 1``. I also tried this inside a ``.def/.endef`` pair, which
-    #       just produced error messages.
-    #
-    # Perhaps saving each snippet to a file, then including them via
-    # ``.include`` would help. Ugh.
+    # Prepend a line number directive to each snippet.
     #
     # Select what to prepend based on the language.
     ext = os.path.splitext(source_path)[1]
     if ext == ".c":
-        # See https://gcc.gnu.org/onlinedocs/cpp/Line-Control.html.
         fmt = '#line 1 "box {}"\n'
     elif ext == ".s":
+        # I can't get this to work in the `gnu assembler <https://gcc.gnu.org/onlinedocs/cpp/Line-Control.html>`_. I tried:
+        #
+        # - From Section 4.11 (Misc directives):
+        #
+        #   -   ``.appline 1``
+        #   -   ``.ln 1`` (produces the message ``Error: unknown pseudo-op: `.ln'``.
+        #       But if I use the assembly option ``-a``, the listing file shows that
+        #       this directive inserts line 1 of the source .s file into the listing
+        #       file. ???
+        #   -   ``.loc 1 1`` (trying ``.loc 1, 1`` produces ``Error: rest of line
+        #       ignored; first ignored character is `,'``)
+        #
+        # - From Section 4.12 (directives for debug information):
+        #
+        #   -   ``.line 1``. I also tried this inside a ``.def/.endef`` pair, which
+        #       just produced error messages.
+        #
+        # Perhaps saving each snippet to a file, then including them via ``.include`` would help. Ugh.
         fmt = ""
     elif ext == ".py":
-        # Python doesn't (easily) support `setting line numbers <https://lists.gt.net/python/python/164854>`_.
+        # Python doesn't (easily) support `setting line numbers <https://lists.gt.net/python/python/164854>`__.
+        fmt = ""
+    elif ext == ".rs":
+        # Rust doesn't support `setting line numbers <https://github.com/rust-lang/rfcs/issues/1862>`__ either.
         fmt = ""
     else:
         # This is an unsupported language. It would be nice to report this as an error instead of raising an exception.
