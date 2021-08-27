@@ -750,7 +750,7 @@ def subchapoverview():
         parse_dates=["timestamp"],
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
-    data["sid"] = data.last_name + ", " + data.first_name
+    data["sid"] = data.last_name + ", " + data.first_name + "<br>(" + data.sid + ")"
     data.drop(["first_name", "last_name"], axis=1)
 
     tdoff = pd.Timedelta(
