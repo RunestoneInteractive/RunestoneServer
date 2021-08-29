@@ -32,9 +32,12 @@ from common_builder import (
 # None.
 
 
+# Utilities
+# =========
 # Create and configure the Celery app.
 app = Celery("scheduled_builder")
 app.conf.update(celery_config)
+
 
 # This function should run the provided code and report the results. It will
 # vary for a given compiler and language.
@@ -42,9 +45,7 @@ app.conf.update(celery_config)
 def _scheduled_builder(
     # The name of the builder to use.
     builder,
-    # An absolute path to the file which contains code to test. The file resides in a
-    # temporary directory, which should be used to hold any additional files
-    # produced by the test.
+    # An absolute path to the file which contains code to test. The file resides in a temporary directory, which should be used to hold any additional files produced by the test.
     file_path,
     # An absolute path to the Sphinx root directory.
     sphinx_base_path,
@@ -52,8 +53,7 @@ def _scheduled_builder(
     sphinx_source_path,
     # A relative path to the Sphinx output path from the ``sphinx_base_path``.
     sphinx_out_path,
-    # A relative path to the source file from the ``sphinx_source_path``, based
-    # on the submitting web page.
+    # A relative path to the source file from the ``sphinx_source_path``, based on the submitting web page.
     source_path,
 ):
 
@@ -70,22 +70,84 @@ def _scheduled_builder(
 
     if builder_func is None:
         raise RuntimeError("Unknown builder {}".format(builder))
-    return builder_func(
-        file_path,
-        sphinx_base_path,
-        sphinx_source_path,
-        sphinx_out_path,
-        source_path,
-    )
+
+    try:
+        out_list, correct = builder_func(
+            file_path,
+            sphinx_base_path,
+            sphinx_source_path,
+            sphinx_out_path,
+            source_path,
+        )
+    except BuildFailed as e:
+        out_list = e.out_list
+        correct = e.correct
+    return "".join(out_list), correct
 
 
-def python_builder(
-    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+# Raise this exception if the build fails.
+class BuildFailed(Exception):
+    def __init__(self, out_list, correct=0):
+        self.out_list = out_list
+        self.correct = correct
+
+
+# Transform the arguments to ``subprocess.run`` into a string showing what
+# command will be executed.
+def _subprocess_string(args, **kwargs):
+    return kwargs.get("cwd", "") + "% " + " ".join(args) + "\n"
+
+
+# Run a subprocess with the provided arguments, returning a string which contains the output. On failure, raise an exception. Returns True if the subprocess completed successfully.
+def report_subprocess(
+    # Arguments to invoke the subprocess.
+    args,
+    # A string describing this step in the build.
+    desc,
+    # A path to the working directory for the subprocess.
+    cwd,
+    # A list of output produced thus far in the build; this function will append to it.
+    out_list,
+    # True if stdout should be included in the results.
+    include_stdout=True,
+    # Additional kwargs for the subprocess call.
+    **kwargs,
 ):
-    cwd = os.path.dirname(file_path)
+    # Add a newline before the next title, unless there's nothing in the output list yet.
+    if out_list:
+        out_list.append("\n")
+    out_list.extend([f"{desc}\n{'=' * len(desc)}\n", _subprocess_string(args, cwd=cwd)])
 
-    # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-    test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.py"
+    try:
+        cp = subprocess.run(
+            args, capture_output=True, text=True, cwd=cwd, timeout=15, *kwargs
+        )
+    except subprocess.TimeoutExpired as e:
+        cp = e
+        # Create a failing return code for the logic below.
+        cp.returncode = -1
+        out_list.append("Timeout.\n\n")
+
+    # Record output.
+    out_list.append(cp.stdout)
+    if include_stdout:
+        out_list.append(cp.stderr)
+
+    # A returncode of 0 indicates success; anything else is an error.
+    if cp.returncode:
+        raise BuildFailed(out_list, 0)
+    return out_list, 100
+
+
+# Given a path to the student source, determine the name of the corresponding test file.
+def get_test_file_name(file_path, ext):
+    return os.path.splitext(os.path.basename(file_path))[0] + f"-test{ext}"
+
+
+# Copy the test file from its Sphinx location to the temporary directory where the student source code is.
+def copy_test_file_to_tmp(
+    test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
+):
     dest_test_path = os.path.join(cwd, test_file_name)
     shutil.copyfile(
         os.path.join(
@@ -96,57 +158,43 @@ def python_builder(
         ),
         dest_test_path,
     )
-    try:
-        str_out = subprocess.check_output(
-            [sys.executable, dest_test_path],
-            stderr=subprocess.STDOUT,
-            universal_newlines=True,
-            cwd=cwd,
-        )
-        return str_out, 100
-    except subprocess.CalledProcessError as e:
-        return e.output, 0
+
+
+# Builders
+# ========
+def python_builder(
+    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+):
+    cwd = os.path.dirname(file_path)
+
+    # Copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
+    test_file_name = get_test_file_name(file_path, ".py")
+    copy_test_file_to_tmp(
+        test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
+    )
+
+    return report_subprocess([sys.executable, dest_test_path], "Run Python", cwd, [])
 
 
 def rust_builder(
     file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
 ):
     cwd = os.path.dirname(file_path)
-    sp_kwargs = dict(
-        stderr=subprocess.STDOUT,
-        text=True,
-        cwd=cwd,
-    )
 
     # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-    test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.rs"
-    dest_test_path = os.path.join(cwd, test_file_name)
-    shutil.copyfile(
-        os.path.join(
-            sphinx_base_path,
-            sphinx_source_path,
-            os.path.dirname(source_path),
-            test_file_name,
-        ),
-        dest_test_path,
+    test_file_name = get_test_file_name(file_path, ".rs")
+    copy_test_file_to_tmp(
+        test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
     )
 
     # Compile. See `rustc tests <https://doc.rust-lang.org/rustc/tests/index.html>`_.
-    args = ["rustc", "--test", test_file_name]
-    str_out = _subprocess_string(args, **sp_kwargs)
-    try:
-        str_out += subprocess.check_output(args, **sp_kwargs)
-    except subprocess.CalledProcessError as e:
-        return str_out + e.output, 0
+    out_list = []
+    report_subprocess(["rustc", "--test", test_file_name], "Compile", cwd, out_list)
 
     # Run.
-    args = ["./" + os.path.splitext(test_file_name)[0]]
-    str_out += _subprocess_string(args, **sp_kwargs)
-    try:
-        str_out += subprocess.check_output(args, **sp_kwargs)
-    except subprocess.CalledProcessError as e:
-        return str_out + e.output, 0
-    return str_out, 100
+    return report_subprocess(
+        ["./" + os.path.splitext(test_file_name)[0]], "Run", cwd, out_list
+    )
 
 
 def xc16_builder(
@@ -155,18 +203,11 @@ def xc16_builder(
     cwd = os.path.dirname(file_path)
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
-    #
-    # Compile in the temporary directory, in which ``file_path`` resides.
-    sp_args = dict(
-        stderr=subprocess.STDOUT,
-        text=True,
-        cwd=cwd,
-    )
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
     try:
         is_extension_asm = {".s": True, ".c": False}[extension]
-    except:
+    except Exception:
         raise RuntimeError("Unknown file extension in {}.".format(file_path))
     if is_extension_asm:
         args = [
@@ -203,12 +244,8 @@ def xc16_builder(
             "-c",
             "-o" + o_path,
         ]
-    out = _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
+    out_list = []
+    report_subprocess(args, "Compile / Assemble", cwd, out_list)
 
     # Build the test code with a random verification code.
     verification_code = get_verification_code()
@@ -252,12 +289,7 @@ def xc16_builder(
         "-c",
         "-o" + test_object_path,
     ]
-    out += _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
+    report_subprocess(args, "Compile test code", cwd, out_list)
 
     # Link.
     elf_path = file_path + ".elf"
@@ -283,27 +315,27 @@ def xc16_builder(
         os.path.join(waf_root, "tests/platform/Microchip_PIC24/platform.c.1.o"),
         "-o" + elf_path,
     ]
-    out += "\n" + _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
+    report_subprocess(args, "Link", cwd, out_list)
 
     # Simulate. Create the simulation commands.
-    out += "\nTest results:\n"
     sim_ret = 0
     if not is_extension_asm:
-        out = sim_run_mdb("mdb", "dspic33EP128GP502", elf_path)
+        out_list.append(sim_run_mdb("mdb", "dspic33EP128GP502", elf_path))
     else:
         simout_path = file_path + ".simout"
         timeout_str = ""
         ss = get_sim_str_sim30("dspic33epsuper", elf_path, simout_path)
         args = ["sim30"]
 
-        # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I
-        # couldn't find a way to re-use that code.
-        out += _subprocess_string(args, **sp_args)
+        # Run the simulation. This is a re-coded version of ``wscript.sim_run`` -- I couldn't find a way to re-use that code.
+        sp_args = dict(
+            stderr=subprocess.STDOUT,
+            text=True,
+            cwd=cwd,
+        )
+        out_list.extend(
+            ["\nSimulation\n==========\n", _subprocess_string(args, **sp_args)]
+        )
         try:
             cp = subprocess.run(
                 args, input=ss, stdout=subprocess.PIPE, timeout=10, **sp_args
@@ -316,13 +348,16 @@ def xc16_builder(
         # Read the results of the simulation.
         try:
             with open(simout_path, encoding="utf-8", errors="backslashreplace") as f:
-                out += f.read().rstrip()
+                out_list.append(f.read().rstrip())
         except Exception as e:
-            out += "No simulation output produced in {} - {}.\n".format(simout_path, e)
+            out_list(f"No simulation output produced in {simout_path} - {e}.\n")
         # Put the timeout string at the end of all the simulator output.
-        out += timeout_str
+        if timeout_str:
+            out_list.append(timeout_str)
 
-    return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
+    return out_list, (
+        100 if not sim_ret and check_sim_out(out_list, verification_code) else 0
+    )
 
 
 def armv7_builder(
@@ -333,13 +368,6 @@ def armv7_builder(
     verification_code = get_verification_code()
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
-    #
-    # Compile in the temporary directory, in which ``file_path`` resides.
-    sp_args = dict(
-        stderr=subprocess.STDOUT,
-        text=True,
-        cwd=cwd,
-    )
     elf_path = file_path + ".elf"
     lib_path = os.path.join(
         sphinx_base_path,
@@ -401,23 +429,17 @@ def armv7_builder(
         # The specific chip we use has a different RAM address than the linker file. Override it here.
         "-Wl,--section-start=.text=0x60010000",
     ]
-
-    out = _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
+    out_list = []
+    report_subprocess(args, "Build", cwd, out_list)
 
     # Transform to a bin file.
     bin_path = file_path + ".bin"
-    args = ["arm-none-eabi-objcopy", "-O", "binary", elf_path, bin_path]
-    out += _subprocess_string(args, **sp_args)
-    try:
-        out += subprocess.check_output(args, **sp_args)
-    except subprocess.CalledProcessError as e:
-        out += e.output
-        return out, 0
+    report_subprocess(
+        ["arm-none-eabi-objcopy", "-O", "binary", elf_path, bin_path],
+        "Transform to bin",
+        cwd,
+        out_list,
+    )
 
     # Simulate.
     args = [
@@ -448,23 +470,8 @@ def armv7_builder(
         # Enable semihosting, so that newlib can easily exit the simulator, produce stdio, etc.
         "-semihosting",
     ]
-    out += _subprocess_string(args, **sp_args)
-    timeout_str = ""
-    try:
-        cp = subprocess.run(args, stdout=subprocess.PIPE, timeout=10, **sp_args)
-        sim_ret = cp.returncode
-        out += cp.stdout
-    except subprocess.TimeoutExpired:
-        sim_ret = 1
-        timeout_str = "\n\nTimeout."
+    out_list, correct = report_subprocess(args, "Simulate", cwd, out_list, include_stdout=False)
 
-    # Put the timeout string at the end of all the simulator output.
-    out += timeout_str
-
-    return out, (100 if not sim_ret and check_sim_out(out, verification_code) else 0)
-
-
-# Transform the arguments to ``subprocess.run`` into a string showing what
-# command will be executed.
-def _subprocess_string(*args, **kwargs):
-    return kwargs.get("cwd", "") + "% " + " ".join(args[0]) + "\n"
+    return out_list, (
+        100 if correct == 100 and check_sim_out(out_list, verification_code) else 0
+    )
