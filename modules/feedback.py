@@ -72,7 +72,7 @@ def fitb_feedback(answer_json, feedback):
         # Some answers may parse as JSON, but still be in the old format. The
         # new format should always return an array.
         assert isinstance(answer, list)
-    except:
+    except Exception:
         answer = answer_json.split(",")
     displayFeed = []
     isCorrectArray = []
