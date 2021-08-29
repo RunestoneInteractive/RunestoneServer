@@ -941,6 +941,7 @@ def subchapdetail():
         & (db.questions.subchapter == request.vars.sub)
         & (db.questions.base_course == thecourse.base_course)
         & (db.questions.question_type != "page")
+        & (db.questions.from_source == True)
     ).select(db.questions.name, db.questions.question_type)
 
     res = db.executesql(
