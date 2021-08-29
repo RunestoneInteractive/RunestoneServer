@@ -4,6 +4,7 @@ import logging
 from operator import itemgetter
 from collections import OrderedDict
 import urllib.parse
+import re
 import six
 import pandas as pd
 import numpy as np
@@ -718,6 +719,11 @@ def exercisemetrics():
 
 
 def format_cell(sid, chap, subchap, val):
+    # extract the username from the friendly version of the name
+    g = re.match(r".*<br>\((.*)\)", sid)
+    if g:
+        sid = g.group(1)
+
     sid = urllib.parse.quote(sid)
     if np.isnan(val):
         return ""
@@ -807,7 +813,7 @@ def subchapoverview():
         """
     select chapter, subchapter, count(*) act_count
     from questions
-    where base_course = '{}'
+    where base_course = '{}' and from_source = 'T'
     group by chapter, subchapter order by chapter, subchapter;
     """.format(
             thecourse.base_course
@@ -935,6 +941,7 @@ def subchapdetail():
         & (db.questions.subchapter == request.vars.sub)
         & (db.questions.base_course == thecourse.base_course)
         & (db.questions.question_type != "page")
+        & (db.questions.from_source == True)
     ).select(db.questions.name, db.questions.question_type)
 
     res = db.executesql(
@@ -942,7 +949,7 @@ def subchapdetail():
 select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timestamp) as last, count(*) as clicks
     from questions join useinfo on name = div_id and course_id = %s
     where chapter = %s and subchapter = %s
-    and base_course = %s and sid = %s
+    and base_course = %s and sid = %s and from_source = 'T'
     group by name, question_type""",
         (
             auth.user.course_name,
