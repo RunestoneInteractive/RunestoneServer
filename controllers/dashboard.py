@@ -4,6 +4,7 @@ import logging
 from operator import itemgetter
 from collections import OrderedDict
 import urllib.parse
+import re
 import six
 import pandas as pd
 import numpy as np
@@ -718,6 +719,11 @@ def exercisemetrics():
 
 
 def format_cell(sid, chap, subchap, val):
+    # extract the username from the friendly version of the name
+    g = re.match(r".*<br>\((.*)\)", sid)
+    if g:
+        sid = g.group(1)
+
     sid = urllib.parse.quote(sid)
     if np.isnan(val):
         return ""
