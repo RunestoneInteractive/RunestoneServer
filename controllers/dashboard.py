@@ -948,7 +948,7 @@ def subchapdetail():
 select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timestamp) as last, count(*) as clicks
     from questions join useinfo on name = div_id and course_id = %s
     where chapter = %s and subchapter = %s
-    and base_course = %s and sid = %s
+    and base_course = %s and sid = %s and from_source = 'T'
     group by name, question_type""",
         (
             auth.user.course_name,
