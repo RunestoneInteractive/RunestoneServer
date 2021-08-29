@@ -813,7 +813,7 @@ def subchapoverview():
         """
     select chapter, subchapter, count(*) act_count
     from questions
-    where base_course = '{}'
+    where base_course = '{}' and from_source = 'T'
     group by chapter, subchapter order by chapter, subchapter;
     """.format(
             thecourse.base_course
