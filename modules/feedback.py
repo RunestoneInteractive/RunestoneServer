@@ -183,9 +183,7 @@ def lp_feedback(code_snippets, feedback_struct):
             "errors": ["Cannot open source file {}: {}.".format(abs_source_path, e)]
         }
 
-    # Create a snippet-replaced version of the source, by looking for "put code
-    #   here" comments and replacing them with the provided code. To do so,
-    # first split out the "put code here" comments.
+    # Create a snippet-replaced version of the source, by looking for "put code here" comments and replacing them with the provided code. To do so, first split out the "put code here" comments.
     split_source = source_str.split(code_here_comment(source_path))
     # Sanity check! Source with n "put code here" comments splits into n+1
     # items, into which the n student code snippets should be interleaved.
@@ -254,7 +252,7 @@ def _platform_edit(
     #
     #   -   ``.appline 1``
     #   -   ``.ln 1`` (produces the message ``Error: unknown pseudo-op: `.ln'``.
-    #       But if I use the assembly option ``-a``, the listing file show that
+    #       But if I use the assembly option ``-a``, the listing file shows that
     #       this directive inserts line 1 of the source .s file into the listing
     #       file. ???
     #   -   ``.loc 1 1`` (trying ``.loc 1, 1`` produces ``Error: rest of line

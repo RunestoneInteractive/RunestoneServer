@@ -57,35 +57,43 @@ def _scheduled_builder(
     source_path,
 ):
 
-    cwd = os.path.dirname(file_path)
     if builder == "unsafe-python" and os.environ.get("WEB2PY_CONFIG") == "test":
         # Run the test in Python. This is for testing only, and should never be used in production; instead, this should be run in a limited Docker container. For simplicity, it lacks a timeout.
-        #
-        # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-        test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.py"
-        dest_test_path = os.path.join(cwd, test_file_name)
-        shutil.copyfile(
-            os.path.join(
-                sphinx_base_path,
-                sphinx_source_path,
-                os.path.dirname(source_path),
-                test_file_name,
-            ),
-            dest_test_path,
-        )
-        try:
-            str_out = subprocess.check_output(
-                [sys.executable, dest_test_path],
-                stderr=subprocess.STDOUT,
-                universal_newlines=True,
-                cwd=cwd,
-            )
-            return str_out, 100
-        except subprocess.CalledProcessError as e:
-            # from gluon.debug import dbg; dbg.set_trace()
-            return e.output, 0
+        return python_builder()
     elif builder != "pic24-xc16-bullylib":
         raise RuntimeError("Unknown builder {}".format(builder))
+    return xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path)
+
+
+def python_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path):
+    cwd = os.path.dirname(file_path)
+
+    # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
+    test_file_name = os.path.splitext(os.path.basename(file_path))[0] + "-test.py"
+    dest_test_path = os.path.join(cwd, test_file_name)
+    shutil.copyfile(
+        os.path.join(
+            sphinx_base_path,
+            sphinx_source_path,
+            os.path.dirname(source_path),
+            test_file_name,
+        ),
+        dest_test_path,
+    )
+    try:
+        str_out = subprocess.check_output(
+            [sys.executable, dest_test_path],
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,
+            cwd=cwd,
+        )
+        return str_out, 100
+    except subprocess.CalledProcessError as e:
+        return e.output, 0
+
+
+def xc16_builder(file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path):
+    cwd = os.path.dirname(file_path)
 
     # Assemble or compile the source. We assume that the binaries are already in the path.
     #
