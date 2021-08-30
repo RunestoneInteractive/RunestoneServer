@@ -64,16 +64,14 @@ def _scheduled_builder(
         "pic24-xc16-bullylib": xc16_builder,
         "armv7-newlib-sim": armv7_builder,
     }.get(builder, None)
-    # The Python builder is for testing only. TODO: Run this in JOBE instead.
-    if builder == "unsafe-python" and os.environ.get("WEB2PY_CONFIG") != "test":
-        builder_func = None
-
     if builder_func is None:
-        raise RuntimeError("Unknown builder {}".format(builder))
+        raise RuntimeError(f"Unknown builder {builder}")
 
+    # Run the builder then return the results.
     try:
         out_list, correct = builder_func(
             file_path,
+            os.path.dirname(file_path),
             sphinx_base_path,
             sphinx_source_path,
             sphinx_out_path,
@@ -113,10 +111,16 @@ def report_subprocess(
     # Additional kwargs for the subprocess call.
     **kwargs,
 ):
-    # Add a newline before the next title, unless there's nothing in the output list yet.
-    if out_list:
-        out_list.append("\n")
-    out_list.extend([f"{desc}\n{'=' * len(desc)}\n", _subprocess_string(args, cwd=cwd)])
+    out_list.extend(
+        [
+            # Add a newline before the next title, unless there's nothing in the output list yet.
+            "\n" if out_list else "",
+            # Print the title with a nice underline.
+            f"{desc}\n{'=' * len(desc)}\n",
+            # Show the command executed.
+            _subprocess_string(args, cwd=cwd),
+        ]
+    )
 
     try:
         cp = subprocess.run(
@@ -125,13 +129,15 @@ def report_subprocess(
     except subprocess.TimeoutExpired as e:
         cp = e
         # Create a failing return code for the logic below.
-        cp.returncode = -1
-        out_list.append("Timeout.\n\n")
+        cp.returncode = True
 
     # Record output.
     out_list.append(cp.stdout)
     if include_stdout:
         out_list.append(cp.stderr)
+    # Put the timeout message last.
+    if cp.returncode is True:
+        out_list.append("Timeout.\n\n")
 
     # A returncode of 0 indicates success; anything else is an error.
     if cp.returncode:
@@ -139,69 +145,66 @@ def report_subprocess(
     return out_list, 100
 
 
-# Given a path to the student source, determine the name of the corresponding test file.
-def get_test_file_name(file_path, ext):
-    return os.path.splitext(os.path.basename(file_path))[0] + f"-test{ext}"
-
-
-# Copy the test file from its Sphinx location to the temporary directory where the student source code is.
+# Copy the test file from its Sphinx location to the temporary directory where the student source code is. Return the name of the test file; if the copy failed, assume there's no test file; instead, return the file name of the student source code.
 def copy_test_file_to_tmp(
-    test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
+    file_path, cwd, sphinx_base_path, sphinx_source_path, source_path, ext=None
 ):
+    # If not provided, assume the text file's extension is the same as the student source file.
+    if not ext:
+        ext = os.path.splitext(file_path)[1]
+    # The test file name takes file_name.old_ext and produces file_name-test.new_ext.
+    test_file_name = os.path.splitext(os.path.basename(file_path))[0] + f"-test{ext}"
     dest_test_path = os.path.join(cwd, test_file_name)
-    shutil.copyfile(
-        os.path.join(
-            sphinx_base_path,
-            sphinx_source_path,
-            os.path.dirname(source_path),
-            test_file_name,
-        ),
-        dest_test_path,
-    )
+    try:
+        shutil.copyfile(
+            os.path.join(
+                sphinx_base_path,
+                sphinx_source_path,
+                os.path.dirname(source_path),
+                test_file_name,
+            ),
+            dest_test_path,
+        )
+    except OSError:
+        # The test file couldn't be copied; assume the test should run on the student source file instead.
+        return os.path.basename(file_path)
+    return test_file_name
 
 
 # Builders
 # ========
 def python_builder(
-    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+    file_path, cwd, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
 ):
-    cwd = os.path.dirname(file_path)
-
     # Copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-    test_file_name = get_test_file_name(file_path, ".py")
-    copy_test_file_to_tmp(
-        test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
+    run_file_name = copy_test_file_to_tmp(
+        file_path, cwd, sphinx_base_path, sphinx_source_path, source_path
     )
 
-    return report_subprocess([sys.executable, dest_test_path], "Run Python", cwd, [])
+    return report_subprocess([sys.executable, run_file_name], "Run", cwd, [])
 
 
 def rust_builder(
-    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+    file_path, cwd, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
 ):
-    cwd = os.path.dirname(file_path)
-
     # First, copy the test to the temp directory. Otherwise, running the test file from its book location means it will import the solution, which is in the same directory.
-    test_file_name = get_test_file_name(file_path, ".rs")
-    copy_test_file_to_tmp(
-        test_file_name, cwd, sphinx_base_path, sphinx_source_path, source_path
+    run_file_name = copy_test_file_to_tmp(
+        file_path, cwd, sphinx_base_path, sphinx_source_path, source_path
     )
 
     # Compile. See `rustc tests <https://doc.rust-lang.org/rustc/tests/index.html>`_.
     out_list = []
-    report_subprocess(["rustc", "--test", test_file_name], "Compile", cwd, out_list)
+    report_subprocess(["rustc", "--test", run_file_name], "Compile", cwd, out_list)
 
     # Run.
     return report_subprocess(
-        ["./" + os.path.splitext(test_file_name)[0]], "Run", cwd, out_list
+        ["./" + os.path.splitext(run_file_name)[0]], "Run", cwd, out_list
     )
 
 
 def xc16_builder(
-    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+    file_path, cwd, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
 ):
-    cwd = os.path.dirname(file_path)
-
     # Assemble or compile the source. We assume that the binaries are already in the path.
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
@@ -361,9 +364,8 @@ def xc16_builder(
 
 
 def armv7_builder(
-    file_path, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
+    file_path, cwd, sphinx_base_path, sphinx_source_path, sphinx_out_path, source_path
 ):
-    cwd = os.path.dirname(file_path)
     # Build the test code with a random verification code.
     verification_code = get_verification_code()
 
@@ -470,7 +472,9 @@ def armv7_builder(
         # Enable semihosting, so that newlib can easily exit the simulator, produce stdio, etc.
         "-semihosting",
     ]
-    out_list, correct = report_subprocess(args, "Simulate", cwd, out_list, include_stdout=False)
+    out_list, correct = report_subprocess(
+        args, "Simulate", cwd, out_list, include_stdout=False
+    )
 
     return out_list, (
         100 if correct == 100 and check_sim_out(out_list, verification_code) else 0
