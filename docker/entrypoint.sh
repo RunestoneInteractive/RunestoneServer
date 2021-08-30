@@ -51,10 +51,10 @@ if [ ! -f "$stamp" ]; then
     fi
 
     set +e
-    if [[ -z "${CERTBOT_EMAIL}" ]]; then
+    if [ -z ${CERTBOT_EMAIL} ]; then
         echo "CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!"
     else
-        certbot -n  --agree-tos --email "${CERTBOT_EMAIL}" --nginx --redirect -d "${RUNESTONE_HOST}"
+        certbot -n  --agree-tos --email ${CERTBOT_EMAIL} --nginx --redirect -d "${RUNESTONE_HOST}"
         echo "You should be good for https"
     fi
     set -e
@@ -178,6 +178,14 @@ service nginx start
 info "starting uwsgi"
 /usr/local/bin/uwsgi --ini /etc/uwsgi/sites/runestone.ini &
 
+## Assume that we mount BookServer like we mount RunestoneComponents
+info "starting FastAPI server"
+bookserver --book_path /srv/web2py/applications/runestone/books \
+    --bks_config development \
+    --dburl $ASYNC_DEV_DBURL \
+    --error_path /tmp \
+    --gconfig /etc/gunicorn/gunicorn.conf.py \
+    --bind unix:/run/gunicorn.sock > ${WEB2PY_PATH}/logs/asgi.log 2>&1 &
 
 
 ## Go through all books and build

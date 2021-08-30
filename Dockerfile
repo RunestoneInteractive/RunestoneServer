@@ -112,5 +112,7 @@ COPY docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service
 COPY docker/wsgihandler.py /srv/web2py/wsgihandler.py
 RUN ln -s /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
 RUN rm /etc/nginx/sites-enabled/default
+RUN mkdir -p /etc/gunicorn
+COPY docker/gunicorn/gunicorn.conf.py /etc/gunicorn
 
 CMD /bin/bash /usr/local/sbin/entrypoint.sh
