@@ -49,17 +49,17 @@ RUN apt-get update && \
     apt-get install -y eatmydata && \
     eatmydata apt-get update && echo "count 1" && \
     eatmydata apt-get install -y --no-install-recommends \
-        gcc \
-        git \
-        unzip \
-        emacs-nox \
-        less \
-        libfreetype6-dev postgresql-common postgresql postgresql-contrib \
-        libpq-dev libxml2-dev libxslt1-dev \
-        texlive-full xsltproc pdf2svg \
-        certbot python-certbot-nginx \
-        openjdk-11-jre-headless \
-        rsync wget nginx xvfb x11-utils google-chrome-stable lsof && \
+    gcc \
+    git \
+    unzip \
+    emacs-nox \
+    less \
+    libfreetype6-dev postgresql-common postgresql postgresql-contrib \
+    libpq-dev libxml2-dev libxslt1-dev \
+    texlive-full xsltproc pdf2svg \
+    certbot python-certbot-nginx \
+    openjdk-11-jre-headless \
+    rsync wget nginx xvfb x11-utils lsof && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
@@ -94,7 +94,7 @@ WORKDIR ${RUNESTONE_PATH}
 RUN mkdir -p private && \
     echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > private/auth.key && \
     pip3 install -r requirements-dev.txt && \
-    pip3 install uwsgi uwsgitop && \
+    pip3 install uwsgi uwsgitop poetry bookserver myst-parser sphinx-reredirects && \
     rm -rf ${WEB2PY_PATH}/.cache/* && \
     cp ${RUNESTONE_PATH}/scripts/routes.py ${WEB2PY_PATH}/routes.py
 
@@ -112,5 +112,7 @@ COPY docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service
 COPY docker/wsgihandler.py /srv/web2py/wsgihandler.py
 RUN ln -s /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
 RUN rm /etc/nginx/sites-enabled/default
+RUN mkdir -p /etc/gunicorn
+COPY docker/gunicorn/gunicorn.conf.py /etc/gunicorn
 
 CMD /bin/bash /usr/local/sbin/entrypoint.sh

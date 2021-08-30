@@ -41,6 +41,7 @@ services:
       DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
       DEV_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone'
       TEST_DBURL: 'postgresql://runestone:${POSTGRES_PASSWORD}@db/runestone_test'
+      ASYNC_DEV_DBURL: 'postgresql+asyncpg://runestone:${POSTGRES_PASSWORD}@db/runestone'      
       REDIS_URI: 'redis://redis:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'
       CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
