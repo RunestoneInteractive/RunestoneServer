@@ -181,7 +181,7 @@ info "starting uwsgi"
 ## Assume that we mount BookServer like we mount RunestoneComponents
 info "starting FastAPI server"
 bookserver --book_path /srv/web2py/applications/runestone/books \
-    --root /ns
+    --root /ns \
     --bks_config development \
     --dburl $ASYNC_DEV_DBURL \
     --error_path /tmp \
