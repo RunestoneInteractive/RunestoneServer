@@ -1,6 +1,6 @@
 var ws = null;
 function connect(event) {
-    ws = new WebSocket(`ws://localhost:8080/chat/${user}/ws`);
+    ws = new WebSocket(`wss://dev.runestoneinteractive.org/ns/chat/${user}/ws`);
     ws.onmessage = function (event) {
         var messages = document.getElementById('messages')
         var message = document.createElement('li')
