@@ -86,7 +86,7 @@ db.define_table(
 db.define_table(
     "user_state",
     Field("user_id", "integer"),
-    Field("course_id", "string"),
+    Field("course_name", "string"),
     Field("last_page_url", "string"),
     Field("last_page_hash", "string"),
     Field("last_page_chapter", "string"),

@@ -1,0 +1,24 @@
+{{ extend "admin/instructors.html"}}
+
+{{ block tabcontent }}
+
+<h1>Peer Work</h1>
+<h2></h2>
+<table class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Due</th>
+        <th>Description</th>
+    </tr>
+    {{i=0}}
+    {{for assignment in assignments:}}
+    <tr>
+        <td><a href="dashboard?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+        <td>{{=assignment['duedate']}}</td>
+        <td>{{=assignment['description']}}</td>
+
+    </tr>
+    {{pass}}
+</table>
+
+{{ end }}

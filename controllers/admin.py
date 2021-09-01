@@ -622,10 +622,7 @@ def admin():
 
 # Called in admin.js from courseStudents to populate  the list of students
 # eBookConfig.getCourseStudentsURL
-@auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
-)
+@auth.requires_login()
 def course_students():
     response.headers["content-type"] = "application/json"
     cur_students = db(
@@ -2193,16 +2190,28 @@ def add__or_update_assignment_question():
         return json.dumps("Error")
 
 
+# As we move toward a question bank model for questions, this relaxes the
+# question belongs to a course idea by first simply searching for the question
+# by name.  If there is only one match then no problem.  If there is more than one
+# then the base course of the current user should be preferred to ensure
+# backward compatibility.
 def _get_question_id(question_name, course_id):
-    question = (
-        db(
-            (db.questions.name == question_name)
-            & (db.questions.base_course == db.courses.base_course)
-            & (db.courses.id == course_id)
+    # first try to just get the question by name.
+    question = db((db.questions.name == question_name)).select(db.questions.id)
+    # if there is more than one then use the course_id
+    if len(question) > 1:
+        question = (
+            db(
+                (db.questions.name == question_name)
+                & (db.questions.base_course == db.courses.base_course)
+                & (db.courses.id == course_id)
+            )
+            .select(db.questions.id)
+            .first()
         )
-        .select(db.questions.id)
-        .first()
-    )
+    else:
+        question = question[0]
+
     if question:
         return int(question.id)
     else:
@@ -2402,7 +2411,7 @@ def courselog():
     """.format(
             thecourse.base_course, course
         ),
-        settings.database_uri,
+        settings.database_uri.replace("postgres://", "postgresql://"),
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
 
@@ -2426,7 +2435,7 @@ def codelog():
     """.format(
             auth.user.course_id
         ),
-        settings.database_uri,
+        settings.database_uri.replace("postgres://", "postgresql://"),
     )
     data = data[~data.sid.str.contains(r"^\d{38,38}@")]
 
@@ -2578,31 +2587,6 @@ def enroll_students():
         session.flash = "created {} new users".format(counter)
 
     return redirect(URL("admin", "admin"))
-
-
-def _validateUser(username, password, fname, lname, email, course_name, line):
-    errors = []
-
-    if auth.user.course_name != course_name:
-        errors.append(f"Course name does not match your course on line {line}")
-    cinfo = db(db.courses.course_name == course_name).select().first()
-    if not cinfo:
-        errors.append(f"Course {course_name} does not exist on line {line}")
-    match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
-    if match:
-        errors.append(
-            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line {line}"""
-        )
-    uinfo = db(db.auth_user.username == username).count()
-    if uinfo > 0:
-        errors.append(f"Username {username} already exists on line {line}")
-
-    if password == "":
-        errors.append(f"password cannot be blank on line {line}")
-    if "@" not in email:
-        errors.append(f"Email address missing @ on line {line}")
-
-    return errors
 
 
 @auth.requires(

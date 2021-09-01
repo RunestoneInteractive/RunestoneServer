@@ -166,6 +166,7 @@ db.define_table(
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
     Field("courselevel", type="string"),
+    Field("new_server", type="boolean", default=False),
     migrate=table_migrate_prefix + "courses.table",
 )
 
@@ -183,20 +184,21 @@ current.get_course_row = get_course_row
 
 # Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
 def get_course_url(*args):
-    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
-    if os.path.exists(os.path.join(request.folder, "static", auth.user.course_name)):
-        return URL("static", "/".join((auth.user.course_name,) + args))
-    else:
-        course = (
-            db(db.courses.id == auth.user.course_id)
-            .select(db.courses.base_course)
-            .first()
-        )
-        args = tuple(x for x in args if x != "")
-        if course:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    args = tuple(x for x in args if x != "")
+
+    if course:
+        if course.new_server == True:
+            return URL(
+                a=settings.bks,
+                c="books",
+                f="published",
+                args=(course.course_name,) + args,
+            )
         else:
-            return URL(c="default")
+            return URL(c="books", f="published", args=(course.base_course,) + args)
+    else:
+        return URL(c="default")
 
 
 ########################################
@@ -569,3 +571,28 @@ def createUser(username, password, fname, lname, email, course_name, instructor=
         irole = db(db.auth_group.role == "instructor").select(db.auth_group.id).first()
         db.auth_membership.insert(user_id=uid, group_id=irole)
         db.course_instructor.insert(course=cinfo.id, instructor=uid)
+
+
+def _validateUser(username, password, fname, lname, email, course_name, line):
+    errors = []
+
+    if auth.user.course_name != course_name:
+        errors.append(f"Course name does not match your course on line {line}")
+    cinfo = db(db.courses.course_name == course_name).select().first()
+    if not cinfo:
+        errors.append(f"Course {course_name} does not exist on line {line}")
+    match = re.search(r"""[!"#$%&'()*+,./:;<=>?@[\]^`{|}~ ]""", username)
+    if match:
+        errors.append(
+            f"""Username cannot contain a {match.group(0).replace(" ", "space")} on line {line}"""
+        )
+    uinfo = db(db.auth_user.username == username).count()
+    if uinfo > 0:
+        errors.append(f"Username {username} already exists on line {line}")
+
+    if password == "":
+        errors.append(f"password cannot be blank on line {line}")
+    if "@" not in email:
+        errors.append(f"Email address missing @ on line {line}")
+
+    return errors

@@ -1,0 +1,46 @@
+# .. Copyright (C) 2012-2020 Bryan A. Jones.
+#
+#  This file is part of the CodeChat System.
+#
+#  The CodeChat System is free software: you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  The CodeChat System is distributed in the hope that it will be
+#  useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+#  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with the CodeChat System.  If not, see
+#  <http://www.gnu.org/licenses/>.
+#
+# ************************************************
+# |docname| - Configuration for a CodeChat project
+# ************************************************
+# This file defines the configuration for a CodeChat project. It contains a working `Sphinx <https://www.sphinx-doc.org/>`_ configuration.
+#
+# ``source_path``: optional; defaults to ``.`` (the current directory). A path to the root of the source tree. Relative paths are rooted in the directory containing this configuration file.
+#source_path: .
+
+# ``output_path``: required. A path to the root of the HTML output produced by this renderer. Relative paths are rooted in the directory containing this configuration file.
+output_path: _build
+
+# ``args``: required string or sequence of strings. This provides the arguments to invoke the renderer. These strings may optionally contain the following replacement values:
+#
+# - ``{project_path}``: an absolute path to the directory containing this file.
+# - ``{source_path}``: the ``source_path`` above, but as an absolute path.
+# - ``{output_path}``: the ``output_path`` above, but as an absolute path.
+#
+# The line below could also be written ``args: sphinx-build . _build``.
+args:
+    # See `sphinx-build <https://www.sphinx-doc.org/en/master/man/sphinx-build.html>`_.
+    -   sphinx-build
+    # The source directory.
+    -   .
+    # The output directory.
+    -   _build
+
+# ``html_ext``: optional; defaults to ``.html``. The extension used by this renderer when generating HTML files.
+#html_ext: .html
