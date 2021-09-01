@@ -23,6 +23,10 @@ server {
       proxy_redirect off;
       # Allow web sockets.
       proxy_buffering off;
+      `WebSocket proxying <https://nginx.org/en/docs/http/websocket.html?_ga=2.58949805.1641238518.1630518248-2075569494.1630518248>`_:
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
       # `proxy_pass <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass>`_: set the protocol and address of a proxied server and an optional URI to which a location should be mapped. **Tricky**: Specifying the ``location`` above with a trailing slash and including a trailing slash at the end of ``proxy_pass`` causes nginx to strip of the ``/ns`` prefix when sending it to gunicorn. Quoting the docs: "If the ``proxy_pass`` directive is specified with a URI, then when a request is passed to the server, the part of a normalized request URI matching the location is replaced by a URI specified in the directive."
       proxy_pass http://unix:/run/gunicorn.sock:/;
     }
