@@ -166,6 +166,7 @@ db.define_table(
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
     Field("courselevel", type="string"),
+    Field("new_server", type="boolean", default=False),
     migrate=False,
 )
 
@@ -183,20 +184,21 @@ current.get_course_row = get_course_row
 
 # Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
 def get_course_url(*args):
-    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
-    if os.path.exists(os.path.join(request.folder, "static", auth.user.course_name)):
-        return URL("static", "/".join((auth.user.course_name,) + args))
-    else:
-        course = (
-            db(db.courses.id == auth.user.course_id)
-            .select(db.courses.base_course)
-            .first()
-        )
-        args = tuple(x for x in args if x != "")
-        if course:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    args = tuple(x for x in args if x != "")
+
+    if course:
+        if course.new_server == True:
+            return URL(
+                a=settings.bks,
+                c="books",
+                f="published",
+                args=(course.course_name,) + args,
+            )
         else:
-            return URL(c="default")
+            return URL(c="books", f="published", args=(course.base_course,) + args)
+    else:
+        return URL(c="default")
 
 
 ########################################
