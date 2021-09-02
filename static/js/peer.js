@@ -41,6 +41,11 @@ function connect(event) {
             }
         }
     }
+
+    window.onbeforeunload = function () {
+        ws.onclose = function () { }; // disable onclose handler first
+        ws.close();
+    };
 }
 
 async function logStopVote() {
