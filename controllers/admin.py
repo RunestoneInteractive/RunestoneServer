@@ -1913,6 +1913,7 @@ def get_assignment():
     assignment_data["from_source"] = assignment_row.from_source
     assignment_data["nofeedback"] = assignment_row.nofeedback
     assignment_data["nopause"] = assignment_row.nopause
+    assignment_data["is_peer"] = assignment_row.is_peer
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -2016,6 +2017,7 @@ def save_assignment():
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
     nopause = request.vars["nopause"]
+    is_peer = request.vars["is_peer"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -2036,6 +2038,8 @@ def save_assignment():
             time_limit=time_limit,
             nofeedback=nofeedback,
             nopause=nopause,
+            is_peer=is_peer,
+            current_index=0,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
