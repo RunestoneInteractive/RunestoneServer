@@ -455,7 +455,7 @@ def grades():
         assign.points = update_total_points(assign.id)
         duedates.append(date2String(assign.duedate))
 
-    students = db(
+    allstudents = db(
         (db.user_courses.course_id == auth.user.course_id)
         & (db.auth_user.id == db.user_courses.user_id)
     ).select(
@@ -474,7 +474,12 @@ def grades():
         where points is not null and assignments.course = %s and auth_user.id in
             (select user_id from user_courses where course_id = %s)
             order by last_name, first_name, assignments.duedate, assignments.id;"""
-    rows = db.executesql(query, [course["id"], course["id"]])
+    trows = db.executesql(query, [course["id"], course["id"]])
+    rows = []
+    for row in trows:
+        # remove instructor rows from trows
+        if not verifyInstructorStatus(auth.user.course_id, row[3]):
+            rows.append(row)
 
     studentinfo = {}
     practice_setting = (
@@ -482,7 +487,12 @@ def grades():
     )
     practice_average = 0
     total_possible_points = 0
-    for s in students:
+    students = []
+    for s in allstudents:
+        if verifyInstructorStatus(auth.user.course_id, s.id):
+            # filter out instructors from the gradebook
+            continue
+        students.append(s)
         if practice_setting:
             if practice_setting.spacing == 1:
                 practice_completion_count = db(
