@@ -459,7 +459,9 @@ def _autograde_one_q(
         )
         if actual_q:
             act_question_name = actual_q.selected_questions.selected_id
-            act_points = actual_q.selected_questions.points
+            # points may not be specified, especially for selectquestions
+            # in the body of the book's text
+            act_points = actual_q.selected_questions.points or points
             act_question_type = actual_q.questions.question_type
             sel_id = actual_q.selected_questions.id
             score = _autograde_one_q(
