@@ -451,9 +451,11 @@ def grades():
     # recalculate total points for each assignment in case the stored
     # total is out of sync.
     duedates = []
+    totalpoints = []
     for assign in assignments:
         assign.points = update_total_points(assign.id)
         duedates.append(date2String(assign.duedate))
+        totalpoints.append(assign.points)
 
     allstudents = db(
         (db.user_courses.course_id == auth.user.course_id)
@@ -584,6 +586,7 @@ def grades():
         averagerow=averagerow,
         practice_average=practice_average,
         duedates=duedates,
+        totalpoints=totalpoints,
     )
 
 
