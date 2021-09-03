@@ -25,7 +25,7 @@ function connect(event) {
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             clearInterval(itimerid);
                             // send log message to indicate voting is over
-                            if (voteNum == 2) {
+                            if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();
                             }
                         }
@@ -35,6 +35,12 @@ function connect(event) {
                     window.mcList[currentQuestion].submitButton.disabled = false;
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`
+                    break;
+                case "enableNext":
+                    let butt = document.getElementById("nextqbutton");
+                    if (butt) {
+                        butt.removeAttribute("disabled")
+                    }
                     break;
                 default:
                     console.log("unknown control message");
@@ -171,6 +177,17 @@ async function clearPartners(event) {
     });
     let resp = await fetch(request);
     let spec = await resp.json();
+}
+
+function enableNext() {
+    let mess = {
+        type: "control",
+        sender: `${user}`,
+        message: "enableNext",
+        broadcast: true
+    }
+    publishMessage(mess);
+    return true;
 }
 
 async function publishMessage(data) {

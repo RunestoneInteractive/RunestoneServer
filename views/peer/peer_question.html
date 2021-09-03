@@ -16,7 +16,8 @@
     <div class="col-md-6">
         <form action="/runestone/peer/peer_question" method="GET">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-            <button type="submit" name="next" value="Next">Next Question</button>
+            <button id="nextqbutton" type="submit" class="btn btn-success" name="next" disabled value="Next">Next
+                Question</button>
         </form>
     </div>
 </div>
