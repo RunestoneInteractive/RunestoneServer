@@ -30,9 +30,10 @@ logger.setLevel(settings.log_level)
     requires_login=True,
 )
 def instructor():
-    assignments = db(db.assignments.is_peer == True).select(
-        orderby=~db.assignments.duedate
-    )
+    assignments = db(
+        (db.assignments.is_peer == True)
+        & (db.assignments.course == auth.user.course_id)
+    ).select(orderby=~db.assignments.duedate)
 
     return dict(
         course_id=auth.user.course_name,
@@ -175,9 +176,11 @@ def num_answers():
 #
 @auth.requires_login()
 def student():
-    assignments = db(db.assignments.is_peer == True).select(
-        orderby=~db.assignments.duedate
-    )
+    assignments = db(
+        (db.assignments.is_peer == True)
+        & (db.assignments.course == auth.user.course_id)
+        & (db.assignments.visible == True)
+    ).select(orderby=~db.assignments.duedate)
 
     return dict(
         course_id=auth.user.course_name,
