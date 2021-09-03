@@ -388,6 +388,9 @@ def record_grade():
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
         )
         return json.dumps({"response": "not replaced"})
+
+    # TODO: call do_calculate_totals when request.vars.recalc is true
+
     return json.dumps({"response": "replaced"})
 
 
