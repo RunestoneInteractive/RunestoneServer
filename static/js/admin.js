@@ -156,7 +156,7 @@ function autoGrade() {
             // Grade each student provided.
             let student_array = Object.keys(students);
             let total = 0;
-            $("#gradingprogresstitle").html("<h3>Grading Progress</h3>");
+            $("#gradingprogresstitle").html("<h3>Grading in Progress</h3>");
             $("#autogradingprogress").html("");
             $("#autogradingprogress").css("border", "1px solid");
             for (let index = 0; index < student_array.length; ++index) {
@@ -183,7 +183,7 @@ function autoGrade() {
             $("#autogradingprogress").animate({
                 scrollTop: $("#autogradingprogress").height(),
             });
-
+            $("#gradingprogresstitle").html("<h3>Grading Complete</h3>");
             gradingSummary("autogradingsummary");
             $("#autogradesubmit").prop("disabled", false);
         })(students, params);
