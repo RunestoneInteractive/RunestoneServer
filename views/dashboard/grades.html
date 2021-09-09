@@ -54,6 +54,16 @@
                             <td class="roguecol">{{=date}}</td>
                     {{pass}}
                 </tr>
+                <tr style="background-color: lightgray" id="tpointsid">
+                    <td class="roguecol">Total Points</td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol"> </td>
+                    <td class="roguecol"> </td>
+                    {{for p in totalpoints:}}
+                            <td class="roguecol">{{=p}}</td>
+                    {{pass}}
+                </tr>
                 <tr style="background-color: lightgray" id="classaverage">
                     <td class="roguecol">Class Average</td>
                     <td class="roguecol"> </td>
