@@ -178,7 +178,7 @@ function autoGrade() {
                         scrollTop: $("#autogradingprogress").height(),
                     });
                 } catch (e) {
-                    console.log(e)
+                    console.log(`Error when autograding ${student} is ${e}`);
                 }
             } // end for
             $("#autogradingprogress").append(
