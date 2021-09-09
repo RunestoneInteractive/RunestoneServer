@@ -23,7 +23,12 @@ function connect(event) {
                         } else {
                             messarea.innerHTML = `<h3>Time is up</h3>`;
                             window.mcList[currentQuestion].submitButton.disabled = true;
+                            window.mcList[currentQuestion].disableInteraction();
                             clearInterval(itimerid);
+                            // Get the current answer and insert it into the 
+                            let ansSlot = document.getElementById("first_answer");
+                            let currAnswer = window.mcList[currentQuestion].answer;
+                            ansSlot.innerHTML = currAnswer;
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();
@@ -33,6 +38,7 @@ function connect(event) {
                     break;
                 case "enableVote":
                     window.mcList[currentQuestion].submitButton.disabled = false;
+                    window.mcList[currentQuestion].enableInteraction()
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`
                     break;
