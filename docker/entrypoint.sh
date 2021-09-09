@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail early upon error
-set -eu
+set -e
 
 info () {
     echo "I: $@"
