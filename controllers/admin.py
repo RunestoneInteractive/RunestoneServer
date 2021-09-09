@@ -632,13 +632,15 @@ def course_students():
         db.auth_user.username,
         db.auth_user.first_name,
         db.auth_user.last_name,
+        db.auth_user.id,
         orderby=db.auth_user.last_name | db.auth_user.first_name,
     )
     searchdict = OrderedDict()
     for row in cur_students:
-        name = row.first_name + " " + row.last_name
-        username = row.username
-        searchdict[str(username)] = name
+        if not verifyInstructorStatus(auth.user.course_id, row.id):
+            name = row.first_name + " " + row.last_name
+            username = row.username
+            searchdict[str(username)] = name
     return json.dumps(searchdict)
 
 
@@ -693,28 +695,26 @@ def grading():
     cur_students = db(db.user_courses.course_id == auth.user.course_id).select(
         db.user_courses.user_id
     )
+    # TODO: investigate why this search dict is overriden by a call to course_students
+    # on the grading page load????
     searchdict = {}
     for row in cur_students:
-        isinstructor = db(
-            (db.course_instructor.course == auth.user.course_id)
-            & (db.course_instructor.instructor == row.user_id)
-        ).select()
-        instructorlist = []
-        for line in isinstructor:
-            instructorlist.append(line.instructor)
-        if row.user_id not in instructorlist:
-            person = db(db.auth_user.id == row.user_id).select(
-                db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
-            )
-            for identity in person:
-                name = identity.first_name + " " + identity.last_name
-                username = (
-                    db(db.auth_user.id == int(row.user_id))
-                    .select(db.auth_user.username)
-                    .first()
-                    .username
+        isinstructor = verifyInstructorStatus(auth.user.course_id, row.user_id)
+        logger.debug(f"User {row.user_id} instructor status {isinstructor}")
+        if not isinstructor:
+            person = (
+                db(db.auth_user.id == row.user_id)
+                .select(
+                    db.auth_user.username,
+                    db.auth_user.first_name,
+                    db.auth_user.last_name,
                 )
-                searchdict[str(username)] = name
+                .first()
+            )
+            name = person.first_name + " " + person.last_name
+            username = person.username
+            searchdict[username] = name
+            logger.debug(f"Added {username} to searchdict")
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     base_course = course.base_course
@@ -732,7 +732,7 @@ def grading():
         chapter_labels[row.chapter_label] = q_list
 
     set_latex_preamble(base_course)
-
+    logger.debug(f"{searchdict=}")
     return dict(
         assignmentinfo=json.dumps(assignments),
         students=searchdict,
