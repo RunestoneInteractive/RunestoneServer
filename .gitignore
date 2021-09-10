@@ -67,3 +67,4 @@ sphinx-enki-info.txt
 _builddoctrees
 .venv
 .nova
+.env
