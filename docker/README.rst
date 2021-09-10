@@ -6,7 +6,7 @@ Docker Deployment
     These instructions are for installing Runestone Server using docker to automate
     much of the work involved in setting up the environment needed to run a server.
     If you would prefer to install all the components directly on a server yourself,
-    see the `Manual Installation instructions <https://runestoneserver.readthedocs.io/en/stable/docs/installation.html>`_.
+    see the `Manual Installation instructions <../docs/installation.html>`_.
 
 
 Using Docker, we can bring up the server without needing to install dependencies directly on
@@ -274,7 +274,7 @@ You do not have to restart the server to make use of the course.
 To add an initial instructor account to the course you have created, you can either create a new user or add
 an existing user as an instructor to the course.
 
-To add a new user, use the ``dmange`` script to run **inituser**. It asks for what class to add the user to and whether or not
+To add a new user, use the ``dmanage`` script to run **inituser**. It asks for what class to add the user to and whether or not
 they should be made an instructor.
 
 .. code-block:: bash
@@ -283,7 +283,7 @@ they should be made an instructor.
 
 
 Or, if you already have an account that you want to add as an instructor to the new course, you can use the
-``dmange`` script to execute **addinstructor** which will prompt you for a username and course name:
+``dmanage`` script to execute **addinstructor** which will prompt you for a username and course name:
 
 .. code-block:: bash
 
@@ -322,7 +322,6 @@ to be failing to start or is exhibiting other errors.
     already written (between when you started the container and ran this command) and
     will continue to display new information as it is written.
 
-https://runestoneserver.readthedocs.io/en/stable/rsmanage/toctree.html
 
 
 Shelling Inside
@@ -346,7 +345,7 @@ Maintenance Scripts
 
 The ``scripts`` directory has a number of maintenance scripts that will run commands inside the runestone
 container to avoid having to shell into it first. In particular the ``dmanage`` script can be used to
-`perform a variety of tasks <https://runestoneserver.readthedocs.io/en/stable/rsmanage/toctree.html>`_.
+`perform a variety of tasks <../rsmanage/toctree.html>`_.
 
 Runestone Components Development
 **********************************
@@ -371,7 +370,8 @@ as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` dire
     npm run build
 
 
-Then return to the ``RunestoneServer`` directory and create a docker-compose.override.yml. It should look like this:
+Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy.
+In the ``RunestoneServer`` directory create a `docker-compose.override.yml` file. Then add this to it:
 
 .. code-block::
     
