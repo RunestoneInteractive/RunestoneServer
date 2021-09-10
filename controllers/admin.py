@@ -732,7 +732,6 @@ def grading():
         chapter_labels[row.chapter_label] = q_list
 
     set_latex_preamble(base_course)
-    logger.debug(f"{searchdict=}")
     return dict(
         assignmentinfo=json.dumps(assignments),
         students=searchdict,
