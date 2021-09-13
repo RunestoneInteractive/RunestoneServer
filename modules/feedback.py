@@ -64,6 +64,9 @@ def is_server_feedback(div_id, course):
 def fitb_feedback(answer_json, feedback):
     # Grade based on this feedback. The new format is JSON; the old is
     # comma-separated.
+    if answer_json is None:
+        return "F"
+
     try:
         answer = json.loads(answer_json)
         # Some answers may parse as JSON, but still be in the old format. The
