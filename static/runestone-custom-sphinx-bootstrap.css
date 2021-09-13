@@ -652,3 +652,9 @@ div.settingsbox {
     border-width: 2px;
     padding: 3pt;
 }
+
+.support-rs {
+    border: solid bisque;
+    border-radius: 4pt;
+    padding: 6pt;
+}
