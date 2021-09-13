@@ -162,21 +162,25 @@ function autoGrade() {
             for (let index = 0; index < student_array.length; ++index) {
                 let student = student_array[index];
                 ajax_params.data.sid = student;
-                res = await jQuery.ajax(ajax_params);
-                $("#autogradingprogress").append(
-                    `${index + 1} of ${student_array.length}: ${student}
+                try {
+                    res = await jQuery.ajax(ajax_params);
+                    $("#autogradingprogress").append(
+                        `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
-                        student
-                    )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
-                    }</a>
+                            student
+                        )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
+                        }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
-                );
-                total = total + res.total_mess;
-                $("#autogradingprogress").animate({
-                    scrollTop: $("#autogradingprogress").height(),
-                });
-            }
+                    );
+                    total = total + res.total_mess;
+                    $("#autogradingprogress").animate({
+                        scrollTop: $("#autogradingprogress").height(),
+                    });
+                } catch (e) {
+                    console.log(`Error when autograding ${student} is ${e}`);
+                }
+            } // end for
             $("#autogradingprogress").append(
                 `Average Score: ${total / student_array.length}`
             );
