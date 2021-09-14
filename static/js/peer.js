@@ -28,7 +28,10 @@ function connect(event) {
                             // Get the current answer and insert it into the 
                             let ansSlot = document.getElementById("first_answer");
                             let currAnswer = window.mcList[currentQuestion].answer;
+                            const ordA = 65;
+                            currAnswer = String.fromCharCode(ordA + currAnswer);
                             ansSlot.innerHTML = currAnswer;
+
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();
