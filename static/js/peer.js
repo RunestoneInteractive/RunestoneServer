@@ -5,6 +5,7 @@ function connect(event) {
     ws.onmessage = function (event) {
         var messages = document.getElementById('messages')
         var message = document.createElement('li')
+        message.classList.add("incoming-mess")
         let mess = JSON.parse(event.data);
         if (mess.type === "text") {
             if (!(mess.time in messageTrail)) {
@@ -111,6 +112,7 @@ async function sendMessage(event) {
     await publishMessage(mess)
     var messages = document.getElementById('messages')
     var message = document.createElement('li')
+    message.classList.add("outgoing-mess")
     var content = document.createTextNode(input.value)
     message.appendChild(content)
     messages.appendChild(message)
@@ -217,3 +219,14 @@ async function publishMessage(data) {
     let resp = await fetch(request);
     let spec = await resp.json();
 }
+
+$(function () {
+    let tinput = document.getElementById("messageText");
+    tinput.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("sendpeermsg").click();
+        }
+    });
+});
+
