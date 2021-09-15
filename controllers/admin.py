@@ -1183,11 +1183,14 @@ def getQuestionInfo():
 
     row = db(query).select().first()
 
-    question_code = row.question
-    htmlsrc = row.htmlsrc
-    question_author = row.author
-    question_difficulty = row.difficulty
-    question_id = row.id
+    if row:
+        question_code = row.question
+        htmlsrc = row.htmlsrc
+        question_author = row.author
+        question_difficulty = row.difficulty
+        question_id = row.id
+    else:
+        return json.dumps({})
 
     tags = []
     question_tags = db((db.question_tags.question_id == question_id)).select()
