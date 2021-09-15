@@ -1,14 +1,18 @@
 var ws = null;
 function connect(event) {
     ws = new WebSocket(`${eBookConfig.websocketUrl}/chat/${user}/ws`);
+    messageTrail = {};
     ws.onmessage = function (event) {
         var messages = document.getElementById('messages')
         var message = document.createElement('li')
         let mess = JSON.parse(event.data);
         if (mess.type === "text") {
-            var content = document.createTextNode(mess.message)
-            message.appendChild(content)
-            messages.appendChild(message)
+            if (!(mess.time in messageTrail)) {
+                var content = document.createTextNode(mess.message)
+                message.appendChild(content)
+                messages.appendChild(message)
+                messageTrail[mess.time] = mess.message;
+            }
         } else if (mess.type === "control") {
             let messarea;
             switch (mess.message) {
@@ -29,7 +33,7 @@ function connect(event) {
                             let ansSlot = document.getElementById("first_answer");
                             let currAnswer = window.mcList[currentQuestion].answer;
                             const ordA = 65;
-                            currAnswer = String.fromCharCode(ordA + currAnswer);
+                            currAnswer = String.fromCharCode(ordA + parseInt(currAnswer));
                             ansSlot.innerHTML = currAnswer;
 
                             // send log message to indicate voting is over
@@ -99,6 +103,7 @@ async function sendMessage(event) {
         type: "text",
         from: `${user}`,
         message: input.value,
+        time: Date.now(),
         broadcast: false,
         course_name: eBookConfig.course,
         div_id: currentQuestion
