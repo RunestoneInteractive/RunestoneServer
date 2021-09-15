@@ -48,7 +48,9 @@
         var opt = { "renderer": "canvas", "actions": false };
         let data = {
             "div_id": "{{=XML(current_question['name'])}}",
-            "answer_num": 1
+            "answer_num": 1,
+            "start_time": startTime,
+            "num_answers": window.mcList[currentQuestion].answerList.length,
         }
         let jsheaders = new Headers({
             "Content-type": "application/json; charset=utf-8",
@@ -80,6 +82,7 @@
     async function updateCount() {// Every five seconds get the graph data
         let data = {
             "div_id": "{{=XML(current_question['name'])}}",
+            "start_time": startTime,
         }
         let jsheaders = new Headers({
             "Content-type": "application/json; charset=utf-8",
@@ -108,6 +111,6 @@
         setTimeout(connect, 1000);
         setInterval(updateCount, 2000);
     });
-
+    var startTime = new Date().toUTCString();
 </script>
 {{ end }}

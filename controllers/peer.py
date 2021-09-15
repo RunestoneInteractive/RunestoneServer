@@ -19,7 +19,7 @@ import os
 import altair as alt
 import pandas as pd
 import redis
-
+from dateutil.parser import parse
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -100,7 +100,7 @@ def _get_current_question(assignment_id, get_next):
     return current_question
 
 
-def _get_n_answers(num_answer, div_id, course_name):
+def _get_n_answers(num_answer, div_id, course_name, start_time):
     dburl = settings.database_uri.replace("postgres://", "postgresql://")
 
     df = pd.read_sql_query(
@@ -118,6 +118,7 @@ def _get_n_answers(num_answer, div_id, course_name):
         WHERE
             div_id = '{div_id}'
             AND course_name = '{course_name}'
+            AND timestamp > '{start_time}'
     )
     SELECT
         *
@@ -146,12 +147,25 @@ def _get_n_answers(num_answer, div_id, course_name):
 def chartdata():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
+    start_time = request.vars.start_time
+    num_choices = request.vars.num_answers
     course_name = auth.user.course_name
     logger.debug(f"divid = {div_id}")
-    df = _get_n_answers(2, div_id, course_name)
+    df = _get_n_answers(2, div_id, course_name, start_time)
     df["letter"] = df.answer.map(lambda x: chr(65 + x))
-    c = alt.Chart(df[df.rn == 1]).mark_bar().encode(x="letter", y="count()")
-    d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="count()")
+    x = df.groupby(["letter", "rn"])["answer"].count()
+    df = x.reset_index()
+    alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    y = pd.DataFrame(
+        {
+            "letter": list(alpha[:num_choices] * 2),
+            "rn": [1] * num_choices + [2] * num_choices,
+            "answer": [0] * num_choices * 2,
+        }
+    )
+    df = df.merge(y, how="outer")
+    c = alt.Chart(df[df.rn == 1]).mark_bar().encode(x="letter", y="sum(answer)")
+    d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="sum(answer)")
 
     return alt.vconcat(c, d).to_json()
 
@@ -166,6 +180,7 @@ def num_answers():
     acount = db(
         (db.mchoice_answers.div_id == div_id)
         & (db.mchoice_answers.course_name == auth.user.course_name)
+        & (db.mchoice_answers.timestamp > parse(request.vars.start_time))
     ).count(distinct=db.mchoice_answers.sid)
 
     return json.dumps({"count": acount})

@@ -222,11 +222,13 @@ async function publishMessage(data) {
 
 $(function () {
     let tinput = document.getElementById("messageText");
-    tinput.addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            document.getElementById("sendpeermsg").click();
-        }
-    });
+    if (tinput) {
+        tinput.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("sendpeermsg").click();
+            }
+        });
+    }
 });
 
