@@ -220,6 +220,32 @@ async function publishMessage(data) {
     let spec = await resp.json();
 }
 
+
+async function ratePeer(radio) {
+    let eventInfo = {
+        sid: eBookConfig.username,
+        div_id: currentQuestion,
+        event: "ratepeer",
+        course_id: eBookConfig.course,
+        rating: radio.value,
+    }
+    let request = new Request(`/runestone/peer/log_peer_rating?div_id=${currentQuestion}&rating=${radio.value}`, {
+        method: "GET",
+        headers: this.jsonHeaders,
+        //body: JSON.stringify(eventInfo),
+    });
+    try {
+        let response = await fetch(request);
+        if (!response.ok) {
+            throw new Error("Failed to save the log entry");
+        }
+        post_return = response.json();
+    } catch (e) {
+        alert(`Error: Your action was not saved! The error was ${e}`);
+        console.log(`Error: ${e}`);
+    }
+}
+
 $(function () {
     let tinput = document.getElementById("messageText");
     if (tinput) {

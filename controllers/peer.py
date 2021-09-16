@@ -278,3 +278,20 @@ def publish_message():
     logger.debug(f"{data=}")
     r.publish("peermessages", data)
     return json.dumps("success")
+
+
+def log_peer_rating():
+    response.headers["content-type"] = "application/json"
+    current_question = request.vars.div_id
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    peer_sid = r.hget("partnerdb", auth.user.username).decode("utf8")
+    db.useinfo.insert(
+        course_id=auth.user.course_name,
+        sid=auth.user.username,
+        div_id=current_question,
+        event="ratepeer",
+        act=f"{peer_sid}:{request.vars.rating}",
+        timestamp=datetime.datetime.utcnow(),
+    )
+
+    return json.dumps("success")
