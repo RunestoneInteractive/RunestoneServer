@@ -230,6 +230,10 @@ async function publishMessage(data) {
 
 
 async function ratePeer(radio) {
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
     let eventInfo = {
         sid: eBookConfig.username,
         div_id: currentQuestion,
@@ -237,10 +241,10 @@ async function ratePeer(radio) {
         course_id: eBookConfig.course,
         rating: radio.value,
     }
-    let request = new Request(`/runestone/peer/log_peer_rating?div_id=${currentQuestion}&rating=${radio.value}`, {
-        method: "GET",
-        headers: this.jsonHeaders,
-        //body: JSON.stringify(eventInfo),
+    let request = new Request("/runestone/peer/log_peer_rating", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(eventInfo),
     });
     try {
         let response = await fetch(request);
