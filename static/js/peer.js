@@ -2,6 +2,9 @@ var ws = null;
 function connect(event) {
     ws = new WebSocket(`${eBookConfig.websocketUrl}/chat/${user}/ws`);
     messageTrail = {};
+    if (ws) {
+        console.log(`Websocket Connected: ${ws}`);
+    }
     ws.onmessage = function (event) {
         var messages = document.getElementById('messages')
         var message = document.createElement('li')
@@ -71,16 +74,20 @@ function connect(event) {
 async function logStopVote() {
     // This can be refactored to take some parameters if peer grows
     // to require more logging functionality.
+    let headers = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
     let eventInfo = {
         sid: eBookConfig.username,
         div_id: currentQuestion,
         event: "peer",
         act: "stop_question",
-        course_id: eBookConfig.course,
+        course: eBookConfig.course,
     }
     let request = new Request(eBookConfig.ajaxURL + "hsblog", {
         method: "POST",
-        headers: this.jsonHeaders,
+        headers: headers,
         body: JSON.stringify(eventInfo),
     });
     try {
@@ -144,7 +151,8 @@ async function makePartners() {
     butt.classList.replace("btn-info", "btn-secondary")
 
     let data = {
-        div_id: currentQuestion
+        div_id: currentQuestion,
+        start_time: startTime, // set in dashboard.html when loaded
     }
     let jsheaders = new Headers({
         "Content-type": "application/json; charset=utf-8",

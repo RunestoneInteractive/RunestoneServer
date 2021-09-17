@@ -225,7 +225,7 @@ def peer_question():
 def make_pairs():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
-    df = _get_n_answers(1, div_id, auth.user.course_name)
+    df = _get_n_answers(1, div_id, auth.user.course_name, request.vars.start_time)
     logger.debug("HELLO")
     # answers = list(df.answer.unique())
     correct = df[df.correct == "T"][["sid", "answer"]]
@@ -284,14 +284,17 @@ def log_peer_rating():
     response.headers["content-type"] = "application/json"
     current_question = request.vars.div_id
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    peer_sid = r.hget("partnerdb", auth.user.username).decode("utf8")
-    db.useinfo.insert(
-        course_id=auth.user.course_name,
-        sid=auth.user.username,
-        div_id=current_question,
-        event="ratepeer",
-        act=f"{peer_sid}:{request.vars.rating}",
-        timestamp=datetime.datetime.utcnow(),
-    )
+    peer_sid = r.hget("partnerdb", auth.user.username)
+    if peer_sid:
+        peer_sid = peer_sid.decode("utf8")
+        db.useinfo.insert(
+            course_id=auth.user.course_name,
+            sid=auth.user.username,
+            div_id=current_question,
+            event="ratepeer",
+            act=f"{peer_sid}:{request.vars.rating}",
+            timestamp=datetime.datetime.utcnow(),
+        )
+        return json.dumps("success")
 
-    return json.dumps("success")
+    return json.dumps("Error: no peer to rate")
