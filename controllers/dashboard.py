@@ -312,6 +312,7 @@ def index():
     return dict(
         assignments=assignments,
         course=course,
+        is_instructor=True,
         questions=questions,
         sections=sections,
         chapters=chapters,

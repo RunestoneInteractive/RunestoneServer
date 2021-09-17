@@ -147,8 +147,8 @@ These are used in several places in the instructor interface. TODO: identify whe
   {{ if 'auth' in globals() and auth.user: }}
   eBookConfig.username = "{{=auth.user.username}}"
   eBookConfig.email = "{{=auth.user.email}}"
-    {{ if 'is_instructor' in globals(): }}
-        eBookConfig.isInstructor = {{ =is_instructor }};
+    {{ if 'is_instructor' in globals() and is_instructor: }}
+        eBookConfig.isInstructor = true;
     {{pass}}
   {{pass}}
   eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;

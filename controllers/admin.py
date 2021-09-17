@@ -154,6 +154,7 @@ def assignments():
         chapters=chapter_labels,
         toc=_get_toc_and_questions(),  # <-- This Gets the readings and questions
         course=course,
+        is_instructor=True,
     )
 
 
@@ -616,6 +617,7 @@ def admin():
         consumer=consumer,
         secret=secret,
         examlist=exams,
+        is_instructor=True,
         **course_attrs,
     )
 
@@ -748,6 +750,7 @@ def grading():
         assignmentids=json.dumps(assignmentids),
         assignment_deadlines=json.dumps(assignment_deadlines),
         question_points=json.dumps(question_points),
+        is_instructor=True,
         course=course,
     )
 
