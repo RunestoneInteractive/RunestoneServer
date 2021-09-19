@@ -1023,7 +1023,21 @@ select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timesta
                     row["correct"] = "No"
             else:
                 row["correct"] = "NA"
-
+        elif row["question_type"] in ["khanex", "quizly"]:
+            res = (
+                db(
+                    (db.useinfo.sid == request.vars.sid)
+                    & (db.useinfo.div_id == row["name"])
+                    & (db.useinfo.course_id == thecourse.course_name)
+                    & (db.useinfo.act.like("%correct"))
+                )
+                .select()
+                .first()
+            )
+            if res:
+                row["correct"] = "Yes"
+            else:
+                row["correct"] = "No"
         else:
             row["correct"] = "NA"
 
