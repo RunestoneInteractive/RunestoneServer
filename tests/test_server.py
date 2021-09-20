@@ -359,6 +359,7 @@ def test_pricing(runestone_db_tools, runestone_env):
     # These course names rely on defaults in the ``runestone_db_tools`` fixture.
     base_course = runestone_db_tools.create_course("test_course_1")
     child_course_1 = runestone_db_tools.create_course()
+    runestone_db_tools.db.commit()
     runestone_env["auth"].get_or_create_user(dict(username="test_user_1"))
 
     # First, test on a base course.
