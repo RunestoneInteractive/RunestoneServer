@@ -356,10 +356,14 @@ def test_pricing(runestone_db_tools, runestone_env):
     default_controller = web2py_controller_import(runestone_env, "default")
     db = runestone_db_tools.db
 
-    base_course = runestone_db_tools.create_course()
-    child_course = runestone_db_tools.create_course(
-        "test_child_course", base_course=base_course.course_name
+    # These course names rely on defaults in the ``runestone_db_tools`` fixture.
+    base_course = runestone_db_tools.create_course("test_course_1")
+    child_course_1 = runestone_db_tools.create_course()
+    # It would be nice to use the ``test_user`` fixture, but we're not using the web interface here -- it's direct database access instead. This is an alternative.
+    runestone_env["auth"].get_or_create_user(
+        dict(username="test_user_1", course_id=child_course_1.course_id)
     )
+
     # First, test on a base course.
     for expected_price, actual_price in [(0, None), (0, -100), (0, 0), (15, 15)]:
         db(db.courses.id == base_course.course_id).update(student_price=actual_price)
@@ -388,12 +392,22 @@ def test_pricing(runestone_db_tools, runestone_env):
         db(db.courses.id == base_course.course_id).update(
             student_price=actual_base_price
         )
-        db(db.courses.id == child_course.course_id).update(
+        db(db.courses.id == child_course_1.course_id).update(
             student_price=actual_child_price
         )
         assert (
-            default_controller._course_price(child_course.course_id) == expected_price
+            default_controller._course_price(child_course_1.course_id) == expected_price
         )
+
+    # Make sure the book is free if the student already owns the base course.
+    #
+    # First, create another child course and add the current student to it.
+    child_course_2 = runestone_db_tools.create_course("test_child_course_2")
+    db.user_courses.insert(
+        user_id=runestone_env["auth"].user.id, course_id=child_course_2.course_id
+    )
+    # Now check the price of a different child course of the same base course.
+    assert default_controller._course_price(child_course_1.course_id) == 0
 
 
 # Check that setting the price causes redirects to the correct location (payment vs. donation) when registering for a course or adding a new course.

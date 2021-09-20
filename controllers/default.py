@@ -110,15 +110,29 @@ def _course_price(course_id):
     )
     assert course
     price = course.student_price
+    base_course_name = course.base_course
+    # See if the student owns this base course.
+    base_course_owned = (
+        db(
+            (db.user_courses.user_id == auth.user.id)
+            & (db.user_courses.course_id == db.courses.id)
+            & (db.courses.base_course == base_course_name)
+        )
+        .select(db.user_courses.id)
+        .first()
+    )
+    # If so, then this course is free.
+    if base_course_owned:
+        price = 0
     # Only look deeper if a price isn't set (even a price of 0).
     if price is None:
-        # See if the base course has a student price.
+        # Get the base course's price.
         base_course = (
-            db(db.courses.course_name == course.base_course)
+            db(db.courses.course_name == base_course_name)
             .select(db.courses.student_price)
             .first()
         )
-        # If this is already a base course, we're done.
+        # Paranoia. Every course should have a valid base course name, so this should always be true...
         if base_course:
             price = base_course.student_price
     # If price is ``None`` or negative, return a free course.
