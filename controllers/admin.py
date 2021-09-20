@@ -528,10 +528,14 @@ def admin():
                 person.first_name + " " + person.last_name
             )
 
-    cur_students = db(db.user_courses.course_id == auth.user.course_id).select(
+    cur_students = db(
+        (db.user_courses.course_id == auth.user.course_id)
+        & (db.user_courses.user_id == db.auth_user.id)
+    ).select(
         db.user_courses.user_id,
         orderby=db.auth_user.last_name | db.auth_user.first_name,
     )
+
     studentdict = OrderedDict()
     for row in cur_students:
         person = db(db.auth_user.id == row.user_id).select(
