@@ -1,5 +1,10 @@
-Installation
-============
+Manual Installation
+====================
+
+.. warning::
+
+   Note: These are the instructions for installing Runestone Server by hand environment. There are also `simpler Docker based instructions <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_ available.
+
 
 #. Install python.
 

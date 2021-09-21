@@ -30,20 +30,23 @@ The Runestone Server has evolved into a streamlined LMS to support interactive t
 You are welcome to fork this source and run your own server, but you are also welcome to use the Runestone Server as a free service on `Runestone Academy <https://runestone.academy>`_
 
 
-Server Installation
--------------------
+Installation
+------------
 
-Installing the Runestone server is a fairly involved process.  The complete guide is in the `Installation <https://runestoneserver.readthedocs.io/en/latest/docs/installation.html>`_ chapter.
+With Docker
+***********
+
+The easiest way to deploy Runestone Server is to use `Docker <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_. Docker automates 
+installing many of the components needed to provide a functioning server.
+Please see complete instructions on the `Docker Deployment ReadTheDocs page <https://runestoneserver.readthedocs.io/en/stable/docker/README.html>`_.
+
+This `video <https://youtu.be/y3oeBmRQVf0>`_ is a little out of date, but demonstrates the process of getting a Docker container up and running on a fresh clean Ubuntu image.
 
 
-Docker Installation
--------------------
+Manual Installation
+*******************
 
-The easiest way to deploy or develop Runestone Server is to use `Docker <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_, and a `Dockerfile <Dockerfile>`_ is provided for that.
-You can simply build the container, and run it, providing the database password sourced from an environment variable (or similar).
-Please see complete instructions in the `docker <docker>`_ folder included here.
-
-**Even better** is this `video I created <https://youtu.be/y3oeBmRQVf0>`_ That walks you through the process of getting a Docker container up and running on a fresh clean Ubuntu image.
+It is also possible to manually install Runestone Server. This involves more work up front, but may make any custom modifications you do later a little more straightforward. For instructions, see these `Manual Installation instructions <https://runestoneserver.readthedocs.io/en/latest/docs/installation.html>`_.
 
 
 

@@ -2110,7 +2110,10 @@ function edit_question(form) {
     jQuery.post("/runestone/admin/edit_question", data, function (myres) {
         alert(myres);
         if (myres.includes("Success")) {
-            $("#editModal").modal("hide");
+            //$("#editModal").modal("hide");
+            //$("#close_editor_now").click();
+            // TODO: Figure out why this leaves the main screen gray and buttons unresponsive.
+            // emulating the click on the close button should work but does not.
         }
     });
 }
