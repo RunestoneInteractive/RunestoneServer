@@ -701,7 +701,7 @@ def exercisemetrics():
     prob_id = request.vars["id"]
     answers = []
     attempt_histogram = []
-    logger.debug(problem_metrics.problems)
+    logger.debug(f"PROBLEMS for problem metrics {problem_metrics.problems}")
     try:
         problem_metric = problem_metrics.problems[prob_id]
     except KeyError:

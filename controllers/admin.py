@@ -536,6 +536,7 @@ def admin():
         db.user_courses.user_id,
         orderby=db.auth_user.last_name | db.auth_user.first_name,
     )
+
     studentdict = OrderedDict()
     for row in cur_students:
         person = db(db.auth_user.id == row.user_id).select(
