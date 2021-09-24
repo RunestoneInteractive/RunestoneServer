@@ -18,7 +18,7 @@ function connect(event) {
         let mess = JSON.parse(event.data);
         if (mess.type === "text") {
             if (!(mess.time in messageTrail)) {
-                var content = document.createTextNode(mess.message)
+                var content = document.createTextNode(`${mess.from}: ${mess.message}`)
                 message.appendChild(content)
                 messages.appendChild(message)
                 messageTrail[mess.time] = mess.message;
@@ -35,7 +35,7 @@ function connect(event) {
                             messarea.innerHTML = `<h3>Finish Up only ${count} seconds remaining</h3>`;
                             count = count - 1;
                         } else {
-                            messarea.innerHTML = `<h3>Time is up</h3>`;
+                            messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your partner</p>`;
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             window.mcList[currentQuestion].disableInteraction();
                             clearInterval(itimerid);
@@ -45,7 +45,10 @@ function connect(event) {
                             const ordA = 65;
                             currAnswer = String.fromCharCode(ordA + parseInt(currAnswer));
                             ansSlot.innerHTML = currAnswer;
-
+                            let discPanel = document.getElementById("discussion_panel");
+                            if (discPanel) {
+                                discPanel.style.display = "block";
+                            }
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();
