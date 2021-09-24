@@ -5,7 +5,7 @@ function connect(event) {
     if (ws) {
         console.log(`Websocket Connected: ${ws}`);
     }
-    ws.onclose("disconnect", function () {
+    ws.on("disconnect", function () {
         alert("You have been disconnected from the peer instruction server. Will Reconnect.")
         connect();
     });
