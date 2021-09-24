@@ -12,19 +12,19 @@ db.define_table(
     Field(
         "threshold_pct", "float"
     ),  # threshold required to qualify for maximum points on the assignment; null means use actual points
-    Field("released", "boolean"),
+    Field("released", "boolean", default=False),
     Field(
         "allow_self_autograde", "boolean"
     ),  # if True, when student clicks to autograde assignment, it calculates totals; otherwise it only scores individual questions but doesn't calculate score for the assignment
     Field("description", "text"),
     Field("duedate", "datetime"),
     Field("enforce_due", "boolean"),
-    Field("visible", "boolean"),
+    Field("visible", "boolean", default=False),
     Field("is_timed", "boolean", default=False),
     Field("is_peer", "boolean", default=False),
     Field("current_index", "integer", default=0),
     Field("time_limit", "integer"),
-    Field("from_source", "boolean"),
+    Field("from_source", "boolean", default=False),
     Field("nofeedback", "boolean"),
     Field("nopause", "boolean"),
     format="%(name)s",
@@ -38,7 +38,7 @@ db.define_table(
     Field("auth_user", db.auth_user),
     Field("assignment", db.assignments),
     Field("score", "double"),
-    Field("manual_total", "boolean"),
+    Field("manual_total", "boolean", default=False),
     Field("projected", "double"),
     # guid for the student x assignment cell in the external gradebook
     #
