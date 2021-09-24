@@ -39,6 +39,7 @@ def instructor():
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
         assignments=assignments,
+        is_instructor=True,
     )
 
 
