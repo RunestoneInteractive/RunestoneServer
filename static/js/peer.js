@@ -5,10 +5,12 @@ function connect(event) {
     if (ws) {
         console.log(`Websocket Connected: ${ws}`);
     }
-    ws.on("disconnect", function () {
+
+    ws.onclose = function () {
         alert("You have been disconnected from the peer instruction server. Will Reconnect.")
         connect();
-    });
+    };
+
     ws.onmessage = function (event) {
         var messages = document.getElementById('messages')
         var message = document.createElement('li')
