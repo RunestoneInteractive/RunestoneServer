@@ -384,7 +384,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         xqt("chmod 600 /root/.pgpass")
 
         # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.conf`.
-        nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone.conf")
+        nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
         txt = replace_vars(nginx_conf.read_text(), dict(
             RUNESTONE_HOST=env.RUNESTONE_HOST,
             WEB2PY_PATH=env.WEB2PY_PATH,
@@ -398,7 +398,10 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
                 }
             """) if env.CERTBOT_EMAIL else "",
         ))
-        Path("/etc/nginx/sites-enabled/runestone.conf").write_text(txt)
+        Path("/etc/nginx/sites-available/runestone").write_text(txt)
+        xqt(
+            "ln -s /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
+        )
 
         if env.CERTBOT_EMAIL:
             xqt('certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"')
