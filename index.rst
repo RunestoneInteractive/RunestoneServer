@@ -167,7 +167,7 @@ Containers
     /docker/docker_tools.py
     /docker/wsgihandler.py
     /docker/uwsgi/sites/runestone.ini
-    /docker/nginx/sites-available/runestone.conf
+    /docker/nginx/sites-available/runestone
 
 
 Documentation

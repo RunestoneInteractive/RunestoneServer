@@ -142,6 +142,7 @@ CodeChat_lexer_for_glob = {
     # The Dockerfile has ``#`` as comments. So does Perl...
     "Dockerfile": "Perl",
     "*.conf": "Perl",
+    "runestone": "Perl",
     # Docker's env files are INI formatted.
     ".env*": "INI",
 }

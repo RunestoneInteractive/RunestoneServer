@@ -383,7 +383,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         Path("/root/.pgpass").write_text(f"db:5432:*:{env.POSTGRES_USER}:{env.POSTGRES_PASSWORD}")
         xqt("chmod 600 /root/.pgpass")
 
-        # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.conf`.
+        # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
         nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
         txt = replace_vars(nginx_conf.read_text(), dict(
             RUNESTONE_HOST=env.RUNESTONE_HOST,
