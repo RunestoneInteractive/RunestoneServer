@@ -165,10 +165,18 @@ def chartdata():
         }
     )
     df = df.merge(y, how="outer")
-    c = alt.Chart(df[df.rn == 1]).mark_bar().encode(x="letter", y="sum(answer)")
-    d = alt.Chart(df[df.rn == 2]).mark_bar().encode(x="letter", y="sum(answer)")
+    c = (
+        alt.Chart(df[df.rn == 1], title="First Answer")
+        .mark_bar()
+        .encode(x="letter", y=alt.Y("sum(answer)", title="Number of Students"))
+    )
+    d = (
+        alt.Chart(df[df.rn == 2], title="Second Answer")
+        .mark_bar()
+        .encode(x="letter", y=alt.Y("sum(answer)", title="Number of Students"))
+    )
 
-    return alt.vconcat(c, d).to_json()
+    return alt.hconcat(c, d).to_json()
 
 
 @auth.requires(
@@ -262,7 +270,31 @@ def make_pairs():
             except IndexError:
                 done = True
 
+    _broadcast_peer_answers(correct, incorrect)
     return json.dumps("success")
+
+
+def _broadcast_peer_answers(correct, incorrect):
+    """
+    The correct and incorrect lists are dataframes that containe the sid and their answer
+    We want to iterate over the
+    """
+    df = pd.concat([correct, incorrect])
+    answers = dict(zip(df.sid, df.answer))
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    for p1, p2 in r.hgetall("partnerdb").items():
+        p1 = p1.decode("utf8")
+        p2 = p2.decode("utf8")
+        ans = answers[p2]
+        # create a message to p1 to put into the publisher queue
+        mess = {
+            "type": "control",
+            "from": p2,
+            "message": "enableChat",
+            "broadcast": False,
+            "answer": ans,
+        }
+        r.publish("peermessages", json.dumps(mess))
 
 
 def clear_pairs():

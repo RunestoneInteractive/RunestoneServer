@@ -45,10 +45,6 @@ function connect(event) {
                             const ordA = 65;
                             currAnswer = String.fromCharCode(ordA + parseInt(currAnswer));
                             ansSlot.innerHTML = currAnswer;
-                            let discPanel = document.getElementById("discussion_panel");
-                            if (discPanel) {
-                                discPanel.style.display = "block";
-                            }
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();
@@ -67,6 +63,18 @@ function connect(event) {
                     if (butt) {
                         butt.removeAttribute("disabled")
                     }
+                    break;
+                case "enableChat":
+                    let discPanel = document.getElementById("discussion_panel");
+                    if (discPanel) {
+                        discPanel.style.display = "block";
+                    }
+                    let pnameSlot = document.getElementById("pname");
+                    let panswerSlot = document.getElementById("panswer");
+                    pnameSlot.innerHTML = mess.from;
+                    const ordA = 65;
+                    let currAnswer = String.fromCharCode(ordA + parseInt(mess.answer));
+                    panswerSlot.innerHTML = currAnswer;
                     break;
                 default:
                     console.log("unknown control message");
