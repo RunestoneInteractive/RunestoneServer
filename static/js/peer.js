@@ -180,6 +180,7 @@ function startVote2(event) {
     let butt = document.querySelector("#vote2")
     butt.classList.replace("btn-info", "btn-secondary")
     voteNum += 1;
+    startTime2 = new Date().toUTCString();
     let mess = {
         type: "control",
         sender: `${user}`,

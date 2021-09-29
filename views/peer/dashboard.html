@@ -84,6 +84,9 @@
             "div_id": "{{=XML(current_question['name'])}}",
             "start_time": startTime,
         }
+        if (startTime2 !== null) {
+            data.start_time = startTime2;
+        }
         let jsheaders = new Headers({
             "Content-type": "application/json; charset=utf-8",
             Accept: "application/json",
@@ -112,5 +115,6 @@
         setInterval(updateCount, 2000);
     });
     var startTime = new Date().toUTCString();
+    var startTime2 = null;
 </script>
 {{ end }}
