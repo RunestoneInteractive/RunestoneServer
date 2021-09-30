@@ -225,7 +225,9 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         xqt(
             # Get the ``add-apt-repository`` tool.
             "eatmydata apt-get install -y software-properties-common",
+            # Use it to add repo for the ARM tools.
             "eatmydata add-apt-repository -y ppa:canonical-server/server-backports",
+            # Then install the ARM tools (and the QEMU emulator).
             "eatmydata apt-get install -y qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
         )
 
@@ -277,7 +279,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             """))
         # Just symlink mdb, since that's the only tool we use.
         xqt(
-            "ln -s /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb.sh",
+            "ln -s /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb",
         )
 
         # Microchip tools (mdb) needs write access to these directories.
