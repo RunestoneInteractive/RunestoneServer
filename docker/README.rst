@@ -381,15 +381,6 @@ The ``scripts`` folder has a nice utility called ``dtest`` that does this for yo
 the ``-k`` option for you to run a single test.
 
 
-Creating Questions from the Web Interface
-*************************************************
-
-If you want to write questions from the web interface you will need to make sure
-that ``settings.python_interpreter`` is set to a real python. In the uwsgi environment uwsgi tends to
-replace python in ``sys.executable`` with itself, which is pretty annoying. You can do so
-in the ``1.py`` file.
-
-
 Previous Database
 **********************************
 

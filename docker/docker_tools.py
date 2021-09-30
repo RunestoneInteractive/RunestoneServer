@@ -145,7 +145,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 settings.jobe_key = ''
                 settings.jobe_server = 'http://jobe'
                 settings.bks = "ns"
-                settings.python_interpreter = "/usr/bin/python3"
+                settings.python_interpreter = "/srv/venv/bin/python3"
                 # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
                 settings.secret = "supersecret"
             """))
