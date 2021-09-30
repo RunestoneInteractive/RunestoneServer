@@ -196,6 +196,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         # All one big command! Therefore, there are no commas after each line, but instead a trailing space.
         "eatmydata apt-get install -y --no-install-recommends "
             "gcc unzip "
+            # For jobe's runguard.
+            "sudo "
             # Some books use the `Sphinx graphviz extension <https://www.sphinx-doc.org/en/master/usage/extensions/graphviz.html>`_, which needs the ``graphviz``` binary.
             "graphviz "
             # TODO: What is this for?
@@ -209,6 +211,14 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             "rsync wget nginx "
             # Useful tools for debug.
             "nano less "
+    )
+
+    # Build runguard and set up jobe users.
+    xqt("mkdir /var/www/jobe")
+    chdir("/var/www/jobe")
+    xqt(
+        "cp -r $RUNESTONE_PATH/docker/runguard .",
+        f"{sys.executable} $RUNESTONE_PATH/docker/runguard-install.py",
     )
 
     if arm:

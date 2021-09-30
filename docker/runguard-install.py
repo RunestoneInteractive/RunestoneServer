@@ -18,6 +18,12 @@ LANGUAGE_CACHE_FILE = '/tmp/jobe_language_cache_file'
 FILE_CACHE_BASE = '/home/jobe/files'
 
 def get_config(param_name, install_dir):
+    # These were copied from ``application/config/config.php``.
+    return dict(
+        jobe_max_users=10,
+        clean_up_path="/tmp;/var/tmp;/var/crash;/run/lock;/var/lock",
+    )[param_name]
+
     '''Get a config parameter from <<install_dir>>/application/config/config.php.
        An exception occurs if either the file or the required parameter
        is not found.
@@ -43,6 +49,8 @@ def fail():
 
 
 def get_webserver():
+    return "www-data"
+
     '''Find the user name used to run the Apache web server'''
     ps_cmd = "ps aux | grep -E '/usr/sbin/(apache2|httpd)'"
     try:
@@ -72,6 +80,7 @@ def do_command(cmd, ignore_errors=False):
 
 
 def check_php_version():
+    return
     '''Check that the installed PHP version is at least 5.5.
        Raise an exception on failure.
     '''
