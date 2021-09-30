@@ -233,7 +233,7 @@ urllib3==1.26.4
     # via
     #   requests
     #   runestone
-    #   selenium
+    #   selenium automation
 vine==5.0.0
     # via
     #   amqp
@@ -250,4 +250,4 @@ zope.interface==5.2.0
     # via gevent
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools
+# Setuptools
