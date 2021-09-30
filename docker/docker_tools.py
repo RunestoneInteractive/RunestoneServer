@@ -98,7 +98,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 # ---------------------------------------
         # Check to make sure Docker is installed.
         try:
-            xqt("docker")
+            xqt("docker --version")
         except subprocess.CalledProcessError as e:
             print(f"Unable to run docker: {e} Installing...")
             # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
@@ -109,7 +109,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
         # ...and docker-compose.
         try:
-            xqt("docker-compose")
+            xqt("docker-compose --version")
         except subprocess.CalledProcessError as e:
             print("Unable to run docker-compose: {e} Installing...")
             xqt(
@@ -270,7 +270,6 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             # Install just the IDE and the 16-bit tools. This program check to see if this is being run by root by looking at the ``USER`` env var, which Docker doesn't set. Fake it out.
             f'USER=root eatmydata "./{mplabx_sh}" -- --mode unattended --ipe 0 --8bitmcu 0 --32bitmcu 0 --othermcu 0',
             f'rm "{mplabx_sh}"',
-            # TODO: install runguard from jobe.
         )
         # Add the path to the xc16 tools.
         with open("/root/.bashrc", "a", encoding="utf-8") as f:
@@ -349,8 +348,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
         # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
-        "ln -sf /dev/stdout /var/log/nginx/access.log",
-        "ln -sf /dev/stderr /var/log/nginx/error.log",
+        "ln -s /dev/stdout /var/log/nginx/access.log",
+        "ln -s /dev/stderr /var/log/nginx/error.log",
         # Set up gunicorn
         "mkdir -p /etc/gunicorn",
         "cp $RUNESTONE_PATH/docker/gunicorn/gunicorn.conf.py /etc/gunicorn",
@@ -391,6 +390,8 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         )
 
         print("Creating auth key")
+        if not Path(f"{env.RUNESTONE_PATH}").is_dir():
+            xqt("mkdir $RUNESTONE_PATH/private")
         (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
 
         print("Creating pgpass file")
@@ -403,8 +404,21 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             RUNESTONE_HOST=env.RUNESTONE_HOST,
             WEB2PY_PATH=env.WEB2PY_PATH,
             LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
-            # Redirect from http to https. Copied from a `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
+            PRODUCTION_ONLY=dedent("""
+                # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
+                server {
+                    # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
+                    #
+                    # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
+                    listen 80 default_server;
+                    # Also look for HTTPS connections.
+                    listen 443 default_server;
+                    # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
+                    return 444;
+                }
+            """) if env.WEB2PY_CONFIG == "production" else "",
             FORWARD_HTTP=dedent("""
+                # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
                 server {
                     listen 80;
                     server_name ${RUNESTONE_HOST};
@@ -414,7 +428,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         ))
         Path("/etc/nginx/sites-available/runestone").write_text(txt)
         xqt(
-            "ln -s /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
+            "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
         )
 
         if env.CERTBOT_EMAIL:
@@ -458,22 +472,25 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             f"chown -R www-data:www-data {Path(env.RUNESTONE_PATH).parent}"
         )
 
-        # Write the stamp only after everything completed successfully, so it will be re-run if there's a failure.
-        stamp.write_text("")
-
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
+        import pdb; pdb.set_trace()
         # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
         print("Waiting for Postgres to start...")
-        # TODO: should check the specific dburl in use (dev/test/prod).
-        xqt('pg_isready --dbname="$DBURL"')
+        if env.WEB2PY_CONFIG == "production":
+            effective_dburl = env.DBURL
+        elif env.WEB2PY_CONFIG == "test":
+            effective_dburl = env.TEST_DBURL
+        else:
+            effective_dburl = env.DEV_DBURL
+        xqt(f'pg_isready --dbname="{effective_dburl}"')
 
         print("Checking the State of Database and Migration Info")
         # Make sure psql is working.
         xqt("psql --version")
         try:
             # From `SO <https://stackoverflow.com/a/15538220/16038919>`__.
-            xqt("psql $DBURL -c ''")
+            xqt(f"psql {effective_dburl} -c ''")
         except subprocess.CalledProcessError:
             # The database doesn't exist. Create it.
             xqt("createdb --echo --host=db --username=$POSTGRES_USER $POSTGRES_DB")
@@ -484,10 +501,13 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
                 with TestClient(app) as client:
                     pass
             ''')
-            xqt(f"BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL=$ASYNC_DEV_DBURL {'poetry run' if dev_bookserver else sys.executable} python -c '{populate_script}'", **run_bookserver_kwargs)
+            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL="$ASYNC_DEV_DBURL" {"poetry run" if dev_bookserver else sys.executable} python -c "{populate_script}"', **run_bookserver_kwargs)
         else:
             print("Database exists.")
             # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
+
+        # Write the stamp only after everything completed successfully, so it will be re-run if there's a failure.
+        stamp.write_text("")
 
 # Start the servers
 # ^^^^^^^^^^^^^^^^^

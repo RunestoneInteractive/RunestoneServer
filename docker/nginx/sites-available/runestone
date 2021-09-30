@@ -8,17 +8,7 @@
 # `gzip_static <http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html>`_: Enables ("on") or disables ("off") checking the existence of precompressed files. Send compressed files in lieu of uncompressed files where they exist. This requires the optional ``ngx_http_gzip_static_module`` module.
 gzip_static on;
 
-# `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
-server {
-    # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
-    #
-    # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
-    listen 80 default_server;
-    # Also look for HTTPS connections.
-    listen 443 default_server;
-    # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
-    return 444;
-}
+${PRODUCTION_ONLY}
 
 ${FORWARD_HTTP}
 
@@ -28,7 +18,7 @@ server {
     listen ${LISTEN_PORT} deferred;
     include /etc/nginx/default.d/*.conf;
 
-    # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server. TODO: update this by setting the correct host(s) for your site.
+    # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server.
     server_name ${RUNESTONE_HOST};
 
     # Rewrite the path to static files.
