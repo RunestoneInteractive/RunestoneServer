@@ -356,6 +356,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         "cp $RUNESTONE_PATH/docker/gunicorn/gunicorn.conf.py /etc/gunicorn",
         # Set up web2py routing.
         "cp $RUNESTONE_PATH/docker/routes.py $WEB2PY_PATH",
+        # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
+        "ln -s /srv/venv/bin/sphinx-build /usr/local/bin",
     )
 
     # Clean up after install.
