@@ -14,12 +14,12 @@ the host. Instead, the software required to run the server will be installed in 
 docker containers (Runestone application, redis cache, postgres DB, jobe code compilation).
 
 
-.. note:: 
+.. note::
 
     These instructions have been tested on Ubuntu 20.04 and should work on any version of Ubuntu 18.04+
     Installation on older versions of Ubuntu or other Linux distributions may require adjustments.
-    
-    Installing directly on other OS's is likely more trouble than it is worth. 
+
+    Installing directly on other OS's is likely more trouble than it is worth.
     If your native OS is Mac or Windows, it is recommended you install in a Linux VM.
     If you are trying to install in a Windows hosted virtual machine, avoid installing into
     a shared folder - permissions issues will likely prevent the deployment from working.
@@ -28,37 +28,6 @@ docker containers (Runestone application, redis cache, postgres DB, jobe code co
 Setup
 -----------------------------
 
-0. Install Docker
-***********************
-
-#. Follow the `Docker installation guide <https://docs.docker.com/install/#supported-platforms>`_.
-    On an updated version of Ubuntu, this should just require:
-
-    .. code-block:: bash
-
-        sudo apt install docker.io
-
-
-#. On Linux, make sure to also perform the `post-installation steps <https://docs.docker.com/install/linux/linux-postinstall/>`_. 
-    On a recent version of Ubuntu this should involve adding yourself to the docker group:
-
-    .. code-block:: bash
-
-        sudo usermod -aG docker $USER
-
-    And then reloading the groups by either logging out and back in,
-    restarting your virtual machine, or using this from the command prompt:
-
-    .. code-block:: bash
-
-        su - $USER
-
-#. `Install Docker Compose <https://docs.docker.com/compose/install/>`_. On Ubuntu this should just be:  
-    \ 
-
-    .. code-block:: bash
-
-        sudo apt install docker-compose
 
 1. Get Runestone Server
 ***********************
@@ -84,7 +53,10 @@ Next, build the image that will be used for the core Runestone application.
 
 .. code-block:: bash
 
-    docker build -t runestone/server .
+    # See the possibilities
+    python3 docker/docker_tools.py build --help
+    # Actually run the build (add options as desired)
+    python3 docker/docker_tools.py build
 
 
 This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
@@ -93,7 +65,7 @@ to make changes or rebuild the image.
 
 To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the ``docker build``
 command. The build process caches results from previous builds and should complete much more rapidly. However, the
-cache can cause issues if you modify a file that the system is checking for changes. If you need to force a 
+cache can cause issues if you modify a file that the system is checking for changes. If you need to force a
 complete rebuild, use:
 
 .. code-block:: bash
@@ -139,7 +111,7 @@ will be in a file ``models/1.py`` that you will need to make. You can use the pr
 
 Again, if you are installing for local development/testing you should not need to modify
 any of the settings. If you are installing for production, you will want/need to modify
-some of them (so that things like sending students emails for lost passwords work). 
+some of them (so that things like sending students emails for lost passwords work).
 See comments in the file for details.
 
 
@@ -158,11 +130,14 @@ This command will create four containers to run different parts of the applicati
 
 .. code-block:: bash
 
+    # For debugging, watch the container start up. Stop the container when ctrl-c is pressed.
+    docker-compose up
+    # Run the container in the background. Use ``docker-compose logs --follow`` to watch.
     docker-compose up -d
 
 The first time you run the command will take a little longer as it installs software into the various
-containers. After it is complete, you can go to http://localhost/runestone  to see the application 
-(if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, 
+containers. After it is complete, you can go to http://localhost/  to see the application
+(if you configured a hostname, substitute it for localhost). If everything so far is set up correctly,
 you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
 
 To stop all containers use:
@@ -208,7 +183,7 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
     cd ..
 
 
-.. warning:: 
+.. warning::
 
    It is important that the folder name for the book matches the ``project_name`` set in its ``pavement.py``.
    This is not always automatically the case. For example, the `ThinkCPP <https://github.com/RunestoneInteractive/ThinkCPP>`_
@@ -231,7 +206,7 @@ You will then need to restart the Runestone server to make the new/updated book 
 
     docker-compose restart runestone
 
-.. note:: 
+.. note::
 
    Most Runestone books set ``master_url`` to ``get_master_url()`` in their ``pavement.py`` file. However, if the book
    you are adding does not, it is **critical** that the ``master_url`` variable in that file is set correctly.
@@ -263,7 +238,7 @@ pair programming (default is no).
 
 You do not have to restart the server to make use of the course.
 
-.. note:: 
+.. note::
 
     Some of the default books already have "default" courses with the same name as the book. If you try to create
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
@@ -297,7 +272,7 @@ Once you have logged in as an instructor, you can bulk add students through the 
 It is also possible to use a csv file to add multiple instructors or students as you start
 up the server. However, this process is brittle (any error loading the information results
 in the server entering a restart loop as it fails to load). To do so, make a file named either
-`instructors.csv` or `students.csv` in a folder called `configs` in the RunestoneServer folder. 
+`instructors.csv` or `students.csv` in a folder called `configs` in the RunestoneServer folder.
 The format of the csv files is to have one person per line with the format of each line as follows:
 
     username,email,first_name,last_name,pw,course
@@ -358,7 +333,7 @@ First make sure ``npm`` is installed:
     sudo apt install npm
 
 
-Then you will need to clone `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ 
+Then you will need to clone `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
 as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` directory do:
 
 .. code-block:: bash
@@ -374,7 +349,6 @@ Then you will need to tell ``RunestoneServer`` to use this copy of Components in
 In the ``RunestoneServer`` directory create a `docker-compose.override.yml` file. Then add this to it:
 
 .. code-block::
-    
     version: "3"
 
     services:
@@ -469,18 +443,9 @@ develop a cleaner solution to handle migrations.
 Testing the Entrypoint
 **********************************
 
-If you want to test the [entrypoint.sh](entrypoint.sh) script, the easiest thing
+If you want to test the script, the easiest thing
 to do is add a command to the docker-compose to disable it, and then run commands
-interactively by shelling into the container. For example, add a command line like
-this to the "runestone" container:
-
-.. code-block::
-
-    runestone:
-      image: runestone/server
-      command: tail -F peanutbutter
-    ...
-
+interactively by shelling into the container.
 
 Bring up the containers and then shell inside. Once inside, you can then issue commands
 to test the entrypoint - since the other containers were started

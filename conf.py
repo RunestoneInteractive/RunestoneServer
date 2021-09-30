@@ -141,6 +141,10 @@ CodeChat_lexer_for_glob = {
     "*.js": "JavaScript",
     # The Dockerfile has ``#`` as comments. So does Perl...
     "Dockerfile": "Perl",
+    "*.conf": "Perl",
+    "runestone": "Perl",
+    # Docker's env files are INI formatted.
+    ".env*": "INI",
 }
 
 # `source_encoding <http://sphinx-doc.org/config.html#confval-source_encoding>`_:
@@ -211,6 +215,8 @@ exclude_patterns = [
     # The ``CodeToRestSphinx`` extension creates a file named
     # ``sphinx-enki-info.txt``, which should be ignored by Sphinx.
     "sphinx-enki-info.txt",
+    # venvs
+    ".venv",
 ]
 
 # `default_role <http://sphinx-doc.org/config.html#confval-default_role>`_: The

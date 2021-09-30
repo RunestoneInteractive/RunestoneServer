@@ -999,6 +999,9 @@ def createAssignment():
                 course=course,
                 name=name,
                 duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7),
+                released=False,
+                visible=False,
+                from_source=False,
             )
             db.commit()
         except Exception as ex:
