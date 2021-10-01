@@ -46,7 +46,7 @@ from textwrap import dedent
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
-from ci_utils import chdir, env, xqt, is_linux
+from ci_utils import chdir, env, xqt, is_win
 
 # Third-party
 # -----------
@@ -87,7 +87,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     Inside a Docker build, install all dependencies as root.
     """
 
-    assert is_linux, "This program is only capable of running on Ubuntu/Debian."
+    assert not is_win, "Run this program in WSL/VirtualBox/VMWare/etc."
 
     # Are we inside the Docker build?
     phase = env.IN_DOCKER
