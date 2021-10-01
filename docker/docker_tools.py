@@ -134,8 +134,9 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             xqt("docker-compose --version")
         except subprocess.CalledProcessError as e:
             print("Unable to run docker-compose: {e} Installing...")
+            # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
             xqt(
-                'sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose"',
+                'sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
                 "sudo chmod +x /usr/local/bin/docker-compose",
             )
 
@@ -172,6 +173,12 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
                 settings.secret = "supersecret"
             """))
+
+        # Ensure the user is in the ``www-data`` group.
+        print("Checking to see if the current user is in the www-data group...")
+        if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
+            print("Adding the current user to the group. You must log out and log back in for this to take effect.")
+            xqt('sudo gpasswd -a "$USER" www-data')
 
         # Run the Docker build.
         xqt(f'ENABLE_BUILDKIT=1 docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
