@@ -28,7 +28,7 @@
 #
 # Imports
 # =======
-# These are listed in the order prescribed by PEP 8.
+# These are listed in the order prescribed by PEP 8, with exceptions noted below.
 #
 # Standard library
 # ----------------
@@ -43,21 +43,45 @@ from textwrap import dedent
 
 # Local application
 # -----------------
+# Everything after this depends on Unix utilities.
+if sys.platform == "win32":
+    print("Run this program in WSL/VirtualBox/VMWare/etc.")
+    #sys.exit()
+
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
-from ci_utils import chdir, env, xqt, is_win
+try:
+    # This unused import triggers the script download if it's not present.
+    import ci_utils
+except ImportError:
+    print("Downloading supporting script ci_utils.py...")
+    subprocess.run([
+        "curl",
+        "-fsSLO",
+        # TODO: Update this URL before merge.
+        "https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/ci_utils.py",
+    ], check=True)
+from ci_utils import chdir, env, xqt
 
 # Third-party
 # -----------
+# This comes after importing ``ci_utils``, since we use that to install click if necessary.
+in_venv = sys.prefix != sys.base_prefix
 try:
     import click
 except ImportError:
     print("Installing click...")
+    # Outside a venv, install locally.
+    user = '' if in_venv else '--user'
     xqt(
-        f"{sys.executable} -m pip install --upgrade pip",
-        f"{sys.executable} -m pip install --upgrade click",
+        f"{sys.executable} -m pip install {user} --upgrade pip",
+        f"{sys.executable} -m pip install {user} --upgrade click",
     )
+    # If pip is upgraded, it won't find click. `Re-load sys.path <https://stackoverflow.com/a/25384923/16038919>`_ to fix this.
+    import site
+    from importlib import reload
+    reload(site)
     import click
 
 
@@ -86,8 +110,6 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
     Inside a Docker build, install all dependencies as root.
     """
-
-    assert not is_win, "Run this program in WSL/VirtualBox/VMWare/etc."
 
     # Are we inside the Docker build?
     phase = env.IN_DOCKER
@@ -126,6 +148,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 print(f"Unable to run git: {e} Installing...")
                 xqt("sudo apt-get install -y git")
             print("Didn't find the runestone repo. Cloning...")
+            # TODO: specify the --branch to clone, unless this is merged with master.
             xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
             chdir("RunestoneServer")
         else:
@@ -178,7 +201,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     assert phase == "1", f"Unknown value of IN_DOCKER={phase}"
 
     # It should always be `run in a venv <https://stackoverflow.com/a/1883251/16038919>`_.
-    assert sys.prefix != sys.base_prefix, "This should be running in a Python virtual environment."
+    assert in_venv, "This should be running in a Python virtual environment."
 
 # Install required packages
 # ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -278,7 +301,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             """))
         # Just symlink mdb, since that's the only tool we use.
         xqt(
-            "ln -s /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb",
+            "ln -sf /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb",
         )
 
         # Microchip tools (mdb) needs write access to these directories.
@@ -343,20 +366,20 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         "cp $RUNESTONE_PATH/docker/uwsgi/sites/runestone.ini /etc/uwsgi/sites/runestone.ini",
         # TODO: is this ever used?
         "cp $RUNESTONE_PATH/docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service",
-        "ln -s /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service",
+        "ln -sf /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service",
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
         # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
-        "ln -s /dev/stdout /var/log/nginx/access.log",
-        "ln -s /dev/stderr /var/log/nginx/error.log",
+        "ln -sf /dev/stdout /var/log/nginx/access.log",
+        "ln -sf /dev/stderr /var/log/nginx/error.log",
         # Set up gunicorn
         "mkdir -p /etc/gunicorn",
         "cp $RUNESTONE_PATH/docker/gunicorn/gunicorn.conf.py /etc/gunicorn",
         # Set up web2py routing.
         "cp $RUNESTONE_PATH/docker/routes.py $WEB2PY_PATH",
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
-        "ln -s /srv/venv/bin/sphinx-build /usr/local/bin",
+        "ln -sf /srv/venv/bin/sphinx-build /usr/local/bin",
     )
 
     # Clean up after install.
@@ -390,7 +413,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         )
 
         print("Creating auth key")
-        if not Path(f"{env.RUNESTONE_PATH}").is_dir():
+        if not Path(f"{env.RUNESTONE_PATH}/private").is_dir():
             xqt("mkdir $RUNESTONE_PATH/private")
         (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
 
@@ -468,13 +491,13 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             )
 
         xqt(
-            # web2py needs write access to update logs, database schemas, etc. Give it ownership to allow this.
-            f"chown -R www-data:www-data {Path(env.RUNESTONE_PATH).parent}"
+            # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
+            f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
+            f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
         )
 
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-        import pdb; pdb.set_trace()
         # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
         print("Waiting for Postgres to start...")
         if env.WEB2PY_CONFIG == "production":
@@ -486,14 +509,9 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         xqt(f'pg_isready --dbname="{effective_dburl}"')
 
         print("Checking the State of Database and Migration Info")
-        # Make sure psql is working.
-        xqt("psql --version")
-        try:
-            # From `SO <https://stackoverflow.com/a/15538220/16038919>`__.
-            xqt(f"psql {effective_dburl} -c ''")
-        except subprocess.CalledProcessError:
-            # The database doesn't exist. Create it.
-            xqt("createdb --echo --host=db --username=$POSTGRES_USER $POSTGRES_DB")
+        p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
+        if p.stderr == "Did not find any relations.\n":
+            print("Populating database...")
             # Populate the db with courses, users.
             populate_script = dedent('''
                 from bookserver.main import app
@@ -501,9 +519,9 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
                 with TestClient(app) as client:
                     pass
             ''')
-            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL="$ASYNC_DEV_DBURL" {"poetry run" if dev_bookserver else sys.executable} python -c "{populate_script}"', **run_bookserver_kwargs)
+            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL="$ASYNC_DEV_DBURL" {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
         else:
-            print("Database exists.")
+            print("Database already populated.")
             # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
 
         # Write the stamp only after everything completed successfully, so it will be re-run if there's a failure.

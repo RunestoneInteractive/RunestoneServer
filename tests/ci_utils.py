@@ -50,7 +50,7 @@ def xqt(
     # instead of passing ``stdout=subprocess.DEVNULL`` to ``check_call``).
     for cmd in cmds:
         # Per http://stackoverflow.com/questions/15931526/why-subprocess-stdout-to-a-file-is-written-out-of-order,
-        # the ``check_call`` below will flush stdout and stderr, causing all
+        # the ``run`` below will flush stdout and stderr, causing all
         # the subprocess output to appear first, followed by all the Python
         # output (such as the print statement above). So, flush the buffers to
         # avoid this.
