@@ -16,13 +16,9 @@ docker containers (Runestone application, redis cache, postgres DB, jobe code co
 
 .. note::
 
-    These instructions have been tested on Ubuntu 20.04 and should work on any version of Ubuntu 18.04+
+    These instructions have been tested on Ubuntu 20.04 and should work on any version of Ubuntu 18.04+.
     Installation on older versions of Ubuntu or other Linux distributions may require adjustments.
-
-    Installing directly on other OS's is likely more trouble than it is worth.
-    If your native OS is Mac or Windows, it is recommended you install in a Linux VM.
-    If you are trying to install in a Windows hosted virtual machine, avoid installing into
-    a shared folder - permissions issues will likely prevent the deployment from working.
+    These instructions have also been tested on OS X. For Windows, use WSL, VirtualBox, or other similar virtualization software.
 
 
 Setup
@@ -32,7 +28,13 @@ Setup
 1. Get Runestone Server
 ***********************
 
-Make a folder to folder to hold Runestone and install the source code:
+Quick install option do this, then skip to step 3:
+
+.. code-block:: bash
+
+    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 -
+
+The traditional process: Make a folder to folder to hold Runestone and install the source code:
 
 .. code-block:: bash
 
@@ -43,7 +45,7 @@ Make a folder to folder to hold Runestone and install the source code:
 
 .. note::
 
-    All future commands should be run in the **RunestoneServer** directory unless instructions specify otherwise.
+    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
 
 
 2. Build
@@ -63,14 +65,14 @@ This will take a while. But once built, you will not need to rebuild the image u
 inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
 to make changes or rebuild the image.
 
-To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the ``docker build``
+To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
 command. The build process caches results from previous builds and should complete much more rapidly. However, the
 cache can cause issues if you modify a file that the system is checking for changes. If you need to force a
 complete rebuild, use:
 
 .. code-block:: bash
 
-    docker build -t runestone/server . --no-cache
+    python3 docker/docker_tools.py build -- --no-cache
 
 
 3. Configuration
@@ -88,7 +90,7 @@ way to do so is to use a ``.env`` file, which docker will read automatically as 
 containers. A sample ``.env`` file is provided as ``docker/.env`` (copied from ``docker/.env.prototype`` on the first build).
 
 If you are running a local test/development instance, you should not need to modify
-any of the settings in .env. If you are setting up a production server, you will need to
+any of the settings in ``.env``. If you are setting up a production server, you will need to
 modify the defaults. See the file for notes about what values are required.
 
 Python Settings
@@ -180,6 +182,7 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
 
+TODO: None of the following runs code in the venv, and should probably all be integrated into the ``docker_build.py`` script.
 
 After cloning a book, or after making any edits/updates to it, you need to build the book using the ``dbuild``
 command found in the scripts folder. Pass it the name of the book that you wish to build:
@@ -307,46 +310,44 @@ The ``scripts`` directory has a number of maintenance scripts that will run comm
 container to avoid having to shell into it first. In particular the ``dmanage`` script can be used to
 `perform a variety of tasks <../rsmanage/toctree.html>`_.
 
-Runestone Components Development
-**********************************
+Runestone Components / BookServer Development
+***********************************************
 
-If you are doing development work on Runestone itself, you will want to install the RunestoneComponents from source.
-First make sure ``npm`` is installed:
-
-.. code-block:: bash
-
-    sudo apt install npm
-
-
-Then you will need to clone `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
+If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source.
+Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
 as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` directory do:
 
 .. code-block:: bash
 
     cd ..
     git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
-    cd RunestoneComponents/
-    npm install
-    npm run build
+    git clone https://github.com/RunestoneInteractive/BookServer.git
 
 
 Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy.
 In the ``RunestoneServer`` directory create a `docker-compose.override.yml` file. Then add this to it:
 
-.. code-block::
+.. code-block:: yaml
 
     version: "3"
 
     services:
         runestone:
             volumes:
+                # Add one or both depending on which git clones you just executed.
                 - ../RunestoneComponents:/srv/RunestoneComponents
+                - ../../../BookServer/:/srv/BookServer
 
-You will then have to restart the runestone container, at which point the entrypoint.sh file will notice that you
-have this volume mounted and reinstall the development version of Runestone.
+Next, rebuild the container for development then run it:
 
-As you make changes to Runestone Components, you should not have to restart the server. Any rebuild
-of a book should immediately use the new code.
+.. code-block::
+    bash
+
+    docker/docker_tools.py build --dev
+    docker-compose up
+
+As you make changes to Runestone Components or the BookServer, you should not have to restart the Docker containerized application. Any rebuild
+of a book should immediately use the new code. TODO: but need to run the BookServer in dev mode with auto-reload...
 
 
 Developing on Runestone Server
@@ -399,22 +400,22 @@ without removing this folder, you'll see an error (and the container won't start
 The message tells you to remove the databases folder. Since the container is restarting
 on its own, you should be able to remove it, and then wait, and it will start cleanly.
 As an alternative, you can stop and rebuild the container, changing the ``WEB2PY_MIGRATE``
-variable to be Fake in ``entrypoint.sh`` and try again:
+variable to be Fake in ``docker-compose.yml`` and try again:
 
 .. code-block:: bash
 
     export WEB2PY_MIGRATE=Fake
 
 
-You would rebuild the container like this:
+You would rebuild the container as usual:
 
 .. code-block:: bash
 
-    docker build -t runestone/server .
+    docker/docker_tools.py build
 
 
 For now, it's recommended to remove the folder. Hopefully we will
-develop a cleaner solution to handle migrations.
+develop a cleaner solution to handle migrations. TODO: Talk about Alembic.
 
 
 Testing the Entrypoint
@@ -425,7 +426,7 @@ to do is add a command to the docker-compose to disable it, and then run command
 interactively by shelling into the container.
 
 Bring up the containers and then shell inside. Once inside, you can then issue commands
-to test the entrypoint - since the other containers were started
+to test the entry point script - since the other containers were started
 with docker-compose everything in them is ready to go.
 
 Restarting uwsgi/web2py
@@ -441,7 +442,7 @@ File Permissions
 
 File permissions can seem a little strange when you start this container on Linux. Primarily because both
 nginx and uwsgi run as the ``www-data`` user. So you will suddenly find your files under RunestoneServer
-owned by ``www-data`` . The container's entrypoint script updates permissions to allow both you and the
+owned by ``www-data`` . The container's entry point script updates permissions to allow both you and the
 container enough privileges to do your work.
 
 Writing Your Own Book
@@ -468,7 +469,3 @@ RunestoneServer ``scripts`` folder use the command ``dbuild bookname``
 
     If you are missing ``runestone-manifest.xml`` then you need to rebuild your PreTeXt
     book with ``runestone`` as the publisher. See the PreTeXt docs for how do do this.
-
-4. If this book is a PreTeXt book you should put run ``touch NOBUILD`` in the root directory for
-this book. Otherwise when the container restarts it will try to build this book using runestone
-build and it will fail, causing an endless cycle of container restarts.
