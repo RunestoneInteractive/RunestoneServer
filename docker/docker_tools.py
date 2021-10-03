@@ -538,7 +538,10 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 # ^^^^^^^^^^^^^^^^^
     print("Starting the servers")
 
-    # To start in a mode more consistent with deployment Do this:
+    print("Starting Celery...")
+    # sudo doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
+    xqt('sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" /srv/venv/bin/celery --app=scheduled_builder worker --pool=threads --concurrency=3 --loglevel=info &', cwd=f"{env.RUNESTONE_PATH}/modules")
+
     print("starting nginx")
     xqt("service nginx start")
 
