@@ -46,7 +46,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    #sys.exit()
+    sys.exit()
 
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
@@ -178,7 +178,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
             print("Adding the current user to the group. You must log out and log back in for this to take effect.")
-            xqt('sudo gpasswd -a "$USER" www-data')
+            xqt('sudo usermod -a -G www-data "$USER"')
 
         # Run the Docker build.
         xqt(f'ENABLE_BUILDKIT=1 docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
@@ -507,6 +507,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 # ^^^^^^^^^^^^^^^^^^^^^^^^
         # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
         print("Waiting for Postgres to start...")
+        # TODO: use ``bookserver.config.settings._sync_database_url`` instead?
         if env.WEB2PY_CONFIG == "production":
             effective_dburl = env.DBURL
         elif env.WEB2PY_CONFIG == "test":
@@ -526,7 +527,9 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
                 with TestClient(app) as client:
                     pass
             ''')
-            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL="$ASYNC_DEV_DBURL" {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
+            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
+            # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
+            xqt("rm $RUNESTONE_PATH/databases/*")
         else:
             print("Database already populated.")
             # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
@@ -557,7 +560,6 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         "--book_path $RUNESTONE_PATH/books "
         "--root /ns "
         "--bks_config development "
-        "--dburl $ASYNC_DEV_DBURL "
         "--error_path /tmp "
         "--gconfig /etc/gunicorn/gunicorn.conf.py "
         "--bind unix:/run/gunicorn.sock "

@@ -85,15 +85,9 @@ need to stop the containers and restart them.
 Environmental Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You will need to set a number of environmental variables to rune Runestone. The easiest
+You will need to set a number of environmental variables to run Runestone. The easiest
 way to do so is to use a ``.env`` file, which docker will read automatically as it loads
-containers. A sample ``.env`` file is provided as ``docker/.env.prototype``. Copy
-it to the RunestoneServer directory and rename it ``.env``:
-
-.. code-block:: bash
-
-    cp docker/.env.prototype .env
-
+containers. A sample ``.env`` file is provided as ``docker/.env`` (copied from ``docker/.env.prototype`` on the first build).
 
 If you are running a local test/development instance, you should not need to modify
 any of the settings in ``.env``. If you are setting up a production server, you will need to
@@ -103,12 +97,7 @@ Python Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You also will also likely want to configure some options in the Python code. These options
-will be in a file ``models/1.py`` that you will need to make. You can use the provided 
-``1.py.prototype`` file as a starter:
-
-.. code-block:: bash
-
-    cp models/1.py.prototype models/1.py
+will be in a file ``models/1.py`` (which is automatically created on the first build).
 
 
 Again, if you are installing for local development/testing you should not need to modify
@@ -291,14 +280,10 @@ Other Tips & Tricks
 Debugging
 *****************
 
-There are a couple of ways to get at the logger output. This can be useful if the server appears
+Logger output can be useful if the server appears
 to be failing to start or is exhibiting other errors.
 
-1.  Shell into the container (see below) and then look at ``/srv/web2py/logs/uwsgi.log``
-
-2.  Run ``docker-compose logs --tail 100 --follow`` This will give you the lst 100 lines of information
-    already written (between when you started the container and ran this command) and
-    will continue to display new information as it is written.
+Run ``docker-compose logs --tail 100 --follow``. This will give you the lst 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
 
 
 
@@ -393,54 +378,8 @@ You can run the unit tests in the container using the following command.
     docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
 
 
-The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports 
+The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports
 the ``-k`` option for you to run a single test.
-
-
-Creating Questions from the Web Interface
-*************************************************
-
-If you want to write questions from the web interface you will need to make sure
-that ``settings.python_interpreter`` is set to a real python. In the uwsgi environment uwsgi tends to 
-replace python in ``sys.executable`` with itself, which is pretty annoying. You can do so
-in the ``1.py`` file.
-
-
-Previous Database
-**********************************
-
-Once you create the containers, you'll notice a "databases" subfolder is generated
-on the host. This happens after the initialization, as the runestone folder
-is bound to the host. If you remove the containers and try to bring them up
-without removing this folder, you'll see an error (and the container won't start):
-
-.. code-block::
-
-    docker-compose logs runestone
-    /srv/web2py/applications/runestone/databases exists, cannot init until removed from the host.
-    sudo rm -rf databases
-
-
-The message tells you to remove the databases folder. Since the container is restarting
-on its own, you should be able to remove it, and then wait, and it will start cleanly.
-As an alternative, you can stop and rebuild the container, changing the ``WEB2PY_MIGRATE``
-variable to be Fake in ``docker-compose.yml`` and try again:
-
-.. code-block:: bash
-
-    export WEB2PY_MIGRATE=Fake
-
-
-You would rebuild the container as usual:
-
-.. code-block:: bash
-
-    docker/docker_tools.py build
-
-
-For now, it's recommended to remove the folder. Hopefully we will
-develop a cleaner solution to handle migrations. TODO: Talk about Alembic.
-
 
 Testing the Entrypoint
 **********************************
@@ -486,10 +425,10 @@ RunestoneServer ``scripts`` folder use the command ``dbuild bookname``
 ``runestone-manifest.xml`` file and run the command:
 
 .. code-block:: bash
-    
+
     runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml
 
-.. note:: 
-    
+.. note::
+
     If you are missing ``runestone-manifest.xml`` then you need to rebuild your PreTeXt
     book with ``runestone`` as the publisher. See the PreTeXt docs for how do do this.

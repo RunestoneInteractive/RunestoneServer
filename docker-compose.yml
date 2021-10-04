@@ -43,7 +43,6 @@ services:
       DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}'
       DEV_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}'
       TEST_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}'
-      ASYNC_DEV_DBURL: 'postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}'
       REDIS_URI: 'redis://redis:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'
       CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
