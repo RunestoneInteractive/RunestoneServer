@@ -1,6 +1,10 @@
+.. _runestone server docs:
+
 ************************************************
 Developer documentation for the Runestone server
 ************************************************
+
+:ref:`Runestone server <runestone server docs>`.
 
 Architecture
 ============
@@ -141,8 +145,6 @@ web2py server
     /controllers/toctree
     /views/__init__.py
     /modules/__init__.py
-    /static/toctree
-    /build/toctree
 
 
 Tests and CI
@@ -158,12 +160,14 @@ Tests and CI
 Containers
 ==========
 .. toctree::
+    :maxdepth: 2
 
     /Dockerfile
     /docker-compose.yml
-    /docker/entrypoint.sh
+    /docker/docker_tools.py
     /docker/wsgihandler.py
     /docker/uwsgi/sites/runestone.ini
+    /docker/nginx/sites-available/runestone
 
 
 Documentation

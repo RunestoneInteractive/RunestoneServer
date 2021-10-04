@@ -32,6 +32,8 @@ certifi==2020.12.5
     # via
     #   requests
     #   runestone
+cffi==1.14.6
+    # via cryptography
 chardet==4.0.0
     # via
     #   requests
@@ -54,6 +56,8 @@ codechat==1.8.6
     # via runestone
 cogapp==3.0.0
     # via runestone
+cryptography==3.4.7
+    # via -r requirements.in
 cssselect==1.1.0
     # via -r requirements.in
 diff-match-patch==20200713
@@ -135,11 +139,15 @@ prompt-toolkit==3.0.14
     # via click-repl
 psycopg2-binary==2.8.6
     # via -r requirements.in
+pycparser==2.20
+    # via cffi
 pygments==2.8.1
     # via
     #   codechat
     #   runestone
     #   sphinx
+pyjwt==2.0.1
+    # via -r requirements.in
 pylint==2.6.0
     # via -r requirements.in
 pyparsing==2.4.7

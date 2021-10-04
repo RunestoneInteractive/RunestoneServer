@@ -657,3 +657,14 @@ div.settingsbox {
     border-radius: 4pt;
     padding: 6pt;
 }
+
+/* Styling for peer discussions */
+.incoming-mess {
+    list-style-type: none;
+}
+
+.outgoing-mess {
+    list-style-type: none;
+    font-style: italic;
+    color: blue;
+}

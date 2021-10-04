@@ -160,8 +160,8 @@ def initdb(config, list_tables, reset, fake, force):
         os.environ["WEB2PY_MIGRATE"] = "fake"
 
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    cmd = "python web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(
-        APP, APP_PATH, list_tables
+    cmd = "{} web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(
+        sys.executable, APP, APP_PATH, list_tables
     )
     click.echo("Running: {}".format(cmd))
     res = subprocess.call(cmd, shell=True)
@@ -183,7 +183,7 @@ def migrate(config, fake):
         os.environ["WEB2PY_MIGRATE"] = "Yes"
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
         shell=True,
     )
 
@@ -202,7 +202,7 @@ def run(config, with_scheduler):
     """Starts up the runestone server and optionally scheduler"""
     os.chdir(findProjectRoot())
     _ = subprocess.Popen(
-        "python -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X",
+        f"{sys.executable} -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X",
         shell=True,
     )
 
@@ -505,7 +505,7 @@ def inituser(
             userinfo["instructor"] = False
             os.environ["RSM_USERINFO"] = json.dumps(userinfo)
             res = subprocess.call(
-                "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
+                f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
                 shell=True,
             )
             if res != 0:
@@ -538,7 +538,7 @@ def inituser(
 
         os.environ["RSM_USERINFO"] = json.dumps(userinfo)
         res = subprocess.call(
-            "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
+            f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
             shell=True,
         )
         if res != 0:
@@ -572,7 +572,7 @@ def resetpw(config, username, password):
 
     os.environ["RSM_USERINFO"] = json.dumps(userinfo)
     res = subprocess.call(
-        "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw",
+        f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw",
         shell=True,
     )
     if res != 0:
@@ -945,7 +945,7 @@ def grade(config, course, pset, enforce):
     os.environ["RSM_USERINFO"] = json.dumps(userinfo)
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py",
         shell=True,
     )
 
@@ -1040,7 +1040,7 @@ def fill_practice_log_missings(config):
     os.chdir(findProjectRoot())
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py",
         shell=True,
     )
 

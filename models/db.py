@@ -37,8 +37,13 @@ from gluon.tools import Auth, Crud, Service, PluginManager, prettydate  # noqa: 
 ## be redirected to HTTPS, uncomment the line below:
 # request.requires_htps()
 
+
+# If the bookserver owns (performs migrations) on this table, then don't do web2py migrations on it.
+def bookserver_owned(table_name):
+    return False
+
+
 table_migrate_prefix = "runestone_"
-table_migrate_prefix_test = ""
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     if os.environ.get("WEB2PY_CONFIG", "") == "test":
@@ -49,7 +54,10 @@ if not request.env.web2py_runtime_gae:
             adapter_args=dict(logfile="test_runestone_migrate.log"),
         )
         table_migrate_prefix = "test_runestone_"
-        table_migrate_prefix_test = table_migrate_prefix
+        # For tests, use migration to create tables.
+        def bookserver_owned(table_name):
+            return table_migrate_prefix + table_name + ".table"
+
     else:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
         db = DAL(
@@ -166,7 +174,8 @@ db.define_table(
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
     Field("courselevel", type="string"),
-    migrate=table_migrate_prefix + "courses.table",
+    Field("new_server", type="boolean", default=False),
+    migrate=bookserver_owned("courses"),
 )
 
 
@@ -183,20 +192,21 @@ current.get_course_row = get_course_row
 
 # Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
 def get_course_url(*args):
-    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
-    if os.path.exists(os.path.join(request.folder, "static", auth.user.course_name)):
-        return URL("static", "/".join((auth.user.course_name,) + args))
-    else:
-        course = (
-            db(db.courses.id == auth.user.course_id)
-            .select(db.courses.base_course)
-            .first()
-        )
-        args = tuple(x for x in args if x != "")
-        if course:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+    course = db(db.courses.id == auth.user.course_id).select().first()
+    args = tuple(x for x in args if x != "")
+
+    if course:
+        if course.new_server == True:
+            return URL(
+                a=settings.bks,
+                c="books",
+                f="published",
+                args=(course.course_name,) + args,
+            )
         else:
-            return URL(c="default")
+            return URL(c="books", f="published", args=(course.base_course,) + args)
+    else:
+        return URL(c="default")
 
 
 ########################################
@@ -366,7 +376,7 @@ db.define_table(
     Field("donated", type="boolean", writable=False, readable=False, default=False),
     #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ""),
-    migrate=table_migrate_prefix + "auth_user.table",
+    migrate=bookserver_owned("auth_user"),
 )
 
 
@@ -436,7 +446,7 @@ db.define_table(
     Field("course_id", db.courses, ondelete="CASCADE"),
     Field("user_id", db.auth_user),
     Field("course_id", db.courses),
-    migrate=table_migrate_prefix + "user_courses.table",
+    migrate=bookserver_owned("user_courses"),
 )
 # For whatever reason the automatic migration of this table failed.  Need the following manual statements
 # alter table user_courses alter column user_id type integer using user_id::integer;
@@ -471,7 +481,7 @@ Hello,
 <p>We received your request to retrieve your username.  According to our files
 Your username is: %(username)s </p>
 
-<p>If you have any trouble with this automated system you can also ask your instructor 
+<p>If you have any trouble with this automated system you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on  <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
@@ -488,7 +498,7 @@ Hello, <br>
 
 <p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
 
-<p>If you have any trouble with the link you can also ask your instructor 
+<p>If you have any trouble with the link you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
