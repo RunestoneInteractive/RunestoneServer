@@ -48,6 +48,16 @@ if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
     sys.exit()
 
+# We need curl for some (possibly missing) imports -- make sure it's installed now.
+print("Checking for curl...")
+try:
+    subprocess.run(["curl", "--version"], check=True)
+except:
+    print("Installing curl...")
+    subprocess.run(["sudo", "apt-get", "install", "-y", "curl"], check=True)
+else:
+    print("Curl found.")
+
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
@@ -59,10 +69,9 @@ except ImportError:
     subprocess.run([
         "curl",
         "-fsSLO",
-        # TODO: Update this URL before merge.
-        "https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/ci_utils.py",
+        "https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/tests/ci_utils.py",
     ], check=True)
-from ci_utils import chdir, env, xqt
+from ci_utils import chdir, env, mkdir, xqt
 
 # Third-party
 # -----------
@@ -118,16 +127,26 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         #
 # Step 1: prepare to run the Docker build
 # ---------------------------------------
+        # Did we add the current user to a group?
+        did_group_add = False
+        # Do we need to use ``sudo`` to execute Docker?
+        docker_sudo = False
         # Check to make sure Docker is installed.
         try:
             xqt("docker --version")
         except subprocess.CalledProcessError as e:
-            print(f"Unable to run docker: {e} Installing...")
+            print(f"Unable to run docker: {e} Installing Docker...")
             # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
             xqt(
                 "curl -fsSL https://get.docker.com -o get-docker.sh",
                 "sudo sh ./get-docker.sh",
+                "rm get-docker.sh",
+                # This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__.`
+                "sudo usermod -aG docker ${USER}",
             )
+            # The group add doesn't take effect until the user logs out then back in. Work around it for now.
+            did_group_add = True
+            docker_sudo = True
 
         # ...and docker-compose.
         try:
@@ -142,6 +161,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
         # Are we inside the Runestone repo?
         if not (wd / "uwsgi").is_dir():
+            change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
             try:
                 xqt("git --version")
@@ -149,15 +169,18 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 print(f"Unable to run git: {e} Installing...")
                 xqt("sudo apt-get install -y git")
             print("Didn't find the runestone repo. Cloning...")
-            # TODO: specify the --branch to clone, unless this is merged with master.
-            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
-            chdir("RunestoneServer")
+            # Make this in a path that can eventually include web2py.
+            mkdir("web2py/applications", parents=True)
+            chdir("web2py/applications")
+            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git runestone")
+            chdir("runestone")
         else:
             # Make sure we're in the root directory of the web2py repo.
             chdir(wd.parent)
+            change_dir = False
 
         # Make sure the ``docker/.env`` file exists.
-        if not Path("docker/.env").is_file():
+        if not Path(".env").is_file():
             xqt("cp docker/.env.prototype .env")
 
         # Do the same for ``1.py``.
@@ -177,11 +200,17 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-            print("Adding the current user to the group. You must log out and log back in for this to take effect.")
             xqt('sudo usermod -a -G www-data "$USER"')
+            did_group_add = True
 
         # Run the Docker build.
-        xqt(f'ENABLE_BUILDKIT=1 docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
+        xqt(f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
+
+        # Print thesse messages last; otherwise, it will be lost in all the build noise.
+        if change_dir:
+            print('\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.')
+        if did_group_add:
+            print('\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".')
         return
 
     # Step 3 - startup script for container.
