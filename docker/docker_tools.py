@@ -51,16 +51,28 @@ if sys.platform == "win32":
     #sys.exit()
 
 
-# We need curl for some (possibly missing) imports -- make sure it's installed.
-def get_curl():
-    print("Checking for curl...")
+# Check to see if a program is installed; if not, install it.
+def check_install(
+    # The command to run to check if the program is installed.
+    check_cmd: str,
+    # The name of the package containing this program.
+    install_package: str
+) -> None:
+    check_list = check_cmd.split()
+    print(f"Checking for {check_list[0]}...")
     try:
-        subprocess.run(["curl", "--version"], check=True)
+        subprocess.run(check_list, check=True)
     except:
-        print("Installing curl...")
-        subprocess.run(["sudo", "apt-get", "install", "-y", "curl"], check=True)
+        print("Not found. Installing...")
+        subprocess.run(["sudo", "apt-get", "install", "-y", install_package], check=True)
     else:
-        print("Curl found.")
+        print("Found.")
+
+
+# We need curl for some (possibly missing) imports -- make sure it's installed.
+def check_install_curl():
+    check_install("curl --version", "curl")
+
 
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
@@ -69,7 +81,7 @@ try:
     # This unused import triggers the script download if it's not present.
     import ci_utils
 except ImportError:
-    get_curl()
+    check_install_curl()
     print("Downloading supporting script ci_utils.py...")
     subprocess.run([
         "curl",
@@ -140,7 +152,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         try:
             xqt("docker --version")
         except subprocess.CalledProcessError as e:
-            get_curl()
+            check_install_curl()
             print(f"Unable to run docker: {e} Installing Docker...")
             # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
             xqt(
@@ -210,14 +222,15 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 version: "3"
 
                 services:
-                runestone:
-                    environment:
-                    - "DISPLAY": "unix${DISPLAY}"
-                    volumes:
-                    - ../../../RunestoneComponents/:/srv/RunestoneComponents
-                    - ../../../BookServer/:/srv/BookServer
-                    # Mount the X11 socket so we can use Chrome.
-                    - /tmp/.X11-unix:/tmp/.X11-unix
+                    runestone:
+                        # Set up for VNC.
+                        environment:
+                            DISPLAY: ${DISPLAY}
+                        ports:
+                            -   "5900:5900"
+                        volumes:
+                            -   ../../../RunestoneComponents/:/srv/RunestoneComponents
+                            -   ../../../BookServer/:/srv/BookServer
             """))
 
         # Ensure the user is in the ``www-data`` group.
@@ -225,6 +238,12 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
+
+        if dev:
+            # To allow VNC access to the container.
+            check_install("gvncviewer -h", "gvncviewer")
+            # Allow VS Code / remote access to the container.
+            check_install("dpkg -l openssh-server", "openssh-server")
 
         # Run the Docker build.
         xqt(f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
@@ -324,6 +343,15 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             "mv chromedriver /usr/bin/chromedriver",
             "chown root:root /usr/bin/chromedriver",
             "chmod +x /usr/bin/chromedriver",
+            # Provide VNC access. TODO: just pass the correct DISPLAY value and ports and use X11 locally, but how? Notes on my failures:
+            #
+            # - Including ``network_mode: host`` in `../docker-compose.yml` works. However, this breaks everything else (port mapping, links, etc.). It suggests that the correct networking setup would make this work.
+            # - Passing ``volume: - /tmp/.X11-unix:/tmp/.X11-unix`` has no effect (on a Ubuntu 20.03.4 LTS host). Per the previous point, it seems that X11 is using TCP as its transport.
+            # - Mapping X11 ports via ``ports: - "6000-6063:6000-6063"`` doesn't work.
+            # - Setting ``DISPLAY`` to various values (from the host's ``hostname -I``, or various names to route to the host) doesn't work.
+            #
+            # Install a VNC server plus a simple window manager. Xephyr is required until I figure out how to run Selenium without pyvirtualdisplay.
+            "eatmydata apt-get install -y x11vnc xfce4 xserver-xephyr",
         )
 
     if pic24:
@@ -447,7 +475,11 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     )
 
     # Clean up after install.
-    xqt("rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*")
+    xqt(
+        "eatmydata sudo apt-get -y autoclean",
+        "eatmydata sudo apt-get -y autoremove",
+        "rm -rf /tmp/* /var/tmp/*",
+        )
     # Remove all the files from the local repo, since they will be replaced by the volume. This must be the last step, since it deletes the script as well.
     xqt("rm -rf $RUNESTONE_PATH")
 
@@ -585,6 +617,14 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
+
+    if dev:
+        # Start up everything needed for vnc access.
+        xqt(
+            "Xvfb :0 &",
+            "x11vnc -forever &",
+            "startxfce4 &",
+        )
 
 # Start the servers
 # ^^^^^^^^^^^^^^^^^

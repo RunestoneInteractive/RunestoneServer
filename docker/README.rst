@@ -63,6 +63,18 @@ complete rebuild, use:
 
     python3 docker/docker_tools.py build -- --no-cache
 
+.. note:: VirtualBox
+
+    To run in VirtualBox, configure the network settings: use NAT, select Advanced, Port forwarding, add:
+
+    =====   ========    =======     =========   ========    ==========
+    Name    Protocol    Host IP     Host Port   Guest IP    Guest Port
+    =====   ========    =======     =========   ========    ==========
+    SSH     TCP                     22                      22
+    HTTP    TCP                     80                      80
+    HTTPS   TCP                     443                     443
+    =====   ========    =======     =========   ========    ==========
+
 
 2. Configuration
 ***********************
@@ -291,6 +303,12 @@ the RunestoneServer directory do:
 Remember that the folder under web2py applications/runestone is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
+
+
+VNC access
+*********************
+On your host, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc. (TODO: magic flag to make Chrome visible.)
+
 
 Maintenance Scripts
 **********************************
