@@ -64,7 +64,7 @@ complete rebuild, use:
     python3 docker/docker_tools.py build -- --no-cache
 
 
-3. Configuration
+2. Configuration
 ***********************
 
 Most basic configuration can be done via two files you will need to create. These files
@@ -101,7 +101,7 @@ See comments in the file for details.
     ``.gitignore`` file is set to ignore both of them.
 
 
-4. Starting/Stopping
+3. Starting/Stopping
 **************************
 
 Once your environment is ready to go, you can use docker-compose to bring the containers up.
@@ -149,7 +149,7 @@ If you ever want to completely wipe the containers, stop them and then do:
     docker-compose rm
 
 
-5. Add Books
+4. Add Books
 **************************
 
 To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
@@ -195,7 +195,7 @@ You will then need to restart the Runestone server to make the new/updated book 
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-6. Add Courses
+5. Add Courses
 **************************
 
 To add a course based on a book, run the ``daddcourse`` script:
@@ -224,7 +224,7 @@ You do not have to restart the server to make use of the course.
     Some of the default books already have "default" courses with the same name as the book. If you try to create
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
-7. Add a User
+6. Add a User
 **************************
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
@@ -304,7 +304,7 @@ Runestone Components / BookServer Development
 
 If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source.
 Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
-as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` directory do:
+as a sibling of the ``web2py`` directory: from the ``web2py`` directory do:
 
 .. code-block:: bash
 
@@ -313,21 +313,7 @@ as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` dire
     git clone https://github.com/RunestoneInteractive/BookServer.git
 
 
-Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy.
-In the ``RunestoneServer`` directory create a `docker-compose.override.yml` file. Then add this to it:
-
-.. code-block:: yaml
-
-    version: "3"
-
-    services:
-        runestone:
-            volumes:
-                # Add one or both depending on which git clones you just executed.
-                - ../RunestoneComponents:/srv/RunestoneComponents
-                - ../../../BookServer/:/srv/BookServer
-
-Next, rebuild the container for development then run it:
+Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy. To do so, rebuild the container for development then run it:
 
 .. code-block::
     bash

@@ -30,6 +30,8 @@
 # =======
 # These are listed in the order prescribed by PEP 8, with exceptions noted below.
 #
+# There's a fair amount of bootstrap code here to download and install required imports and their dependencies.
+#
 # Standard library
 # ----------------
 from pathlib import Path
@@ -46,17 +48,19 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    sys.exit()
+    #sys.exit()
 
-# We need curl for some (possibly missing) imports -- make sure it's installed now.
-print("Checking for curl...")
-try:
-    subprocess.run(["curl", "--version"], check=True)
-except:
-    print("Installing curl...")
-    subprocess.run(["sudo", "apt-get", "install", "-y", "curl"], check=True)
-else:
-    print("Curl found.")
+
+# We need curl for some (possibly missing) imports -- make sure it's installed.
+def get_curl():
+    print("Checking for curl...")
+    try:
+        subprocess.run(["curl", "--version"], check=True)
+    except:
+        print("Installing curl...")
+        subprocess.run(["sudo", "apt-get", "install", "-y", "curl"], check=True)
+    else:
+        print("Curl found.")
 
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
@@ -65,6 +69,7 @@ try:
     # This unused import triggers the script download if it's not present.
     import ci_utils
 except ImportError:
+    get_curl()
     print("Downloading supporting script ci_utils.py...")
     subprocess.run([
         "curl",
@@ -135,6 +140,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         try:
             xqt("docker --version")
         except subprocess.CalledProcessError as e:
+            get_curl()
             print(f"Unable to run docker: {e} Installing Docker...")
             # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
             xqt(
@@ -195,6 +201,19 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 settings.python_interpreter = "/srv/venv/bin/python3"
                 # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
                 settings.secret = "supersecret"
+            """))
+
+        # For development, include extra volumes.
+        dc = Path("docker-compose.override.yml")
+        if dev and not dc.is_file():
+            dc.write_text(dedent("""
+                version: "3"
+
+                services:
+                runestone:
+                    volumes:
+                    - ../../../RunestoneComponents/:/srv/RunestoneComponents
+                    - ../../../BookServer/:/srv/BookServer
             """))
 
         # Ensure the user is in the ``www-data`` group.
@@ -436,7 +455,8 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = Path(f"{w2p_parent}/BookServer")
-    dev_bookserver = bookserver_path.is_dir()
+    # _`Volume detection strategy`: don't check just ``BookServer`` -- the volume may be mounted, but may not point to an actual filesystem path if the developer didn't clone the BookServer repo. Instead, look for evidence that there are actually some files in this path.
+    dev_bookserver = (bookserver_path / '/bookserver').is_dir()
     run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
 
     # Use a marker to run final install steps. These depend on volumes mounted/env vars/other containers that are only availabe when the container is run, so they can't be performed in the previous phase.
@@ -509,7 +529,8 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             )
 
         rsc = Path(f"{w2p_parent}/RunestoneComponents")
-        if rsc.is_dir():
+        # Use the same `volume detection strategy`_ as the BookServer.
+        if (rsc / "runestone").is_dir():
             chdir(rsc)
             # If the bookserver is in dev mode, then the Runestone Components is already installed there in dev mode. Install it again in the venv so that both are up to date.
             # Otherwise, install them now.
