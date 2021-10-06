@@ -28,30 +28,23 @@ Setup
 1. Get Runestone Server
 ***********************
 
-Quick install option do this, then skip to step 3:
+To build a Docker application with the server and all its dependencies:
 
 .. code-block:: bash
 
-    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 -
+    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 - -- build
 
-The traditional process: Make a folder to folder to hold Runestone and install the source code:
+This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
+inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
+to make changes or rebuild the image.
 
-.. code-block:: bash
-
-    mkdir Runestone
-    cd Runestone/
-    git clone https://github.com/RunestoneInteractive/RunestoneServer.git
-    cd RunestoneServer/
+When this completes, **log out then back in** (reboot if using a VM) to update your group membership. Next, ``cd web2py/applications/runestone``.
 
 .. note::
 
-    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
+    All future commands should be run in the ``web2py/applications/runestone`` directory unless instructions specify otherwise.
 
-
-2. Build
-***********************
-
-Next, build the image that will be used for the core Runestone application.
+To re-build an image:
 
 .. code-block:: bash
 
@@ -60,10 +53,6 @@ Next, build the image that will be used for the core Runestone application.
     # Actually run the build (add options as desired)
     python3 docker/docker_tools.py build
 
-
-This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
-inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
-to make changes or rebuild the image.
 
 To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
 command. The build process caches results from previous builds and should complete much more rapidly. However, the
