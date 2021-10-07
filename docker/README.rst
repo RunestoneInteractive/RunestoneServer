@@ -284,7 +284,7 @@ Debugging
 Logger output can be useful if the server appears
 to be failing to start or is exhibiting other errors.
 
-Run ``docker-compose logs --tail 100 --follow``. This will give you the lst 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
+Run ``docker-compose logs --tail 100 --follow``. This will give you the last 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
 
 
 
