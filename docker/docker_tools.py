@@ -350,8 +350,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             # - Mapping X11 ports via ``ports: - "6000-6063:6000-6063"`` doesn't work.
             # - Setting ``DISPLAY`` to various values (from the host's ``hostname -I``, or various names to route to the host) doesn't work.
             #
-            # Install a VNC server plus a simple window manager. Xephyr is required until I figure out how to run Selenium without pyvirtualdisplay.
-            "eatmydata apt-get install -y x11vnc xfce4 xserver-xephyr",
+            # Install a VNC server plus a simple window manager.
+            "eatmydata apt-get install -y x11vnc icewm",
         )
 
     if pic24:
@@ -623,7 +623,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         xqt(
             "Xvfb :0 &",
             "x11vnc -forever &",
-            "startxfce4 &",
+            "icewm-session &",
         )
 
 # Start the servers
