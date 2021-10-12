@@ -589,7 +589,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
+    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_. Use a longer timeout, since something the database needs more time to get started.
     print("Waiting for Postgres to start...")
     # TODO: use ``bookserver.config.settings._sync_database_url`` instead?
     if env.WEB2PY_CONFIG == "production":
@@ -598,7 +598,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         effective_dburl = env.TEST_DBURL
     else:
         effective_dburl = env.DEV_DBURL
-    xqt(f'pg_isready --dbname="{effective_dburl}"')
+    xqt(f'pg_isready --timeout=15 --dbname="{effective_dburl}"')
 
     print("Checking the State of Database and Migration Info")
     p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
