@@ -30,6 +30,8 @@
 # =======
 # These are listed in the order prescribed by PEP 8, with exceptions noted below.
 #
+# There's a fair amount of bootstrap code here to download and install required imports and their dependencies.
+#
 # Standard library
 # ----------------
 from pathlib import Path
@@ -48,6 +50,30 @@ if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
     #sys.exit()
 
+
+# Check to see if a program is installed; if not, install it.
+def check_install(
+    # The command to run to check if the program is installed.
+    check_cmd: str,
+    # The name of the package containing this program.
+    install_package: str
+) -> None:
+    check_list = check_cmd.split()
+    print(f"Checking for {check_list[0]}...")
+    try:
+        subprocess.run(check_list, check=True)
+    except:
+        print("Not found. Installing...")
+        subprocess.run(["sudo", "apt-get", "install", "-y", install_package], check=True)
+    else:
+        print("Found.")
+
+
+# We need curl for some (possibly missing) imports -- make sure it's installed.
+def check_install_curl():
+    check_install("curl --version", "curl")
+
+
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
@@ -55,14 +81,14 @@ try:
     # This unused import triggers the script download if it's not present.
     import ci_utils
 except ImportError:
+    check_install_curl()
     print("Downloading supporting script ci_utils.py...")
     subprocess.run([
         "curl",
         "-fsSLO",
-        # TODO: Update this URL before merge.
-        "https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/ci_utils.py",
+        "https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/tests/ci_utils.py",
     ], check=True)
-from ci_utils import chdir, env, xqt
+from ci_utils import chdir, env, mkdir, xqt
 
 # Third-party
 # -----------
@@ -118,16 +144,27 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         #
 # Step 1: prepare to run the Docker build
 # ---------------------------------------
+        # Did we add the current user to a group?
+        did_group_add = False
+        # Do we need to use ``sudo`` to execute Docker?
+        docker_sudo = False
         # Check to make sure Docker is installed.
         try:
             xqt("docker --version")
         except subprocess.CalledProcessError as e:
-            print(f"Unable to run docker: {e} Installing...")
+            check_install_curl()
+            print(f"Unable to run docker: {e} Installing Docker...")
             # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
             xqt(
                 "curl -fsSL https://get.docker.com -o get-docker.sh",
                 "sudo sh ./get-docker.sh",
+                "rm get-docker.sh",
+                # This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__.`
+                "sudo usermod -aG docker ${USER}",
             )
+            # The group add doesn't take effect until the user logs out then back in. Work around it for now.
+            did_group_add = True
+            docker_sudo = True
 
         # ...and docker-compose.
         try:
@@ -142,6 +179,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
         # Are we inside the Runestone repo?
         if not (wd / "uwsgi").is_dir():
+            change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
             try:
                 xqt("git --version")
@@ -149,15 +187,18 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 print(f"Unable to run git: {e} Installing...")
                 xqt("sudo apt-get install -y git")
             print("Didn't find the runestone repo. Cloning...")
-            # TODO: specify the --branch to clone, unless this is merged with master.
-            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
-            chdir("RunestoneServer")
+            # Make this in a path that can eventually include web2py.
+            mkdir("web2py/applications", parents=True)
+            chdir("web2py/applications")
+            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git runestone")
+            chdir("runestone")
         else:
             # Make sure we're in the root directory of the web2py repo.
             chdir(wd.parent)
+            change_dir = False
 
         # Make sure the ``docker/.env`` file exists.
-        if not Path("docker/.env").is_file():
+        if not Path(".env").is_file():
             xqt("cp docker/.env.prototype .env")
 
         # Do the same for ``1.py``.
@@ -174,14 +215,44 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 settings.secret = "supersecret"
             """))
 
+        # For development, include extra volumes.
+        dc = Path("docker-compose.override.yml")
+        if dev and not dc.is_file():
+            dc.write_text(dedent("""
+                version: "3"
+
+                services:
+                    runestone:
+                        # Set up for VNC.
+                        environment:
+                            DISPLAY: ${DISPLAY}
+                        ports:
+                            -   "5900:5900"
+                        volumes:
+                            -   ../../../RunestoneComponents/:/srv/RunestoneComponents
+                            -   ../../../BookServer/:/srv/BookServer
+            """))
+
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-            print("Adding the current user to the group. You must log out and log back in for this to take effect.")
-            xqt('sudo gpasswd -a "$USER" www-data')
+            xqt('sudo usermod -a -G www-data "$USER"')
+            did_group_add = True
+
+        if dev:
+            # To allow VNC access to the container.
+            check_install("gvncviewer -h", "gvncviewer")
+            # Allow VS Code / remote access to the container.
+            check_install("dpkg -l openssh-server", "openssh-server")
 
         # Run the Docker build.
-        xqt(f'ENABLE_BUILDKIT=1 docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
+        xqt(f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
+
+        # Print thesse messages last; otherwise, it will be lost in all the build noise.
+        if change_dir:
+            print('\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.')
+        if did_group_add:
+            print('\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".')
         return
 
     # Step 3 - startup script for container.
@@ -266,12 +337,21 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             # Tests use `html5validator <https://github.com/svenkreiss/html5validator>`_, which requires the JDK.
             "eatmydata apt-get install -y --no-install-recommends openjdk-11-jre-headless git xvfb x11-utils google-chrome-stable lsof emacs-nox",
             # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
-            "wget --no-verbose https://chromedriver.storage.googleapis.com/85.0.4183.87/chromedriver_linux64.zip",
+            "wget --no-verbose https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip",
             "unzip chromedriver_linux64.zip",
             "rm chromedriver_linux64.zip",
             "mv chromedriver /usr/bin/chromedriver",
             "chown root:root /usr/bin/chromedriver",
             "chmod +x /usr/bin/chromedriver",
+            # Provide VNC access. TODO: just pass the correct DISPLAY value and ports and use X11 locally, but how? Notes on my failures:
+            #
+            # - Including ``network_mode: host`` in `../docker-compose.yml` works. However, this breaks everything else (port mapping, links, etc.). It suggests that the correct networking setup would make this work.
+            # - Passing ``volume: - /tmp/.X11-unix:/tmp/.X11-unix`` has no effect (on a Ubuntu 20.03.4 LTS host). Per the previous point, it seems that X11 is using TCP as its transport.
+            # - Mapping X11 ports via ``ports: - "6000-6063:6000-6063"`` doesn't work.
+            # - Setting ``DISPLAY`` to various values (from the host's ``hostname -I``, or various names to route to the host) doesn't work.
+            #
+            # Install a VNC server plus a simple window manager. Xephyr is required until I figure out how to run Selenium without pyvirtualdisplay.
+            "eatmydata apt-get install -y x11vnc xfce4 xserver-xephyr",
         )
 
     if pic24:
@@ -328,7 +408,12 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
 # Python/pip-related installs
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Install web2py
+    # Install rsmanage.
+    xqt(
+        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
+    )
+
+    # Install web2py.
     xqt(
         "mkdir -p $WEB2PY_PATH",
         # Make the www-data the owner and place its files in the www-data group. This is because web2py needs to write to this directory tree (log, errors, etc.).
@@ -338,7 +423,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     )
     w2p_parent = Path(env.WEB2PY_PATH).parent
     xqt(
-        # Install additional components
+        # Install additional components.
         "eatmydata wget --no-verbose https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip",
         "eatmydata unzip -q web2py_src.zip",
         "rm -f web2py_src.zip",
@@ -390,7 +475,11 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     )
 
     # Clean up after install.
-    xqt("rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*")
+    xqt(
+        "eatmydata sudo apt-get -y autoclean",
+        "eatmydata sudo apt-get -y autoremove",
+        "rm -rf /tmp/* /var/tmp/*",
+        )
     # Remove all the files from the local repo, since they will be replaced by the volume. This must be the last step, since it deletes the script as well.
     xqt("rm -rf $RUNESTONE_PATH")
 
@@ -407,137 +496,138 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = Path(f"{w2p_parent}/BookServer")
-    dev_bookserver = bookserver_path.is_dir()
+    # _`Volume detection strategy`: don't check just ``BookServer`` -- the volume may be mounted, but may not point to an actual filesystem path if the developer didn't clone the BookServer repo. Instead, look for evidence that there are actually some files in this path.
+    dev_bookserver = (bookserver_path / 'bookserver').is_dir()
     run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
 
-    # Use a marker to run final install steps. These depend on volumes mounted/env vars/other containers that are only availabe when the container is run, so they can't be performed in the previous phase.
-    stamp = Path("/root/initialized.stamp")
-    if stamp.is_file():
-        print(f"Skipping one-time initialization (install dev directories, init db, etc.) To re-run this, delete the file {stamp} then re-run this.")
+    # Make sure we have the latest version of rsmanage
+    print("Creating auth key")
+    if not Path(f"{env.RUNESTONE_PATH}/private").is_dir():
+        xqt("mkdir $RUNESTONE_PATH/private")
+    (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
+
+    print("Creating pgpass file")
+    Path("/root/.pgpass").write_text(f"db:5432:*:{env.POSTGRES_USER}:{env.POSTGRES_PASSWORD}")
+    xqt("chmod 600 /root/.pgpass")
+
+    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
+    nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
+    txt = replace_vars(nginx_conf.read_text(), dict(
+        RUNESTONE_HOST=env.RUNESTONE_HOST,
+        WEB2PY_PATH=env.WEB2PY_PATH,
+        LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
+        PRODUCTION_ONLY=dedent("""
+            # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
+            server {
+                # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
+                #
+                # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
+                listen 80 default_server;
+                # Also look for HTTPS connections.
+                listen 443 default_server;
+                # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
+                return 444;
+            }
+        """) if env.WEB2PY_CONFIG == "production" else "",
+        FORWARD_HTTP=dedent("""
+            # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
+            server {
+                listen 80;
+                server_name ${RUNESTONE_HOST};
+                return 301 https://${RUNESTONE_HOST}$request_uri;
+            }
+        """) if env.CERTBOT_EMAIL else "",
+    ))
+    Path("/etc/nginx/sites-available/runestone").write_text(txt)
+    xqt(
+        "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
+    )
+
+    # TODO: Move this to phase 1 and pass another flag (--certbot-email).
+    if env.CERTBOT_EMAIL:
+        xqt('certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"')
+        print("You should be good for https")
     else:
-        xqt(
-            f"{sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
-        )
-
-        print("Creating auth key")
-        if not Path(f"{env.RUNESTONE_PATH}/private").is_dir():
-            xqt("mkdir $RUNESTONE_PATH/private")
-        (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
-
-        print("Creating pgpass file")
-        Path("/root/.pgpass").write_text(f"db:5432:*:{env.POSTGRES_USER}:{env.POSTGRES_PASSWORD}")
-        xqt("chmod 600 /root/.pgpass")
-
-        # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
-        nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
-        txt = replace_vars(nginx_conf.read_text(), dict(
-            RUNESTONE_HOST=env.RUNESTONE_HOST,
-            WEB2PY_PATH=env.WEB2PY_PATH,
-            LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
-            PRODUCTION_ONLY=dedent("""
-                # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
-                server {
-                    # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
-                    #
-                    # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
-                    listen 80 default_server;
-                    # Also look for HTTPS connections.
-                    listen 443 default_server;
-                    # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
-                    return 444;
-                }
-            """) if env.WEB2PY_CONFIG == "production" else "",
-            FORWARD_HTTP=dedent("""
-                # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
-                server {
-                    listen 80;
-                    server_name ${RUNESTONE_HOST};
-                    return 301 https://${RUNESTONE_HOST}$request_uri;
-                }
-            """) if env.CERTBOT_EMAIL else "",
-        ))
-        Path("/etc/nginx/sites-available/runestone").write_text(txt)
-        xqt(
-            "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
-        )
-
-        if env.CERTBOT_EMAIL:
-            xqt('certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"')
-            print("You should be good for https")
-        else:
-            print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
+        print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
 
 # Do dev installs
 # ^^^^^^^^^^^^^^^
-        if dev_bookserver:
-            assert dev, "You must run ``docker-tools.py build --dev`` in order to install the dev version of the BookServer."
-            print("Installing development Version of the BookServer.")
-            xqt(
-                # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible.
-                "poetry config virtualenvs.in-project true",
-                "poetry install",
-                cwd=bookserver_path
-            )
-
-        rsc = Path(f"{w2p_parent}/RunestoneComponents")
-        if rsc.is_dir():
-            chdir(rsc)
-            # If the bookserver is in dev mode, then the Runestone Components is already installed there in dev mode. Install it again in the venv so that both are up to date.
-            # Otherwise, install them now.
-            if not dev:
-                print("Warning: you're installing a dev version of the components without running ``docker-tools.py build --dev``. The usual dev tools aren't installed.")
-            print("Installing Development Version of Runestone Components")
-            xqt(
-                f"{sys.executable} -m pip install --upgrade -e .",
-                f"{sys.executable} -m runestone --version",
-            )
-            # Build the webpack after the Runestone Components are installed.
-            xqt(
-                "npm install",
-                "npm run build",
-            )
-
+    if dev_bookserver:
+        assert dev, "You must run ``docker-tools.py build --dev`` in order to install the dev version of the BookServer."
+        print("Installing development version of the BookServer.")
         xqt(
-            # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
-            f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
-            f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
+            # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible.
+            "poetry config virtualenvs.in-project true",
+            "poetry install",
+            cwd=bookserver_path
         )
+
+    rsc = Path(f"{w2p_parent}/RunestoneComponents")
+    # Use the same `volume detection strategy`_ as the BookServer.
+    if (rsc / "runestone").is_dir():
+        chdir(rsc)
+        # If the bookserver is in dev mode, then the Runestone Components is already installed there in dev mode. Install it again in the venv so that both are up to date.
+        # Otherwise, install them now.
+        if not dev:
+            print("Warning: you're installing a dev version of the components without running ``docker-tools.py build --dev``. The usual dev tools aren't installed.")
+        print("Installing Development Version of Runestone Components")
+        xqt(
+            f"{sys.executable} -m pip install --upgrade -e .",
+            f"{sys.executable} -m runestone --version",
+        )
+        # Build the webpack after the Runestone Components are installed.
+        xqt(
+            "npm install",
+            "npm run build",
+        )
+
+    xqt(
+        # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
+        f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
+        f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
+    )
 
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-        # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
-        print("Waiting for Postgres to start...")
-        if env.WEB2PY_CONFIG == "production":
-            effective_dburl = env.DBURL
-        elif env.WEB2PY_CONFIG == "test":
-            effective_dburl = env.TEST_DBURL
-        else:
-            effective_dburl = env.DEV_DBURL
-        xqt(f'pg_isready --dbname="{effective_dburl}"')
+    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
+    print("Waiting for Postgres to start...")
+    # TODO: use ``bookserver.config.settings._sync_database_url`` instead?
+    if env.WEB2PY_CONFIG == "production":
+        effective_dburl = env.DBURL
+    elif env.WEB2PY_CONFIG == "test":
+        effective_dburl = env.TEST_DBURL
+    else:
+        effective_dburl = env.DEV_DBURL
+    xqt(f'pg_isready --dbname="{effective_dburl}"')
 
-        print("Checking the State of Database and Migration Info")
-        p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
-        if p.stderr == "Did not find any relations.\n":
-            print("Populating database...")
-            # Populate the db with courses, users.
-            populate_script = dedent('''
-                from bookserver.main import app
-                from fastapi.testclient import TestClient
-                with TestClient(app) as client:
-                    pass
-            ''')
-            xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes DEV_DBURL="$ASYNC_DEV_DBURL" {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
-        else:
-            print("Database already populated.")
-            # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
+    print("Checking the State of Database and Migration Info")
+    p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
+    if p.stderr == "Did not find any relations.\n":
+        print("Populating database...")
+        # Populate the db with courses, users.
+        populate_script = dedent('''
+            from bookserver.main import app
+            from fastapi.testclient import TestClient
+            with TestClient(app) as client:
+                pass
+        ''')
+        xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
+        # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
+        xqt("rm $RUNESTONE_PATH/databases/*")
+    else:
+        print("Database already populated.")
+        # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
 
-        # Write the stamp only after everything completed successfully, so it will be re-run if there's a failure.
-        stamp.write_text("")
+    if dev:
+        # Start up everything needed for vnc access.
+        xqt(
+            "Xvfb :0 &",
+            "x11vnc -forever &",
+            "startxfce4 &",
+        )
 
 # Start the servers
 # ^^^^^^^^^^^^^^^^^
-    print("Starting the servers")
-
     print("Starting Celery...")
     # sudo doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
     xqt('sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" /srv/venv/bin/celery --app=scheduled_builder worker --pool=threads --concurrency=3 --loglevel=info &', cwd=f"{env.RUNESTONE_PATH}/modules")
@@ -557,7 +647,6 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         "--book_path $RUNESTONE_PATH/books "
         "--root /ns "
         "--bks_config development "
-        "--dburl $ASYNC_DEV_DBURL "
         "--error_path /tmp "
         "--gconfig /etc/gunicorn/gunicorn.conf.py "
         "--bind unix:/run/gunicorn.sock "

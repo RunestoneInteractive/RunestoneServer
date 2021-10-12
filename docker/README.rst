@@ -28,30 +28,23 @@ Setup
 1. Get Runestone Server
 ***********************
 
-Quick install option do this, then skip to step 3:
+To build a Docker application with the server and all its dependencies:
 
 .. code-block:: bash
 
-    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 -
+    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 - -- build
 
-The traditional process: Make a folder to folder to hold Runestone and install the source code:
+This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
+inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
+to make changes or rebuild the image.
 
-.. code-block:: bash
-
-    mkdir Runestone
-    cd Runestone/
-    git clone https://github.com/RunestoneInteractive/RunestoneServer.git
-    cd RunestoneServer/
+When this completes, **log out then back in** (reboot if using a VM) to update your group membership. Next, ``cd web2py/applications/runestone``.
 
 .. note::
 
-    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
+    All future commands should be run in the ``web2py/applications/runestone`` directory unless instructions specify otherwise.
 
-
-2. Build
-***********************
-
-Next, build the image that will be used for the core Runestone application.
+To re-build an image:
 
 .. code-block:: bash
 
@@ -60,10 +53,6 @@ Next, build the image that will be used for the core Runestone application.
     # Actually run the build (add options as desired)
     python3 docker/docker_tools.py build
 
-
-This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
-inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
-to make changes or rebuild the image.
 
 To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
 command. The build process caches results from previous builds and should complete much more rapidly. However, the
@@ -74,8 +63,20 @@ complete rebuild, use:
 
     python3 docker/docker_tools.py build -- --no-cache
 
+.. note:: VirtualBox
 
-3. Configuration
+    To run in VirtualBox, configure the network settings: use NAT, select Advanced, Port forwarding, add:
+
+    =====   ========    =======     =========   ========    ==========
+    Name    Protocol    Host IP     Host Port   Guest IP    Guest Port
+    =====   ========    =======     =========   ========    ==========
+    SSH     TCP                     22                      22
+    HTTP    TCP                     80                      80
+    HTTPS   TCP                     443                     443
+    =====   ========    =======     =========   ========    ==========
+
+
+2. Configuration
 ***********************
 
 Most basic configuration can be done via two files you will need to create. These files
@@ -85,15 +86,9 @@ need to stop the containers and restart them.
 Environmental Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You will need to set a number of environmental variables to rune Runestone. The easiest
+You will need to set a number of environmental variables to run Runestone. The easiest
 way to do so is to use a ``.env`` file, which docker will read automatically as it loads
-containers. A sample ``.env`` file is provided as ``docker/.env.prototype``. Copy
-it to the RunestoneServer directory and rename it ``.env``:
-
-.. code-block:: bash
-
-    cp docker/.env.prototype .env
-
+containers. A sample ``.env`` file is provided as ``docker/.env`` (copied from ``docker/.env.prototype`` on the first build).
 
 If you are running a local test/development instance, you should not need to modify
 any of the settings in ``.env``. If you are setting up a production server, you will need to
@@ -103,12 +98,7 @@ Python Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You also will also likely want to configure some options in the Python code. These options
-will be in a file ``models/1.py`` that you will need to make. You can use the provided 
-``1.py.prototype`` file as a starter:
-
-.. code-block:: bash
-
-    cp models/1.py.prototype models/1.py
+will be in a file ``models/1.py`` (which is automatically created on the first build).
 
 
 Again, if you are installing for local development/testing you should not need to modify
@@ -123,7 +113,7 @@ See comments in the file for details.
     ``.gitignore`` file is set to ignore both of them.
 
 
-4. Starting/Stopping
+3. Starting/Stopping
 **************************
 
 Once your environment is ready to go, you can use docker-compose to bring the containers up.
@@ -171,7 +161,7 @@ If you ever want to completely wipe the containers, stop them and then do:
     docker-compose rm
 
 
-5. Add Books
+4. Add Books
 **************************
 
 To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
@@ -217,7 +207,7 @@ You will then need to restart the Runestone server to make the new/updated book 
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-6. Add Courses
+5. Add Courses
 **************************
 
 To add a course based on a book, run the ``daddcourse`` script:
@@ -246,7 +236,7 @@ You do not have to restart the server to make use of the course.
     Some of the default books already have "default" courses with the same name as the book. If you try to create
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
-7. Add a User
+6. Add a User
 **************************
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
@@ -291,14 +281,10 @@ Other Tips & Tricks
 Debugging
 *****************
 
-There are a couple of ways to get at the logger output. This can be useful if the server appears
+Logger output can be useful if the server appears
 to be failing to start or is exhibiting other errors.
 
-1.  Shell into the container (see below) and then look at ``/srv/web2py/logs/uwsgi.log``
-
-2.  Run ``docker-compose logs --tail 100 --follow`` This will give you the lst 100 lines of information
-    already written (between when you started the container and ran this command) and
-    will continue to display new information as it is written.
+Run ``docker-compose logs --tail 100 --follow``. This will give you the last 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
 
 
 
@@ -318,6 +304,12 @@ Remember that the folder under web2py applications/runestone is bound to your ho
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
+
+VNC access
+*********************
+On your host, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc. (TODO: magic flag to make Chrome visible.)
+
+
 Maintenance Scripts
 **********************************
 
@@ -330,7 +322,7 @@ Runestone Components / BookServer Development
 
 If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source.
 Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
-as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` directory do:
+as a sibling of the ``web2py`` directory: from the ``web2py`` directory do:
 
 .. code-block:: bash
 
@@ -339,21 +331,7 @@ as a sibling of the RunestoneServer directory. From the ``RunestoneServer`` dire
     git clone https://github.com/RunestoneInteractive/BookServer.git
 
 
-Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy.
-In the ``RunestoneServer`` directory create a `docker-compose.override.yml` file. Then add this to it:
-
-.. code-block:: yaml
-
-    version: "3"
-
-    services:
-        runestone:
-            volumes:
-                # Add one or both depending on which git clones you just executed.
-                - ../RunestoneComponents:/srv/RunestoneComponents
-                - ../../../BookServer/:/srv/BookServer
-
-Next, rebuild the container for development then run it:
+Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy. To do so, rebuild the container for development then run it:
 
 .. code-block::
     bash
@@ -393,54 +371,8 @@ You can run the unit tests in the container using the following command.
     docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
 
 
-The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports 
+The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports
 the ``-k`` option for you to run a single test.
-
-
-Creating Questions from the Web Interface
-*************************************************
-
-If you want to write questions from the web interface you will need to make sure
-that ``settings.python_interpreter`` is set to a real python. In the uwsgi environment uwsgi tends to 
-replace python in ``sys.executable`` with itself, which is pretty annoying. You can do so
-in the ``1.py`` file.
-
-
-Previous Database
-**********************************
-
-Once you create the containers, you'll notice a "databases" subfolder is generated
-on the host. This happens after the initialization, as the runestone folder
-is bound to the host. If you remove the containers and try to bring them up
-without removing this folder, you'll see an error (and the container won't start):
-
-.. code-block::
-
-    docker-compose logs runestone
-    /srv/web2py/applications/runestone/databases exists, cannot init until removed from the host.
-    sudo rm -rf databases
-
-
-The message tells you to remove the databases folder. Since the container is restarting
-on its own, you should be able to remove it, and then wait, and it will start cleanly.
-As an alternative, you can stop and rebuild the container, changing the ``WEB2PY_MIGRATE``
-variable to be Fake in ``docker-compose.yml`` and try again:
-
-.. code-block:: bash
-
-    export WEB2PY_MIGRATE=Fake
-
-
-You would rebuild the container as usual:
-
-.. code-block:: bash
-
-    docker/docker_tools.py build
-
-
-For now, it's recommended to remove the folder. Hopefully we will
-develop a cleaner solution to handle migrations. TODO: Talk about Alembic.
-
 
 Testing the Entrypoint
 **********************************
@@ -486,10 +418,10 @@ RunestoneServer ``scripts`` folder use the command ``dbuild bookname``
 ``runestone-manifest.xml`` file and run the command:
 
 .. code-block:: bash
-    
+
     runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml
 
-.. note:: 
-    
+.. note::
+
     If you are missing ``runestone-manifest.xml`` then you need to rebuild your PreTeXt
     book with ``runestone`` as the publisher. See the PreTeXt docs for how do do this.
