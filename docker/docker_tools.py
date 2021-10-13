@@ -23,7 +23,7 @@
 #
 # venvs
 # =====
-# All Python installs are placed in a virtual environment -- ``/root/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
+# All Python installs are placed in a virtual environment -- ``/srv/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
 #
 #
 # Imports
