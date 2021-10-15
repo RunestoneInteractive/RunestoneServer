@@ -23,7 +23,7 @@
 #
 # venvs
 # =====
-# All Python installs are placed in a virtual environment -- ``/root/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
+# All Python installs are placed in a virtual environment -- ``/srv/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
 #
 #
 # Imports
@@ -350,8 +350,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             # - Mapping X11 ports via ``ports: - "6000-6063:6000-6063"`` doesn't work.
             # - Setting ``DISPLAY`` to various values (from the host's ``hostname -I``, or various names to route to the host) doesn't work.
             #
-            # Install a VNC server plus a simple window manager. Xephyr is required until I figure out how to run Selenium without pyvirtualdisplay.
-            "eatmydata apt-get install -y x11vnc xfce4 xserver-xephyr",
+            # Install a VNC server plus a simple window manager.
+            "eatmydata apt-get install -y x11vnc icewm",
         )
 
     if pic24:
@@ -589,7 +589,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_.
+    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_. Use a longer timeout, since something the database needs more time to get started.
     print("Waiting for Postgres to start...")
     # TODO: use ``bookserver.config.settings._sync_database_url`` instead?
     if env.WEB2PY_CONFIG == "production":
@@ -598,7 +598,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         effective_dburl = env.TEST_DBURL
     else:
         effective_dburl = env.DEV_DBURL
-    xqt(f'pg_isready --dbname="{effective_dburl}"')
+    xqt(f'pg_isready --timeout=15 --dbname="{effective_dburl}"')
 
     print("Checking the State of Database and Migration Info")
     p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
@@ -623,7 +623,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         xqt(
             "Xvfb :0 &",
             "x11vnc -forever &",
-            "startxfce4 &",
+            "icewm-session &",
         )
 
 # Start the servers
