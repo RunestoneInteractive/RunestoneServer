@@ -22,7 +22,7 @@
 #
 #
 # venvs
-# =====
+# -----
 # All Python installs are placed in a virtual environment -- ``/srv/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
 #
 #
@@ -70,7 +70,7 @@ def check_install(
 
 
 # We need curl for some (possibly missing) imports -- make sure it's installed.
-def check_install_curl():
+def check_install_curl() -> None:
     check_install("curl --version", "curl")
 
 
@@ -111,15 +111,16 @@ except ImportError:
     import click
 
 
-# CLI interface
-# =============
-@click.group()
-def cli():
-    pass
 
 
 # ``build`` command
 # =================
+# Create a series of subcommands for this CLI.
+@click.group()
+def cli() -> None:
+    pass
+
+
 @cli.command()
 # Allow users to pass args directly to the underlying ``docker build`` command -- see the `click docs <https://click.palletsprojects.com/en/8.0.x/arguments/#option-like-arguments>`_.
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
@@ -128,7 +129,7 @@ def cli():
 @click.option("--pic24/--no-pic24", default=False, help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.")
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Instal LaTeX and related tools.")
-def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust: bool):
+def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust: bool) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
 
@@ -141,7 +142,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     phase = env.IN_DOCKER
     if not phase:
         # No -- this is the first step in the install.
-        #
+        assert not in_docker()
+
 # Step 1: prepare to run the Docker build
 # ---------------------------------------
         # Did we add the current user to a group?
@@ -231,6 +233,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                         volumes:
                             -   ../../../RunestoneComponents/:/srv/RunestoneComponents
                             -   ../../../BookServer/:/srv/BookServer
+                            # To make Chrome happy.
+                            -   /dev/shm:/dev/shm
             """))
 
         # Ensure the user is in the ``www-data`` group.
@@ -264,9 +268,9 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             print(f"Failed to start the Runestone servers:")
             print_exc()
 
-# Notify listener (see `cli-up`) we're done
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        # Notify listener user we're done.
         print("=-=-= Runestone setup finished =-=-=")
+        # Flush now, so that text won't stay hidden in Python's buffers. The next step is to do nothing (where no flush occurs and the text would otherwise stay hidden).
         sys.stdout.flush()
         sys.stderr.flush()
         # If this script exits, then Docker re-runs it. So, loop forever.
@@ -277,6 +281,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 # ---------------------------------------
     # This is run inside the Docker build, from the `Dockerfile`.
     assert phase == "1", f"Unknown value of IN_DOCKER={phase}"
+    assert in_docker()
 
     # It should always be `run in a venv <https://stackoverflow.com/a/1883251/16038919>`_.
     assert in_venv, "This should be running in a Python virtual environment."
@@ -408,11 +413,6 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
 # Python/pip-related installs
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Install rsmanage.
-    xqt(
-        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
-    )
-
     # Install web2py.
     xqt(
         "mkdir -p $WEB2PY_PATH",
@@ -474,6 +474,11 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         "ln -sf /srv/venv/bin/sphinx-build /usr/local/bin",
     )
 
+    # Create a default auth key for web2py.
+    print("Creating auth key")
+    xqt("mkdir $RUNESTONE_PATH/private")
+    (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
+
     # Clean up after install.
     xqt(
         "eatmydata sudo apt-get -y autoclean",
@@ -500,16 +505,33 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     dev_bookserver = (bookserver_path / 'bookserver').is_dir()
     run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
 
-    # Make sure we have the latest version of rsmanage
-    print("Creating auth key")
-    if not Path(f"{env.RUNESTONE_PATH}/private").is_dir():
-        xqt("mkdir $RUNESTONE_PATH/private")
-    (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
+# Misc setup
+# ^^^^^^^^^^
+    if env.CERTBOT_EMAIL:
+        xqt('certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"')
+        print("You should be good for https")
+    else:
+        print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
 
-    print("Creating pgpass file")
-    Path("/root/.pgpass").write_text(f"db:5432:*:{env.POSTGRES_USER}:{env.POSTGRES_PASSWORD}")
-    xqt("chmod 600 /root/.pgpass")
+    # Install rsmanage.
+    xqt(
+        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
+    )
 
+    if dev:
+        # Start up everything needed for vnc access.
+        xqt(
+            # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``
+            f"rm -f /tmp/.X{env.DISPLAY.split(':', 1)[1]}-lock",
+            "Xvfb $DISPLAY &",
+            # Wait a bit for Xvfb to start up before running the following X applications.
+            "sleep 1",
+            "x11vnc -forever &",
+            "icewm-session &",
+        )
+
+# Set up nginx
+# ^^^^^^^^^^^^
     # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
     nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
     txt = replace_vars(nginx_conf.read_text(), dict(
@@ -542,13 +564,6 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     xqt(
         "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
     )
-
-    # TODO: Move this to phase 1 and pass another flag (--certbot-email).
-    if env.CERTBOT_EMAIL:
-        xqt('certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"')
-        print("You should be good for https")
-    else:
-        print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
 
 # Do dev installs
 # ^^^^^^^^^^^^^^^
@@ -589,16 +604,30 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
 # Set up Postgres database
 # ^^^^^^^^^^^^^^^^^^^^^^^^
-    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_. Use a longer timeout, since something the database needs more time to get started.
+    # Wait until Postgres is ready using `pg_isready <https://www.postgresql.org/docs/current/app-pg-isready.html>`_. Note that its ``--timeout`` parameter applies only when it's waiting for a response from the Postgres server, not to the time spent retrying a refused connection.
     print("Waiting for Postgres to start...")
-    # TODO: use ``bookserver.config.settings._sync_database_url`` instead?
     if env.WEB2PY_CONFIG == "production":
         effective_dburl = env.DBURL
     elif env.WEB2PY_CONFIG == "test":
         effective_dburl = env.TEST_DBURL
     else:
         effective_dburl = env.DEV_DBURL
-    xqt(f'pg_isready --timeout=15 --dbname="{effective_dburl}"')
+    for junk in range(5):
+        try:
+            xqt(f'pg_isready --dbname="{effective_dburl}"')
+            break
+        except Exception:
+            sleep(1)
+    else:
+        assert False, "Postgres not available."
+
+    print("Creating database if necessary...")
+    try:
+        xqt(f"psql {effective_dburl} -c ''")
+    except Exception:
+        # The expected format of a DBURL is ``postgresql://user:password@netloc/dbname``, a simplified form of the `connection URI <https://www.postgresql.org/docs/9.6/static/libpq-connect.html#LIBPQ-CONNSTRING>`_.
+        junk, dbname = effective_dburl.rsplit("/", 1)
+        xqt(f"PGPASSWORD=$POSTGRES_PASSWORD PGUSER=$POSTGRES_USER PGHOST=db createdb {dbname}")
 
     print("Checking the State of Database and Migration Info")
     p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
@@ -613,18 +642,10 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         ''')
         xqt(f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"', **run_bookserver_kwargs)
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
-        xqt("rm $RUNESTONE_PATH/databases/*")
+        xqt("rm -f $RUNESTONE_PATH/databases/*")
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
-
-    if dev:
-        # Start up everything needed for vnc access.
-        xqt(
-            "Xvfb :0 &",
-            "x11vnc -forever &",
-            "icewm-session &",
-        )
 
 # Start the servers
 # ^^^^^^^^^^^^^^^^^
@@ -641,25 +662,45 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     # To manually test out web2py, first ``service nginx stop`` then run ``python3 web2py.py --ip=0.0.0.0 --port=80 --password="$POSTGRES_PASSWORD" -K runestone --no_gui -X``.
 
     print("Starting FastAPI server")
+    run_bookserver(dev)
+
+
+# ``bookserver`` subcommand
+# =========================
+@cli.command()
+@click.option("--dev/--no-dev", default=False, help="Run the server in development mode, auto-reloading if the code changes.")
+def bookserver(dev: bool) -> None:
+    "Run the bookserver. This should only be called inside the Docker container."
+
+    # TODO: if not in docker, the use docker exec to run this inside Docker.
+    run_bookserver(dev)
+
+
+# Utilities
+# =========
+# Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
+def run_bookserver(dev: bool) -> None:
+    assert in_docker()
+    w2p_parent = Path(env.WEB2PY_PATH).parent
+    bookserver_path = Path(f"{w2p_parent}/BookServer")
+    # See the `Volume detection strategy`_.
+    dev_bookserver = (bookserver_path / 'bookserver').is_dir()
+    run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
     run_bookserver_venv = ("poetry run " if dev_bookserver else f"{sys.executable} -m ") + "bookserver "
     xqt(
         run_bookserver_venv +
-        "--book_path $RUNESTONE_PATH/books "
         "--root /ns "
-        "--bks_config development "
         "--error_path /tmp "
         "--gconfig /etc/gunicorn/gunicorn.conf.py "
-        "--bind unix:/run/gunicorn.sock "
-        "--web2py $RUNESTONE_PATH "
-        # Uncomment this to log to a file instead of stdio.
-        ##"> ${WEB2PY_PATH}/logs/asgi.log 2>&1 "
+        "--bind unix:/run/gunicorn.sock " +
+        ("--reload " if dev else "") +
         "&",
         **run_bookserver_kwargs,
     )
 
 
 # A utility to replace all instances of ``${var_name}`` in  a string, where the variables are provided in ``vars_``. This is an alternative to the build-in ``str.format()`` which doesn't require escaping all the curly braces.
-def replace_vars(str_: str, vars_: Dict[str, str]):
+def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
     def repl(matchobj: re.Match):
         var_name = matchobj.group(1)
         return (
@@ -672,6 +713,12 @@ def replace_vars(str_: str, vars_: Dict[str, str]):
     # Search for a ``${var_name}``.
     pattern = r"\${(\w+)}"
     return re.sub(pattern, repl, str_)
+
+
+# Determine if we're running in a Docker container
+def in_docker() -> None:
+    # Docker creates a file -- just look for that.
+    return Path("/.dockerenv").is_file()
 
 
 if __name__ == "__main__":
