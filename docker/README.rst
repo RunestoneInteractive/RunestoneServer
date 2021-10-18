@@ -3,7 +3,7 @@ Docker Deployment
 
 .. note::
 
-    These instructions are for installing Runestone Server using docker to automate
+    These instructions are for installing Runestone Server using Docker to automate
     much of the work involved in setting up the environment needed to run a server.
     If you would prefer to install all the components directly on a server yourself,
     see the `Manual Installation instructions <../docs/installation.html>`_.
@@ -307,7 +307,7 @@ in permissions on the host.
 
 VNC access
 *********************
-On your host, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc. (TODO: magic flag to make Chrome visible.)
+On your host, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc.
 
 
 Maintenance Scripts
@@ -321,7 +321,7 @@ Runestone Components / BookServer Development
 ***********************************************
 
 If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source.
-Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_
+Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
 as a sibling of the ``web2py`` directory: from the ``web2py`` directory do:
 
 .. code-block:: bash
@@ -340,7 +340,7 @@ Then you will need to tell ``RunestoneServer`` to use this copy of Components in
     docker-compose up
 
 As you make changes to Runestone Components or the BookServer, you should not have to restart the Docker containerized application. Any rebuild
-of a book should immediately use the new code. TODO: but need to run the BookServer in dev mode with auto-reload...
+of a book should immediately use the new code.
 
 
 Developing on Runestone Server
@@ -358,7 +358,11 @@ is bound as a volume to the container:
 
 This means that if you make changes to the repository root
 (the Runestone Server application) they will also be made in the container and should
-be instantly visible.
+be instantly visible. When in development mode, the BookServer and/or the Runestone Components are set up in the same way.
+
+To run the BookServer if you've stopped it, run the ``docker/docker_tools.py bookserver`` command from inside Docker.
+
+TODO: discuss the venvs;
 
 
 Running the Runestone Server Unit Tests
@@ -368,7 +372,7 @@ You can run the unit tests in the container using the following command.
 
 .. code-block:: bash
 
-    docker exec -it runestoneserver_runestone_1 bash -c 'cd applications/runestone/tests; python run_tests.py'
+    docker exec -it runestoneserver_runestone_1 bash -c 'cd /srv/web2py/applications/runestone/tests; /srv/venv/bin/python run_tests.py'
 
 
 The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports
