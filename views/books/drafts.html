@@ -1,0 +1,78 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+<link rel="stylesheet" href="/runestone/static/css/index.css">
+<style>
+    /* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.row {
+    background-color:rgb(238, 238, 238);
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+</style>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <h2>New Book Registery</h2>
+        <p>
+            There are many free and open source textbooks available on Runestone.Academy. 
+            However, sometimes these books don't match the content taught in certain classes. 
+            This page can be used to create custom textbooks to fit your classes needs.
+            To start, log into Github. 
+            Then, find the textbook you would like and use the clone button which forks the book into your Github.
+            You can use the left hand panel to view the book in its current state and publish it.
+        </p>
+        <div class="row">
+            <div class="column">
+              <h4>Available Textbooks</h4>
+                <div class="searchbar" style="margin-top: 10px; margin-bottom: 20px;">
+                    <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+                </div>
+                <!-- <b style="font-size: 25px;">Textbooks:</b> -->
+                <h4>Textbooks:</h4>
+
+                {{ for book in book_list: }}
+                
+                <form action="" method="post">
+                    <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px;" name="foo" value="upvote">Clone</button>
+                </form>
+                <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 70px;">
+                    <div class="book_title_drafts"> {{=book['title']}}
+                        <a href="{{=book['url']}}"> 
+                        <span class="link1"></span> 
+                        </a>
+                    </div>
+                    <div class="book_descript_drafts" ><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                    </div>
+                </div>
+            
+                {{pass}}
+                <script  src="../static/js/books.js"></script>
+        
+            
+            <p>
+            </div>
+            <div class="column">
+              <h4>My Custom Textbooks</h4>
+              <p>Custom books will appear here once cloned</p>
+            </div>
+        </div>
+
+            The books published on Runestone are all licensed under the Creative Commons CC-BY
+            license or the GNU Free Documentation license.  The source code for each book can be found on
+            <a href="https://github.com/RunestoneInteractive">Our Github Page</a> and will give you the specifics
+            of the license.  We encourage you to report any innacuracies, typos or leave us suggestions using
+            the Github issues page for each book.
+        </p>
+    </div>
+</div>

@@ -14,7 +14,6 @@
         <link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/dd.css')}}" />
         <link rel="shortcut icon"
             href="{{=URL('static','favicon.ico')}}" type="image/ico" />
-
         <script src="{{=URL('static', 'js/jquery.js')}}"></script>
         <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
         <script src="{{=URL('static', 'js/web2py.js')}}"></script>
@@ -197,6 +196,7 @@
                         <li class="divider-vertical"></li>
                         {{ if request.controller == "default" and settings.academy_mode:}}
                             <li><a href="/{{=request.application}}/books/index">Our Library</a> </li>
+                            <li><a href="/{{=request.application}}/books/drafts">Drafts</a> </li>
                         {{ elif auth.user: }}
                             <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
                         {{ pass }}

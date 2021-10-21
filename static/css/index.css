@@ -87,3 +87,59 @@
     .library_entry {
         margin-bottom: 5pt;
     }
+    .book_title_drafts{
+        font-size: 5em;
+        background-color: #124c63;
+        color: rgb(252, 240, 240);
+        width: 25em;
+        height: 7mm;
+        line-height: 1.8em;
+        text-align: left;
+        padding-left: 5px;
+        border: 1px solid rgb(36, 35, 35);
+        overflow-wrap: break-word;
+        font-size: 1em;
+        font-family: Helvetica, Arial, sans-serif;
+        cursor: pointer;
+        border-radius:5px 5px 0px 0px;
+        position: relative;
+    } 
+    .book_title_drafts:hover{
+        background-color:#247697;
+    }
+
+    .book_descript_drafts{
+        font-size: 5em;
+        background-color: #f3f3f3;
+        color: rgb(3, 2, 2);
+        width: 25em;
+        height: 32px;
+        line-height: 3em;
+        text-align: left;
+        border: 1px solid rgb(36, 35, 35);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: unset;
+        font-size: 1em;
+        font-family: Helvetica, Arial, sans-serif;
+        /* cursor: pointer; */
+        position: relative;
+        border-radius:0px 0px 5px 5px;
+        padding: 5px;
+
+    }
+    .book_descript_drafts:hover{
+        height:unset;     
+    }
+    .github_button{
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
