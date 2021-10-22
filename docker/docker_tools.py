@@ -48,7 +48,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    #sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
