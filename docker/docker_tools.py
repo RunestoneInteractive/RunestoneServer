@@ -247,8 +247,8 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             if is_linux:
                 # To allow VNC access to the container. Not available on OS X.
                 check_install("gvncviewer -h", "gvncviewer")
-            # Allow VS Code / remote access to the container.
-            check_install("dpkg -l openssh-server", "openssh-server")
+                # Allow VS Code / remote access to the container. dpkg isn't available on OS X .
+                check_install("dpkg -l openssh-server", "openssh-server")
 
         # Run the Docker build.
         xqt(f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
