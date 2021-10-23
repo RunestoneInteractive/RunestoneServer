@@ -48,7 +48,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    #sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -88,7 +88,7 @@ except ImportError:
         "-fsSLO",
         "https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/tests/ci_utils.py",
     ], check=True)
-from ci_utils import chdir, env, mkdir, xqt
+from ci_utils import chdir, env, is_linux, mkdir, xqt
 
 # Third-party
 # -----------
@@ -207,7 +207,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         one_py = Path("models/1.py")
         if not one_py.is_file():
             # add a new setting so that institutions can run using a base book like thinkcspy as their course.  On Runestone.academy we don't let anyone be an instructor for the base courses because they are open to anyone.  This makes for a much less complicated deployment strategy for an institution that just wants to run their own server and use one or two books.
-            one_py.write_text(dedent("""
+            one_py.write_text(dedent("""\
                 settings.docker_institution_mode = True
                 settings.jobe_key = ''
                 settings.jobe_server = 'http://jobe'
@@ -220,7 +220,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         # For development, include extra volumes.
         dc = Path("docker-compose.override.yml")
         if dev and not dc.is_file():
-            dc.write_text(dedent("""
+            dc.write_text(dedent("""\
                 version: "3"
 
                 services:
@@ -244,10 +244,11 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             did_group_add = True
 
         if dev:
-            # To allow VNC access to the container.
-            check_install("gvncviewer -h", "gvncviewer")
-            # Allow VS Code / remote access to the container.
-            check_install("dpkg -l openssh-server", "openssh-server")
+            if is_linux:
+                # To allow VNC access to the container. Not available on OS X.
+                check_install("gvncviewer -h", "gvncviewer")
+                # Allow VS Code / remote access to the container. dpkg isn't available on OS X .
+                check_install("dpkg -l openssh-server", "openssh-server")
 
         # Run the Docker build.
         xqt(f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}')
@@ -476,7 +477,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
 
     # Create a default auth key for web2py.
     print("Creating auth key")
-    xqt("mkdir $RUNESTONE_PATH/private")
+    xqt("mkdir -p $RUNESTONE_PATH/private")
     (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text("sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33")
 
     # Clean up after install.
@@ -538,7 +539,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
         RUNESTONE_HOST=env.RUNESTONE_HOST,
         WEB2PY_PATH=env.WEB2PY_PATH,
         LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
-        PRODUCTION_ONLY=dedent("""
+        PRODUCTION_ONLY=dedent("""\
             # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
             server {
                 # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
@@ -551,7 +552,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
                 return 444;
             }
         """) if env.WEB2PY_CONFIG == "production" else "",
-        FORWARD_HTTP=dedent("""
+        FORWARD_HTTP=dedent("""\
             # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
             server {
                 listen 80;
@@ -634,7 +635,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     if p.stderr == "Did not find any relations.\n":
         print("Populating database...")
         # Populate the db with courses, users.
-        populate_script = dedent('''
+        populate_script = dedent('''\
             from bookserver.main import app
             from fastapi.testclient import TestClient
             with TestClient(app) as client:
@@ -716,9 +717,9 @@ def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
 
 
 # Determine if we're running in a Docker container
-def in_docker() -> None:
-    # Docker creates a file -- just look for that.
-    return Path("/.dockerenv").is_file()
+def in_docker() -> bool:
+    # From a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
+    return "docker" in Path("/proc/1/cgroup").read_text()
 
 
 if __name__ == "__main__":
