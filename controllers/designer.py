@@ -22,6 +22,42 @@ admin_logger(logger)
 def index():
     basicvalues = {}
     if settings.academy_mode:
+        basicvalues["message"] = T("Build a Custom Course")
+        basicvalues["descr"] = T(
+            """This page allows you to select a book for your own class. You will have access to all student activities in your course.
+        To begin, enter a project name below."""
+        )
+    return basicvalues
+
+@auth.requires_login()
+def callback():
+    import requests
+    import json
+    oauth_url = 'https://github.com/login/oauth/access_token'
+    oauth_data = {"client_id":"1d31e6dc6ff88f189241", "client_secret":"1ac9570e0d63b075382825454ca3b6e9d7149e39","code": request.vars.code}
+    oauth_headers = {"Accept":"application/json"} 
+    oauth = requests.post(oauth_url, json=oauth_data,headers=oauth_headers )
+    #access_token = oauth.json()['access_token']
+    basicvalues = {}
+    #session.flash = (f"course name {access_token} has already been used")
+    redirect(URL("designer", "book"))
+    return basicvalues
+
+@auth.requires_login()
+def book():
+    basicvalues = {}
+    if settings.academy_mode:
+        basicvalues["message"] = T("Build a Custom Course")
+        basicvalues["descr"] = T(
+            """This page allows you to select a book for your own class. You will have access to all student activities in your course.
+        To begin, enter a project name below."""
+        )
+    return basicvalues
+
+@auth.requires_login()
+def course():
+    basicvalues = {}
+    if settings.academy_mode:
         """
         example action using the internationalization operator T and flash
         rendered by views/default/index.html or views/generic.html
@@ -38,7 +74,7 @@ def index():
 
 
 @auth.requires_login()
-def build():
+def course_build():
     buildvalues = {}
     if settings.academy_mode:
         buildvalues["pname"] = request.vars.projectname
@@ -51,11 +87,11 @@ def build():
             session.flash = (
                 f"course name {request.vars.projectname} has already been used"
             )
-            redirect(URL("designer", "index"))
+            redirect(URL("designer", "course"))
 
         if not request.vars.coursetype:
             session.flash = "You must select a base course."
-            redirect(URL("designer", "index"))
+            redirect(URL("designer", "course"))
 
         # if make instructor add row to auth_membership
         if "instructor" in request.vars:
