@@ -29,7 +29,11 @@ from ci_utils import env, xqt
 # ``bookserver``
 # --------------
 @click.command()
-@click.option("--dev/--no-dev", default=False, help="Run the server in development mode, auto-reloading if the code changes.")
+@click.option(
+    "--dev/--no-dev",
+    default=False,
+    help="Run the server in development mode, auto-reloading if the code changes.",
+)
 def bookserver(dev: bool) -> None:
     """
     Run the bookserver. This should only be called inside the Docker container.
@@ -44,17 +48,16 @@ def run_bookserver(dev: bool) -> None:
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = Path(f"{w2p_parent}/BookServer")
     # See the `Volume detection strategy`_.
-    dev_bookserver = (bookserver_path / 'bookserver').is_dir()
+    dev_bookserver = (bookserver_path / "bookserver").is_dir()
     run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
-    run_bookserver_venv = ("poetry run " if dev_bookserver else f"{sys.executable} -m ") + "bookserver "
+    run_bookserver_venv = (
+        "poetry run " if dev_bookserver else f"{sys.executable} -m "
+    ) + "bookserver "
     xqt(
-        run_bookserver_venv +
-        "--root /ns "
+        run_bookserver_venv + "--root /ns "
         "--error_path /tmp "
         "--gconfig /etc/gunicorn/gunicorn.conf.py "
-        "--bind unix:/run/gunicorn.sock " +
-        ("--reload " if dev else "") +
-        "&",
+        "--bind unix:/run/gunicorn.sock " + ("--reload " if dev else "") + "&",
         **run_bookserver_kwargs,
     )
 
