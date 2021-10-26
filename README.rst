@@ -36,11 +36,9 @@ Installation
 With Docker
 ***********
 
-The easiest way to deploy Runestone Server is to use `Docker <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_. Docker automates 
+The easiest way to deploy Runestone Server is to use `Docker <https://www.docker.com/>`_. Docker automates
 installing many of the components needed to provide a functioning server.
-Please see complete instructions on the `Docker Deployment ReadTheDocs page <https://runestoneserver.readthedocs.io/en/stable/docker/README.html>`_.
-
-This `video <https://youtu.be/y3oeBmRQVf0>`_ is a little out of date, but demonstrates the process of getting a Docker container up and running on a fresh clean Ubuntu image.
+Please see complete instructions on the `Docker Deployment ReadTheDocs page <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_.
 
 
 Manual Installation
@@ -149,4 +147,3 @@ If you use Runestone in your Research or write about it, please reference ``http
     address = {New York, NY, USA},
     keywords = {cs1, ebook, sphinx},
    }
-
