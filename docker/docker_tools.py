@@ -43,8 +43,8 @@ from traceback import print_exc
 from typing import Dict, Tuple
 from textwrap import dedent
 
-# Local application
-# -----------------
+# Local application bootstrap
+# ---------------------------
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
@@ -64,7 +64,7 @@ def check_install(
         subprocess.run(check_list, check=True)
     except:
         print("Not found. Installing...")
-        subprocess.run(["sudo", "apt-get", "install", "-y", install_package], check=True)
+        subprocess.run(["sudo", "apt-get", "install", "-y", "--no-install-recommends", install_package], check=True)
     else:
         print("Found.")
 
@@ -90,8 +90,8 @@ except ImportError:
     ], check=True)
 from ci_utils import chdir, env, is_linux, mkdir, xqt
 
-# Third-party
-# -----------
+# Third-party bootstrap
+# ---------------------
 # This comes after importing ``ci_utils``, since we use that to install click if necessary.
 in_venv = sys.prefix != sys.base_prefix
 try:
@@ -111,6 +111,9 @@ except ImportError:
     import click
 
 
+# Local application
+# -----------------
+from docker_tools_misc import bookserver, in_docker, run_bookserver, stop_servers
 
 
 # ``build`` command
@@ -119,6 +122,11 @@ except ImportError:
 @click.group()
 def cli() -> None:
     pass
+
+
+# Add the subcommands defined in `docker_tools_misc.py`.
+cli.add_command(bookserver)
+cli.add_command(stop_servers)
 
 
 @cli.command()
@@ -187,7 +195,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
                 xqt("git --version")
             except Exception as e:
                 print(f"Unable to run git: {e} Installing...")
-                xqt("sudo apt-get install -y git")
+                xqt("sudo apt-get install -y --no-install-recommends git")
             print("Didn't find the runestone repo. Cloning...")
             # Make this in a path that can eventually include web2py.
             mkdir("web2py/applications", parents=True)
@@ -298,7 +306,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
     xqt(
         "apt-get update",
-        "apt-get install -y eatmydata",
+        "apt-get install -y --no-install-recommends eatmydata",
 
         # All one big command! Therefore, there are no commas after each line, but instead a trailing space.
         "eatmydata apt-get install -y --no-install-recommends "
@@ -331,11 +339,11 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
     if arm:
         xqt(
             # Get the ``add-apt-repository`` tool.
-            "eatmydata apt-get install -y software-properties-common",
+            "eatmydata apt-get install -y --no-install-recommends software-properties-common",
             # Use it to add repo for the ARM tools.
             "eatmydata add-apt-repository -y ppa:canonical-server/server-backports",
             # Then install the ARM tools (and the QEMU emulator).
-            "eatmydata apt-get install -y qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
+            "eatmydata apt-get install -y --no-install-recommends qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
         )
 
     if dev:
@@ -357,7 +365,7 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
             # - Setting ``DISPLAY`` to various values (from the host's ``hostname -I``, or various names to route to the host) doesn't work.
             #
             # Install a VNC server plus a simple window manager.
-            "eatmydata apt-get install -y x11vnc icewm",
+            "eatmydata apt-get install -y --no-install-recommends x11vnc icewm",
         )
 
     if pic24:
@@ -407,10 +415,10 @@ def build(arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust
         )
 
     if tex:
-        xqt("eatmydata apt-get install -y texlive-full xsltproc pdf2svg")
+        xqt("eatmydata apt-get install -y --no-install-recommends texlive-full xsltproc pdf2svg")
 
     if rust:
-        xqt("eatmydata apt-get install -y cargo")
+        xqt("eatmydata apt-get install -y --no-install-recommends cargo")
 
 # Python/pip-related installs
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -666,40 +674,8 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     run_bookserver(dev)
 
 
-# ``bookserver`` subcommand
-# =========================
-@cli.command()
-@click.option("--dev/--no-dev", default=False, help="Run the server in development mode, auto-reloading if the code changes.")
-def bookserver(dev: bool) -> None:
-    "Run the bookserver. This should only be called inside the Docker container."
-
-    # TODO: if not in docker, the use docker exec to run this inside Docker.
-    run_bookserver(dev)
-
-
 # Utilities
 # =========
-# Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
-def run_bookserver(dev: bool) -> None:
-    assert in_docker()
-    w2p_parent = Path(env.WEB2PY_PATH).parent
-    bookserver_path = Path(f"{w2p_parent}/BookServer")
-    # See the `Volume detection strategy`_.
-    dev_bookserver = (bookserver_path / 'bookserver').is_dir()
-    run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
-    run_bookserver_venv = ("poetry run " if dev_bookserver else f"{sys.executable} -m ") + "bookserver "
-    xqt(
-        run_bookserver_venv +
-        "--root /ns "
-        "--error_path /tmp "
-        "--gconfig /etc/gunicorn/gunicorn.conf.py "
-        "--bind unix:/run/gunicorn.sock " +
-        ("--reload " if dev else "") +
-        "&",
-        **run_bookserver_kwargs,
-    )
-
-
 # A utility to replace all instances of ``${var_name}`` in  a string, where the variables are provided in ``vars_``. This is an alternative to the build-in ``str.format()`` which doesn't require escaping all the curly braces.
 def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
     def repl(matchobj: re.Match):
@@ -714,12 +690,6 @@ def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
     # Search for a ``${var_name}``.
     pattern = r"\${(\w+)}"
     return re.sub(pattern, repl, str_)
-
-
-# Determine if we're running in a Docker container
-def in_docker() -> bool:
-    # From a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
-    return "docker" in Path("/proc/1/cgroup").read_text()
 
 
 if __name__ == "__main__":

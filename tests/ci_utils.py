@@ -36,6 +36,10 @@ def xqt(
     # Commands to run. For example, ``'foo -param firstArg secondArg', 'bar |
     # grep alpha'``.
     *cmds,
+    # This is passed directly to ``subprocess.run``.
+    check=True,
+    # This is passed directly to ``subprocess.run``.
+    shell=True,
     # Optional keyword arguments to pass on to `subprocess.run <https://docs.python.org/3/library/subprocess.html#subprocess.run>`_.
     **kwargs,
 ):
@@ -61,7 +65,7 @@ def xqt(
         executable = "/bin/bash" if is_linux or is_darwin else None
         try:
             cp = subprocess.run(
-                cmd, shell=True, executable=executable, check=True, **kwargs
+                cmd, shell=shell, executable=executable, check=check, **kwargs
             )
         except subprocess.CalledProcessError as e:
             flush_print(f"{e.stderr or ''}{e.stdout or ''}")

@@ -304,6 +304,8 @@ Remember that the folder under web2py applications/runestone is bound to your ho
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
+To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` or ``cd /srv/BookServer; poetry shell`` as appropriate.
+
 
 VNC access
 *********************
@@ -362,11 +364,11 @@ be instantly visible. When in development mode, the BookServer and/or the Runest
 
 To run the BookServer if you've stopped it, run the ``docker/docker_tools.py bookserver`` command from inside Docker.
 
-TODO: discuss the venvs;
-
 
 Running the Runestone Server Unit Tests
 *************************************************
+
+TODO: this probably doesn't work. It needs updating -- the servers need to be stopped before tests can run.
 
 You can run the unit tests in the container using the following command.
 
