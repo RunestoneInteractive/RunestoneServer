@@ -32,7 +32,7 @@ To build a Docker application with the server and all its dependencies:
 
 .. code-block:: bash
 
-    curl -fsSLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py | python3 - -- build
+    curl -fsSL https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py | python3 - -- build
 
 This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
 inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
