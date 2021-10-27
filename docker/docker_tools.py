@@ -127,7 +127,13 @@ except ImportError:
 
 # Local application
 # -----------------
-from docker_tools_misc import bookserver, in_docker, run_bookserver, stop_servers
+from docker_tools_misc import (
+    add_commands,
+    bookserver,
+    get_bookserver_path,
+    in_docker,
+    run_bookserver,
+)
 
 
 # ``build`` command
@@ -139,8 +145,7 @@ def cli() -> None:
 
 
 # Add the subcommands defined in `docker_tools_misc.py`.
-cli.add_command(bookserver)
-cli.add_command(stop_servers)
+add_commands(cli)
 
 
 @cli.command()
@@ -556,10 +561,8 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     ), "This should be running in a Python virtual environment."
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
-    bookserver_path = Path(f"{w2p_parent}/BookServer")
-    # _`Volume detection strategy`: don't check just ``BookServer`` -- the volume may be mounted, but may not point to an actual filesystem path if the developer didn't clone the BookServer repo. Instead, look for evidence that there are actually some files in this path.
-    dev_bookserver = (bookserver_path / "bookserver").is_dir()
-    run_bookserver_kwargs = dict(cwd=bookserver_path) if dev_bookserver else {}
+    bookserver_path = get_bookserver_path()
+    run_bookserver_kwargs = dict(cwd=bookserver_path) if bookserver_path else {}
 
     # Misc setup
     # ^^^^^^^^^^
@@ -636,7 +639,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
-    if dev_bookserver:
+    if bookserver_path:
         assert (
             dev
         ), "You must run ``docker-tools.py build --dev`` in order to install the dev version of the BookServer."
@@ -718,7 +721,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             """
         )
         xqt(
-            f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if dev_bookserver else sys.executable} -c "{populate_script}"',
+            f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
             **run_bookserver_kwargs,
         )
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).

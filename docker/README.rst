@@ -185,12 +185,11 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
 
 TODO: None of the following runs code in the venv, and should probably all be integrated into the ``docker_build.py`` script.
 
-After cloning a book, or after making any edits/updates to it, you need to build the book using the ``dbuild``
-command found in the scripts folder. Pass it the name of the book that you wish to build:
+After cloning a book, or after making any edits/updates to it, you need to build the book:
 
 .. code-block:: bash
 
-    scripts/dbuild thinkcspy
+    docker/docker_tools.py book-build <book-name>
 
 
 You will then need to restart the Runestone server to make the new/updated book available.
@@ -297,7 +296,7 @@ the RunestoneServer directory do:
 
 .. code-block:: bash
 
-    scripts/dshell
+    docker/docker_tools.py shell
 
 
 Remember that the folder under web2py applications/runestone is bound to your host,
@@ -417,8 +416,7 @@ system. You need to do the following:
 the name of BOTH the course and the basecourse when it asks. The dmanage command is in the scripts
 folder of RunestoneServer.
 
-2. Now that your course is registered rebuild it using the ``dbuild`` command found in the
-RunestoneServer ``scripts`` folder use the command ``dbuild bookname``
+2. Now that your course is registered rebuild it using the command ``docker/docker_tools.py book-build <book_name>`` command.
 
 3. If this book is a PreTeXt book you will need to navigate to the directory that contains the
 ``runestone-manifest.xml`` file and run the command:
