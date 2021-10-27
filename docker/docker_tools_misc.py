@@ -43,7 +43,7 @@ RUNESTONE_CONTAINER_NAME = "runestone_runestone_1"
 )
 def bookserver(dev: bool) -> None:
     """
-    Run the bookserver. This should only be called inside the Docker container.
+    Run the bookserver.
     """
     run_bookserver(dev)
 
@@ -86,7 +86,7 @@ def book_build(book_sub_name) -> None:
 @click.command()
 def shell() -> None:
     """
-    Open a Bash shell in the Docker container.
+    Open a Bash shell in the Docker container. Do not run this from the GUI -- there's no way to interact with the resulting terminal.
     """
     if in_docker():
         print("Already in Docker. Doing nothing.")

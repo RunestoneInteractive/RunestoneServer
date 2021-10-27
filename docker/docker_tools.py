@@ -26,8 +26,8 @@
 # All Python installs are placed in a virtual environment -- ``/srv/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
 #
 #
-# Imports
-# =======
+# Imports and bootstrap
+# =====================
 # These are listed in the order prescribed by PEP 8, with exceptions noted below.
 #
 # There's a fair amount of bootstrap code here to download and install required imports and their dependencies.
@@ -42,6 +42,7 @@ from time import sleep
 from traceback import print_exc
 from typing import Dict, Tuple
 from textwrap import dedent
+import webbrowser
 
 # Local application bootstrap
 # ---------------------------
@@ -101,53 +102,73 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, is_linux, mkdir, xqt
+from ci_utils import chdir, env, is_linux, mkdir, pushd, xqt
 
 # Third-party bootstrap
 # ---------------------
 # This comes after importing ``ci_utils``, since we use that to install click if necessary.
 in_venv = sys.prefix != sys.base_prefix
 try:
-    import click
+    import click, click_web
 except ImportError:
-    print("Installing click...")
-    # Outside a venv, install locally.
-    user = "" if in_venv else "--user"
-    xqt(
-        f"{sys.executable} -m pip install {user} --upgrade pip",
-        f"{sys.executable} -m pip install {user} --upgrade click",
-    )
-    # If pip is upgraded, it won't find click. `Re-load sys.path <https://stackoverflow.com/a/25384923/16038919>`_ to fix this.
     import site
     from importlib import reload
 
+    # Ensure ``pip`` is installed before using it.
+    check_install("pip3 --version", "python3-pip")
+
+    print("Installing click...")
+    # Outside a venv, install locally.
+    user = " " if in_venv else "--user "
+    xqt(
+        f"{sys.executable} -m pip install {user}--upgrade pip",
+        f"{sys.executable} -m pip install {user}--upgrade click click_web",
+    )
+    # If pip is upgraded, it won't find click. `Re-load sys.path <https://stackoverflow.com/a/25384923/16038919>`_ to fix this.
     reload(site)
-    import click
+    import click, click_web
 
 
 # Local application
 # -----------------
-from docker_tools_misc import (
-    add_commands,
-    bookserver,
-    get_bookserver_path,
-    in_docker,
-    run_bookserver,
-)
+# When bootstrapping, this import fails. This is fine, since these commands require a working container before they're usable.
+try:
+    from docker_tools_misc import (
+        add_commands,
+        get_bookserver_path,
+        in_docker,
+        run_bookserver,
+    )
+except ImportError:
+    print("Note: this must be an initial install; additional commands missing.")
 
 
-# ``build`` command
-# =================
+# CLI and ``gui`` command
+# =======================
 # Create a series of subcommands for this CLI.
 @click.group()
 def cli() -> None:
     pass
 
 
-# Add the subcommands defined in `docker_tools_misc.py`.
-add_commands(cli)
+# Add the subcommands defined in `docker_tools_misc.py`, if it's available.
+try:
+    add_commands(cli)
+except NameError:
+    pass
 
 
+@cli.command()
+def gui():
+    """
+    Open a web-based GUI for this program in the default browser. Press Ctrl-C to stop the webserver.
+    """
+    webbrowser.open("http://127.0.0.1:5000", new=1, autoraise=True)
+    click_web.create_click_web_app(sys.modules[__name__], cli).run()
+
+
+# ``build`` command
+# =================
 @cli.command()
 # Allow users to pass args directly to the underlying ``docker build`` command -- see the `click docs <https://click.palletsprojects.com/en/8.0.x/arguments/#option-like-arguments>`_.
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
@@ -178,9 +199,6 @@ def build(
     # Are we inside the Docker build?
     phase = env.IN_DOCKER
     if not phase:
-        # No -- this is the first step in the install.
-        assert not in_docker()
-
         # Step 1: prepare to run the Docker build
         # ---------------------------------------
         # Did we add the current user to a group?
@@ -216,15 +234,17 @@ def build(
                 "sudo chmod +x /usr/local/bin/docker-compose",
             )
 
+        # Make sure git's installed.
+        try:
+            xqt("git --version")
+        except Exception as e:
+            print(f"Unable to run git: {e} Installing...")
+            xqt("sudo apt-get install -y --no-install-recommends git")
+
         # Are we inside the Runestone repo?
         if not (wd / "uwsgi").is_dir():
             change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
-            try:
-                xqt("git --version")
-            except Exception as e:
-                print(f"Unable to run git: {e} Installing...")
-                xqt("sudo apt-get install -y --no-install-recommends git")
             print("Didn't find the runestone repo. Cloning...")
             # Make this in a path that can eventually include web2py.
             mkdir("web2py/applications", parents=True)
@@ -260,42 +280,53 @@ def build(
                 )
             )
 
-        # For development, include extra volumes.
-        dc = Path("docker-compose.override.yml")
-        if dev and not dc.is_file():
-            dc.write_text(
-                dedent(
-                    """\
-                    version: "3"
+        if dev:
+            # For development, include extra volumes.
+            dc = Path("docker-compose.override.yml")
+            if not dc.is_file():
+                dc.write_text(
+                    dedent(
+                        """\
+                        version: "3"
 
-                    services:
-                        runestone:
-                            # Set up for VNC.
-                            environment:
-                                DISPLAY: ${DISPLAY}
-                            ports:
-                                -   "5900:5900"
-                            volumes:
-                                -   ../../../RunestoneComponents/:/srv/RunestoneComponents
-                                -   ../../../BookServer/:/srv/BookServer
-                                # To make Chrome happy.
-                                -   /dev/shm:/dev/shm
-                    """
+                        services:
+                            runestone:
+                                # Set up for VNC.
+                                environment:
+                                    DISPLAY: ${DISPLAY}
+                                ports:
+                                    -   "5900:5900"
+                                volumes:
+                                    -   ../../../RunestoneComponents/:/srv/RunestoneComponents
+                                    -   ../../../BookServer/:/srv/BookServer
+                                    # To make Chrome happy.
+                                    -   /dev/shm:/dev/shm
+                        """
+                    )
                 )
-            )
+
+            # Clone these if they don't exist.
+            with pushd("../../.."):
+                bks = Path("BookServer")
+                if not bks.exists():
+                    print(f"Dev mode: since {bks} doesn't exist, cloning the BookServer...")
+                    xqt("git clone https://github.com/bnmnetp/BookServer.git")
+                rsc = Path("RunestoneComponents")
+                if not rsc.exists():
+                    print(f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components...")
+                    xqt("git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git")
+
+            if is_linux:
+                # To allow VNC access to the container. Not available on OS X.
+                check_install("gvncviewer -h", "gvncviewer")
+                # Allow VS Code / remote access to the container. dpkg isn't available on OS X .
+                check_install("dpkg -l openssh-server", "openssh-server")
 
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
-
-        if dev:
-            if is_linux:
-                # To allow VNC access to the container. Not available on OS X.
-                check_install("gvncviewer -h", "gvncviewer")
-                # Allow VS Code / remote access to the container. dpkg isn't available on OS X .
-                check_install("dpkg -l openssh-server", "openssh-server")
 
         # Run the Docker build.
         xqt(
