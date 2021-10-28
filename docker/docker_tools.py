@@ -319,8 +319,8 @@ def build(
             if is_linux:
                 # To allow VNC access to the container. Not available on OS X.
                 check_install("gvncviewer -h", "gvncviewer")
-                # Allow VS Code / remote access to the container. dpkg isn't available on OS X .
-                check_install("dpkg -l openssh-server", "openssh-server")
+                # Allow VS Code / remote access to the container. dpkg isn't available on OS X.
+                check_install("dpkg --no-pager -l openssh-server", "openssh-server")
 
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
@@ -335,11 +335,11 @@ def build(
 
         # Print thesse messages last; otherwise, it will be lost in all the build noise.
         if change_dir:
-            print(
+            print("\n" + "*" * 80 +
                 '\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.'
             )
         if did_group_add:
-            print(
+            print("\n" + "*" * 80 +
                 '\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".'
             )
         return
@@ -611,11 +611,12 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     )
 
     if dev:
-        # Start up everything needed for vnc access.
+        # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available.
+        x_display = env.get("DISPLAY", ":0")
         xqt(
             # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``
-            f"rm -f /tmp/.X{env.DISPLAY.split(':', 1)[1]}-lock",
-            "Xvfb $DISPLAY &",
+            f"rm -f /tmp/.X{x_display.split(':', 1)[1]}-lock",
+            f"Xvfb {x_display} &",
             # Wait a bit for Xvfb to start up before running the following X applications.
             "sleep 1",
             "x11vnc -forever &",
