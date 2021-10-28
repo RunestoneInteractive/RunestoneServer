@@ -34,6 +34,7 @@
 #
 # Standard library
 # ----------------
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -612,7 +613,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     if dev:
         # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available.
-        x_display = env.get("DISPLAY", ":0")
+        x_display = os.environ.get("DISPLAY", ":0")
         xqt(
             # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``
             f"rm -f /tmp/.X{x_display.split(':', 1)[1]}-lock",
