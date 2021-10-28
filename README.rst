@@ -64,6 +64,7 @@ The Runestone Tools are not only good for authoring the textbooks contained in t
 How to Contribute
 -----------------
 
+Following are the steps using which one can contribute :
 #. See the file `CONTRIBUTING.md` in this directory
 #. Get a Github (free) account.
 #. Make a fork of this project.  That will create a repository in your
