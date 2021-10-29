@@ -612,7 +612,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     )
 
     if dev:
-        # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available.
+        # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available or empty.
         x_display = os.environ.get("DISPLAY") or ":0"
         xqt(
             # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``

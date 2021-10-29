@@ -304,7 +304,7 @@ Remember that the folder under web2py applications/runestone is bound to your ho
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
-To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` or ``cd /srv/BookServer; poetry shell`` as appropriate.
+To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` when working on topics related to the old Runestone server (the instructor interface) or ``cd /srv/BookServer; poetry shell`` for topics related to the (new) BookServer (the student-facing content).
 
 
 VNC access

@@ -120,10 +120,16 @@ def add_commands(cli) -> None:
         cli.add_command(cmd)
 
 
-# Determine if we're running in a Docker container
+# Determine if we're running in a Docker container.
 def in_docker() -> bool:
+    # This is difficult, and varies between OSes (Linux vs OS X) and Docker versions. Try a few different approaches and hope one works.
     # From a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
-    return "docker" in Path("/proc/1/cgroup").read_text()
+    try:
+        return "docker" in Path("/proc/1/cgroup").read_text()
+    except Exception:
+        # Newer Docker versions create a file -- just look for that.
+        return Path("/.dockerenv").is_file()
+
 
 
 # If we're not in Docker, then re-run this command inside Docker.
