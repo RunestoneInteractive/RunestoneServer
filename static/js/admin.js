@@ -1738,7 +1738,7 @@ function preview_question_id(question_id, preview_div, sid, gradeit) {
         // Render it.
         data = { acid: question_id };
         if (sid) {
-            data.sid = sid;
+            data.sid = decodeURIComponent(sid);
             data.graderactive = true;
             data.useRunestoneServices = true;
         }
