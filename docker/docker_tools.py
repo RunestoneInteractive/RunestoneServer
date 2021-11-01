@@ -50,7 +50,7 @@ import webbrowser
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    # sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -336,7 +336,7 @@ def build(
 
 
         # Run the Docker build.
-        asdf
+
         xqt(
             f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
         )
