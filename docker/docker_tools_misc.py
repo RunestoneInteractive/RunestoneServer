@@ -131,7 +131,6 @@ def in_docker() -> bool:
         return Path("/.dockerenv").is_file()
 
 
-
 # If we're not in Docker, then re-run this command inside Docker.
 def ensure_in_docker() -> None:
     if in_docker():
