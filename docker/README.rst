@@ -32,7 +32,8 @@ To build a Docker application with the server and all its dependencies:
 
 .. code-block:: bash
 
-    curl -fsSLO https://raw.githubusercontent.com/bjones1/RunestoneServer/docker_updates/tests/docker_tools.py | python3 - -- build
+    curl -fsSLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
+    python3 docker_tools.py build
 
 This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
 inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
@@ -185,12 +186,11 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
 
 TODO: None of the following runs code in the venv, and should probably all be integrated into the ``docker_build.py`` script.
 
-After cloning a book, or after making any edits/updates to it, you need to build the book using the ``dbuild``
-command found in the scripts folder. Pass it the name of the book that you wish to build:
+After cloning a book, or after making any edits/updates to it, you need to build the book:
 
 .. code-block:: bash
 
-    scripts/dbuild thinkcspy
+    docker/docker_tools.py book-build <book-name>
 
 
 You will then need to restart the Runestone server to make the new/updated book available.
@@ -297,12 +297,14 @@ the RunestoneServer directory do:
 
 .. code-block:: bash
 
-    scripts/dshell
+    docker/docker_tools.py shell
 
 
 Remember that the folder under web2py applications/runestone is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
+
+To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` when working on topics related to the old Runestone server (the instructor interface) or ``cd /srv/BookServer; poetry shell`` for topics related to the (new) BookServer (the student-facing content).
 
 
 VNC access
@@ -362,11 +364,11 @@ be instantly visible. When in development mode, the BookServer and/or the Runest
 
 To run the BookServer if you've stopped it, run the ``docker/docker_tools.py bookserver`` command from inside Docker.
 
-TODO: discuss the venvs;
-
 
 Running the Runestone Server Unit Tests
 *************************************************
+
+TODO: this probably doesn't work. It needs updating -- the servers need to be stopped before tests can run.
 
 You can run the unit tests in the container using the following command.
 
@@ -415,8 +417,7 @@ system. You need to do the following:
 the name of BOTH the course and the basecourse when it asks. The dmanage command is in the scripts
 folder of RunestoneServer.
 
-2. Now that your course is registered rebuild it using the ``dbuild`` command found in the
-RunestoneServer ``scripts`` folder use the command ``dbuild bookname``
+2. Now that your course is registered rebuild it using the command ``docker/docker_tools.py book-build <book_name>`` command.
 
 3. If this book is a PreTeXt book you will need to navigate to the directory that contains the
 ``runestone-manifest.xml`` file and run the command:
