@@ -329,7 +329,14 @@ def build(
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
 
+        # Provide this script as a more convenient CLI.
+        xqt(
+            f"{sys.executable} -m pip install --user -e docker",
+        )
+
+
         # Run the Docker build.
+        asdf
         xqt(
             f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
         )
@@ -606,9 +613,12 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
     else:
         print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
 
-    # Install rsmanage.
+    # Install rsmanage and docker-tools.
     xqt(
         f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
+    )
+    xqt(
+        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/docker",
     )
 
     if dev:
