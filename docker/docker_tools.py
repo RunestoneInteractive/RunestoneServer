@@ -310,12 +310,18 @@ def build(
             with pushd("../../.."):
                 bks = Path("BookServer")
                 if not bks.exists():
-                    print(f"Dev mode: since {bks} doesn't exist, cloning the BookServer...")
+                    print(
+                        f"Dev mode: since {bks} doesn't exist, cloning the BookServer..."
+                    )
                     xqt("git clone https://github.com/bnmnetp/BookServer.git")
                 rsc = Path("RunestoneComponents")
                 if not rsc.exists():
-                    print(f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components...")
-                    xqt("git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git")
+                    print(
+                        f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
+                    )
+                    xqt(
+                        "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
+                    )
 
             if is_linux:
                 # To allow VNC access to the container. Not available on OS X.
@@ -334,7 +340,6 @@ def build(
             f"{sys.executable} -m pip install --user -e docker",
         )
 
-
         # Run the Docker build.
 
         xqt(
@@ -343,12 +348,16 @@ def build(
 
         # Print thesse messages last; otherwise, it will be lost in all the build noise.
         if change_dir:
-            print("\n" + "*" * 80 +
-                '\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.'
+            print(
+                "\n"
+                + "*" * 80
+                + '\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.'
             )
         if did_group_add:
-            print("\n" + "*" * 80 +
-                '\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".'
+            print(
+                "\n"
+                + "*" * 80
+                + '\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".'
             )
         return
 
