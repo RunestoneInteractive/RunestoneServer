@@ -25,15 +25,18 @@ Setup
 -----------------------------
 
 
-1. Get Runestone Server
-***********************
+1. Run the bootstrap script
+****************************
 
-To build a Docker application with the server and all its dependencies:
+To build a Docker application with the server and all its dependencies, download then run the bootstrap script:
 
 .. code-block:: bash
 
     curl -fsSLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
-    python3 docker_tools.py build
+    # See what build options are available.
+    python3 docker_tools.py build --help
+    # Run the build.
+    python3 docker_tools.py build <your options here>
 
 This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
 inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
@@ -44,25 +47,6 @@ When this completes, **log out then back in** (reboot if using a VM) to update y
 .. note::
 
     All future commands should be run in the ``web2py/applications/runestone`` directory unless instructions specify otherwise.
-
-To re-build an image:
-
-.. code-block:: bash
-
-    # See the possibilities
-    python3 docker/docker_tools.py build --help
-    # Actually run the build (add options as desired)
-    python3 docker/docker_tools.py build
-
-
-To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
-command. The build process caches results from previous builds and should complete much more rapidly. However, the
-cache can cause issues if you modify a file that the system is checking for changes. If you need to force a
-complete rebuild, use:
-
-.. code-block:: bash
-
-    python3 docker/docker_tools.py build -- --no-cache
 
 .. note:: VirtualBox
 
@@ -84,7 +68,7 @@ Most basic configuration can be done via two files you will need to create. Thes
 are read every time the server is restarted - to see the effects of any changes you will
 need to stop the containers and restart them.
 
-Environmental Variables
+Environment Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You will need to set a number of environmental variables to run Runestone. The easiest
@@ -117,9 +101,9 @@ See comments in the file for details.
 3. Starting/Stopping
 **************************
 
-Once your environment is ready to go, you can use docker-compose to bring the containers up.
+Once your environment is ready to go, you can use ``docker-compose`` to bring the containers up.
 This command will create four containers to run different parts of the application stack
-(runestone server, redis cache, postgres DB, jobe code testing environment):
+(runestone server, redis cache, postgres DB, jobe code testing environment). There are two options:
 
 .. code-block:: bash
 
@@ -184,13 +168,11 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
 
-TODO: None of the following runs code in the venv, and should probably all be integrated into the ``docker_build.py`` script.
-
 After cloning a book, or after making any edits/updates to it, you need to build the book:
 
 .. code-block:: bash
 
-    docker/docker_tools.py book-build <book-name>
+    docker-tools book-build <book-name>
 
 
 You will then need to restart the Runestone server to make the new/updated book available.
@@ -209,6 +191,8 @@ You will then need to restart the Runestone server to make the new/updated book 
 
 5. Add Courses
 **************************
+
+TODO: This scripts needs to be updated. It doesn't work.
 
 To add a course based on a book, run the ``daddcourse`` script:
 
@@ -238,6 +222,8 @@ You do not have to restart the server to make use of the course.
 
 6. Add a User
 **************************
+
+TODO: This scripts needs to be updated. It doesn't work.
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
 an existing user as an instructor to the course.
@@ -278,6 +264,31 @@ Other Tips & Tricks
 -------------------------------
 
 
+Rebuilding
+***********************
+
+To re-build an image:
+
+.. code-block:: bash
+
+    # See the possibilities
+    docker-tools build --help
+    # Actually run the build (add options as desired)
+    docker-tools build
+
+
+To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
+command. The build process caches results from previous builds and should complete much more rapidly. However, the
+cache can cause issues if you modify a file that the system is checking for changes. If you need to force a
+complete rebuild, use:
+
+.. code-block:: bash
+
+    docker-tools build -- --no-cache
+
+
+
+
 Debugging
 *****************
 
@@ -297,7 +308,7 @@ the RunestoneServer directory do:
 
 .. code-block:: bash
 
-    docker/docker_tools.py shell
+    docker-tools shell
 
 
 Remember that the folder under web2py applications/runestone is bound to your host,
@@ -307,13 +318,18 @@ in permissions on the host.
 To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` when working on topics related to the old Runestone server (the instructor interface) or ``cd /srv/BookServer; poetry shell`` for topics related to the (new) BookServer (the student-facing content).
 
 
-VNC access
+SSH/VNC access
 *********************
-On your host, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc.
+
+To install a VNC client on Linux, execute ``sudo apt install gvncviewer``. Next, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc.
+
+Execute ``sudo apt get openssh-server`` to install a SSH server. This allows easy access from VSCode, as well as usual SSH access.
 
 
 Maintenance Scripts
 **********************************
+
+TODO: All these scripts are out of date. They need to be ported to `docker_build_misc.py`.
 
 The ``scripts`` directory has a number of maintenance scripts that will run commands inside the runestone
 container to avoid having to shell into it first. In particular the ``dmanage`` script can be used to
@@ -322,9 +338,15 @@ container to avoid having to shell into it first. In particular the ``dmanage`` 
 Runestone Components / BookServer Development
 ***********************************************
 
-If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source.
-Clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
-as a sibling of the ``web2py`` directory: from the ``web2py`` directory do:
+If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source. To do this, rebuild the image with the ``--dev`` option:
+
+.. code-block:: bash
+
+    docker-tools build --dev
+    docker-compose up
+
+This command automatically clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
+as a sibling of the ``web2py`` directory: from the ``web2py`` directory using the equivalent of:
 
 .. code-block:: bash
 
@@ -333,13 +355,7 @@ as a sibling of the ``web2py`` directory: from the ``web2py`` directory do:
     git clone https://github.com/RunestoneInteractive/BookServer.git
 
 
-Then you will need to tell ``RunestoneServer`` to use this copy of Components instead of the default copy. To do so, rebuild the container for development then run it:
-
-.. code-block::
-    bash
-
-    docker/docker_tools.py build --dev
-    docker-compose up
+You may instead remove these clones and replace them with a clone of your development repositories.
 
 As you make changes to Runestone Components or the BookServer, you should not have to restart the Docker containerized application. Any rebuild
 of a book should immediately use the new code.
@@ -362,7 +378,7 @@ This means that if you make changes to the repository root
 (the Runestone Server application) they will also be made in the container and should
 be instantly visible. When in development mode, the BookServer and/or the Runestone Components are set up in the same way.
 
-To run the BookServer if you've stopped it, run the ``docker/docker_tools.py bookserver`` command from inside Docker.
+To run the BookServer if you've stopped it, run the ``docker-tools bookserver`` command from inside Docker.
 
 
 Running the Runestone Server Unit Tests

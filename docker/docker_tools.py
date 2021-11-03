@@ -323,12 +323,6 @@ def build(
                         "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
                     )
 
-            if is_linux:
-                # To allow VNC access to the container. Not available on OS X.
-                check_install("gvncviewer -h", "gvncviewer")
-                # Allow VS Code / remote access to the container. dpkg isn't available on OS X.
-                check_install("dpkg --no-pager -l openssh-server", "openssh-server")
-
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
@@ -614,14 +608,6 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     # Misc setup
     # ^^^^^^^^^^
-    if env.CERTBOT_EMAIL:
-        xqt(
-            'certbot -n  --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
-        )
-        print("You should be good for https")
-    else:
-        print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
-
     # Install rsmanage and docker-tools.
     xqt(
         f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
@@ -670,15 +656,18 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             )
             if env.WEB2PY_CONFIG == "production"
             else "",
-            FORWARD_HTTP=dedent(
-                """\
-                # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
-                server {
-                    listen 80;
-                    server_name ${RUNESTONE_HOST};
-                    return 301 https://${RUNESTONE_HOST}$request_uri;
-                }
-                """
+            FORWARD_HTTP=replace_vars(
+                dedent(
+                    """\
+                    # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
+                    server {
+                        listen 80;
+                        server_name ${RUNESTONE_HOST};
+                        return 301 https://${RUNESTONE_HOST}$request_uri;
+                    }
+                    """
+                ),
+                dict(RUNESTONE_HOST=env.RUNESTONE_HOST),
             )
             if env.CERTBOT_EMAIL
             else "",
@@ -807,6 +796,15 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     print("Starting FastAPI server")
     run_bookserver(dev)
+
+    # Certbot requires nginx to be running to succeed, hence its placement here.
+    if env.CERTBOT_EMAIL:
+        xqt(
+            'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
+        )
+        print("You should be good for https")
+    else:
+        print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
 
 
 # Utilities
