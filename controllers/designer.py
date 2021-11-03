@@ -5,6 +5,8 @@ import random
 import datetime
 import logging
 
+from requests.sessions import session
+
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
@@ -32,27 +34,88 @@ def index():
 @auth.requires_login()
 def callback():
     import requests
-    import json
     oauth_url = 'https://github.com/login/oauth/access_token'
     oauth_data = {"client_id":"1d31e6dc6ff88f189241", "client_secret":"1ac9570e0d63b075382825454ca3b6e9d7149e39","code": request.vars.code}
-    oauth_headers = {"Accept":"application/json"} 
-    oauth = requests.post(oauth_url, json=oauth_data,headers=oauth_headers )
-    #access_token = oauth.json()['access_token']
+    oauth_headers = {"Accept":"application/json"}
+    #print(request.vars.code)
+    try:
+        oauth = requests.post(oauth_url, json=oauth_data,headers=oauth_headers)
+        if oauth.status_code == 200:
+            print(oauth.json()['access_token'])
+            #session.auth.user['github_oauth_token']=oauth.json()['access_token']
+            session.__dict__['github_oauth_token'] = oauth.json()['access_token']
+            user = requests.get('https://api.github.com/user', headers = {'Authorization':'token '+oauth.json()['access_token']})
+            #session.auth.user['github_user'] = user.json()['login']
+            session.__dict__['github_user'] = user.json()['login']
+        else:
+            session.flash = (f"got {oauth.status_code} from github")
+    except:
+        print(f"Failure connecting to {oauth_url} There is either a problem with your servers connectivity or githubs")
     basicvalues = {}
-    #session.flash = (f"course name {access_token} has already been used")
     redirect(URL("designer", "book"))
     return basicvalues
 
 @auth.requires_login()
 def book():
-    basicvalues = {}
-    if settings.academy_mode:
-        basicvalues["message"] = T("Build a Custom Course")
-        basicvalues["descr"] = T(
-            """This page allows you to select a book for your own class. You will have access to all student activities in your course.
-        To begin, enter a project name below."""
+    #print("loading book page")
+    import requests
+    #print(session.__dict__.keys())
+    github={}
+    session.__dict__['github_client_id'] = '1d31e6dc6ff88f189241'
+    github['client_id']=session.__dict__['github_client_id']
+    # try:
+        # if 'github_oauth_token' in session.auth.user.keys():
+        #     github['user'] = session.auth.user['github_user']
+        #     github['found'] = True
+    if 'github_oauth_token' in session.__dict__.keys():
+        github['user'] = session.__dict__['github_user']
+        github['found'] = True
+        user = requests.get('https://api.github.com/user', headers = {'Authorization':'token '+session.__dict__['github_oauth_token']})
+        if user.status_code != 200:
+            location = "https://github.com/login/oauth/authorize?scope=repo&client_id="+session.__dict__['github_client_id']
+            print("token expired, redirecting to refresh token")
+            raise HTTP(303,'You are being redirected to refresh your github token', Location=location)
+    else:
+        github['found'] = False
+    # except:
+    #     github['found'] =False
+    #     print("error getting github username from session variable")
+    book_list = os.listdir("applications/{}/books".format(request.application))
+    book_list = [book for book in book_list if ".git" not in book]
+    res = []
+    for book in sorted(book_list):
+        # try:
+        #     # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
+        #     config = importlib.import_module(
+        #         "applications.{}.books.{}.conf".format(request.application, book)
+        #     )
+        # except Exception as e:
+        #     logger.error("Error in book list: {}".format(e))
+        #     continue
+        book_info = {}
+        book_info.update(course_description="")
+        book_info.update(key_words="")
+        if hasattr(config, "navbar_title"):
+            book_info["title"] = config.navbar_title
+        elif hasattr(config, "html_title"):
+            book_info["title"] = config.html_title
+        elif hasattr(config, "html_short_title"):
+            book_info["title"] = config.html_short_title
+        else:
+            book_info["title"] = "Runestone Book"
+        # update course description if found in the book's conf.py
+        if hasattr(config, "course_description"):
+            book_info.update(course_description=config.course_description)
+        # update course key_words if found in book's conf.py
+        if hasattr(config, "key_words"):
+            book_info.update(key_words=config.key_words)
+        book_info["url"] = "/{}/books/published/{}/index.html".format(
+            request.application, book
         )
-    return basicvalues
+        book_info["regname"] = book
+        res.append(book_info)
+        print(book_info)
+    return dict(book_list=res,github=github)
 
 @auth.requires_login()
 def course():

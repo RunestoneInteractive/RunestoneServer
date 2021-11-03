@@ -2,19 +2,105 @@
 {{extend 'layout.html'}}
 
 
-{{if 'message' in globals():}}
+<link rel="stylesheet" href="/runestone/static/css/index.css">
 <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-<h3>{{=message}}</h3>
 
-<p>
-    We're going to now talk to the GitHub API. Ready?
-    <a href="https://github.com/login/oauth/authorize?scope=repo&client_id=1d31e6dc6ff88f189241">Click here</a> to begin!</a>
-  </p>
 
-{{pass}}
+<script type="text/javascript">
+$(document).on("click", ".cloneButton", function () {
+     var bookToBeCloned = $(this).parent()[0].id;
+     $("#newBookIdentifier")[0].value = bookToBeCloned
+     $("#newGithubRepo")[0].value = bookToBeCloned
+     $("#newBookName")[0].value = $("#"+bookToBeCloned+"_title")[0].innerText
+     $("#newBookDescription")[0].value = $("#"+bookToBeCloned+"_description")[0].innerText
+     $("#newBookKeywords")[0].value = $("#"+bookToBeCloned+"_keywords")[0].innerText
+     $("#baseBook")[0].value = bookToBeCloned;
+});
+    // function validateForm() {
+    //     var bookname = document.forms["mainform"]["bookname"].value;
+    //     var basebook = document.forms["mainform"]["basebook"].value;
+
+    //     if (bookname == "" || bookname.indexOf(" ") !== -1 || bookname.indexOf("/") > -1) {
+    //         alert('Error:  Your book name may not contain spaces or /')
+    //         return false;
+    //     }
+
+    //     if (!/^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(bookname)) {
+    //         alert("Error: Your book name can only contain ASCII letters digits and - or _");
+    //         return false;
+    //     }
+
+    //     if (basebook == "") {
+    //         alert('Error: You must select a base book to fork')
+    //         return false;
+    //     }
+
+    //     return true
+    // }
+</script>
+
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="searchbar">
+            <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+        </div>
+        <b style="font-size: 25px;">Computer Science Textbooks:</b>  
+        {{ for book in book_list: }}
+        <div id="{{=book['regname']}}" class='library_entry'>
+            <button id="{{=book['regname']}}_button" class="btn cloneButton" data-target="#cloneTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
+            <div class="book_title"> <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
+                <a href="{{=book['url']}}"> 
+                <span class="link1"></span> 
+                </a>
+            </div>
+            <div class="book_descript"><b>Description:</b> <div id="{{=book['regname']}}_description">{{=book['course_description']}}</div> To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: <div id="{{=book['regname']}}_keywords">{{=book['key_words']}}</div></p>  
+            </div>
+        </div>
+        {{pass}}
+        <script  src="../static/js/books.js"></script>
+        {{ if github['found']: }}
+        <p>You are logged in to git hub as {{=github['user']}}. Logout?</p>
+        {{ else: }}
+        <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+        {{pass}}
+    </div>
+</div>
+  <div aria-hidden="false" aria-labelledby="myAddModalLabel" class="modal fade" id="cloneTextbook" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myAddModalLabel">Create Assignment</h4>
+        </div><!-- Modal Body -->
+        <div class="modal-body">
+          {{ if github['found']: }}
+          <form role="form">
+            <input type="text" id="githubUser" value="{{=github['user']}}">
+            <input type="text" id="baseBook" value="">
+            <div class="form-group">
+              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
+              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" placeholder="Enter Book Identifier" type="text">
+              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" placeholder="Enter Book Name" type="text">
+              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" placeholder="Enter Book Description" type="text">
+              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" placeholder="Enter Book Keywords" type="text">
+            </div>
+            <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
+          </form>
+          {{ else: }}
+          <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+          {{ pass }}
+        </div><!-- Modal Footer -->
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 {{block right_sidebar}}
 
