@@ -11,7 +11,7 @@
 # To build a container, this script walks through three steps:
 #
 # #.    The first step occurs when this script is invoked from the terminal/command line, outside Docker. It does some preparation, then invokes the Docker build.
-# #.    Next, Docker invokes this script from the ``../Dockerfile``. This script installs everything it can.
+# #.    Next, Docker invokes this script from the `../Dockerfile`. This script installs everything it can.
 # #.    Finally, Docker invokes this when the container is run. On the first run, this script completes container configuration, then runs the servers. After that, it only runs the servers, since the first-run configuration step is time-consuming.
 #
 # Since some files are built into the container in step 1 or run only once in step 2, simply editing a file in this repo may not update the file inside the container. Look through the source here to see which files this applies to.
@@ -103,7 +103,7 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, is_linux, mkdir, pushd, xqt
+from ci_utils import chdir, env, pushd, xqt
 
 # Third-party bootstrap
 # ---------------------
@@ -247,13 +247,8 @@ def build(
             change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
             print("Didn't find the runestone repo. Cloning...")
-            # Make this in a path that can eventually include web2py.
-            mkdir("web2py/applications", parents=True)
-            chdir("web2py/applications")
-            xqt(
-                "git clone https://github.com/RunestoneInteractive/RunestoneServer.git runestone"
-            )
-            chdir("runestone")
+            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
+            chdir("RunestoneServer")
         else:
             # Make sure we're in the root directory of the web2py repo.
             chdir(wd.parent)
@@ -298,8 +293,8 @@ def build(
                                 ports:
                                     -   "5900:5900"
                                 volumes:
-                                    -   ../../../RunestoneComponents/:/srv/RunestoneComponents
-                                    -   ../../../BookServer/:/srv/BookServer
+                                    -   ../RunestoneComponents/:/srv/RunestoneComponents
+                                    -   ../BookServer/:/srv/BookServer
                                     # To make Chrome happy.
                                     -   /dev/shm:/dev/shm
                         """
@@ -307,7 +302,7 @@ def build(
                 )
 
             # Clone these if they don't exist.
-            with pushd("../../.."):
+            with pushd(".."):
                 bks = Path("BookServer")
                 if not bks.exists():
                     print(
@@ -328,6 +323,7 @@ def build(
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
+            docker_sudo = True
 
         # Provide this script as a more convenient CLI.
         xqt(
@@ -335,7 +331,6 @@ def build(
         )
 
         # Run the Docker build.
-
         xqt(
             f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
         )

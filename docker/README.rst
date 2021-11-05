@@ -42,11 +42,11 @@ This will take a while. But once built, you will not need to rebuild the image u
 inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
 to make changes or rebuild the image.
 
-When this completes, **log out then back in** (reboot if using a VM) to update your group membership. Next, ``cd web2py/applications/runestone``.
+When this completes, **log out then back in** (reboot if using a VM) to update your group membership. Next, ``cd RunestoneServer``.
 
 .. note::
 
-    All future commands should be run in the ``web2py/applications/runestone`` directory unless instructions specify otherwise.
+    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
 
 .. note:: VirtualBox
 
@@ -287,8 +287,6 @@ complete rebuild, use:
     docker-tools build -- --no-cache
 
 
-
-
 Debugging
 *****************
 
@@ -296,7 +294,6 @@ Logger output can be useful if the server appears
 to be failing to start or is exhibiting other errors.
 
 Run ``docker-compose logs --tail 100 --follow``. This will give you the last 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
-
 
 
 Shelling Inside
@@ -318,22 +315,33 @@ in permissions on the host.
 To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` when working on topics related to the old Runestone server (the instructor interface) or ``cd /srv/BookServer; poetry shell`` for topics related to the (new) BookServer (the student-facing content).
 
 
+Ephemeral filesystem
+********************
+Data is stored on a Docker containerized application in two distinct places:
+
+-   Volumes, such as the Runestone Server path (`$RUNESTONE_PATH`), the BookServer path, and the Runestone Components path.
+-   Layers in a docker image -- which is everything not stored in the volumes listed above.
+
+**Anything written to layers after the Docker build process will be lost.** For example, if you shell into the container then ``apt install`` a package, these changes will be lost if the container is stopped, its configuration changed, etc. This is the nature of Docker. See the `docs <https://docs.docker.com/storage/>`__ for more information.
+
+
 SSH/VNC access
 *********************
 
 To install a VNC client on Linux, execute ``sudo apt install gvncviewer``. Next, run ``gvncviewer localhost:0 &``. This allows you to open a terminal in the container, see Chrome as Selenium tests run, etc.
 
-Execute ``sudo apt get openssh-server`` to install a SSH server. This allows easy access from VSCode, as well as usual SSH access.
+Execute ``sudo apt install openssh-server`` to install a SSH server. This allows easy access from VSCode, as well as usual SSH access.
 
 
 Maintenance Scripts
 **********************************
 
-TODO: All these scripts are out of date. They need to be ported to `docker_build_misc.py`.
+TODO: All these scripts are out of date. They need to be ported to `docker_tools_misc.py`.
 
 The ``scripts`` directory has a number of maintenance scripts that will run commands inside the runestone
 container to avoid having to shell into it first. In particular the ``dmanage`` script can be used to
 `perform a variety of tasks <../rsmanage/toctree.html>`_.
+
 
 Runestone Components / BookServer Development
 ***********************************************
@@ -396,6 +404,7 @@ You can run the unit tests in the container using the following command.
 The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports
 the ``-k`` option for you to run a single test.
 
+
 Testing the Entrypoint
 **********************************
 
@@ -407,6 +416,7 @@ Bring up the containers and then shell inside. Once inside, you can then issue c
 to test the entry point script - since the other containers were started
 with docker-compose everything in them is ready to go.
 
+
 Restarting uwsgi/web2py
 **********************************
 
@@ -415,6 +425,7 @@ changes to code in the ``modules`` folder you will need to restart web2py or els
 that a cached version of that code will be used. You can restart web2py easily by first
 shelling into the container and then running the command ``touch /srv/web2py/reload_server``
 
+
 File Permissions
 **********************************
 
@@ -422,6 +433,7 @@ File permissions can seem a little strange when you start this container on Linu
 nginx and uwsgi run as the ``www-data`` user. So you will suddenly find your files under RunestoneServer
 owned by ``www-data`` . The container's entry point script updates permissions to allow both you and the
 container enough privileges to do your work.
+
 
 Writing Your Own Book
 **********************************

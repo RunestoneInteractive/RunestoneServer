@@ -26,6 +26,7 @@ services:
     image: runestone/server
     restart: always
     volumes:
+      # This must agree with ``$RUNESTONE_PATH`` in the `Dockerfile`. There's no easy way to share this automatically.
       - ./:/srv/web2py/applications/runestone
     links:
       - db

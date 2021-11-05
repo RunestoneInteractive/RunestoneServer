@@ -27,7 +27,7 @@ from ci_utils import chdir, env, xqt
 # Globals
 # =======
 # The name of the container running the Runestone servers.
-RUNESTONE_CONTAINER_NAME = "runestone_runestone_1"
+RUNESTONE_CONTAINER_NAME = "runestoneserver_runestone_1"
 
 
 # Subcommands for the CLI
@@ -48,6 +48,10 @@ def bookserver(dev: bool) -> None:
     run_bookserver(dev)
 
 
+# .. _run_bookserver:
+#
+# run_bookserver
+# --------------
 # Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
 def run_bookserver(dev: bool) -> None:
     ensure_in_docker()
@@ -60,6 +64,7 @@ def run_bookserver(dev: bool) -> None:
         run_bookserver_venv + "--root /ns "
         "--error_path /tmp "
         "--gconfig /etc/gunicorn/gunicorn.conf.py "
+        # This must match with the `gunicorn socket <gunicorn socket>`.
         "--bind unix:/run/gunicorn.sock " + ("--reload " if dev else "") + "&",
         **run_bookserver_kwargs,
     )
