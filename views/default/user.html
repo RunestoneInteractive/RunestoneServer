@@ -289,17 +289,14 @@
                                         <td class="w2p_fl"><label>Verify:</label></td>
                                         <td class="w2p_fw">
                                             <div id="recaptcha">
-                                                <script type="text/css"><!--
-                                                    var RecaptchaOptions = {theme: 'blackglass'};
-                                                //-->
-                                                </script>
-                                                <script src="http://www.google.com/recaptcha/api/challenge?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD" type="text/javascript"></script>
-                                                <noscript>
-                                                    <iframe frameborder="0" height="300"
-                                                            src="http://www.google.com/recaptcha/api/noscript?k=6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD"
-                                                            width="500"></iframe>
-                                                    <br/><input name="recaptcha_response_field" type="hidden" value="manual_challenge"/>
-                                                </noscript>
+                                                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                                <form action="?" method="POST">
+                                                    <div class="g-recaptcha" data-sitekey="6LdiuxodAAAAAL8EqAlBnVsY91SJyFK-hKCITDM8"></div>
+                                                    <br/>
+                                                    <input type="submit" value="Submit">
+                                                  </form>
+                                              
+
                                             </div>
                                         </td>
                                         <td class="w2p_fc"></td>

@@ -123,21 +123,6 @@ current.db = db
 current.settings = settings
 current.auth = auth
 
-if settings.enable_captchas:
-    ## Enable captcha's :-(
-    from gluon.tools import Recaptcha
-
-    auth.settings.captcha = Recaptcha(
-        request,
-        "6Lfb_t4SAAAAAB9pG_o1CwrMB40YPsdBsD8GsvlD",
-        "6Lfb_t4SAAAAAGvAHwmkahQ6s44478AL5Cf-fI-x",
-        options="theme:'blackglass'",
-    )
-
-auth.settings.login_captcha = False
-auth.settings.retrieve_password_captcha = False
-auth.settings.retrieve_username_captcha = False
-
 # Set up for `two-factor authentication <http://web2py.com/books/default/chapter/29/09/access-control#Two-step-verification>`_.
 # auth.settings.auth_two_factor_enabled = True
 # auth.settings.two_factor_methods = [lambda user, auth_two_factor: 'password_here']
