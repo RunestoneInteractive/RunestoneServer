@@ -93,13 +93,13 @@ $(document).on("click", ".editButton", function () {
         {{ for book in book_list: }}
         <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
           <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
-          <div class="book_title"> 
+          <div class="book_title_drafts"> 
             <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
             <a href="{{=book['url']}}"> 
               <span class="link1"></span> 
             </a>
           </div>
-          <div class="book_descript">
+          <div class="book_descript_drafts">
             <b>Description:</b> 
             <div id="{{=book['regname']}}_description">{{=book['course_description']}}</div> 
             To register for this book use the code <code>{{=book['regname']}}</code> <br>
@@ -115,6 +115,11 @@ $(document).on("click", ".editButton", function () {
     </div>
     <script  src="../static/js/books.js"></script>
     <script  src="../static/js/designer.js"></script>
+    <div style="display: inline-block; vertical-align: top;">
+      <a href="https://github.com/">
+        <img alt="Github Logo" src="../static/images/GitHub.png" >
+    </a>
+    </div>
     {{ if github['found']: }}
     <p>You are logged in to git hub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a></p>
     {{ else: }}
