@@ -13,6 +13,7 @@
 # ----------------
 from pathlib import Path
 import sys
+import subprocess
 from typing import Optional
 
 # Third-party
@@ -27,8 +28,8 @@ from ci_utils import chdir, env, xqt
 # Globals
 # =======
 # The name of the container running the Runestone servers.
-RUNESTONE_CONTAINER_NAME = "runestoneserver_runestone_1"
-
+res = subprocess.run('docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"', shell=True, capture_output=True, text=True)
+RUNESTONE_CONTAINER_NAME = res.stdout.strip()
 
 # Subcommands for the CLI
 # ========================
@@ -96,6 +97,9 @@ def shell() -> None:
     if in_docker():
         print("Already in Docker. Doing nothing.")
         return
+    if RUNESTONE_CONTAINER_NAME == "":
+        click.echo("Error - Unable to find Runestone Server Container")
+        return
     xqt(f"docker exec -it {RUNESTONE_CONTAINER_NAME} bash")
 
 
@@ -140,6 +144,10 @@ def in_docker() -> bool:
 def ensure_in_docker() -> None:
     if in_docker():
         return
+    if RUNESTONE_CONTAINER_NAME == "":
+        click.echo("Error - Unable to find Runestone Server Container")
+        sys.exit(1)
+
     # Some subtleties:
     #
     # #.    Single-quote each argument before passing it.

@@ -36,6 +36,7 @@
 # ----------------
 import os
 from pathlib import Path
+import platform
 import re
 import subprocess
 import sys
@@ -380,12 +381,17 @@ def build(
     # Install required packages
     # ^^^^^^^^^^^^^^^^^^^^^^^^^
     # Add in Chrome repo. Copied from https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
+    # Unless we are on an ARM64 processor, then we will fall back to using chromium
     xqt(
         "curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -",
     )
-    Path("/etc/apt/sources.list.d/google-chrome.list").write_text(
-        "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main"
-    )
+    if platform.uname().machine == "x86_64":
+        Path("/etc/apt/sources.list.d/google-chrome.list").write_text(
+            "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main"
+        )
+        browser = "google-chrome-stable"
+    else:
+        browser = "chromium"
     # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
     xqt(
@@ -432,7 +438,7 @@ def build(
     if dev:
         xqt(
             # Tests use `html5validator <https://github.com/svenkreiss/html5validator>`_, which requires the JDK.
-            "eatmydata apt-get install -y --no-install-recommends openjdk-11-jre-headless git xvfb x11-utils google-chrome-stable lsof emacs-nox",
+            f"eatmydata apt-get install -y --no-install-recommends openjdk-11-jre-headless git xvfb x11-utils {browser} lsof emacs-nox",
             # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
             "wget --no-verbose https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip",
             "unzip chromedriver_linux64.zip",
