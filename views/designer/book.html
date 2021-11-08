@@ -12,34 +12,33 @@
 <script type="text/javascript">
 $(document).on("click", ".cloneButton", function () {
      var bookToBeCloned = $(this).parent()[0].id;
+     $("#changeType")[0].value = "create";
      $("#newBookIdentifier")[0].value = bookToBeCloned
      $("#newGithubRepo")[0].value = bookToBeCloned
      $("#newBookName")[0].value = $("#"+bookToBeCloned+"_title")[0].innerText
      $("#newBookDescription")[0].value = $("#"+bookToBeCloned+"_description")[0].innerText
      $("#newBookKeywords")[0].value = $("#"+bookToBeCloned+"_keywords")[0].innerText
      $("#baseBook")[0].value = bookToBeCloned;
+     //$("#baseBookInfo")[0].style.display = "none"
+     $("#resetCheckbox")[0].style.display = "none"
+     $("#resetCheckboxLabel")[0].style.display = "none"
+     $("#deleteButton")[0].style.display = "none"
 });
-    // function validateForm() {
-    //     var bookname = document.forms["mainform"]["bookname"].value;
-    //     var basebook = document.forms["mainform"]["basebook"].value;
-
-    //     if (bookname == "" || bookname.indexOf(" ") !== -1 || bookname.indexOf("/") > -1) {
-    //         alert('Error:  Your book name may not contain spaces or /')
-    //         return false;
-    //     }
-
-    //     if (!/^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(bookname)) {
-    //         alert("Error: Your book name can only contain ASCII letters digits and - or _");
-    //         return false;
-    //     }
-
-    //     if (basebook == "") {
-    //         alert('Error: You must select a base book to fork')
-    //         return false;
-    //     }
-
-    //     return true
-    // }
+$(document).on("click", ".editButton", function () {
+    // // //  var bookToBeEdited = $(this).parent()[0].id;
+    $("#changeType")[0].value = "edit";
+    // // //  $("#newBookIdentifier")[0].value = bookToBeEdited
+    // // //  $("#oldGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+    // // //  $("#newGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+    // // //  $("#newBookName")[0].value = $("#"+bookToBeEdited+"_title")[0].innerText
+    // // //  $("#newBookDescription")[0].value = $("#"+bookToBeEdited+"_description")[0].innerText
+    // // //  $("#newBookKeywords")[0].value = $("#"+bookToBeEdited+"_keywords")[0].innerText
+    // // //  $("#baseBook")[0].value = $("#"+bookToBeEdited+"_base")[0].innerText
+     //$("#baseBookInfo")[0].style.display = "block"
+     $("#resetCheckbox")[0].style.display = "block"
+     $("#resetCheckboxLabel")[0].style.display = "block"
+     $("#deleteButton")[0].style.display = "block"
+});
 </script>
 
 <div class="container">
@@ -50,7 +49,7 @@ $(document).on("click", ".cloneButton", function () {
         <b style="font-size: 25px;">Computer Science Textbooks:</b>  
         {{ for book in book_list: }}
         <div id="{{=book['regname']}}" class='library_entry'>
-            <button id="{{=book['regname']}}_button" class="btn cloneButton" data-target="#cloneTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
+            <button id="{{=book['regname']}}_button" class="btn cloneButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
             <div class="book_title"> <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
                 <a href="{{=book['url']}}"> 
                 <span class="link1"></span> 
@@ -61,14 +60,16 @@ $(document).on("click", ".cloneButton", function () {
         </div>
         {{pass}}
         <script  src="../static/js/books.js"></script>
+        <script  src="../static/js/designer.js"></script>
         {{ if github['found']: }}
-        <p>You are logged in to git hub as {{=github['user']}}. Logout?</p>
+        <p>You are logged in to git hub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a></p>
         {{ else: }}
-        <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+        <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
         {{pass}}
+        <button id="test_button" class="btn editButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Edit</button>
     </div>
 </div>
-  <div aria-hidden="false" aria-labelledby="myAddModalLabel" class="modal fade" id="cloneTextbook" role="dialog" tabindex="-1">
+  <div aria-hidden="false" aria-labelledby="myAddModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
@@ -78,20 +79,26 @@ $(document).on("click", ".cloneButton", function () {
         </div><!-- Modal Body -->
         <div class="modal-body">
           {{ if github['found']: }}
-          <form role="form">
-            <input type="text" id="githubUser" value="{{=github['user']}}">
-            <input type="text" id="baseBook" value="">
+          <form>
+            <input type="text"  id="githubUser" name="githubUser" value="{{=github['user']}}">
+            <input type="text"  id="baseBook" name="baseBook" value="">
+            <input type="text"  id="changeType" name="changeType" value="">
+            <input type="text"  id="oldGithubRepo" name="oldGithubRepo" value="">
             <div class="form-group">
-              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
-              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" placeholder="Enter Book Identifier" type="text">
-              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" placeholder="Enter Book Name" type="text">
-              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" placeholder="Enter Book Description" type="text">
-              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" placeholder="Enter Book Keywords" type="text">
+              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" name="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
+              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" name="newBookIdentifier" placeholder="Enter Book Identifier" type="text">
+              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" name="newBookName" placeholder="Enter Book Name" type="text">
+              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" name="newBookDescription" placeholder="Enter Book Description" type="text">
+              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" name="newBookKeywords" placeholder="Enter Book Keywords" type="text">
             </div>
-            <input class="btn btn-default" data-dismiss="modal" onclick="createAssignment(this.form)" type="button" value="Create">
+            <!-- <input class="btn btn-default" data-dismiss="modal" onclick="editCustomBook(this.form)" type="button" value="Create"> -->
+            <input type="checkbox" id="resetCheckbox" name="resetCheckbox" value="yes">
+            <label for="resetCheckbox" id="resetCheckboxLabel"> Reset repository to parent</label>
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Submit" id ="submitButton" onclick="validateForm2(this.form);">
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton" onclick='$("#changeType")[0].value = "delete"; validateForm2(this.form);'>
           </form>
           {{ else: }}
-          <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+          <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
           {{ pass }}
         </div><!-- Modal Footer -->
         <div class="modal-footer">
@@ -100,7 +107,6 @@ $(document).on("click", ".cloneButton", function () {
       </div>
     </div>
   </div>
-
 
 {{block right_sidebar}}
 
