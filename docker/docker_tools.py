@@ -176,6 +176,11 @@ def gui():
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
 @click.option("--arm/--no-arm", default=False, help="Install the ARMv7 toolchain.")
 @click.option(
+    "--author/--no-author",
+    default=False,
+    help="Install the author's toolkit -- the CodeChat System",
+)
+@click.option(
     "--dev/--no-dev",
     default=False,
     help="Install tools needed for development with the Runestone.",
@@ -188,7 +193,13 @@ def gui():
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Instal LaTeX and related tools.")
 def build(
-    arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust: bool
+    arm: bool,
+    author: bool,
+    dev: bool,
+    passthrough: Tuple,
+    pic24: bool,
+    tex: bool,
+    rust: bool,
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
@@ -277,7 +288,7 @@ def build(
                 )
             )
 
-        if dev:
+        if author or dev:
             # For development, include extra volumes.
             dc = Path("docker-compose.override.yml")
             if not dc.is_file():
@@ -292,7 +303,10 @@ def build(
                                 environment:
                                     DISPLAY: ${DISPLAY}
                                 ports:
+                                    # For VNC.
                                     -   "5900:5900"
+                                    # For the CodeChat System (author toolkit)
+                                    -   "27377-27378:27377-27378"
                                 volumes:
                                     -   ../RunestoneComponents/:/srv/RunestoneComponents
                                     -   ../BookServer/:/srv/BookServer
@@ -354,7 +368,7 @@ def build(
     # Step 3 - startup script for container.
     if phase == "2":
         try:
-            _build_phase2(arm, dev, pic24, tex, rust)
+            _build_phase2(arm, author, dev, pic24, tex, rust)
             print("Success! The Runestone servers are running.")
         except Exception:
             print(f"Failed to start the Runestone servers:")
@@ -548,6 +562,9 @@ def build(
         "cp scripts/routes.py $WEB2PY_PATH/routes.py",
     )
 
+    if author:
+        xqt(f"eatmydata {sys.executable} -m pip install CodeChat_Server")
+
     # Set up config files
     # ^^^^^^^^^^^^^^^^^^^
     xqt(
@@ -593,7 +610,9 @@ def build(
 
 # Step 3: Final installs / run servers
 # ------------------------------------
-def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
+def _build_phase2(
+    arm: bool, author: bool, dev: bool, pic24: bool, tex: bool, rust: bool
+):
     # Check the environment.
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."
     assert env.RUNESTONE_HOST, "Please export RUNESTONE_HOST."

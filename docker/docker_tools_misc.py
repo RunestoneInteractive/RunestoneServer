@@ -28,7 +28,12 @@ from ci_utils import chdir, env, xqt
 # Globals
 # =======
 # The name of the container running the Runestone servers.
-res = subprocess.run('docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"', shell=True, capture_output=True, text=True)
+res = subprocess.run(
+    'docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"',
+    shell=True,
+    capture_output=True,
+    text=True,
+)
 RUNESTONE_CONTAINER_NAME = res.stdout.strip()
 
 # Subcommands for the CLI
