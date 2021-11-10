@@ -1,0 +1,200 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,True}}
+{{extend 'layout.html'}}
+<link rel="stylesheet" href="/runestone/static/css/index.css">
+<style>
+    /* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+.row {
+    background-color:rgb(238, 238, 238);
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.button {
+  font: bold 15px Arial;
+  text-decoration: none;
+  background-color:#116cc2;
+  color: white;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  text-align: center;
+  border-radius: 3px;
+  padding: 5px
+}
+</style>
+
+<link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+
+<script type="text/javascript">
+$(document).on("click", ".cloneButton", function () {
+  //var bookToBeCloned = $(this).parent()[0].id;
+  //var bookToBeCloned = this.id.replace("_button","");
+  var bookToBeCloned = this.id.replace(new RegExp("_button" + '$'),"");
+  $("#changeType")[0].value = "create";
+  $("#newBookIdentifier")[0].value = bookToBeCloned
+  $("#newGithubRepo")[0].value = bookToBeCloned
+  $("#newBookName")[0].value = $("#"+bookToBeCloned+"_title")[0].innerText
+  $("#newBookDescription")[0].value = $("#"+bookToBeCloned+"_description")[0].innerText
+  $("#newBookKeywords")[0].value = $("#"+bookToBeCloned+"_keywords")[0].innerText
+  $("#baseBook")[0].value = bookToBeCloned;
+  //$("#baseBookInfo")[0].style.display = "none"
+  $("#resetCheckbox")[0].style.display = "none"
+  $("#resetCheckboxLabel")[0].style.display = "none"
+  $("#deleteButton")[0].style.display = "none"
+});
+$(document).on("click", ".editButton", function () {
+  var bookToBeEdited = this.id.replace(new RegExp("_button" + '$'),"");
+  $("#changeType")[0].value = "edit";
+  // TODO: associate edit buttons with custom textbooks
+  // // //  $("#newBookIdentifier")[0].value = bookToBeEdited
+  // // //  $("#oldGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+  // // //  $("#newGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+  // // //  $("#newBookName")[0].value = $("#"+bookToBeEdited+"_title")[0].innerText
+  // // //  $("#newBookDescription")[0].value = $("#"+bookToBeEdited+"_description")[0].innerText
+  // // //  $("#newBookKeywords")[0].value = $("#"+bookToBeEdited+"_keywords")[0].innerText
+  // // //  $("#baseBook")[0].value = $("#"+bookToBeEdited+"_base")[0].innerText
+  //$("#baseBookInfo")[0].style.display = "block"
+  $("#resetCheckbox")[0].style.display = "block"
+  $("#resetCheckboxLabel")[0].style.display = "block"
+  $("#deleteButton")[0].style.display = "block"
+});
+</script>
+<script  src="../static/js/designer.js"></script>
+<div class="container">
+  <div class="col-md-8 col-md-offset-2">
+    <h2>New Book Registery</h2>
+    <p>
+        There are many free and open source textbooks available on Runestone.Academy. 
+        However, sometimes these books don't match the content taught in certain classes. 
+        This page can be used to create custom textbooks to fit your classes needs.
+        To start, log into Github. 
+        Then, find the textbook you would like and use the clone button which forks the book into your Github.
+        You can use the left hand panel to view the book in its current state and publish it.
+    </p>
+    <div class="row">
+      <div class="column">
+        <script  src="../static/js/books.js"></script>
+        <div class="searchbar">
+          <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+        </div>
+        <h4>Available Textbooks</h4>
+        {{ for book in book_list: }}
+        <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
+        <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
+          <div class="book_title_drafts"> 
+            <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
+            <a href="{{=book['url']}}"> 
+              <span class="link1"></span> 
+            </a>
+          </div>
+          <div class="book_descript_drafts">
+            <b>Description:</b> 
+            <div id="{{=book['regname']}}_description">{{=book['course_description']}}</div> 
+            To register for this book use the code <code>{{=book['regname']}}</code> <br>
+            <p style="display: none;"> keywords: <div id="{{=book['regname']}}_keywords">{{=book['key_words']}}</div></p>
+          </div>
+        </div>
+        {{pass}}
+      </div>
+      <div class="column">
+        <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
+        <!-- Use books from book_list rn but change to be custom books -->
+        {{ for book in book_list: }}
+        <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
+        <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
+          <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
+            <div class="draft_title book_title_drafts"> {{=book['regname']}}
+              <a href="{{=book['url']}}"> 
+                <span class="link1"></span> 
+              </a>
+            </div>
+            <div class="book_descript_drafts" >
+              <b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> 
+              <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+            </div>
+          </div>
+          <div style="margin-top: 5px;">
+            <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
+              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
+              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
+              <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        {{pass}}
+      </div>
+    </div>
+    <div style="display: inline-block; vertical-align: top;">
+      <a href="https://github.com/">
+        <img alt="Github Logo" src="../static/images/GitHub.png" >
+    </a>
+    </div>
+    {{ if github['found']: }}
+    <p>You are logged in to git hub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a></p>
+    {{ else: }}
+    <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+    {{pass}}
+    <button id="test_button" class="btn editButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Edit</button>
+  </div>
+</div>
+  <div aria-hidden="false" aria-labelledby="editBookModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="editBookModalLabel">Create Assignment</h4>
+        </div><!-- Modal Body -->
+        <div class="modal-body">
+          {{ if github['found']: }}
+          <form>
+            <input type="text"  id="githubUser" name="githubUser" value="{{=github['user']}}">
+            <input type="text"  id="baseBook" name="baseBook" value="">
+            <input type="text"  id="changeType" name="changeType" value="">
+            <input type="text"  id="oldGithubRepo" name="oldGithubRepo" value="">
+            <div class="form-group">
+              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" name="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
+              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" name="newBookIdentifier" placeholder="Enter Book Identifier" type="text">
+              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" name="newBookName" placeholder="Enter Book Name" type="text">
+              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" name="newBookDescription" placeholder="Enter Book Description" type="text">
+              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" name="newBookKeywords" placeholder="Enter Book Keywords" type="text">
+            </div>
+            <!-- <input class="btn btn-default" data-dismiss="modal" onclick="editCustomBook(this.form)" type="button" value="Create"> -->
+            <input type="checkbox" id="resetCheckbox" name="resetCheckbox" value="yes">
+            <label for="resetCheckbox" id="resetCheckboxLabel"> Reset repository to parent</label>
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Submit" id ="submitButton" onclick="validateForm2(this.form);">
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton" onclick='$("#changeType")[0].value = "delete"; validateForm2(this.form);'>
+          </form>
+          {{ else: }}
+          <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+          {{ pass }}
+        </div><!-- Modal Footer -->
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{{block right_sidebar}}
+
+{{end}}

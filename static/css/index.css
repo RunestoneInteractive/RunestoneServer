@@ -1,89 +1,161 @@
 /* Styling Runestone Library */
-     .book_title{
-        font-size: 5em;
-        background-color: #124c63;
-        color: rgb(252, 240, 240);
-        width: 45em;
-        height: 7mm;
-        line-height: 1.8em;
-        text-align: left;
-        padding-left: 5px;
-        border: 1px solid rgb(36, 35, 35);
-        overflow-wrap: break-word;
-        font-size: 1em;
-        font-family: Helvetica, Arial, sans-serif;
-        cursor: pointer;
-        border-radius:5px 5px 0px 0px;
-        position: relative;
-    } 
+.book_title{
+    font-size: 5em;
+    background-color: #124c63;
+    color: rgb(252, 240, 240);
+    width: 45em;
+    height: 7mm;
+    line-height: 1.8em;
+    text-align: left;
+    padding-left: 5px;
+    border: 1px solid rgb(36, 35, 35);
+    overflow-wrap: break-word;
+    font-size: 1em;
+    font-family: Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    border-radius:5px 5px 0px 0px;
+    position: relative;
+} 
 
-    .book_title:hover{
-        background-color:#247697;
-    }
+.book_title:hover{
+    background-color:#247697;
+}
 
-    .book_descript{
-        font-size: 5em;
-        background-color: #f3f3f3;
-        color: rgb(3, 2, 2);
-        width: 45em;
-        height: 32px;
-        line-height: 3em;
-        text-align: left;
-        border: 1px solid rgb(36, 35, 35);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: unset;
-        font-size: 1em;
-        font-family: Helvetica, Arial, sans-serif;
-        /* cursor: pointer; */
-        position: relative;
-        border-radius:0px 0px 5px 5px;
-        padding: 5px;
+.book_descript{
+    font-size: 5em;
+    background-color: #f3f3f3;
+    color: rgb(3, 2, 2);
+    width: 45em;
+    height: 32px;
+    line-height: 3em;
+    text-align: left;
+    border: 1px solid rgb(36, 35, 35);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: unset;
+    font-size: 1em;
+    font-family: Helvetica, Arial, sans-serif;
+    /* cursor: pointer; */
+    position: relative;
+    border-radius:0px 0px 5px 5px;
+    padding: 5px;
 
-    } 
+} 
 
-    .book_descript:hover{
-        height:unset;     
-    }
+.book_descript:hover{
+    height:unset;     
+}
 
-    .link1 {
-    position: absolute;
+.link1 {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+z-index: 1;
+}
+
+.searchbar{
+    background-image:url("../_images/searchicon2.jpg");
+    background-position:left;
+    background-repeat: no-repeat;
+    background-size: 15mm;
+    background-color:transparent;
+    border-image-width: 3mm;
+    width: 100%; 
+    font-size: 25px; 
+    padding: 0px 0px 0px 45px; 
+    margin: 1px;
+    border: 0.1px solid black; 
+    border-radius: 20px 20px 20px 20px;
+    border-color: black;  
+}
+
+input[type=text]{
     width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    }
+    border:none;
+    background-color:transparent;
+    border-radius:  0px 20px 20px 0px;
+    border-color: rgb(14, 11, 11); 
+}
 
-    .searchbar{
-        background-image:url("../_images/searchicon2.jpg");
-        background-position:left;
-        background-repeat: no-repeat;
-        background-size: 15mm;
-        background-color:transparent;
-        border-image-width: 3mm;
-        width: 100%; 
-        font-size: 25px; 
-        padding: 0px 0px 0px 45px; 
-        margin: 1px;
-        border: 0.1px solid black; 
-        border-radius: 20px 20px 20px 20px;
-        border-color: black;  
-    }
 
-    input[type=text]{
-        width: 100%;
-        border:none;
-        background-color:transparent;
-        border-radius:  0px 20px 20px 0px;
-        border-color: rgb(14, 11, 11); 
-    }
-    
+input {
+    outline-style:none;   
+}
 
-    input {
-        outline-style:none;   
-    }
+.library_entry {
+    margin-bottom: 5pt;
+}
+.book_title_drafts{
+    font-size: 5em;
+    background-color: #124c63;
+    color: rgb(252, 240, 240);
+    width: 20em;
+    height: 7mm;
+    line-height: 1.8em;
+    text-align: left;
+    padding-left: 5px;
+    border: 1px solid rgb(36, 35, 35);
+    overflow-wrap: break-word;
+    font-size: 1em;
+    font-family: Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    border-radius:5px 5px 0px 0px;
+    position: relative;
+} 
+.book_title_drafts:hover{
+    background-color:#247697;
+}
 
-    .library_entry {
-        margin-bottom: 5pt;
-    }
+.book_descript_drafts{
+    font-size: 5em;
+    background-color: #f3f3f3;
+    color: rgb(3, 2, 2);
+    width: 20em;
+    height: 32px;
+    line-height: 3em;
+    text-align: left;
+    border: 1px solid rgb(36, 35, 35);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: unset;
+    font-size: 1em;
+    font-family: Helvetica, Arial, sans-serif;
+    /* cursor: pointer; */
+    position: relative;
+    border-radius:0px 0px 5px 5px;
+    padding: 5px;
+
+}
+.book_descript_drafts:hover{
+    height:unset;     
+}
+/* .github_button{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+} */
+
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+  }
+  
+  .row {
+      background-color:rgb(238, 238, 238);
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
