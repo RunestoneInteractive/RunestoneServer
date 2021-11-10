@@ -60,6 +60,7 @@ $(document).on("click", ".cloneButton", function () {
 $(document).on("click", ".editButton", function () {
   var bookToBeEdited = this.id.replace(new RegExp("_button" + '$'),"");
   $("#changeType")[0].value = "edit";
+  // TODO: associate edit buttons with custom textbooks
   // // //  $("#newBookIdentifier")[0].value = bookToBeEdited
   // // //  $("#oldGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
   // // //  $("#newGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
