@@ -789,6 +789,9 @@ def _build_phase2(
             xqt(
                 'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
             )
+        else:
+            # Renew the certificate in case it's near its expiration date. Per the `certbot docs <https://certbot.eff.org/docs/using.html#renewing-certificates>`_, ``renew`` supports automated use, renewing only when a certificate is near expiration.
+            xqt("certbot renew")
         print("You should be good for https")
     else:
         print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
