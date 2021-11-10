@@ -6,3 +6,4 @@
 **/altair*.json
 **/__pycache__
 books
+docker/letsencrypt
