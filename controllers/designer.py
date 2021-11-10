@@ -5,6 +5,7 @@ import random
 import datetime
 import logging
 
+import requests, json, time, re, importlib
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -35,7 +36,6 @@ def logout_github():
     redirect(URL("designer", "book"))
 
 def verify_github_login(desiredUser, retry = True):
-    import requests
     if 'github_oauth_token' in session.auth.user.__dict__.keys():
         user = requests.get('https://api.github.com/user', headers = {'Authorization':'token '+session.auth.user.__dict__['github_oauth_token']})
         if user.status_code != 200 and retry:
@@ -62,7 +62,6 @@ def verify_github_login(desiredUser, retry = True):
 
 def github_book_repo(account, repo, oldb, renameval= None, delete=False, reset=False, create =False):
     ret_dict= {"changed":False, "failed":True}
-    import requests, json
     auth=(session.auth.user.__dict__['github_user'], session.auth.user.__dict__['github_oauth_token'])
     headers = {'Accept': 'application/vnd.github.v3+json'}
     base_url='https://api.github.com/'
@@ -100,7 +99,6 @@ def github_book_repo(account, repo, oldb, renameval= None, delete=False, reset=F
         fork = requests.post(fork_url, auth= auth, headers= headers)
         print(f"fork sc {fork.status_code}")
         retries = 30
-        import time
         while requests.get(base_url+'repos/'+account+'/'+oldb, auth=auth,headers=headers).status_code != 200 and retries > 0:
             time.sleep(1)
             retries-=1
@@ -127,7 +125,6 @@ def github_book_repo(account, repo, oldb, renameval= None, delete=False, reset=F
 
 @auth.requires_login()
 def book_edit():
-    import json, re
     # Verify post data is sane
     for id in ["newBookIdentifier","baseBook","newGithubRepo","githubUser"]:
         if request.vars[id] == "" or " " in request.vars[id] or "/" in request.vars[id]:
@@ -184,7 +181,6 @@ def book_edit():
 
 @auth.requires_login()
 def callback():
-    import requests
     if 'code' in request.vars.keys():
         oauth_url = 'https://github.com/login/oauth/access_token'
         oauth_data = {"client_id":"1d31e6dc6ff88f189241", "client_secret":"1ac9570e0d63b075382825454ca3b6e9d7149e39","code": request.vars.code}
@@ -220,14 +216,14 @@ def book():
     book_list = [book for book in book_list if ".git" not in book]
     res = []
     for book in sorted(book_list):
-        # try:
-        #     # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
-        #     config = importlib.import_module(
-        #         "applications.{}.books.{}.conf".format(request.application, book)
-        #     )
-        # except Exception as e:
-        #     logger.error("Error in book list: {}".format(e))
-        #     continue
+        try:
+            # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
+            config = importlib.import_module(
+                "applications.{}.books.{}.conf".format(request.application, book)
+            )
+        except Exception as e:
+            logger.error("Error in book list: {}".format(e))
+            continue
         book_info = {}
         book_info.update(course_description="")
         book_info.update(key_words="")

@@ -42,36 +42,38 @@
 
 <script type="text/javascript">
 $(document).on("click", ".cloneButton", function () {
-     var bookToBeCloned = $(this).parent()[0].id;
-     $("#changeType")[0].value = "create";
-     $("#newBookIdentifier")[0].value = bookToBeCloned
-     $("#newGithubRepo")[0].value = bookToBeCloned
-     $("#newBookName")[0].value = $("#"+bookToBeCloned+"_title")[0].innerText
-     $("#newBookDescription")[0].value = $("#"+bookToBeCloned+"_description")[0].innerText
-     $("#newBookKeywords")[0].value = $("#"+bookToBeCloned+"_keywords")[0].innerText
-     $("#baseBook")[0].value = bookToBeCloned;
-     //$("#baseBookInfo")[0].style.display = "none"
-     $("#resetCheckbox")[0].style.display = "none"
-     $("#resetCheckboxLabel")[0].style.display = "none"
-     $("#deleteButton")[0].style.display = "none"
+  //var bookToBeCloned = $(this).parent()[0].id;
+  //var bookToBeCloned = this.id.replace("_button","");
+  var bookToBeCloned = this.id.replace(new RegExp("_button" + '$'),"");
+  $("#changeType")[0].value = "create";
+  $("#newBookIdentifier")[0].value = bookToBeCloned
+  $("#newGithubRepo")[0].value = bookToBeCloned
+  $("#newBookName")[0].value = $("#"+bookToBeCloned+"_title")[0].innerText
+  $("#newBookDescription")[0].value = $("#"+bookToBeCloned+"_description")[0].innerText
+  $("#newBookKeywords")[0].value = $("#"+bookToBeCloned+"_keywords")[0].innerText
+  $("#baseBook")[0].value = bookToBeCloned;
+  //$("#baseBookInfo")[0].style.display = "none"
+  $("#resetCheckbox")[0].style.display = "none"
+  $("#resetCheckboxLabel")[0].style.display = "none"
+  $("#deleteButton")[0].style.display = "none"
 });
 $(document).on("click", ".editButton", function () {
-    // // //  var bookToBeEdited = $(this).parent()[0].id;
-    $("#changeType")[0].value = "edit";
-    // // //  $("#newBookIdentifier")[0].value = bookToBeEdited
-    // // //  $("#oldGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
-    // // //  $("#newGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
-    // // //  $("#newBookName")[0].value = $("#"+bookToBeEdited+"_title")[0].innerText
-    // // //  $("#newBookDescription")[0].value = $("#"+bookToBeEdited+"_description")[0].innerText
-    // // //  $("#newBookKeywords")[0].value = $("#"+bookToBeEdited+"_keywords")[0].innerText
-    // // //  $("#baseBook")[0].value = $("#"+bookToBeEdited+"_base")[0].innerText
-     //$("#baseBookInfo")[0].style.display = "block"
-     $("#resetCheckbox")[0].style.display = "block"
-     $("#resetCheckboxLabel")[0].style.display = "block"
-     $("#deleteButton")[0].style.display = "block"
+  var bookToBeEdited = this.id.replace(new RegExp("_button" + '$'),"");
+  $("#changeType")[0].value = "edit";
+  // // //  $("#newBookIdentifier")[0].value = bookToBeEdited
+  // // //  $("#oldGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+  // // //  $("#newGithubRepo")[0].value = $("#"+bookToBeEdited+"_repo")[0].innerText
+  // // //  $("#newBookName")[0].value = $("#"+bookToBeEdited+"_title")[0].innerText
+  // // //  $("#newBookDescription")[0].value = $("#"+bookToBeEdited+"_description")[0].innerText
+  // // //  $("#newBookKeywords")[0].value = $("#"+bookToBeEdited+"_keywords")[0].innerText
+  // // //  $("#baseBook")[0].value = $("#"+bookToBeEdited+"_base")[0].innerText
+  //$("#baseBookInfo")[0].style.display = "block"
+  $("#resetCheckbox")[0].style.display = "block"
+  $("#resetCheckboxLabel")[0].style.display = "block"
+  $("#deleteButton")[0].style.display = "block"
 });
 </script>
-
+<script  src="../static/js/designer.js"></script>
 <div class="container">
   <div class="col-md-8 col-md-offset-2">
     <h2>New Book Registery</h2>
@@ -85,14 +87,14 @@ $(document).on("click", ".editButton", function () {
     </p>
     <div class="row">
       <div class="column">
-        <h4>Available Textbooks</h4>
+        <script  src="../static/js/books.js"></script>
         <div class="searchbar">
           <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
-        <b style="font-size: 25px;">Computer Science Textbooks:</b>  
+        <h4>Available Textbooks</h4>
         {{ for book in book_list: }}
+        <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
         <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
-          <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
           <div class="book_title_drafts"> 
             <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
             <a href="{{=book['url']}}"> 
@@ -109,12 +111,37 @@ $(document).on("click", ".editButton", function () {
         {{pass}}
       </div>
       <div class="column">
-        <h4>My Custom Textbooks</h4>
-        <p>Custom books will appear here once cloned</p>
+        <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
+        <!-- Use books from book_list rn but change to be custom books -->
+        {{ for book in book_list: }}
+        <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
+        <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
+          <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
+            <div class="draft_title book_title_drafts"> {{=book['regname']}}
+              <a href="{{=book['url']}}"> 
+                <span class="link1"></span> 
+              </a>
+            </div>
+            <div class="book_descript_drafts" >
+              <b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> 
+              <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+            </div>
+          </div>
+          <div style="margin-top: 5px;">
+            <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
+              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
+              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
+              <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        {{pass}}
       </div>
     </div>
-    <script  src="../static/js/books.js"></script>
-    <script  src="../static/js/designer.js"></script>
     <div style="display: inline-block; vertical-align: top;">
       <a href="https://github.com/">
         <img alt="Github Logo" src="../static/images/GitHub.png" >
@@ -128,13 +155,13 @@ $(document).on("click", ".editButton", function () {
     <button id="test_button" class="btn editButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Edit</button>
   </div>
 </div>
-  <div aria-hidden="false" aria-labelledby="myAddModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1">
+  <div aria-hidden="false" aria-labelledby="editBookModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
           <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myAddModalLabel">Create Assignment</h4>
+          <h4 class="modal-title" id="editBookModalLabel">Create Assignment</h4>
         </div><!-- Modal Body -->
         <div class="modal-body">
           {{ if github['found']: }}
