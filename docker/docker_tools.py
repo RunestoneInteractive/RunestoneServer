@@ -176,6 +176,11 @@ def gui():
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
 @click.option("--arm/--no-arm", default=False, help="Install the ARMv7 toolchain.")
 @click.option(
+    "--author/--no-author",
+    default=False,
+    help="Install the author's toolkit -- the CodeChat System",
+)
+@click.option(
     "--dev/--no-dev",
     default=False,
     help="Install tools needed for development with the Runestone.",
@@ -188,7 +193,13 @@ def gui():
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Instal LaTeX and related tools.")
 def build(
-    arm: bool, dev: bool, passthrough: Tuple, pic24: bool, tex: bool, rust: bool
+    arm: bool,
+    author: bool,
+    dev: bool,
+    passthrough: Tuple,
+    pic24: bool,
+    tex: bool,
+    rust: bool,
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
@@ -277,7 +288,7 @@ def build(
                 )
             )
 
-        if dev:
+        if author or dev:
             # For development, include extra volumes.
             dc = Path("docker-compose.override.yml")
             if not dc.is_file():
@@ -292,7 +303,10 @@ def build(
                                 environment:
                                     DISPLAY: ${DISPLAY}
                                 ports:
+                                    # For VNC.
                                     -   "5900:5900"
+                                    # For the CodeChat System (author toolkit)
+                                    -   "27377-27378:27377-27378"
                                 volumes:
                                     -   ../RunestoneComponents/:/srv/RunestoneComponents
                                     -   ../BookServer/:/srv/BookServer
@@ -354,7 +368,7 @@ def build(
     # Step 3 - startup script for container.
     if phase == "2":
         try:
-            _build_phase2(arm, dev, pic24, tex, rust)
+            _build_phase2(arm, author, dev, pic24, tex, rust)
             print("Success! The Runestone servers are running.")
         except Exception:
             print(f"Failed to start the Runestone servers:")
@@ -548,6 +562,9 @@ def build(
         "cp scripts/routes.py $WEB2PY_PATH/routes.py",
     )
 
+    if author:
+        xqt(f"eatmydata {sys.executable} -m pip install CodeChat_Server")
+
     # Set up config files
     # ^^^^^^^^^^^^^^^^^^^
     xqt(
@@ -562,6 +579,7 @@ def build(
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
+        "ln -sf $RUNESTONE_PATH/docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
         # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
         "ln -sf /dev/stdout /var/log/nginx/access.log",
         "ln -sf /dev/stderr /var/log/nginx/error.log",
@@ -593,7 +611,9 @@ def build(
 
 # Step 3: Final installs / run servers
 # ------------------------------------
-def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
+def _build_phase2(
+    arm: bool, author: bool, dev: bool, pic24: bool, tex: bool, rust: bool
+):
     # Check the environment.
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."
     assert env.RUNESTONE_HOST, "Please export RUNESTONE_HOST."
@@ -632,52 +652,16 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     # Set up nginx
     # ^^^^^^^^^^^^
-    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
+    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.template`.
     nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
-    txt = replace_vars(
-        nginx_conf.read_text(),
-        dict(
-            RUNESTONE_HOST=env.RUNESTONE_HOST,
-            WEB2PY_PATH=env.WEB2PY_PATH,
-            LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
-            PRODUCTION_ONLY=dedent(
-                """\
-                # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
-                server {
-                    # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
-                    #
-                    # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
-                    listen 80 default_server;
-                    # Also look for HTTPS connections.
-                    listen 443 default_server;
-                    # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
-                    return 444;
-                }
-                """
-            )
-            if env.WEB2PY_CONFIG == "production"
-            else "",
-            FORWARD_HTTP=replace_vars(
-                dedent(
-                    """\
-                    # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
-                    server {
-                        listen 80;
-                        server_name ${RUNESTONE_HOST};
-                        return 301 https://${RUNESTONE_HOST}$request_uri;
-                    }
-                    """
-                ),
-                dict(RUNESTONE_HOST=env.RUNESTONE_HOST),
-            )
-            if env.CERTBOT_EMAIL
-            else "",
-        ),
-    )
-    Path("/etc/nginx/sites-available/runestone").write_text(txt)
-    xqt(
-        "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
-    )
+    # Since certbot (if enabled) edits this file, avoid overwriting it.
+    if not nginx_conf.is_file():
+        nginx_conf_template = nginx_conf.with_suffix(".template")
+        txt = replace_vars(
+            nginx_conf_template.read_text(),
+            dict(RUNESTONE_HOST=env.RUNESTONE_HOST, WEB2PY_PATH=env.WEB2PY_PATH),
+        )
+        nginx_conf.write_text(txt)
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
@@ -763,7 +747,7 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
             """
         )
         xqt(
-            f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
+            f'{"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
             **run_bookserver_kwargs,
         )
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
@@ -800,9 +784,14 @@ def _build_phase2(arm: bool, dev: bool, pic24: bool, tex: bool, rust: bool):
 
     # Certbot requires nginx to be running to succeed, hence its placement here.
     if env.CERTBOT_EMAIL:
-        xqt(
-            'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
-        )
+        # See if there's already a certificate for this host. If not, get one.
+        if not Path(f"/etc/letsencrypt/live/{env.RUNESTONE_HOST}").is_dir():
+            xqt(
+                'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
+            )
+        else:
+            # Renew the certificate in case it's near its expiration date. Per the `certbot docs <https://certbot.eff.org/docs/using.html#renewing-certificates>`_, ``renew`` supports automated use, renewing only when a certificate is near expiration.
+            xqt("certbot renew")
         print("You should be good for https")
     else:
         print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")

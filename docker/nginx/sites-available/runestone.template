@@ -8,14 +8,8 @@
 # `gzip_static <http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html>`_: Enables ("on") or disables ("off") checking the existence of precompressed files. Send compressed files in lieu of uncompressed files where they exist. This requires the optional ``ngx_http_gzip_static_module`` module.
 gzip_static on;
 
-${PRODUCTION_ONLY}
-
-${FORWARD_HTTP}
-
 # Define the web2py and FastAPI servers.
 server {
-    # For testing, use port 80 (http); for production, use port 443 (https).
-    listen ${LISTEN_PORT} deferred;
     include /etc/nginx/default.d/*.conf;
 
     # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server.
