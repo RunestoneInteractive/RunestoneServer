@@ -579,6 +579,7 @@ def build(
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
+        "ln -sf $RUNESTONE_PATH/docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
         # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
         "ln -sf /dev/stdout /var/log/nginx/access.log",
         "ln -sf /dev/stderr /var/log/nginx/error.log",
@@ -651,52 +652,16 @@ def _build_phase2(
 
     # Set up nginx
     # ^^^^^^^^^^^^
-    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone`.
+    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.template`.
     nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
-    txt = replace_vars(
-        nginx_conf.read_text(),
-        dict(
-            RUNESTONE_HOST=env.RUNESTONE_HOST,
-            WEB2PY_PATH=env.WEB2PY_PATH,
-            LISTEN_PORT=443 if env.CERTBOT_EMAIL else 80,
-            PRODUCTION_ONLY=dedent(
-                """\
-                # `server (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#server>`_: set configuration for a virtual server. This server closes the connection if there's no host match to prevent host spoofing.
-                server {
-                    # `listen (http) <http://nginx.org/en/docs/http/ngx_http_core_module.html#listen>`_: Set the ``address`` and ``port`` for IP, or the ``path`` for a UNIX-domain socket on which the server will accept requests.
-                    #
-                    # I think that omitting the server_name_ directive causes this to match any host name not otherwise matched. TODO: does the use of ``default_server`` play into this? What is the purpose of ``default_server``?
-                    listen 80 default_server;
-                    # Also look for HTTPS connections.
-                    listen 443 default_server;
-                    # `return <https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return>`_: define a rewritten URL for the client. The non-standard code 444 closes a connection without sending a response header.
-                    return 444;
-                }
-                """
-            )
-            if env.WEB2PY_CONFIG == "production"
-            else "",
-            FORWARD_HTTP=replace_vars(
-                dedent(
-                    """\
-                    # Redirect from http to https. Copied from an `nginx blog <https://www.nginx.com/blog/creating-nginx-rewrite-rules/#https>`_.
-                    server {
-                        listen 80;
-                        server_name ${RUNESTONE_HOST};
-                        return 301 https://${RUNESTONE_HOST}$request_uri;
-                    }
-                    """
-                ),
-                dict(RUNESTONE_HOST=env.RUNESTONE_HOST),
-            )
-            if env.CERTBOT_EMAIL
-            else "",
-        ),
-    )
-    Path("/etc/nginx/sites-available/runestone").write_text(txt)
-    xqt(
-        "ln -sf /etc/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
-    )
+    # Since certbot (if enabled) edits this file, avoid overwriting it.
+    if not nginx_conf.is_file():
+        nginx_conf_template = nginx_conf.with_suffix(".template")
+        txt = replace_vars(
+            nginx_conf_template.read_text(),
+            dict(RUNESTONE_HOST=env.RUNESTONE_HOST, WEB2PY_PATH=env.WEB2PY_PATH),
+        )
+        nginx_conf.write_text(txt)
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
@@ -782,7 +747,7 @@ def _build_phase2(
             """
         )
         xqt(
-            f'BOOK_SERVER_CONFIG=development DROP_TABLES=Yes {"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
+            f'{"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
             **run_bookserver_kwargs,
         )
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
@@ -819,9 +784,11 @@ def _build_phase2(
 
     # Certbot requires nginx to be running to succeed, hence its placement here.
     if env.CERTBOT_EMAIL:
-        xqt(
-            'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
-        )
+        # See if there's already a certificate for this host. If not, get one.
+        if not Path(f"/etc/letsencrypt/live/{env.RUNESTONE_HOST}").is_dir():
+            xqt(
+                'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
+            )
         print("You should be good for https")
     else:
         print("CERTBOT_EMAIL not set will not attempt certbot setup -- NO https!!")
