@@ -355,7 +355,7 @@ def build(
             print(
                 "\n"
                 + "*" * 80
-                + '\nDownloaded the RunestoneServer repo. You must "cd web2py/applications/runestone" before running this script again.'
+                + '\nDownloaded the RunestoneServer repo. You must "cd RunestoneServer" before running this script again.'
             )
         if did_group_add:
             print(
