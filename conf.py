@@ -210,6 +210,7 @@ exclude_patterns = [
     "jobeinabox/include",
     # Ignore the Sphinx build directory output.
     "_build",
+    "tests/test_course_1/build",
     # **CodeChat notes:**
     #
     # The ``CodeToRestSphinx`` extension creates a file named

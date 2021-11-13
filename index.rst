@@ -176,8 +176,9 @@ Documentation
 This is the beginning of developer documentation for the Runestone server. To build these documents:
 
 #.  Open a terminal or command prompt and change to the root of this repository.
-#.  Execute ``python -m pip install -U -r requirements-dev.txt``. This only needs to be done once.
-#.  Execute ``sphinx-build -d _build/doctrees . _build``.
+#.  `Install Poetry <https://python-poetry.org/docs/#installation>`_.
+#.  Install this project's dependencies: at a command line, execute ``poetry install``.
+#.  Execute ``poetry run sphinx-build -d _build/doctrees . _build``.
 
 There's a lot of work left to do. In particular:
 
@@ -208,6 +209,7 @@ Other files
     /__init__.py
     /.prettierrc.js
     conf.py
+    pyproject.toml
 
 Indices and tables
 ------------------
