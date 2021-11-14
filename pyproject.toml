@@ -11,7 +11,7 @@
 name = "runestone_web2py_server"
 version = "0.1.0"
 description = "A web2py-based server for the Runestone e-book system."
-authors = ["Your Name <you@example.com>"]
+authors = ["Brad Miller <bonelake@mac.com>", "Bryan A. Jones <bjones AT ece DOT msstate DOT edu"]
 license = "MIT"
 
 
@@ -54,8 +54,9 @@ uwsgitop = {version = "^0.11", markers = "sys.platform != 'win32'"}
 # ========================
 [tool.poetry.dev-dependencies]
 beautifulsoup4 = "^4.0.0"
-black = "== 20.8b1"
+black = "^21.0b"
 bookserver = { path = "../BookServer", develop = true }
+bookserver-dev = { path = "../bookserver-dev", develop = true }
 CodeChat = ">= 1.8.6"
 contextlib2 = "^0.6.0"
 coverage = "< 5.0"
@@ -69,7 +70,7 @@ pytest = "^6.0.0"
 pyvirtualdisplay = "^2.0.0"
 pywin32 = {version = ">= 301", markers = "sys.platform == 'win32'"}
 runestone = { path = "../RunestoneComponents", develop = true }
-selenium = ">= 2.53.6"
+selenium = "^3.0.0"
 
 
 # Poetry backend
