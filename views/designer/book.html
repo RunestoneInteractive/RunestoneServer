@@ -32,6 +32,29 @@
   border-radius: 3px;
   padding: 5px
 }
+.button1 {
+  background-color: #428bca;
+  font: 15px Arial; 
+  color: white; 
+  height: 32px;
+}
+
+.button1:hover {
+  filter: brightness(1.2);
+  color: white;
+}
+.button2 {
+  background-color: #116cc2;
+  font: 15px Arial; 
+  color: white; 
+  border: 2px solid #116cc2;
+  height: 32px;
+}
+
+.button2:hover {
+  filter: brightness(1.2);
+  color: white;
+}
 </style>
 
 <link rel="stylesheet" type="text/css"
@@ -77,7 +100,7 @@ $(document).on("click", ".editButton", function () {
 <script  src="../static/js/designer.js"></script>
 <div class="container">
   <div class="col-md-8 col-md-offset-2">
-    <h2>New Book Registery</h2>
+    <h2>New Book Registry</h2>
     <p>
         There are many free and open source textbooks available on Runestone.Academy. 
         However, sometimes these books don't match the content taught in certain classes. 
@@ -94,10 +117,10 @@ $(document).on("click", ".editButton", function () {
         </div>
         <h4>Available Textbooks</h4>
         {{ for book in book_list: }}
-        <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
+        <button id="{{=book['regname']}}_button" class="button button1" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
         <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
           <div class="book_title_drafts"> 
-            <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
+            <div id="{{=book['regname']}}_title">{{=book['regname']}}</div>
             <a href="{{=book['url']}}"> 
               <span class="link1"></span> 
             </a>
@@ -115,8 +138,10 @@ $(document).on("click", ".editButton", function () {
         <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
         <!-- Use books from book_list rn but change to be custom books -->
         {{ for book in book_list: }}
-        <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
-        <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
+        <button style="text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote" data-dismiss="modal">
+          <img src="../static/images/settings_info.png" height="30" width="30" >
+      </button>
+        <div id="list" class="library_entry" style="margin-top: 10px; margin-bottom: 20px;">
           <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
             <div class="draft_title book_title_drafts"> {{=book['regname']}}
               <a href="{{=book['url']}}"> 
@@ -129,9 +154,9 @@ $(document).on("click", ".editButton", function () {
             </div>
           </div>
           <div style="margin-top: 5px;">
-            <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
-              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
-              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
+            <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px; hover: background-color: lighten(green, 5%)">
+              <button class="button button1 style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
+              <button class = "button button2" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none;" style:focus="background-color: yellow">View Published</button>
               <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
               <label class="switch">
                 <input type="checkbox" checked>
@@ -162,7 +187,7 @@ $(document).on("click", ".editButton", function () {
         <!-- Modal Header -->
         <div class="modal-header">
           <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="editBookModalLabel">Create Assignment</h4>
+          <h4 class="modal-title" id="editBookModalLabel">Clone Book</h4>
         </div><!-- Modal Body -->
         <div class="modal-body">
           {{ if github['found']: }}
