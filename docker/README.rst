@@ -300,7 +300,7 @@ Shelling Inside
 **********************************
 
 You can shell into the container to look around, or otherwise test. When you enter,
-you'll be in the web2py folder, where runstone is an application under applications. From
+you'll be in the web2py folder, where runestone is an application under applications. From
 the RunestoneServer directory do:
 
 .. code-block:: bash
@@ -312,7 +312,12 @@ Remember that the folder under web2py applications/runestone is bound to your ho
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
-To run Python-based program, you must first activate a virtual environment: use ``source /srv/venv/bin/activate`` when working on topics related to the old Runestone server (the instructor interface) or ``cd /srv/BookServer; poetry shell`` for topics related to the (new) BookServer (the student-facing content).
+To run Python-based program, you must first activate a virtual environment:
+
+.. code:: bash
+
+    cd $RUNESTONE_PATH
+    poetry shell
 
 
 Ephemeral filesystem

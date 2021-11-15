@@ -130,10 +130,10 @@ Overview Material
 .. toctree::
     :maxdepth: 2
 
-    /docs/installation
-    /docs/lti
-    /docker/README
-    /rsmanage/toctree
+    docs/installation
+    docs/lti
+    docker/toctree
+    rsmanage/toctree
 
 
 web2py server
@@ -155,19 +155,6 @@ Tests and CI
     /.travis.yml
     /.coveralls.yml
     /tests/__init__.py
-
-
-Containers
-==========
-.. toctree::
-    :maxdepth: 2
-
-    /Dockerfile
-    /docker-compose.yml
-    /docker/docker_tools.py
-    /docker/wsgihandler.py
-    /docker/uwsgi/sites/runestone.ini
-    /docker/nginx/sites-available/runestone
 
 
 Documentation
@@ -203,13 +190,14 @@ Other files
     :glob:
 
     docs/lti
-    /CONTRIBUTING
-    /ChangeLog
-    /scripts/toctree
-    /__init__.py
-    /.prettierrc.js
+    CONTRIBUTING
+    ChangeLog
+    scripts/toctree
+    __init__.py
+    .prettierrc.js
     conf.py
     pyproject.toml
+    runestone_poetry_project/__init__
 
 Indices and tables
 ------------------
