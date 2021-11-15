@@ -213,7 +213,7 @@ def get_course_url(*args):
 
 
 def getCourseNameFromId(courseid):
-    """ used to compute auth.user.course_name field """
+    """used to compute auth.user.course_name field"""
     q = db.courses.id == courseid
     row = db(q).select().first()
     return row.course_name if row else ""
