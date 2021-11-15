@@ -50,10 +50,10 @@ jobs:
                   shopt -s extglob
                   mv !(web2py) web2py/applications/runestone
                   # Download and set up web2py.
-                  wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
-                  unzip web2py_src.zip
+                  wget --no-verbose http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+                  unzip -q web2py_src.zip
                   # Define a web2py private key.
-                  mkdir web2py/applications/runestone/privates
+                  mkdir web2py/applications/runestone/private
                   echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
                   # Get the latest RS components and build webpack.
                   git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
