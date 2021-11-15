@@ -41,6 +41,7 @@ pytz = ">= 2016.6.1"
 requests = ">= 2.10.0"
 rsmanage = { path = "./rsmanage", develop = true }
 runestone = ">= 5.8.1"
+runestone-docker-tools = { path = "./docker", develop = true }
 stripe = "^2.0.0"
 six = ">= 1.10.0"
 Sphinx = ">= 3.0.0, < 4.0.0"
@@ -84,11 +85,9 @@ selenium = "^3.0.0"
 # .. toctree::
 #
 #   runestone_poetry_project/__init__.py
-#   runestone_poetry_project/docker_tools_launch.py
 #   runestone_poetry_project/make_dev_pyproject.py
 #
 [tool.poetry.scripts]
-docker-tools = "runestone_poetry_project.docker_tools_launch:cli"
 make-dev-pyproject = "runestone_poetry_project.make_dev_pyproject:main"
 
 

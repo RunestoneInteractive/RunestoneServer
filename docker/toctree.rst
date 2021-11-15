@@ -15,4 +15,5 @@ This directory contains files supporting the Docker containerized application.
     nginx/sites-available/runestone.template
     routes.py
     .env.prototype
+    setup.py
     __init__.py
