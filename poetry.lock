@@ -274,7 +274,7 @@ uvicorn = {version = "^0.14.0", extras = ["standard"]}
 
 [package.source]
 type = "directory"
-url = "../BookServer"
+url = "../../../BookServer"
 
 [[package]]
 name = "bookserver-dev"
@@ -306,7 +306,7 @@ tox = "^3.23.0"
 
 [package.source]
 type = "directory"
-url = "../bookserver-dev"
+url = "../../../bookserver-dev"
 
 [[package]]
 name = "bottle"
@@ -1676,7 +1676,7 @@ urllib3 = "1.26.6"
 
 [package.source]
 type = "directory"
-url = "../RunestoneComponents"
+url = "../../../RunestoneComponents"
 
 [[package]]
 name = "runestone-docker-tools"
@@ -2211,7 +2211,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "27b161225e5a8d607c58b04318da4a378abddbcf1a974c5de9e89b6e5ed3b300"
+content-hash = "98ab447be77eb6dd7a5954d63da37b3aab8db7d487bceb6375dc69e5597b0d48"
 
 [metadata.files]
 aiofiles = [
