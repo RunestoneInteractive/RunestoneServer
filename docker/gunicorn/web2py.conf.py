@@ -1,7 +1,7 @@
-# ***********************************
-# |docname| - gunincorn configuration
-# ***********************************
-# This file configures gunicorn to use Uvicorn to run FastAPI which runs the BookServer.
+# ********************************************************************
+# |docname| - gunicorn configuration for web2py / the Runestone Server
+# ********************************************************************
+# This file configures gunicorn to run the web2py-based (old) Runestone Server.
 #
 # See also the `gunicorn config docs <https://docs.gunicorn.org/en/stable/configure.html#configuration-file>`_.
 #
@@ -12,6 +12,7 @@
 # Standard library
 # ----------------
 import multiprocessing
+import os
 
 # Third-party imports
 # -------------------
@@ -24,8 +25,11 @@ import multiprocessing
 #
 # Configuration
 # =============
+# `chdir <https://docs.gunicorn.org/en/stable/settings.html#chdir>`_: Change directory to specified directory before loading apps. Point this to the location of ``wsgihandler.py``, which must be copied to the web2py root directory.
+chdir = os.environ["WEB2PY_PATH"]
+
 # `wsgi_app <https://docs.gunicorn.org/en/stable/settings.html#wsgi-app>`_: A WSGI application path in pattern ``$(MODULE_NAME):$(VARIABLE_NAME)``.
-wsgi_app = "bookserver.main:app"
+wsgi_app = "wsgihandler:application"
 
 # `user <https://docs.gunicorn.org/en/stable/settings.html#user>`_: Switch worker processes to run as this user.
 user = "www-data"
@@ -34,7 +38,7 @@ user = "www-data"
 group = "www-data"
 
 # `workers <https://docs.gunicorn.org/en/stable/settings.html#workers>`_: The number of worker processes for handling requests. Pick this based on CPU count.
-workers = multiprocessing.cpu_count() * 2 + 1
+workers = multiprocessing.cpu_count()
 
-# `worker_class <https://docs.gunicorn.org/en/stable/settings.html#worker-class>`_: The type of workers to use. Use `uvicorn's worker class for gunicorn <https://www.uvicorn.org/deployment/#gunicorn>`_.
-worker_class = "uvicorn.workers.UvicornWorker"
+# `bind <https://docs.gunicorn.org/en/stable/settings.html#bind>`_: The socket to bind. This must match the socket nginx sends to.
+bind = "unix:/run/web2py.sock"
