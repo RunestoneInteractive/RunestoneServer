@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will install Python dependencies, run tests and lint with a single version of Python.
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: Runestone Server Tests
@@ -69,6 +69,8 @@ jobs:
                   curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
                   # Install the Runestone Server dependencies.
                   cd runestone
+                  python3 -m pip install toml
+                  python3 runestone_poetry_project/make_dev_pyproject.py
                   poetry install
                   popd
                   cp applications/runestone/tests/.coveragerc .
