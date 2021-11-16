@@ -80,12 +80,36 @@ def run_bookserver(dev: bool) -> None:
 # --------------
 @click.command()
 @click.argument("book_sub_name")
-def book_build(book_sub_name) -> None:
+@click.option(
+    "--online/--no-online", 
+    default=False,
+    help="Download repo from an online Github Repository",
+)
+@click.option(
+    "--username",
+    default="RunestoneInteractive",
+    nargs=1,
+    help="Clone repository with specified Github Username",
+)
+def book_build(book_sub_name, online: bool, username: str) -> None:
     """
     Build a Runestone e-book, where BOOK_SUB_NAME provides the name of the subdirectory where a book resides.
+    
+    Optionally: Use the 'Online' and 'Username' flags to specify if you wish to download a repository and subsequently build it.
     """
     ensure_in_docker()
+    if online:
+        chdir(f"{env.RUNESTONE_PATH}/books/")
+        try:
+            xqt(f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{username}/{book_sub_name}.git")
+        except subprocess.CalledProcessError as e:
+            exit("Could not clone github repository! Please make sure all information is correct.")
+
     chdir(f"{env.RUNESTONE_PATH}/books/{book_sub_name}")
+    try:
+        xqt(f"{sys.executable} -m pip install -r requirements.txt")
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: Requirements.txt in {book_sub_name} not found!")
     xqt(
         f"{sys.executable} -m runestone build --all",
         f"{sys.executable} -m runestone deploy",
