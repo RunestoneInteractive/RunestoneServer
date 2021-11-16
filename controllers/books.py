@@ -387,9 +387,9 @@ def safe_join(directory, *pathnames):
     lambda: verifyInstructorStatus(auth.user.course_name, auth.user),
     requires_login=True,
 )
-
 def draft():
     return _route_book(False)
+
 
 def drafts():
     # return _route_book(False)
@@ -398,6 +398,8 @@ def drafts():
     return _route_book()
 
 # Serve from the ``published`` directory, instead of the ``build`` directory.
+
+
 def published():
     if len(request.args) == 0:
         return index()

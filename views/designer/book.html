@@ -32,6 +32,29 @@
   border-radius: 3px;
   padding: 5px
 }
+.button1 {
+  background-color: #428bca;
+  font: 15px Arial; 
+  color: white; 
+  height: 32px;
+}
+
+.button1:hover {
+  filter: brightness(1.2);
+  color: white;
+}
+.button2 {
+  background-color: #116cc2;
+  font: 15px Arial; 
+  color: white; 
+  border: 2px solid #116cc2;
+  height: 32px;
+}
+
+.button2:hover {
+  filter: brightness(1.2);
+  color: white;
+}
 </style>
 
 <link rel="stylesheet" type="text/css"
@@ -77,7 +100,7 @@ $(document).on("click", ".editButton", function () {
 <script  src="../static/js/designer.js"></script>
 <div class="container">
   <div class="col-md-8 col-md-offset-2">
-    <h2>New Book Registery</h2>
+    <h2>New Book Registry</h2>
     <p>
         There are many free and open source textbooks available on Runestone.Academy. 
         However, sometimes these books don't match the content taught in certain classes. 
@@ -94,17 +117,16 @@ $(document).on("click", ".editButton", function () {
         </div>
         <h4>Available Textbooks</h4>
         {{ for book in book_list: }}
-        <button id="{{=book['regname']}}_button" class="btn cloneButton" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
-        <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
+        <button id="{{=book['regname']}}_button" class="btn button1" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Clone</button>
+        <div id="{{=book['regname']}}" class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 80px;">
           <div class="book_title_drafts"> 
-            <div id="{{=book['regname']}}_title">{{=book['title']}}</div>
+            <div id="{{=book['regname']}}_title">{{=book['regname']}}</div>
             <a href="{{=book['url']}}"> 
               <span class="link1"></span> 
             </a>
           </div>
           <div class="book_descript_drafts">
-            <b>Description:</b> 
-            <div id="{{=book['regname']}}_description">{{=book['course_description']}}</div> 
+            <b>Description:</b> {{=book['course_description']}}
             To register for this book use the code <code>{{=book['regname']}}</code> <br>
             <p style="display: none;"> keywords: <div id="{{=book['regname']}}_keywords">{{=book['key_words']}}</div></p>
           </div>
@@ -112,13 +134,14 @@ $(document).on("click", ".editButton", function () {
         {{pass}}
       </div>
       <div class="column">
-        <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
+        <h4 style="margin-bottom: 10px;">My Custom Textbooks</h4>
         <!-- Use books from book_list rn but change to be custom books -->
         {{ for book in book_list: }}
-        <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
+        <!-- <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button> -->
+        <a data-toggle="modal" data-target="#editTextbook"> <img src="../static/images/settings_info.png" alt="custom book settings" style="width: 30px; height: 30px; margin-left: 15px; display: inline-block; float: left; margin-top: 10px;" title="Edit Settings"></a>
         <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
           <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
-            <div class="draft_title book_title_drafts"> {{=book['regname']}}
+            <div class="draft_title book_title_drafts" style="background-color: rgb(22, 85, 14);"> {{=book['regname']}}
               <a href="{{=book['url']}}"> 
                 <span class="link1"></span> 
               </a>
@@ -129,42 +152,42 @@ $(document).on("click", ".editButton", function () {
             </div>
           </div>
           <div style="margin-top: 5px;">
-            <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
-              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
-              <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
-              <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
-              <label class="switch">
-                <input type="checkbox" checked>
-                <span class="slider round"></span>
-              </label>
+            <div style="width: 300px; padding: 3px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 30px; hover: background-color: lighten(green, 5%)">
+              <button class="btn" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; margin: 3px; margin-right: 5px; margin-left: 5px;">View Draft</button>
+              <button class = "btn" style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none;">View Published</button>
+              <a data-toggle="modal" data-target="#PublishTextbook"> <img src="../static/images/Publish.png" alt="publish book" style="width: 35px; height: 35px; margin-left: 20px; display: inline-block" title="Publish Book"></a>
             </div>
           </div>
         </div>
         {{pass}}
       </div>
     </div>
-    <div style="display: inline-block; vertical-align: top;">
-      <a href="https://github.com/">
-        <img alt="Github Logo" src="../static/images/GitHub.png" >
-    </a>
+    <div style="margin:10px">
+      <div style="display: inline-block; vertical-align: top;">
+        <a href="https://github.com/">
+          <img alt="Github Logo" src="../static/images/GitHub.png" >
+        </a>
+      </div>
+      <div style="display: inline-block; margin-top: 20px;">
+        {{ if github['found']: }}
+        <p>You are logged in to GitHub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a></p>
+        {{ else: }}
+        <p>You need to log into GitHub first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
+        {{pass}}
+      </div>
     </div>
-    {{ if github['found']: }}
-    <p>You are logged in to git hub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a></p>
-    {{ else: }}
-    <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
-    {{pass}}
-    <button id="test_button" class="btn editButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Edit</button>
+    <!-- <button id="test_button" class="btn editButton" data-target="#editTextbook" data-toggle="modal" style="margin-top: 12px;">Edit</button> -->
   </div>
 </div>
-  <div aria-hidden="false" aria-labelledby="editBookModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1">
+  <div aria-hidden="false" aria-labelledby="editBookModalLabel" class="modal fade" id="editTextbook" role="dialog" tabindex="-1" style="width: 1000px; height: 700px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
-        <div class="modal-header">
+        <div class="modal-header" style="padding-left: 50px;">
           <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="editBookModalLabel">Create Assignment</h4>
+          <h4 class="modal-title" id="editBookModalLabel" style="text-align: center;">Custom Textbook</h4>
         </div><!-- Modal Body -->
-        <div class="modal-body">
+        <div class="modal-body" style="padding-left: 50px; padding-right: 50px;">
           {{ if github['found']: }}
           <form>
             <input type="text"  id="githubUser" name="githubUser" value="{{=github['user']}}">
@@ -172,17 +195,18 @@ $(document).on("click", ".editButton", function () {
             <input type="text"  id="changeType" name="changeType" value="">
             <input type="text"  id="oldGithubRepo" name="oldGithubRepo" value="">
             <div class="form-group">
-              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" name="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
-              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" name="newBookIdentifier" placeholder="Enter Book Identifier" type="text">
-              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" name="newBookName" placeholder="Enter Book Name" type="text">
-              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" name="newBookDescription" placeholder="Enter Book Description" type="text">
-              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" name="newBookKeywords" placeholder="Enter Book Keywords" type="text">
+              <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" name="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text" style="border-radius: 15px;">
+              <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" name="newBookIdentifier" placeholder="Enter Book Identifier (no spaces or special characters)" type="text" style="border-radius: 15px;">
+              <label for="newBookName">Book Name</label> <input class="form-control" id="newBookName" name="newBookName" placeholder="Enter Book Name" type="text" style="border-radius: 15px;">
+              <label for="newBookDescription">Book Description</label> <input class="form-control" id="newBookDescription" name="newBookDescription" placeholder="Enter Book Description" type="text" style="border-radius: 15px;">
+              <label for="newBookKeywords">Book Keywords</label> <input class="form-control" id="newBookKeywords" name="newBookKeywords" placeholder="Enter Book Keywords (ex python, algorithms, etc)" type="text" style="border-radius: 15px;">
             </div>
             <!-- <input class="btn btn-default" data-dismiss="modal" onclick="editCustomBook(this.form)" type="button" value="Create"> -->
             <input type="checkbox" id="resetCheckbox" name="resetCheckbox" value="yes">
             <label for="resetCheckbox" id="resetCheckboxLabel"> Reset repository to parent</label>
-            <input class="btn btn-default" data-dismiss="modal" type="button" value="Submit" id ="submitButton" onclick="validateForm2(this.form);">
-            <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton" onclick='$("#changeType")[0].value = "delete"; validateForm2(this.form);'>
+            <br>
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Submit" id ="submitButton" onclick="validateForm2(this.form);" style="background-color: green; border: none; margin-right: 10px;">
+            <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton" onclick='$("#changeType")[0].value = "delete"; validateForm2(this.form);' style="background-color: red; border: none">
           </form>
           {{ else: }}
           <p>You need to log into github first <a href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click here</a> to begin!</a></p>
@@ -190,6 +214,17 @@ $(document).on("click", ".editButton", function () {
         </div><!-- Modal Footer -->
         <div class="modal-footer">
           <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="false" aria-labelledby="PublishModalLabel" class="modal fade" id="PublishTextbook" role="dialog" tabindex="-1" style="width: 500px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="padding-left: 50px; border-radius: 5px;">
+          <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+          <h5 class="modal-title" id="PublishModalLabel" style="text-align: center;">Book has been Published</h5>
         </div>
       </div>
     </div>
