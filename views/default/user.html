@@ -221,10 +221,14 @@
                         <script type="text/javascript">
                             function checkTcp() {
                                 let cb = document.getElementById("auth_user_accept_tcp");
-                                if (cb.checked) {
+
+                                var reCaptchaKey = grecaptcha.getResponse();
+                                let reCaptchaValidation = Boolean(grecaptcha.getResponse());
+
+                                if (cb.checked && reCaptchaValidation) {
                                     return true;
                                 } else {
-                                    alert("You must accept our privacy policy to register.");
+                                    alert("You must accept our privacy policy and complete reCaptcha to register.");
                                     return false;
                                 }
                             }
@@ -294,8 +298,6 @@
                                                     <div class="g-recaptcha" data-sitekey="6LdiuxodAAAAAL8EqAlBnVsY91SJyFK-hKCITDM8"></div>
                                                     <br/>
                                                   </form>
-                                              
-
                                             </div>
                                         </td>
                                         <td class="w2p_fc"></td>
