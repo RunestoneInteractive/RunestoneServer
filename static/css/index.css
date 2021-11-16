@@ -150,19 +150,50 @@ input {
     padding: 10px;
   }
   
-  .row {
+.row {
       background-color:rgb(238, 238, 238);
   }
   
-  .row:after {
+.row:after {
     content: "";
     display: table;
     clear: both;
   }
 
+.view_draft {
+    color: orange;
+}
 
+.view_draft.button {
+    color:green;
+  text-decoration: none;
+}
 
+.view_draft:active{
+    background:olive;
+}
 
+.view_draft:focus {
+    background: black;
+}
 
+.view_draft:hover {
+    background-color: lighten(green, 5%);
+    cursor: pointer;
+    cursor: hand;
+  }
 
-  
+.button {
+    &:hover {
+      background-color: lighten(green, 5%);
+      cursor: pointer;
+      cursor: hand;
+    }
+    width: 100px;
+  height: 50px;
+  background-color: green;
+  color: white;
+  text-align:center;
+  line-height:50px;
+  border-radius: 30px;
+}
