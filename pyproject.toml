@@ -1,17 +1,19 @@
 # ********************************
 # |docname| - Poetry configuration
 # ********************************
-#
-# See https://python-poetry.org/docs/dependency-specification/ to get an understanding of
+# See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>_ to get an understanding of
 # how poetry does specifies dependencies.
+#
+# **Important**: Before running ``poetry install`` or ``poetry update``, run ``make-dev-dependencies`` so that development dependencies will be installed correctly. See `scripts/make_dev_dependencies.py`. Since this script isn't installed until the first run of ``poetry install``, run the script manually (``python3 -m pip install --user toml`` then ``python3 scripts/make_dev_dependencies.py``) before the first install.
+#
 #
 # Project metadata
 # ================
 [tool.poetry]
-name = "runestone_web2py_server"
+name = "runestone_poetry_project"
 version = "0.1.0"
 description = "A web2py-based server for the Runestone e-book system."
-authors = ["Your Name <you@example.com>"]
+authors = ["Brad Miller <bonelake@mac.com>", "Bryan A. Jones <bjones AT ece DOT msstate DOT edu"]
 license = "MIT"
 
 
@@ -54,8 +56,9 @@ uwsgitop = {version = "^0.11", markers = "sys.platform != 'win32'"}
 # ========================
 [tool.poetry.dev-dependencies]
 beautifulsoup4 = "^4.0.0"
-black = "== 20.8b1"
-bookserver = { path = "../BookServer", develop = true }
+black = "^21.0b"
+bookserver = { path = "../../../BookServer", develop = true }
+bookserver-dev = { path = "../../../bookserver-dev", develop = true }
 CodeChat = ">= 1.8.6"
 contextlib2 = "^0.6.0"
 coverage = "< 5.0"
@@ -64,12 +67,28 @@ flake8 = "^3.0.0"
 html5validator = "^0.3.0"
 locust = "^1.0.0"
 mock = "^4.0.0"
+# For building the docs with Sphinx.
+myst-parser = "^0.15.0"
+# For the plugin.
 polling2 = "^0.4.0"
 pytest = "^6.0.0"
 pyvirtualdisplay = "^2.0.0"
 pywin32 = {version = ">= 301", markers = "sys.platform == 'win32'"}
-runestone = { path = "../RunestoneComponents", develop = true }
-selenium = ">= 2.53.6"
+runestone = { path = "../../../RunestoneComponents", develop = true }
+selenium = "^3.0.0"
+
+
+# Scripts
+# =======
+# See `scripts <https://python-poetry.org/docs/pyproject/#scripts>`_. This refers to the following files:
+#
+# .. toctree::
+#
+#   runestone_poetry_project/__init__.py
+#   runestone_poetry_project/make_dev_pyproject.py
+#
+[tool.poetry.scripts]
+make-dev-pyproject = "runestone_poetry_project.make_dev_pyproject:main"
 
 
 # Poetry backend

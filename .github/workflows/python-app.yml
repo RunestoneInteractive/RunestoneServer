@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will install Python dependencies, run tests and lint with a single version of Python.
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: Runestone Server Tests
@@ -50,14 +50,12 @@ jobs:
                   shopt -s extglob
                   mv !(web2py) web2py/applications/runestone
                   # Download and set up web2py.
-                  wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
-                  unzip web2py_src.zip
+                  wget --no-verbose http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+                  unzip -q web2py_src.zip
                   # Define a web2py private key.
                   mkdir web2py/applications/runestone/private
                   echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
-                  # Get the latest RS components and build webpack. The location is a bit odd for web2py, but required by the Poetry project layout.
-                  cd web2py
-                  pushd applications
+                  # Get the latest RS components and build webpack.
                   git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
                   cd RunestoneComponents
                   npm install
@@ -65,10 +63,13 @@ jobs:
                   # Get the BookServer -- it's required by the Poetry install.
                   cd ..
                   git clone https://github.com/bnmnetp/BookServer.git
+                  cd web2py
+                  pushd applications/runestone
                   # Install Poetry.
                   curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
                   # Install the Runestone Server dependencies.
-                  cd runestone
+                  python3 -m pip install toml
+                  python3 runestone_poetry_project/make_dev_pyproject.py
                   poetry install
                   popd
                   cp applications/runestone/tests/.coveragerc .
