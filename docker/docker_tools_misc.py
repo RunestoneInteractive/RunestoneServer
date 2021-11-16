@@ -64,7 +64,8 @@ def run_bookserver(dev: bool) -> None:
     xqt(
         "poetry run bookserver --root /ns "
         "--error_path /tmp "
-        "--gconfig $RUNESTONE_PATH/docker/gunicorn/fastapi.conf.py "
+        "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
+        # This much match the address in `../nginx/sites-available/runestone.template`.
         "--bind unix:/run/fastapi.sock " + ("--reload " if dev else "") + "&",
         cwd=env.RUNESTONE_PATH,
     )

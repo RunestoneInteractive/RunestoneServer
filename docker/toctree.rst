@@ -11,8 +11,8 @@ This directory contains files supporting the Docker containerized application.
     docker_tools_misc.py
     ../Dockerfile
     ../docker-compose.yml
-    uwsgi/sites/runestone.ini
     nginx/sites-available/runestone.template
+    gunicorn/toctree
     routes.py
     .env.prototype
     setup.py

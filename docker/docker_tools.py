@@ -712,7 +712,7 @@ def _build_phase2(
 
     print("Starting web2py...")
     xqt(
-        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn/web2py.conf.py &",
+        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=env.RUNESTONE_PATH,
     )
 
