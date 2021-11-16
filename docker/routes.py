@@ -6,6 +6,6 @@
 # See the `web2py manual <http://web2py.com/books/default/chapter/29/04/the-core#Parameter-based-system>`_.
 routers = dict(
     BASE=dict(
-        default_application='runestone',
+        default_application="runestone",
     )
 )
