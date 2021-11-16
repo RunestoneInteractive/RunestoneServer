@@ -13,7 +13,7 @@ LABEL authors="@bnmnetp,@vsoch,@yarikoptic,@bjones1"
 
 # `docker/docker_tools.py` passes this when invoking a ``docker build``.
 ARG DOCKER_BUILD_ARGS
-# It must be an ``ENV`` so that it exits when the ``CMD`` is run by ``docker-compose up``.
+# It must be an ``ENV`` so that it exists when the ``CMD`` is run by ``docker-compose up``.
 ENV DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 
 # Define some ARGs which could be passed into while building
@@ -32,12 +32,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 # We need the entire Runstone server repo for the build.
 COPY . ${RUNESTONE_PATH}
 RUN \
-    # Put everything in a venv.
-    python -m venv /srv/venv && \
     # Tell the script this is the build phase of the process.
     IN_DOCKER=1 \
     # Run the main script.
-    /srv/venv/bin/python ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}
+    python3 ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}
 
-# This also must start in the venv in the built container.
-CMD IN_DOCKER=2 /srv/venv/bin/python ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}
+# Run the script again, in the run phase of the process.
+CMD IN_DOCKER=2 python3 ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}

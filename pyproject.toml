@@ -4,7 +4,7 @@
 # See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>_ to get an understanding of
 # how poetry does specifies dependencies.
 #
-# **Important**: Before running ``poetry install`` or ``poetry update``, run ``make-dev-dependencies`` so that development dependencies will be installed correctly. See `scripts/make_dev_dependencies.py`. Since this script isn't installed until the first run of ``poetry install``, run the script manually (``python3 -m pip install --user toml`` then ``python3 scripts/make_dev_dependencies.py``) before the first install.
+# **Important**: Before running ``poetry install`` or ``poetry update``, run ``make-dev-dependencies`` so that development dependencies will be installed correctly. See `scripts/make_dev_dependencies.py`. Since this script isn't installed until the first run of ``poetry install``, run the script manually (``python3 -m pip install --user toml`` then ``python3 runestone_poetry_project/make_dev_dependencies.py``) before the first install.
 #
 #
 # Project metadata
@@ -48,8 +48,6 @@ Sphinx = ">= 3.0.0, < 4.0.0"
 sphinxcontrib-paverutils = ">= 1.17"
 SQLAlchemy = ">= 1.0.14"
 pyjwt = "== 2.0.1"
-uWSGI = {version = "^2.0.0", markers = "sys.platform != 'win32'"}
-uwsgitop = {version = "^0.11", markers = "sys.platform != 'win32'"}
 
 
 # Development dependencies

@@ -61,18 +61,13 @@ def bookserver(dev: bool) -> None:
 # Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
 def run_bookserver(dev: bool) -> None:
     ensure_in_docker()
-    bookserver_path = get_bookserver_path()
-    run_bookserver_kwargs = dict(cwd=bookserver_path) if bookserver_path else {}
-    run_bookserver_venv = (
-        "poetry run " if bookserver_path else f"{sys.executable} -m "
-    ) + "bookserver "
     xqt(
-        run_bookserver_venv + "--root /ns "
+        "poetry run bookserver --root /ns "
         "--error_path /tmp "
-        "--gconfig /etc/gunicorn/gunicorn.conf.py "
-        # This must match with the `gunicorn socket <gunicorn socket>`.
-        "--bind unix:/run/gunicorn.sock " + ("--reload " if dev else "") + "&",
-        **run_bookserver_kwargs,
+        "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
+        # This much match the address in `../nginx/sites-available/runestone.template`.
+        "--bind unix:/run/fastapi.sock " + ("--reload " if dev else "") + "&",
+        cwd=env.RUNESTONE_PATH,
     )
 
 
@@ -114,13 +109,12 @@ def shell() -> None:
 @click.command()
 def stop_servers() -> None:
     """
-    Shut down the web servers and celery, typically before running tests which involve the web servers. This should only be called inside the Docker container.
+    Shut down the web servers and celery, typically before running tests which involve the web servers.
     """
     ensure_in_docker()
     xqt(
         "pkill celery",
         "pkill nginx",
-        "pkill -9 uwsgi",
         "pkill -f gunicorn",
         check=False,
     )

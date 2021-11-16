@@ -1,6 +1,6 @@
-# ***********************************
-# |docname| - gunincorn configuration
-# ***********************************
+# ***********************************************************
+# |docname| - gunicorn configuration for FastAPI / BookServer
+# ***********************************************************
 # This file configures gunicorn to use Uvicorn to run FastAPI which runs the BookServer.
 #
 # See also the `gunicorn config docs <https://docs.gunicorn.org/en/stable/configure.html#configuration-file>`_.
@@ -19,19 +19,13 @@ import multiprocessing
 #
 # Local application imports
 # -------------------------
-# None.
-#
-#
+from gunicorn_config.common_config import *
+
+
 # Configuration
 # =============
 # `wsgi_app <https://docs.gunicorn.org/en/stable/settings.html#wsgi-app>`_: A WSGI application path in pattern ``$(MODULE_NAME):$(VARIABLE_NAME)``.
 wsgi_app = "bookserver.main:app"
-
-# `user <https://docs.gunicorn.org/en/stable/settings.html#user>`_: Switch worker processes to run as this user.
-user = "www-data"
-
-# `group <https://docs.gunicorn.org/en/stable/settings.html#group>`_: Switch worker process to run as this group.
-group = "www-data"
 
 # `workers <https://docs.gunicorn.org/en/stable/settings.html#workers>`_: The number of worker processes for handling requests. Pick this based on CPU count.
 workers = multiprocessing.cpu_count() * 2 + 1

@@ -21,9 +21,9 @@
 # Unlike earlier approaches, this script doesn't cause the container to restart if something goes wrong. Instead, it catches all errors in a try/except block then stops executing so you can see what happened.
 #
 #
-# venvs
-# -----
-# All Python installs are placed in a virtual environment -- ``/srv/venv`` and also (for dev builds) in a venv managed by Poetry. Before running Python scripts, be sure to activate the relevant venv.
+# venv
+# ----
+# All Python installs are placed in a virtual environment managed by Poetry. Before running Python scripts, be sure to activate this venv.
 #
 #
 # Imports and bootstrap
@@ -44,14 +44,13 @@ from time import sleep
 from traceback import print_exc
 from typing import Dict, Tuple
 from textwrap import dedent
-import webbrowser
 
 # Local application bootstrap
 # ---------------------------
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    sys.exit()
+    # sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -65,7 +64,7 @@ def check_install(
     print(f"Checking for {check_list[0]}...")
     try:
         subprocess.run(check_list, check=True)
-    except:
+    except subprocess.CalledProcessError:
         print("Not found. Installing...")
         subprocess.run(
             [
@@ -91,9 +90,10 @@ def check_install_curl() -> None:
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
 try:
-    # This unused import triggers the script download if it's not present.
+    # This unused import triggers the script download if it's not present. This only happens outside the container.
     import ci_utils
 except ImportError:
+    assert not os.environ.get("IN_DOCKER")
     check_install_curl()
     print("Downloading supporting script ci_utils.py...")
     subprocess.run(
@@ -111,7 +111,7 @@ from ci_utils import chdir, env, pushd, xqt
 # This comes after importing ``ci_utils``, since we use that to install click if necessary.
 in_venv = sys.prefix != sys.base_prefix
 try:
-    import click, click_web
+    import click
 except ImportError:
     import site
     from importlib import reload
@@ -119,16 +119,16 @@ except ImportError:
     # Ensure ``pip`` is installed before using it.
     check_install("pip3 --version", "python3-pip")
 
-    print("Installing click...")
+    print("Installing Python dependencies...")
     # Outside a venv, install locally.
     user = " " if in_venv else "--user "
     xqt(
         f"{sys.executable} -m pip install {user}--upgrade pip",
-        f"{sys.executable} -m pip install {user}--upgrade click click_web",
+        f"{sys.executable} -m pip install {user}--upgrade click",
     )
     # If pip is upgraded, it won't find click. `Re-load sys.path <https://stackoverflow.com/a/25384923/16038919>`_ to fix this.
     reload(site)
-    import click, click_web
+    import click
 
 
 # Local application
@@ -158,15 +158,6 @@ try:
     add_commands(cli)
 except NameError:
     pass
-
-
-@cli.command()
-def gui():
-    """
-    Open a web-based GUI for this program in the default browser. Press Ctrl-C to stop the webserver.
-    """
-    webbrowser.open("http://127.0.0.1:5000", new=1, autoraise=True)
-    click_web.create_click_web_app(sys.modules[__name__], cli).run()
 
 
 # ``build`` command
@@ -255,7 +246,7 @@ def build(
             xqt("sudo apt-get install -y --no-install-recommends git")
 
         # Are we inside the Runestone repo?
-        if not (wd / "uwsgi").is_dir():
+        if not (wd / "nginx").is_dir():
             change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
             print("Didn't find the runestone repo. Cloning...")
@@ -281,7 +272,7 @@ def build(
                     settings.jobe_key = ''
                     settings.jobe_server = 'http://jobe'
                     settings.bks = "ns"
-                    settings.python_interpreter = "/srv/venv/bin/python3"
+                    settings.python_interpreter = f"{os.environ.get['RUNESTONE_PATH']/.venv/bin/python3"
                     # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
                     settings.secret = "supersecret"
                     """
@@ -371,7 +362,7 @@ def build(
             _build_phase2(arm, author, dev, pic24, tex, rust)
             print("Success! The Runestone servers are running.")
         except Exception:
-            print(f"Failed to start the Runestone servers:")
+            print("Failed to start the Runestone servers.")
             print_exc()
 
         # Notify listener user we're done.
@@ -388,9 +379,6 @@ def build(
     # This is run inside the Docker build, from the `Dockerfile`.
     assert phase == "1", f"Unknown value of IN_DOCKER={phase}"
     assert in_docker()
-
-    # It should always be `run in a venv <https://stackoverflow.com/a/1883251/16038919>`_.
-    assert in_venv, "This should be running in a Python virtual environment."
 
     # Install required packages
     # ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -512,7 +500,7 @@ def build(
         for path in (mchp_packs, java):
             xqt(
                 f"mkdir {path}",
-                f"chown www-data:www-data {path}",
+                f"eatmydata chown www-data:www-data {path}",
             )
 
     if tex:
@@ -523,59 +511,37 @@ def build(
     if rust:
         xqt("eatmydata apt-get install -y --no-install-recommends cargo")
 
-    # Python/pip-related installs
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Install web2py.
+    # Install web2py and Poetry
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^
     xqt(
         "mkdir -p $WEB2PY_PATH",
         # Make the www-data the owner and place its files in the www-data group. This is because web2py needs to write to this directory tree (log, errors, etc.).
-        "chown www-data:www-data $WEB2PY_PATH",
+        "eatmydata chown www-data:www-data $WEB2PY_PATH",
         # Make any newly created directories have the www-group. Give the group write permission.
-        "chmod g+ws $WEB2PY_PATH",
+        "eatmydata chmod g+ws $WEB2PY_PATH",
     )
     w2p_parent = Path(env.WEB2PY_PATH).parent
     xqt(
-        # Install additional components.
         "eatmydata wget --no-verbose https://mdipierro.pythonanywhere.com/examples/static/web2py_src.zip",
         "eatmydata unzip -q web2py_src.zip",
         "rm -f web2py_src.zip",
         cwd=w2p_parent,
     )
 
-    # Wheel helps several other packages (uwsgi, etc.) build more cleanly. Otherwise, we get ``Using legacy 'setup.py install' for uwsgi, since package 'wheel' is not installed.``
-    xqt(f"eatmydata {sys.executable} -m pip install --upgrade wheel")
-
     chdir(env.RUNESTONE_PATH)
-    if dev:
-        # The dev requirements include the main requirements file as well.
-        xqt(f"eatmydata {sys.executable} -m pip install -r requirements-dev.txt")
-        # For development purposes, `install Poetry <https://python-poetry.org/docs/master/#osx--linux--bashonwindows-install-instructions>`_.
-        xqt(
-            "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | POETRY_HOME=/usr/local python -"
-        )
-    else:
-        xqt(f"eatmydata {sys.executable} -m pip install -r requirements.txt")
-
+    # `Install Poetry <https://python-poetry.org/docs/master/#osx--linux--bashonwindows-install-instructions>`_.
     xqt(
-        f"eatmydata {sys.executable} -m pip install uwsgi uwsgitop bookserver myst-parser sphinx-reredirects",
+        "eatmydata curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | POETRY_HOME=/usr/local python -"
+    )
+    xqt(
         "rm -rf $WEB2PY_PATH/.cache/*",
         "cp scripts/routes.py $WEB2PY_PATH/routes.py",
     )
 
-    if author:
-        xqt(f"eatmydata {sys.executable} -m pip install CodeChat_Server")
-
     # Set up config files
     # ^^^^^^^^^^^^^^^^^^^
     xqt(
-        # Set up for uwsgi
         "mkdir -p $WEB2PY_PATH/logs",
-        "mkdir -p /run/uwsgi",
-        "mkdir -p /etc/uwsgi/sites",
-        "cp $RUNESTONE_PATH/docker/uwsgi/sites/runestone.ini /etc/uwsgi/sites/runestone.ini",
-        # TODO: is this ever used?
-        "cp $RUNESTONE_PATH/docker/systemd/system/uwsgi.service /etc/systemd/system/uwsgi.service",
-        "ln -sf /etc/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service",
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
@@ -583,13 +549,10 @@ def build(
         # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
         "ln -sf /dev/stdout /var/log/nginx/access.log",
         "ln -sf /dev/stderr /var/log/nginx/error.log",
-        # Set up gunicorn
-        "mkdir -p /etc/gunicorn",
-        "cp $RUNESTONE_PATH/docker/gunicorn/gunicorn.conf.py /etc/gunicorn",
         # Set up web2py routing.
         "cp $RUNESTONE_PATH/docker/routes.py $WEB2PY_PATH",
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
-        "ln -sf /srv/venv/bin/sphinx-build /usr/local/bin",
+        "ln -sf $RUNESTONE_PATH/.venv/bin/sphinx-build /usr/local/bin",
     )
 
     # Create a default auth key for web2py.
@@ -618,10 +581,18 @@ def _build_phase2(
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."
     assert env.RUNESTONE_HOST, "Please export RUNESTONE_HOST."
 
-    # This should always be `run in a venv`_.
-    assert (
-        sys.prefix != sys.base_prefix
-    ), "This should be running in a Python virtual environment."
+    # Install all required Python packages, then switch to this venv.
+    xqt(
+        # Update dependencies. See `scripts/make_dev_pyproject.py`. This must come before Poetry, since it will check for the existence of the project created by these commands.
+        f"{sys.executable} -m pip install --user toml",
+        f"{sys.executable} runestone_poetry_project/make_dev_pyproject.py",
+        # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible and at a known location (``./.venv``).
+        "poetry config virtualenvs.in-project true",
+        f"poetry install{'' if dev else ' --no-dev'}",
+        cwd=env.RUNESTONE_PATH,
+    )
+    activate_this_path = f"{env.RUNESTONE_PATH}/.venv/bin/activate_this.py"
+    exec(open(activate_this_path).read(), {'__file__': activate_this_path})
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = get_bookserver_path()
@@ -629,14 +600,6 @@ def _build_phase2(
 
     # Misc setup
     # ^^^^^^^^^^
-    # Install rsmanage and docker-tools.
-    xqt(
-        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/rsmanage",
-    )
-    xqt(
-        f"eatmydata {sys.executable} -m pip install -e $RUNESTONE_PATH/docker",
-    )
-
     if dev:
         # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available or empty.
         x_display = os.environ.get("DISPLAY") or ":0"
@@ -665,33 +628,10 @@ def _build_phase2(
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
-    if bookserver_path:
-        assert (
-            dev
-        ), "You must run ``docker-tools.py build --dev`` in order to install the dev version of the BookServer."
-        print("Installing development version of the BookServer.")
-        xqt(
-            # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible.
-            "poetry config virtualenvs.in-project true",
-            "poetry install",
-            cwd=bookserver_path,
-        )
-
     rsc = Path(f"{w2p_parent}/RunestoneComponents")
     # Use the same `volume detection strategy`_ as the BookServer.
     if (rsc / "runestone").is_dir():
         chdir(rsc)
-        # If the bookserver is in dev mode, then the Runestone Components is already installed there in dev mode. Install it again in the venv so that both are up to date.
-        # Otherwise, install them now.
-        if not dev:
-            print(
-                "Warning: you're installing a dev version of the components without running ``docker-tools.py build --dev``. The usual dev tools aren't installed."
-            )
-        print("Installing Development Version of Runestone Components")
-        xqt(
-            f"{sys.executable} -m pip install --upgrade -e .",
-            f"{sys.executable} -m runestone --version",
-        )
         # Build the webpack after the Runestone Components are installed.
         xqt(
             "npm install",
@@ -762,7 +702,7 @@ def _build_phase2(
     # sudo doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
     xqt(
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
-        "/srv/venv/bin/celery --app=scheduled_builder worker --pool=threads "
+        "poetry run celery --app=scheduled_builder worker --pool=threads "
         "--concurrency=3 --loglevel=info &",
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
@@ -770,14 +710,11 @@ def _build_phase2(
     print("starting nginx")
     xqt("service nginx start")
 
-    print("starting uwsgi")
-    # Use uwsgi's "--virtualenv" option, since running it from a venv doesn't cause it to run apps in the same venv.
+    print("Starting web2py...")
     xqt(
-        "/srv/venv/bin/uwsgi --virtualenv /srv/venv "
-        "--ini /etc/uwsgi/sites/runestone.ini &",
-        cwd=env.WEB2PY_PATH,
+        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
+        cwd=env.RUNESTONE_PATH,
     )
-    # To manually test out web2py, first ``service nginx stop`` then run ``python3 web2py.py --ip=0.0.0.0 --port=80 --password="$POSTGRES_PASSWORD" -K runestone --no_gui -X``.
 
     print("Starting FastAPI server")
     run_bookserver(dev)
