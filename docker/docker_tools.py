@@ -140,9 +140,9 @@ try:
         get_bookserver_path,
         get_ready_file,
         in_docker,
-        run_bookserver,
         SERVER_START_FAILURE_MESSAGE,
         SERVER_START_SUCCESS_MESSAGE,
+        _start_servers,
     )
 except ImportError:
     print("Note: this must be an initial install; additional commands missing.")
@@ -724,17 +724,8 @@ def _build_phase2(
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
 
-    print("starting nginx")
-    xqt("service nginx start")
-
-    print("Starting web2py...")
-    xqt(
-        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
-        cwd=env.RUNESTONE_PATH,
-    )
-
-    print("Starting FastAPI server")
-    run_bookserver(dev)
+    print("Starting web servers.")
+    _start_servers(dev)
 
     # Certbot requires nginx to be running to succeed, hence its placement here.
     if env.CERTBOT_EMAIL:
