@@ -396,6 +396,8 @@ def build(
         browser = "chromium"
     # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
+    xqt("""echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""")
+    xqt("wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -")
     xqt(
         "apt-get update",
         "apt-get install -y --no-install-recommends eatmydata",
@@ -408,7 +410,7 @@ def build(
         # TODO: What is this for?
         "libfreetype6-dev "
         # Required for postgres.
-        "postgresql-client "
+        "postgresql-client-13 "
         # Just installing ``nodejs`` fails with messages about unmet dependencies. Adding ``yarn`` (which is never used) makes it happy. Solution from `SO <https://stackoverflow.com/a/67329755/16038919>`__.
         "nodejs yarn "
         # TODO: should this only be installed in the dev image?
