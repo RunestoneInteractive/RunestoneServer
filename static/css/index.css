@@ -183,7 +183,6 @@ input {
     cursor: hand;
   }
 
-<<<<<<< HEAD
 .button {
     &:hover {
       background-color: lighten(green, 5%);
@@ -198,8 +197,7 @@ input {
   line-height:50px;
   border-radius: 30px;
 }
-=======
+
 .btn {
     
 }
->>>>>>> UIDesign2
