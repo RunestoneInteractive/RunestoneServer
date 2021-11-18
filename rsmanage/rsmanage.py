@@ -1,3 +1,4 @@
+import asyncio
 import click
 import csv
 import json
@@ -6,11 +7,16 @@ import re
 import shutil
 import signal
 import subprocess
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
 from psycopg2.errors import UniqueViolation
 import sys
 
+from bookserver.crud import create_initial_courses_users
+from bookserver.db import init_models
+from bookserver.config import settings
 
 class Config(object):
     def __init__(self):
@@ -117,12 +123,9 @@ def initdb(config, list_tables, reset, fake, force):
             shell=True,
         )
         if res == 0:
-            res = subprocess.call(
-                "createdb --echo --host={} --username={} {}".format(
-                    config.dbhost, config.dbuser, config.dbname
-                ),
-                shell=True,
-            )
+            # Because click wont natively support making commands async we can use this simple method
+            # to cll async functions.
+            asyncio.run(init_models())
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -156,18 +159,10 @@ def initdb(config, list_tables, reset, fake, force):
         message="Initializing the database", file=None, nl=True, err=False, color=None
     )
 
-    if fake:
-        os.environ["WEB2PY_MIGRATE"] = "fake"
-
+    settings.drop_tables = "Yes"
+    asyncio.run(create_initial_courses_users())
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    cmd = "{} web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(
-        sys.executable, APP, APP_PATH, list_tables
-    )
-    click.echo("Running: {}".format(cmd))
-    res = subprocess.call(cmd, shell=True)
-
-    if res != 0:
-        click.echo(message="Database Initialization Failed")
+    
 
 
 @cli.command()
