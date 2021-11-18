@@ -136,7 +136,7 @@ def calculate_totals():
     requires_login=True,
 )
 def get_summary():
-    assignment_name = request.vars.assignment
+    assignment_name = request.vars.assignment #recieves json sent by ajax call 
     assignment = (
         db(
             (db.assignments.name == assignment_name)
@@ -156,11 +156,14 @@ group by chapter, name
         as_dict=True,
     )
 
-    not_supported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
+    """ List of question types that are not supported by the exercisemetrics page
+       we look through the questions table for the questions with names equal to row["name"]"""
+
+    unsupported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
 
     for row in res:
         question = db(db.questions.name == row["name"]).select().first()
-        if question.question_type not in not_supported_question_types: 
+        if question.question_type not in unsupported_question_types: 
             if row["count"] > 0:
                 row[
                     "name"
