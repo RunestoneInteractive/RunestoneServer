@@ -3,16 +3,17 @@
 
 
 {{if 'message' in globals():}}
+<div style="text-justify: inter-word; text-align:justify; margin: 15px">
+
 <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <h3>{{=message}}</h3>
-
-<p style="text-justify: inter-word; text-align:justify; margin: 5px"><strong>For Instructors ONLY</strong> If you are an independent learner you DO NOT need to build your own course. If
+<p><strong>For Instructors ONLY</strong> If you are an independent learner you DO NOT need to build your own course. If
     you are
     a student and think that building your own course will show you the answers, YOU ARE WRONG.</p>
-<p style="text-justify: inter-word; text-align:justify; margin: 5px">
+<p>
     This page allows you to select a book for your own class. Once you have selected and built the book, you will be
     able to create assignments for your students. These assignments
     will be publish
@@ -356,6 +357,7 @@
     $('#startdate').datepicker();
 </script>
 
+</div>
 {{pass}}
 
 {{block right_sidebar}}
