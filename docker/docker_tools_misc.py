@@ -14,6 +14,7 @@
 from pathlib import Path
 import sys
 import subprocess
+from time import sleep
 from typing import Optional
 
 # Third-party
@@ -35,6 +36,9 @@ res = subprocess.run(
     text=True,
 )
 RUNESTONE_CONTAINER_NAME = res.stdout.strip()
+SERVER_START_SUCCESS_MESSAGE = "Success! The Runestone servers are running."
+SERVER_START_FAILURE_MESSAGE = "Failed to start the Runestone servers."
+
 
 # Subcommands for the CLI
 # ========================
@@ -97,10 +101,8 @@ def shell() -> None:
     if in_docker():
         print("Already in Docker. Doing nothing.")
         return
-    if RUNESTONE_CONTAINER_NAME == "":
-        click.echo("Error - Unable to find Runestone Server Container")
-        return
-    xqt(f"docker exec -it {RUNESTONE_CONTAINER_NAME} bash")
+    ensure_in_docker(True)
+    xqt("bash")
 
 
 # ``stop_servers``
@@ -120,11 +122,29 @@ def stop_servers() -> None:
     )
 
 
+# ``wait``
+# --------
+@click.command()
+def wait() -> None:
+    """
+    Wait until the server is running, then report success or failure through the program's exit code.
+    """
+    ensure_in_docker()
+    ready_file = get_ready_file()
+    # Wait for success or failure.
+    while True:
+        txt = ready_file.read_text() if ready_file.is_file() else ""
+        if txt.endswith(SERVER_START_FAILURE_MESSAGE):
+            sys.exit(1)
+        if txt.endswith(SERVER_START_SUCCESS_MESSAGE):
+            sys.exit(0)
+
+
 # Misc
 # ----
 # Add all subcommands in this file to the CLI.
 def add_commands(cli) -> None:
-    for cmd in (bookserver, book_build, shell, stop_servers):
+    for cmd in (bookserver, book_build, shell, stop_servers, wait):
         cli.add_command(cmd)
 
 
@@ -133,14 +153,22 @@ def in_docker() -> bool:
     # This is difficult, and varies between OSes (Linux vs OS X) and Docker versions. Try a few different approaches and hope one works.
     # From a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
     try:
-        return "docker" in Path("/proc/1/cgroup").read_text()
+        if "docker" in Path("/proc/1/cgroup").read_text():
+            return True
     except Exception:
-        # Newer Docker versions create a file -- just look for that.
-        return Path("/.dockerenv").is_file()
+        pass
+    # Newer Docker versions create a file -- just look for that.
+    if Path("/.dockerenv").is_file():
+        return True
+    # Try looking at the first process to see if it's ``sh``.
+    return Path("/proc/1/sched").read_text().startswith("sh")
 
 
 # If we're not in Docker, then re-run this command inside Docker.
-def ensure_in_docker() -> None:
+def ensure_in_docker(
+    # True to make this interactive (the ``-i`` flag in ``docker exec``.)
+    is_interactive: bool = False,
+) -> None:
     if in_docker():
         return
     if RUNESTONE_CONTAINER_NAME == "":
@@ -154,8 +182,8 @@ def ensure_in_docker() -> None:
     # #.    Use env vars defined in the `../Dockerfile`, rather than hard-coding paths. We want these env vars evaluated after the shell in Docker starts, not now, hence the use of ``\$`` and the surrounding double quotes.
     quoted_args = "' '".join(sys.argv[1:])
     xqt(
-        f"docker exec -it {RUNESTONE_CONTAINER_NAME} bash -c "
-        '"/srv/venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py '
+        f"docker exec -{'i' if is_interactive else ''}t {RUNESTONE_CONTAINER_NAME} bash -c "
+        '"\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py '
         f"'{quoted_args}'\""
     )
     # TODO: get a return code from the above statement and return that instead.
@@ -169,3 +197,8 @@ def get_bookserver_path() -> Optional[Path]:
     # _`Volume detection strategy`: don't check just ``BookServer`` -- the volume may be mounted, but may not point to an actual filesystem path if the developer didn't clone the BookServer repo. Instead, look for evidence that there are actually some files in this path.
     dev_bookserver = (bookserver_path / "bookserver").is_dir()
     return bookserver_path if dev_bookserver else None
+
+
+# Return the path to a file used to report the status of the container. Only for use inside Docker.
+def get_ready_file() -> Path:
+    return Path(env.RUNESTONE_PATH) / "ready.txt"

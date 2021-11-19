@@ -138,8 +138,11 @@ try:
     from docker_tools_misc import (
         add_commands,
         get_bookserver_path,
+        get_ready_file,
         in_docker,
         run_bookserver,
+        SERVER_START_FAILURE_MESSAGE,
+        SERVER_START_SUCCESS_MESSAGE,
     )
 except ImportError:
     print("Note: this must be an initial install; additional commands missing.")
@@ -358,21 +361,33 @@ def build(
 
     # Step 3 - startup script for container.
     if phase == "2":
+        base_ready_text = dedent(
+            """\
+            This file reports the status of the Docker containerized
+            application.
+
+            The container is starting up...
+            """
+        )
+        get_ready_file().write_text(base_ready_text)
         try:
             _build_phase2(arm, author, dev, pic24, tex, rust)
-            print("Success! The Runestone servers are running.")
         except Exception:
-            print("Failed to start the Runestone servers.")
+            msg = SERVER_START_FAILURE_MESSAGE
             print_exc()
+        else:
+            msg = SERVER_START_SUCCESS_MESSAGE
+        print(msg)
+        get_ready_file().write_text(base_ready_text + msg)
 
         # Notify listener user we're done.
         print("=-=-= Runestone setup finished =-=-=")
-        # Flush now, so that text won't stay hidden in Python's buffers. The next step is to do nothing (where no flush occurs and the text would otherwise stay hidden).
-        sys.stdout.flush()
-        sys.stderr.flush()
         # If this script exits, then Docker re-runs it. So, loop forever.
         while True:
-            sleep(1000)
+            # Flush now, so that text won't stay hidden in Python's buffers. The next step is to do nothing (where no flush occurs and the text would otherwise stay hidden).
+            sys.stdout.flush()
+            sys.stderr.flush()
+            sleep(1)
 
     # Step 2: install Runestone dependencies
     # ---------------------------------------
@@ -594,7 +609,7 @@ def _build_phase2(
         cwd=env.RUNESTONE_PATH,
     )
     activate_this_path = f"{env.RUNESTONE_PATH}/.venv/bin/activate_this.py"
-    exec(open(activate_this_path).read(), {'__file__': activate_this_path})
+    exec(open(activate_this_path).read(), {"__file__": activate_this_path})
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = get_bookserver_path()

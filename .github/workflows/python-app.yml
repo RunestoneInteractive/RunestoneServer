@@ -10,7 +10,7 @@ on:
         branches: [master]
 
 jobs:
-    build:
+    ubuntu_build:
         runs-on: ubuntu-latest
         env:
             WEB2PY_CONFIG: test
@@ -20,71 +20,101 @@ jobs:
             COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
         steps:
-            - uses: actions/checkout@v2
-            - uses: Harmon758/postgresql-action@v1.0.0
-              with:
-                  postgresql db: runestone_test
-                  postgresql user: runestone
-                  postgresql password: runestone
-            - uses: actions/setup-java@v1.4.3
-              with:
-                  java-version: 1.8
-                  java-package: jre
-            - uses: supercharge/redis-github-action@1.1.0
-            - uses: act10ns/slack@v1
-              with:
-                  status: starting
-                  channel: "#builds"
-              if: always()
+            -   uses: actions/checkout@v2
+            -   uses: Harmon758/postgresql-action@v1.0.0
+                with:
+                    postgresql db: runestone_test
+                    postgresql user: runestone
+                    postgresql password: runestone
+            -   uses: actions/setup-java@v1.4.3
+                with:
+                    java-version: 1.8
+                    java-package: jre
+            -   uses: supercharge/redis-github-action@1.1.0
+            -   uses: act10ns/slack@v1
+                with:
+                    status: starting
+                    channel: "#builds"
+                if: always()
 
-            - name: Set up Python 3.8
-              uses: actions/setup-python@v2
-              with:
-                  python-version: 3.8
-            - uses: actions/setup-node@v2.1.2
-            - name: Install dependencies
-              id: setup-environment
-              run: |
-                  # Put this repo in the ``runestone`` subdirectory.
-                  mkdir -p web2py/applications/runestone
-                  shopt -s extglob
-                  mv !(web2py) web2py/applications/runestone
-                  # Download and set up web2py.
-                  wget --no-verbose http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
-                  unzip -q web2py_src.zip
-                  # Define a web2py private key.
-                  mkdir web2py/applications/runestone/private
-                  echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
-                  # Get the latest RS components and build webpack.
-                  git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
-                  cd RunestoneComponents
-                  npm install
-                  npm run build
-                  # Get the BookServer -- it's required by the Poetry install.
-                  cd ..
-                  git clone https://github.com/bnmnetp/BookServer.git
-                  cd web2py
-                  pushd applications/runestone
-                  # Install Poetry.
-                  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
-                  # Install the Runestone Server dependencies.
-                  python3 -m pip install toml
-                  python3 runestone_poetry_project/make_dev_pyproject.py
-                  poetry install
-                  popd
-                  cp applications/runestone/tests/.coveragerc .
+            -   name: Set up Python 3.8
+                uses: actions/setup-python@v2
+                with:
+                    python-version: 3.8
+            -   uses: actions/setup-node@v2.1.2
+            -   name: Install dependencies
+                id: setup-environment
+                run: |
+                    # Put this repo in the ``runestone`` subdirectory.
+                    mkdir -p web2py/applications/runestone
+                    shopt -s extglob
+                    mv !(web2py) web2py/applications/runestone
+                    # Download and set up web2py.
+                    wget --no-verbose http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
+                    unzip -q web2py_src.zip
+                    # Define a web2py private key.
+                    mkdir web2py/applications/runestone/private
+                    echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
+                    # Get the latest RS components and build webpack.
+                    git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
+                    cd RunestoneComponents
+                    npm install
+                    npm run build
+                    # Get the BookServer -- it's required by the Poetry install.
+                    cd ..
+                    git clone https://github.com/bnmnetp/BookServer.git
+                    cd web2py
+                    pushd applications/runestone
+                    # Install Poetry.
+                    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
+                    # Install the Runestone Server dependencies.
+                    python3 -m pip install toml
+                    python3 runestone_poetry_project/make_dev_pyproject.py
+                    poetry install
+                    popd
+                    cp applications/runestone/tests/.coveragerc .
 
-            - name: Test with pytest
-              id: pytest
-              run: |
-                  echo $TEST_DBURL
-                  # Poetry can't run from outside its project. Here's a workaround.
-                  cd web2py/applications/runestone
-                  poetry run bash -c "cd ../.. && pytest -v applications/runestone/tests"
+            -   name: Test with pytest
+                id: pytest
+                run: |
+                    echo $TEST_DBURL
+                    # Poetry can't run from outside its project. Here's a workaround.
+                    cd web2py/applications/runestone
+                    poetry run bash -c "cd ../.. && pytest -v applications/runestone/tests"
 
-            - uses: act10ns/slack@v1
-              with:
-                  status: ${{ job.status }}
-                  steps: ${{ toJson(steps) }}
-                  channel: "#builds"
-              if: always()
+            -   uses: act10ns/slack@v1
+                with:
+                    status: ${{ job.status }}
+                    steps: ${{ toJson(steps) }}
+                    channel: "#builds"
+                if: always()
+
+
+    docker_build:
+        runs-on: ubuntu-latest
+        env:
+            LANG: en_US.UTF-8
+            COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        steps:
+            -   uses: actions/checkout@v2
+                with:
+                    path: RunestoneServer
+            -   name: Set up Python 3.8
+                uses: actions/setup-python@v2
+                with:
+                    python-version: 3.8
+            -   name: Install dependencies
+                id: setup-environment
+                run: |
+                    cd RunestoneServer
+                    python3 docker/docker_tools.py build --dev
+            -   name: Test with pytest
+                id: pytest
+                run: |
+                    cd RunestoneServer
+                    docker-compose up -d
+                    docker-compose logs --follow &
+                    sleep 5
+                    docker-tools wait
+                    docker-tools stop-servers
