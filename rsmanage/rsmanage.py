@@ -18,6 +18,7 @@ from bookserver.crud import create_initial_courses_users
 from bookserver.db import init_models
 from bookserver.config import settings
 
+
 class Config(object):
     def __init__(self):
         self.verbose = False
@@ -64,11 +65,14 @@ def cli(config, verbose, if_clean):
     config.conf = conf
     config.dbname = re.match(r"postgres.*//.*?@.*?/(.*)", config.dburl).group(1)
     config.dbhost = re.match(r"postgres.*//.*?@(.*?)/(.*)", config.dburl).group(1)
-    if conf  != "production":
-        config.dbuser = re.match(r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl).group(1)
+    if conf != "production":
+        config.dbuser = re.match(
+            r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl
+        ).group(1)
     else:
-        config.dbuser = re.match(r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl).group(1)
-
+        config.dbuser = re.match(
+            r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl
+        ).group(1)
 
     if verbose:
         echoEnviron(config)
@@ -162,7 +166,6 @@ def initdb(config, list_tables, reset, fake, force):
     settings.drop_tables = "Yes"
     asyncio.run(create_initial_courses_users())
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    
 
 
 @cli.command()
