@@ -248,8 +248,11 @@ def shutdown(config):
     help="Only registered users can access this course?",
 )
 @click.option("--institution", help="Your institution")
+@click.option("--courselevel", help="Your course level", default="unknown")
+@click.option("--allowdownloads", help="enable download button", default="F")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
+@click.option("--newserver", default="T", help="use the new book server")
 @click.option(
     "--allow_pairs",
     is_flag=True,
@@ -265,8 +268,11 @@ def addcourse(
     python3,
     login_required,
     institution,
+    courselevel,
+    allowdownloads,
     language,
     host,
+    newserver,
     allow_pairs,
 ):
     """Create a course in the database"""
@@ -323,17 +329,19 @@ def addcourse(
             )
 
     eng.execute(
-        """insert into courses (course_name, base_course, python3, term_start_date, login_required, institution, allow_pairs)
-                values ('{}', '{}', '{}', '{}', '{}', '{}', '{}')
-                """.format(
-            course_name,
-            basecourse,
-            python3,
-            start_date,
-            login_required,
-            institution,
-            allow_pairs,
-        )
+        f"""insert into courses 
+           (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
+                values ('{course_name}', 
+                '{basecourse}',
+                 '{python3}', 
+                 '{start_date}', 
+                 '{login_required}',
+                  '{institution}', 
+                  '{courselevel}',
+                  '{allowdownloads}',
+                  '{allow_pairs}',
+                  '{newserver}')
+                """
     )
 
     click.echo("Course added to DB successfully")
