@@ -174,6 +174,9 @@
         <div id="problems-collapse" class="panel-collapse collapse">
           <div class="panel-body">
             <p>Select the problems which compose this assignment.</p>
+            <button id="remove" class="btn btn-danger pull-right" disabled>
+              <i class="glyphicon glyphicon-trash"></i> Delete
+            </button>
             <table id="questionTable" style="width:100%;"></table>
             <span id="totalPointsCopy" style="margin-bottom: 10px;"></span><br>
             <div class="container">
@@ -378,7 +381,16 @@ var question_picker = $('#tree-question-picker');
 var readings_picker = $('#tree-readings-picker');
 var question_table = $('#questionTable');
 var readings_table = $('#readingsTable');
+var $remove = $('#remove');
+var selections= [];
 // Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
+
+function printMe(){
+      console.log("This is working");
+      // return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'},  question_table);
+                    
+    };
+
 $(function () {
     $("#tags").select2();
     $("#addTags").select2();
@@ -423,8 +435,14 @@ $(function () {
         // Called when a node is unchecked.
         function (node) { remove_reading(node.id); }
     );
-
-
+  
+  //for the delete all; to get the questions id's of the question selecteed
+  function getIdSelections() {
+    //console.log(question_table.bootstrapTable('getSelections'));
+    return $.map(question_table.bootstrapTable('getSelections'), function (row) {
+      return row['question_id']
+    })
+  }  
     // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
     question_table.bootstrapTable({
         // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
@@ -436,14 +454,16 @@ $(function () {
             {
                 field: 'question',
                 title: 'Question',
+
             }, {
                 field: 'question_id',
                 visible: false,
             }, {
                 field: 'points',
-                title: 'Points',
+                title: "Points",
                 // Make the points value editable.
-                editable: true,
+                editable:true,
+                
             }, {
                 field: 'autograde',
                 title: 'Auto-grade',
@@ -462,6 +482,7 @@ $(function () {
             }, {
                 field: 'which_to_grade',
                 title: 'Which to grade',
+                
                 editable: {
                     source: function () {
                         // Update the menu for this item.
@@ -476,36 +497,36 @@ $(function () {
                 // Add a delete column with a button.
                 field: 'delete',
                 title: 'Delete',
-                formatter: function (value, row, index) {
-                    // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
-                    return [
-                        '<a class="question_table_remove" href="javascript:void(0)" title="Remove">',
-                        '<i class="glyphicon glyphicon-remove"><\/i>',
-                        '<\/a>'
-                    ].join('');
-                },
-                events: {
-                     // Copied from ``operateEvents`` in an example_.
-                    'click .question_table_remove': function (e, value, row, index) {
-                        // Unchecking the question in the tree picker also deletes it from the database and table.
-                        if (question_picker.jstree(true).get_node(row['question_id'])) {
-                            question_picker.jstree(true).uncheck_node(row['question_id']);
-                        } else {
-                            // sometimes questions get moved or go private and may be in an old assignment, but no longer
-                            // part of the jstree.  In that case removal should not fail, but we may have to do it directly.
-                            remove_question(row["question_id"]);
-                        }
-
-                    },
-                },
+                checkbox: true,
            },
         ],
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
         // See `onEditableSave <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/editable#oneditablesaveeditable-savebstable>`_.
         onEditableSave : async function(field, row, oldValue, html_element) {
-            let resp = await updateAssignmentRaw(row['question_id'], null, row['points'], row['autograde'], row['which_to_grade']);
-            add_to_qtable(resp);
+          let newPoints=row['points'];
+          let newAutograde=row['autograde'];
+          //console.log(typeof(field));
+          for(let question of $('#questionTable').bootstrapTable('getData')){
+            if (field==="points"){
+              question.points=newPoints;
+            }
+            else if (field==="autograde"){
+              question.autograde=newAutograde;
+            }
+             
+              //row=question.node;
+              let questionId=JSON.stringify(question['question_id']);
+              //let node= question_picker.jstree(true).get_node(row['question_id']);
+              console.log(question);
+              let resp = await updateAssignmentRaw(question['question_id'], null, question['points'], question['autograde'], question['which_to_grade']);
+              add_to_qtable(resp);
+              $('#questionTable').bootstrapTable('refreshOptions',{showRefresh: true})
+              //console.log(question);
+            }
+            
+            
         },
+        // },
          // This function produces no useful output -- the ``dragRow`` and ``droppedAfterRow`` vars sometimes have no relationship to the actual event. I left it here in case for future development.
         ///onReorderRow : function(rows) {
         ///    var [dragRow, droppedAfterRow] = rows;
@@ -534,8 +555,33 @@ $(function () {
             });
         },
     });
+    // deleting question based on selection by the checkbox
+    question_table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove.prop('disabled', !question_table.bootstrapTable('getSelections').length)
 
+      // save our the data, here just save the current page
+      selections = getIdSelections()
+      // push or splice the selections if you want to save all data selections
+    })
+    question_table.on('all.bs.table', function (e, name, args) {    
+    $remove.click(function () {
+      for (let selection of selections){
+        if (question_picker.jstree(true).get_node(selection)) {
+          question_picker.jstree(true).uncheck_node(selection);      
+        }
+        else
+        {
+        remove_question(selection);
+        }
+      }
+      $remove.prop('disabled', true)
+    })})
+  
 
+  
+    
     // This is a `bootstrap table`_. Configuration:
     readings_table.bootstrapTable({
         // Select the ``subchapter_id`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
