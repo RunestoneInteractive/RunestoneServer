@@ -158,6 +158,9 @@
         <div id="readings-collapse" class="panel-collapse collapse">
           <div class="panel-body">
             <p>Define the readings students must complete by selecting chapters and subchapters of the textbook.</p>
+            <button id="remove_readings" class="btn btn-danger pull-right" disabled>
+              <i class="glyphicon glyphicon-trash"></i> Delete
+            </button>
             <table id="readingsTable" style="width:100%;">
             </table>
             <input id="search-tree-readings-picker" type="text">
@@ -382,6 +385,7 @@ var readings_picker = $('#tree-readings-picker');
 var question_table = $('#questionTable');
 var readings_table = $('#readingsTable');
 var $remove = $('#remove');
+var $remove_readings = $('#remove_readings');
 var selections= [];
 // Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
 
@@ -441,6 +445,7 @@ $(function () {
     question_table.bootstrapTable({
         // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
         uniqueId: 'question_id',
+        // checkboxHeader:false,
         // Make the `rows reorderable <https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/reorder-rows>`_.
         reorderableRows: true,
         // Give names for each column, so they can be added via JavaScript, per the `bootstrap docs`_.
@@ -554,7 +559,12 @@ $(function () {
     })})
   
 
-  
+    function getreadingIdSelections() {
+    //console.log(question_table.bootstrapTable('getSelections'));
+    return $.map(readings_table.bootstrapTable('getSelections'), function (row) {
+      return row['subchapter_id']
+    })
+  } 
     
     // This is a `bootstrap table`_. Configuration:
     readings_table.bootstrapTable({
@@ -631,21 +641,7 @@ $(function () {
                 // Add a delete column with a button.
                 field: 'delete',
                 title: 'Delete',
-                formatter: function (value, row, index) {
-                    // Copied from ``operateFormatter`` in an `example <https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html>`_.
-                    return [
-                        '<a class="readings_table_remove" href="javascript:void(0)" title="Remove">',
-                        '<i class="glyphicon glyphicon-remove"><\/i>',
-                        '<\/a>'
-                    ].join('');
-                },
-                events: {
-                     // Copied from ``operateEvents`` in an example_.
-                    'click .readings_table_remove': function (e, value, row, index) {
-                        // Unchecking the question in the tree picker also deletes it from the database and table.
-                        readings_picker.jstree(true).uncheck_node(row['subchapter_id']);
-                    },
-                },
+                checkbox: true,
            },
         ],
         // Configure `events <http://bootstrap-table.wenzhixin.net.cn/documentation/#events>`_.
@@ -679,7 +675,27 @@ $(function () {
             })
         },
     });
+    //delete all/and or selected reading from the readings table
+    readings_table.on('check.bs.table uncheck.bs.table ' +
+      'check-all.bs.table uncheck-all.bs.table',
+    function () {
+      $remove_readings.prop('disabled', !readings_table.bootstrapTable('getSelections').length)
+
+      // save our the data, here just save the current page
+      selection = getreadingIdSelections()
+      // push or splice the selections if you want to save all data selections
+    })
+    readings_table.on('all.bs.table', function (e, name, args) {    
+    $remove_readings.click(function () {
+      // console.log(selection)
+      for (let selections of selection){
+        readings_picker.jstree(true).uncheck_node(selections);
+      }
+      $remove_readings.prop('disabled', true)
+    })})
+
 });
+
 </script>
 
 {{ end }}
