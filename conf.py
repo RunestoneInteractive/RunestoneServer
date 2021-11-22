@@ -173,6 +173,7 @@ exclude_patterns = [
     ".DS_Store",
     ".pytest_cache",
     "tests/.pytest_cache",
+    ".venv",
     # Don't build textbooks.
     "books",
     # Ignore Runestone files.

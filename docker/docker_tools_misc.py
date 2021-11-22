@@ -23,19 +23,11 @@ import click
 
 # Local application
 # -----------------
-from ci_utils import chdir, env, xqt
+from ci_utils import env, xqt
 
 
 # Globals
 # =======
-# The name of the container running the Runestone servers.
-res = subprocess.run(
-    'docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"',
-    shell=True,
-    capture_output=True,
-    text=True,
-)
-RUNESTONE_CONTAINER_NAME = res.stdout.strip()
 SERVER_START_SUCCESS_MESSAGE = "Success! The Runestone servers are running."
 SERVER_START_FAILURE_MESSAGE = "Failed to start the Runestone servers."
 
@@ -43,27 +35,47 @@ SERVER_START_FAILURE_MESSAGE = "Failed to start the Runestone servers."
 # Subcommands for the CLI
 # ========================
 #
-# ``bookserver``
-# --------------
+# ``shell``
+# ---------
+@click.command()
+@click.option(
+    "--venv/--no-venv",
+    default=True,
+    help="Open a shell within the Python virtual environment for the Runestone servers.",
+)
+def shell(venv: bool) -> None:
+    """
+    Open a Bash shell in the Docker container.
+    """
+    # Ask for an interactive console.
+    ensure_in_docker(True)
+    # Skip a check, since the user will see any failures and because this raises an exception of the last command in the shell produced a non-zero exit code.
+    if venv:
+        xqt("poetry run bash", cwd=env.RUNESTONE_PATH, check=False)
+    else:
+        xqt("bash", check=False)
+
+
+# ``start_servers``
+# -----------------
 @click.command()
 @click.option(
     "--dev/--no-dev",
     default=False,
-    help="Run the server in development mode, auto-reloading if the code changes.",
+    help="Run the BookServer in development mode, auto-reloading if the code changes.",
 )
-def bookserver(dev: bool) -> None:
+def start_servers(dev: bool) -> None:
     """
-    Run the bookserver.
+    Run the web servers -- nginx, web2py, and FastAPI -- used by Runestone.
     """
-    run_bookserver(dev)
+
+    _start_servers(dev)
+    # If we exit too early, the servers don't start. Perhaps losing the stdout prematurely causes this?
+    sleep(7)
 
 
-# .. _run_bookserver:
-#
-# run_bookserver
-# --------------
 # Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
-def run_bookserver(dev: bool) -> None:
+def _start_servers(dev: bool) -> None:
     ensure_in_docker()
     xqt(
         "poetry run bookserver --root /ns "
@@ -71,38 +83,10 @@ def run_bookserver(dev: bool) -> None:
         "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
         # This much match the address in `../nginx/sites-available/runestone.template`.
         "--bind unix:/run/fastapi.sock " + ("--reload " if dev else "") + "&",
+        "service nginx start",
+        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=env.RUNESTONE_PATH,
     )
-
-
-# ``book_build``
-# --------------
-@click.command()
-@click.argument("book_sub_name")
-def book_build(book_sub_name) -> None:
-    """
-    Build a Runestone e-book, where BOOK_SUB_NAME provides the name of the subdirectory where a book resides.
-    """
-    ensure_in_docker()
-    chdir(f"{env.RUNESTONE_PATH}/books/{book_sub_name}")
-    xqt(
-        f"{sys.executable} -m runestone build --all",
-        f"{sys.executable} -m runestone deploy",
-    )
-
-
-# ``shell``
-# ---------
-@click.command()
-def shell() -> None:
-    """
-    Open a Bash shell in the Docker container. Do not run this from the GUI -- there's no way to interact with the resulting terminal.
-    """
-    if in_docker():
-        print("Already in Docker. Doing nothing.")
-        return
-    ensure_in_docker(True)
-    xqt("bash")
 
 
 # ``stop_servers``
@@ -113,17 +97,37 @@ def stop_servers() -> None:
     """
     Shut down the web servers and celery, typically before running tests which involve the web servers.
     """
+    _stop_servers()
+
+
+def _stop_servers() -> None:
     ensure_in_docker()
     xqt(
         "pkill celery",
-        "pkill nginx",
         "pkill -f gunicorn",
+        "service nginx stop",
         check=False,
     )
 
 
+# ``test``
+# --------
+@click.command()
+def test() -> None:
+    """
+    Run unit tests.
+    """
+    ensure_in_docker()
+    _stop_servers()
+    pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
+    xqt(f"{pytest} -v applications/runestone/tests", cwd=env.WEB2PY_PATH)
+    xqt(f"{pytest} -v", cwd=f"{env.WEB2PY_PATH}../RunestoneComponents")
+    xqt(f"{pytest} -v", cwd=f"{env.WEB2PY_PATH}../BookServer")
+
+
 # ``wait``
 # --------
+# This is primarily used by tests to wait until the servers are running.
 @click.command()
 def wait() -> None:
     """
@@ -144,7 +148,7 @@ def wait() -> None:
 # ----
 # Add all subcommands in this file to the CLI.
 def add_commands(cli) -> None:
-    for cmd in (bookserver, book_build, shell, stop_servers, wait):
+    for cmd in (shell, start_servers, stop_servers, test, wait):
         cli.add_command(cmd)
 
 
@@ -168,10 +172,19 @@ def in_docker() -> bool:
 def ensure_in_docker(
     # True to make this interactive (the ``-i`` flag in ``docker exec``.)
     is_interactive: bool = False,
-) -> None:
+    # Return value: True if already in Docker; the function calls ``sys.exit(0)``, ending the program, otherwise.
+) -> bool:
     if in_docker():
-        return
-    if RUNESTONE_CONTAINER_NAME == "":
+        return True
+    # Get the name of the container running the Runestone servers.
+    res = subprocess.run(
+        'docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"',
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    runestone_container_name = res.stdout.strip()
+    if runestone_container_name == "":
         click.echo("Error - Unable to find Runestone Server Container")
         sys.exit(1)
 
@@ -182,11 +195,10 @@ def ensure_in_docker(
     # #.    Use env vars defined in the `../Dockerfile`, rather than hard-coding paths. We want these env vars evaluated after the shell in Docker starts, not now, hence the use of ``\$`` and the surrounding double quotes.
     quoted_args = "' '".join(sys.argv[1:])
     xqt(
-        f"docker exec -{'i' if is_interactive else ''}t {RUNESTONE_CONTAINER_NAME} bash -c "
+        f"docker exec -{'i' if is_interactive else ''}t {runestone_container_name} bash -c "
         '"\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py '
         f"'{quoted_args}'\""
     )
-    # TODO: get a return code from the above statement and return that instead.
     sys.exit(0)
 
 

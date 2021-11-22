@@ -202,7 +202,7 @@ python-versions = "*"
 
 [[package]]
 name = "black"
-version = "21.10b0"
+version = "21.11b0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -668,7 +668,7 @@ pyjwt = "*"
 
 [[package]]
 name = "filelock"
-version = "3.3.2"
+version = "3.4.0"
 description = "A platform independent file lock."
 category = "dev"
 optional = false
@@ -944,7 +944,7 @@ format_nongpl = ["fqdn", "idna", "isoduration", "jsonpointer (>1.13)", "rfc3339-
 
 [[package]]
 name = "kombu"
-version = "5.2.1"
+version = "5.2.2"
 description = "Messaging library for Python."
 category = "main"
 optional = false
@@ -963,7 +963,7 @@ mongodb = ["pymongo (>=3.3.0,<3.12.1)"]
 msgpack = ["msgpack"]
 pyro = ["pyro4"]
 qpid = ["qpid-python (>=0.26)", "qpid-tools (>=0.26)"]
-redis = ["redis (>=3.4.1)"]
+redis = ["redis (>=3.4.1,<4.0.0)"]
 slmq = ["softlayer-messaging (>=1.0.3)"]
 sqlalchemy = ["sqlalchemy"]
 sqs = ["boto3 (>=1.9.12)", "pycurl (>=7.44.1,<7.45.0)", "urllib3 (>=1.26.7)"]
@@ -1031,7 +1031,7 @@ lingua = ["lingua"]
 
 [[package]]
 name = "markdown"
-version = "3.3.4"
+version = "3.3.5"
 description = "Python implementation of Markdown."
 category = "dev"
 optional = false
@@ -1913,7 +1913,7 @@ python-dateutil = ">=2.6.0"
 
 [[package]]
 name = "stripe"
-version = "2.62.0"
+version = "2.63.0"
 description = "Python bindings for the Stripe API"
 category = "main"
 optional = false
@@ -2280,8 +2280,8 @@ billiard = [
     {file = "billiard-3.6.4.0.tar.gz", hash = "sha256:299de5a8da28a783d51b197d496bef4f1595dd023a93a4f59dde1886ae905547"},
 ]
 black = [
-    {file = "black-21.10b0-py3-none-any.whl", hash = "sha256:6eb7448da9143ee65b856a5f3676b7dda98ad9abe0f87fce8c59291f15e82a5b"},
-    {file = "black-21.10b0.tar.gz", hash = "sha256:a9952229092e325fe5f3dae56d81f639b23f7131eb840781947e4b2886030f33"},
+    {file = "black-21.11b0-py3-none-any.whl", hash = "sha256:0b1f66cbfadcd332ceeaeecf6373d9991d451868d2e2219ad0ac1213fb701117"},
+    {file = "black-21.11b0.tar.gz", hash = "sha256:83f3852301c8dcb229e9c444dd79f573c8d31c7c2dad9bbaaa94c808630e32aa"},
 ]
 bleach = [
     {file = "bleach-3.3.1-py2.py3-none-any.whl", hash = "sha256:ae976d7174bba988c0b632def82fdc94235756edfb14e6558a9c5be555c9fb78"},
@@ -2545,8 +2545,8 @@ fastapi-login = [
     {file = "fastapi_login-1.6.3-py3-none-any.whl", hash = "sha256:c13373bdd451655c4c25fa3e509864658f4c370e8bd311da3839d16e917ed9f6"},
 ]
 filelock = [
-    {file = "filelock-3.3.2-py3-none-any.whl", hash = "sha256:bb2a1c717df74c48a2d00ed625e5a66f8572a3a30baacb7657add1d7bac4097b"},
-    {file = "filelock-3.3.2.tar.gz", hash = "sha256:7afc856f74fa7006a289fd10fa840e1eebd8bbff6bffb69c26c54a0512ea8cf8"},
+    {file = "filelock-3.4.0-py3-none-any.whl", hash = "sha256:2e139a228bcf56dd8b2274a65174d005c4a6b68540ee0bdbb92c76f43f29f7e8"},
+    {file = "filelock-3.4.0.tar.gz", hash = "sha256:93d512b32a23baf4cac44ffd72ccf70732aeff7b8050fcaf6d3ec406d954baf4"},
 ]
 flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
@@ -2755,8 +2755,8 @@ jsonschema = [
     {file = "jsonschema-4.2.1.tar.gz", hash = "sha256:390713469ae64b8a58698bb3cbc3859abe6925b565a973f87323ef21b09a27a8"},
 ]
 kombu = [
-    {file = "kombu-5.2.1-py3-none-any.whl", hash = "sha256:31bd287191bf56b1addba54a28eced8d6b6b5ba57ad184f48b065578f73c8e33"},
-    {file = "kombu-5.2.1.tar.gz", hash = "sha256:f262a2adc71b53e5b7dad4933bbdee65d8766ca4df6a9043b13edaad2144aaec"},
+    {file = "kombu-5.2.2-py3-none-any.whl", hash = "sha256:d36f0cde6a18d9eb7b6b3aa62a59bfdff7f5724689850e447eca5be8efc9d501"},
+    {file = "kombu-5.2.2.tar.gz", hash = "sha256:0f5d0763fb916808f617b886697b2be28e6bc35026f08e679697fc814b48a608"},
 ]
 lazy-object-proxy = [
     {file = "lazy-object-proxy-1.6.0.tar.gz", hash = "sha256:489000d368377571c6f982fba6497f2aa13c6d1facc40660963da62f5c379726"},
@@ -2841,8 +2841,8 @@ mako = [
     {file = "Mako-1.1.5.tar.gz", hash = "sha256:169fa52af22a91900d852e937400e79f535496191c63712e3b9fda5a9bed6fc3"},
 ]
 markdown = [
-    {file = "Markdown-3.3.4-py3-none-any.whl", hash = "sha256:96c3ba1261de2f7547b46a00ea8463832c921d3f9d6aba3f255a6f71386db20c"},
-    {file = "Markdown-3.3.4.tar.gz", hash = "sha256:31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49"},
+    {file = "Markdown-3.3.5-py3-none-any.whl", hash = "sha256:0d2d09f75cb8d1ffc6770c65c61770b23a61708101f47bda416a002a0edbc480"},
+    {file = "Markdown-3.3.5.tar.gz", hash = "sha256:26e9546bfbcde5fcd072bd8f612c9c1b6e2677cb8aadbdf65206674f46dde069"},
 ]
 markdown-it-py = [
     {file = "markdown-it-py-1.1.0.tar.gz", hash = "sha256:36be6bb3ad987bfdb839f5ba78ddf094552ca38ccbd784ae4f74a4e1419fc6e3"},
@@ -3529,8 +3529,8 @@ strictyaml = [
     {file = "strictyaml-1.5.0.tar.gz", hash = "sha256:273a6382cc98a404d20779351cd5bb12e746397fbe18a8e9ccec4ae3c0ffa0e2"},
 ]
 stripe = [
-    {file = "stripe-2.62.0-py2.py3-none-any.whl", hash = "sha256:026905a5732c28d42997e0bad774a07ca587e696a9b222738ededab3c3402250"},
-    {file = "stripe-2.62.0.tar.gz", hash = "sha256:1fb51d67a961ea889c5be324f020535ed511c6f483bd13a07f48f6e369fa8df0"},
+    {file = "stripe-2.63.0-py2.py3-none-any.whl", hash = "sha256:175e697e3eefbec9aac79628c430468432a518e3aa4e3766bd0b895ee395bbc7"},
+    {file = "stripe-2.63.0.tar.gz", hash = "sha256:816c935e31d82737a9e4362c662e8702bdf9000ea1bd36882cd4cbd23eb81ae1"},
 ]
 thrift = [
     {file = "thrift-0.15.0.tar.gz", hash = "sha256:87c8205a71cf8bbb111cb99b1f7495070fbc9cabb671669568854210da5b3e29"},
