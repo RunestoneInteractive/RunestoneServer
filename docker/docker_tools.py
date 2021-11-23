@@ -184,8 +184,32 @@ except NameError:
     default=False,
     help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
 )
+@click.option(
+    "--clone-rs",
+    default="RunestoneInteractive",
+    nargs=1,
+    help="Clone RunestoneServer with <User> repository",
+)
+@click.option(
+    "--clone-bs",
+    default="RunestoneInteractive",
+    nargs=1,
+    help="Clone BookServer with <User> repository",
+)
+@click.option(
+    "--clone-rc",
+    default="RunestoneInteractive",
+    nargs=1,
+    help="Clone RunestoneComponents with <User> repository",
+)
+@click.option(
+    "--clone-all",
+    default="RunestoneInteractive",
+    nargs=1,
+    help="Clone all Repositories with <User> repositories",
+)
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
-@click.option("--tex/--no-tex", default=False, help="Instal LaTeX and related tools.")
+@click.option("--tex/--no-tex", default=False, help="Install LaTeX and related tools.")
 def build(
     arm: bool,
     author: bool,
@@ -194,6 +218,10 @@ def build(
     pic24: bool,
     tex: bool,
     rust: bool,
+    clone_rs: str,
+    clone_bs: str,
+    clone_rc: str,
+    clone_all: str
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
@@ -248,12 +276,23 @@ def build(
             print(f"Unable to run git: {e} Installing...")
             xqt("sudo apt-get install -y --no-install-recommends git")
 
+        # Check if Clone-All Flag is set
+        if clone_all != "RunestoneInteractive":
+            fork_bs = clone_all
+            fork_rc = clone_all
+            fork_rs = clone_all
+
         # Are we inside the Runestone repo?
         if not (wd / "nginx").is_dir():
             change_dir = True
             # No, we must be running from a downloaded script. Clone the runestone repo.
             print("Didn't find the runestone repo. Cloning...")
-            xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
+            try:
+                # Check if possible to clone RunestoneServer with Custom Repo
+                xqt("export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/%s/RunestoneServer.git"%clone_rs)
+            except subprocess.CalledProcessError as e:
+                # Clone with Default Repo if clone failure Detected (Git Error 128)
+                xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
             chdir("RunestoneServer")
         else:
             # Make sure we're in the root directory of the web2py repo.
@@ -273,7 +312,7 @@ def build(
                     """\
                     from os import environ
 
-                    settings.docker institution_mode = True
+                    settings.docker_institution_mode = True
                     settings.jobe_key = ''
                     settings.jobe_server = 'http://jobe'
                     settings.bks = "ns"
@@ -319,15 +358,27 @@ def build(
                     print(
                         f"Dev mode: since {bks} doesn't exist, cloning the BookServer..."
                     )
-                    xqt("git clone https://github.com/bnmnetp/BookServer.git")
+                    try:
+                        # Check if possible to clone BookServer with Custom Repo
+                        xqt("export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/%s/BookServer.git"%clone_bs)
+                    except subprocess.CalledProcessError as e:
+                        # Clone with Default Repo if clone failure Detected (Git Error 128)
+                        xqt("git clone https://github.com/bnmnetp/BookServer.git")
                 rsc = Path("RunestoneComponents")
                 if not rsc.exists():
                     print(
                         f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
                     )
-                    xqt(
-                        "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
-                    )
+                    try:
+                        # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
+                        xqt(
+                            "export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/%s/BookServer.git"%fork_bs
+                        )
+                    except subprocess.CalledProcessError as e:
+                        # Clone with Default Repo if clone failure Detected (Git Error 128)
+                        xqt(
+                            "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
+                        )
 
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
@@ -335,15 +386,24 @@ def build(
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
             docker_sudo = True
+            
 
         # Provide this script as a more convenient CLI.
         xqt(
             f"{sys.executable} -m pip install --user -e docker",
         )
 
-        # Run the Docker build.
+        # Filter out clone flags
+        arg_pass = []
+        for arg in sys.argv[:]:
+            if arg in ["build", "--dev","--no-dev", "--pic24", "--no-pic24", "--arm", "--no-arm", "--tex", "--no-tex", "--rust", "--no-rust", "--author", "--no-author"]:
+                arg_pass.append(arg)
+
+        print(arg_pass)
+
+        # Run the Docker Build.
         xqt(
-            f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
+            f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(arg_pass)}" --progress plain {" ".join(passthrough)}'
         )
 
         # Print thesse messages last; otherwise, it will be lost in all the build noise.
