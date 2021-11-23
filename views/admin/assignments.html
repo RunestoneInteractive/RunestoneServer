@@ -160,7 +160,9 @@
             <p>Define the readings students must complete by selecting chapters and subchapters of the textbook.</p>
             <button id="remove_readings" class="btn btn-danger pull-right" disabled>
               <i class="glyphicon glyphicon-trash"></i> Delete
-            </button>     
+            </button>
+            <table id="readingsTable" style="width:100%;">
+            </table>
             <input id="search-tree-readings-picker" type="text">
             <div id="tree-readings-picker"></div>
           </div>
@@ -386,6 +388,7 @@ var $remove = $('#remove');
 var $remove_readings = $('#remove_readings');
 var selections= [];
 // Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
+
 $(function () {
     $("#tags").select2();
     $("#addTags").select2();
