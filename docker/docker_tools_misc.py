@@ -193,10 +193,12 @@ def ensure_in_docker(
     # #.    Single-quote each argument before passing it.
     # #.    Run it in the venv used when building Docker, since this avoids installing click globally.
     # #.    Use env vars defined in the `../Dockerfile`, rather than hard-coding paths. We want these env vars evaluated after the shell in Docker starts, not now, hence the use of ``\$`` and the surrounding double quotes.
-    quoted_args = "' '".join(sys.argv[1:])
+    # #.    Use just the name, not the full path, of ``sys.argv[0]``, since the filesystem is different in Docker. We assume that this command will be either in the path (with the venv activated).
+    exec_name = Path(sys.argv[0]).name
+    quoted_args = "' '".join([exec_name] + sys.argv[1:])
     xqt(
         f"docker exec -{'i' if is_interactive else ''}t {runestone_container_name} bash -c "
-        '"\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py '
+        '"source \$RUNESTONE_PATH/.venv/bin/activate; '
         f"'{quoted_args}'\""
     )
     sys.exit(0)
