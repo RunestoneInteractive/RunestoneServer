@@ -162,6 +162,13 @@
               <i class="glyphicon glyphicon-trash"></i> Delete
             </button>
             <table id="readingsTable" style="width:100%;">
+              <thead>
+                <tr>
+                  <th data-field="id">ID</th>
+                  <th data-field="name">Item Name</th>
+                  <th data-field="price">Item Price</th>
+                </tr>
+              </thead>
             </table>
             <input id="search-tree-readings-picker" type="text">
             <div id="tree-readings-picker"></div>
@@ -441,6 +448,7 @@ $(function () {
       return row['question_id']
     })
   }  
+  
     // This is a `bootstrap table <http://bootstrap-table.wenzhixin.net.cn>`_. Configuration:
     question_table.bootstrapTable({
         // Select the ``question`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
@@ -453,6 +461,7 @@ $(function () {
             {
                 field: 'question',
                 title: 'Question',
+              
 
             }, {
                 field: 'question_id',
@@ -496,6 +505,7 @@ $(function () {
                 // Add a delete column with a button.
                 field: 'delete',
                 title: 'Delete',
+                titleTooltip:'Delete All',
                 checkbox: true,
            },
         ],
@@ -535,6 +545,7 @@ $(function () {
         },
     });
     // deleting question based on selection by the checkbox
+    //https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html
     question_table.on('check.bs.table uncheck.bs.table ' +
       'check-all.bs.table uncheck-all.bs.table',
     function () {
@@ -565,7 +576,6 @@ $(function () {
       return row['subchapter_id']
     })
   } 
-    
     // This is a `bootstrap table`_. Configuration:
     readings_table.bootstrapTable({
         // Select the ``subchapter_id`` column as a unique id, per the `bootstrap docs <http://bootstrap-table.wenzhixin.net.cn/documentation/>`_.
@@ -641,6 +651,7 @@ $(function () {
                 // Add a delete column with a button.
                 field: 'delete',
                 title: 'Delete',
+                titleTooltip:'Delete All',
                 checkbox: true,
            },
         ],
@@ -676,6 +687,7 @@ $(function () {
         },
     });
     //delete all/and or selected reading from the readings table
+    //https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html
     readings_table.on('check.bs.table uncheck.bs.table ' +
       'check-all.bs.table uncheck-all.bs.table',
     function () {
