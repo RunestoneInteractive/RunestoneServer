@@ -180,7 +180,7 @@ except NameError:
     help="Install tools needed for development with the Runestone.",
 )
 @click.option(
-    "--pic24","--no-pic24",
+    "--pic24/--no-pic24",
     default=False,
     help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
 )
