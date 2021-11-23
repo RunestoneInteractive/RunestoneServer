@@ -212,6 +212,16 @@
     <div class="content row">
     {{pass}}
         <!-- REGISTRATION -->
+        {{if form.errors: }}
+                            <div class="warning">
+                                <p style="color:red"><b>Please fix the following errors in your registration</b></p>
+                                <ul>
+                                    {{ for error in form.errors:}}
+                                        <li><b>{{=error}}:</b>  {{=form.errors[error]}}</li>
+                                    {{pass}}
+                                </ul>
+                            </div>
+                        {{pass}}
         {{if (request.args(0) == 'register'): }} <!-- register page -->
           {{if not settings.lti_only_mode:}}
             <div id="registration_div">
@@ -318,16 +328,6 @@
                                 });
                             </script>
                         {{=form.custom.end}}
-                        {{if form.errors: }}
-                            <div class="warning">
-                                <p><b>Please fix the following errors in your registration</b></p>
-                                <ul>
-                                    {{ for error in form.errors:}}
-                                        <li>{{=error}}:  {{=form.errors[error]}}</li>
-                                    {{pass}}
-                                </ul>
-                            </div>
-                        {{pass}}
                     </div> <!-- end form div -->
                 </div>
             </div> <!-- end register div -->
