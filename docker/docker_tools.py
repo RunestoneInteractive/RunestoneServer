@@ -271,11 +271,13 @@ def build(
             one_py.write_text(
                 dedent(
                     """\
-                    settings.docker_institution_mode = True
+                    from os import environ
+
+                    settings.docker institution_mode = True
                     settings.jobe_key = ''
                     settings.jobe_server = 'http://jobe'
                     settings.bks = "ns"
-                    settings.python_interpreter = f"{os.environ.get['RUNESTONE_PATH']/.venv/bin/python3"
+                    settings.python_interpreter = f"{environ['RUNESTONE_PATH']}/.venv/bin/python3"
                     # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
                     settings.secret = "supersecret"
                     """
