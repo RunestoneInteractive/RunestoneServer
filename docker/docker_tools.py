@@ -180,30 +180,30 @@ except NameError:
     help="Install tools needed for development with the Runestone.",
 )
 @click.option(
-    "--pic24/--no-pic24",
+    "--pic24","--no-pic24",
     default=False,
     help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
 )
 @click.option(
-    "--clone-rs",
+    "-crs","--clone-rs",
     default="RunestoneInteractive",
     nargs=1,
     help="Clone RunestoneServer with <User> repository",
 )
 @click.option(
-    "--clone-bs",
+    "-cbs","--clone-bs",
     default="RunestoneInteractive",
     nargs=1,
     help="Clone BookServer with <User> repository",
 )
 @click.option(
-    "--clone-rc",
+    "-crc","--clone-rc",
     default="RunestoneInteractive",
     nargs=1,
     help="Clone RunestoneComponents with <User> repository",
 )
 @click.option(
-    "--clone-all",
+    "-c","--clone-all",
     default="RunestoneInteractive",
     nargs=1,
     help="Clone all Repositories with <User> repositories",
@@ -278,9 +278,9 @@ def build(
 
         # Check if Clone-All Flag is set
         if clone_all != "RunestoneInteractive":
-            fork_bs = clone_all
-            fork_rc = clone_all
-            fork_rs = clone_all
+            clone_bs = clone_all
+            clone_rc = clone_all
+            clone_rs = clone_all
 
         # Are we inside the Runestone repo?
         if not (wd / "nginx").is_dir():
@@ -372,7 +372,7 @@ def build(
                     try:
                         # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
                         xqt(
-                            "export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/%s/BookServer.git"%fork_bs
+                            "export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/%s/RunestoneComponents.git"%clone_bs
                         )
                     except subprocess.CalledProcessError as e:
                         # Clone with Default Repo if clone failure Detected (Git Error 128)
