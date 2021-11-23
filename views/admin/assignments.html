@@ -160,16 +160,7 @@
             <p>Define the readings students must complete by selecting chapters and subchapters of the textbook.</p>
             <button id="remove_readings" class="btn btn-danger pull-right" disabled>
               <i class="glyphicon glyphicon-trash"></i> Delete
-            </button>
-            <table id="readingsTable" style="width:100%;">
-              <thead>
-                <tr>
-                  <th data-field="id">ID</th>
-                  <th data-field="name">Item Name</th>
-                  <th data-field="price">Item Price</th>
-                </tr>
-              </thead>
-            </table>
+            </button>     
             <input id="search-tree-readings-picker" type="text">
             <div id="tree-readings-picker"></div>
           </div>
@@ -395,7 +386,6 @@ var $remove = $('#remove');
 var $remove_readings = $('#remove_readings');
 var selections= [];
 // Do all config after the DOM is `ready <https://api.jquery.com/ready/>`_.
-
 $(function () {
     $("#tags").select2();
     $("#addTags").select2();
@@ -542,7 +532,9 @@ $(function () {
             }).fail(function() {
               alert("Failed to Save your reordered question");
             });
+            $question_table.bootstrapTable('refresh')
         },
+        
     });
     // deleting question based on selection by the checkbox
     //https://github.com/wenzhixin/bootstrap-table-examples/blob/master/welcome.html
