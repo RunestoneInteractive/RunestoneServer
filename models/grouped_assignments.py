@@ -39,7 +39,6 @@ db.define_table(
     Field("assignment", db.assignments),
     Field("score", "double"),
     Field("manual_total", "boolean", default=False),
-    Field("projected", "double"),
     # guid for the student x assignment cell in the external gradebook
     #
     # Guessing that the ``lis_outcome_url`` length is actually inteded for this field, use that as its maximum length.

@@ -39,7 +39,6 @@ db.define_table(
     Field("code", "text"),
     Field("emessage", "text"),
     Field("course_id", "integer"),
-    Field("grade", "double"),
     Field("sid", "string"),
     Field("timestamp", "datetime"),
     Field("comment", "text"),
