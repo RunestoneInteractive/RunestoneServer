@@ -289,10 +289,10 @@ def build(
             print("Didn't find the runestone repo. Cloning...")
             try:
                 # Check if possible to clone RunestoneServer with Custom Repo
-                xqt("export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/%s/RunestoneServer.git"%clone_rs)
+                xqt(f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git")
             except subprocess.CalledProcessError as e:
-                # Clone with Default Repo if clone failure Detected (Git Error 128)
-                xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
+                # Exit script with Git Clone Error
+                sys.exit(f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}")
             chdir("RunestoneServer")
         else:
             # Make sure we're in the root directory of the web2py repo.
@@ -360,10 +360,10 @@ def build(
                     )
                     try:
                         # Check if possible to clone BookServer with Custom Repo
-                        xqt("export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/%s/BookServer.git"%clone_bs)
+                        xqt(f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_bs}/BookServer.git")
                     except subprocess.CalledProcessError as e:
-                        # Clone with Default Repo if clone failure Detected (Git Error 128)
-                        xqt("git clone https://github.com/bnmnetp/BookServer.git")
+                        # Exit script with Git Clone Error
+                        sys.exit(f"ERROR: Unable to clone BookServer remote repository via User - {clone_bs}")
                 rsc = Path("RunestoneComponents")
                 if not rsc.exists():
                     print(
@@ -372,13 +372,11 @@ def build(
                     try:
                         # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
                         xqt(
-                            "export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/%s/RunestoneComponents.git"%clone_bs
+                            f"export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/{clone_bs}/RunestoneComponents.git"
                         )
                     except subprocess.CalledProcessError as e:
-                        # Clone with Default Repo if clone failure Detected (Git Error 128)
-                        xqt(
-                            "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
-                        )
+                        # Exit script with Git Clone Error
+                        sys.exit(f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rs}")
 
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
