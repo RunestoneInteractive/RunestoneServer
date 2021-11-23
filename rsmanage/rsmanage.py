@@ -3,6 +3,7 @@ import click
 import csv
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 import signal
@@ -18,6 +19,15 @@ from bookserver.crud import create_initial_courses_users
 from bookserver.db import init_models
 from bookserver.config import settings
 
+
+wd = (Path(__file__).parents[1]).resolve()
+sys.path.extend([str(wd / "docker"), str(wd / "tests")])
+# Run this in Docker if possible. We assume that a development version of the Runestone Server implies Docker.
+try:
+    from docker_tools_misc import ensure_in_docker
+    ensure_in_docker()
+except ModuleNotFoundError:
+    pass
 
 class Config(object):
     def __init__(self):
