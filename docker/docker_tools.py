@@ -50,7 +50,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    # sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -411,8 +411,12 @@ def build(
         browser = "chromium"
     # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
-    xqt("""echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""")
-    xqt("wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -")
+    xqt(
+        """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list"""
+    )
+    xqt(
+        "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -"
+    )
     xqt(
         "apt-get update",
         "apt-get install -y --no-install-recommends eatmydata",
