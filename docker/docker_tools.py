@@ -185,28 +185,32 @@ except NameError:
     help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
 )
 @click.option(
+    "-c","--clone-all",
+    default="RunestoneInteractive",
+    nargs=1,
+    metavar='<USERNAME>',
+    help="Clone all System components from repos with specifed USERNAME",
+)
+@click.option(
     "-crs","--clone-rs",
     default="RunestoneInteractive",
     nargs=1,
-    help="Clone RunestoneServer with <User> repository",
+    metavar='<USERNAME>',
+    help="Clone RunestoneServer repo with USERNAME",
 )
 @click.option(
     "-cbs","--clone-bs",
     default="RunestoneInteractive",
     nargs=1,
-    help="Clone BookServer with <User> repository",
+    metavar='<USERNAME>',
+    help="Clone BookServer repo with USERNAME",
 )
 @click.option(
     "-crc","--clone-rc",
     default="RunestoneInteractive",
     nargs=1,
-    help="Clone RunestoneComponents with <User> repository",
-)
-@click.option(
-    "-c","--clone-all",
-    default="RunestoneInteractive",
-    nargs=1,
-    help="Clone all Repositories with <User> repositories",
+    metavar='<USERNAME>',
+    help="Clone RunestoneComponents repo with USERNAME",
 )
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Install LaTeX and related tools.")
@@ -228,6 +232,8 @@ def build(
 
         PASSTHROUGH: These arguments are passed directly to the underlying "docker build" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py build -- -no-cache" instead of "docker_tools.py build -no-cache" (which produces an error).
 
+        WARNING: Flag '-c / --clone-all' is passed an argument then it will override any other clone flags called.
+    
     Inside a Docker build, install all dependencies as root.
     """
 
@@ -276,8 +282,16 @@ def build(
             print(f"Unable to run git: {e} Installing...")
             xqt("sudo apt-get install -y --no-install-recommends git")
 
-        # Check if Clone-All Flag is set
+        # If Clone-all flag is set override other Clone Flags
         if clone_all != "RunestoneInteractive":
+            # Print Warning and provide countdown to abort script
+            click.secho("Warning: Clone-all flag was initalized and will override any other clone flag specifed!", fg='red')
+            from time import sleep
+            # Wait 20 Seconds prior to proceeding with script
+            for i in range(20, 0, -1):
+                print(f"Press Ctrl+C within {i} seconds abort script...", end="\r")
+                sleep(1)
+            # Set each individual flag to the clone-all argument
             clone_bs = clone_all
             clone_rc = clone_all
             clone_rs = clone_all
@@ -391,17 +405,9 @@ def build(
             f"{sys.executable} -m pip install --user -e docker",
         )
 
-        # Filter out clone flags
-        arg_pass = []
-        for arg in sys.argv[:]:
-            if arg in ["build", "--dev","--no-dev", "--pic24", "--no-pic24", "--arm", "--no-arm", "--tex", "--no-tex", "--rust", "--no-rust", "--author", "--no-author"]:
-                arg_pass.append(arg)
-
-        print(arg_pass)
-
         # Run the Docker Build.
         xqt(
-            f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(arg_pass)}" --progress plain {" ".join(passthrough)}'
+            f'ENABLE_BUILDKIT=1 {"sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
         )
 
         # Print thesse messages last; otherwise, it will be lost in all the build noise.
