@@ -992,6 +992,14 @@ where courses.course_name = %s order by last_name
         print("No instructors found for {}".format(course))
 
 
+@cli.command()
+@pass_config
+def db(config):
+
+    os.system(f"psql {config.dburl}")    
+
+    #  FIXME - input seems to get lost as this starts the psql process but does not read input.
+
 #
 # Utility Functions Below here
 #
