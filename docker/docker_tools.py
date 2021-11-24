@@ -185,31 +185,35 @@ except NameError:
     help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
 )
 @click.option(
-    "-c","--clone-all",
+    "-c",
+    "--clone-all",
     default="RunestoneInteractive",
     nargs=1,
-    metavar='<USERNAME>',
+    metavar="<USERNAME>",
     help="Clone all System components from repos with specifed USERNAME",
 )
 @click.option(
-    "-crs","--clone-rs",
+    "-crs",
+    "--clone-rs",
     default="RunestoneInteractive",
     nargs=1,
-    metavar='<USERNAME>',
+    metavar="<USERNAME>",
     help="Clone RunestoneServer repo with USERNAME",
 )
 @click.option(
-    "-cbs","--clone-bs",
+    "-cbs",
+    "--clone-bs",
     default="RunestoneInteractive",
     nargs=1,
-    metavar='<USERNAME>',
+    metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
 )
 @click.option(
-    "-crc","--clone-rc",
+    "-crc",
+    "--clone-rc",
     default="RunestoneInteractive",
     nargs=1,
-    metavar='<USERNAME>',
+    metavar="<USERNAME>",
     help="Clone RunestoneComponents repo with USERNAME",
 )
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
@@ -225,14 +229,14 @@ def build(
     clone_rs: str,
     clone_bs: str,
     clone_rc: str,
-    clone_all: str
+    clone_all: str,
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
 
         PASSTHROUGH: These arguments are passed directly to the underlying "docker build" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py build -- -no-cache" instead of "docker_tools.py build -no-cache" (which produces an error).
 
-        WARNING: Flag '-c / --clone-all' is passed an argument then it will override any other clone flags called.
+        WARNING: Flag '-c / --clone-all' is passed an argument then it will override any other clone flags specified.
     
     Inside a Docker build, install all dependencies as root.
     """
@@ -285,8 +289,12 @@ def build(
         # If Clone-all flag is set override other Clone Flags
         if clone_all != "RunestoneInteractive":
             # Print Warning and provide countdown to abort script
-            click.secho("Warning: Clone-all flag was initalized and will override any other clone flag specifed!", fg='red')
+            click.secho(
+                "Warning: Clone-all flag was initalized and will override any other clone flag specifed!",
+                fg="red",
+            )
             from time import sleep
+
             # Wait 20 Seconds prior to proceeding with script
             for i in range(20, 0, -1):
                 print(f"Press Ctrl+C within {i} seconds abort script...", end="\r")
@@ -303,10 +311,14 @@ def build(
             print("Didn't find the runestone repo. Cloning...")
             try:
                 # Check if possible to clone RunestoneServer with Custom Repo
-                xqt(f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git")
+                xqt(
+                    f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git"
+                )
             except subprocess.CalledProcessError as e:
                 # Exit script with Git Clone Error
-                sys.exit(f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}")
+                sys.exit(
+                    f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}"
+                )
             chdir("RunestoneServer")
         else:
             # Make sure we're in the root directory of the web2py repo.
@@ -374,10 +386,14 @@ def build(
                     )
                     try:
                         # Check if possible to clone BookServer with Custom Repo
-                        xqt(f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_bs}/BookServer.git")
+                        xqt(
+                            f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_bs}/BookServer.git"
+                        )
                     except subprocess.CalledProcessError as e:
                         # Exit script with Git Clone Error
-                        sys.exit(f"ERROR: Unable to clone BookServer remote repository via User - {clone_bs}")
+                        sys.exit(
+                            f"ERROR: Unable to clone BookServer remote repository via User - {clone_bs}"
+                        )
                 rsc = Path("RunestoneComponents")
                 if not rsc.exists():
                     print(
@@ -390,7 +406,9 @@ def build(
                         )
                     except subprocess.CalledProcessError as e:
                         # Exit script with Git Clone Error
-                        sys.exit(f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rs}")
+                        sys.exit(
+                            f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rs}"
+                        )
 
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
@@ -398,12 +416,9 @@ def build(
             xqt('sudo usermod -a -G www-data "$USER"')
             did_group_add = True
             docker_sudo = True
-            
 
         # Provide this script as a more convenient CLI.
-        xqt(
-            f"{sys.executable} -m pip install --user -e docker",
-        )
+        xqt(f"{sys.executable} -m pip install --user -e docker")
 
         # Run the Docker Build.
         xqt(
@@ -466,7 +481,7 @@ def build(
     # Add in Chrome repo. Copied from https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
     # Unless we are on an ARM64 processor, then we will fall back to using chromium
     xqt(
-        "curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -",
+        "curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
     )
     if platform.uname().machine == "x86_64":
         Path("/etc/apt/sources.list.d/google-chrome.list").write_text(
@@ -477,8 +492,12 @@ def build(
         browser = "chromium"
     # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
-    xqt("""echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""")
-    xqt("wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -")
+    xqt(
+        """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list"""
+    )
+    xqt(
+        "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -"
+    )
     xqt(
         "apt-get update",
         "apt-get install -y --no-install-recommends eatmydata",
@@ -574,17 +593,14 @@ def build(
             f.write("\nexport PATH=$PATH:/opt/microchip/xc16/v1.70/bin\n")
         # Just symlink mdb, since that's the only tool we use.
         xqt(
-            "ln -sf /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb",
+            "ln -sf /opt/microchip/mplabx/v5.50/mplab_platform/bin/mdb.sh /usr/local/bin/mdb"
         )
 
         # Microchip tools (mdb) needs write access to these directories.
         mchp_packs = "/var/www/.mchp_packs"
         java = "/var/www/.java"
         for path in (mchp_packs, java):
-            xqt(
-                f"mkdir {path}",
-                f"eatmydata chown www-data:www-data {path}",
-            )
+            xqt(f"mkdir {path}", f"eatmydata chown www-data:www-data {path}")
 
     if tex:
         xqt(
@@ -616,10 +632,7 @@ def build(
     xqt(
         "eatmydata curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | POETRY_HOME=/usr/local python -"
     )
-    xqt(
-        "rm -rf $WEB2PY_PATH/.cache/*",
-        "cp scripts/routes.py $WEB2PY_PATH/routes.py",
-    )
+    xqt("rm -rf $WEB2PY_PATH/.cache/*", "cp scripts/routes.py $WEB2PY_PATH/routes.py")
 
     # Set up config files
     # ^^^^^^^^^^^^^^^^^^^
@@ -716,10 +729,7 @@ def _build_phase2(
     if (rsc / "runestone").is_dir():
         chdir(rsc)
         # Build the webpack after the Runestone Components are installed.
-        xqt(
-            "npm install",
-            "npm run build",
-        )
+        xqt("npm install", "npm run build")
 
     xqt(
         # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
