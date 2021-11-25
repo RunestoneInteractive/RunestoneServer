@@ -318,7 +318,6 @@ def build(
                         f"Dev mode: since {bks} doesn't exist, cloning the BookServer..."
                     )
                     xqt("git clone https://github.com/bnmnetp/BookServer.git")
-                    xqt("ln -s BookServer web2py/applications/BookServer")
                 rsc = Path("RunestoneComponents")
                 if not rsc.exists():
                     print(
@@ -327,7 +326,6 @@ def build(
                     xqt(
                         "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
                     )
-                    xqt("ln -s BookServer web2py/applications/RunestoneComponents")
                     
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
