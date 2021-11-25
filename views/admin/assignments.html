@@ -441,12 +441,16 @@ $(function () {
                 visible: false,
             }, {
                 field: 'points',
-                title: 'Points',
+                title: 'Points   '+'<button id="applyAllpoints" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="margin-left:20%;border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 // Make the points value editable.
                 editable: true,
             }, {
                 field: 'autograde',
-                title: 'Auto-grade',
+                title: 'Autograde   '+'<button id="applyAllautograde" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="margin-left:20%;border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 // Specify that the ``autograde`` column should be edited by a select drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
                 //
                 // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
@@ -461,7 +465,9 @@ $(function () {
                 visible: false,
             }, {
                 field: 'which_to_grade',
-                title: 'Which to grade',
+                title: 'Which to grade   '+'<button id="applyAllwhich_to_grade" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="margin-left:20%;border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 editable: {
                     source: function () {
                         // Update the menu for this item.
@@ -535,6 +541,46 @@ $(function () {
         },
     });
 
+        // Tooltip handler for the apply all changes. Resource: https://getbootstrap.com/docs/4.0/components/tooltips/
+        $(function(){
+      $("#applyAllpoints,#applyAllautograde,#applyAllwhich_to_grade,#applyAllreadingPoints, #applyAllreadingAutograde, #applyAllreadingWhich_to_grade, #applyAllrequired").tooltip();
+    });
+    
+    // Add event handlers to the apply all buttons in the Readings table
+    $("#applyAllpoints, #applyAllautograde, #applyAllwhich_to_grade").on("click",
+    async function () {
+      // select the first row in the table
+      let editedQuestion=$("#questionTable").bootstrapTable("getData")[0];
+      // store the values of the first row to be used in updating the column
+      let newPoints = editedQuestion["points"];
+      let newAutograde = editedQuestion["autograde"];
+      let newWhich_to_grade = editedQuestion["which_to_grade"];
+      for (let question of $("#questionTable").bootstrapTable("getData")) {
+        // identify the column to change from the id of the element clicked
+        let applyAllId=$(this).attr('id');
+        
+        if ( applyAllId=== "applyAllpoints") {
+              question.points = newPoints;
+            } else if (applyAllId=== "applyAllautograde") {
+              question.autograde = newAutograde;
+            } else if (applyAllId == "applyAllwhich_to_grade") {
+              question.which_to_grade = newWhich_to_grade;
+            }
+         // get the questionId and update the row
+         let questionId = JSON.stringify(question["question_id"]);
+            let resp = await updateAssignmentRaw(
+              question["question_id"],
+              null,
+              question["points"],
+              question["autograde"],
+              question["which_to_grade"]
+            );
+            add_to_qtable(resp);
+            // refresh table as the values change
+            $("#questionTable").bootstrapTable("refreshOptions", {});
+      }
+    }
+  )
 
     // This is a `bootstrap table`_. Configuration:
     readings_table.bootstrapTable({
@@ -559,7 +605,9 @@ $(function () {
                 title: 'Activity count',
             }, {
                 field: 'activities_required',
-                title: '# required',
+                title: '# required    '+'<button id="applyAllrequired" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="border-radius:15%;" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 // The hack_ again.
                 editable: {
                     // TODO: Validate that this is <= activity_count. See validate at http://vitalets.github.io/x-editable/docs.html#editable.
@@ -576,12 +624,16 @@ $(function () {
                 },
             }, {
                 field: 'points',
-                title: 'Points',
+                title: 'Points    '+'<button id="applyAllreadingPoints" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 // Make the points value editable.
                 editable: true,
             }, {
                 field: 'autograde',
-                title: 'Auto-grade',
+                title: 'Auto-grade    '+'<button id="applyAllreadingAutograde" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 // Specify that the ``autograde`` column should be edited by a select drop-down. See `type <http://vitalets.github.io/x-editable/docs.html#editable>`_, and `source <http://vitalets.github.io/x-editable/docs.html#select>`_ attributes.
                 //
                 // A bit of a _`hack`: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
@@ -596,7 +648,9 @@ $(function () {
                 visible: false,
             }, {
                 field: 'which_to_grade',
-                title: 'Which to grade',
+                title: 'Which to grade    '+'<button id="applyAllreadingWhich_to_grade" class="editable-submit btn-primary" data-toggle="tooltip" data-placement="bottom" title="Apply All changes to column" style="border-radius:15%" href="javascript:void(0)">'+
+                  '<i class="glyphicon glyphicon-check"></i>'+
+                  '</button>',
                 editable: {
                     source: function () {
                         // Update the menu for this item.
@@ -659,6 +713,39 @@ $(function () {
             })
         },
     });
+
+      // Add event handlers to the apply all buttons in the Readings table
+      $("#applyAllreadingPoints, #applyAllreadingAutograde, #applyAllreadingWhich_to_grade, #applyAllrequired").on("click",
+    async function () {
+      // select the first row in the readingsTable
+      let editedReading=$("#readingsTable").bootstrapTable("getData")[0];
+      // store the values of the first row to be used in updating the column
+      let newreadingPoints = editedReading["points"];
+      let newreadingAutograde = editedReading["autograde"];
+      let newreadingWhich_to_grade = editedReading["which_to_grade"];
+      let newreadingRequired=editedReading["activities_required"];
+      for (let reading of $("#readingsTable").bootstrapTable("getData")) {
+        // identify the column to change from the id of the element clicked
+        let applyAllId=$(this).attr('id');
+        if ( applyAllId=== "applyAllreadingPoints") {
+              reading.points = newreadingPoints;
+            } else if (applyAllId=== "applyAllreadingAutograde") {
+              reading.autograde = newreadingAutograde;
+            } else if (applyAllId == "applyAllreadingWhich_to_grade") {
+              reading.which_to_grade = newreadingWhich_to_grade;
+            }
+            else if (applyAllId==="applyAllrequired"){
+              reading.activities_required=newreadingRequired;
+            }
+         // get the subChapterId and update the row
+         let subChapterId = JSON.stringify(editedReading["subchapter_id"]);
+         let resp = await updateReading(reading['subchapter_id'], reading['activities_required'], reading['points'], reading['autograde'], reading['which_to_grade']);
+            add_to_table(resp);
+            //refresh table as the values change
+            $("#readingsTable").bootstrapTable("refreshOptions", {});
+      }
+    }
+  )
 });
 </script>
 
