@@ -50,7 +50,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    # sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -138,8 +138,11 @@ try:
     from docker_tools_misc import (
         add_commands,
         get_bookserver_path,
+        get_ready_file,
         in_docker,
-        run_bookserver,
+        SERVER_START_FAILURE_MESSAGE,
+        SERVER_START_SUCCESS_MESSAGE,
+        _start_servers,
     )
 except ImportError:
     print("Note: this must be an initial install; additional commands missing.")
@@ -360,21 +363,33 @@ def build(
 
     # Step 3 - startup script for container.
     if phase == "2":
+        base_ready_text = dedent(
+            """\
+            This file reports the status of the Docker containerized
+            application.
+
+            The container is starting up...
+            """
+        )
+        get_ready_file().write_text(base_ready_text)
         try:
             _build_phase2(arm, author, dev, pic24, tex, rust)
-            print("Success! The Runestone servers are running.")
         except Exception:
-            print("Failed to start the Runestone servers.")
+            msg = SERVER_START_FAILURE_MESSAGE
             print_exc()
+        else:
+            msg = SERVER_START_SUCCESS_MESSAGE
+        print(msg)
+        get_ready_file().write_text(base_ready_text + msg)
 
         # Notify listener user we're done.
         print("=-=-= Runestone setup finished =-=-=")
-        # Flush now, so that text won't stay hidden in Python's buffers. The next step is to do nothing (where no flush occurs and the text would otherwise stay hidden).
-        sys.stdout.flush()
-        sys.stderr.flush()
         # If this script exits, then Docker re-runs it. So, loop forever.
         while True:
-            sleep(1000)
+            # Flush now, so that text won't stay hidden in Python's buffers. The next step is to do nothing (where no flush occurs and the text would otherwise stay hidden).
+            sys.stdout.flush()
+            sys.stderr.flush()
+            sleep(1)
 
     # Step 2: install Runestone dependencies
     # ---------------------------------------
@@ -398,8 +413,12 @@ def build(
         browser = "chromium"
     # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
     xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
-    xqt("""echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""")
-    xqt("wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -")
+    xqt(
+        """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list"""
+    )
+    xqt(
+        "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -"
+    )
     xqt(
         "apt-get update",
         "apt-get install -y --no-install-recommends eatmydata",
@@ -596,7 +615,7 @@ def _build_phase2(
         cwd=env.RUNESTONE_PATH,
     )
     activate_this_path = f"{env.RUNESTONE_PATH}/.venv/bin/activate_this.py"
-    exec(open(activate_this_path).read(), {'__file__': activate_this_path})
+    exec(open(activate_this_path).read(), {"__file__": activate_this_path})
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
     bookserver_path = get_bookserver_path()
@@ -711,17 +730,8 @@ def _build_phase2(
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
 
-    print("starting nginx")
-    xqt("service nginx start")
-
-    print("Starting web2py...")
-    xqt(
-        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
-        cwd=env.RUNESTONE_PATH,
-    )
-
-    print("Starting FastAPI server")
-    run_bookserver(dev)
+    print("Starting web servers.")
+    _start_servers(dev)
 
     # Certbot requires nginx to be running to succeed, hence its placement here.
     if env.CERTBOT_EMAIL:
