@@ -33,6 +33,7 @@ oauth2 = ">=1.9"
 pandas = "^1.0.0"
 pathlib2 = "^2.0.0"
 Paver = ">= 1.2.4"
+pgcli = "^3.0.0"
 psycopg2-binary = "^2.0.0"
 pylint = ">= 1.2.1"
 python = "^3.8"
@@ -55,8 +56,8 @@ pyjwt = "== 2.0.1"
 [tool.poetry.dev-dependencies]
 beautifulsoup4 = "^4.0.0"
 black = "^21.0b"
-bookserver = { path = "../../../BookServer", develop = true }
-bookserver-dev = { path = "../../../bookserver-dev", develop = true }
+bookserver = { path = "../BookServer", develop = true }
+bookserver-dev = { path = "../bookserver-dev", develop = true }
 CodeChat = ">= 1.8.6"
 contextlib2 = "^0.6.0"
 coverage = "< 5.0"
@@ -72,7 +73,7 @@ polling2 = "^0.4.0"
 pytest = "^6.0.0"
 pyvirtualdisplay = "^2.0.0"
 pywin32 = {version = ">= 301", markers = "sys.platform == 'win32'"}
-runestone = { path = "../../../RunestoneComponents", develop = true }
+runestone = { path = "../RunestoneComponents", develop = true }
 selenium = "^3.0.0"
 
 

@@ -135,9 +135,16 @@ def in_docker() -> bool:
     try:
         return "docker" in Path("/proc/1/cgroup").read_text()
     except Exception:
-        # Newer Docker versions create a file -- just look for that.
-        return Path("/.dockerenv").is_file()
-
+        pass
+    # Newer Docker versions create a file -- just look for that.
+    if Path("/.dockerenv").is_file():
+        return True
+    # Try looking at the first process to see if it's ``sh``.
+    sched = Path("/proc/1/sched")
+    if sched.is_file():
+        return sched.read_text().startswith("sh")
+    # We can't find any evidence of Docker. Assume it's not running.
+    return False
 
 # If we're not in Docker, then re-run this command inside Docker.
 def ensure_in_docker() -> None:

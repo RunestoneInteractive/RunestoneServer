@@ -12,6 +12,7 @@ import subprocess
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
+from pgcli.main import cli as clipg
 from psycopg2.errors import UniqueViolation
 import sys
 
@@ -992,18 +993,15 @@ where courses.course_name = %s order by last_name
         print("No instructors found for {}".format(course))
 
 
-from pgcli.main import cli as clipg
 
 @cli.command()
 @pass_config
 def db(config):
-    click.echo("Hello from db")
-    #os.system(f"psql {config.dburl}")    
-    #os.system("/bin/bash")    
-    click.echo(sys.argv)
+
+    # replace argv[1] which is 'db' with the url to connect to
     sys.argv[1] = config.dburl
     sys.exit(clipg())
-    #  TODO - input seems to get lost as this starts the psql process but does not read input.
+
 
 #
 # Utility Functions Below here
