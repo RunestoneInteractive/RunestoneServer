@@ -293,12 +293,6 @@ def build(
                 "Warning: Clone-all flag was initalized and will override any other clone flag specifed!",
                 fg="red",
             )
-            from time import sleep
-
-            # Wait 20 Seconds prior to proceeding with script
-            for i in range(20, 0, -1):
-                print(f"Press Ctrl+C within {i} seconds abort script...", end="\r")
-                sleep(1)
             # Set each individual flag to the clone-all argument
             clone_bs = clone_all
             clone_rc = clone_all
