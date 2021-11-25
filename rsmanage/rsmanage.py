@@ -992,13 +992,18 @@ where courses.course_name = %s order by last_name
         print("No instructors found for {}".format(course))
 
 
+from pgcli.main import cli as clipg
+
 @cli.command()
 @pass_config
 def db(config):
-
-    os.system(f"psql {config.dburl}")    
-
-    #  FIXME - input seems to get lost as this starts the psql process but does not read input.
+    click.echo("Hello from db")
+    #os.system(f"psql {config.dburl}")    
+    #os.system("/bin/bash")    
+    click.echo(sys.argv)
+    sys.argv[1] = config.dburl
+    sys.exit(clipg())
+    #  TODO - input seems to get lost as this starts the psql process but does not read input.
 
 #
 # Utility Functions Below here
