@@ -553,8 +553,11 @@ def admin_logger(logger):
                 course_id=course,
             )
         except Exception as e:
-            logger.error(f"failed to insert log record for {request.controller} {request.function}: {e}")
+            logger.error(
+                f"failed to insert log record for {request.controller} {request.function}: {e}"
+            )
             db.rollback()
+
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):
     cinfo = db(db.courses.course_name == course_name).select().first()
