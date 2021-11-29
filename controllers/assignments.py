@@ -147,11 +147,10 @@ def get_summary():
     )
 
     res = db.executesql(
-        """
-    select chapter, name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
+        """select chapter, name, min(question_type) question_type, min(score), max(score), to_char(avg(score), '00.999') as  mean, count(score) 
+from assignment_questions join questions on question_id = questions.id join question_grades on name =  div_id 
 where assignment_id = %s and course_name = %s
-group by chapter, name
-    """,
+group by chapter, name""",
         (assignment.id, auth.user.course_name),
         as_dict=True,
     )
@@ -162,8 +161,8 @@ group by chapter, name
     unsupported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
 
     for row in res:
-        question = db(db.questions.name == row["name"]).select().first()
-        if question.question_type not in unsupported_question_types: 
+        # question = db(db.questions.name == row["name"]).select().first()
+        if row["question_type"] not in unsupported_question_types: 
             if row["count"] > 0:
                 row[
                     "name"
