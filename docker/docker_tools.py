@@ -50,7 +50,7 @@ from textwrap import dedent
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    # sys.exit()
+    sys.exit()
 
 
 # Check to see if a program is installed; if not, install it.
@@ -403,7 +403,6 @@ def build(
                         sys.exit(
                             f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rc}"
                         )
-
         # Ensure the user is in the ``www-data`` group.
         print("Checking to see if the current user is in the www-data group...")
         if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:

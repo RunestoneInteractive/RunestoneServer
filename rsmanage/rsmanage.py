@@ -1,16 +1,34 @@
+import asyncio
 import click
 import csv
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 import signal
 import subprocess
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
+from pgcli.main import cli as clipg
 from psycopg2.errors import UniqueViolation
 import sys
 
+from bookserver.crud import create_initial_courses_users
+from bookserver.db import init_models
+from bookserver.config import settings
+
+
+wd = (Path(__file__).parents[1]).resolve()
+sys.path.extend([str(wd / "docker"), str(wd / "tests")])
+# Run this in Docker if possible. We assume that a development version of the Runestone Server implies Docker.
+try:
+    from docker_tools_misc import ensure_in_docker
+    ensure_in_docker()
+except ModuleNotFoundError:
+    pass
 
 class Config(object):
     def __init__(self):
@@ -58,11 +76,14 @@ def cli(config, verbose, if_clean):
     config.conf = conf
     config.dbname = re.match(r"postgres.*//.*?@.*?/(.*)", config.dburl).group(1)
     config.dbhost = re.match(r"postgres.*//.*?@(.*?)/(.*)", config.dburl).group(1)
-    if conf  != "production":
-        config.dbuser = re.match(r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl).group(1)
+    if conf != "production":
+        config.dbuser = re.match(
+            r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl
+        ).group(1)
     else:
-        config.dbuser = re.match(r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl).group(1)
-
+        config.dbuser = re.match(
+            r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl
+        ).group(1)
 
     if verbose:
         echoEnviron(config)
@@ -117,12 +138,9 @@ def initdb(config, list_tables, reset, fake, force):
             shell=True,
         )
         if res == 0:
-            res = subprocess.call(
-                "createdb --echo --host={} --username={} {}".format(
-                    config.dbhost, config.dbuser, config.dbname
-                ),
-                shell=True,
-            )
+            # Because click wont natively support making commands async we can use this simple method
+            # to cll async functions.
+            asyncio.run(init_models())
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -156,18 +174,9 @@ def initdb(config, list_tables, reset, fake, force):
         message="Initializing the database", file=None, nl=True, err=False, color=None
     )
 
-    if fake:
-        os.environ["WEB2PY_MIGRATE"] = "fake"
-
+    settings.drop_tables = "Yes"
+    asyncio.run(create_initial_courses_users())
     list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    cmd = "{} web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(
-        sys.executable, APP, APP_PATH, list_tables
-    )
-    click.echo("Running: {}".format(cmd))
-    res = subprocess.call(cmd, shell=True)
-
-    if res != 0:
-        click.echo(message="Database Initialization Failed")
 
 
 @cli.command()
@@ -250,8 +259,11 @@ def shutdown(config):
     help="Only registered users can access this course?",
 )
 @click.option("--institution", help="Your institution")
+@click.option("--courselevel", help="Your course level", default="unknown")
+@click.option("--allowdownloads", help="enable download button", default="F")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
+@click.option("--newserver", default="T", help="use the new book server")
 @click.option(
     "--allow_pairs",
     is_flag=True,
@@ -267,8 +279,11 @@ def addcourse(
     python3,
     login_required,
     institution,
+    courselevel,
+    allowdownloads,
     language,
     host,
+    newserver,
     allow_pairs,
 ):
     """Create a course in the database"""
@@ -325,17 +340,19 @@ def addcourse(
             )
 
     eng.execute(
-        """insert into courses (course_name, base_course, python3, term_start_date, login_required, institution, allow_pairs)
-                values ('{}', '{}', '{}', '{}', '{}', '{}', '{}')
-                """.format(
-            course_name,
-            basecourse,
-            python3,
-            start_date,
-            login_required,
-            institution,
-            allow_pairs,
-        )
+        f"""insert into courses 
+           (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
+                values ('{course_name}', 
+                '{basecourse}',
+                 '{python3}', 
+                 '{start_date}', 
+                 '{login_required}',
+                  '{institution}', 
+                  '{courselevel}',
+                  '{allowdownloads}',
+                  '{allow_pairs}',
+                  '{newserver}')
+                """
     )
 
     click.echo("Course added to DB successfully")
@@ -974,6 +991,16 @@ where courses.course_name = %s order by last_name
             )
     else:
         print("No instructors found for {}".format(course))
+
+
+
+@cli.command()
+@pass_config
+def db(config):
+
+    # replace argv[1] which is 'db' with the url to connect to
+    sys.argv[1] = config.dburl
+    sys.exit(clipg())
 
 
 #

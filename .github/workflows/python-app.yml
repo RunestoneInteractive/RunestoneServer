@@ -115,6 +115,9 @@ jobs:
                     cd RunestoneServer
                     docker-compose up -d
                     docker-compose logs --follow &
+                    # Wait for the container to start and create a basic venv before running docker tools inside it.
                     sleep 5
-                    docker-tools wait
+                    # Invoke this directly, since the ``docker-tools`` script isn't installed yet.
+                    docker exec -t runestoneserver_runestone_1 bash -c "\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py wait"
+                    # After this, the docker tools are installed.
                     docker-tools stop-servers
