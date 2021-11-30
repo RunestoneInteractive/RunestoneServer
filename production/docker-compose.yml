@@ -14,14 +14,7 @@ services:
   runestone:
     image: runestone/server
     restart: always
-    volumes:
-      # This must agree with ``$RUNESTONE_PATH`` in the `Dockerfile`. There's no easy way to share this automatically.
-      - ./:/srv/web2py/applications/runestone
-      # For certbot, store certificates outside the (ephemeral) write layer.
-      - ./docker/letsencrypt:/etc/letsencrypt
     links:
-      - db
-      - redis
       - jobe
     ports:
       - "80:80"
