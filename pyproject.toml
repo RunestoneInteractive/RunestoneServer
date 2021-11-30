@@ -1,10 +1,10 @@
 # ********************************
 # |docname| - Poetry configuration
 # ********************************
-# See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>_ to get an understanding of
+# See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>`_ to get an understanding of
 # how poetry does specifies dependencies.
 #
-# **Important**: Before running ``poetry install`` or ``poetry update``, run ``make-dev-dependencies`` so that development dependencies will be installed correctly. See `scripts/make_dev_dependencies.py`. Since this script isn't installed until the first run of ``poetry install``, run the script manually (``python3 -m pip install --user toml`` then ``python3 runestone_poetry_project/make_dev_dependencies.py``) before the first install.
+# **Important**: Before running ``poetry install`` or ``poetry update``, run ``poetry-fix`` so that development dependencies will be installed correctly. See `runestone_poetry_project/poetry_fix.py`. Since this script isn't installed until the first run of ``poetry install``, run the script after the install then run ``poetry update`` again.
 #
 #
 # Project metadata
@@ -33,7 +33,6 @@ oauth2 = ">=1.9"
 pandas = "^1.0.0"
 pathlib2 = "^2.0.0"
 Paver = ">= 1.2.4"
-pgcli = "^3.0.0"
 psycopg2-binary = "^2.0.0"
 pylint = ">= 1.2.1"
 python = "^3.8"
@@ -56,8 +55,8 @@ pyjwt = "== 2.0.1"
 [tool.poetry.dev-dependencies]
 beautifulsoup4 = "^4.0.0"
 black = "^21.0b"
-bookserver = { path = "../../../BookServer", develop = true }
-bookserver-dev = { path = "../../../bookserver-dev", develop = true }
+bookserver = { path = "../BookServer", develop = true }
+bookserver-dev = { path = "../bookserver-dev", develop = true }
 CodeChat = ">= 1.8.6"
 contextlib2 = "^0.6.0"
 coverage = "< 5.0"
@@ -72,8 +71,8 @@ myst-parser = "^0.15.0"
 polling2 = "^0.4.0"
 pytest = "^6.0.0"
 pyvirtualdisplay = "^2.0.0"
-pywin32 = {version = ">= 301", markers = "sys.platform == 'win32'"}
-runestone = { path = "../../../RunestoneComponents", develop = true }
+pywin32 = { version = ">= 301", markers = "sys.platform == 'win32'" }
+runestone = { path = "../RunestoneComponents", develop = true }
 selenium = "^3.0.0"
 
 
@@ -84,10 +83,10 @@ selenium = "^3.0.0"
 # .. toctree::
 #
 #   runestone_poetry_project/__init__.py
-#   runestone_poetry_project/make_dev_pyproject.py
+#   runestone_poetry_project/poetry_fix.py
 #
 [tool.poetry.scripts]
-make-dev-pyproject = "runestone_poetry_project.make_dev_pyproject:main"
+poetry-fix = "runestone_poetry_project.poetry_fix:main"
 
 
 # Poetry backend

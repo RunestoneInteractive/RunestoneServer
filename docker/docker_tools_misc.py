@@ -85,7 +85,7 @@ def _start_servers(dev: bool) -> None:
         "--bind unix:/run/fastapi.sock " + ("--reload " if dev else "") + "&",
         "service nginx start",
         "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
-        cwd=env.RUNESTONE_PATH,
+        cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
     )
 
 
@@ -154,13 +154,10 @@ def add_commands(cli) -> None:
 
 # Determine if we're running in a Docker container.
 def in_docker() -> bool:
-    # This is difficult, and varies between OSes (Linux vs OS X) and Docker versions. Try a few different approaches and hope one works.
-    # From a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
-    try:
-        if "docker" in Path("/proc/1/cgroup").read_text():
-            return True
-    except Exception:
-        pass
+    # This is difficult, and varies between OSes (Linux vs OS X) and Docker versions. Try a few different approaches and hope one works. This was taken from a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
+    cgroup = Path("/proc/1/cgroup")
+    if cgroup.is_file():
+        return "docker" in cgroup.read_text()
     # Newer Docker versions create a file -- just look for that.
     if Path("/.dockerenv").is_file():
         return True
@@ -170,6 +167,7 @@ def in_docker() -> bool:
         return sched.read_text().startswith("sh")
     # We can't find any evidence of Docker. Assume it's not running.
     return False
+
 
 # If we're not in Docker, then re-run this command inside Docker.
 def ensure_in_docker(

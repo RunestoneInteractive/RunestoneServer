@@ -11,8 +11,9 @@ This directory contains files supporting the Docker containerized application.
     docker_tools_misc.py
     ../Dockerfile
     ../docker-compose.yml
+    ../.dockerignore
     nginx/sites-available/runestone.template
-    gunicorn/toctree
+    gunicorn_config/toctree
     routes.py
     .env.prototype
     setup.py
