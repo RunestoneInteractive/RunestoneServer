@@ -427,7 +427,6 @@ def _build_phase_0(
                         -   db
                         -   redis
                         -   jobe
-
                 """
                 ),
                 d,
@@ -437,9 +436,14 @@ def _build_phase_0(
     if build_config.is_dev():
         # Install Poetry. It requires an executable named ``python`` -- make sure it's installed.
         check_install("python --version", "python-is-python3")
-        xqt(
-            "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -"
-        )
+        print("Checking for poetry...")
+        try:
+            subprocess.run(["poetry", "--version"], check=True)
+        except subprocess.CalledProcessError:
+            print("Installing poetry...")
+            xqt(
+                "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -"
+            )
         # Clone supporting repos if they don't exist.
         with pushd(".."):
             bks = Path("BookServer")
