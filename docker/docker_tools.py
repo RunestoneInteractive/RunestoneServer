@@ -203,7 +203,7 @@ except NameError:
 @click.option(
     "-cbs",
     "--clone-bs",
-    default="RunestoneInteractive",
+    default="bjones1", # Default since BookServer not forked by RunestoneInteractive yet!
     nargs=1,
     metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
