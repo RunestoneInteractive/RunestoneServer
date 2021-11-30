@@ -396,12 +396,12 @@ def build(
                     try:
                         # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
                         xqt(
-                            f"export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/{clone_bs}/RunestoneComponents.git"
+                            f"export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/{clone_rc}/RunestoneComponents.git"
                         )
                     except subprocess.CalledProcessError as e:
                         # Exit script with Git Clone Error
                         sys.exit(
-                            f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rs}"
+                            f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rc}"
                         )
 
         # Ensure the user is in the ``www-data`` group.
