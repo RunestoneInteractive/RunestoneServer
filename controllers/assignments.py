@@ -155,13 +155,11 @@ group by chapter, name""",
         as_dict=True,
     )
 
-    """ List of question types that are not supported by the exercisemetrics page
-       we look through the questions table for the questions with names equal to row["name"]"""
+    """ List of question types that are not supported by the exercisemetrics page """
 
     unsupported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
 
     for row in res:
-        # question = db(db.questions.name == row["name"]).select().first()
         if row["question_type"] not in unsupported_question_types: 
             if row["count"] > 0:
                 row[
