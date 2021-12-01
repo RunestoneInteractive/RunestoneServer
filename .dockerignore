@@ -1,4 +1,10 @@
+# ***********************************
+# |docname| - Files ignored by docker
+# ***********************************
+# Per the `docs <https://docs.docker.com/engine/reference/builder/#dockerignore-file>`__, these files are excluded from the Docker context.
 .git
+.venv
+_build
 **/Data
 **/Notebooks
 **/TestNotebooks

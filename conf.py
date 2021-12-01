@@ -139,10 +139,11 @@ CodeChat_lexer_for_glob = {
     # Likewise, HTML and JS files are auto-detected incorrectly.
     "*.html": "HTML",
     "*.js": "JavaScript",
-    # The Dockerfile has ``#`` as comments. So does Perl...
-    "Dockerfile": "Perl",
-    "*.conf": "Perl",
-    "runestone.template": "Perl",
+    # The Dockerfile has ``#`` as comments. So do INI files...
+    "Dockerfile": "INI",
+    "*.conf": "INI",
+    "runestone.template": "INI",
+    ".dockerignore": "INI",
     # Docker's env files are INI formatted.
     ".env*": "INI",
 }

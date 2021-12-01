@@ -20,7 +20,7 @@ import os
 #
 # Local application imports
 # -------------------------
-from gunicorn_config.common_config import *
+from common_config import *
 
 
 # Configuration
