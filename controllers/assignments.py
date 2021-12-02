@@ -342,6 +342,10 @@ def record_grade():
         return json.dumps(
             {"success": False, "message": "Must provide either grade or comment."}
         )
+    if ("assignmentid" not in request.vars):
+        return json.dumps(
+            {"success": False, "message": "Must provide assignment id."}
+        )
 
     # Create a dict of updates for this grade.
     updates = dict(course_name=auth.user.course_name)
@@ -368,6 +372,20 @@ def record_grade():
     div_id = request.vars.acid
     # Accept input of a single sid from the request variable ``sid`` or a list from ``sid[]``, following the way `jQuery serielizes this <https://api.jquery.com/jQuery.param/>`_ (with the ``traditional`` flag set to its default value of ``false``). Note that ``$.param({sid: ["one"]})`` produces ``"sid%5B%5D=one"``, meaning that this "list" will still be a single-element value. Therefore, use ``getlist`` for **both** "sid" (which should always be only one element) and "sid[]" (which could be a single element or a list).
     sids = request.vars.getlist("sid") or request.vars.getlist("sid[]")
+    # Gather assignment id for future use by do_calculate_totals function
+    assignment_id = request.vars.assignmentid
+
+    assignment = (
+        db(
+            (db.assignments.id == assignment_id)
+            & (db.assignments.course == auth.user.course_id)
+        )
+        .select()
+        .first()
+    )
+
+    student_rownum = None
+
 
     # Update the score(s).
     try:
@@ -383,6 +401,8 @@ def record_grade():
                 div_id=div_id,
                 **updates,
             )
+            do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name,sid,student_rownum,db,settings)
+
     except IntegrityError:
         logger.error(
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)

@@ -1754,6 +1754,10 @@ function renderGradingComponents(sid, divid) {
     let div = document.createElement("div");
     let grade = document.createElement("input");
     let gradelabel = document.createElement("label");
+    let url = new URL(window.location.href);
+    let assignmentid = url.searchParams.get("assignment_id");
+    // let assignmentid = GetUrlKeyValue("assignment_id", false, location.href);
+    console.log(assignmentid);
     gradelabel.for = "grade-input";
     $(gradelabel).text("Grade");
     grade.type = "text";
@@ -1775,6 +1779,7 @@ function renderGradingComponents(sid, divid) {
             type: "POST",
             dataType: "JSON",
             data: {
+                assignmentid: assignmentid,
                 acid: divid,
                 sid: sid,
                 grade: $(grade).val(),
@@ -1783,6 +1788,7 @@ function renderGradingComponents(sid, divid) {
             success: function (data) {
                 $(grade).css("background", "lightgreen");
                 $(comment).css("background", "lightgreen");
+                window.location.reload(true);
             },
         });
     });
