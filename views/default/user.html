@@ -223,7 +223,7 @@
                                 let cb = document.getElementById("auth_user_accept_tcp");
 
                                 var reCaptchaKey = grecaptcha.getResponse();
-                                let reCaptchaValidation = Boolean(grecaptcha.getResponse());
+                                let reCaptchaValidation = Boolean(reCaptchaKey);
 
                                 if (cb.checked && reCaptchaValidation) {
                                     return true;
