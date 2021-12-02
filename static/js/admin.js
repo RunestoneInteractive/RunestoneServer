@@ -1756,8 +1756,6 @@ function renderGradingComponents(sid, divid) {
     let gradelabel = document.createElement("label");
     let url = new URL(window.location.href);
     let assignmentid = url.searchParams.get("assignment_id");
-    // let assignmentid = GetUrlKeyValue("assignment_id", false, location.href);
-    console.log(assignmentid);
     gradelabel.for = "grade-input";
     $(gradelabel).text("Grade");
     grade.type = "text";
