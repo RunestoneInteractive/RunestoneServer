@@ -16,7 +16,9 @@ ARG DOCKER_BUILD_ARGS
 # It must be an ``ENV`` so that it exists when the ``CMD`` is run by ``docker-compose up``.
 ENV DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 
-# Define some ARGs which could be passed into while building
+# Define some ARGs which could be passed into while building.
+#
+# **Warning:** Changing this path will require changes in many other places: the Docker volume locations, the paths in ``pyproject.toml``, paths used to run tests, etc.
 ARG WEB2PY_PATH=/srv/web2py
 # And export some as env vars so they could be available at run time
 ENV WEB2PY_PATH=${WEB2PY_PATH}

@@ -21,6 +21,11 @@ docker containers (Runestone application, redis cache, postgres DB, jobe code co
     These instructions have also been tested on OS X. For Windows, use WSL, VirtualBox, or other similar virtualization software.
 
 
+Contents
+--------
+.. contents::
+
+
 Setup
 -----------------------------
 
@@ -71,9 +76,9 @@ need to stop the containers and restart them.
 Environment Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You will need to set a number of environmental variables to run Runestone. The easiest
-way to do so is to use a ``.env`` file, which docker will read automatically as it loads
-containers. A sample ``.env`` file is provided as ``docker/.env`` (copied from ``docker/.env.prototype`` on the first build).
+You may need to set values for environment variables to run Runestone. The easiest
+way to do so is to use a ``.env`` file, which Docker will read automatically as it loads
+containers. A sample ``.env`` file is provided as ``./.env`` (copied from `docker/.env.prototype <.env.prototype>` on the first build).
 
 If you are running a local test/development instance, you should not need to modify
 any of the settings in ``.env``. If you are setting up a production server, you will need to
@@ -83,7 +88,7 @@ Python Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You also will also likely want to configure some options in the Python code. These options
-will be in a file ``models/1.py`` (which is automatically created on the first build).
+will be in the file ``models/1.py`` (which is automatically created on the first build).
 
 
 Again, if you are installing for local development/testing you should not need to modify
@@ -175,7 +180,7 @@ After cloning a book, or after making any edits/updates to it, you need to build
     docker-tools book-build <book-name>
 
 
-You will then need to restart the Runestone server to make the new/updated book available.
+You will then need to restart the Runestone server to make the new/updated book available. TODO: this is old. rsmanage?
 
 .. code-block:: bash
 
@@ -287,15 +292,6 @@ complete rebuild, use:
     docker-tools build -- --no-cache
 
 
-Debugging
-*****************
-
-Logger output can be useful if the server appears
-to be failing to start or is exhibiting other errors.
-
-Run ``docker-compose logs --tail 100 --follow``. This will give you the last 100 lines of information already written (between when you started the container and ran this command) and will continue to display new information as it is written.
-
-
 Shelling Inside
 **********************************
 
@@ -338,76 +334,25 @@ To install a VNC client on Linux, execute ``sudo apt install gvncviewer``. Next,
 Execute ``sudo apt install openssh-server`` to install a SSH server. This allows easy access from VSCode, as well as usual SSH access.
 
 
-Maintenance Scripts
-**********************************
-
-TODO: All these scripts are out of date. They need to be ported to `docker_tools_misc.py`.
-
-The ``scripts`` directory has a number of maintenance scripts that will run commands inside the runestone
-container to avoid having to shell into it first. In particular the ``dmanage`` script can be used to
-`perform a variety of tasks <../rsmanage/toctree.html>`_.
-
-
 Runestone Components / BookServer Development
 ***********************************************
 
-If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source. To do this, rebuild the image with the ``--dev`` option:
+If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source. To do this, rebuild the image with the ``--single-dev`` option:
 
 .. code-block:: bash
 
-    docker-tools build --dev
+    docker-tools build --single-dev
     docker-compose up
 
-This command automatically clone the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
-as a sibling of the ``web2py`` directory: from the ``web2py`` directory using the equivalent of:
-
-.. code-block:: bash
-
-    cd ..
-    git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
-    git clone https://github.com/RunestoneInteractive/BookServer.git
-
-
-You may instead remove these clones and replace them with a clone of your development repositories.
+This command automatically clones the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
+as a sibling of the root directory. Use the ``docker-tools build --clone-all/bks/rc/rs`` options to clone your repositories.
 
 As you make changes to Runestone Components or the BookServer, you should not have to restart the Docker containerized application. Any rebuild
-of a book should immediately use the new code.
+of a book should immediately use the new code. This is because the host filesystem is mounted as a `volume <https://docs.docker.com/storage/volumes/>`_ in the container; see the generated ``docker-compose.overrides.yaml`` file.
 
+You can run the unit tests in the container using the ``docker-tools test`` command.
 
-Developing on Runestone Server
-*********************************************
-
-If you look at the docker-compose file, you'll notice that the root of the repository
-is bound as a volume to the container:
-
-.. code-block:: bash
-
-    volumes:
-      - .:/srv/web2py/applications/runestone
-    ...
-
-
-This means that if you make changes to the repository root
-(the Runestone Server application) they will also be made in the container and should
-be instantly visible. When in development mode, the BookServer and/or the Runestone Components are set up in the same way.
-
-To run the BookServer if you've stopped it, run the ``docker-tools bookserver`` command from inside Docker.
-
-
-Running the Runestone Server Unit Tests
-*************************************************
-
-TODO: this probably doesn't work. It needs updating -- the servers need to be stopped before tests can run.
-
-You can run the unit tests in the container using the following command.
-
-.. code-block:: bash
-
-    docker exec -it runestoneserver_runestone_1 bash -c 'cd /srv/web2py/applications/runestone/tests; /srv/venv/bin/python run_tests.py'
-
-
-The ``scripts`` folder has a nice utility called ``dtest`` that does this for you and also supports
-the ``-k`` option for you to run a single test.
+To start or stop the servers, use ``docker-tools start-servers`` / ``docker-tools stop-servers``. While changes to web2py controllers don't require a server restart, any changes to code in the ``modules`` folder does.
 
 
 Testing the Entrypoint
@@ -420,15 +365,6 @@ interactively by shelling into the container.
 Bring up the containers and then shell inside. Once inside, you can then issue commands
 to test the entry point script - since the other containers were started
 with docker-compose everything in them is ready to go.
-
-
-Restarting uwsgi/web2py
-**********************************
-
-Controllers are reloaded automatically every time they are used. However if you are making
-changes to code in the ``modules`` folder you will need to restart web2py or else it is likely
-that a cached version of that code will be used. You can restart web2py easily by first
-shelling into the container and then running the command ``touch /srv/web2py/reload_server``
 
 
 File Permissions
@@ -450,7 +386,7 @@ system. You need to do the following:
 the name of BOTH the course and the basecourse when it asks. The dmanage command is in the scripts
 folder of RunestoneServer.
 
-2. Now that your course is registered rebuild it using the command ``docker/docker_tools.py book-build <book_name>`` command.
+2. Now that your course is registered rebuild it using the command ``docker/docker_tools.py book-build <book_name>`` command. TODO: This is old. rsmanage?
 
 3. If this book is a PreTeXt book you will need to navigate to the directory that contains the
 ``runestone-manifest.xml`` file and run the command:
@@ -463,3 +399,9 @@ folder of RunestoneServer.
 
     If you are missing ``runestone-manifest.xml`` then you need to rebuild your PreTeXt
     book with ``runestone`` as the publisher. See the PreTeXt docs for how do do this.
+
+
+Changing dependencies
+*********************
+
+If you modify the dependencies of a non-Poetry project (such as the Runestone Components or rsmanage), then ``poetry update`` **will not** see these updates. To force an update, manually delete the ``*.egg-info`` directory before running ``poetry update``.
