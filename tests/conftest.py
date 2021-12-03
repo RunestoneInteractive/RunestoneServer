@@ -321,7 +321,7 @@ def runestone_controller(runestone_env):
 # Provide acess the the Runestone database through a fixture. After a test runs,
 # restore the database to its initial state.
 @pytest.fixture
-def runestone_db(runestone_controller):
+def runestone_db(runestone_controller, web2py_server):
     db = runestone_controller.db
     yield db
 
@@ -344,7 +344,7 @@ def runestone_db(runestone_controller):
     ## SELECT input_table_name || ',' AS truncate_query FROM(SELECT table_schema || '.' || table_name AS input_table_name FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND table_name NOT IN ('questions', 'source_code', 'chapters', 'sub_chapters', 'scheduler_run', 'scheduler_task', 'scheduler_task_deps', 'scheduler_worker') AND table_schema NOT LIKE 'pg_toast%') AS information order by input_table_name;
     db.executesql(
         """TRUNCATE
-  public.assignment_questions,
+ public.assignment_questions,
  public.assignments,
  public.auth_cas,
  public.auth_event,
@@ -918,9 +918,9 @@ def test_assignment(test_client, test_user, runestone_db_tools):
 # Create an instance of Selenium once per testing session.
 @pytest.fixture(scope="session")
 def selenium_driver_session():
-    # Start a virtual display for Linux.
+    # Start a virtual display for Linux if there's no X terminal available.
     is_linux = sys.platform.startswith("linux")
-    if is_linux:
+    if is_linux and "DISPLAY" not in os.environ:
         display = Display(visible=0, size=(1280, 1024))
         display.start()
     else:

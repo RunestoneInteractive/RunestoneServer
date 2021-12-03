@@ -417,6 +417,7 @@ class ProgressMetrics(object):
 
 class SubChapterActivity(object):
     def __init__(self, sub_chapter, total_users):
+        rslogger.debug(f"subchapActivity {total_users}")
         self.sub_chapter_label = sub_chapter.sub_chapter_label
         rslogger.debug(sub_chapter.sub_chapter_name)
         self.sub_chapter_text = sub_chapter.sub_chapter_label
@@ -427,12 +428,13 @@ class SubChapterActivity(object):
         self.total_users = total_users if total_users > 0 else 1
 
     def add_activity(self, row):
-        if row.user_sub_chapter_progress.status == -1:
-            self.not_started += 1
+        # if row.user_sub_chapter_progress.status == -1:
+        #     self.not_started += 1
         if row.user_sub_chapter_progress.status == 0:
             self.started += 1
         if row.user_sub_chapter_progress.status == 1:
             self.completed += 1
+        self.not_started = self.total_users - self.started - self.completed
 
     def get_started_percent(self):
         return "{0:.2f}%".format(float(self.started) / self.total_users * 100)

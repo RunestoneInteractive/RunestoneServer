@@ -638,7 +638,7 @@ def doAssignment():
             htmlsrc = bts.replace(
                 'src="../_static/', 'src="' + get_course_url("_static/")
             )
-            htmlsrc = htmlsrc.replace("../_images/", get_course_url("_images/"))
+            htmlsrc = htmlsrc.replace("../_images", get_course_url("_images"))
         else:
             htmlsrc = None
 
@@ -837,16 +837,22 @@ def chooseAssignment():
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
-        (db.assignments.course == course.id) & (db.assignments.visible == "T")
+        (db.assignments.course == course.id)
+        & (db.assignments.visible == "T")
+        & ((db.assignments.is_peer == False) | (db.assignments.is_peer == None))
     ).select(orderby=~db.assignments.duedate)
 
     for assignment in assignments:
 
         timestamp = datetime.datetime.utcnow()
         deadline = assignment.duedate
-        # TODO:  assignment deadlines should be stored in UTC and converted but they are not
-        # if timezoneoffset:
-        #     deadline = deadline + datetime.timedelta(hours=float(timezoneoffset))
+
+        # deadline is in localtime of the instructor - we should display
+        # the deadline with no conversion.  TODO: end this craziness by storing the deadline in UTC
+        # convert the timestamp to localtime - avoid false positive Past Due messages
+        if timezoneoffset:
+            timestamp = timestamp - datetime.timedelta(hours=float(timezoneoffset))
+
         # Finds the grades table for each assignment
         grade = (
             db(
@@ -869,10 +875,10 @@ def chooseAssignment():
                     status.append(str(int(percent_grade)) + "%")
                 else:
                     status.append("{0:.1f}%".format(percent_grade))
-            elif timestamp > deadline and assignment.enforce_due:
-                status.append("Past Due")
             elif grade.is_submit:
                 status.append(grade.is_submit)
+            elif timestamp > deadline and assignment.enforce_due:
+                status.append("Past Due")
             else:
                 status.append("Not Started")
         elif timestamp > deadline and assignment.enforce_due:

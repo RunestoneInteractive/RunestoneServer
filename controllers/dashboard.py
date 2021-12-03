@@ -312,6 +312,7 @@ def index():
     return dict(
         assignments=assignments,
         course=course,
+        is_instructor=True,
         questions=questions,
         sections=sections,
         chapters=chapters,
@@ -700,7 +701,7 @@ def exercisemetrics():
     prob_id = request.vars["id"]
     answers = []
     attempt_histogram = []
-    logger.debug(problem_metrics.problems)
+    logger.debug(f"PROBLEMS for problem metrics {problem_metrics.problems}")
     try:
         problem_metric = problem_metrics.problems[prob_id]
     except KeyError:
@@ -1023,7 +1024,21 @@ select name, question_type, min(useinfo.timestamp) as first, max(useinfo.timesta
                     row["correct"] = "No"
             else:
                 row["correct"] = "NA"
-
+        elif row["question_type"] in ["khanex", "quizly"]:
+            kqres = (
+                db(
+                    (db.useinfo.sid == request.vars.sid)
+                    & (db.useinfo.div_id == row["name"])
+                    & (db.useinfo.course_id == thecourse.course_name)
+                    & (db.useinfo.act.like("%correct"))
+                )
+                .select()
+                .first()
+            )
+            if kqres:
+                row["correct"] = "Yes"
+            else:
+                row["correct"] = "No"
         else:
             row["correct"] = "NA"
 

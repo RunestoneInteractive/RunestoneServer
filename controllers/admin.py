@@ -154,6 +154,7 @@ def assignments():
         chapters=chapter_labels,
         toc=_get_toc_and_questions(),  # <-- This Gets the readings and questions
         course=course,
+        is_instructor=True,
     )
 
 
@@ -528,10 +529,15 @@ def admin():
                 person.first_name + " " + person.last_name
             )
 
-    cur_students = db(db.user_courses.course_id == auth.user.course_id).select(
-        db.user_courses.user_id
+    cur_students = db(
+        (db.user_courses.course_id == auth.user.course_id)
+        & (db.user_courses.user_id == db.auth_user.id)
+    ).select(
+        db.user_courses.user_id,
+        orderby=db.auth_user.last_name | db.auth_user.first_name,
     )
-    studentdict = {}
+
+    studentdict = OrderedDict()
     for row in cur_students:
         person = db(db.auth_user.id == row.user_id).select(
             db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
@@ -616,6 +622,7 @@ def admin():
         consumer=consumer,
         secret=secret,
         examlist=exams,
+        is_instructor=True,
         **course_attrs,
     )
 
@@ -632,13 +639,15 @@ def course_students():
         db.auth_user.username,
         db.auth_user.first_name,
         db.auth_user.last_name,
+        db.auth_user.id,
         orderby=db.auth_user.last_name | db.auth_user.first_name,
     )
     searchdict = OrderedDict()
     for row in cur_students:
-        name = row.first_name + " " + row.last_name
-        username = row.username
-        searchdict[str(username)] = name
+        if not verifyInstructorStatus(auth.user.course_id, row.id):
+            name = row.first_name + " " + row.last_name
+            username = row.username
+            searchdict[str(username)] = name
     return json.dumps(searchdict)
 
 
@@ -693,28 +702,26 @@ def grading():
     cur_students = db(db.user_courses.course_id == auth.user.course_id).select(
         db.user_courses.user_id
     )
+    # TODO: investigate why this search dict is overriden by a call to course_students
+    # on the grading page load????
     searchdict = {}
     for row in cur_students:
-        isinstructor = db(
-            (db.course_instructor.course == auth.user.course_id)
-            & (db.course_instructor.instructor == row.user_id)
-        ).select()
-        instructorlist = []
-        for line in isinstructor:
-            instructorlist.append(line.instructor)
-        if row.user_id not in instructorlist:
-            person = db(db.auth_user.id == row.user_id).select(
-                db.auth_user.username, db.auth_user.first_name, db.auth_user.last_name
-            )
-            for identity in person:
-                name = identity.first_name + " " + identity.last_name
-                username = (
-                    db(db.auth_user.id == int(row.user_id))
-                    .select(db.auth_user.username)
-                    .first()
-                    .username
+        isinstructor = verifyInstructorStatus(auth.user.course_id, row.user_id)
+        logger.debug(f"User {row.user_id} instructor status {isinstructor}")
+        if not isinstructor:
+            person = (
+                db(db.auth_user.id == row.user_id)
+                .select(
+                    db.auth_user.username,
+                    db.auth_user.first_name,
+                    db.auth_user.last_name,
                 )
-                searchdict[str(username)] = name
+                .first()
+            )
+            name = person.first_name + " " + person.last_name
+            username = person.username
+            searchdict[username] = name
+            logger.debug(f"Added {username} to searchdict")
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     base_course = course.base_course
@@ -732,7 +739,6 @@ def grading():
         chapter_labels[row.chapter_label] = q_list
 
     set_latex_preamble(base_course)
-
     return dict(
         assignmentinfo=json.dumps(assignments),
         students=searchdict,
@@ -749,6 +755,7 @@ def grading():
         assignmentids=json.dumps(assignmentids),
         assignment_deadlines=json.dumps(assignment_deadlines),
         question_points=json.dumps(question_points),
+        is_instructor=True,
         course=course,
     )
 
@@ -992,6 +999,9 @@ def createAssignment():
                 course=course,
                 name=name,
                 duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7),
+                released=False,
+                visible=False,
+                from_source=False,
             )
             db.commit()
         except Exception as ex:
@@ -1184,11 +1194,14 @@ def getQuestionInfo():
 
     row = db(query).select().first()
 
-    question_code = row.question
-    htmlsrc = row.htmlsrc
-    question_author = row.author
-    question_difficulty = row.difficulty
-    question_id = row.id
+    if row:
+        question_code = row.question
+        htmlsrc = row.htmlsrc
+        question_author = row.author
+        question_difficulty = row.difficulty
+        question_id = row.id
+    else:
+        return json.dumps({})
 
     tags = []
     question_tags = db((db.question_tags.question_id == question_id)).select()
@@ -1913,6 +1926,7 @@ def get_assignment():
     assignment_data["from_source"] = assignment_row.from_source
     assignment_data["nofeedback"] = assignment_row.nofeedback
     assignment_data["nopause"] = assignment_row.nopause
+    assignment_data["is_peer"] = assignment_row.is_peer
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -2016,6 +2030,7 @@ def save_assignment():
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
     nopause = request.vars["nopause"]
+    is_peer = request.vars["is_peer"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -2036,6 +2051,8 @@ def save_assignment():
             time_limit=time_limit,
             nofeedback=nofeedback,
             nopause=nopause,
+            is_peer=is_peer,
+            current_index=0,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:

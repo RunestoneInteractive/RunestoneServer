@@ -201,7 +201,7 @@ def hsblog():
         correct = request.vars.correct
         # Grade on the server if needed.
         do_server_feedback, feedback = is_server_feedback(div_id, course)
-        if do_server_feedback:
+        if do_server_feedback and answer_json is not None:
             correct, res_update = fitb_feedback(answer_json, feedback)
             res.update(res_update)
             pct = res["percent"]
@@ -1199,7 +1199,7 @@ def getAssessResults():
         #
         res = {"answer": rows.answer, "timestamp": str(rows.timestamp)}
         do_server_feedback, feedback = is_server_feedback(div_id, course)
-        if do_server_feedback:
+        if do_server_feedback and rows.answer != None:
             correct, res_update = fitb_feedback(rows.answer, feedback)
             res.update(res_update)
         return json.dumps(res)

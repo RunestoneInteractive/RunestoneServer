@@ -1,25 +1,67 @@
+#This file, when renamed 1.py will be loaded after 0.py and can override options set there
+
 from os import uname
 
-#The best way to set the database_uri is to set your environment variable WEB2PY_CONFIG to one of the following values along with an database environment variable for each configuration as follows:
+# ===================================================
+# Database options
+# ===================================================
+
+# The best way to set the database_uri is to set your environment variable WEB2PY_CONFIG
+# to one of the following values along with an database environment variable for each configuration as follows:
 #
 # production - set DBURL
 # test - set TEST_DBURL
 # development - set DEV_DBURL
-#
 
-# If, for some reason, you do not want to use environment variables then you'll have to remember
-# to edit this file every time you want to use a different database.
+# ===================================================
+# LTI Options
+# ===================================================
 
-#settings.database_uri = 'postgres://username:password@database-host.com/database_name'
-
-# Enable captchas during registration
-settings.enable_captchas = True
+# By default the lti interface is off. It can be turned on for an individual course by setting
+# the course attribute lti_interface with a value of True
+# If you want to enable the lti interface for your whole site then uncomment the next line
+#settings.lti_interface = True
 
 # Set the strings used as credentials by remote LMS app when passing a student in to be automatically logged in
-settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
-settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or whatever the full URL is for making an LTI connection
+#settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
+#settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or whatever the full URL is for making an LTI connection
+
+
+# ===================================================
+# Course/User Options
+# ===================================================
 
 settings.default_course = 'fopp'
+
+# Enable captchas during registration
+#settings.enable_captchas = True
+
+# This allows you to use "standard" courses as an instructor. Runestone.academy does not let
+# people be instructors for the default courses like "thinkcpy" 
+settings.docker_institution_mode = True
+
+# ===================================================
+# Jobe Options
+# ===================================================
+
+# Set location of jobe code compilation server
+settings.jobe_server = 'http://jobe'
+settings.jobe_key = ''
+
+
+# ===================================================
+# Other Server Options
+# ===================================================
+
+# If you are going to use this with a live class you will probably want to configure an email to
+# handle forgotten passwords and usernames. A simple gmail account can be configured
+# to handle this task. However you will want to configure that account so that 2-factor authentication
+# is turned on, AND you will need to create an application specific password for your server.
+#settings.email_server = "smtp.gmail.com:587"
+#settings.email_sender = "youraccount@gmail.com"
+#settings.email_login = "youraccount@gmail.com:APP-SECIFIC-PW-HERE"
+
+# Google Analytics id
 settings.google_ga = 'UA-XXX-XX'
 
 # lti_interface
@@ -27,3 +69,15 @@ settings.google_ga = 'UA-XXX-XX'
 # the course attribute lti_interface with a value of True
 # If you want to enable the lti interface for your whole site then uncomment the next line
 # settings.lti_interface = True
+
+# for compatibility with the new book server set a secret key value here
+# settings.secret = "supersecret"
+
+# to work with a websocket server (FastAPI based) for peer instruction chat
+# settings.websocket_url = "ws://dev.runestoneinteractive.org/ns"
+# for https servers
+# settings.websocket_url = "wss://dev.runestoneinteractive.org/ns"
+
+
+# This must point to a valid python interpreter to use the web interface for question authoring.
+settings.python_interpreter = sys.executable

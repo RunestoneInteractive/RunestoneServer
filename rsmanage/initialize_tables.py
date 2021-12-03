@@ -17,7 +17,7 @@ if db(db.courses.id > 0).isempty():
         color="green",
     )
     db.courses.insert(
-        course_name="boguscourse", term_start_date=datetime.date(2000, 1, 1)
+        course_name="boguscourse", base_course="boguscourse", term_start_date=datetime.date(2000, 1, 1), courselevel="bogus", institution="bogus"
     )
     # should be id 1
     BASE_COURSES = [
@@ -45,7 +45,7 @@ if db(db.courses.id > 0).isempty():
 
     for c in BASE_COURSES:
         db.courses.insert(
-            course_name=c, base_course=c, term_start_date=datetime.date(2000, 1, 1),
+            course_name=c, base_course=c, term_start_date=datetime.date(2000, 1, 1), courselevel="", institution="", new_server="F", allow_pairs="F", downloads_enabled="F"
         )
 else:
     click.echo(message="Your database already has Courses")

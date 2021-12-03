@@ -642,3 +642,29 @@ div.settingsbox {
     width: auto;
     white-space: inherit;
 }
+
+/* Admin */
+.timed-group {
+    border-color: black;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 2px;
+    padding: 3pt;
+}
+
+.support-rs {
+    border: solid bisque;
+    border-radius: 4pt;
+    padding: 6pt;
+}
+
+/* Styling for peer discussions */
+.incoming-mess {
+    list-style-type: none;
+}
+
+.outgoing-mess {
+    list-style-type: none;
+    font-style: italic;
+    color: blue;
+}

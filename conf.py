@@ -141,6 +141,10 @@ CodeChat_lexer_for_glob = {
     "*.js": "JavaScript",
     # The Dockerfile has ``#`` as comments. So does Perl...
     "Dockerfile": "Perl",
+    "*.conf": "Perl",
+    "runestone": "Perl",
+    # Docker's env files are INI formatted.
+    ".env*": "INI",
 }
 
 # `source_encoding <http://sphinx-doc.org/config.html#confval-source_encoding>`_:

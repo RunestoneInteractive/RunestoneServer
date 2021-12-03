@@ -2,6 +2,7 @@
 import json
 import os
 import requests
+import datetime
 from six.moves.urllib.parse import unquote
 from six.moves.urllib.error import HTTPError
 import logging
@@ -9,6 +10,7 @@ import subprocess
 
 from gluon.restricted import RestrictedError
 from stripe_form import StripeForm
+import jwt
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -110,15 +112,29 @@ def _course_price(course_id):
     )
     assert course
     price = course.student_price
+    base_course_name = course.base_course
+    # See if the student owns this base course.
+    base_course_owned = (
+        db(
+            (db.user_courses.user_id == auth.user.id)
+            & (db.user_courses.course_id == db.courses.id)
+            & (db.courses.base_course == base_course_name)
+        )
+        .select(db.user_courses.id)
+        .first()
+    )
+    # If so, then this course is free.
+    if base_course_owned:
+        price = 0
     # Only look deeper if a price isn't set (even a price of 0).
     if price is None:
-        # See if the base course has a student price.
+        # Get the base course's price.
         base_course = (
-            db(db.courses.course_name == course.base_course)
+            db(db.courses.course_name == base_course_name)
             .select(db.courses.student_price)
             .first()
         )
-        # If this is already a base course, we're done.
+        # Paranoia. Every course should have a valid base course name, so this should always be true...
         if base_course:
             price = base_course.student_price
     # If price is ``None`` or negative, return a free course.
@@ -175,6 +191,17 @@ def index():
             % (request.application, request.application)
         )
     else:
+        # At this point the user has logged in
+        # add a jwt cookie for compatibility with bookserver
+        token = _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+        # set cookie
+        if token:
+            response.cookies["access_token"] = token
+            response.cookies["access_token"]["expires"] = 24 * 3600 * 30
+            response.cookies["access_token"]["path"] = "/"
+
         # check to see if there is an entry in user_courses for
         # this user,course configuration
         in_db = db(
@@ -610,3 +637,53 @@ def delete():
         auth.logout()  # logout user and redirect to home page
     else:
         redirect(URL("default", "user/profile"))
+
+
+# This function is basically copied from the fastapi_login plugin
+# see `their github repo <https://github.com/MushroomMaula/fastapi_login>`_
+#
+def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
+    """
+    Helper function to create the encoded access token using
+    the provided secret and the algorithm of the LoginManager instance
+
+    Args:
+        data (dict): The data which should be stored in the token
+        expires (datetime.timedelta):  An optional timedelta in which the token expires.
+            Defaults to 15 minutes
+        scopes (Collection): Optional scopes the token user has access to.
+
+    Returns:
+        The encoded JWT with the data and the expiry. The expiry is
+        available under the 'exp' key
+    """
+
+    to_encode = data.copy()
+
+    if expires:
+        expires_in = datetime.datetime.utcnow() + expires
+    else:
+        # default to 15 minutes expiry times
+        expires_in = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+
+    to_encode.update({"exp": expires_in})
+
+    if scopes is not None:
+        unique_scopes = set(scopes)
+        to_encode.update({"scopes": list(unique_scopes)})
+
+    algorithm = "HS256"  # normally set in constructor
+
+    # the secret key value should be set in 1.py as part of the
+    # web2py installation.
+    secret = settings.secret
+
+    try:
+        encoded_jwt = jwt.encode(to_encode, secret, algorithm)
+    except:
+        logger.error(f"failed to create a JWT Token for {to_encode}")
+        if not secret:
+            logger.error("Please set a secret key value in models/1.py")
+        encoded_jwt = None
+    # decode here decodes the byte str to a normal str not the token
+    return encoded_jwt

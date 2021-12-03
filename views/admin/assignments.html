@@ -58,9 +58,9 @@
           <label for="date_enforce" class="form-check-label">Allow Late Submissions</label>
           <input id="date_enforce" class="form-check-input" type="checkbox" name="enforce_due" value="T"><br>
         </div>
-        <div class="form-group form-check">
+        <div class="form-group form-check timed-group">
             <label for="assign_is_timed" class="form-check-label">Show as Timed Assessment</label>
-            <input id="assign_is_timed" class="form-check-input" type="checkbox" name="is_timed" value="T"> (Use this to make quizzes or exams - <strong>Beta!</strong>)<br>
+            <input id="assign_is_timed" class="form-check-input" type="checkbox" name="is_timed" value="T"> (Use this to make quizzes or exams)<br>
             <label for="timelimit" class="form-check-label">Time Limit</label>
             <input id="timelimit" name="timelimit" type="number" min="5" max="125" value=""> Leave blank for no limit --
             <label for="nofeedback" class="form-check-label">No Feedback</label>
@@ -68,6 +68,10 @@
             <label for="nopause" class="form-check-label">No Pause</label>
             <input id="nopause" name="nopause" type="checkbox">
             <span id="simulatorbuttonspan" style="margin-left: 10px;"></span>
+        </div>
+        <div class="form-group form-check peer-group">
+          <label for="assign_is_peer" class="form-check-label">Peer Assessment Activity</label>
+          <input id="assign_is_peer" class="form-check-input" type="checkbox" name="is_peer" value="T"> (Do not use with timed exam! (Beta))<br>
         </div>
         <label for="assignment_description">Description: </label>
         <input class="form-control" id="assignment_description" name="description" type="text"><br>
@@ -419,7 +423,7 @@ $(function () {
 
     configure_tree_picker(readings_picker, eBookConfig.toc.reading_picker, $('#search-tree-readings-picker'), 2,
         // Called when a node is checked.
-        async function (node) { let res = await updateReading(node.id, -1, 1, 'interact', 'best_answer'); return res },
+        async function (node) { let res = await updateReading(node.id, -1, 1, 'interact', 'first_answer'); return res },
         // Called when a node is unchecked.
         function (node) { remove_reading(node.id); }
     );
