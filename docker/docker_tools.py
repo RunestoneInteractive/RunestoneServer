@@ -416,33 +416,23 @@ def _build_phase_0(
         chdir(wd.parent)
         change_dir = False
 
-    # Create the ``docker/.env`` if it doesn't already exist.
+    # Create the ``docker/.env`` if it doesn't already exist. TODO: keep a dict of {file name, checksum} and save as JSON. Use this to detect if a file was hand-edited; if not, we can simply replace it.
     if not Path(".env").is_file():
         xqt("cp docker/.env.prototype .env")
 
     # Do the same for ``1.py``.
     one_py = Path("models/1.py")
     if not one_py.is_file():
-        # add a new setting so that institutions can run using a base book like thinkcspy as their course.  On Runestone.academy we don't let anyone be an instructor for the base courses because they are open to anyone.  This makes for a much less complicated deployment strategy for an institution that just wants to run their own server and use one or two books.
         one_py.write_text(
-            dedent(
-                """\
-                import os
-
-                settings.docker_institution_mode = True
-                settings.jobe_key = ""
-                settings.jobe_server = "http://jobe"
-                settings.bks = "ns"
-                settings.python_interpreter = f"{os.environ['RUNESTONE_PATH']}/.venv/bin/python3"
-                # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
-                settings.secret = os.environ["JWT_SECRET"]
-                """
+            replace_vars(
+                Path("models/1.py.prototype").read_text(),
+                dict(BUILD_CONFIG_SINGLE=build_config.is_single()),
             )
         )
 
     dc = Path("docker-compose.override.yml")
     if not build_config.is_single():
-        # Remove this if it exists (probably from an earlier built without ``--multi``). This file is only correct for ``--single(-dev)`` builds.
+        # Remove this if it exists (probably from an earlier build without ``--multi``). This file is only correct for ``--single(-dev)`` builds.
         dc.unlink(True)
     else:
         # For single-server operation, include additional services.

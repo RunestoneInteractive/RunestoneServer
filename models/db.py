@@ -54,9 +54,6 @@ if not request.env.web2py_runtime_gae:
             adapter_args=dict(logfile="test_runestone_migrate.log"),
         )
         table_migrate_prefix = "test_runestone_"
-        # For tests, use migration to create tables.
-        def bookserver_owned(table_name):
-            return table_migrate_prefix + table_name + ".table"
 
     else:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
