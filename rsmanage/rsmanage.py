@@ -87,6 +87,7 @@ def cli(config, verbose, if_clean):
             r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl
         ).group(1)
 
+    config.dbpass = os.environ.get("POSTGRES_PASSWORD")
     if verbose:
         echoEnviron(config)
 
@@ -98,6 +99,10 @@ def cli(config, verbose, if_clean):
 
     config.verbose = verbose
 
+def init_roles(config):
+    eng = create_engine(config.dburl)
+    eng.execute("""insert into auth_group (role) values ('instructor')""")
+    eng.execute("""insert into auth_group (role) values ('editor')""")
 
 #
 #    initdb
@@ -119,10 +124,6 @@ def initdb(config, list_tables, reset, fake, force):
         click.echo("Making databases folder")
         os.mkdir(DBSDIR)
 
-    if not os.path.exists(PRIVATEDIR):
-        click.echo("Making private directory for auth")
-        os.mkdir(PRIVATEDIR)
-
     if reset:
         if not force:
             click.confirm(
@@ -133,16 +134,35 @@ def initdb(config, list_tables, reset, fake, force):
                 show_default=True,
                 err=False,
             )
+        # If PGPASSWORD is not set in the environment then it will prompt for password
         res = subprocess.call(
-            "dropdb --if-exists --host={} --username={} {}".format(
-                config.dbhost, config.dbuser, config.dbname
-            ),
+            f"dropdb --if-exists --force --host={config.dbhost} --username={config.dbuser} {config.dbname}",
+            shell=True,
+        )
+        res = subprocess.call(
+            f"createdb --host={config.dbhost} --username={config.dbuser} --owner={config.dbuser} {config.dbname}",
             shell=True,
         )
         if res == 0:
             # Because click wont natively support making commands async we can use this simple method
             # to cll async functions.
-            asyncio.run(init_models())
+            # we if we successfully dropped the database we need to make it here.
+            async def foo():
+                await init_models()
+                settings.drop_tables = "Yes"
+                await create_initial_courses_users()
+
+            os.environ["WEB2PY_MIGRATE"] = "Yes"
+
+            subprocess.call(
+                f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
+                shell=True,
+            )
+
+            asyncio.run(foo())
+
+            init_roles(config)
+            click.echo("Created new tables")
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -176,9 +196,15 @@ def initdb(config, list_tables, reset, fake, force):
         message="Initializing the database", file=None, nl=True, err=False, color=None
     )
 
-    settings.drop_tables = "Yes"
-    asyncio.run(create_initial_courses_users())
-    list_tables = "-A --list_tables" if config.verbose or list_tables else ""
+    if not reset:
+        eng = create_engine(config.dburl)
+        res = eng.execute("""select count(*) from courses""").first()[0]
+        print(f"{res=}")
+        if res == 0:
+            settings.drop_tables = "Yes"
+            asyncio.run(create_initial_courses_users())
+
+
 
 
 @cli.command()
