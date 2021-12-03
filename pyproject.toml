@@ -52,7 +52,7 @@ pyjwt = "== 2.0.1"
 
 # Development dependencies
 # ========================
-[tool.no-poetry.dev-dependencies]
+[tool.poetry.dev-dependencies]
 beautifulsoup4 = "^4.0.0"
 black = "^21.0b"
 bookserver = { path = "../BookServer", develop = true }
