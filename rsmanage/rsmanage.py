@@ -1,9 +1,21 @@
+import sys
+from pathlib import Path
+
+# Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.)
+wd = (Path(__file__).parents[1]).resolve()
+sys.path.extend([str(wd / "docker"), str(wd / "tests")])
+try:
+    # Assume that a development version of the Runestone Server -- meaning the presence of `../docker/docker_tools_misc.py` -- implies Docker.
+    from docker_tools_misc import ensure_in_docker
+    ensure_in_docker()
+except ModuleNotFoundError:
+    pass
+
 import asyncio
 import click
 import csv
 import json
 import os
-from pathlib import Path
 import re
 import shutil
 import signal
@@ -14,21 +26,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
 from pgcli.main import cli as clipg
 from psycopg2.errors import UniqueViolation
-import sys
 
 from bookserver.crud import create_initial_courses_users
 from bookserver.db import init_models
 from bookserver.config import settings
 
-
-wd = (Path(__file__).parents[1]).resolve()
-sys.path.extend([str(wd / "docker"), str(wd / "tests")])
-# Run this in Docker if possible. We assume that a development version of the Runestone Server implies Docker.
-try:
-    from docker_tools_misc import ensure_in_docker
-    ensure_in_docker()
-except ModuleNotFoundError:
-    pass
 
 class Config(object):
     def __init__(self):
@@ -340,14 +342,14 @@ def addcourse(
             )
 
     eng.execute(
-        f"""insert into courses 
+        f"""insert into courses
            (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
-                values ('{course_name}', 
+                values ('{course_name}',
                 '{basecourse}',
-                 '{python3}', 
-                 '{start_date}', 
+                 '{python3}',
+                 '{start_date}',
                  '{login_required}',
-                  '{institution}', 
+                  '{institution}',
                   '{courselevel}',
                   '{allowdownloads}',
                   '{allow_pairs}',
