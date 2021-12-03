@@ -113,16 +113,29 @@ def _stop_servers() -> None:
 # ``test``
 # --------
 @click.command()
-def test() -> None:
+@click.option("--bks/--no-bks", default=True, help="Run/skip tests on the BookServer.")
+@click.option(
+    "--rc/--no-rc", default=True, help="Run/skip tests on the Runestone components."
+)
+@click.option(
+    "--rs/--no-rs", default=True, help="Run/skip tests on the Runestone server."
+)
+def test(bks: bool, rc: bool, rs: bool) -> None:
     """
     Run unit tests.
     """
     ensure_in_docker()
     _stop_servers()
     pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
-    xqt(f"{pytest} -v applications/runestone/tests", cwd=env.WEB2PY_PATH)
-    xqt(f"{pytest} -v", cwd=f"{env.WEB2PY_PATH}../RunestoneComponents")
-    xqt(f"{pytest} -v", cwd=f"{env.WEB2PY_PATH}../BookServer")
+    if bks:
+        xqt(f"{pytest} -v", cwd="/srv/BookServer")
+    if rc:
+        xqt(f"{pytest} -v", cwd="/srv/RunestoneComponents")
+    if rs:
+        xqt(
+            f"{pytest} -v applications/runestone/tests -k test_preview_question",
+            cwd=env.WEB2PY_PATH,
+        )
 
 
 # ``wait``
@@ -156,8 +169,8 @@ def add_commands(cli) -> None:
 def in_docker() -> bool:
     # This is difficult, and varies between OSes (Linux vs OS X) and Docker versions. Try a few different approaches and hope one works. This was taken from a `site <https://www.baeldung.com/linux/is-process-running-inside-container>`__.
     cgroup = Path("/proc/1/cgroup")
-    if cgroup.is_file():
-        return "docker" in cgroup.read_text()
+    if cgroup.is_file() and "docker" in cgroup.read_text():
+        return True
     # Newer Docker versions create a file -- just look for that.
     if Path("/.dockerenv").is_file():
         return True
