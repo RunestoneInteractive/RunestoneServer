@@ -155,15 +155,11 @@ group by chapter, name
         as_dict=True,
     )
 
-    not_supported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
-
     for row in res:
-        question = db(db.questions.name == row["name"]).select().first()
-        if question.question_type not in not_supported_question_types:
-            if row["count"] > 0:
-                row[
-                    "name"
-                ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
+        if row["count"] > 0:
+            row[
+                "name"
+            ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
 
     return json.dumps(res)
 
