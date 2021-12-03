@@ -1,7 +1,7 @@
-# *****************************************************
-# |docname| - Configure containerize Docker application
-# *****************************************************
-version: '3'
+# ******************************************************
+# |docname| - Configure containerized Docker application
+# ******************************************************
+version: "3"
 
 services:
   jobe:
@@ -9,7 +9,6 @@ services:
     build: ./jobeinabox/
     volumes:
     - ./jobeinabox/files:/usr/local/lib/java
-
   runestone:
     image: runestone/server
     restart: always
@@ -18,15 +17,23 @@ services:
       - "80:80"
       - "443:443"
     environment:
+      # Database vars.
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
+      DBURL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}"
+      DEV_DBURL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}_dev"
+      TEST_DBURL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}_test"
+      # Server vars.
       WEB2PY_CONFIG: ${SERVER_CONFIG}
       BOOK_SERVER_CONFIG: ${SERVER_CONFIG}
-      WEB2PY_MIGRATE: 'Yes'
-      DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}'
-      DEV_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}_dev'
-      TEST_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}_test'
-      REDIS_URI: 'redis://redis:6379/0'
-      RUNESTONE_HOST: '${RUNESTONE_HOST}'
-      CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
+      WEB2PY_MIGRATE: "Yes"
+      WEB2PY_ADMIN_PASSWORD: ${WEB2PY_ADMIN_PASSWORD}
+      WEB2PY_SALT: ${WEB2PY_SALT}
+      JWT_SECRET: ${JWT_SECRET}
+      # Misc vars.
+      REDIS_URI: "redis://redis:6379/0"
+      RUNESTONE_HOST: ${RUNESTONE_HOST}
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+    links:
+    - jobe

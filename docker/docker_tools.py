@@ -76,11 +76,10 @@ def check_install(
     # The name of the package containing this program.
     install_package: str,
 ) -> None:
-    check_list = check_cmd.split()
-    print(f"Checking for {check_list[0]}...")
+    print(f"Checking for '{check_cmd}'...")
     try:
-        subprocess.run(check_list, check=True)
-    except subprocess.CalledProcessError:
+        subprocess.run(check_cmd, check=True, shell=True)
+    except (subprocess.CalledProcessError, FileNotFoundError):
         print("Not found. Installing...")
         subprocess.run(
             [
@@ -120,7 +119,7 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, pushd, xqt
+from ci_utils import chdir, env, is_linux, pushd, xqt
 
 # Third-party bootstrap
 # ---------------------
@@ -133,7 +132,7 @@ except ImportError:
     from importlib import reload
 
     # Ensure ``pip`` is installed before using it.
-    check_install("pip3 --version", "python3-pip")
+    check_install(f"{sys.executable} -m pip --version", "python3-pip")
 
     print("Installing Python dependencies...")
     # Outside a venv, install locally.
@@ -216,33 +215,20 @@ class BuildConfiguration(Enum):
     flag_value=BuildConfiguration.SINGLE_DEV.name,
     help="Build an image for single-server development.",
 )
-# Provide additional build options.
-@click.option("--arm/--no-arm", default=False, help="Install the ARMv7 toolchain.")
-@click.option(
-    "--pic24/--no-pic24",
-    default=False,
-    help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
-)
+# Provide options for cloning from another repo.
 @click.option(
     "-c",
     "--clone-all",
     default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
-    help="Clone all System components from repos with specifed USERNAME",
+    help="Clone all System components from repos with specified USERNAME",
 )
 @click.option(
-    "-crs",
-    "--clone-rs",
-    default="RunestoneInteractive",
-    nargs=1,
-    metavar="<USERNAME>",
-    help="Clone RunestoneServer repo with USERNAME",
-)
-@click.option(
-    "-cbs",
-    "--clone-bs",
-    default="bjones1", # Default since BookServer not forked by RunestoneInteractive yet!
+    "-cbks",
+    "--clone-bks",
+    # Default since BookServer not forked by RunestoneInteractive yet!
+    default="bnmnetp",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
@@ -255,39 +241,64 @@ class BuildConfiguration(Enum):
     metavar="<USERNAME>",
     help="Clone RunestoneComponents repo with USERNAME",
 )
+@click.option(
+    "-crs",
+    "--clone-rs",
+    default="RunestoneInteractive",
+    nargs=1,
+    metavar="<USERNAME>",
+    help="Clone RunestoneServer repo with USERNAME",
+)
+# Provide additional build options.
+@click.option("--arm/--no-arm", default=False, help="Install the ARMv7 toolchain.")
+@click.option(
+    "--pic24/--no-pic24",
+    default=False,
+    help="Install tools needed for development with the PIC24/dsPIC33 family of microcontrollers.",
+)
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Install LaTeX and related tools.")
 def build(
     passthrough: Tuple,
-    build_config_name: bool,
+    build_config_name: str,
+    clone_all: str,
+    clone_bks: str,
+    clone_rc: str,
+    clone_rs: str,
     arm: bool,
     pic24: bool,
-    tex: bool,
     rust: bool,
-    clone_rs: str,
-    clone_bs: str,
-    clone_rc: str,
-    clone_all: str,
+    tex: bool,
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
 
         PASSTHROUGH: These arguments are passed directly to the underlying "docker build" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py build -- -no-cache" instead of "docker_tools.py build -no-cache" (which produces an error).
 
-        WARNING: Flag '-c / --clone-all' is passed an argument then it will override any other clone flags specified.
-    
+        WARNING: if the flag '-c / --clone-all' is passed an argument, then it will override any other clone flags specified.
+
     Inside a Docker build, install all dependencies as root.
     """
 
     phase = env.IN_DOCKER
     build_config = BuildConfiguration[build_config_name]
-    print(f"{build_config=}")
     # Phase 0 -- prepare then start the container build.
     if not phase:
-        _build_phase_0(passthrough, build_config, arm, pic24, tex, rust)
+        _build_phase_0(
+            passthrough,
+            build_config,
+            clone_all,
+            clone_bks,
+            clone_rc,
+            clone_rs,
+            arm,
+            pic24,
+            rust,
+            tex,
+        )
     # Phase 1 -- build the container.
     elif phase == "1":
-        _build_phase_1(build_config, arm, pic24, tex, rust)
+        _build_phase_1(build_config, arm, pic24, rust, tex)
     # Phase 2 - run the startup script for container.
     if phase == "2":
         base_ready_text = dedent(
@@ -300,7 +311,7 @@ def build(
         )
         get_ready_file().write_text(base_ready_text)
         try:
-            _build_phase_2_core(build_config, arm, pic24, tex, rust)
+            _build_phase_2_core(build_config, arm, pic24, rust, tex)
         except Exception:
             msg = SERVER_START_FAILURE_MESSAGE
             print_exc()
@@ -323,11 +334,15 @@ def build(
 # -----------------------------------------------
 def _build_phase_0(
     passthrough: Tuple,
-    build_config: bool,
+    build_config: BuildConfiguration,
+    clone_all: str,
+    clone_bks: str,
+    clone_rc: str,
+    clone_rs: str,
     arm: bool,
     pic24: bool,
-    tex: bool,
     rust: bool,
+    tex: bool,
 ) -> None:
     # Did we add the current user to a group?
     did_group_add = False
@@ -368,13 +383,33 @@ def _build_phase_0(
     except Exception as e:
         print(f"Unable to run git: {e} Installing...")
         xqt("sudo apt-get install -y --no-install-recommends git")
+    # If Clone-all flag is set override other Clone Flags
+    if clone_all != "RunestoneInteractive":
+        # Print Warning and provide countdown to abort script
+        click.secho(
+            "Warning: Clone-all flag was initalized and will override any other clone flag specifed!",
+            fg="red",
+        )
+        # Set each individual flag to the clone-all argument
+        clone_bks = clone_all
+        clone_rc = clone_all
+        clone_rs = clone_all
 
     # Are we inside the Runestone repo?
     if not (wd / "nginx").is_dir():
         change_dir = True
         # No, we must be running from a downloaded script. Clone the runestone repo.
         print("Didn't find the runestone repo. Cloning...")
-        xqt("git clone https://github.com/RunestoneInteractive/RunestoneServer.git")
+        try:
+            # Check if possible to clone RunestoneServer with Custom Repo
+            xqt(
+                f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git"
+            )
+        except subprocess.CalledProcessError:
+            # Exit script with Git Clone Error
+            sys.exit(
+                f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}"
+            )
         chdir("RunestoneServer")
     else:
         # Make sure we're in the root directory of the web2py repo.
@@ -392,20 +427,25 @@ def _build_phase_0(
         one_py.write_text(
             dedent(
                 """\
+                import os
+
                 settings.docker_institution_mode = True
-                settings.jobe_key = ''
-                settings.jobe_server = 'http://jobe'
+                settings.jobe_key = ""
+                settings.jobe_server = "http://jobe"
                 settings.bks = "ns"
-                settings.python_interpreter = f"{os.environ.get['RUNESTONE_PATH']/.venv/bin/python3"
+                settings.python_interpreter = f"{os.environ['RUNESTONE_PATH']}/.venv/bin/python3"
                 # This must match the secret in the BookServer's ``config.py`` ``settings.secret``.
-                settings.secret = "supersecret"
+                settings.secret = os.environ["JWT_SECRET"]
                 """
             )
         )
 
-    if build_config.is_single():
+    dc = Path("docker-compose.override.yml")
+    if not build_config.is_single():
+        # Remove this if it exists (probably from an earlier built without ``--multi``). This file is only correct for ``--single(-dev)`` builds.
+        dc.unlink(True)
+    else:
         # For single-server operation, include additional services.
-        dc = Path("docker-compose.override.yml")
         # Define dev-only replacements for this file.
         d = {
             "DEV_MISC": dedent(
@@ -465,7 +505,6 @@ def _build_phase_0(
                         links:
                         -   db
                         -   redis
-                        -   jobe
                 """
                 ),
                 d,
@@ -473,12 +512,16 @@ def _build_phase_0(
         )
 
     if build_config.is_dev():
-        # Install Poetry. It requires an executable named ``python`` -- make sure it's installed.
-        check_install("python --version", "python-is-python3")
+        # OS X doesn't need this.
+        if is_linux:
+            # Poetry requires an executable named ``python`` -- make sure it's installed.
+            check_install("python --version", "python-is-python3")
+            # Poetry also needs ensurepip installed. Simply running ``python3 -m ensurepip`` always fails on Ubuntu, since Ubuntu returns an exit code of 1 and text about "ensurepip is disabled in Debian/Ubuntu for the system python...".
+            check_install('python3 -c "import ensurepip"', "python3-venv")
         print("Checking for poetry...")
         try:
             subprocess.run(["poetry", "--version"], check=True)
-        except subprocess.CalledProcessError:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             print("Installing poetry...")
             xqt(
                 "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -"
@@ -488,15 +531,31 @@ def _build_phase_0(
             bks = Path("BookServer")
             if not bks.exists():
                 print(f"Dev mode: since {bks} doesn't exist, cloning the BookServer...")
-                xqt("git clone https://github.com/bnmnetp/BookServer.git")
+                try:
+                    # Check if possible to clone BookServer with Custom Repo
+                    xqt(
+                        f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_bks}/BookServer.git"
+                    )
+                except subprocess.CalledProcessError:
+                    # Exit script with Git Clone Error
+                    sys.exit(
+                        f"ERROR: Unable to clone BookServer remote repository via User - {clone_bks}"
+                    )
             rsc = Path("RunestoneComponents")
             if not rsc.exists():
                 print(
                     f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
                 )
-                xqt(
-                    "git clone --branch peer_support https://github.com/RunestoneInteractive/RunestoneComponents.git"
-                )
+                try:
+                    # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
+                    xqt(
+                        f"export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/{clone_rc}/RunestoneComponents.git"
+                    )
+                except subprocess.CalledProcessError:
+                    # Exit script with Git Clone Error
+                    sys.exit(
+                        f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rc}"
+                    )
 
     # Ensure the user is in the ``www-data`` group.
     print("Checking to see if the current user is in the www-data group...")
@@ -506,6 +565,7 @@ def _build_phase_0(
         docker_sudo = True
 
     # Provide server-related CLIs.
+    check_install(f"{sys.executable} -m pip --version", "python3-pip")
     xqt(
         f"{sys.executable} -m pip install --user -e docker",
         f"{sys.executable} -m pip install --user -e rsmanage",
@@ -538,8 +598,8 @@ def _build_phase_1(
     build_config: bool,
     arm: bool,
     pic24: bool,
-    tex: bool,
     rust: bool,
+    tex: bool,
 ):
     assert in_docker()
     apt_install = "eatmydata apt-get install -y --no-install-recommends"
@@ -611,7 +671,7 @@ def _build_phase_1(
             # Just installing ``nodejs`` fails with messages about unmet dependencies. Adding ``yarn`` (which is never used) makes it happy. Solution from `SO <https://stackoverflow.com/a/67329755/16038919>`__.
             f"{apt_install} nodejs yarn",
             # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
-            "wget --no-verbose https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip",
+            "wget --no-verbose https://chromedriver.storage.googleapis.com/96.0.4664.18/chromedriver_linux64.zip",
             "unzip chromedriver_linux64.zip",
             "rm chromedriver_linux64.zip",
             "mv chromedriver /usr/bin/chromedriver",
@@ -722,13 +782,6 @@ def _build_phase_1(
         "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
     )
 
-    # Create a default auth key for web2py.
-    print("Creating auth key")
-    xqt("mkdir -p $RUNESTONE_PATH/private")
-    (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text(
-        "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33"
-    )
-
     xqt(
         # Do any final updates.
         "eatmydata sudo apt-get -y update",
@@ -745,7 +798,6 @@ def _build_phase_1(
     else:
         # For the multi-container build, there's no volume. Install everything that must be saved to disk.
         run_poetry(build_config.is_dev())
-        ensure_nginx_config()
 
 
 # Phase 2 core: Final installs / run servers
@@ -754,8 +806,8 @@ def _build_phase_2_core(
     build_config: bool,
     arm: bool,
     pic24: bool,
-    tex: bool,
     rust: bool,
+    tex: bool,
 ):
     # Check the environment.
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."
@@ -775,7 +827,7 @@ def _build_phase_2_core(
     # ^^^^^^^^^^
     if build_config.is_dev():
         # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available or empty.
-        x_display = os.environ.get("DISPLAY") or ":0"
+        x_display = env.DISPLAY or ":0"
         xqt(
             # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``
             f"rm -f /tmp/.X{x_display.split(':', 1)[1]}-lock",
@@ -786,7 +838,51 @@ def _build_phase_2_core(
             "icewm-session &",
         )
 
-    ensure_nginx_config()
+    # nginx config
+    # ^^^^^^^^^^^^
+    # Overwrite the nginx config file unless there is certbot data to preserve. This helps to prevent old builds from leaving behind incorrect config files.
+    has_cert = Path(f"/etc/letsencrypt/live/{env.RUNESTONE_HOST}").is_dir()
+    # A cert should only be preserved if there's a cert e-mail address and an existing cert file for that e-mail address. Overwrite the file otherwise.
+    overwrite = not (env.CERTBOT_EMAIL and has_cert)
+    # _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.template`.
+    nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
+    # Since certbot (if enabled) edits this file, avoid overwriting it.
+    if overwrite or not nginx_conf.is_file():
+        nginx_conf_template = nginx_conf.with_suffix(".template")
+        txt = replace_vars(
+            nginx_conf_template.read_text(),
+            dict(RUNESTONE_HOST=env.RUNESTONE_HOST, WEB2PY_PATH=env.WEB2PY_PATH),
+        )
+        nginx_conf.write_text(txt)
+
+    # web2py config
+    # ^^^^^^^^^^^^^
+    # Create a default auth key for web2py.
+    print("Creating auth key")
+    xqt("mkdir -p $RUNESTONE_PATH/private")
+    (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text(env.WEB2PY_SALT)
+    # Write the admin password.
+    xqt(
+        dedent(
+            f"""\
+            {sys.executable} -c \\
+            "from gluon.main import save_password
+            save_password(
+                '{env.WEB2PY_ADMIN_PASSWORD}',
+                {'443' if env.CERTBOT_EMAIL else '80'}
+            )"
+            """
+        ),
+        cwd=env.WEB2PY_PATH,
+    )
+    # Set up admin interface access.
+    admin_1_py = Path(f"{env.WEB2PY_PATH}/applications/admin/models/1.py")
+    if env.CERTBOT_EMAIL:
+        # This isn't needed when HTTPS is available.
+        admin_1_py.unlink(True)
+    else:
+        # Allow admin access in HTTP mode only.
+        admin_1_py.write_text("DEMO_MODE = True")
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
@@ -869,10 +965,12 @@ def _build_phase_2_core(
     print("Starting web servers.")
     _start_servers(build_config.is_dev())
 
+    # cerbot
+    # ^^^^^^
     # Certbot requires nginx to be running to succeed, hence its placement here.
     if env.CERTBOT_EMAIL:
         # See if there's already a certificate for this host. If not, get one.
-        if not Path(f"/etc/letsencrypt/live/{env.RUNESTONE_HOST}").is_dir():
+        if not has_cert:
             xqt(
                 'certbot -n --agree-tos --email "$CERTBOT_EMAIL" --nginx --redirect -d "$RUNESTONE_HOST"'
             )
@@ -903,24 +1001,11 @@ def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
     return re.sub(pattern, repl, str_)
 
 
-# _`Set up nginx based on env vars.` See `nginx/sites-available/runestone.template`.
-def ensure_nginx_config():
-    nginx_conf = Path(f"{env.RUNESTONE_PATH}/docker/nginx/sites-available/runestone")
-    # Since certbot (if enabled) edits this file, avoid overwriting it.
-    if not nginx_conf.is_file():
-        nginx_conf_template = nginx_conf.with_suffix(".template")
-        txt = replace_vars(
-            nginx_conf_template.read_text(),
-            dict(RUNESTONE_HOST=env.RUNESTONE_HOST, WEB2PY_PATH=env.WEB2PY_PATH),
-        )
-        nginx_conf.write_text(txt)
-
-
 # Run Poetry and associated tools.
 def run_poetry(is_dev: bool):
     no_dev_arg = "" if is_dev else " --no-dev"
     xqt(
-        # Update dependencies. See `scripts/poetry_fix.py`. This must come before Poetry, since it will check for the existence of the project created by these commands.
+        # Update dependencies. See `scripts/poetry_fix.py`. This must come before Poetry, since it will check for the existence of the project created by these commands. (Even calling ``poetry config`` will perform this check!)
         f"{sys.executable} -m pip install --user toml",
         f"{sys.executable} runestone_poetry_project/poetry_fix.py{no_dev_arg}",
         # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible and at a known location (``./.venv``).

@@ -1,7 +1,51 @@
 # ***********************************
 # |docname| - Work around Poetry bugs
 # ***********************************
-# This script contains two fixes for Poetry bugs: one bug which manifests when the ``--no-dev`` flag is passed to ``poetry install/update`` and another which occurs when the ``--no-dev`` flag isn't passed.
+# This script contains two fixes for Poetry bugs: one bug which manifests when the ``--no-dev`` flag is passed to ``poetry install/update`` and another which occurs when the ``--no-dev`` flag isn't passed. It doesn't provide a fix to a third bug, discussed below
+#
+# `Invalid package METADATA <https://github.com/python-poetry/poetry/issues/3148>`_
+# =====================================================================================
+# Per this issue, Poetry generates invalid package metadata for local path dependencies. For example, the last few lines of ``.venv/lib/python3.8/site-packages/runestone_poetry_project-0.1.0.dist-info/METADATA`` contain:
+#
+# .. code-block:: text
+#
+#   Requires-Dist: pytz (>=2016.6.1)
+#   Requires-Dist: requests (>=2.10.0)
+#   Requires-Dist: rsmanage @ rsmanage
+#   Requires-Dist: runestone
+#   Requires-Dist: runestone-docker-tools @ docker
+#   Requires-Dist: six (>=1.10.0)
+#   Requires-Dist: sphinxcontrib-paverutils (>=1.17)
+#   Requires-Dist: stripe (>=2.0.0,<3.0.0)
+#
+# This causes an exception when running a command such as ``pip show click``:
+#
+# .. code-block:: text
+#
+#   ERROR: Exception:
+#   Traceback (most recent call last):
+#     File "/srv/web2py/applications/runestone/.venv/lib/python3.8/site-packages/pip/_vendor/pkg_resources/__init__.py", line 3021, in _dep_map
+#       return self.__dep_map
+#     File "/srv/web2py/applications/runestone/.venv/lib/python3.8/site-packages/pip/_vendor/pkg_resources/__init__.py", line 2815, in __getattr__
+#       raise AttributeError(attr)
+#   AttributeError: _DistInfoDistribution__dep_map
+#
+# ... along with a long traceback of other chained exceptions.
+#
+# Fixing the ``METADATA`` file to be:
+#
+# .. code-block:: text
+#
+#   Requires-Dist: pytz (>=2016.6.1)
+#   Requires-Dist: requests (>=2.10.0)
+#   Requires-Dist: rsmanage @ file://rsmanage
+#   Requires-Dist: runestone
+#   Requires-Dist: runestone-docker-tools @ file://docker
+#   Requires-Dist: six (>=1.10.0)
+#   Requires-Dist: sphinxcontrib-paverutils (>=1.17)
+#   Requires-Dist: stripe (>=2.0.0,<3.0.0)
+#
+# ... along with a similar fix to the ``METADATA`` for ``bookserver_dev`` allow ``pip`` to run successfully.
 #
 #
 # TODO
@@ -15,9 +59,8 @@
 #
 # Standard library
 # ----------------
-import subprocess
 from pathlib import Path
-from typing import Set
+from typing import Any, Dict, Set
 
 # Third-party imports
 # -------------------
@@ -34,7 +77,7 @@ import toml
 # Given a main Poetry ``pyproject.toml``, these functions look for all subprojects included via path depdencies, creating additional subprojects namd ``projectname-dev`` in which the subproject's dev-dependencies become dependencies in the newly-created subproject. This is a workaround for Poetry's inability to install the dev dependencies for a sub project included via a path requirement. To use this, in the main project, do something like:
 #
 # .. code-block:: TOML
-#   :number-lines:
+#   :linenos:
 #
 #   [tool.poetry.dev-dependencies]
 #   sub = { path = "../sub", develop = true }
@@ -73,9 +116,9 @@ def create_dev_dependencies(
 
 def walk_dependencies(
     # A dict of Poetry-specific values.
-    poetry_dict,
+    poetry_dict: Dict[str, Any],
     # True to look at dependencies; False to look at dev-dependencies.
-    is_deps,
+    is_deps: bool,
     # See `project_path`.
     project_path: Path,
     # See `walked_paths_set`.
@@ -125,9 +168,9 @@ def make_dev_pyproject():
 
 # Fix for the main ``pyproject.toml``
 # ===================================
-# This function updates the ``pyproject.toml`` in the current directory by switching between a section named ``[tool.poetry.dev-dependencies]`` when in development mode or ``[tool.no-poetry.dev-dependencies]`` when not in development mode. Next, it run ``poetry update`` if a change was made, to update the ``poetry.lock`` file.
+# This function updates the ``pyproject.toml`` in the current directory by switching between a section named ``[tool.poetry.dev-dependencies]`` when in development mode or ``[tool.no-poetry.dev-dependencies]`` when not in development mode. Next, it runs ``poetry update`` if a change was made, to update the ``poetry.lock`` file.
 #
-# Reason: sadly, Poetry v1.1.11 is broken in some important ways. Specifically, `path based dev-dependencies break 'install --no-dev' when the directory does not exist <https://github.com/python-poetry/poetry/issues/668>_. In addition, if a dependency exists both in the ``[tool.poetry.dependencies]`` and the same dependency with a path in ``[tool.poetry.dev-dependencies]`` sections, this version of Poetry will place the path in the resulting ``poetry.lock`` file even when the ``--no-dev`` option is passed, causing Poetry to install the dev version or fail if it's not available.
+# Reason: sadly, Poetry v1.1.11 is broken in some important ways. Specifically, `path based dev-dependencies break 'install --no-dev' when the directory does not exist <https://github.com/python-poetry/poetry/issues/668>`_. In addition, if a dependency exists both in the ``[tool.poetry.dependencies]`` and the same dependency with a path in ``[tool.poetry.dev-dependencies]`` sections, this version of Poetry will place the path in the resulting ``poetry.lock`` file even when the ``--no-dev`` option is passed, causing Poetry to install the dev version or fail if it's not available.
 #
 # As a workaround, this function renames the ``[tool.poetry.dependencies]``  section, effectively hiding it, for ``--no-dev`` option, and un-hides it otherwise. It then reruns ``poetry update`` if it makes a change.
 def rewrite_pyproject(is_dev: bool) -> None:
@@ -153,7 +196,16 @@ def rewrite_pyproject(is_dev: bool) -> None:
         # No update neded. We're done.
         return
     pyproject.write_text(pp_text)
-    subprocess.run(f"poetry update{'' if has_dev else ' --no-dev'} --lock", check=True, shell=True)
+    # Ideally, we'd run ``poetry update`` here. However, we're blocked from doing so by circular dependencies:
+    #
+    # #.    In a clean install, the command ``poetry config virtualenvs.in-project true`` has not executed yet.
+    # #.    Running this command will first check the dependencies in the existing ``poetry.lock`` file and report that directories such as ``../BookServer`` don't exist. (Why does Poetry do this?)
+    # #.    To update ``poetry.lock``, we can run ``poetry update``.
+    # #.    But ``poetry update`` will update the wrong venv, since ``poetry config virtualenvs.in-project true`` hasn't run yet.
+    # #.    Go to step 1.
+    #
+    # So, just delete the lock file and let Poetry rebuild it.
+    Path("poetry.lock").unlink()
 
 
 # CLI interface
