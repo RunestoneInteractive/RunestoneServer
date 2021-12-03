@@ -1,17 +1,12 @@
-#This file, when renamed 1.py will be loaded after 0.py and can override options set there
+# *******************************************
+# |docname| - Additional web2py configuration
+# *******************************************
+# This file, when renamed 1.py will be loaded after 0.py and can override options set there. TODO: combine with with 0.py (some overlap between these files).
 
+# TODO: do we need this import?
 from os import uname
+import os
 
-# ===================================================
-# Database options
-# ===================================================
-
-# The best way to set the database_uri is to set your environment variable WEB2PY_CONFIG
-# to one of the following values along with an database environment variable for each configuration as follows:
-#
-# production - set DBURL
-# test - set TEST_DBURL
-# development - set DEV_DBURL
 
 # ===================================================
 # LTI Options
@@ -22,9 +17,8 @@ from os import uname
 # If you want to enable the lti interface for your whole site then uncomment the next line
 #settings.lti_interface = True
 
-# Set the strings used as credentials by remote LMS app when passing a student in to be automatically logged in
-#settings.lti_consumer, settings.lti_secret = 'some string', 'another string'
-#settings.lti_uri = 'https://106w18.learningpython.today/runestone/lti' # or whatever the full URL is for making an LTI connection
+# If not specified, the LTI interface will use the URL presented by the tool consumer. Otherwise, set this to the full URL for making an LTI connection to the tool consumer.
+#settings.lti_uri = 'https://my-runeston-site.edu/runestone/lti'
 
 
 # ===================================================
@@ -37,8 +31,9 @@ settings.default_course = 'fopp'
 #settings.enable_captchas = True
 
 # This allows you to use "standard" courses as an instructor. Runestone.academy does not let
-# people be instructors for the default courses like "thinkcpy" 
+# people be instructors for the default courses like "thinkcpy"
 settings.docker_institution_mode = True
+
 
 # ===================================================
 # Jobe Options
@@ -64,20 +59,19 @@ settings.jobe_key = ''
 # Google Analytics id
 settings.google_ga = 'UA-XXX-XX'
 
-# lti_interface
-# by default the lti interface is off. It can be turned on for an individual course by setting
-# the course attribute lti_interface with a value of True
-# If you want to enable the lti interface for your whole site then uncomment the next line
-# settings.lti_interface = True
-
 # for compatibility with the new book server set a secret key value here
-# settings.secret = "supersecret"
+settings.secret = os.environ["JWT_SECRET"]
+
+# This must point to a valid python interpreter to use the web interface for question authoring. TODO: this is no longer necessary since we're not using uwsgi to run web2py.
+settings.python_interpreter = f"{os.environ['RUNESTONE_PATH']}/.venv/bin/python3"
 
 # to work with a websocket server (FastAPI based) for peer instruction chat
 # settings.websocket_url = "ws://dev.runestoneinteractive.org/ns"
 # for https servers
 # settings.websocket_url = "wss://dev.runestoneinteractive.org/ns"
 
-
-# This must point to a valid python interpreter to use the web interface for question authoring.
-settings.python_interpreter = sys.executable
+build_config_single = ${BUILD_CONFIG_SINGLE}
+if build_config_single:
+    settings.websocket_url = f"ws{'s' if os.environ['CERTBOT_EMAIL'] else ''}://{os.environ['RUNESTONE_HOST']}/ns"
+else:
+    settings.websocket_url = f"wss://{os.environ['LOAD_BALANCER_HOST']}/ns"
