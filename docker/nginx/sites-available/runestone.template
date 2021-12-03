@@ -19,11 +19,11 @@ server {
     #
     # `location <https://nginx.org/en/docs/http/ngx_http_core_module.html#location>`_: set configuration depending on a request URI. The ``~*`` indicates the following parameter is a case-insensitive regex. Look for web2py static files.
     #
-    # Match web2py static paths with the application specified, such as ``/runestone/static/``.
+    # Match web2py static paths with the application specified, such as ``/runestone/static/``. Avoid matching ``admin/`` so the admin interface works -- it uses the `web2py's static asset management <http://www.web2py.com/books/default/chapter/29/04/the-core#Static-asset-management>`_ which breaks the simple redirect below.
     #
     # root supplies the uptree path the match gets appended to the path specified
     # by the root directive
-    location ~* /(\w+)/static/ {
+    location ~* /(?!admin/)(\w+)/static/ {
         root /srv/web2py/applications/;
     }
 
