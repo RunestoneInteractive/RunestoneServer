@@ -65,19 +65,6 @@ db.define_table(
     migrate=bookserver_owned("source_code"),
 )
 
-# acerror_log
-# ----------
-# TODO: remove this definition after safely backing up and removing the table from academy
-db.define_table(
-    "acerror_log",
-    Field("timestamp", "datetime"),
-    Field("sid", "string"),
-    Field("div_id", "string"),
-    Field("course_id", "string"),
-    Field("code", "text"),
-    Field("emessage", "text"),
-    migrate=table_migrate_prefix + "acerror_log.table",
-)
 
 ##table to store the last position of the user. 1 row per user, per course
 # user_state

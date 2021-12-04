@@ -152,14 +152,14 @@ def initdb(config, list_tables, reset, fake, force):
                 settings.drop_tables = "Yes"
                 await create_initial_courses_users()
 
-            os.environ["WEB2PY_MIGRATE"] = "Yes"
-
-            subprocess.call(
-                f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
-                shell=True,
-            )
 
             asyncio.run(foo())
+            os.environ["WEB2PY_MIGRATE"] = "No"
+
+            subprocess.call(
+                f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/noop.py",
+                shell=True,
+            )
 
             init_roles(config)
             click.echo("Created new tables")
