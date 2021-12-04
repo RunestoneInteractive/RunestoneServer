@@ -27,7 +27,8 @@ services:
       # Server vars.
       WEB2PY_CONFIG: ${SERVER_CONFIG}
       BOOK_SERVER_CONFIG: ${SERVER_CONFIG}
-      WEB2PY_MIGRATE: "Yes"
+      WEB2PY_MIGRATE: "No"
+      PGPASSWORD: ${POSTGRES_PASSWORD} # auto login from docker-tools shell
       WEB2PY_ADMIN_PASSWORD: ${WEB2PY_ADMIN_PASSWORD}
       WEB2PY_SALT: ${WEB2PY_SALT}
       JWT_SECRET: ${JWT_SECRET}

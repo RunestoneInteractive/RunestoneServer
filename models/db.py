@@ -52,6 +52,9 @@ if not request.env.web2py_runtime_gae:
             migrate=False,
             pool_size=5,
             adapter_args=dict(logfile="test_runestone_migrate.log"),
+            migrate_enabled=(
+                os.environ.get("WEB2PY_MIGRATE", "Yes") in ["Yes", "Fake"]
+            ),
         )
         table_migrate_prefix = "test_runestone_"
 
