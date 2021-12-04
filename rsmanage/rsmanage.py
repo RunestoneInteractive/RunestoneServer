@@ -154,7 +154,7 @@ def initdb(config, list_tables, reset, fake, force):
 
 
             asyncio.run(foo())
-            os.environ["WEB2PY_MIGRATE"] = "No"
+            os.environ["WEB2PY_MIGRATE"] = "Yes"
 
             subprocess.call(
                 f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/noop.py",
