@@ -909,6 +909,20 @@ function remove_instructor() {
     };
 }
 
+function TA_search() {
+    var elements = document.getElementsByClassName("available_students");
+    for (var i = 0; i < elements.length; i++) {
+        var name = elements[i].innerText.toUpperCase();
+        var text = $("#TA_search").val()
+        if(name.includes(text.toUpperCase())){
+            elements[i].style.display = "block"; 
+        }
+        else{
+            elements[i].style.display = "none";
+        }
+    }
+}
+
 function edit_indexrst(form) {
     let data = {
         newtext: form.editIndex.value,
