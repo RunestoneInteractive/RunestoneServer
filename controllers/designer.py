@@ -35,7 +35,7 @@ def index():
         )
         # return dict(message=T('Welcome to CourseWare Manager'))
     return basicvalues
-
+    
 
 @auth.requires_login()
 def build():
@@ -79,6 +79,12 @@ def build():
         else:
             institution = request.vars.institution
 
+        if not request.vars.instructor_name:
+            instructor_name = "Not Provided"
+        else:
+            instructor_name = request.vars.instructor_name
+
+
         if not request.vars.courselevel:
             courselevel = "unknown"
         else:
@@ -94,7 +100,8 @@ def build():
         cid = db.courses.update_or_insert(
             course_name=request.vars.projectname,
             term_start_date=request.vars.startdate,
-            institution=institution,
+            institution=request.vars.institution,
+            instructor_name=request.vars.instructor_name,
             base_course=base_course,
             login_required=login_required,
             python3=python3,

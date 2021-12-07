@@ -68,9 +68,12 @@ def _route_book(is_published=True):
         response.cookies["last_course"]["path"] = "/"
 
         # Get `course info <courses table>`.
+        
         course = (
             db(db.courses.id == auth.user.course_id)
             .select(
+                db.courses.institution,
+                db.courses.instructor_name,
                 db.courses.id,
                 db.courses.course_name,
                 db.courses.base_course,
@@ -289,6 +292,8 @@ def _route_book(is_published=True):
         questions = _exercises(base_course, chapter)
     logger.debug("QUESTIONS = {} {}".format(subchapter, questions))
     return dict(
+        instructor_name=course.instructor_name,
+        institution=course.institution,
         course_name=course.course_name,
         base_course=base_course,
         is_logged_in=is_logged_in,

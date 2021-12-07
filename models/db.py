@@ -154,11 +154,14 @@ else:
 # ``courses`` table
 # =================
 ## create all tables needed by auth if not custom tables
+
+
 db.define_table(
     "courses",
     Field("course_name", "string", unique=True),
     Field("term_start_date", "date"),
-    Field("institution", "string"),
+    Field("institution", "string"),       # field for institution name 
+    Field("instructor_name", "string"),   # field for instructor name
     Field("base_course", "string"),
     Field("python3", type="boolean", default=True),
     Field("login_required", type="boolean", default=True),
@@ -173,7 +176,7 @@ db.define_table(
 # Provide a common query. Pass ``db.courses.ALL`` to retrieve all fields; otherwise, only the ``course_name`` and ``base_course`` are selected.
 def get_course_row(*args, **kwargs):
     if not args:
-        args = db.courses.course_name, db.courses.base_course
+        args =  db.courses.institution, db.courses.institution_logo, db.courses.instructor_name, db.courses.course_name, db.courses.base_course,
     return db(db.courses.id == auth.user.course_id).select(*args).first()
 
 
@@ -207,6 +210,12 @@ def getCourseNameFromId(courseid):
     q = db.courses.id == courseid
     row = db(q).select().first()
     return row.course_name if row else ""
+    
+def getCourseNameFromId(coursec):
+    """ used to compute auth.user.course_name field """
+    q = db.courses.institution == coursec
+    row = db(q).select().first()
+    return row.institution if row else ""
 
 
 def getCourseOrigin(base_course):
@@ -214,6 +223,7 @@ def getCourseOrigin(base_course):
         db(
             (db.course_attributes.course_id == db.courses.id)
             & (db.courses.course_name == base_course)
+            
             & (db.course_attributes.attr == "markup_system")
         )
         .select(db.course_attributes.value, **SELECT_CACHE)
