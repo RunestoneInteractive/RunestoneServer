@@ -386,7 +386,6 @@ def record_grade():
 
     student_rownum = None
 
-
     # Update the score(s).
     try:
         # sid can be a list of sids to change. Walk through each element in the list.
