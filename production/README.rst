@@ -50,7 +50,7 @@ For any machine that wants to access our private registry we will need to login 
 
 On one machine you will need to set up a build environment by cloning RunestoneServer.
 
-1. run `docker/docker_tools.py --multi` to build an image
+1. run `docker/docker_tools.py build --multi` to build an image
 2. run `docker commit` to commit this image.  The `docker commit` command allows us to save any changes that were made to the running container after the initial build phase is complete.
 3. Tag the new image.  when using a registry we must tag an image to differentiate it from other similar images.  For us, using the digital ocean registry we can use the following command to tag a newly created image.  The general form of the tag command is `docker image tag SOURCE_IMAGE TARGET_IMAGE` In our case we will use  `docker image tag runestone/server:latest registry.digitalocean.com/runestone-registry/production_server:latest` Instead of `runestone/server:latest` we could also substitute the hash of an image that we get from the `docker images` command.  Note that the target image contains the address of the registry along with our private folder within the registry. and finally the tag name we wish to assign `production_server` along with the `:latest` tag. (yes tags within tags)
 4. push the saved image to the container registry using `docker push registry.digitalocean.com/runestone-registry/production_server:latest` 
