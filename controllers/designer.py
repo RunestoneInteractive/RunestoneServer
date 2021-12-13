@@ -24,7 +24,7 @@ admin_logger(logger)
 def index():
     basicvalues = {}
     if settings.academy_mode:
-        basicvalues["message"] = T("Build a Custom Course")
+        basicvalues["message"] = T("Course and Textbook Designer")
         basicvalues["descr"] = T(
             """This page allows you to select a book for your own class. You will have access to all student activities in your course.
         To begin, enter a project name below."""
