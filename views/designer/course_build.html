@@ -28,7 +28,7 @@
         <strong
             >Click this link to proceed to
             {{if "basecourse" in globals():}}
-            <a href="/runestone/books/published/{{=basecourse}}/index.html">
+            <a href="{{=get_course_url('index.html') }}">
             {{=coursename}}
             </a>
             {{else:}}

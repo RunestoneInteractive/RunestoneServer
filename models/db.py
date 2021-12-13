@@ -194,7 +194,10 @@ def get_course_url(*args):
         )
         args = tuple(x for x in args if x != "")
         if course:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+            if "/" in course.base_course: #we are dealing with a custom textbook here, so route it differently
+                return URL(c="books", f="custom_books", args=("published",course.base_course) + args)
+            else: #we are just dealing with a normal textbook
+                return URL(c="books", f="published", args=(course.base_course,) + args)
         else:
             return URL(c="default")
 

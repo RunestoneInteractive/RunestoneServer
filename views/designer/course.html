@@ -83,6 +83,21 @@
         </div>
 
         <br />
+        {{ if len(custom_book_list) > 0: }}
+        <div class='form-group'>
+            <label>
+                Choose from your own custom textbooks:
+            </label>
+            {{ for book in custom_book_list: }}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="coursetype" value="{{=book['path']}}" />
+                    {{=book['title']}}
+                </label>
+            </div>
+            {{ pass }}
+        </div>
+        {{ pass }}
 
         <div class='form-group'>
 

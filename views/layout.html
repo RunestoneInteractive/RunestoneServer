@@ -201,9 +201,9 @@
                             <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
-                        {{if 'user_navs' in globals() and user_navs: }}
+                        {{if ('user_navs' in globals() and user_navs) or request.controller == "designer":}}
                             {{if 'auth' in globals() and auth.user:}}
-                                <li><a href="/{{=request.application}}/designer/index">Create a Course</a> </li>
+                                <li><a href="/{{=request.application}}/designer/index">Create a Course or Book</a> </li>
                             {{pass}}
                             {{if 'auth' in globals() and not auth.user and request.args(0) != 'login' and not settings.lti_only_mode:}}
                                 <li><a href="/{{=request.application}}/default/user/login">Login</a> </li>
