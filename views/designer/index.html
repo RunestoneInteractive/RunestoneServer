@@ -1,12 +1,12 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,True}}
 {{extend 'layout.html'}}
-
-
 {{if 'message' in globals():}}
 <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://kit.fontawesome.com/00f50cd1e9.js" crossorigin="anonymous"></script>
+<!-- <h3>{{=message}}</h3> -->
+<!-- <p><strong>MAIN</strong> <a href="{{=URL('course')}}">course</a>  <a href="{{=URL('book')}}">book</a> PLS</p> -->
 <style>
     /* Create two equal columns that floats next to each other */
     .column {
@@ -14,11 +14,9 @@
         width: 20%;
         padding: 10px;
     }
-
     .row {
         background-color: white;
     }
-
     .row:after {
         content: "";
         display: table;
@@ -27,52 +25,48 @@
 </style>
 <div class="container">
     <div class="col-md-8 col-md-offset-2">
-        <h2>{{=message}}</h2>
-        <p>
-            Welcome to the designers page.
-            You can choose to make a course based on a preexisting book or you can build your own custom textbook from
+        <h2 style="padding-left: 20px;">{{=message}}</h2>
+        <p style="padding-left:20px; padding-right:20px">
+            Welcome to the course designers page where you can choose to select a book or build your own custom textbook
+            from
             one of the current books.
             If you are a student or independent learner you do not need to build a course.
         </p>
-        <div style="display: inline-block; margin: 20px;">
-            <div class="row">
-                <div class="column" style="width: 350px;">
-                    <form action="{{=URL('course')}}">
-                        <button type="submit" class = "btn btn-primary"
-                            style="font-size: 20px; text-align: center; height: 75px; width: 310px">Build a Course <i class="fas fa-users"></i></button>
-                    </form>
-                    <div class="column" style="width: 350px;"></div>
-                    <p>Buidling a course allows you to select a book for your own class. Once you have selected and
-                        built
-                        the
-                        book, you will be able to create assignments for your students. These assignments will be
-                        publish
-                        right
-                        in the book. As the instructor, You can grade your students homework, and have access to a
-                        dashboard
-                        that allows you to monitor student progress. </p>
-                </div>
-
-                <div class="column" style="width: 350px;">
-                    <form action="{{=URL('book')}}">
-                        <button class = "btn btn-primary" type="submit"
-                        style="font-size: 20px; text-align: center; height: 75px; width: 310px">Create a Custom Textbook <i class="fas fa-book-open"></i></button>
-                    </form>
-                    <div class="column" style="width: 350px;"></div>
-                    <p>This page can be used to create custom textbooks to fit your classes needs. To start, log into
-                        Github.
-                        Then, find the textbook you would like and use the clone button which forks the book into your
-                        Github.
-                        You can use the left hand panel to view the book in its current state and publish it.</p>
-                </div>
+        <!-- <a href="{{=URL('course')}}">course</a>  <a href="{{=URL('book')}}">book</a>
+        <button onclick="{{=URL('course')}}">TEST</button> -->
+        <!-- <form action="{{=URL('course')}}">
+            <button type="submit" style="font-size: 16px; background-color: #116CC2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; margin-top: 20px;">Build a Course</button>
+         </form>
+         <form action="{{=URL('book')}}">
+            <button type="submit" style="font-size: 16px; background-color: #116CC2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; margin: -100px 150px">Create a Custom Textbook</button>
+         </form>
+         <p> </p> -->
+        <div style="display: inline-block; margin: 20px; display: flex; column-gap: 20px">
+            <div class="column" style="height: 280px; width: 350px; border-style: solid; border-width: thin; padding: 40px; border-color: #C8C3C2;">
+                <p style="font-size: 18px"><b>Choose an existing textbook</b></p>
+                <p style="padding-top: 10px; padding-bottom: 10px;">Buidling a course allows you to select a book from the Runestone library for your own class. </p>
+                <form action="{{=URL('course')}}">
+                    <button type="submit" class="btn btn-primary"
+                        style="font-size: 20px; text-align: center; height: 65px; width: 280px; font-size: 18px">Build a Course <i class="fas fa-users"></i></button>
+                </form>
+                <div class="column" style="width: 350px;"></div>
             </div>
-
+            <br>
+            <div class="column" style="height: 280px; width: 350px; border-style: solid; border-width: thin; padding: 40px; border-color: #C8C3C2;">
+                <p style="font-size: 18px"><b>Design a custom book</b></p>
+                <p style="padding-top: 10px; padding-bottom: 10px;">Creating a custom book allows you to edit textbooks from the Runestone library to fit your
+                    classes needs.</p>
+                <form action="{{=URL('book')}}">
+                    <button class="btn btn-primary" type="submit"
+                        style="font-size: 20px; text-align: center; height: 65px; width: 280px; font-size: 18px">Create
+                        a Custom Textbook <i class="fas fa-book-open"></i></button>
+                </form>
+            </div>
         </div>
+        <p style="padding-left: 20px;"><b>Disclaimer:</b> This resource is only available for professors. If you are a student or
+            independent learner, you will not have access to create a course</p>
     </div>
 </div>
-
 {{pass}}
-
 {{block right_sidebar}}
-
 {{end}}

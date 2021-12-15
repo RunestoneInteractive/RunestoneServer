@@ -54,17 +54,20 @@ def update_local_files(path,clone_url,commit_id,oldbookname = None):
             reset_local(path,clone_url,commit_id)
     except:
         reset_local(path,clone_url,commit_id)
-    directory_name = os.listdir(path+"/published")[0]
-    if path.split("/")[3] == "drafts":
-        db.textbooks.update_or_insert(
-            db.textbooks.path == ("/").join(path.split("/")[4:6]),
-            drafts_directory=directory_name,
-        )
-    else:
-        db.textbooks.update_or_insert(
-            db.textbooks.path == ("/").join(path.split("/")[4:6]),
-            published_directory=directory_name,
-        )
+    try:
+        directory_name = os.listdir(path+"/published")[0]
+        if path.split("/")[3] == "drafts":
+            db.textbooks.update_or_insert(
+                db.textbooks.path == ("/").join(path.split("/")[4:6]),
+                drafts_directory=directory_name,
+            )
+        else:
+            db.textbooks.update_or_insert(
+                db.textbooks.path == ("/").join(path.split("/")[4:6]),
+                published_directory=directory_name,
+            )
+    except:
+        print("error setting directory name")
 
 def update_books_webhook():
     verify_webhook=False ### TODO turn to true
@@ -180,8 +183,8 @@ def github_book_repo(account, repo, oldb, renameval= None, delete=False, reset=F
 
 @auth.requires_login()
 def book_edit():
-    # Verify post data is sane
-    for id in ["oldBookIdentifier","newBookIdentifier","baseBook","newGithubRepo","githubUser"]:
+    # Verify post data is of the correct format
+    for id in ["oldBookIdentifier","newBookIdentifier","baseBook","newGithubRepo","githubUser","oldGithubRepo"]:
         if request.vars[id] == "" or " " in request.vars[id] or "/" in request.vars[id]:
             session.flash = (f"Failed to edit book: {id} cannot be emtpy, have spaces or /")
             redirect(URL("designer", "book"))
@@ -231,10 +234,17 @@ def book_edit():
         else:
             os.system("rm -rf applications/runestone/custom_books/drafts/{}/{}".format(existing_old_book.runestone_account, existing_old_book.regname))
             os.system("rm -rf applications/runestone/custom_books/published/{}/{}".format(existing_old_book.runestone_account, existing_old_book.regname))
+            courses = db(db.courses.base_course == old_path).select()
+            for course in courses:
+                db.courses.update_or_insert(
+                    db.courses.course_name == course.course_name,
+                    base_course =existing_old_book.base_book,
+                )
             db(db.textbooks.path == old_path).delete()
             session.flash = (f"Deleted book: {request.vars['newBookIdentifier']}")
             redirect(URL("designer", "book"))
     elif request.vars.changeType == "edit":
+        print("in edit")
         if (not existing_old_book) or (existing_new_book and not new_book_is_same) or (not request.vars.githubUser == existing_old_book.github_account) or (not session.auth.user.username == existing_old_book.runestone_account):
             print("incorrect github permissions or incorrect database")
             redirect(URL("designer", "book"))
@@ -245,10 +255,20 @@ def book_edit():
             redirect(URL("designer", "book"))
             ## TODO handle changed
         else:
+            print("edit github worked")
             update_local_files("applications/runestone/custom_books/drafts/{}/{}".format(existing_old_book.runestone_account, request.vars.newBookIdentifier),"https://github.com/{}/{}.git".format(existing_old_book.github_account,request.vars.newGithubRepo),existing_old_book.draft_commit,oldbookname=request.vars.oldBookIdentifier)
+            print("b4 published")
             if existing_old_book.published:
                 update_local_files("applications/runestone/custom_books/published/{}/{}".format(existing_old_book.runestone_account, request.vars.newBookIdentifier),"https://github.com/{}/{}.git".format(existing_old_book.github_account,request.vars.newGithubRepo),existing_old_book.draft_commit,oldbookname=request.vars.oldBookIdentifier)
             session.flash = (f"Edited book: {request.vars['newBookIdentifier']}")
+            print("here")
+            print(request.vars.githubUser,session.auth.user.username,request.vars.newGithubRepo,request.vars.newBookIdentifier, new_path, old_path)
+            tb = db(db.textbooks.path == old_path).select().first()
+            print("after tb")
+            print(len(tb))
+            for t in tb:
+                print("hi")
+                print(t.path,t.github_account,t.runestone_account,t.github_repo_name,t.regname)
             db.textbooks.update_or_insert(
                 db.textbooks.path == old_path,
                 path=new_path,
@@ -256,11 +276,14 @@ def book_edit():
                 runestone_account=session.auth.user.username,
                 github_repo_name=request.vars.newGithubRepo,
                 regname=request.vars.newBookIdentifier,
-                base_book=request.vars.baseBook,
-                published=existing_old_book.published,
-                draft_commit=existing_old_book.draft_commit,
-                published_commit=existing_old_book.published_commit,
             )
+            print("b4 courses")
+            courses = db(db.courses.base_course == old_path).select()
+            for course in courses:
+                db.courses.update_or_insert(
+                    db.courses.course_name == course.course_name,
+                    base_course =new_path,
+                )
             redirect(URL("designer", "book"))
     elif request.vars.changeType == "publish":
         if (not existing_old_book) or (not request.vars.githubUser == existing_old_book.github_account) or (not session.auth.user.username == existing_old_book.runestone_account):
@@ -269,15 +292,7 @@ def book_edit():
         update_local_files("applications/runestone/custom_books/published/{}/{}".format(existing_old_book.runestone_account, existing_old_book.regname),"https://github.com/{}/{}.git".format(existing_old_book.github_account,existing_old_book.github_repo_name),existing_old_book.draft_commit)
         db.textbooks.update_or_insert(
             db.textbooks.path == existing_old_book.path,
-            path=existing_old_book.path,
-            github_account=existing_old_book.github_account,
-            runestone_account=existing_old_book.runestone_account,
-            github_repo_name=existing_old_book.github_repo_name,
-            regname=existing_old_book.regname,
-            base_book=existing_old_book.base_book,
             published="true",
-            draft_commit=existing_old_book.draft_commit,
-            published_commit=existing_old_book.draft_commit,
         )
         redirect(URL("designer", "book"))
     else:
@@ -290,8 +305,7 @@ def book_edit():
 def callback():
     if 'code' in request.vars.keys():
         oauth_url = 'https://github.com/login/oauth/access_token'
-        oauth_data = {"client_id":"1d31e6dc6ff88f189241", "client_secret":"1ac9570e0d63b075382825454ca3b6e9d7149e39","code": request.vars.code}
-        #oauth_data = {"client_id":os.getenv('CLIENT_ID'), "client_secret":os.getenv('CLIENT_SECRET'),"code": request.vars.code} ### TODO uncomment
+        oauth_data = {"client_id":os.getenv('CLIENT_ID'), "client_secret":os.getenv('CLIENT_SECRET'),"code": request.vars.code}
         oauth_headers = {"Accept":"application/json"}
         try:
             oauth = requests.post(oauth_url, json=oauth_data,headers=oauth_headers)
@@ -359,8 +373,7 @@ def book():
     os.system("mkdir -p "+"applications/{}/custom_books/drafts/{}".format(request.application,session.auth.user.username))
     os.system("mkdir -p "+"applications/{}/custom_books/published/{}".format(request.application,session.auth.user.username))
     github={}
-    #session.auth.user.__dict__['github_client_id'] = os.getenv('CLIENT_ID') ### TODO uncomment
-    session.auth.user.__dict__['github_client_id'] = '1d31e6dc6ff88f189241'
+    session.auth.user.__dict__['github_client_id'] = os.getenv('CLIENT_ID')
     github['client_id']=session.auth.user.__dict__['github_client_id']
     if 'github_user' in session.auth.user.__dict__.keys():
         if not verify_github_login(session.auth.user.__dict__['github_user']):

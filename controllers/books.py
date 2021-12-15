@@ -46,7 +46,6 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
     courseless_custom_published = False
     if (not is_custom) or (is_custom and request.args[0] == "published"):
         while True: # used to break out of this section early when dealing with published versions of custom books (they can be displayed courselessly)
-            static_checker = 1
             # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
             base_course = (request.args(1)+"/"+request.args(2)) if is_custom else request.args(0)
             if not base_course:
@@ -212,7 +211,6 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
                 )
             break
     if (is_custom and request.args[0] == "published" and courseless_custom_published) or (is_custom and request.args[0] == "drafts"):
-        static_checker = 3
         book_path = safe_join(
             os.path.join(
                 request.folder,
@@ -230,7 +228,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
         raise HTTP(404)
     
     # See if this is static content. By default, the Sphinx static directory names are ``_static`` and ``_images``.
-    if request.args(static_checker) in ["_static", "_images"] or book_path.endswith(
+    if request.args(3 if is_custom else 1) in ["_static", "_images"] or book_path.endswith(
         ("css", "png", "jpg")
     ):
         # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
