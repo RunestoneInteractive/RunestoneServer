@@ -1,37 +1,39 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,True}}
 {{extend 'layout.html'}}
 <link rel="stylesheet" href="/runestone/static/css/index.css">
-<script>function submitModalForm(form) {
-    for (let num of Object.keys(form)) {
-      if (form[num].name == "changeType") {
-        if (form[num].value == "delete") {
-          if (!confirm(`Are you sure you want to delete this book? This will also delete your repo and remove all courses using this book.`)) {
-            return false;
-          }
-        }
-        if (form[num].value == "reset") {
-          if (!confirm(`Are you sure you want to reset this book? This will change the contents of your repo and remove all courses using this book.`)) {
-            return false;
-          }
+<script>
+function submitModalForm(form) {
+  const content = document.getElementById('content')
+  for (let num of Object.keys(form)) {
+    if (form[num].name == "changeType") {
+      if (form[num].value == "delete") {
+        if (!confirm(`Are you sure you want to delete this book? This will also delete your repo and remove all courses using this book.`)) {
+          return false;
         }
       }
-
-      if (["newBookIdentifier", "baseBook", "newGithubRepo", "githubUser"].includes(form[num].name)) {
-        if (form[num].value == "" || form[num].value.indexOf(" ") !== -1 || form[num].value.indexOf("/") > -1) {
-          alert(`Error:  Your ${form[num].name} may not contain spaces or /`)
+      if (form[num].value == "reset") {
+        if (!confirm(`Are you sure you want to reset this book? This will change the contents of your repo and remove all courses using this book.`)) {
           return false;
         }
-        if (!/^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(form[num].value)) {
-          alert(`Error: Your ${form[num].name} can only contain ASCII letters digits and - or _`);
-          return false;
-        }
-
       }
     }
-    form.action = "/runestone/designer/book_edit"
-    form.submit()
-    return true
+    if (["newBookIdentifier", "baseBook", "newGithubRepo", "githubUser"].includes(form[num].name)) {
+      if (form[num].value == "" || form[num].value.indexOf(" ") !== -1 || form[num].value.indexOf("/") > -1) {
+        alert(`Error:  Your ${form[num].name} may not contain spaces or /`)
+        return false;
+      }
+      if (!/^([\x30-\x39]|[\x41-\x5A]|[\x61-\x7A]|[_-])*$/.test(form[num].value)) {
+        alert(`Error: Your ${form[num].name} can only contain ASCII letters digits and - or _`);
+        return false;
+      }
+
+    }
   }
+  form.action = "/runestone/designer/book_edit"
+  content.classList.add('freeze')
+  form.submit()
+  return true
+}
   function book_searchbar() {
     let input = document.getElementById('searchbar').value
     input = input.toLowerCase();
@@ -54,50 +56,52 @@
 </script>
 
 <style>
-  /* Create two equal columns that floats next to each other */
-  .column {
-    float: left;
-    width: 50%;
-    padding: 10px;
-  }
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
 
-  .row {
-    background-color: rgb(238, 238, 238);
-  }
+.row {
+  background-color: rgb(238, 238, 238);
+}
 
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
-  .dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-  }
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
 
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    padding: 12px 16px;
-    z-index: 1;
-  }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
 
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+/* freeze page content while server internals are working*/
+.freeze { pointer-events: none; }
 </style>
 
 <link rel="stylesheet" type="text/css"
@@ -144,7 +148,7 @@
     submitModalForm($("#changeType")[0].form);
   });
 </script>
-<div class="container">
+<div class="container" id="content">
   <div class="col-md-8 col-md-offset-2">
     <h2>New Book Registry</h2>
     <p>
@@ -231,7 +235,7 @@
       </div>
       <div style="display: inline-block; margin-top: 20px;">
         {{ if github['found']: }}
-        <p>You are logged in to GitHub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a> or <a href="https://github.com/settings/applications">Revoke Access</a></p>
+        <p>You are logged in to GitHub as {{=github['user']}}. <a href="/runestone/designer/logout_github/">Logout</a> or <a href="/runestone/designer/logout_github/revoke">Revoke Access</a></p>
         {{ else: }}
         <p>You need to log into GitHub first <a
             href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click
@@ -255,6 +259,7 @@
       <!-- Modal Body -->
       <div class="modal-body" style="padding-left: 50px; padding-right: 50px;">
         {{ if github['found']: }}
+        <p id="modaleditmessage">Submitting may temporarily cause the draft and published versions to stop working or the book to disappear from your custom list. Please be patient as this may take up to a few minutes to resolve. There are many files that the server needs to copy</p>
         <form>
           <input type="hidden" id="githubUser" name="githubUser" value="{{=github['user']}}">
           <input type="hidden" id="baseBook" name="baseBook" value="">
@@ -279,7 +284,7 @@
           <div id="deleteButtonWrapper">
             <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton"
               onclick='$("#changeType")[0].value = "delete"; submitModalForm(this.form);' style="float: left; background-color: red; border: none; margin-right: 10px;">
-              <p style="float: left;">This will delete your repository<br>and any associated courses</p>
+              <p style="float: left;">This will delete your repository and any associated<br>courses will be set to use the book originally cloned</p>
             </div>
         </form>
         {{ else: }}
