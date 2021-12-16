@@ -38,7 +38,7 @@ logger.setLevel(settings.log_level)
 
 # Supporting functions
 # ====================
-def _route_book(is_published=True, is_custom=False,directory_name=""):
+def _route_book(is_published=True, is_custom=False,directory_name=None):
     motd = ""
     donated = False
     attrdict = {}
@@ -81,7 +81,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
                         db.courses.downloads_enabled,
                         db.courses.term_start_date,
                         db.courses.courselevel,
-                        **cache_kwargs,
+                        #**cache_kwargs, ###TODO cache most of te time
                     )
                     .first()
                 )
@@ -90,10 +90,11 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
 
                 # Ensure the base course in the URL agrees with the base course in ``course``.
                 # If not, ask the user to select a course.
-                if not course and (is_custom and request.args[0] == "published" and request.args[1] == auth.user.username):
+                course_error = (not course) or course.base_course != base_course
+                if course_error and (is_custom and request.args[0] == "published" and request.args[1] == auth.user.username):
                         courseless_custom_published = True
                         break
-                if not course or course.base_course != base_course:
+                if course_error:
                     session.flash = "{} is not the course you are currently in,  switch to or add it to go there".format(
                         base_course
                     )
@@ -192,7 +193,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=""):
                         "books",
                         base_course,
                         "published" if is_published else "build",
-                        base_course,
+                        directory_name if directory_name else base_course,
                     ),
                     *request.args[1:],
                 )
@@ -438,21 +439,30 @@ def safe_join(directory, *pathnames):
 def published():
     if len(request.args) == 0:
         return index()
-    return _route_book()
+    dn = None
+    try:
+        dn = os.listdir(f"applications/runestone/books/{request.args(0)}/published")[0]
+    except:
+        pass
+    return _route_book(directory_name=dn)
 
 @auth.requires_login()
 def custom_books():
-    if len(request.args) <= 2:
+    if len(request.args) <= 3:
         return index()
-    try:
-        book = db((db.textbooks.path == request.args[1]+"/"+request.args[2]) ).select()[0]
-    except:
-        raise(404,"Not Found")
+    book = db(db.textbooks.path == request.args(1)+"/"+request.args(2)).select()
+    if len(book) != 1:
+        return index()
+    book = book[0]
     # only the runestone account that has created the draft version of a textbook should be able to view it
     if request.args[0] == "draft" and book.runestone_account != auth.user.username:
         raise(403,"You are not the owner of this custom textbook")
     # every time runestone build and publish is ran on the published or draft version of the book, the corresponding directory name that is created is put in the database
     dn = book.drafts_directory if request.args[0] == "drafts" else book.published_directory
+    try:
+        dn = os.listdir(f"applications/runestone/custom_books/{request.args(0)}/{request.args(1)}/{request.args(2)}/published")[0]
+    except:
+        pass
     if not dn:
         dn = book.base_book
     return _route_book(is_custom=True,directory_name=dn)

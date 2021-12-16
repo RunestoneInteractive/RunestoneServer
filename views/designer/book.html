@@ -32,7 +32,6 @@ function submitModalForm(form) {
   form.action = "/runestone/designer/book_edit"
   content.classList.add('freeze')
   form.submit()
-  content.classList.add('freeze')
   return true
 }
   function book_searchbar() {
@@ -236,7 +235,7 @@ function submitModalForm(form) {
       </div>
       <div style="display: inline-block; margin-top: 20px;">
         {{ if github['found']: }}
-        <p>You are logged in to GitHub as {{=github['user']}}. <a href="/runestone/designer/logout_github">Logout</a> or <a href="https://github.com/settings/applications">Revoke Access</a></p>
+        <p>You are logged in to GitHub as {{=github['user']}}. <a href="/runestone/designer/logout_github/">Logout</a> or <a href="/runestone/designer/logout_github/revoke">Revoke Access</a></p>
         {{ else: }}
         <p>You need to log into GitHub first <a
             href="https://github.com/login/oauth/authorize?scope=repo,delete_repo&client_id={{=github['client_id']}}">Click
@@ -260,6 +259,7 @@ function submitModalForm(form) {
       <!-- Modal Body -->
       <div class="modal-body" style="padding-left: 50px; padding-right: 50px;">
         {{ if github['found']: }}
+        <p id="modaleditmessage">Submitting may temporarily cause the draft and published versions to stop working or the book to disappear from your custom list. Please be patient as this may take up to a few minutes to resolve. There are many files that the server needs to copy</p>
         <form>
           <input type="hidden" id="githubUser" name="githubUser" value="{{=github['user']}}">
           <input type="hidden" id="baseBook" name="baseBook" value="">
@@ -284,7 +284,7 @@ function submitModalForm(form) {
           <div id="deleteButtonWrapper">
             <input class="btn btn-default" data-dismiss="modal" type="button" value="Delete" id="deleteButton"
               onclick='$("#changeType")[0].value = "delete"; submitModalForm(this.form);' style="float: left; background-color: red; border: none; margin-right: 10px;">
-              <p style="float: left;">This will delete your repository<br>and any associated courses</p>
+              <p style="float: left;">This will delete your repository and any associated<br>courses will be set to use the book originally cloned</p>
             </div>
         </form>
         {{ else: }}
