@@ -22,7 +22,7 @@ db.define_table(
     Field("description", type="text"),
     Field("pct_on_first", type="float"),
     Field("mean_clicks_to_correct", "float"),
-    migrate=table_migrate_prefix + "questions.table",
+    migrate=bookserver_owned("questions"),
 )
 
 db.define_table(
@@ -31,7 +31,7 @@ db.define_table(
     Field("question_name", type="string"),
     Field("competency", type="string"),
     Field("is_primary", type="boolean"),
-    migrate=table_migrate_prefix + "competency.table",
+    migrate=bookserver_owned("competency"),
 )
 
 db.define_table(
@@ -72,5 +72,5 @@ db.define_table(
     Field(
         "activities_required", type="integer"
     ),  # specifies how many activities in a sub chapter a student must perform in order to receive credit
-    migrate=table_migrate_prefix + "assignment_questions.table",
+    migrate=bookserver_owned("assignment_questions"),
 )

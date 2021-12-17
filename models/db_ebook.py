@@ -27,7 +27,7 @@ db.define_table(
     Field("act", "string"),
     Field("div_id", "string"),
     Field("course_id", "string"),
-    migrate=table_migrate_prefix + "useinfo.table",
+    migrate=bookserver_owned("useinfo"),
 )
 
 # stores student's saved code and, unfortunately, comments and grades, which really should be their own table linked to this
@@ -39,12 +39,11 @@ db.define_table(
     Field("code", "text"),
     Field("emessage", "text"),
     Field("course_id", "integer"),
-    Field("grade", "double"),
     Field("sid", "string"),
     Field("timestamp", "datetime"),
     Field("comment", "text"),
     Field("language", "text", default="python"),
-    migrate=table_migrate_prefix + "code.table",
+    migrate=bookserver_owned("code"),
 )
 
 # Stores the source code for activecodes, including prefix and suffix code, so that prefixes and suffixes can be run when grading
@@ -63,22 +62,9 @@ db.define_table(
     ),  # comma-separated string of file_names to make available as divs when running this source_code
     Field("main_code", "text"),
     Field("suffix_code", "text"),  # hidden suffix code
-    migrate=table_migrate_prefix + "source_code.table",
+    migrate=bookserver_owned("source_code"),
 )
 
-# acerror_log
-# ----------
-# TODO: remove this definition after safely backing up and removing the table from academy
-db.define_table(
-    "acerror_log",
-    Field("timestamp", "datetime"),
-    Field("sid", "string"),
-    Field("div_id", "string"),
-    Field("course_id", "string"),
-    Field("code", "text"),
-    Field("emessage", "text"),
-    migrate=table_migrate_prefix + "acerror_log.table",
-)
 
 ##table to store the last position of the user. 1 row per user, per course
 # user_state
@@ -93,7 +79,7 @@ db.define_table(
     Field("last_page_subchapter", "string"),
     Field("last_page_scroll_location", "string"),
     Field("last_page_accessed_on", "datetime"),
-    migrate=table_migrate_prefix + "user_state.table",
+    migrate=bookserver_owned("user_state"),
 )
 
 # Table to match instructor(s) to their course(s)
@@ -107,7 +93,7 @@ db.define_table(
         "verified", "boolean"
     ),  # some features we want to take the extra step of verifying an instructor - such as instructor guide
     Field("paid", "boolean"),  # in the future some instructor features will be paid
-    migrate=table_migrate_prefix + "course_instructor.table",
+    migrate=bookserver_owned("course_instructor"),
 )
 
 # timed_exam
@@ -123,7 +109,7 @@ db.define_table(
     Field("skipped", "integer"),
     Field("time_taken", "integer"),
     Field("reset", "boolean"),
-    migrate=table_migrate_prefix + "timed_exam.table",
+    migrate=bookserver_owned("timed_exam"),
 )
 
 # mchoice_answers
@@ -142,7 +128,7 @@ db.define_table(
     Field("answer", "string", length=50),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "mchoice_answers.table",
+    migrate=bookserver_owned("mchoice_answers"),
 )
 
 # fitb_answers
@@ -156,7 +142,7 @@ db.define_table(
     Field("answer", "string"),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "fitb_answers.table",
+    migrate=bookserver_owned("fitb_answers"),
 )
 # dragndrop_answers
 # -----------------
@@ -170,7 +156,7 @@ db.define_table(
     Field("correct", "boolean"),
     Field("min_height", "string"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "dragndrop_answers.table",
+    migrate=bookserver_owned("dragndrop_answers"),
 )
 # clickablearea_answers
 # ---------------------
@@ -183,7 +169,7 @@ db.define_table(
     Field("answer", "string"),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "clickablearea_answers.table",
+    migrate=bookserver_owned("clickablearea_answers"),
 )
 
 # parsons_answers
@@ -198,7 +184,7 @@ db.define_table(
     Field("source", "string"),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "parsons_answers.table",
+    migrate=bookserver_owned("parsons_answers"),
 )
 
 # codelens_answers
@@ -213,7 +199,7 @@ db.define_table(
     Field("source", "string"),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "codelens_answers.table",
+    migrate=bookserver_owned("codelens_answers"),
 )
 
 # shortanswer_answers
@@ -225,7 +211,7 @@ db.define_table(
     Field("sid", "string"),
     Field("course_name", "string"),
     Field("answer", "text"),
-    migrate=table_migrate_prefix + "shortanswer_answers.table",
+    migrate=bookserver_owned("shortanswer_answers"),
 )
 
 # unittest_answers
@@ -245,7 +231,7 @@ db.define_table(
     Field("failed", "integer"),
     Field("correct", "boolean"),
     Field("percent", "double"),
-    migrate=table_migrate_prefix + "unittest_answers.table",
+    migrate=bookserver_owned("unittest_answers"),
 )
 
 # payments
@@ -255,7 +241,7 @@ db.define_table(
     Field("user_courses_id", db.user_courses, required=True),
     # A `Stripe charge ID <https://stripe.com/docs/api/charges/object#charge_object-id>`_. Per the `Stripe docs <https://stripe.com/docs/upgrades>`_, this is always 255 characters or less.
     Field("charge_id", "string", length=255, required=True),
-    migrate=table_migrate_prefix + "payments.table",
+    migrate=bookserver_owned("payments"),
 )
 
 # lp_answers
@@ -268,7 +254,7 @@ db.define_table(
     Field("course_name", "string"),
     Field("answer", "text"),
     Field("correct", "double"),
-    migrate=table_migrate_prefix + "lp_answers.table",
+    migrate=bookserver_owned("lp_answers"),
 )
 
 # invoice_request
@@ -307,7 +293,7 @@ db.define_table(
     Field("course_id", db.courses),
     Field("attr", "string"),
     Field("value", "text"),
-    migrate=table_migrate_prefix + "course_attributes.table",
+    migrate=bookserver_owned("course_attributes"),
 )
 
 # selected_questions
@@ -324,7 +310,7 @@ db.define_table(
     Field("selected_id", "string"),
     Field("points", "integer"),
     Field("competency", "string"),
-    migrate=table_migrate_prefix + "selected_questions.table",
+    migrate=bookserver_owned("selected_questions"),
 )
 
 db.define_table(
@@ -332,7 +318,7 @@ db.define_table(
     Field("experiment_id", "string"),
     Field("sid", "string"),
     Field("exp_group", "integer"),
-    migrate=table_migrate_prefix + "experiment_user.table",
+    migrate=bookserver_owned("user_experiment"),
 )
 
 

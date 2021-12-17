@@ -1,0 +1,47 @@
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# https://www.nginx.com/resources/wiki/start/
+# https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+# https://wiki.debian.org/Nginx/DirectoryStructure
+#
+# In most cases, administrators will remove this file from sites-enabled/ and
+# leave it as reference inside of sites-available where it will continue to be
+# updated by the nginx packaging team.
+#
+# This file will automatically load configuration files provided by other
+# applications, such as Drupal or Wordpress. These applications will be made
+# available underneath a path with that package name, such as /drupal8.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+# many examples show the rest of this file inside an http block.
+
+upstream backend {
+    server server1.runestoneacademy.org;
+    server server2.runestoneacademy.org;
+}
+
+
+
+server {
+  listen 443 ssl;
+  server_name runestone.academy;
+
+  ssl_certificate /etc/letsencrypt/live/runestoneacademy.org/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/runestoneacademy.org/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  
+  location / {
+    proxy_pass http://backend;
+    }
+
+
+  if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+  }
+
+
+}
+

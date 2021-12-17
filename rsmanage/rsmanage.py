@@ -1,3 +1,17 @@
+import sys
+from pathlib import Path
+
+# Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.)
+wd = (Path(__file__).parents[1]).resolve()
+sys.path.extend([str(wd / "docker"), str(wd / "tests")])
+try:
+    # Assume that a development version of the Runestone Server -- meaning the presence of `../docker/docker_tools_misc.py` -- implies Docker.
+    from docker_tools_misc import ensure_in_docker
+    ensure_in_docker()
+except ModuleNotFoundError:
+    pass
+
+import asyncio
 import click
 import csv
 import json
@@ -6,10 +20,16 @@ import re
 import shutil
 import signal
 import subprocess
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
+from pgcli.main import cli as clipg
 from psycopg2.errors import UniqueViolation
-import sys
+
+from bookserver.crud import create_initial_courses_users
+from bookserver.db import init_models
+from bookserver.config import settings
 
 
 class Config(object):
@@ -58,12 +78,16 @@ def cli(config, verbose, if_clean):
     config.conf = conf
     config.dbname = re.match(r"postgres.*//.*?@.*?/(.*)", config.dburl).group(1)
     config.dbhost = re.match(r"postgres.*//.*?@(.*?)/(.*)", config.dburl).group(1)
-    if conf  != "production":
-        config.dbuser = re.match(r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl).group(1)
+    if conf != "production":
+        config.dbuser = re.match(
+            r"postgres.*//(.*?)(:.*?)?@(.*?)/(.*)", config.dburl
+        ).group(1)
     else:
-        config.dbuser = re.match(r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl).group(1)
+        config.dbuser = re.match(
+            r"postgres.*//(.*?):(.*?)@(.*?)/(.*)", config.dburl
+        ).group(1)
 
-
+    config.dbpass = os.environ.get("POSTGRES_PASSWORD")
     if verbose:
         echoEnviron(config)
 
@@ -75,6 +99,10 @@ def cli(config, verbose, if_clean):
 
     config.verbose = verbose
 
+def init_roles(config):
+    eng = create_engine(config.dburl)
+    eng.execute("""insert into auth_group (role) values ('instructor')""")
+    eng.execute("""insert into auth_group (role) values ('editor')""")
 
 #
 #    initdb
@@ -96,10 +124,6 @@ def initdb(config, list_tables, reset, fake, force):
         click.echo("Making databases folder")
         os.mkdir(DBSDIR)
 
-    if not os.path.exists(PRIVATEDIR):
-        click.echo("Making private directory for auth")
-        os.mkdir(PRIVATEDIR)
-
     if reset:
         if not force:
             click.confirm(
@@ -110,19 +134,35 @@ def initdb(config, list_tables, reset, fake, force):
                 show_default=True,
                 err=False,
             )
+        # If PGPASSWORD is not set in the environment then it will prompt for password
         res = subprocess.call(
-            "dropdb --if-exists --host={} --username={} {}".format(
-                config.dbhost, config.dbuser, config.dbname
-            ),
+            f"dropdb --if-exists --force --host={config.dbhost} --username={config.dbuser} {config.dbname}",
+            shell=True,
+        )
+        res = subprocess.call(
+            f"createdb --host={config.dbhost} --username={config.dbuser} --owner={config.dbuser} {config.dbname}",
             shell=True,
         )
         if res == 0:
-            res = subprocess.call(
-                "createdb --echo --host={} --username={} {}".format(
-                    config.dbhost, config.dbuser, config.dbname
-                ),
+            # Because click wont natively support making commands async we can use this simple method
+            # to cll async functions.
+            # we if we successfully dropped the database we need to make it here.
+            async def foo():
+                await init_models()
+                settings.drop_tables = "Yes"
+                await create_initial_courses_users()
+
+
+            asyncio.run(foo())
+            os.environ["WEB2PY_MIGRATE"] = "Yes"
+
+            subprocess.call(
+                f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/noop.py",
                 shell=True,
             )
+
+            init_roles(config)
+            click.echo("Created new tables")
         else:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
@@ -156,18 +196,15 @@ def initdb(config, list_tables, reset, fake, force):
         message="Initializing the database", file=None, nl=True, err=False, color=None
     )
 
-    if fake:
-        os.environ["WEB2PY_MIGRATE"] = "fake"
+    if not reset:
+        eng = create_engine(config.dburl)
+        res = eng.execute("""select count(*) from courses""").first()[0]
+        print(f"{res=}")
+        if res == 0:
+            settings.drop_tables = "Yes"
+            asyncio.run(create_initial_courses_users())
 
-    list_tables = "-A --list_tables" if config.verbose or list_tables else ""
-    cmd = "python web2py.py --no-banner -S {} -M -R {}/rsmanage/initialize_tables.py {}".format(
-        APP, APP_PATH, list_tables
-    )
-    click.echo("Running: {}".format(cmd))
-    res = subprocess.call(cmd, shell=True)
 
-    if res != 0:
-        click.echo(message="Database Initialization Failed")
 
 
 @cli.command()
@@ -183,7 +220,7 @@ def migrate(config, fake):
         os.environ["WEB2PY_MIGRATE"] = "Yes"
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
         shell=True,
     )
 
@@ -202,7 +239,7 @@ def run(config, with_scheduler):
     """Starts up the runestone server and optionally scheduler"""
     os.chdir(findProjectRoot())
     _ = subprocess.Popen(
-        "python -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X",
+        f"{sys.executable} -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X",
         shell=True,
     )
 
@@ -250,8 +287,11 @@ def shutdown(config):
     help="Only registered users can access this course?",
 )
 @click.option("--institution", help="Your institution")
+@click.option("--courselevel", help="Your course level", default="unknown")
+@click.option("--allowdownloads", help="enable download button", default="F")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
+@click.option("--newserver", default="T", help="use the new book server")
 @click.option(
     "--allow_pairs",
     is_flag=True,
@@ -267,8 +307,11 @@ def addcourse(
     python3,
     login_required,
     institution,
+    courselevel,
+    allowdownloads,
     language,
     host,
+    newserver,
     allow_pairs,
 ):
     """Create a course in the database"""
@@ -325,17 +368,19 @@ def addcourse(
             )
 
     eng.execute(
-        """insert into courses (course_name, base_course, python3, term_start_date, login_required, institution, allow_pairs)
-                values ('{}', '{}', '{}', '{}', '{}', '{}', '{}')
-                """.format(
-            course_name,
-            basecourse,
-            python3,
-            start_date,
-            login_required,
-            institution,
-            allow_pairs,
-        )
+        f"""insert into courses
+           (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
+                values ('{course_name}',
+                '{basecourse}',
+                 '{python3}',
+                 '{start_date}',
+                 '{login_required}',
+                  '{institution}',
+                  '{courselevel}',
+                  '{allowdownloads}',
+                  '{allow_pairs}',
+                  '{newserver}')
+                """
     )
 
     click.echo("Course added to DB successfully")
@@ -505,7 +550,7 @@ def inituser(
             userinfo["instructor"] = False
             os.environ["RSM_USERINFO"] = json.dumps(userinfo)
             res = subprocess.call(
-                "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
+                f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
                 shell=True,
             )
             if res != 0:
@@ -538,7 +583,7 @@ def inituser(
 
         os.environ["RSM_USERINFO"] = json.dumps(userinfo)
         res = subprocess.call(
-            "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
+            f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py",
             shell=True,
         )
         if res != 0:
@@ -572,7 +617,7 @@ def resetpw(config, username, password):
 
     os.environ["RSM_USERINFO"] = json.dumps(userinfo)
     res = subprocess.call(
-        "python web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw",
+        f"{sys.executable} web2py.py --no-banner -S runestone -M -R applications/runestone/rsmanage/makeuser.py -A --resetpw",
         shell=True,
     )
     if res != 0:
@@ -945,7 +990,7 @@ def grade(config, course, pset, enforce):
     os.environ["RSM_USERINFO"] = json.dumps(userinfo)
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/grade.py",
         shell=True,
     )
 
@@ -974,6 +1019,16 @@ where courses.course_name = %s order by last_name
             )
     else:
         print("No instructors found for {}".format(course))
+
+
+
+@cli.command()
+@pass_config
+def db(config):
+
+    # replace argv[1] which is 'db' with the url to connect to
+    sys.argv[1] = config.dburl
+    sys.exit(clipg())
 
 
 #
@@ -1040,7 +1095,7 @@ def fill_practice_log_missings(config):
     os.chdir(findProjectRoot())
 
     subprocess.call(
-        "python web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py",
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/fill_practice_log_missings.py",
         shell=True,
     )
 

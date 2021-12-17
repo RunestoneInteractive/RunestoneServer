@@ -154,6 +154,7 @@ def assignments():
         chapters=chapter_labels,
         toc=_get_toc_and_questions(),  # <-- This Gets the readings and questions
         course=course,
+        is_instructor=True,
     )
 
 
@@ -621,6 +622,7 @@ def admin():
         consumer=consumer,
         secret=secret,
         examlist=exams,
+        is_instructor=True,
         **course_attrs,
     )
 
@@ -753,6 +755,7 @@ def grading():
         assignmentids=json.dumps(assignmentids),
         assignment_deadlines=json.dumps(assignment_deadlines),
         question_points=json.dumps(question_points),
+        is_instructor=True,
         course=course,
     )
 
@@ -996,6 +999,9 @@ def createAssignment():
                 course=course,
                 name=name,
                 duedate=datetime.datetime.utcnow() + datetime.timedelta(days=7),
+                released=False,
+                visible=False,
+                from_source=False,
             )
             db.commit()
         except Exception as ex:
@@ -1920,6 +1926,7 @@ def get_assignment():
     assignment_data["from_source"] = assignment_row.from_source
     assignment_data["nofeedback"] = assignment_row.nofeedback
     assignment_data["nopause"] = assignment_row.nopause
+    assignment_data["is_peer"] = assignment_row.is_peer
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -2023,6 +2030,7 @@ def save_assignment():
     time_limit = request.vars["timelimit"]
     nofeedback = request.vars["nofeedback"]
     nopause = request.vars["nopause"]
+    is_peer = request.vars["is_peer"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -2043,6 +2051,8 @@ def save_assignment():
             time_limit=time_limit,
             nofeedback=nofeedback,
             nopause=nopause,
+            is_peer=is_peer,
+            current_index=0,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:

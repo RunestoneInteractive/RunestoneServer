@@ -2,7 +2,7 @@
 rsmanage - command-line tools for managing the Runestone server
 ***************************************************************
 
-The rsmange command is designed to streamline many of the common tasks associated with running a Runestone Server.
+The rsmanage command is designed to streamline many of the common tasks associated with running a Runestone Server.
 
 ::
 

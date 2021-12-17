@@ -1,0 +1,96 @@
+# ********************************
+# |docname| - Poetry configuration
+# ********************************
+# See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>`_ to get an understanding of
+# how poetry does specifies dependencies.
+#
+# **Important**: Before running ``poetry install`` or ``poetry update``, run ``poetry-fix`` so that development dependencies will be installed correctly. See `runestone_poetry_project/poetry_fix.py`. Since this script isn't installed until the first run of ``poetry install``, run the script after the install then run ``poetry update`` again.
+#
+#
+# Project metadata
+# ================
+[tool.poetry]
+name = "runestone_poetry_project"
+version = "0.1.0"
+description = "A web2py-based server for the Runestone e-book system."
+authors = ["Brad Miller <bonelake@mac.com>", "Bryan A. Jones <bjones AT ece DOT msstate DOT edu"]
+license = "MIT"
+
+
+# Dependencies
+# ============
+[tool.poetry.dependencies]
+cryptography = "^3.0.0"
+altair = "^4.0.0"
+bleach = "> 3.1.1"
+bookserver = "^0.3.0"
+celery = { extras = ["redis,gevent"], version = "^5.0.0" }
+cssselect = ">= 1.0"
+diff-match-patch = ">= 20110725.1"
+lxml = ">= 4.6.2"
+numpy = ">= 1.9.2"
+oauth2 = ">=1.9"
+pandas = "^1.0.0"
+pathlib2 = "^2.0.0"
+Paver = ">= 1.2.4"
+psycopg2-binary = "^2.0.0"
+pylint = ">= 1.2.1"
+python = "^3.8"
+python-dateutil = ">= 2.4.2"
+pytz = ">= 2016.6.1"
+requests = ">= 2.10.0"
+rsmanage = { path = "./rsmanage", develop = true }
+runestone = {version = "^6.0.0*", allow-prereleases = true }
+runestone-docker-tools = { path = "./docker", develop = true }
+stripe = "^2.0.0"
+six = ">= 1.10.0"
+Sphinx = ">= 3.0.0, < 4.0.0"
+sphinxcontrib-paverutils = ">= 1.17"
+SQLAlchemy = ">= 1.0.14"
+pyjwt = "== 2.0.1"
+
+
+# Development dependencies
+# ========================
+[tool.poetry.dev-dependencies]
+beautifulsoup4 = "^4.0.0"
+black = "^21.0b"
+bookserver = { path = "../BookServer", develop = true }
+bookserver-dev = { path = "../bookserver-dev", develop = true }
+CodeChat = ">= 1.8.6"
+contextlib2 = "^0.6.0"
+coverage = "< 5.0"
+coveralls = "== 1.8.2"
+flake8 = "^3.0.0"
+html5validator = "^0.3.0"
+locust = "^1.0.0"
+mock = "^4.0.0"
+# For building the docs with Sphinx.
+myst-parser = "^0.15.0"
+# For the plugin.
+polling2 = "^0.4.0"
+pytest = "^6.0.0"
+pyvirtualdisplay = "^2.0.0"
+pywin32 = { version = ">= 301", markers = "sys.platform == 'win32'" }
+runestone = { path = "../RunestoneComponents", develop = true }
+selenium = "^3.0.0"
+
+
+# Scripts
+# =======
+# See `scripts <https://python-poetry.org/docs/pyproject/#scripts>`_. This refers to the following files:
+#
+# .. toctree::
+#
+#   runestone_poetry_project/__init__.py
+#   runestone_poetry_project/poetry_fix.py
+#
+[tool.poetry.scripts]
+poetry-fix = "runestone_poetry_project.poetry_fix:main"
+
+
+# Poetry backend
+# ==============
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

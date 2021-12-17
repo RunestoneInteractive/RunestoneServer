@@ -7,4 +7,3 @@ Misc scripts
     :glob:
 
     *.py
-    *.sh

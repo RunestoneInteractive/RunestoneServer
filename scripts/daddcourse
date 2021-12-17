@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "This command will add a new course to the database in your Docker container"
-
-docker exec -it runestoneserver_runestone_1 bash -c "rsmanage addcourse"

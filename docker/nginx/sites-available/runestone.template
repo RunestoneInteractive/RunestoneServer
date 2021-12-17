@@ -1,0 +1,77 @@
+# *******************************
+# |docname| - nginx configuration
+# *******************************
+# This sets up nginx to run both the old and new server together. It requires `processing by Python <Set up nginx based on env vars.>`_ before use.
+#
+# This file was partially taken from the `gunicorn deployment docs <https://docs.gunicorn.org/en/stable/deploy.html#nginx-configuration>`_.
+#
+# `gzip_static <http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html>`_: Enables ("on") or disables ("off") checking the existence of precompressed files. Send compressed files in lieu of uncompressed files where they exist. This requires the optional ``ngx_http_gzip_static_module`` module.
+gzip_static on;
+
+# Define the web2py and FastAPI servers.
+server {
+    include /etc/nginx/default.d/*.conf;
+
+    # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server.
+    server_name ${RUNESTONE_HOST};
+
+    # Rewrite the path to static files.
+    #
+    # `location <https://nginx.org/en/docs/http/ngx_http_core_module.html#location>`_: set configuration depending on a request URI. The ``~*`` indicates the following parameter is a case-insensitive regex. Look for web2py static files.
+    #
+    # Match web2py static paths with the application specified, such as ``/runestone/static/``. Avoid matching ``admin/`` so the admin interface works -- it uses the `web2py's static asset management <http://www.web2py.com/books/default/chapter/29/04/the-core#Static-asset-management>`_ which breaks the simple redirect below.
+    #
+    # root supplies the uptree path the match gets appended to the path specified
+    # by the root directive
+    location ~* /(?!admin/)(\w+)/static/ {
+        root /srv/web2py/applications/;
+    }
+
+    # Match web2py static paths with no application specified; assume the default application is ``runestone``.
+    location /static/ {
+        root ${WEB2PY_PATH}/applications/runestone;
+    }
+
+    # Route static book files from web2py with an application specified. Regex fun: ``(?!ns/)`` prevents a match with a prefix of ``ns/`` (since this should be routed to the new server instead).
+    ##              $1                 $2        $3              $4             $5
+    location ~* ^/(?!ns/)(\w+)/books/(published|draft)/(\w+)/(_static|_images|images)/(.*)$ {
+        alias ${WEB2PY_PATH}/applications/$1/books/$3/$2/$3/$4/$5;
+    }
+
+    # Route static book files from web2py with no application specified; assume the default application is ``runestone``.
+    ##                         $1           $2               $3           $4
+    location ~* ^/books/(published|draft)/(\w+)/(_static|_images|images)/(.*)$ {
+        alias ${WEB2PY_PATH}/applications/runestone/books/$2/$1/$2/$3/$4;
+    }
+
+    # Route the ``/ns`` (new server) path to gunicorn.
+    location /ns/ {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        # we don't want nginx trying to do something clever with
+        # redirects, we set the Host: header above already.
+        proxy_redirect off;
+        # Allow web sockets.
+        proxy_buffering off;
+        # `WebSocket proxying <https://nginx.org/en/docs/http/websocket.html?_ga=2.58949805.1641238518.1630518248-2075569494.1630518248>`_:
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        # `proxy_pass <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass>`_: set the protocol and address of a proxied server and an optional URI to which a location should be mapped. **Tricky**: Specifying the ``location`` above with a trailing slash and including a trailing slash at the end of ``proxy_pass`` causes nginx to strip of the ``/ns`` prefix when sending it to gunicorn. Quoting the docs: "If the ``proxy_pass`` directive is specified with a URI, then when a request is passed to the server, the part of a normalized request URI matching the location is replaced by a URI specified in the directive."
+        #
+        # _`gunicorn socket`: This matches the ``--bind`` parameter when `gunicorn is run <run_bookserver>`.
+        proxy_pass http://unix:/run/fastapi.sock:/;
+    }
+
+    location / {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header Host $http_host;
+      # we don't want nginx trying to do something clever with
+      # redirects, we set the Host: header above already.
+      proxy_redirect off;
+      # See `../../gunicorn/web2py.conf.py` for the corresponding socket bind.
+      proxy_pass http://unix:/run/web2py.sock:/;
+    }
+}

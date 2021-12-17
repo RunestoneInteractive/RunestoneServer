@@ -37,8 +37,13 @@ from gluon.tools import Auth, Crud, Service, PluginManager, prettydate  # noqa: 
 ## be redirected to HTTPS, uncomment the line below:
 # request.requires_htps()
 
+
+# If the bookserver owns (performs migrations) on this table, then don't do web2py migrations on it.
+def bookserver_owned(table_name):
+    return False
+
+
 table_migrate_prefix = "runestone_"
-table_migrate_prefix_test = ""
 if not request.env.web2py_runtime_gae:
     ## if NOT running on Google App Engine use SQLite or other DB
     if os.environ.get("WEB2PY_CONFIG", "") == "test":
@@ -47,9 +52,12 @@ if not request.env.web2py_runtime_gae:
             migrate=False,
             pool_size=5,
             adapter_args=dict(logfile="test_runestone_migrate.log"),
+            migrate_enabled=(
+                os.environ.get("WEB2PY_MIGRATE", "Yes") in ["Yes", "Fake"]
+            ),
         )
         table_migrate_prefix = "test_runestone_"
-        table_migrate_prefix_test = table_migrate_prefix
+
     else:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
         db = DAL(
@@ -166,7 +174,8 @@ db.define_table(
     Field("student_price", type="integer"),
     Field("downloads_enabled", type="boolean", default=False),
     Field("courselevel", type="string"),
-    migrate=table_migrate_prefix + "courses.table",
+    Field("new_server", type="boolean", default=False),
+    migrate=bookserver_owned("courses"),
 )
 
 
@@ -197,16 +206,20 @@ def get_course_url(*args):
             if "/" in course.base_course: #we are dealing with a custom textbook here, so route it differently
                 return URL(c="books", f="custom_books", args=("published",course.base_course) + args)
             else: #we are just dealing with a normal textbook
-                return URL(c="books", f="published", args=(course.base_course,) + args)
+                if course.new_server == True:
+                    return URL(a=settings.bks,c="books", f="published", args=(course.course_name,) + args)
+                else:
+                    return URL(c="books", f="published", args=(course.base_course,) + args)
         else:
             return URL(c="default")
+
 
 
 ########################################
 
 
 def getCourseNameFromId(courseid):
-    """ used to compute auth.user.course_name field """
+    """used to compute auth.user.course_name field"""
     q = db.courses.id == courseid
     row = db(q).select().first()
     return row.course_name if row else ""
@@ -369,7 +382,7 @@ db.define_table(
     Field("donated", type="boolean", writable=False, readable=False, default=False),
     #    format='%(username)s',
     format=lambda u: (u.first_name or "") + " " + (u.last_name or ""),
-    migrate=table_migrate_prefix + "auth_user.table",
+    migrate=bookserver_owned("auth_user"),
 )
 
 
@@ -439,7 +452,7 @@ db.define_table(
     Field("course_id", db.courses, ondelete="CASCADE"),
     Field("user_id", db.auth_user),
     Field("course_id", db.courses),
-    migrate=table_migrate_prefix + "user_courses.table",
+    migrate=bookserver_owned("user_courses"),
 )
 # For whatever reason the automatic migration of this table failed.  Need the following manual statements
 # alter table user_courses alter column user_id type integer using user_id::integer;
@@ -474,7 +487,7 @@ Hello,
 <p>We received your request to retrieve your username.  According to our files
 Your username is: %(username)s </p>
 
-<p>If you have any trouble with this automated system you can also ask your instructor 
+<p>If you have any trouble with this automated system you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on  <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
@@ -491,7 +504,7 @@ Hello, <br>
 
 <p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
 
-<p>If you have any trouble with the link you can also ask your instructor 
+<p>If you have any trouble with the link you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
 on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">Github</a>.</p>
@@ -535,7 +548,7 @@ def admin_logger(logger):
             course = auth.user.course_name
         else:
             sid = "Anonymous"
-            course = "Unknown"
+            course = "boguscourse"
         try:
             db.useinfo.insert(
                 sid=sid,
@@ -546,7 +559,10 @@ def admin_logger(logger):
                 course_id=course,
             )
         except Exception as e:
-            logger.error(f"failed to insert log record for practice: {e}")
+            logger.error(
+                f"failed to insert log record for {request.controller} {request.function}: {e}"
+            )
+            db.rollback()
 
 
 def createUser(username, password, fname, lname, email, course_name, instructor=False):

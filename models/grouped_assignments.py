@@ -12,21 +12,23 @@ db.define_table(
     Field(
         "threshold_pct", "float"
     ),  # threshold required to qualify for maximum points on the assignment; null means use actual points
-    Field("released", "boolean"),
+    Field("released", "boolean", default=False),
     Field(
         "allow_self_autograde", "boolean"
     ),  # if True, when student clicks to autograde assignment, it calculates totals; otherwise it only scores individual questions but doesn't calculate score for the assignment
     Field("description", "text"),
     Field("duedate", "datetime"),
     Field("enforce_due", "boolean"),
-    Field("visible", "boolean"),
+    Field("visible", "boolean", default=False),
     Field("is_timed", "boolean", default=False),
+    Field("is_peer", "boolean", default=False),
+    Field("current_index", "integer", default=0),
     Field("time_limit", "integer"),
-    Field("from_source", "boolean"),
+    Field("from_source", "boolean", default=False),
     Field("nofeedback", "boolean"),
     Field("nopause", "boolean"),
     format="%(name)s",
-    migrate=table_migrate_prefix + "assignments.table",
+    migrate=bookserver_owned("assignments"),
 )
 
 
@@ -36,8 +38,7 @@ db.define_table(
     Field("auth_user", db.auth_user),
     Field("assignment", db.assignments),
     Field("score", "double"),
-    Field("manual_total", "boolean"),
-    Field("projected", "double"),
+    Field("manual_total", "boolean", default=False),
     # guid for the student x assignment cell in the external gradebook
     #
     # Guessing that the ``lis_outcome_url`` length is actually inteded for this field, use that as its maximum length.
@@ -47,7 +48,7 @@ db.define_table(
     # Per the `LTI spec v1.1.1 <https://www.imsglobal.org/specs/ltiv1p1p1/implementation-guide>`_ in section 6, the maximum length of the ``lis_outcome_url`` field is 1023 characters.
     Field("lis_outcome_url", "string", length=1024),
     Field("is_submit", "string"),
-    migrate=table_migrate_prefix + "grades.table",
+    migrate=bookserver_owned("grades"),
 )
 
 db.define_table(
@@ -78,5 +79,5 @@ db.define_table(
     Field("deadline", "datetime"),
     Field("score", type="double"),
     Field("comment", type="text"),
-    migrate=table_migrate_prefix + "question_grades.table",
+    migrate=bookserver_owned("question_grades"),
 )
