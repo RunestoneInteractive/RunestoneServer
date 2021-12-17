@@ -39,7 +39,7 @@ def logout_github():
 def update_local_files(path,clone_url,commit_id,oldbookname = None):
     do_async = True ###TODO turn to true for production
     def update_async(path,clone_url,commit_id,oldbookname):
-        if oldbookname:
+        if oldbookname: # try moving from oldbookname to the last part of path, but if that does not work remove oldbookname
             os.system("cd "+"/".join(path.split("/")[:-1])+f" && (mv {oldbookname} {path.split('/')[-1]} || rm -rf {oldbookname} )")
         def reset_local(path,clone_url,commit_id): # if anything goes wrong this function is called. it deletes everything and re clones it
             os.system("rm -rf "+path)
@@ -47,12 +47,11 @@ def update_local_files(path,clone_url,commit_id,oldbookname = None):
             os.system("cd "+path+" && cd .. && git clone "+clone_url+" " +path.split("/")[-1])
             if commit_id:
                 os.system("cd "+path+" && git fetch && git reset --hard "+ commit_id)
-            os.system("cd "+path+" && runestone build 1> /dev/null 2> /dev/null && runestone deploy 1> /dev/null 2> /dev/null")
 
         os.system("mkdir -p "+"/".join(path.split("/")[:-1]))
         try:
-            x = os.system("cd "+path+" && git symbolic-ref --short refs/remotes/origin/HEAD")
-            if x != 0 or os.system("cd "+path+" && git fetch && git reset --hard "+ commit_id) != 0:
+            x = os.system("cd "+path+" && git symbolic-ref --short refs/remotes/origin/HEAD 1> /dev/null 2> /dev/null")
+            if x != 0 or os.system("cd "+path+" && git fetch 1> /dev/null 2> /dev/null && git reset --hard "+ commit_id) != 0:
                 reset_local(path,clone_url,commit_id)
         except:
             reset_local(path,clone_url,commit_id)
@@ -236,6 +235,7 @@ def book_edit():
             os.system("rm -rf applications/runestone/custom_books/drafts/{}/{}".format(existing_old_book.runestone_account, existing_old_book.regname))
             os.system("rm -rf applications/runestone/custom_books/published/{}/{}".format(existing_old_book.runestone_account, existing_old_book.regname))
             courses = db(db.courses.base_course == old_path).select()
+            # all courses that are using the custom textbook now use the book that the custom textbook was originally cloned from
             for course in courses:
                 db.courses.update_or_insert(
                     db.courses.course_name == course.course_name,
@@ -267,6 +267,7 @@ def book_edit():
             if existing_old_book.published:
                 update_local_files("applications/runestone/custom_books/published/{}/{}".format(existing_old_book.runestone_account, request.vars.newBookIdentifier),"https://github.com/{}/{}.git".format(existing_old_book.github_account,request.vars.newGithubRepo),existing_old_book.draft_commit,oldbookname=request.vars.oldBookIdentifier)
             courses = db(db.courses.base_course == old_path).select()
+            # all courses that are using the custom textbook now use the new name
             for course in courses:
                 db.courses.update_or_insert(
                     db.courses.course_name == course.course_name,
@@ -290,7 +291,7 @@ def book_edit():
 
 
 @auth.requires_login()
-def callback():
+def callback(): #handles github oauth callback after user grants repository permiission
     if 'code' in request.vars.keys():
         oauth_url = 'https://github.com/login/oauth/access_token'
         oauth_data = {"client_id":os.getenv('CLIENT_ID'), "client_secret":os.getenv('CLIENT_SECRET'),"code": request.vars.code}

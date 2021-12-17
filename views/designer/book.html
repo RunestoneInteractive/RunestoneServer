@@ -30,6 +30,7 @@ function submitModalForm(form) {
     }
   }
   form.action = "/runestone/designer/book_edit"
+  //prevent user from entering data while backend is running
   content.classList.add('freeze')
   form.submit()
   return true
