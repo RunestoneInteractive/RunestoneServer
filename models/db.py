@@ -202,14 +202,12 @@ def get_course_url(*args):
             .first()
         )
         args = tuple(x for x in args if x != "")
+        ## had to remove part about course.new_server and settings.bks, it was giving me trouble
         if course:
             if "/" in course.base_course: #we are dealing with a custom textbook here, so route it differently
                 return URL(c="books", f="custom_books", args=("published",course.base_course) + args)
             else: #we are just dealing with a normal textbook
-                if course.new_server == True:
-                    return URL(a=settings.bks,c="books", f="published", args=(course.course_name,) + args)
-                else:
-                    return URL(c="books", f="published", args=(course.base_course,) + args)
+                return URL(c="books", f="published", args=(course.base_course,) + args)
         else:
             return URL(c="default")
 
