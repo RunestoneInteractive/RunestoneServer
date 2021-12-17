@@ -7,6 +7,7 @@ sys.path.extend([str(wd / "docker"), str(wd / "tests")])
 try:
     # Assume that a development version of the Runestone Server -- meaning the presence of `../docker/docker_tools_misc.py` -- implies Docker.
     from docker_tools_misc import ensure_in_docker
+
     ensure_in_docker()
 except ModuleNotFoundError:
     pass
@@ -99,10 +100,12 @@ def cli(config, verbose, if_clean):
 
     config.verbose = verbose
 
+
 def init_roles(config):
     eng = create_engine(config.dburl)
     eng.execute("""insert into auth_group (role) values ('instructor')""")
     eng.execute("""insert into auth_group (role) values ('editor')""")
+
 
 #
 #    initdb
@@ -151,7 +154,6 @@ def initdb(config, list_tables, reset, fake, force):
                 await init_models()
                 settings.drop_tables = "Yes"
                 await create_initial_courses_users()
-
 
             asyncio.run(foo())
             os.environ["WEB2PY_MIGRATE"] = "Yes"
@@ -203,8 +205,6 @@ def initdb(config, list_tables, reset, fake, force):
         if res == 0:
             settings.drop_tables = "Yes"
             asyncio.run(create_initial_courses_users())
-
-
 
 
 @cli.command()
@@ -1019,7 +1019,6 @@ where courses.course_name = %s order by last_name
             )
     else:
         print("No instructors found for {}".format(course))
-
 
 
 @cli.command()

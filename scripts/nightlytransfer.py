@@ -2,10 +2,14 @@ from sqlalchemy import create_engine, Table, MetaData, select, func
 from sqlalchemy.orm import sessionmaker
 import os
 
-rspw = os.environ['RUNESTONEPW']
+rspw = os.environ["RUNESTONEPW"]
 
-localengine = create_engine('postgresql://millbr02@localhost/runestoneanalysis')
-remoteengine = create_engine('postgresql://bnmnetp_courselib:{}@web608.webfaction.com/bnmnetp_courselib'.format(rspw))
+localengine = create_engine("postgresql://millbr02@localhost/runestoneanalysis")
+remoteengine = create_engine(
+    "postgresql://bnmnetp_courselib:{}@web608.webfaction.com/bnmnetp_courselib".format(
+        rspw
+    )
+)
 
 meta = MetaData()
 
@@ -29,9 +33,8 @@ def mirror_table(fromeng, toeng, tablename):
         toeng.execute(s)
         ct += 1
 
-    print("Inserted {} new rows into {}".format(ct,tablename))
+    print("Inserted {} new rows into {}".format(ct, tablename))
 
 
-for tbl in ['useinfo','acerror_log','courses','div_ids', 'code', 'timed_exam']:
+for tbl in ["useinfo", "acerror_log", "courses", "div_ids", "code", "timed_exam"]:
     mirror_table(remoteengine, localengine, tbl)
-

@@ -916,10 +916,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
     # Create some datafile into the db and then read it out using the ajax/get_datafile()
     db = runestone_db_tools.db
 
-    kwargs = dict(
-        selector_id="dynamic_q_1",
-        questions="test_activecode_1",
-    )
+    kwargs = dict(selector_id="dynamic_q_1", questions="test_activecode_1")
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)
     assert "test_activecode_1" in res
@@ -931,10 +928,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
     res = json.loads(test_client.text)
     assert "test_activecode_1" in res
 
-    kwargs = dict(
-        selector_id="dynamic_q_2",
-        questions="thisquestiondoesnotexist",
-    )
+    kwargs = dict(selector_id="dynamic_q_2", questions="thisquestiondoesnotexist")
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)
     assert "No preview available" in res
@@ -970,10 +964,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
         assert rows.selected_id == "test_activecode_1"
 
     # test the not seen in an exam scenario
-    kwargs = dict(
-        selector_id="dynamic_q_5",
-        questions="test_fitb_string",
-    )
+    kwargs = dict(selector_id="dynamic_q_5", questions="test_fitb_string")
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)
     assert "test_fitb_string" in res
@@ -1004,9 +995,7 @@ def test_get_question_source(test_client, test_user_1, runestone_db_tools):
 
     # Even though test_mchoice_1 has been seen it must still be returned as our only option
     kwargs = dict(
-        selector_id="dynamic_q_7",
-        questions="test_mchoice_1",
-        not_seen_ever=True,
+        selector_id="dynamic_q_7", questions="test_mchoice_1", not_seen_ever=True
     )
     test_client.validate("ajax/get_question_source", data=kwargs)
     res = json.loads(test_client.text)

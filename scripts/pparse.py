@@ -1,13 +1,13 @@
-__author__ = 'bmiller'
+__author__ = "bmiller"
 import re
 
-class PTest:
 
+class PTest:
     def parse_multiline_parsons(self, lines):
         current_block = []
         results = []
         for line in lines:
-            if(line == '====='):
+            if line == "=====":
                 results.append(self.convert_leading_whitespace_for_block(current_block))
                 current_block = []
             else:
@@ -20,11 +20,12 @@ class PTest:
         initialWhitespace = whitespaceMatcher.match(block[0]).end()
         result = block[0]
         for line in block[1:]:
-            result += '\\n' # not a line break...the literal characters \n
+            result += "\\n"  # not a line break...the literal characters \n
             result += line[initialWhitespace:]
         return result
 
-tt = '''
+
+tt = """
 x = 0
 =====
 for i in range(3):
@@ -33,10 +34,10 @@ for i in range(3):
 =====
 print x
 print y
-'''
+"""
 
 z = PTest()
-zzz = z.parse_multiline_parsons(tt.split('\n'))
+zzz = z.parse_multiline_parsons(tt.split("\n"))
 print(type(zzz))
-print(zzz.split('\n'))
+print(zzz.split("\n"))
 print(zzz)

@@ -584,13 +584,7 @@ def _build_phase_0(
 # Phase 1: install Runestone dependencies
 # ---------------------------------------
 # This is run inside the Docker build, from the `../Dockerfile`.
-def _build_phase_1(
-    build_config: bool,
-    arm: bool,
-    pic24: bool,
-    rust: bool,
-    tex: bool,
-):
+def _build_phase_1(build_config: bool, arm: bool, pic24: bool, rust: bool, tex: bool):
     assert in_docker()
     apt_install = "eatmydata apt-get install -y --no-install-recommends"
     # Install required packages
@@ -599,7 +593,7 @@ def _build_phase_1(
         # Add in Chrome repo. Copied from https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
         # Unless we are on an ARM64 processor, then we will fall back to using chromium.
         xqt(
-            "curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -",
+            "curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -"
         )
         if platform.uname().machine == "x86_64":
             Path("/etc/apt/sources.list.d/google-chrome.list").write_text(
@@ -633,7 +627,7 @@ def _build_phase_1(
         "certbot python-certbot-nginx "
         "rsync wget nginx "
         # Useful tools for debug.
-        "nano less ",
+        "nano less "
     )
 
     # Build runguard and set up jobe users. Needed by `../modules/scheduled_builder.py`.
@@ -793,11 +787,7 @@ def _build_phase_1(
 # Phase 2 core: Final installs / run servers
 # ------------------------------------------
 def _build_phase_2_core(
-    build_config: bool,
-    arm: bool,
-    pic24: bool,
-    rust: bool,
-    tex: bool,
+    build_config: bool, arm: bool, pic24: bool, rust: bool, tex: bool
 ):
     # Check the environment.
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."

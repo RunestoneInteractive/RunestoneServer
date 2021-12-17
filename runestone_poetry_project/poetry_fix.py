@@ -185,7 +185,9 @@ def rewrite_pyproject(is_dev: bool) -> None:
     elif no_dev_section in pp_text:
         has_dev = False
     else:
-        print(f"Error: there is no [tool.(no-)poetry.dev-dependencies] section in {pyproject.resolve()}.")
+        print(
+            f"Error: there is no [tool.(no-)poetry.dev-dependencies] section in {pyproject.resolve()}."
+        )
 
     # Update accordingly.
     if is_dev and not has_dev:
@@ -211,7 +213,9 @@ def rewrite_pyproject(is_dev: bool) -> None:
 # CLI interface
 # =============
 @click.command()
-@click.option("--no-dev", is_flag=True, help="Prepare for running poetry install/update --no-dev.")
+@click.option(
+    "--no-dev", is_flag=True, help="Prepare for running poetry install/update --no-dev."
+)
 def main(no_dev: bool):
     """
     This script works around Poetry bugs related to path dependencies.
