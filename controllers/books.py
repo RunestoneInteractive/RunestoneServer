@@ -43,8 +43,8 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
     donated = False
     attrdict = {}
     settings.show_rs_banner = False
-    courseless_custom_published = False
-    if (not is_custom) or (is_custom and request.args[0] == "published"):
+    courseless_custom_published = False # for custom published books, they should be visible if you are enrolled in a course for them, but also if you are the owner and not in a course for them (the latter is when this is set to True)
+    if (not is_custom) or (is_custom and request.args[0] == "published"): #try displaying the book as part of a course
         while True: # used to break out of this section early when dealing with published versions of custom books (they can be displayed courselessly)
             # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
             base_course = (request.args(1)+"/"+request.args(2)) if is_custom else request.args(0)
@@ -81,19 +81,20 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
                         db.courses.downloads_enabled,
                         db.courses.term_start_date,
                         db.courses.courselevel,
-                        #**cache_kwargs, ###TODO cache most of te time
+                        #**cache_kwargs, ###TODO uncomment this. caching should be used, but as it is currently implemented causes problems when the name of a custom book is changed. The new value for the base_course of a course does not match the cached value
                     )
                     .first()
                 )
                 if auth.user.donated:
                     donated = True
 
-                # Ensure the base course in the URL agrees with the base course in ``course``.
-                # If not, ask the user to select a course.
+                # If we cannot properly get the course for a published custom book, break from this loop and try serving it courselessly
                 course_error = (not course) or course.base_course != base_course
                 if course_error and (is_custom and request.args[0] == "published" and request.args[1] == auth.user.username):
                         courseless_custom_published = True
                         break
+                # Ensure the base course in the URL agrees with the base course in ``course``.
+                # If not, ask the user to select a course.
                 if course_error:
                     session.flash = "{} is not the course you are currently in,  switch to or add it to go there".format(
                         base_course
@@ -246,6 +247,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
     chapter = os.path.split(os.path.split(book_path)[0])[1]
     subchapter = os.path.basename(os.path.splitext(book_path)[0])
     div_counts = {}
+    # only for displaying with a course
     if auth.user and ((not is_custom) or (is_custom and request.args[0] == "published" and not courseless_custom_published)):
         user_id = auth.user.username
         email = auth.user.email
@@ -280,6 +282,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
         reading_list = session.readings
     else:
         reading_list = "null"
+    # only for displaying with a course
     if (not is_custom) or (is_custom and request.args[0] == "published" and not courseless_custom_published):
         try:
             db.useinfo.insert(
@@ -321,6 +324,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
     if subchapter == "Exercises":
         questions = _exercises(base_course, chapter)
     logger.debug("QUESTIONS = {} {}".format(subchapter, questions))
+    # display as part of a course
     if (not is_custom) or (is_custom and request.args[0] == "published" and not courseless_custom_published):
         return dict(
             course_name=course.course_name,
@@ -339,7 +343,7 @@ def _route_book(is_published=True, is_custom=False,directory_name=None):
             banner_num=banner_num,
             **attrdict,
         )
-    else:
+    else: # display courselessly
         return dict(
             course_name="null",
             base_course="null",
@@ -460,11 +464,12 @@ def custom_books():
     # every time runestone build and publish is ran on the published or draft version of the book, the corresponding directory name that is created is put in the database
     dn = book.drafts_directory if request.args[0] == "drafts" else book.published_directory
     try:
+        # this should be the same as the value that was put into the database, but this one is certian to be accurate
         dn = os.listdir(f"applications/runestone/custom_books/{request.args(0)}/{request.args(1)}/{request.args(2)}/published")[0]
     except:
         pass
     if not dn:
-        dn = book.base_book
+        dn = book.base_book # if nothing has been found so far, hope that it is still the same name as the base book it was cloned from
     return _route_book(is_custom=True,directory_name=dn)
 
 
