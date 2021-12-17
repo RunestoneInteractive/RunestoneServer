@@ -12,4 +12,5 @@ _build
 **/altair*.json
 **/__pycache__
 books
+custom_books
 docker/letsencrypt

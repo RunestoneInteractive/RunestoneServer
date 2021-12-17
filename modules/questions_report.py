@@ -374,11 +374,7 @@ def _row_decode(row, question_type):
         except:
             # Handle non-JSON encoded fitb answers.
             answer = answer.split(",")
-        return (
-            answer,
-            row.fitb_answers.correct,
-            ts_get(row.fitb_answers),
-        )
+        return (answer, row.fitb_answers.correct, ts_get(row.fitb_answers))
     elif question_type == "lp_build":
         answer = row.lp_answers.answer
         return (
@@ -390,11 +386,7 @@ def _row_decode(row, question_type):
         # Multiple choice questions store their answer as a comma-separated string. Turn this into an array of ints.
         answer = row.mchoice_answers.answer
         answer = answer and [int(ans) for ans in answer.split(",")]
-        return (
-            answer,
-            row.mchoice_answers.correct,
-            ts_get(row.mchoice_answers),
-        )
+        return (answer, row.mchoice_answers.correct, ts_get(row.mchoice_answers))
     elif question_type == "parsonsprob":
         return (
             row.parsons_answers.answer,
@@ -404,10 +396,7 @@ def _row_decode(row, question_type):
     elif question_type == "shortanswer":
         # Prefer data from the shortanswer table if we have it; otherwise, we can use useinfo's act.
         answer, ts = (
-            (
-                row.shortanswer_answers.answer,
-                ts_get(row.shortanswer_answers),
-            )
+            (row.shortanswer_answers.answer, ts_get(row.shortanswer_answers))
             if "shortanswer_answers" in row
             else (row.useinfo.act, timestamp)
         )
@@ -417,19 +406,8 @@ def _row_decode(row, question_type):
         except:
             # The newer format is to store the answer as a pure string. So, ``answer`` already has the correct value.
             pass
-        return (
-            answer,
-            None,
-            ts,
-        )
-    elif question_type in [
-        "page",
-        "poll",
-        "showeval",
-        "video",
-        "vimeo",
-        "youtube",
-    ]:
+        return (answer, None, ts)
+    elif question_type in ["page", "poll", "showeval", "video", "vimeo", "youtube"]:
         return row.useinfo.act, None, timestamp
     else:
         # Unknown question! Panic!

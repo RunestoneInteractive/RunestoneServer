@@ -1,15 +1,15 @@
 #!/usr/local/bin/python3.2
-__author__ = 'bmiller'
+__author__ = "bmiller"
 
 import sys
 
 oldTable = sys.stdin.readlines()
 
-numCols = oldTable.count('&')
+numCols = oldTable.count("&")
 
 i = 0
 while i < len(oldTable):
-    oldTable[i] = oldTable[i].split('&')
+    oldTable[i] = oldTable[i].split("&")
     i += 1
 
 numCols = len(oldTable[0])
@@ -23,28 +23,27 @@ for col in range(numCols):
 
 # print header info
 for c in colMax:
-    print("="*c,end=' ')
+    print("=" * c, end=" ")
 
 print()
 col = 0
 for h in oldTable[0]:
-    print(("%"+str(colMax[col])+"s") % h.strip(),end=' ')
+    print(("%" + str(colMax[col]) + "s") % h.strip(), end=" ")
     col += 1
 print()
 
 
 for c in colMax:
-    print("="*c,end=' ')
+    print("=" * c, end=" ")
 print()
 
-for row in range(1,len(oldTable)):
+for row in range(1, len(oldTable)):
     col = 0
     for h in oldTable[row]:
-        print(("%"+str(colMax[col])+"s") % h.strip(),end=' ')
+        print(("%" + str(colMax[col]) + "s") % h.strip(), end=" ")
         col += 1
     print()
 
 for c in colMax:
-    print("="*c,end=' ')
+    print("=" * c, end=" ")
 print()
-

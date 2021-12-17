@@ -60,7 +60,9 @@ def _score_one_code_run(row, points, autograde):
         (ignore, pct, ignore, passed, ignore, failed) = row.act.split(":")
         pct_correct = 100 * float(passed) / (int(failed) + int(passed))
     except (ZeroDivisionError, ValueError):
-        pct_correct = 0  # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
+        pct_correct = (
+            0
+        )  # can still get credit if autograde is 'interact' or 'visited'; but no autograded value
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
@@ -863,8 +865,8 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
     # try to send lti grades
     assignment = _get_assignment(assignment_id)
     if not assignment:
-        current.session.flash = (
-            "Failed to find assignment object for assignment {}".format(assignment_id)
+        current.session.flash = "Failed to find assignment object for assignment {}".format(
+            assignment_id
         )
         return False
     else:
@@ -877,10 +879,8 @@ def _try_to_send_lti_grade(student_row_num, assignment_id):
             .first()
         )
         if not grade:
-            current.session.flash = (
-                "Failed to find grade object for user {} and assignment {}".format(
-                    auth.user.id, assignment_id
-                )
+            current.session.flash = "Failed to find grade object for user {} and assignment {}".format(
+                auth.user.id, assignment_id
             )
             return False
         else:
@@ -1352,13 +1352,16 @@ def do_fill_user_topic_practice_log_missings(db, settings, testing_mode=None):
                         # have a corresponding key in last_practiced where the time of the corresponding
                         # practice_log fits in the i_interval that makes it eligible to present on `flashcard_log_date`.
                         elif (
-                            flashcard_log.end_practice.date()
-                            - last_practiced[
+                            (
+                                flashcard_log.end_practice.date()
+                                - last_practiced[
+                                    f.chapter_label + f.sub_chapter_label
+                                ].end_practice.date()
+                            ).days
+                            >= last_practiced[
                                 f.chapter_label + f.sub_chapter_label
-                            ].end_practice.date()
-                        ).days >= last_practiced[
-                            f.chapter_label + f.sub_chapter_label
-                        ].i_interval:
+                            ].i_interval
+                        ):
                             presentable_topics[
                                 f.chapter_label + f.sub_chapter_label
                             ] = f

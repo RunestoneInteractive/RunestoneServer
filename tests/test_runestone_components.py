@@ -168,11 +168,7 @@ def test_fitb_1(selenium_utils_user_1, runestone_db):
 
     def fitb_check_common_fields(index, div_id):
         answer, correct, percent = check_common_fields(
-            selenium_utils_user_1,
-            db,
-            db.fitb_answers.div_id == div_id,
-            index,
-            div_id,
+            selenium_utils_user_1, db, db.fitb_answers.div_id == div_id, index, div_id
         )
         return json.loads(answer), correct, percent
 

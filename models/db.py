@@ -192,21 +192,30 @@ current.get_course_row = get_course_row
 
 # Provide the correct URL to a book, based on if it's statically or dynamically served. This function return URL(*args) and provides the correct controller/function based on the type of the current course (static vs dynamic).
 def get_course_url(*args):
-    course = db(db.courses.id == auth.user.course_id).select().first()
-    args = tuple(x for x in args if x != "")
-
-    if course:
-        if course.new_server == True:
-            return URL(
-                a=settings.bks,
-                c="books",
-                f="published",
-                args=(course.course_name,) + args,
-            )
-        else:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+    # Redirect to old-style statically-served books if it exists; otherwise, use the dynamically-served controller.
+    if os.path.exists(os.path.join(request.folder, "static", auth.user.course_name)):
+        return URL("static", "/".join((auth.user.course_name,) + args))
     else:
-        return URL(c="default")
+        course = (
+            db(db.courses.id == auth.user.course_id)
+            .select(db.courses.base_course)
+            .first()
+        )
+        args = tuple(x for x in args if x != "")
+        ## had to remove part about course.new_server and settings.bks, it was giving me trouble
+        if course:
+            if (
+                "/" in course.base_course
+            ):  # we are dealing with a custom textbook here, so route it differently
+                return URL(
+                    c="books",
+                    f="custom_books",
+                    args=("published", course.base_course) + args,
+                )
+            else:  # we are just dealing with a normal textbook
+                return URL(c="books", f="published", args=(course.base_course,) + args)
+        else:
+            return URL(c="default")
 
 
 ########################################

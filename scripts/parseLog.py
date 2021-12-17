@@ -4,11 +4,12 @@
 
 import re, sys
 
-timepat = re.compile(r'.*\[((Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*\d\d\d\d)\].*/runestone/ajax/(\w+)(\s|\?).*\s(\d+)\s+msecs.*')
-logfile = open(sys.argv[1], 'r')
+timepat = re.compile(
+    r".*\[((Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*\d\d\d\d)\].*/runestone/ajax/(\w+)(\s|\?).*\s(\d+)\s+msecs.*"
+)
+logfile = open(sys.argv[1], "r")
 
 for line in logfile:
     g = timepat.match(line)
     if g:
-        print("{},{},{}".format(g.group(1),g.group(4), g.group(6)))
-
+        print("{},{},{}".format(g.group(1), g.group(4), g.group(6)))
