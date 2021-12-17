@@ -883,11 +883,14 @@ def _build_phase_2_core(
         # Build the webpack after the Runestone Components are installed.
         xqt("npm install", "npm run build")
 
-    xqt(
-        # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
-        f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
-        f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
-    )
+    # changing permissions groups and permissions makes a restart super slow.
+    # lets avoid doing this if we don't have to.
+    if Path(env.RUNESTONE_PATH).group() != "www-data":
+        xqt(
+            # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
+            f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
+            f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
+        )
 
     # Set up Postgres database
     # ^^^^^^^^^^^^^^^^^^^^^^^^
