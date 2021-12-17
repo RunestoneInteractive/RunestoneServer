@@ -138,9 +138,7 @@ def test_grades(test_client, runestone_db_tools, test_user):
         },
     )
 
-    test_client.validate(
-        "dashboard/grades",
-    )
+    test_client.validate("dashboard/grades")
 
     assert "Gradebook" in test_client.text
 
@@ -156,9 +154,7 @@ def test_questiongrades_redirect(
 
     test_instructor_1.login()
 
-    test_client.validate(
-        "dashboard/questiongrades",
-    )
+    test_client.validate("dashboard/questiongrades")
 
     assert "Cannot call questiongrades directly" in test_client.text
 

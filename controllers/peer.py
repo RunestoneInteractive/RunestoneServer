@@ -26,8 +26,7 @@ logger.setLevel(settings.log_level)
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True
 )
 def instructor():
     assignments = db(
@@ -44,8 +43,7 @@ def instructor():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True
 )
 def dashboard():
     """
@@ -142,8 +140,7 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True
 )
 def chartdata():
     response.headers["content-type"] = "application/json"
@@ -180,8 +177,7 @@ def chartdata():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True
 )
 def num_answers():
     response.headers["content-type"] = "application/json"
@@ -228,8 +224,7 @@ def peer_question():
 
 
 @auth.requires(
-    lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
-    requires_login=True,
+    lambda: verifyInstructorStatus(auth.user.course_id, auth.user), requires_login=True
 )
 def make_pairs():
     response.headers["content-type"] = "application/json"

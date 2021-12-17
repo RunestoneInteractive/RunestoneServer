@@ -102,12 +102,7 @@ def stop_servers() -> None:
 
 def _stop_servers() -> None:
     ensure_in_docker()
-    xqt(
-        "pkill celery",
-        "pkill -f gunicorn",
-        "service nginx stop",
-        check=False,
-    )
+    xqt("pkill celery", "pkill -f gunicorn", "service nginx stop", check=False)
 
 
 # ``test``

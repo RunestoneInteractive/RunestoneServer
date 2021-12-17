@@ -90,11 +90,7 @@ def _scheduled_builder(
     # Assemble or compile the source. We assume that the binaries are already in the path.
     #
     # Compile in the temporary directory, in which ``file_path`` resides.
-    sp_args = dict(
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,
-        cwd=cwd,
-    )
+    sp_args = dict(stderr=subprocess.STDOUT, universal_newlines=True, cwd=cwd)
     o_path = file_path + ".o"
     extension = os.path.splitext(file_path)[1]
     try:

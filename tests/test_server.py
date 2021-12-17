@@ -137,12 +137,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ("default/coursechooser/xxx", True, "Course IDs for open courses", 2),
         ("default/removecourse", True, "Course Selection", 1),
         ("default/removecourse/xxx", True, "Course Selection", 1),
-        (
-            "dashboard/studentreport",
-            True,
-            "Recent Activity",
-            1,
-        ),
+        ("dashboard/studentreport", True, "Recent Activity", 1),
         # **Designer**
         # -------------
         (
@@ -939,17 +934,12 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
 
     # Add questions to the assignment.
     def add_to_assignment(question_kwargs, points):
-        assert (
-            tu.test_client.validate(
-                "admin/add__or_update_assignment_question",
-                data=dict(
-                    question=question_kwargs["div_id"],
-                    points=points,
-                    **assignment_kwargs
-                ),
-            )
-            != json.dumps("Error")
-        )
+        assert tu.test_client.validate(
+            "admin/add__or_update_assignment_question",
+            data=dict(
+                question=question_kwargs["div_id"], points=points, **assignment_kwargs
+            ),
+        ) != json.dumps("Error")
 
     # Determine the order of the questions and the _`point values`.
     add_to_assignment(shortanswer_kwargs, 0)

@@ -250,10 +250,8 @@ def student_autograde():
     )
 
     if not res["success"]:
-        session.flash = (
-            "Failed to autograde questions for user id {} for assignment {}".format(
-                auth.user.id, assignment_id
-            )
+        session.flash = "Failed to autograde questions for user id {} for assignment {}".format(
+            auth.user.id, assignment_id
         )
         res = {"success": False}
     else:
@@ -262,10 +260,8 @@ def student_autograde():
                 student_rownum=auth.user.id, assignment_id=assignment_id
             )
             if not res2["success"]:
-                session.flash = (
-                    "Failed to compute totals for user id {} for assignment {}".format(
-                        auth.user.id, assignment_id
-                    )
+                session.flash = "Failed to compute totals for user id {} for assignment {}".format(
+                    auth.user.id, assignment_id
                 )
                 res = {"success": False}
             else:
@@ -1314,8 +1310,7 @@ def grades_report():
     try:
         if request.vars.report_type == "assignment":
             grades = query_assignment(
-                auth.user.course_name,
-                request.vars.chap_or_assign,
+                auth.user.course_name, request.vars.chap_or_assign
             )
         else:
             assert (
