@@ -36,5 +36,8 @@ services:
       REDIS_URI: "redis://redis:6379/0"
       RUNESTONE_HOST: ${RUNESTONE_HOST}
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      # Github Vars
+      CLIENT_ID: ${GITHUB_CLIENT_ID}
+      CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
     links:
     - jobe
