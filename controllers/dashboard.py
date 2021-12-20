@@ -312,6 +312,7 @@ def index():
     return dict(
         assignments=assignments,
         course=course,
+        is_instructor=True,
         questions=questions,
         sections=sections,
         chapters=chapters,
@@ -534,7 +535,10 @@ def grades():
             if total_possible_points > 0
             else "n/a",
         }
-    practice_average /= len(students)
+    try:
+        practice_average /= len(students)
+    except ZeroDivisionError:
+        practice_average = 0.0
     practice_average = "{0:.2f}".format(practice_average)
 
     # create a matrix indexed by user.id and assignment.id

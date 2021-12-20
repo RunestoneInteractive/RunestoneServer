@@ -1,6 +1,10 @@
+.. _runestone server docs:
+
 ************************************************
 Developer documentation for the Runestone server
 ************************************************
+
+:ref:`Runestone server <runestone server docs>`.
 
 Architecture
 ============
@@ -126,10 +130,10 @@ Overview Material
 .. toctree::
     :maxdepth: 2
 
-    /docs/installation
-    /docs/lti
-    /docker/README
-    /rsmanage/toctree
+    docs/installation
+    docs/lti
+    docker/toctree
+    rsmanage/toctree
 
 
 web2py server
@@ -141,8 +145,6 @@ web2py server
     /controllers/toctree
     /views/__init__.py
     /modules/__init__.py
-    /static/toctree
-    /build/toctree
 
 
 Tests and CI
@@ -155,25 +157,15 @@ Tests and CI
     /tests/__init__.py
 
 
-Containers
-==========
-.. toctree::
-
-    /Dockerfile
-    /docker-compose.yml
-    /docker/entrypoint.sh
-    /docker/wsgihandler.py
-    /docker/uwsgi/sites/runestone.ini
-
-
 Documentation
 =============
 
 This is the beginning of developer documentation for the Runestone server. To build these documents:
 
 #.  Open a terminal or command prompt and change to the root of this repository.
-#.  Execute ``python -m pip install -U -r requirements-dev.txt``. This only needs to be done once.
-#.  Execute ``sphinx-build -d _build/doctrees . _build``.
+#.  `Install Poetry <https://python-poetry.org/docs/#installation>`_.
+#.  Install this project's dependencies: at a command line, execute ``poetry install``.
+#.  Execute ``poetry run sphinx-build -d _build/doctrees . _build``.
 
 There's a lot of work left to do. In particular:
 
@@ -198,12 +190,14 @@ Other files
     :glob:
 
     docs/lti
-    /CONTRIBUTING
-    /ChangeLog
-    /scripts/toctree
-    /__init__.py
-    /.prettierrc.js
+    CONTRIBUTING
+    ChangeLog
+    scripts/toctree
+    __init__.py
+    .prettierrc.js
     conf.py
+    pyproject.toml
+    runestone_poetry_project/__init__
 
 Indices and tables
 ------------------

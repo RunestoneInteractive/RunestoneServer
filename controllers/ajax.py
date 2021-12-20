@@ -2,7 +2,39 @@
 # |docname| - Runestone API
 # *************************
 # This module implements the API that the Runestone Components use to communicate with a Runestone Server.
+#  **Most of this file is Deprecated**
+# **Do not** make any changes to the following functions. They will be removed in an upcoming release.
+# def compareAndUpdateCookieData(sid: str):
+# def hsblog():
+# def runlog():
+# def gethist():
+# def getuser():
+# def set_tz_offset():
+# def updatelastpage():
+# def getCompletionStatus():
+# def getAllCompletionStatus():
+# def getlastpage():
+# def _getCorrectStats(miscdata, event):
+# def _getStudentResults(question: str):
+# def getaggregateresults():
+# def getpollresults():
+# def gettop10Answers():
+# def getassignmentgrade():
+# def _canonicalize_tz(tstring):
+# def getAssessResults():
+# def tookTimedAssessment():
+# def get_datafile():
+# def _same_class(user1: str, user2: str) -> bool:
+# def login_status():
+# def get_question_source():
 #
+# TODO: Move these to a new controller file (maybe admin.py)
+# def preview_question():
+# def save_donate():
+# def did_donate():
+# def broadcast_code():
+# def update_selected_question():
+# #
 # Imports
 # =======
 # These are listed in the order prescribed by `PEP 8

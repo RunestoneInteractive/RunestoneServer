@@ -2,4 +2,5 @@
 
 Dockerfile text eol=lf
 *.sh text eol=lf
-scripts/* text eol=lf
+scripts/** text eol=lf
+docker/docker_tools.py eol=lf

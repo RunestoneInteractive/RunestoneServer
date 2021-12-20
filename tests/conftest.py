@@ -175,7 +175,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
         #
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt("rsmanage --verbose initdb --reset --force")
+        xqt(f"{sys.executable} -m rsmanage --verbose initdb --reset --force")
 
         # Copy the test book to the books directory.
         rmtree("{}/books/test_course_1".format(rs_path), ignore_errors=True)
@@ -918,9 +918,9 @@ def test_assignment(test_client, test_user, runestone_db_tools):
 # Create an instance of Selenium once per testing session.
 @pytest.fixture(scope="session")
 def selenium_driver_session():
-    # Start a virtual display for Linux.
+    # Start a virtual display for Linux if there's no X terminal available.
     is_linux = sys.platform.startswith("linux")
-    if is_linux:
+    if is_linux and "DISPLAY" not in os.environ:
         display = Display(visible=0, size=(1280, 1024))
         display.start()
     else:

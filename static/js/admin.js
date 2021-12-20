@@ -1293,6 +1293,10 @@ function update_assignment(form) {
             return;
         }
     }
+    if (form.is_peer.checked && form.is_timed.checked) {
+        alert("An assignment can not have both Timed and Peer checked")
+        return;
+    }
     if (form.visible.checked) {
         data.visible = "T";
     } else {
@@ -1317,6 +1321,11 @@ function update_assignment(form) {
         data.nopause = "T";
     } else {
         data.nopause = "F";
+    }
+    if (form.is_peer.checked) {
+        data.is_peer = "T";
+    } else {
+        data.is_peer = "F";
     }
     data.timelimit = form.timelimit.value;
     data.description = form.description.value;
@@ -1379,6 +1388,7 @@ function assignmentInfo() {
             $("#timelimit").val(assignmentData.time_limit);
             $("#nopause").val(assignmentData.nopause);
             $("#nofeedback").val(assignmentData.nofeedback);
+            $("#assign_is_peer").val(assignmentData.is_peer);
             if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
             } else {
@@ -1398,6 +1408,11 @@ function assignmentInfo() {
                 $("#nopause").prop("checked", true);
             } else {
                 $("#nopause").prop("checked", false);
+            }
+            if (assignmentData.is_peer === true) {
+                $("#assign_is_peer").prop("checked", true);
+            } else {
+                $("#assign_is_peer").prop("checked", false);
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);
@@ -1738,7 +1753,7 @@ function preview_question_id(question_id, preview_div, sid, gradeit) {
         // Render it.
         data = { acid: question_id };
         if (sid) {
-            data.sid = sid;
+            data.sid = decodeURIComponent(sid);
             data.graderactive = true;
             data.useRunestoneServices = true;
         }

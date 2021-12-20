@@ -109,7 +109,6 @@ def test_activecode_1(selenium_utils_user_ac, runestone_db):
     row = ac_check_fields(0, "test_activecode_2")
     assert row.emessage == "success"
     assert row.code == "print('Goodbye')"
-    assert row.grade == None
     assert row.comment == None
     assert row.language == "python"
 

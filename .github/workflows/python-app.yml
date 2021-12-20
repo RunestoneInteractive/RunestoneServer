@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will install Python dependencies, run tests and lint with a single version of Python.
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 name: Runestone Server Tests
@@ -10,72 +10,42 @@ on:
         branches: [master]
 
 jobs:
-    build:
+    docker_build:
         runs-on: ubuntu-latest
         env:
-            WEB2PY_CONFIG: test
-            TEST_DBURL: postgres://runestone:runestone@localhost/runestone_test
             LANG: en_US.UTF-8
-            WEB2PY_VERSION: 2.20.4
             COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+            SERVER_CONFIG: test
         steps:
-            - uses: actions/checkout@v2
-            - uses: Harmon758/postgresql-action@v1.0.0
-              with:
-                  postgresql db: runestone_test
-                  postgresql user: runestone
-                  postgresql password: runestone
-            - uses: actions/setup-java@v1.4.3
-              with:
-                  java-version: 1.8
-                  java-package: jre
-            - uses: supercharge/redis-github-action@1.1.0
-            - uses: act10ns/slack@v1
-              with:
-                  status: starting
-                  channel: "#builds"
-              if: always()
-
-            - name: Set up Python 3.8
-              uses: actions/setup-python@v2
-              with:
-                  python-version: 3.8
-            - uses: actions/setup-node@v2.1.2
-            - name: Install dependencies
-              id: setup-environment
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install flake8 pytest
-                  if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-                  mkdir runestone
-                  shopt -s extglob
-                  mv !(runestone) runestone
-                  git clone https://github.com/RunestoneInteractive/RunestoneComponents.git
-                  python -m pip install -e RunestoneComponents
-                  cd RunestoneComponents
-                  npm install
-                  npm run build
-                  cd ..
-                  wget http://web2py.com/examples/static/${WEB2PY_VERSION}/web2py_src.zip
-                  unzip web2py_src.zip
-                  mv runestone web2py/applications
-                  mkdir web2py/applications/runestone/private
-                  echo "sha512:16492eda-ba33-48d4-8748-98d9bbdf8d33" > web2py/applications/runestone/private/auth.key
-                  pip install -e web2py/applications/runestone/rsmanage
-                  cd web2py
-                  cp applications/runestone/tests/.coveragerc .
-
-            - name: Test with pytest
-              id: pytest
-              run: |
-                  cd web2py
-                  echo $TEST_DBURL
-                  pytest -v applications/runestone/tests
-
-            - uses: act10ns/slack@v1
-              with:
-                  status: ${{ job.status }}
-                  steps: ${{ toJson(steps) }}
-                  channel: "#builds"
-              if: always()
+            -   uses: actions/checkout@v2
+                with:
+                    path: RunestoneServer
+            -   name: Set up Python 3.8
+                uses: actions/setup-python@v2
+                with:
+                    python-version: 3.8
+            -   name: Build container
+                id: docker-build
+                run: |
+                    cd RunestoneServer
+                    python3 docker/docker_tools.py build --single-dev
+            -   name: Start container
+                id: docker-up
+                run: |
+                    cd RunestoneServer
+                    docker-compose up -d
+                    docker-compose logs --follow &
+                    # Wait for the container to start and create a basic venv before running docker tools inside it.
+                    sleep 5
+                    # Invoke this directly, since the ``docker-tools`` script isn't installed yet. After this finishes, the docker tools are installed.
+                    docker exec -t runestoneserver_runestone_1 bash -c "\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py wait"
+            -   name: Test
+                id: pytest
+                run: |
+                    cd RunestoneServer
+                    # See if the webserver is running. Wait for the server to start.
+                    sleep 5
+                    curl --silent --location 127.0.0.1 | grep "About Runestone"
+                    # Test just the Runestone server.
+                    docker-tools test --no-bks --no-rc

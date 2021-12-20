@@ -1,0 +1,68 @@
+{{extend 'layout.html'}}
+
+{{block moreincludes}}
+{{include '_sphinx_static_files.html'}}
+{{end}}
+
+<script>
+    eBookConfig.peer = true;
+</script>
+
+<h2>Peer Instruction Question</h2>
+<div id="imessage">
+
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form action="/runestone/peer/peer_question" method="GET">
+            <input type="hidden" name="assignment_id" value={{=assignment_id}}>
+            <button id="nextqbutton" type="submit" class="btn btn-success" name="next" disabled value="Next">Next
+                Question</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class='oneq col-md-6'>
+        {{=XML(current_question['htmlsrc'])}}
+    </div>
+    <div id="discussion_panel" class='col-md-6' style="display: none">
+        <p>Your first answer <span id="first_answer"></span></p>
+        <p>Your partner, <span id="pname"></span>, answered <span id="panswer"></span></p>
+        <p>Please explain your answer to your partner</p>
+        <textarea id="messageText" rows="2" cols="33">
+</textarea>
+        <button id="sendpeermsg" type="button" onclick="sendMessage()">Send</button>
+        <div>
+            <ul id="messages" class="conversation">
+
+            </ul>
+        </div>
+        <form>
+            <div class="form-group">
+                Rate Peer's Explanation<br />
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="poor"
+                    onclick="ratePeer(this)">
+                <label class="form-check-label" for="inlineRadio1">Poor</label>
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="good"
+                    onclick="ratePeer(this)">
+                <label class="form-check-label" for="inlineRadio2">Good</label>
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                    value="excellent" onclick="ratePeer(this)">
+                <label class="form-check-label" for="inlineRadio3">Excellent</label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/runestone/static/js/peer.js"></script>
+<script>
+    var user = '{{=auth.user.username}}';
+    var currentQuestion = '{{=XML(current_question.name)}}';
+    document.addEventListener("DOMContentLoaded", function (event) {
+        setTimeout(connect, 1000);
+    });
+
+</script>
+
+{{ end }}
