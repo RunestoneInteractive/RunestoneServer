@@ -537,9 +537,9 @@ def _build_phase_0(
                     f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
                 )
                 try:
-                    # Check if possible to clone RunestoneComponents (peer_support) with Custom Repo
+                    # Check if possible to clone RunestoneComponents with Custom Repo
                     xqt(
-                        f"export GIT_TERMINAL_PROMPT=0 && git clone --branch peer_support https://github.com/{clone_rc}/RunestoneComponents.git"
+                        f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rc}/RunestoneComponents.git"
                     )
                 except subprocess.CalledProcessError:
                     # Exit script with Git Clone Error
