@@ -69,3 +69,4 @@ _builddoctrees
 .nova
 .env
 docker/nginx/sites-available/runestone
+ready.txt
