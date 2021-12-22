@@ -36,5 +36,7 @@ services:
       REDIS_URI: "redis://redis:6379/0"
       RUNESTONE_HOST: ${RUNESTONE_HOST}
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
+      LOGIN_URL: "/runestone/default/user"
     links:
     - jobe
