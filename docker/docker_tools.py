@@ -104,6 +104,7 @@ def check_install_curl() -> None:
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
+# fmt: off
 try:
     # This unused import triggers the script download if it's not present. This only happens outside the container.
     import ci_utils
@@ -120,6 +121,7 @@ except ImportError:
         check=True,
     )
 from ci_utils import chdir, env, is_linux, pushd, xqt
+# fmt: on
 
 # Third-party bootstrap
 # ---------------------
