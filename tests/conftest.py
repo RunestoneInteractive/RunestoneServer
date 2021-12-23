@@ -437,6 +437,8 @@ class _RunestoneDbTools(object):
             term_start_date=term_start_date,
             login_required=login_required,
             student_price=student_price,
+            courselevel="",
+            institution="",
         )
         db.commit()
         return obj

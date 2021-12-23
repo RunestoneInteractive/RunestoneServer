@@ -2164,8 +2164,10 @@ def add__or_update_assignment_question():
     except Exception:
         points = activity_count
 
-    autograde = request.vars.get("autograde")
-    which_to_grade = request.vars.get("which_to_grade")
+    # If no autograde type is provided, use ``interact`` as a fallback, since this works for all questions types.
+    autograde = request.vars.get("autograde", "interact")
+    # Use ``best_answer`` as a safe fallback (see ``WHICH_TO_GRADE_POSSIBLE_VALUES`` in this file. )
+    which_to_grade = request.vars.get("which_to_grade", "best_answer")
     # Make sure the defaults are set correctly for activecode Qs
     if (
         question_type in ("activecode", "actex") and auto_grade != "unittest"
