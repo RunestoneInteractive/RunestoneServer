@@ -92,7 +92,7 @@ def _get_current_question(assignment_id, get_next):
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=db.assignment_questions.sorting_priority
     )
-    logger.debug(f"{idx=} {len(a_qs)=}")
+    logger.debug(f"idx = {idx} len of qs = {len(a_qs)}")
     if idx > len(a_qs) - 1:
         idx = len(a_qs) - 1
     current_question_id = a_qs[idx].question_id
@@ -250,8 +250,6 @@ def make_pairs():
         incorrect_list.remove(auth.user.username)
     logger.debug("TTT")
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    logger.debug(f"{correct_list=}")
-    logger.debug(f"{incorrect_list=}")
     for i in range(min(len(correct_list), len(incorrect_list))):
         p1 = incorrect_list.pop()
         p2 = correct_list.pop()
@@ -308,7 +306,7 @@ def publish_message():
     response.headers["content-type"] = "application/json"
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     data = json.dumps(request.vars)
-    logger.debug(f"{data=}")
+    logger.debug(f"data = {data}")
     r.publish("peermessages", data)
     return json.dumps("success")
 
