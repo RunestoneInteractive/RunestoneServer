@@ -217,7 +217,7 @@ def hsblog():
 
     # Process this event.
     if event == "mChoice" and auth.user:
-        answer = request.vars.answer
+        answer = request.vars.answer or ""
         correct = request.vars.correct
         db.mchoice_answers.insert(
             sid=sid,
@@ -278,7 +278,7 @@ def hsblog():
 
     elif event == "parsons" and auth.user:
         correct = request.vars.correct
-        answer = request.vars.answer
+        answer = request.vars.answer or ""
         source = request.vars.source
         db.parsons_answers.insert(
             sid=sid,
@@ -293,7 +293,7 @@ def hsblog():
 
     elif event == "codelensq" and auth.user:
         correct = request.vars.correct
-        answer = request.vars.answer
+        answer = request.vars.answer or ""
         source = request.vars.source
         db.codelens_answers.insert(
             sid=sid,
@@ -1678,7 +1678,7 @@ def get_question_source():
         json: html source for this question
     """
     prof = False
-    points = request.vars.points
+    points = request.vars.points or 0 # no nulls allowed
     logger.debug(f"POINTS = {points}")
     min_difficulty = request.vars.min_difficulty
     max_difficulty = request.vars.max_difficulty
