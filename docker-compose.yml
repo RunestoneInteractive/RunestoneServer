@@ -11,7 +11,7 @@ services:
     - ./jobeinabox/files:/usr/local/lib/java
   runestone:
     image: runestone/server
-    restart: always
+    restart: on-failure
     ports:
       # Allow HTTP, so the web server can forward to https.
       - "80:80"
