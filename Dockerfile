@@ -7,7 +7,7 @@
 # ************************************************************
 # To build, execute `docker-tools <docker/docker_tools.py>` ``build``.
 
-FROM python:3.8-buster
+FROM python:3.9-buster
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic,@bjones1"
 
