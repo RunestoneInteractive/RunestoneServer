@@ -228,16 +228,14 @@ class BuildConfiguration(Enum):
     help="Clone all System components from repos with specified USERNAME",
 )
 @click.option(
-    "-cbks",
     "--clone-bks",
     # Default since BookServer not forked by RunestoneInteractive yet!
-    default="bnmnetp",
+    default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
 )
 @click.option(
-    "-crc",
     "--clone-rc",
     default="RunestoneInteractive",
     nargs=1,
@@ -245,7 +243,6 @@ class BuildConfiguration(Enum):
     help="Clone RunestoneComponents repo with USERNAME",
 )
 @click.option(
-    "-crs",
     "--clone-rs",
     default="RunestoneInteractive",
     nargs=1,
