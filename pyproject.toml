@@ -23,7 +23,7 @@ license = "MIT"
 cryptography = "^3.0.0"
 altair = "^4.0.0"
 bleach = "> 3.1.1"
-bookserver = "^0.3.0"
+bookserver = "^1.0.0"
 celery = { extras = ["redis,gevent"], version = "^5.0.0" }
 cssselect = ">= 1.0"
 diff-match-patch = ">= 20110725.1"
