@@ -12,8 +12,6 @@ services:
   runestone:
     image: runestone/server
     restart: on-failure
-    volumes:
-    - /home/bmiller/Runestone/books:/srv/web2py/applications/runestone/books
     ports:
       # Allow HTTP, so the web server can forward to https.
       - "80:80"
@@ -43,5 +41,6 @@ services:
       LOGIN_URL: "/runestone/default/user"
       ADSENSEID: ${ADSENSEID}
       GOOGLE_GA: ${GOOGLE_GA}
+      SERVE_AD: 1
     links:
     - jobe
