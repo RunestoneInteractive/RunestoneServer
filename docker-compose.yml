@@ -12,6 +12,8 @@ services:
   runestone:
     image: runestone/server
     restart: on-failure
+    volumes:
+    - /home/bmiller/Runestone/books:/srv/web2py/applications/runestone/books
     ports:
       # Allow HTTP, so the web server can forward to https.
       - "80:80"
@@ -36,7 +38,10 @@ services:
       REDIS_URI: "redis://redis:6379/0"
       RUNESTONE_HOST: ${RUNESTONE_HOST}
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      LOAD_BALANCER_HOST: '${LOAD_BALANCER_HOST}'
       # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
       LOGIN_URL: "/runestone/default/user"
+      ADSENSEID: ${ADSENSEID}
+      GOOGLE_GA: ${GOOGLE_GA}
     links:
     - jobe

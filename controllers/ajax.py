@@ -218,7 +218,7 @@ def hsblog():
     # Process this event.
     if event == "mChoice" and auth.user:
         answer = request.vars.answer or ""
-        correct = request.vars.correct
+        correct = request.vars.correct or False
         db.mchoice_answers.insert(
             sid=sid,
             timestamp=ts,
@@ -230,7 +230,7 @@ def hsblog():
         )
     elif event == "fillb" and auth.user:
         answer_json = request.vars.answer
-        correct = request.vars.correct
+        correct = request.vars.correct or False
         # Grade on the server if needed.
         do_server_feedback, feedback = is_server_feedback(div_id, course)
         if do_server_feedback and answer_json is not None:
@@ -252,7 +252,7 @@ def hsblog():
     elif event == "dragNdrop" and auth.user:
         answers = request.vars.answer
         minHeight = request.vars.minHeight
-        correct = request.vars.correct
+        correct = request.vars.correct or False
 
         db.dragndrop_answers.insert(
             sid=sid,
@@ -265,7 +265,7 @@ def hsblog():
             percent=pct,
         )
     elif event == "clickableArea" and auth.user:
-        correct = request.vars.correct
+        correct = request.vars.correct or False
         db.clickablearea_answers.insert(
             sid=sid,
             timestamp=ts,
@@ -277,7 +277,7 @@ def hsblog():
         )
 
     elif event == "parsons" and auth.user:
-        correct = request.vars.correct
+        correct = request.vars.correct or False
         answer = request.vars.answer or ""
         source = request.vars.source
         db.parsons_answers.insert(
@@ -292,7 +292,7 @@ def hsblog():
         )
 
     elif event == "codelensq" and auth.user:
-        correct = request.vars.correct
+        correct = request.vars.correct or False
         answer = request.vars.answer or ""
         source = request.vars.source
         db.codelens_answers.insert(
@@ -1678,7 +1678,7 @@ def get_question_source():
         json: html source for this question
     """
     prof = False
-    points = request.vars.points or 0 # no nulls allowed
+    points = request.vars.points or 0  # no nulls allowed
     logger.debug(f"POINTS = {points}")
     min_difficulty = request.vars.min_difficulty
     max_difficulty = request.vars.max_difficulty
