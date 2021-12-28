@@ -7,13 +7,15 @@ services:
 
   jobe:
     image: runestone/jobeinabox
-    build: ./jobeinabox/
+    build: ../jobeinabox/
     volumes:
-      - ./jobeinabox/files:/usr/local/lib/java
+      - ../jobeinabox/files:/usr/local/lib/java
 
   runestone:
-    image: runestone/server
+    image: registry.digitalocean.com/runestone-registry/production_server:latest
     restart: always
+    volumes:
+    - /home/bmiller/Runestone/books:/srv/web2py/applications/runestone/books
     links:
       - jobe
     ports:
@@ -21,16 +23,27 @@ services:
       - "443:443"
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGPASSWORD: ${POSTGRES_PASSWORD} # auto login from docker-tools shell
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       WEB2PY_CONFIG: ${SERVER_CONFIG}
       BOOK_SERVER_CONFIG: ${SERVER_CONFIG}
-      WEB2PY_MIGRATE: 'Yes'
+      WEB2PY_MIGRATE: 'No'
       POSTGRES_HOST: ${POSTGRES_HOST}
       REDIS_HOST: ${REDIS_HOST}
       DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}'
       DEV_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}_dev'
       TEST_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}_test'
+      WEB2PY_ADMIN_PASSWORD: ${WEB2PY_ADMIN_PASSWORD}
+      WEB2PY_SALT: ${WEB2PY_SALT}
+      JWT_SECRET: ${JWT_SECRET}
       REDIS_URI: 'redis://${REDIS_HOST}:6379/0'
       RUNESTONE_HOST: '${RUNESTONE_HOST}'
       CERTBOT_EMAIL: '${CERTBOT_EMAIL}'
+      LOAD_BALANCER_HOST: '${LOAD_BALANCER_HOST}'
+      ADSENSEID: ${ADSENSEID}
+      GOOGLE_GA: ${GOOGLE_GA}
+      # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
+      LOGIN_URL: "/runestone/default/user"
+      SERVE_AD: 1
+      
