@@ -436,9 +436,14 @@ def index():
         # update course key_words if found in book's conf.py
         if hasattr(config, "key_words"):
             book_info.update(key_words=config.key_words)
-        book_info["url"] = "/{}/books/published/{}/index.html".format(
-            request.application, book
-        )
+        if hasattr(config, "publisher") and config.publisher == "PTX":
+            bks = request.application
+        elif settings.running_bookserver:
+            bks = settings.bks
+        else:
+            bks = request.application
+
+        book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
         book_info["regname"] = book
         res.append(book_info)
     return dict(book_list=res)
