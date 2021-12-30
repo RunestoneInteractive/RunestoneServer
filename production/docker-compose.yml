@@ -45,5 +45,6 @@ services:
       GOOGLE_GA: ${GOOGLE_GA}
       # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
       LOGIN_URL: "/runestone/default/user"
-      SERVE_AD: 1
+      ADS_FILE: '${ADS_FILE}'
+
       
