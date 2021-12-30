@@ -41,6 +41,7 @@ services:
       LOGIN_URL: "/runestone/default/user"
       ADSENSEID: ${ADSENSEID}
       GOOGLE_GA: ${GOOGLE_GA}
-      SERVE_AD: 1
+      ADS_FILE: '${ADS_FILE}'
+      QUICK_START: ${QUICK_START}
     links:
     - jobe

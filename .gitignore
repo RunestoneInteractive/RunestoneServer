@@ -70,3 +70,4 @@ _builddoctrees
 .env
 docker/nginx/sites-available/runestone
 ready.txt
+books/*

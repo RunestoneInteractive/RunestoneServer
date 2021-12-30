@@ -852,7 +852,10 @@ def _build_phase_2_core(
     # Create a default auth key for web2py.
     print("Creating auth key")
     xqt("mkdir -p $RUNESTONE_PATH/private")
+
     (Path(env.RUNESTONE_PATH) / "private/auth.key").write_text(env.WEB2PY_SALT)
+    # Write the ads.txt file
+    (Path(env.RUNESTONE_PATH) / "static/ads.txt").write_text(env.ADS_FILE)
     # Write the admin password.
     xqt(
         dedent(
@@ -874,7 +877,8 @@ def _build_phase_2_core(
         admin_1_py.unlink(True)
     else:
         # Allow admin access in HTTP mode only.
-        admin_1_py.write_text("DEMO_MODE = True")
+        # Change to False otherwise this allows admin on build --multi
+        admin_1_py.write_text("DEMO_MODE = False")
 
     # Do dev installs
     # ^^^^^^^^^^^^^^^
@@ -887,12 +891,15 @@ def _build_phase_2_core(
 
     # changing permissions groups and permissions makes a restart super slow.
     # lets avoid doing this if we don't have to.
-    #if Path(env.RUNESTONE_PATH).group() != "www-data":
-    xqt(
-        # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
-        f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
-        f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
-    )
+    # if Path(env.RUNESTONE_PATH).group() != "www-data":
+    if os.environ.get("QUICK_START", "No") != "Yes":
+        xqt(
+            # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
+            f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
+            f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
+        )
+    else:
+        print("Skipping permissions changes")
 
     # Set up Postgres database
     # ^^^^^^^^^^^^^^^^^^^^^^^^

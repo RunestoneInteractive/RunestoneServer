@@ -15,6 +15,9 @@ server {
     # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server.
     server_name ${RUNESTONE_HOST};
 
+
+    rewrite ^/ads.txt /runestone/static/ads.txt;
+
     # Rewrite the path to static files.
     #
     # `location <https://nginx.org/en/docs/http/ngx_http_core_module.html#location>`_: set configuration depending on a request URI. The ``~*`` indicates the following parameter is a case-insensitive regex. Look for web2py static files.
