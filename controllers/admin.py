@@ -1489,6 +1489,9 @@ def createquestion():
                 question_id=newqID,
                 timed=timed,
                 points=points,
+                autograde=unittest or "pct_correct",
+                which_to_grade="best_answer",
+                sorting_priority=0,
             )
 
         returndict = {request.vars["name"]: newqID, "timed": timed, "points": points}
@@ -2170,6 +2173,8 @@ def add__or_update_assignment_question():
         if autograde and autograde not in ("manual", "interact"):
             autograde = "manual"
             which_to_grade = ""
+    if autograde is None:
+        autograde = "pct_correct"
     try:
         # save the assignment_question
         db.assignment_questions.update_or_insert(
