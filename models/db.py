@@ -62,7 +62,7 @@ if not request.env.web2py_runtime_gae:
         # WEB2PY_MIGRATE is either "Yes", "No", "Fake", or missing
         db = DAL(
             settings.database_uri,
-            pool_size=30,
+            pool_size=15,
             fake_migrate_all=(os.environ.get("WEB2PY_MIGRATE", "Yes") == "Fake"),
             migrate=False,
             migrate_enabled=(
