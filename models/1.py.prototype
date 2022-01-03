@@ -75,3 +75,6 @@ if build_config_single:
     settings.websocket_url = f"ws{'s' if os.environ['CERTBOT_EMAIL'] else ''}://{os.environ['RUNESTONE_HOST']}/ns"
 else:
     settings.websocket_url = f"wss://{os.environ['LOAD_BALANCER_HOST']}/ns"
+
+# for LTI to work properly in a modern multi server configuration we need to set the `lti_uri`
+# settings.lti_uri = "https://runestone.academy/runestone/lti"
