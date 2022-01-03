@@ -2,6 +2,8 @@
 
 set -e
 
+cd /home/bmiller/Runestone/RunestoneServer/production
+
 if [[ $PWD != */production ]]; then
     echo 'you need to be in the production folder for this'
     exit 
