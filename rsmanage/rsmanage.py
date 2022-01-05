@@ -28,7 +28,7 @@ from pgcli.main import cli as clipg
 from psycopg2.errors import UniqueViolation
 
 from bookserver.crud import create_initial_courses_users
-from bookserver.db import init_models
+from bookserver.db import init_models, term_models
 from bookserver.config import settings
 
 
@@ -104,6 +104,27 @@ def init_roles(config):
     eng.execute("""insert into auth_group (role) values ('instructor')""")
     eng.execute("""insert into auth_group (role) values ('editor')""")
 
+
+def _initdb(config):
+    # Because click won't natively support making commands async we can use this simple method
+    # to call async functions.
+    # Since we successfully dropped the database we need to initialize it here.
+    async def async_funcs():
+        await init_models()
+        await create_initial_courses_users()
+        await term_models()
+
+    asyncio.run(async_funcs())
+
+    os.environ["WEB2PY_MIGRATE"] = "Yes"
+    subprocess.call(
+        f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/noop.py",
+        shell=True,
+    )
+
+    init_roles(config)
+
+
 #
 #    initdb
 #
@@ -144,24 +165,11 @@ def initdb(config, list_tables, reset, fake, force):
             shell=True,
         )
         if res == 0:
-            # Because click wont natively support making commands async we can use this simple method
-            # to cll async functions.
-            # we if we successfully dropped the database we need to make it here.
-            async def foo():
-                await init_models()
-                settings.drop_tables = "Yes"
-                await create_initial_courses_users()
-
-
-            asyncio.run(foo())
-            os.environ["WEB2PY_MIGRATE"] = "Yes"
-
-            subprocess.call(
-                f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/noop.py",
-                shell=True,
-            )
-
-            init_roles(config)
+            # Because click won't natively support making commands async we can use this simple method
+            # to call async functions.
+            # Since we successfully dropped the database we need to initialize it here.
+            settings.drop_tables = "Yes"
+            _initdb(config)
             click.echo("Created new tables")
         else:
             click.echo("Failed to drop the database do you have permission?")
@@ -197,12 +205,7 @@ def initdb(config, list_tables, reset, fake, force):
     )
 
     if not reset:
-        eng = create_engine(config.dburl)
-        res = eng.execute("""select count(*) from courses""").first()[0]
-        print(f"{res=}")
-        if res == 0:
-            settings.drop_tables = "Yes"
-            asyncio.run(create_initial_courses_users())
+        _initdb(config)
 
 
 

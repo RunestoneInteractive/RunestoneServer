@@ -934,22 +934,10 @@ def _build_phase_2_core(
     print("Checking the State of Database and Migration Info")
     p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
     if p.stderr == "Did not find any relations.\n":
-        print("Populating database...")
-        # Populate the db with courses, users.
-        populate_script = dedent(
-            """\
-            from bookserver.main import app
-            from fastapi.testclient import TestClient
-            with TestClient(app) as client:
-                pass
-            """
-        )
-        xqt(
-            f'{"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
-            **run_bookserver_kwargs,
-        )
-        # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
+        # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated). TODO: rsmanage should do this eventually; it doesn't right now.
         xqt("rm -f $RUNESTONE_PATH/databases/*")
+        print("Populating database...")
+        xqt("rsmanage initdb --force", cwd=env.WEB2PY_PATH)
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
