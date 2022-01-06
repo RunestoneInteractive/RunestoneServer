@@ -127,7 +127,7 @@ def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     """
     Run unit tests.
 
-        PASSTHROUGH: These arguments are passed directly to the underlying "pytstd" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py test -- -k test_just_this" instead of "docker_tools.py test -k test_just_this" (which produces an error).
+        PASSTHROUGH: These arguments are passed directly to the underlying "pytest" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py test -- -k test_just_this" instead of "docker_tools.py test -k test_just_this" (which produces an error).
 
     """
     ensure_in_docker()

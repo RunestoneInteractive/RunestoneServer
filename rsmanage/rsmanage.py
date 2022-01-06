@@ -99,11 +99,6 @@ def cli(config, verbose, if_clean):
 
     config.verbose = verbose
 
-def init_roles(config):
-    eng = create_engine(config.dburl)
-    eng.execute("""insert into auth_group (role) values ('instructor')""")
-    eng.execute("""insert into auth_group (role) values ('editor')""")
-
 
 def _initdb(config):
     # Because click won't natively support making commands async we can use this simple method
@@ -122,7 +117,9 @@ def _initdb(config):
         shell=True,
     )
 
-    init_roles(config)
+    eng = create_engine(config.dburl)
+    eng.execute("""insert into auth_group (role) values ('instructor')""")
+    eng.execute("""insert into auth_group (role) values ('editor')""")
 
 
 #
@@ -164,14 +161,7 @@ def initdb(config, list_tables, reset, fake, force):
             f"createdb --host={config.dbhost} --username={config.dbuser} --owner={config.dbuser} {config.dbname}",
             shell=True,
         )
-        if res == 0:
-            # Because click won't natively support making commands async we can use this simple method
-            # to call async functions.
-            # Since we successfully dropped the database we need to initialize it here.
-            settings.drop_tables = "Yes"
-            _initdb(config)
-            click.echo("Created new tables")
-        else:
+        if res != 0:
             click.echo("Failed to drop the database do you have permission?")
             sys.exit(1)
 
@@ -185,10 +175,17 @@ def initdb(config, list_tables, reset, fake, force):
                 if os.path.isfile(file_path) and file_path.startswith(
                     os.path.join(DBSDIR, table_migrate_prefix)
                 ):
-                    print("removing ", file_path)
+                    print(f"removing {file_path}")
                     os.unlink(file_path)
             except Exception as e:
                 print(e)
+
+        # Because click won't natively support making commands async we can use this simple method
+        # to call async functions.
+        # Since we successfully dropped the database we need to initialize it here.
+        settings.drop_tables = "Yes"
+        _initdb(config)
+        click.echo("Created new tables")
 
     if len(os.listdir("{}/databases".format(APP_PATH))) > 1 and not fake and not force:
         click.confirm(

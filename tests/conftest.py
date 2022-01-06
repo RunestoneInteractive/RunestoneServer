@@ -136,6 +136,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
     password = "pass"
 
     os.environ["WEB2PY_CONFIG"] = "test"
+    os.environ["BOOK_SERVER_CONFIG"] = "test"
     # HINT: make sure that ``0.py`` has something like the following, that reads this environment variable:
     #
     # .. code:: Python
@@ -175,7 +176,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
         #
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt(f"{sys.executable} -m rsmanage --verbose initdb --reset --force")
+        xqt(f"rsmanage --verbose initdb --reset --force")
 
         # Copy the test book to the books directory.
         rmtree("{}/books/test_course_1".format(rs_path), ignore_errors=True)
