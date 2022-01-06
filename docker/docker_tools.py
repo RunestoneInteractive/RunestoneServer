@@ -49,6 +49,7 @@
 #
 # Standard library
 # ----------------
+import datetime
 from enum import auto, Enum
 import os
 from pathlib import Path
@@ -773,6 +774,9 @@ def _build_phase_1(
         "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
         "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
     )
+
+    # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
+    Path("/srv/build_info.txt").write_text(f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n")
 
     xqt(
         # Do any final updates.
