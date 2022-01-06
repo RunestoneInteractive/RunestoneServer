@@ -499,7 +499,7 @@ auth.messages.reset_password = """<html>
 Hello, <br>
 
 <p>If you click on <a href="%(link)s">this link</a> you will reset your password.  Sometimes schools have software that tries to sanitize the previous link and makes it useless.</p>
-
+<p>If you get a 404 try changing the http to https in the link provided.</p>
 <p>If you have any trouble with the link you can also ask your instructor
 and they can help you retrieve your username or reset your password.  If you are
 an instructor, you can  (as a last resort) contact Runestone by creating an issue
