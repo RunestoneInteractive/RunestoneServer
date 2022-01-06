@@ -9,6 +9,7 @@
 #
 # Standard library
 # ----------------
+import datetime
 import uuid
 import json
 import html
@@ -249,6 +250,11 @@ def index():
                     )
 
         auth.login_user(user)
+        # At this point the user has logged in
+        # add a jwt cookie for compatibility with bookserver
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
 
     if message_type == "ContentItemSelectionRequest":
         return _provide_assignment_list(course_id, consumer)
