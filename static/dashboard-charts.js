@@ -129,7 +129,7 @@ function DashboardCharts() {
             .style("text-decoration", "underline")
             .on("click", function (d) {
                 document.location.href =
-                    "studentreport?id=" + encodeURIComponent(nameMap[d]);
+                    "dashboard/studentreport?id=" + encodeURIComponent(nameMap[d]);
             });
     }
 
