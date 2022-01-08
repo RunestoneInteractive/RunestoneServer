@@ -65,7 +65,7 @@ def build():
             db.auth_membership.insert(user_id=auth.user.id, group_id=gid)
 
         base_course = request.vars.coursetype
-
+        bcdb = db(db.courses.course_name == base_course).select().first()
         if request.vars.startdate == "":
             request.vars.startdate = datetime.date.today()
         else:
@@ -102,6 +102,14 @@ def build():
             courselevel=courselevel,
             new_server=True if settings.running_bookserver else False,
         )
+
+        origin = getCourseOrigin(base_course)
+        if origin.value == "PreTeXt":
+            origin_attrs = getCourseAttributesDict(bcdb.id)
+            for key in origin_attrs:
+                db.course_attributes.insert(
+                    course_id=cid, attr=key, value=origin_attrs[key]
+                )
 
         if request.vars.invoice:
             db.invoice_request.insert(
