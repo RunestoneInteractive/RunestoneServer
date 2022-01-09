@@ -104,7 +104,7 @@ def build():
         )
 
         origin = getCourseOrigin(base_course)
-        if origin.value == "PreTeXt":
+        if origin and origin.value == "PreTeXt":
             origin_attrs = getCourseAttributesDict(bcdb.id)
             for key in origin_attrs:
                 db.course_attributes.insert(
