@@ -109,9 +109,9 @@
                             </div>
                             <div class="oneq" style="width: 100%; text-align: center">
                                 {{ if origin == "Runestone": }}
-                                <a href="/runestone/books/published/{{=course.base_course}}/{{=q['chapter']}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                                <a href="/ns/books/published/{{=course.course_name}}/{{=q['chapter']}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
                                 {{ else: }}
-                                <a href="/runestone/books/published/{{=course.base_course}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
+                                <a href="/ns/books/published/{{=course.course-name}}/{{=q['subchapter']}}.html#{{=q['name']}}">Question in Context</a>
                                 {{ pass }}
                             </div>
                             <hr>
