@@ -15,7 +15,7 @@ from pathlib import Path
 import sys
 import subprocess
 from time import sleep
-from typing import Optional
+from typing import Optional, Tuple
 
 # Third-party
 # -----------
@@ -66,9 +66,10 @@ def shell(venv: bool) -> None:
 )
 def start_servers(dev: bool) -> None:
     """
-    Run the web servers -- nginx, web2py, and FastAPI -- used by Runestone.
+    Run the web servers -- nginx, web2py, and FastAPI -- used by Runestone. Before starting the server, it will stop any currently-running servers.
     """
 
+    _stop_servers()
     _start_servers(dev)
     # If we exit too early, the servers don't start. Perhaps losing the stdout prematurely causes this?
     sleep(7)
@@ -113,27 +114,33 @@ def _stop_servers() -> None:
 # ``test``
 # --------
 @click.command()
-@click.option("--bks/--no-bks", default=True, help="Run/skip tests on the BookServer.")
+@click.option("--bks/--no-bks", default=False, help="Run/skip tests on the BookServer.")
 @click.option(
-    "--rc/--no-rc", default=True, help="Run/skip tests on the Runestone components."
+    "--rc/--no-rc", default=False, help="Run/skip tests on the Runestone components."
 )
 @click.option(
     "--rs/--no-rs", default=True, help="Run/skip tests on the Runestone server."
 )
-def test(bks: bool, rc: bool, rs: bool) -> None:
+# Allow users to pass args directly to the underlying ``pytest`` command -- see the `click docs <https://click.palletsprojects.com/en/8.0.x/arguments/#option-like-arguments>`_.
+@click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
+def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     """
     Run unit tests.
+
+        PASSTHROUGH: These arguments are passed directly to the underlying "pytest" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py test -- -k test_just_this" instead of "docker_tools.py test -k test_just_this" (which produces an error).
+
     """
     ensure_in_docker()
     _stop_servers()
     pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
+    passthrough_args = " ".join(passthrough)
     if bks:
-        xqt(f"{pytest} -v", cwd="/srv/BookServer")
+        xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/BookServer")
     if rc:
-        xqt(f"{pytest} -v", cwd="/srv/RunestoneComponents")
+        xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/RunestoneComponents")
     if rs:
         xqt(
-            f"{pytest} -v applications/runestone/tests -k test_preview_question",
+            f"{pytest} -v applications/runestone/tests {passthrough_args}",
             cwd=env.WEB2PY_PATH,
         )
 

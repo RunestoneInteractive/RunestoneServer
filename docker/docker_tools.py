@@ -49,6 +49,7 @@
 #
 # Standard library
 # ----------------
+import datetime
 from enum import auto, Enum
 import os
 from pathlib import Path
@@ -227,16 +228,14 @@ class BuildConfiguration(Enum):
     help="Clone all System components from repos with specified USERNAME",
 )
 @click.option(
-    "-cbks",
     "--clone-bks",
     # Default since BookServer not forked by RunestoneInteractive yet!
-    default="bnmnetp",
+    default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
 )
 @click.option(
-    "-crc",
     "--clone-rc",
     default="RunestoneInteractive",
     nargs=1,
@@ -244,7 +243,6 @@ class BuildConfiguration(Enum):
     help="Clone RunestoneComponents repo with USERNAME",
 )
 @click.option(
-    "-crs",
     "--clone-rs",
     default="RunestoneInteractive",
     nargs=1,
@@ -774,6 +772,9 @@ def _build_phase_1(
         "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
     )
 
+    # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
+    Path("/srv/build_info.txt").write_text(f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n")
+
     xqt(
         # Do any final updates.
         "eatmydata sudo apt-get -y update",
@@ -933,22 +934,10 @@ def _build_phase_2_core(
     print("Checking the State of Database and Migration Info")
     p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
     if p.stderr == "Did not find any relations.\n":
-        print("Populating database...")
-        # Populate the db with courses, users.
-        populate_script = dedent(
-            """\
-            from bookserver.main import app
-            from fastapi.testclient import TestClient
-            with TestClient(app) as client:
-                pass
-            """
-        )
-        xqt(
-            f'{"poetry run python" if bookserver_path else sys.executable} -c "{populate_script}"',
-            **run_bookserver_kwargs,
-        )
-        # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated).
+        # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated). TODO: rsmanage should do this eventually; it doesn't right now.
         xqt("rm -f $RUNESTONE_PATH/databases/*")
+        print("Populating database...")
+        xqt("rsmanage initdb --force", cwd=env.WEB2PY_PATH)
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
