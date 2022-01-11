@@ -42,7 +42,7 @@ python-dateutil = ">= 2.4.2"
 pytz = ">= 2016.6.1"
 requests = ">= 2.10.0"
 rsmanage = { path = "./rsmanage", develop = true }
-runestone = {version = "^6.0.0*", allow-prereleases = true }
+runestone = "^6.0.0"
 runestone-docker-tools = { path = "./docker", develop = true }
 stripe = "^2.0.0"
 six = ">= 1.10.0"
