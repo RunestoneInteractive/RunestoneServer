@@ -25,11 +25,7 @@ Canvas
     :Name: Runestone
     :Consumer key: Enter this from Phase 1.
     :Shared Secret: Enter this from Phase 1.
-    :Launch URL: Depends on the book/server in use:
-
-        -   Enter the value ``https://csawesome.runestone.academy/runestone/lti`` if you are using the csawesome course and its dedicated server.
-        -   Enter the value ``https://runestone.academy/runestone/lti`` for all other cases.
-
+    :Launch URL: ``https://runestone.academy/runestone/lti``
     :Domain: Leave blank.
     :Privacy: Select Public; otherwise, Runestone won’t work.
     :Custom Fields: Depends on the installation type:
