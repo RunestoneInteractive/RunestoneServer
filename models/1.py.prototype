@@ -54,12 +54,12 @@ settings.jobe_key = ''
 # is turned on, AND you will need to create an application specific password for your server.
 #settings.email_server = "smtp.gmail.com:587"
 #settings.email_sender = "youraccount@gmail.com"
-#settings.email_login = "youraccount@gmail.com:APP-SECIFIC-PW-HERE"
+#settings.email_login = "youraccount@gmail.com:APP-SPECIFIC-PW-HERE"
 
 # Google Analytics id
 settings.google_ga = 'UA-XXX-XX'
 
-# for compatibility with the new book server set a secret key value here
+# For compatibility with the new book server set a secret key value here.
 settings.secret = os.environ["JWT_SECRET"]
 
 # This must point to a valid python interpreter to use the web interface for question authoring. TODO: this is no longer necessary since we're not using uwsgi to run web2py.
@@ -78,3 +78,6 @@ else:
 
 # for LTI to work properly in a modern multi server configuration we need to set the `lti_uri`
 # settings.lti_uri = "https://runestone.academy/runestone/lti"
+
+# Define the path used to route to the BookServer.
+settings.bks = "ns"
