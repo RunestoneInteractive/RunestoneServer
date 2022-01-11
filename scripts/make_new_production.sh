@@ -20,3 +20,7 @@ docker commit $prod_id runestone/server/prod
 # push the image to our private registry
 docker image tag runestone/server/prod registry.digitalocean.com/runestone-registry/production_server:latest
 docker push registry.digitalocean.com/runestone-registry/production_server:latest
+
+docker compose -f docker-compose.yml stop
+cd production
+docker compose up -d
