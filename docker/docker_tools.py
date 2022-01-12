@@ -692,11 +692,10 @@ def _build_phase_1(
             f"rm {xc16_ver}",
             # MPLAB X install
             #
-            # No longer required: per https://unix.stackexchange.com/questions/486806/steam-missing-32-bit-libraries-libx11-6, enable 32-bit libs.
-            ## "eatmydata dpkg --add-architecture i386",
-            ## "eatmydata apt-get update",
-            # No longer required: per https://microchipdeveloper.com/install:mplabx-lin64, install prereqs. The xc16 compiler is 32-bit.
-            ## "eatmydata apt-get install -y lib32stdc++6 libc6:i386 libx11-6:i386 libxext6:i386 libstdc++6:i386 libexpat1:i386",
+            # Needed to run sim30: per https://unix.stackexchange.com/questions/486806/steam-missing-32-bit-libraries-libx11-6, enable 32-bit libs.
+            "eatmydata dpkg --add-architecture i386",
+            "eatmydata apt-get update",
+            "eatmydata apt-get install -y lib32stdc++6 libc6:i386",
             # Then download and install MPLAB X.
             f'eatmydata wget --no-verbose "https://ww1.microchip.com/downloads/en/DeviceDoc/{mplabx_ver}"',
             f'eatmydata tar -xf "{mplabx_ver}"',
