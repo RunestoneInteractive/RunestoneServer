@@ -196,17 +196,12 @@ def get_course_url(*args):
     args = tuple(x for x in args if x != "")
 
     if course:
-        # TODO: Once we are fully happy that the new bookserver is 100% we can get rid of the second
-        # clause.  For now we want the old academy server to simply ignore new_server settings
-        if course.new_server == True and settings.running_bookserver == True:
-            return URL(
-                a=settings.bks,
-                c="books",
-                f="published",
-                args=(course.course_name,) + args,
-            )
-        else:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+        return URL(
+            a=settings.bks,
+            c="books",
+            f="published",
+            args=(course.course_name,) + args,
+        )
     else:
         return URL(c="default")
 
