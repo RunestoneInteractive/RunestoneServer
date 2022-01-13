@@ -146,7 +146,7 @@ def get_sim_run_str_mdb(
         "{}"
         # Run the program. Wait a time in ms for it to finish.
         "run\n"
-        "wait 6000\n"
+        "wait 12000\n"
         # In case the wait time expired before encountering a breakpoint, halt the simulation.
         "halt\n"
         # Remove all breakpoints.
@@ -169,13 +169,13 @@ def get_verification_code():
 
 
 # Returns True if a simulation produced the correct answer.
-def check_sim_out(out_str, verification_code):
-    sl = out_str.splitlines()
+def check_sim_out(out_list, verification_code):
+    # Gracefully handle an empty list.
+    sl = out_list[-1].splitlines() if out_list else []
+    # Get lines, with fallback if they don't exist.
     second_to_last_line = sl[-2] if len(sl) >= 2 else ""
     last_line = sl[-1] if len(sl) >= 1 else ""
-    return (second_to_last_line == "Correct.") and (
-        last_line == "{}".format(verification_code)
-    )
+    return (second_to_last_line == "Correct.") and (last_line == str(verification_code))
 
 
 # Run MDB
@@ -200,9 +200,8 @@ def sim_run_mdb(
     if (
         # If the simulator hasn't been started, ...
         (not po)
-        or
         # ... or it died, (re)create it.
-        (po and po.poll() is not None)
+        or (po and po.poll() is not None)
     ):
 
         # Create a temp file for the simulation results. Since the simulator doesn't close the file after the simulation finishes, it can't be deleted. Instead, we need a single file to be used for a simulation, read, then truncated.
@@ -266,22 +265,3 @@ def sim_run_mdb(
     # Read then return the result, starting from the beginning of the file.
     _tls.simout_file.seek(0)
     return _tls.simout_file.read()
-
-
-# Celery config
-# =============
-# Provide the `Celery configuration <https://docs.celeryproject.org/en/latest/userguide/application.html#configuration>`_.
-celery_config = dict(
-    # Use `Redis with Celery <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#configuration>`_.
-    broker_url=os.environ.get("REDIS_URI", "redis://localhost:6379/0"),
-    result_backend=os.environ.get("REDIS_URI", "redis://localhost:6379/0"),
-    # Given that tasks time out in 60 seconds, expire them after that. See `result_expires <https://docs.celeryproject.org/en/latest/userguide/configuration.html#result-expires>`.
-    result_expires=120,
-    # This follows the `Redis caveats <http://docs.celeryproject.org/en/latest/getting-started/brokers/redis.html#redis-caveats>`_.
-    broker_transport_options={
-        # 1 hour.
-        "visibility_timeout": 3600,
-        "fanout_prefix": True,
-        "fanout_patterns": True,
-    },
-)
