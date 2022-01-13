@@ -631,6 +631,8 @@ def _build_phase_1(
         "libpq-dev libxml2-dev libxslt1-dev "
         "certbot python-certbot-nginx "
         "rsync wget nginx "
+        # For use with runguard -- must call ``setfacl``.
+        "acl "
         # Useful tools for debug.
         "nano less ",
     )
@@ -645,14 +647,11 @@ def _build_phase_1(
 
     if arm:
         xqt(
-            # Get the ``add-apt-repository`` tool.
-            f"{apt_install} software-properties-common",
-            # Use it to add repo for the ARM tools.
-            "eatmydata add-apt-repository -y ppa:canonical-server/server-backports",
+            # Debian Buster has a very old version of qemu. Use backports to get a more modern version that's required for the simulator to work.
+            'echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list',
+            "eatmydata apt update",
             # Then install the ARM tools (and the QEMU emulator).
-            f"{apt_install} qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
-            # Remove this repo after installing; otherwise, running ``apt update`` produces the error ``E: The repository 'http://ppa.launchpad.net/canonical-server/server-backports/ubuntu jammy Release' does not have a Release file.``.
-            "eatmydata add-apt-repository --remove ppa:canonical-server/server-backports",
+            f"{apt_install} qemu-system-arm/buster-backports gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
         )
 
     if build_config.is_dev():
