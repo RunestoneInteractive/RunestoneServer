@@ -47,14 +47,12 @@ settings.jobe_key = ''
 # ===================================================
 # Other Server Options
 # ===================================================
-
-# If you are going to use this with a live class you will probably want to configure an email to
-# handle forgotten passwords and usernames. A simple gmail account can be configured
-# to handle this task. However you will want to configure that account so that 2-factor authentication
-# is turned on, AND you will need to create an application specific password for your server.
-#settings.email_server = "smtp.gmail.com:587"
-#settings.email_sender = "youraccount@gmail.com"
-#settings.email_login = "youraccount@gmail.com:APP-SPECIFIC-PW-HERE"
+if "EMAIL_SERVER" in os.environ:
+    settings.email_server = os.environ["EMAIL_SERVER"]
+if "EMAIL_SENDER" in os.environ:
+    settings.email_server = os.environ["EMAIL_SENDER"]
+if "EMAIL_LOGIN" in os.environ:
+    settings.email_login = os.environ["EMAIL_LOGIN"]
 
 # Google Analytics id
 settings.google_ga = 'UA-XXX-XX'
