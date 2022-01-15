@@ -438,10 +438,8 @@ def index():
             book_info.update(key_words=config.key_words)
         if hasattr(config, "publisher") and config.publisher == "PTX":
             bks = request.application
-        elif settings.running_bookserver:
-            bks = settings.bks
         else:
-            bks = request.application
+            bks = settings.bks
 
         book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
         book_info["regname"] = book

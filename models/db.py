@@ -1,6 +1,7 @@
 # *************************************
 # |docname| - Core tables and functions
 # *************************************
+import jwt
 import os
 import random
 import re
@@ -648,13 +649,13 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
 
     # the secret key value should be set in 1.py as part of the
     # web2py installation.
-    secret = settings.secret
+    jwt_secret = settings.jwt_secret
 
     try:
-        encoded_jwt = jwt.encode(to_encode, secret, algorithm)
-    except:
-        logger.error(f"failed to create a JWT Token for {to_encode}")
-        if not secret:
+        encoded_jwt = jwt.encode(to_encode, jwt_secret, algorithm)
+    except Exception as e:
+        logger.error(f"Failed to create a JWT Token for {to_encode}: {e}")
+        if not jwt_secret:
             logger.error("Please set a secret key value in models/1.py")
         encoded_jwt = None
 
