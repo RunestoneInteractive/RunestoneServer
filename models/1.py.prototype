@@ -50,7 +50,7 @@ settings.jobe_key = ''
 if "EMAIL_SERVER" in os.environ:
     settings.email_server = os.environ["EMAIL_SERVER"]
 if "EMAIL_SENDER" in os.environ:
-    settings.email_server = os.environ["EMAIL_SENDER"]
+    settings.email_sender = os.environ["EMAIL_SENDER"]
 if "EMAIL_LOGIN" in os.environ:
     settings.email_login = os.environ["EMAIL_LOGIN"]
 
