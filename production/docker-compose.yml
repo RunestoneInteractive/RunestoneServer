@@ -13,6 +13,10 @@ services:
 
   runestone:
     image: registry.digitalocean.com/runestone-registry/production_server:latest
+    logging:
+      options:
+        max-size: "5g"
+        max-file: "3"
     restart: always
     volumes:
     - /home/bmiller/Runestone/books:/srv/web2py/applications/runestone/books
