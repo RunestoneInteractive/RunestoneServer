@@ -58,7 +58,7 @@ if "EMAIL_LOGIN" in os.environ:
 settings.google_ga = 'UA-XXX-XX'
 
 # For compatibility with the new book server set a secret key value here.
-settings.secret = os.environ["JWT_SECRET"]
+settings.jwt_secret = os.environ["JWT_SECRET"]
 
 # This must point to a valid python interpreter to use the web interface for question authoring. TODO: this is no longer necessary since we're not using uwsgi to run web2py.
 settings.python_interpreter = f"{os.environ['RUNESTONE_PATH']}/.venv/bin/python3"
