@@ -242,6 +242,9 @@ def index():
                     # TODO: this doesn't work, since the ``course_id``` and ``assignment_id`` aren't saved in this redirect. Therefore, these should be stored (perhaps in ``session``) then used after a user pays / donates.
                     session.lti_url_next = full_uri
                     auth.login_user(user)
+                    _create_access_token(
+                        {"sub": user.username}, expires=datetime.timedelta(days=30)
+                    )
                     redirect(URL(c="default"))
                 else:
                     # Otherwise, simply create the user.
@@ -253,7 +256,7 @@ def index():
         # At this point the user has logged in
         # add a jwt cookie for compatibility with bookserver
         _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+            {"sub": user.username}, expires=datetime.timedelta(days=30)
         )
 
     if message_type == "ContentItemSelectionRequest":
