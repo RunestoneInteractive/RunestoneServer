@@ -10,6 +10,7 @@ if [[ $PWD != */production ]]; then
 fi
 
 # pull the latest
+git pull
 docker pull registry.digitalocean.com/runestone-registry/production_server:latest
 
 docker compose stop
