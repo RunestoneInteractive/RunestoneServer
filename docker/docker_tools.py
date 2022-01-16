@@ -863,7 +863,7 @@ def _build_phase_2_core(
             {sys.executable} -c \\
             "from gluon.main import save_password
             save_password(
-                '{env.WEB2PY_ADMIN_PASSWORD}',
+                '$WEB2PY_ADMIN_PASSWORD',
                 {'443' if env.CERTBOT_EMAIL else '80'}
             )"
             """
