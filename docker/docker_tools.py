@@ -155,7 +155,6 @@ except ImportError:
 try:
     from docker_tools_misc import (
         add_commands,
-        get_bookserver_path,
         get_ready_file,
         in_docker,
         SERVER_START_FAILURE_MESSAGE,
@@ -652,6 +651,8 @@ def _build_phase_1(
             "eatmydata add-apt-repository -y ppa:canonical-server/server-backports",
             # Then install the ARM tools (and the QEMU emulator).
             f"{apt_install} qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
+            # Remove this repo after installing; otherwise, running ``apt update`` produces the error ``E: The repository 'http://ppa.launchpad.net/canonical-server/server-backports/ubuntu jammy Release' does not have a Release file.``.
+            "eatmydata add-apt-repository --remove ppa:canonical-server/server-backports",
         )
 
     if build_config.is_dev():
@@ -813,8 +814,6 @@ def _build_phase_2_core(
     exec(open(activate_this_path).read(), {"__file__": activate_this_path})
 
     w2p_parent = Path(env.WEB2PY_PATH).parent
-    bookserver_path = get_bookserver_path()
-    run_bookserver_kwargs = dict(cwd=bookserver_path) if bookserver_path else {}
 
     # Misc setup
     # ^^^^^^^^^^
