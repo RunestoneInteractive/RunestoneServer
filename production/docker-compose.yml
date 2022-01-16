@@ -29,15 +29,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGPASSWORD: ${POSTGRES_PASSWORD} # auto login from docker-tools shell
       POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DBNAME: ${POSTGRES_DBNAME}
       WEB2PY_CONFIG: ${SERVER_CONFIG}
       BOOK_SERVER_CONFIG: ${SERVER_CONFIG}
       WEB2PY_MIGRATE: 'No'
       POSTGRES_HOST: ${POSTGRES_HOST}
       REDIS_HOST: ${REDIS_HOST}
-      DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}'
-      DEV_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}_dev'
-      TEST_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}_test'
+      DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DBNAME}'
+      DEV_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DBNAME}_dev'
+      TEST_DBURL: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DBNAME}_test'
       WEB2PY_ADMIN_PASSWORD: ${WEB2PY_ADMIN_PASSWORD}
       WEB2PY_SALT: ${WEB2PY_SALT}
       JWT_SECRET: ${JWT_SECRET}
@@ -50,5 +50,3 @@ services:
       # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
       LOGIN_URL: "/runestone/default/user"
       ADS_FILE: '${ADS_FILE}'
-
-      
