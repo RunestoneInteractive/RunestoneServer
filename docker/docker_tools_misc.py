@@ -205,9 +205,9 @@ def ensure_in_docker(
         text=True,
     )
     runestone_container_name = res.stdout.strip()
-    if runestone_container_name == "":
-        click.echo("Error - Unable to find Runestone Server Container")
-        sys.exit(1)
+
+    if not runestone_container_name:
+        runestone_container_name = "production-runestone-1"
 
     # Some subtleties:
     #

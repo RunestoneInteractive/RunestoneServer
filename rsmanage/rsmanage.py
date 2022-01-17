@@ -6,8 +6,8 @@ wd = (Path(__file__).parents[1]).resolve()
 sys.path.extend([str(wd / "docker"), str(wd / "tests")])
 try:
     # Assume that a development version of the Runestone Server -- meaning the presence of `../docker/docker_tools_misc.py` -- implies Docker.
-    from docker_tools_misc import ensure_in_docker
-    ensure_in_docker()
+    from docker_tools_misc import ensure_in_docker, in_docker
+    ensure_in_docker(True)
 except ModuleNotFoundError:
     pass
 
@@ -47,8 +47,7 @@ APP_PATH = "applications/{}".format(APP)
 DBSDIR = "{}/databases".format(APP_PATH)
 BUILDDIR = "{}/build".format(APP_PATH)
 PRIVATEDIR = "{}/private".format(APP_PATH)
-CUSTOMDIR = "{}/custom_courses".format(APP_PATH)
-
+BOOKSDIR = f"{APP_PATH}/books"
 
 @click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
@@ -225,49 +224,6 @@ def migrate(config, fake):
     )
 
 
-#
-#    run
-#
-
-
-@cli.command()
-@click.option(
-    "--with-scheduler", is_flag=True, help="Star the background task scheduler too"
-)
-@pass_config
-def run(config, with_scheduler):
-    """Starts up the runestone server and optionally scheduler"""
-    os.chdir(findProjectRoot())
-    _ = subprocess.Popen(
-        f"{sys.executable} -u web2py.py --ip=0.0.0.0 --port=8000 --password='<recycle>' -d rs.pid -K runestone --nogui -X",
-        shell=True,
-    )
-
-
-#
-#    shutdown
-#
-
-
-@cli.command()
-@pass_config
-def shutdown(config):
-    """Shutdown the server and any schedulers"""
-    os.chdir(findProjectRoot())
-    with open("rs.pid", "r") as pfile:
-        pid = int(pfile.read())
-
-    click.echo("killing process {}".format(pid))
-    os.kill(pid, signal.SIGINT)
-
-    # select worker_name from scheduler_worker;
-    # iterate over results to kill all schedulers
-    eng = create_engine(config.dburl)
-    res = eng.execute("select worker_name from scheduler_worker")
-    for row in res:
-        # result will be form of hostname#pid
-        os.kill(int(row[0].split("#")[1]), signal.SIGINT)
-
 
 #
 #    addcourse
@@ -396,7 +352,7 @@ def addcourse(
 )
 @click.option("--repo", help="URL to a git repository with the book to build")
 @click.option(
-    "--skipclone", is_flag=True, help="avoid recloning when directory is already there"
+    "--skipclone", is_flag=True, default=True, help="avoid recloning when directory is already there"
 )
 @pass_config
 def build(config, course, repo, skipclone):
@@ -415,27 +371,21 @@ def build(config, course, repo, skipclone):
         )
         exit(1)
 
-    os.chdir(BUILDDIR)
+    os.chdir(BOOKSDIR)
     if not skipclone:
-        res = subprocess.call("git clone {}".format(repo), shell=True)
-        if res != 0:
-            click.echo(
-                "Cloning the repository failed, please check the URL and try again"
-            )
-            exit(1)
+        if os.path.exists(course):
+            click.echo("Book repo already cloned, skipping")
+        else:
+            res = subprocess.call("git clone {}".format(repo), shell=True)
+            if res != 0:
+                click.echo(
+                    "Cloning the repository failed, please check the URL and try again"
+                )
+                exit(1)
 
-    proj_dir = os.path.basename(repo).replace(".git", "")
-    click.echo("Switching to project dir {}".format(proj_dir))
-    os.chdir(proj_dir)
-    paver_file = os.path.join("..", "..", "custom_courses", course, "pavement.py")
-    click.echo("Checking for pavement {}".format(paver_file))
-    if os.path.exists(paver_file):
-        shutil.copy(paver_file, "pavement.py")
-    else:
-        cont = click.confirm("WARNING -- NOT USING CUSTOM PAVEMENT FILE - continue")
-        if not cont:
-            sys.exit()
-
+    #proj_dir = os.path.basename(repo).replace(".git", "")
+    click.echo("Switching to book dir {}".format(course))
+    os.chdir(course)
     try:
         if os.path.exists("pavement.py"):
             sys.path.insert(0, os.getcwd())
@@ -464,10 +414,10 @@ def build(config, course, repo, skipclone):
     if res != 0:
         click.echo("building the book failed, check the log for errors and try again")
         exit(1)
-    click.echo("Build succeedeed... Now deploying to static")
-    if dest != "../../static":
+    click.echo("Build succeedeed... Now deploying to published")
+    if dest != "./published":
         click.echo(
-            "Incorrect deployment directory.  dest should be ../../static in pavement.py"
+            "Incorrect deployment directory.  dest should be ./publisehd in pavement.py"
         )
         exit(1)
 
@@ -476,10 +426,6 @@ def build(config, course, repo, skipclone):
         click.echo("Success! Book deployed")
     else:
         click.echo("Deploy failed, check the log to see what went wrong.")
-
-    click.echo("Cleaning up")
-    os.chdir("..")
-    subprocess.call("rm -rf {}".format(proj_dir), shell=True)
 
 
 #
@@ -1079,6 +1025,9 @@ def findProjectRoot():
             return start
         prevdir = start
         start = os.path.dirname(start)
+    if in_docker():
+        return "/srv/web2py"
+
     raise IOError("You must be in a web2py application to run rsmanage")
 
 
