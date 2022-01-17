@@ -10,7 +10,6 @@ import subprocess
 
 from gluon.restricted import RestrictedError
 from stripe_form import StripeForm
-import jwt
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)

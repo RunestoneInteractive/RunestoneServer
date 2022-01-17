@@ -280,10 +280,9 @@ def shutdown(config):
 @click.option(
     "--start-date", default="2001-01-01", help="Start Date for the course in YYYY-MM-DD"
 )
-@click.option("--python3", is_flag=True, default=True, help="Use python3 style syntax")
+@click.option("--python3/--no-python3", default=True, help="Use python3 style syntax")
 @click.option(
-    "--login-required",
-    is_flag=True,
+    "--login-required/--no-login-required",
     help="Only registered users can access this course?",
 )
 @click.option("--institution", help="Your institution")
@@ -291,10 +290,9 @@ def shutdown(config):
 @click.option("--allowdownloads", help="enable download button", default="F")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
-@click.option("--newserver", default="T", help="use the new book server")
+@click.option("--newserver/--no-newserver", default=True, help="use the new book server")
 @click.option(
-    "--allow_pairs",
-    is_flag=True,
+    "--allow_pairs/--no-allow-pairs",
     default=False,
     help="enable experimental pair programming support",
 )
@@ -338,6 +336,7 @@ def addcourse(
             start_date = click.prompt("Start Date YYYY-MM-DD")
         if not institution and not use_defaults:
             institution = click.prompt("Your institution")
+        # TODO: these prompts make no sense -- only ask for them if the option was False??? Looks like a copy-and-paste error.
         if not login_required and not use_defaults:
             login_required = (
                 "T" if click.confirm("Require users to log in", default="T") else "F"
@@ -372,14 +371,14 @@ def addcourse(
            (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
                 values ('{course_name}',
                 '{basecourse}',
-                 '{python3}',
-                 '{start_date}',
-                 '{login_required}',
-                  '{institution}',
-                  '{courselevel}',
-                  '{allowdownloads}',
-                  '{allow_pairs}',
-                  '{newserver}')
+                '{python3}',
+                '{start_date}',
+                '{login_required}',
+                '{institution}',
+                '{courselevel}',
+                '{allowdownloads}',
+                '{allow_pairs}',
+                '{"T" if newserver else "F"}')
                 """
     )
 

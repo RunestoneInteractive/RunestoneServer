@@ -1,6 +1,7 @@
 # *************************************
 # |docname| - Core tables and functions
 # *************************************
+import jwt
 import os
 import random
 import re
@@ -196,17 +197,12 @@ def get_course_url(*args):
     args = tuple(x for x in args if x != "")
 
     if course:
-        # TODO: Once we are fully happy that the new bookserver is 100% we can get rid of the second
-        # clause.  For now we want the old academy server to simply ignore new_server settings
-        if course.new_server == True and settings.running_bookserver == True:
-            return URL(
-                a=settings.bks,
-                c="books",
-                f="published",
-                args=(course.course_name,) + args,
-            )
-        else:
-            return URL(c="books", f="published", args=(course.base_course,) + args)
+        return URL(
+            a=settings.bks,
+            c="books",
+            f="published",
+            args=(course.course_name,) + args,
+        )
     else:
         return URL(c="default")
 
@@ -648,13 +644,13 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
 
     # the secret key value should be set in 1.py as part of the
     # web2py installation.
-    secret = settings.secret
+    jwt_secret = settings.jwt_secret
 
     try:
-        encoded_jwt = jwt.encode(to_encode, secret, algorithm)
-    except:
-        logger.error(f"failed to create a JWT Token for {to_encode}")
-        if not secret:
+        encoded_jwt = jwt.encode(to_encode, jwt_secret, algorithm)
+    except Exception as e:
+        logger.error(f"Failed to create a JWT Token for {to_encode}: {e}")
+        if not jwt_secret:
             logger.error("Please set a secret key value in models/1.py")
         encoded_jwt = None
 

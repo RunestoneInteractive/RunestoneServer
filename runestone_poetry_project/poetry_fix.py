@@ -67,6 +67,7 @@ from typing import Any, Dict, Set
 import click
 import toml
 
+
 # Local application imports
 # -------------------------
 # None.
@@ -74,7 +75,7 @@ import toml
 #
 # Fix for ``dev-dependencies`` in subprojects
 # ===========================================
-# Given a main Poetry ``pyproject.toml``, these functions look for all subprojects included via path depdencies, creating additional subprojects namd ``projectname-dev`` in which the subproject's dev-dependencies become dependencies in the newly-created subproject. This is a workaround for Poetry's inability to install the dev dependencies for a sub project included via a path requirement. To use this, in the main project, do something like:
+# Given a main Poetry ``pyproject.toml``, these functions look for all subprojects included via path dependencies, creating additional subprojects named ``projectname-dev`` in which the subproject's dev-dependencies become dependencies in the newly-created subproject. This is a workaround for Poetry's inability to install the dev dependencies for a sub project included via a path requirement. To use this, in the main project, do something like:
 #
 # .. code-block:: TOML
 #   :linenos:
@@ -172,7 +173,7 @@ def make_dev_pyproject():
 #
 # Reason: sadly, Poetry v1.1.11 is broken in some important ways. Specifically, `path based dev-dependencies break 'install --no-dev' when the directory does not exist <https://github.com/python-poetry/poetry/issues/668>`_. In addition, if a dependency exists both in the ``[tool.poetry.dependencies]`` and the same dependency with a path in ``[tool.poetry.dev-dependencies]`` sections, this version of Poetry will place the path in the resulting ``poetry.lock`` file even when the ``--no-dev`` option is passed, causing Poetry to install the dev version or fail if it's not available.
 #
-# As a workaround, this function renames the ``[tool.poetry.dependencies]``  section, effectively hiding it, for ``--no-dev`` option, and un-hides it otherwise. It then reruns ``poetry update`` if it makes a change.
+# As a workaround, this function renames the ``[tool.poetry.dependencies]``  section, effectively hiding it, for ``--no-dev`` option, and un-hides it otherwise. It then deletes ``poetry.lock`` if it makes a change, ensuring that poetry will the run ``poetry update`` with these changed dependencies.
 def rewrite_pyproject(is_dev: bool) -> None:
     # Determine the current mode by setting ``has_dev``.
     pyproject = Path("pyproject.toml")
