@@ -31,7 +31,7 @@ user = "www-data"
 group = "www-data"
 
 # `max_requests <https://docs.gunicorn.org/en/stable/settings.html#max-requests>`_: The maximum number of requests a worker will process before restarting. This is a good way to prevent memory "leaks" in Python to keep things from eventually crashing.
-max_requests = 500
+max_requests = 5000
 
 # `max_requests_jitter <https://docs.gunicorn.org/en/stable/settings.html#max-requests-jitter>`_: The maximum jitter to add to the max_requests setting. Ensures that everything doesn't restart in lock step.
 max_requests_jitter = 30
