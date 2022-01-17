@@ -658,9 +658,6 @@ def doAssignment():
 
         chap_name = q.questions.chapter
         subchap_name = q.questions.subchapter
-        logger.error(
-            f"Probaly missing Exercises.rst for {chap_name}/{subchap_name} in {course.base_course}"
-        )
 
         info = dict(
             htmlsrc=htmlsrc,
