@@ -63,6 +63,9 @@ db.define_table(
 # This is like a trigger, but will work across all databases.
 #
 def make_progress_entries(field_dict, id_of_insert):
+    if not field_dict:
+        return
+        
     cname = (
         db(db.courses.id == field_dict["course_id"])
         .select(db.courses.course_name)
