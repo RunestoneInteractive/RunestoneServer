@@ -1,4 +1,9 @@
 import datetime
+import logging
+
+
+logger = logging.getLogger(settings.logger)
+logger.setLevel(settings.log_level)
 
 # table of all book chapters
 db.define_table(
@@ -64,8 +69,9 @@ db.define_table(
 #
 def make_progress_entries(field_dict, id_of_insert):
     if not field_dict:
+        logger.error(f"FIELD_DICT is {field_dict} Inserted ID is {id_of_insert}")
         return
-        
+
     cname = (
         db(db.courses.id == field_dict["course_id"])
         .select(db.courses.course_name)
