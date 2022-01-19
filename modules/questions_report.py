@@ -97,9 +97,8 @@ def questions_to_grades(
     # Now, make this an SQL clause. This is required, since SQL can't select any fields outside of the groupby fields, and adding additional fields causes the max not to work.
     newest_useinfo_expr = (
         "(useinfo.sid, useinfo.div_id, useinfo.timestamp) IN ("
-        +
         # Omit the closing semicolon from the previous query to use it as a subquery.
-        useinfo_max_sql[:-1]
+        + useinfo_max_sql[:-1]
         + ")"
     )
     # Use this id to limit the query.
@@ -133,9 +132,8 @@ def questions_to_grades(
             db.question_grades.on(
                 # Join a question grade to the question that was graded.
                 (db.question_grades.div_id == db.useinfo.div_id)
-                &
                 # Join to ``auth_user`` to get information about each user.
-                (db.question_grades.sid == db.useinfo.sid)
+                & (db.question_grades.sid == db.useinfo.sid)
                 & (db.question_grades.course_name == course_name)
             ),
             # Include answer and correct fields for each question type.
@@ -350,7 +348,7 @@ def _row_decode(row, question_type):
                 failed_label,
                 failed,
             ) = row.useinfo.act.split(":")
-        except:
+        except Exception:
             # Code problems without a unit test won't be parsed.
             return "", None, ts
         return row.useinfo.act, float(percent) >= 100, ts
@@ -371,7 +369,7 @@ def _row_decode(row, question_type):
         try:
             # Guess this is JSON-encoded or empty.
             answer = answer and json.loads(answer)
-        except:
+        except Exception:
             # Handle non-JSON encoded fitb answers.
             answer = answer.split(",")
         return (
@@ -414,7 +412,7 @@ def _row_decode(row, question_type):
         try:
             # Try to JSON decode this, for old data.
             answer = json.loads(answer)
-        except:
+        except Exception:
             # The newer format is to store the answer as a pure string. So, ``answer`` already has the correct value.
             pass
         return (
@@ -475,12 +473,10 @@ def query_assignment(
     query_questions = (
         # Select the desired assignment.
         (db.assignments.name == assignment_name)
-        &
         # Restrict the query to a specific course.
-        (db.assignments.course == course_id)
-        &
+        & (db.assignments.course == course_id)
         # Join to ``assignment_questions`` and from there to ``questions``.
-        (db.assignments.id == db.assignment_questions.assignment_id)
+        & (db.assignments.id == db.assignment_questions.assignment_id)
         & (db.assignment_questions.question_id == db.questions.id)
     )
 
