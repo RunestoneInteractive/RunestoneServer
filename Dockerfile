@@ -7,7 +7,7 @@
 # ************************************************************
 # To build, execute `docker-tools <docker/docker_tools.py>` ``build``.
 
-FROM python:3.9-buster
+FROM python:3.9-bullseye
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic,@bjones1"
 
@@ -39,5 +39,6 @@ RUN \
     # Run the main script.
     python3 ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}
 
+# Allow path changes by running bash -- see `docker/docker_tools.py`.
 # Run the script again, in the run phase of the process.
-CMD IN_DOCKER=2 python3 ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}
+CMD ["bash","-c","source ~/.profile; IN_DOCKER=2 python3 ${RUNESTONE_PATH}/docker/docker_tools.py ${DOCKER_BUILD_ARGS}"]
