@@ -68,32 +68,30 @@ db.define_table(
 # This is like a trigger, but will work across all databases.
 #
 def make_progress_entries(field_dict, id_of_insert):
-    if not field_dict:
-        logger.error(f"FIELD_DICT is {field_dict} Inserted ID is {id_of_insert}")
-        return
-
-    cname = (
-        db(db.courses.id == field_dict["course_id"])
-        .select(db.courses.course_name)
-        .first()["course_name"]
-    )
-    db.executesql(
-        """
-       INSERT INTO user_chapter_progress(user_id, chapter_id, status)
-           SELECT %s, chapters.chapter_label, -1
-           FROM chapters where chapters.course_id = %s;
-    """,
-        (id_of_insert, cname),
-    )
-    db.executesql(
-        """
-       INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
-           SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
-           FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
-    """,
-        (id_of_insert, cname),
-    )
-
+    try:
+        cname = (
+            db(db.courses.id == field_dict["course_id"])
+            .select(db.courses.course_name)
+            .first()["course_name"]
+        )
+        db.executesql(
+            """
+        INSERT INTO user_chapter_progress(user_id, chapter_id, status)
+            SELECT %s, chapters.chapter_label, -1
+            FROM chapters where chapters.course_id = %s;
+        """,
+            (id_of_insert, cname),
+        )
+        db.executesql(
+            """
+        INSERT INTO user_sub_chapter_progress(user_id, chapter_id,sub_chapter_id, status)
+            SELECT %s, chapters.chapter_label, sub_chapters.sub_chapter_label, -1
+            FROM chapters, sub_chapters where sub_chapters.chapter_id = chapters.id and chapters.course_id = %s;
+        """,
+            (id_of_insert, cname),
+        )
+    except Exception as e:
+        logger.error(f"Failed to make progress entries for {field_dict}")
 
 if "auth_user" in db:
     db.auth_user._after_insert.append(make_progress_entries)
