@@ -352,10 +352,10 @@ def addcourse(
 )
 @click.option("--repo", help="URL to a git repository with the book to build")
 @click.option(
-    "--skipclone", is_flag=True, default=True, help="avoid recloning when directory is already there"
+    "--clone", is_flag=True, default=False, help="clone book is already there"
 )
 @pass_config
-def build(config, course, repo, skipclone):
+def build(config, course, repo, clone):
     """Build the book for an existing course"""
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
@@ -372,7 +372,7 @@ def build(config, course, repo, skipclone):
         exit(1)
 
     os.chdir(BOOKSDIR)
-    if not skipclone:
+    if clone:
         if os.path.exists(course):
             click.echo("Book repo already cloned, skipping")
         else:
@@ -453,7 +453,7 @@ def build(config, course, repo, skipclone):
     help="ignore duplicate student errors and keep processing",
 )
 @pass_config
-def inituser(
+def adduser(
     config,
     instructor,
     fromfile,
@@ -970,7 +970,9 @@ where courses.course_name = %s order by last_name
 @cli.command()
 @pass_config
 def db(config):
-
+    """
+    Connect to the database based on the current configuration
+    """
     # replace argv[1] which is 'db' with the url to connect to
     sys.argv[1] = config.dburl
     sys.exit(clipg())
