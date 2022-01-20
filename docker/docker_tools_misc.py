@@ -88,6 +88,13 @@ def _start_servers(dev: bool) -> None:
         "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
     )
+    # Start the script to collect tickets and store them in the database.  Most useful
+    # for a production environment with several worker containers
+    xqt(
+        f"cp {env.RUNESTONE_PATH}/scripts/tickets2db.py {env.WEB2PY_PATH}",
+        f"python web2py.py -M -S runestone --run tickets2db.py &",
+        cwd=f"{env.WEB2PY_PATH}",
+    )
 
 
 # ``stop_servers``
