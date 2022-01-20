@@ -69,6 +69,9 @@ if sys.platform == "win32":
     print("Run this program in WSL/VirtualBox/VMWare/etc.")
     sys.exit()
 
+# See if we're root.
+is_root = subprocess.run(["id", "-u"], capture_output=True, text=True, check=True).stdout.strip() == "0"
+
 
 # Check to see if a program is installed; if not, install it.
 def check_install(
@@ -83,8 +86,9 @@ def check_install(
     except (subprocess.CalledProcessError, FileNotFoundError):
         print("Not found. Installing...")
         subprocess.run(
+            # Only run with ``sudo`` if we're not root.
+            ([] if is_root else ["sudo"]) +
             [
-                "sudo",
                 "apt-get",
                 "install",
                 "-y",
@@ -386,7 +390,7 @@ def _build_phase_0(
     if clone_all != "RunestoneInteractive":
         # Print Warning and provide countdown to abort script
         click.secho(
-            "Warning: Clone-all flag was initalized and will override any other clone flag specifed!",
+            "Warning: Clone-all flag was initalized and will override any other clone flag specified!",
             fg="red",
         )
         # Set each individual flag to the clone-all argument
@@ -501,21 +505,6 @@ def _build_phase_0(
         )
 
     if build_config.is_dev():
-        # OS X doesn't need this.
-        if is_linux:
-            # Poetry requires an executable named ``python`` -- make sure it's installed.
-            check_install("python --version", "python-is-python3")
-            # Poetry also needs ensurepip installed. Simply running ``python3 -m ensurepip`` always fails on Ubuntu, since Ubuntu returns an exit code of 1 and text about "ensurepip is disabled in Debian/Ubuntu for the system python...".
-            check_install('python3 -c "import ensurepip"', "python3-venv")
-        print("Checking for poetry...")
-        try:
-            subprocess.run(["poetry", "--version"], check=True)
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            print("Installing poetry...")
-            xqt(
-                "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -"
-            )
-        # Clone supporting repos if they don't exist.
         with pushd(".."):
             bks = Path("BookServer")
             if not bks.exists():
@@ -591,7 +580,19 @@ def _build_phase_1(
     tex: bool,
 ):
     assert in_docker()
+
+    # Set up apt correctly; include Postgres repo.
+    xqt(
+        "apt-get update",
+        "apt-get install -y --no-install-recommends eatmydata lsb-release",
+        """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""",
+        "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -",
+        "apt-get update",
+    )
     apt_install = "eatmydata apt-get install -y --no-install-recommends"
+    # This uses apt; run it after apt is set up.
+    check_install_curl()
+
     # Install required packages
     # ^^^^^^^^^^^^^^^^^^^^^^^^^
     if build_config.is_dev():
@@ -608,14 +609,11 @@ def _build_phase_1(
         else:
             browser = "chromium"
         # Add node.js per the `instructions <https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions>`_.
-        xqt("curl -fsSL https://deb.nodesource.com/setup_current.x | bash -")
-    xqt(
-        "apt-get update",
-        "apt-get install -y --no-install-recommends eatmydata lsb-release",
-        """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""",
-        "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -",
-        "apt-get update",
-    )
+        xqt(
+            "curl -fsSL https://deb.nodesource.com/setup_current.x | bash -",
+            "apt update",
+            f"{apt_install} nodejs",
+        )
     xqt(
         # All one big command! Therefore, there are no commas after each line, but instead a trailing space.
         f"{apt_install} gcc unzip "
@@ -629,8 +627,10 @@ def _build_phase_1(
         "postgresql-client-13 "
         # TODO: should this only be installed in the dev image?
         "libpq-dev libxml2-dev libxslt1-dev "
-        "certbot python-certbot-nginx "
+        "certbot python3-certbot-nginx "
         "rsync wget nginx "
+        # For use with runguard -- must call ``setfacl``.
+        "acl "
         # Useful tools for debug.
         "nano less ",
     )
@@ -645,22 +645,14 @@ def _build_phase_1(
 
     if arm:
         xqt(
-            # Get the ``add-apt-repository`` tool.
-            f"{apt_install} software-properties-common",
-            # Use it to add repo for the ARM tools.
-            "eatmydata add-apt-repository -y ppa:canonical-server/server-backports",
-            # Then install the ARM tools (and the QEMU emulator).
+            # Install the ARM tools (and the QEMU emulator).
             f"{apt_install} qemu-system-arm gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential",
-            # Remove this repo after installing; otherwise, running ``apt update`` produces the error ``E: The repository 'http://ppa.launchpad.net/canonical-server/server-backports/ubuntu jammy Release' does not have a Release file.``.
-            "eatmydata add-apt-repository --remove ppa:canonical-server/server-backports",
         )
 
     if build_config.is_dev():
         xqt(
             # Tests use `html5validator <https://github.com/svenkreiss/html5validator>`_, which requires the JDK.
             f"{apt_install} openjdk-11-jre-headless git xvfb x11-utils {browser} lsof emacs-nox",
-            # Just installing ``nodejs`` fails with messages about unmet dependencies. Adding ``yarn`` (which is never used) makes it happy. Solution from `SO <https://stackoverflow.com/a/67329755/16038919>`__.
-            f"{apt_install} nodejs yarn",
             # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
             "wget --no-verbose https://chromedriver.storage.googleapis.com/96.0.4664.18/chromedriver_linux64.zip",
             "unzip chromedriver_linux64.zip",
@@ -701,11 +693,11 @@ def _build_phase_1(
             f'eatmydata wget --no-verbose "https://ww1.microchip.com/downloads/en/DeviceDoc/{mplabx_ver}"',
             f'eatmydata tar -xf "{mplabx_ver}"',
             f'rm "{mplabx_ver}"',
-            # Install just the IDE and the 16-bit tools. This program check to see if this is being run by root by looking at the ``USER`` env var, which Docker doesn't set. Fake it out.
+            # Install just the IDE and the 16-bit tools. This program checks to see if this is being run by root by looking at the ``USER`` env var, which Docker doesn't set. Fake it out.
             f'USER=root eatmydata "./{mplabx_sh}" -- --mode unattended --ipe 0 --8bitmcu 0 --32bitmcu 0 --othermcu 0',
             f'rm "{mplabx_sh}"',
         )
-        # Add the path to the xc16 tools.
+        # Add the path to the xc16 tools. Note that ``/root/.bashrc`` doesn't get sourced when Docker starts up; therefore, the `../Dockerfile` invokes bash when running the startup script.
         with open("/root/.bashrc", "a", encoding="utf-8") as f:
             f.write("\nexport PATH=$PATH:/opt/microchip/xc16/v1.70/bin\n")
         # Just symlink mdb, since that's the only tool we use.
@@ -882,8 +874,7 @@ def _build_phase_2_core(
     # Do dev installs
     # ^^^^^^^^^^^^^^^
     rsc = Path(f"{w2p_parent}/RunestoneComponents")
-    # Use the same `volume detection strategy`_ as the BookServer.
-    if (rsc / "runestone").is_dir():
+    if build_config.is_dev():
         chdir(rsc)
         # Build the webpack after the Runestone Components are installed.
         xqt("npm install", "npm run build")
