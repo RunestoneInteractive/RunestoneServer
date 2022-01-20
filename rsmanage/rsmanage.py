@@ -837,6 +837,38 @@ def courseinfo(config, name):
 
 
 @cli.command()
+@click.option("--student", default=None, help="Name of the student")
+@pass_config
+def studentinfo(config, student):
+    """
+    display PII and all courses enrolled for a username
+    """
+    eng = create_engine(config.dburl)
+
+    if not student:
+        student = click.prompt("Student Id: ")
+
+    res = eng.execute(f"""
+        select auth_user.id, first_name, last_name, email, courses.course_name, courses.id 
+        from auth_user join user_courses ON user_courses.user_id = auth_user.id 
+        join courses on courses.id = user_courses.course_id where username = '{student}'"""
+    )
+    print(f"res = {res}")
+    # fetchone fetches the first row without closing the cursor.
+    first = res.fetchone()
+    print(student)
+    print("id\tFirst\tLast\temail")
+    print("\t".join(str(x) for x in first[:4]))
+    print("")
+    print("         Course        cid")
+    print("--------------------------")
+    print(f"{first[-2].rjust(15)} {str(first[-1]).rjust(10)}")
+    if res:
+       for row in res:
+           print(f"{row[-2].rjust(15)} {str(row[-1]).rjust(10)}")
+
+
+@cli.command()
 @click.option("--course", default=None, help="Name of the course")
 @click.option("--attr", default=None, help="Attribute to add")
 @click.option("--value", default=None, help="Attribute Value")
