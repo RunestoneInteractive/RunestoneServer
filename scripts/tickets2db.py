@@ -54,6 +54,6 @@ while 1:
         )
         sess.execute(newtb)
         sess.commit()
-        #os.unlink(filename)
+        os.unlink(filename)
 
     time.sleep(SLEEP_MINUTES * 60)
