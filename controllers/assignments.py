@@ -374,15 +374,24 @@ def record_grade():
     sids = request.vars.getlist("sid") or request.vars.getlist("sid[]")
     # Gather assignment id for future use by do_calculate_totals function
     assignment_id = request.vars.assignmentid
-
-    assignment = (
-        db(
-            (db.assignments.id == assignment_id)
-            & (db.assignments.course == auth.user.course_id)
+    if assignment_id.isnumeric():
+        assignment = (
+            db(
+                (db.assignments.id == assignment_id)
+                & (db.assignments.course == auth.user.course_id)
+            )
+            .select()
+            .first()
         )
-        .select()
-        .first()
-    )
+    else:
+        assignment = (
+            db(
+                (db.assignments.name == assignment_id)
+                & (db.assignments.course == auth.user.course_id)
+            )
+            .select()
+            .first()
+        )
 
     student_rownum = None
 
