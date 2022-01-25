@@ -253,8 +253,8 @@ def make_pairs():
     for i in range(min(len(correct_list), len(incorrect_list))):
         p1 = incorrect_list.pop()
         p2 = correct_list.pop()
-        r.hset("partnerdb", p1, p2)
-        r.hset("partnerdb", p2, p1)
+        r.hset(f"partnerdb_{auth.user.course_name}", p1, p2)
+        r.hset(f"partnerdb_{auth.user.course_name}", p2, p1)
 
     remaining = correct_list or incorrect_list
     if remaining:
@@ -263,8 +263,8 @@ def make_pairs():
             try:
                 p1 = remaining.pop()
                 p2 = remaining.pop()
-                r.hset("partnerdb", p1, p2)
-                r.hset("partnerdb", p2, p1)
+                r.hset(f"partnerdb_{auth.user.course_name}", p1, p2)
+                r.hset(f"partnerdb_{auth.user.course_name}", p2, p1)
             except IndexError:
                 done = True
 
@@ -280,7 +280,7 @@ def _broadcast_peer_answers(correct, incorrect):
     df = pd.concat([correct, incorrect])
     answers = dict(zip(df.sid, df.answer))
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    for p1, p2 in r.hgetall("partnerdb").items():
+    for p1, p2 in r.hgetall(f"partnerdb_{auth.user.course_name}").items():
         p1 = p1.decode("utf8")
         p2 = p2.decode("utf8")
         ans = answers[p2]
@@ -291,6 +291,7 @@ def _broadcast_peer_answers(correct, incorrect):
             "message": "enableChat",
             "broadcast": False,
             "answer": ans,
+            "course_name": auth.user.course_name,
         }
         r.publish("peermessages", json.dumps(mess))
 
@@ -298,7 +299,7 @@ def _broadcast_peer_answers(correct, incorrect):
 def clear_pairs():
     response.headers["content-type"] = "application/json"
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    r.delete("partnerdb")
+    r.delete(f"partnerdb_{auth.user.course_name}")
     return json.dumps("success")
 
 
@@ -315,7 +316,7 @@ def log_peer_rating():
     response.headers["content-type"] = "application/json"
     current_question = request.vars.div_id
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    peer_sid = r.hget("partnerdb", auth.user.username)
+    peer_sid = r.hget(f"partnerdb_{auth.user.course_name}", auth.user.username)
     if peer_sid:
         peer_sid = peer_sid.decode("utf8")
         db.useinfo.insert(

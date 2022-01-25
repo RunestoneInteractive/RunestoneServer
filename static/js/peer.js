@@ -16,6 +16,12 @@ function connect(event) {
         var message = document.createElement('li')
         message.classList.add("incoming-mess")
         let mess = JSON.parse(event.data);
+        // This is an easy to code solution for broadcasting that could go out to 
+        // multiple courses.  It would be better to catch that on the server side
+        // but that will take a bit more work and research
+        if (mess.course_name != eBookConfig.course) {
+            return;
+        }
         if (mess.type === "text") {
             if (!(mess.time in messageTrail)) {
                 var content = document.createTextNode(`${mess.from}: ${mess.message}`)
@@ -149,8 +155,9 @@ function warnAndStopVote(event) {
         type: "control",
         sender: `${user}`,
         message: "countDownAndStop",
-        broadcast: true
-    }
+        broadcast: true,
+        course_name: eBookConfig.course
+    };
 
     publishMessage(mess);
     if (event.srcElement.id == "vote1") {
@@ -193,8 +200,9 @@ function startVote2(event) {
         type: "control",
         sender: `${user}`,
         message: "enableVote",
-        broadcast: true
-    }
+        broadcast: true,
+        course_name: eBookConfig.course
+    };
     //ws.send(JSON.stringify(mess));
     publishMessage(mess)
 
@@ -226,8 +234,9 @@ function enableNext() {
         type: "control",
         sender: `${user}`,
         message: "enableNext",
-        broadcast: true
-    }
+        broadcast: true,
+        course_name: eBookConfig.course
+    };
     publishMessage(mess);
     return true;
 }
