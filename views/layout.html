@@ -199,7 +199,9 @@
                         <li class="divider-vertical"></li>
                         {{ if request.controller == "default" and settings.academy_mode:}}
                             <li><a href="/{{=request.application}}/books/index">Our Library</a> </li>
-                        {{ elif auth.user: }}
+                            <li><a href="https://blog.runestone.academy">Runestone News</a> </li>
+                        {{ pass }}
+                        {{ if auth.user: }}
                             <li><a href="{{=get_course_url('index.html')}}">Back to {{=auth.user.course_name}}</a></li>
                         {{ pass }}
                         <li class="divider-vertical"></li>
@@ -213,7 +215,7 @@
                         {{pass}}
                         <li class="divider-vertical"></li>
                     </ul>
-                    {{if (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
+                    {{if not auth.user and (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
                         <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
                     {{pass}}
                 </div>
