@@ -136,7 +136,7 @@ def calculate_totals():
     requires_login=True,
 )
 def get_summary():
-    assignment_name = request.vars.assignment
+    assignment_name = request.vars.assignment #recieves json sent by ajax call 
     assignment = (
         db(
             (db.assignments.name == assignment_name)
@@ -145,21 +145,26 @@ def get_summary():
         .select()
         .first()
     )
+
     res = db.executesql(
-        """
-    select chapter, name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
+        """select chapter, name, min(question_type) question_type, min(score), max(score), to_char(avg(score), '00.999') as  mean, count(score) 
+from assignment_questions join questions on question_id = questions.id join question_grades on name =  div_id 
 where assignment_id = %s and course_name = %s
-group by chapter, name
-    """,
+group by chapter, name""",
         (assignment.id, auth.user.course_name),
         as_dict=True,
     )
 
+    """ List of question types that are not supported by the exercisemetrics page """
+
+    unsupported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
+
     for row in res:
-        if row["count"] > 0:
-            row[
-                "name"
-            ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
+        if row["question_type"] not in unsupported_question_types: 
+            if row["count"] > 0:
+                row[
+                    "name"
+                ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
 
     return json.dumps(res)
 
