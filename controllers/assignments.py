@@ -136,7 +136,7 @@ def calculate_totals():
     requires_login=True,
 )
 def get_summary():
-    assignment_name = request.vars.assignment #recieves json sent by ajax call 
+    assignment_name = request.vars.assignment  # recieves json sent by ajax call
     assignment = (
         db(
             (db.assignments.name == assignment_name)
@@ -157,15 +157,19 @@ group by chapter, name""",
 
     """ List of question types that are not supported by the exercisemetrics page """
 
-    unsupported_question_types = ['activecode', 'quizly', 'khanex', 'poll', 'shortanswer']
+    unsupported_question_types = [
+        "activecode",
+        "quizly",
+        "khanex",
+        "poll",
+        "shortanswer",
+    ]
 
     for row in res:
-        if row["question_type"] not in unsupported_question_types: 
-            if row["count"] > 0:
-                row[
-                    "name"
-                ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
-
+        # do not construct links for unsupported questions
+        if row["question_type"] not in unsupported_question_types and row["count"] > 0:
+            row["name"] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
+        
     return json.dumps(res)
 
 
@@ -347,10 +351,8 @@ def record_grade():
         return json.dumps(
             {"success": False, "message": "Must provide either grade or comment."}
         )
-    if ("assignmentid" not in request.vars):
-        return json.dumps(
-            {"success": False, "message": "Must provide assignment id."}
-        )
+    if "assignmentid" not in request.vars:
+        return json.dumps({"success": False, "message": "Must provide assignment id."})
 
     # Create a dict of updates for this grade.
     updates = dict(course_name=auth.user.course_name)
@@ -414,7 +416,15 @@ def record_grade():
                 div_id=div_id,
                 **updates,
             )
-            do_calculate_totals(assignment, auth.user.course_id, auth.user.course_name,sid,student_rownum,db,settings)
+            do_calculate_totals(
+                assignment,
+                auth.user.course_id,
+                auth.user.course_name,
+                sid,
+                student_rownum,
+                db,
+                settings,
+            )
 
     except IntegrityError:
         logger.error(

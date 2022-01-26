@@ -369,6 +369,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 sid: studentId,
                 grade: grade,
                 comment: comment,
+                assignmentid: $(document.getElementById("chaporassignselector")).val(),
             },
             success: function (data) {
                 jQuery(".grade", element).html(data.grade);
@@ -445,6 +446,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         acid: acid,
                         sid: studentId,
                         grade: this.value,
+                        assignmentid: $(document.getElementById("chaporassignselector")).val()
                     },
                     success: function (data) {
                         inp.style.backgroundColor = "#ddffdd";
@@ -464,6 +466,9 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         acid: acid,
                         sid: studentId,
                         comment: this.value,
+                        assignmentid: $(
+                            document.getElementById("chaporassignselector")
+                        ).val(),
                     },
                     success: function (data) {
                         inp.style.backgroundColor = "#ddffdd";
