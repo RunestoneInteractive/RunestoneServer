@@ -20,6 +20,7 @@ function connect(event) {
         // multiple courses.  It would be better to catch that on the server side
         // but that will take a bit more work and research
         if (mess.course_name != eBookConfig.course) {
+            console.log(`ignoring message to ${mess.course_name}`)
             return;
         }
         if (mess.type === "text") {
