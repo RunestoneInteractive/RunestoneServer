@@ -357,9 +357,6 @@ def test_pricing(runestone_db_tools, runestone_env):
     db = runestone_db_tools.db
 
     # These course names rely on defaults in the ``runestone_db_tools`` fixture.
-    import pdb
-
-    pdb.set_trace()
     base_course = runestone_db_tools.create_course("test_course_1")
     child_course_1 = runestone_db_tools.create_course()
     # It would be nice to use the ``test_user`` fixture, but we're not using the web interface here -- it's direct database access instead. This is an alternative.
