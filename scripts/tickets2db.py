@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-import time
-import stat
 import datetime
+import hashlib
+import os
 import pickle
+import stat
+import sys
+import time
+
+from bs4 import BeautifulSoup
 from sqlalchemy import create_engine, Table, MetaData
 from sqlalchemy.orm.session import sessionmaker
 
@@ -45,12 +48,27 @@ while 1:
         ticket_id = file
         traceback_str = ticket_data['traceback']
         emess = ticket_data['output']
+        soup = BeautifulSoup(ticket_data['snapshot']['request'].text)
+        path = ""
+        query_string = ""
+        for row in soup.find_all('tr'):
+            if  row.get_text().startswith('raw_uri'):
+                path = row.get_text()
+            if row.get_text().startswith('query_string'):
+                query_string = row.get_text()
+        if path:
+            path = path.split(":")[-1]
+        if query_string:
+            query_string = query_string.split(":")[-1]
 
         newtb = traceback.insert().values(
             traceback=traceback_str,
             timestamp=datetime.datetime.utcnow(),
             err_message=ticket_data['output'],
             hostname='web2py',
+            path=path,
+            query_string=query_string,
+            hash=hashlib.md5(traceback_str.encode("utf8")).hexdigest()
         )
         sess.execute(newtb)
         sess.commit()
