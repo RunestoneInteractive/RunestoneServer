@@ -168,8 +168,10 @@ group by chapter, name""",
     for row in res:
         # do not construct links for unsupported questions
         if row["question_type"] not in unsupported_question_types and row["count"] > 0:
-            row["name"] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
-        
+            row[
+                "name"
+            ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
+
     return json.dumps(res)
 
 
