@@ -361,7 +361,24 @@ def test_pricing(runestone_db_tools, runestone_env):
     child_course_1 = runestone_db_tools.create_course()
     # It would be nice to use the ``test_user`` fixture, but we're not using the web interface here -- it's direct database access instead. This is an alternative.
     runestone_env["auth"].get_or_create_user(
-        dict(username="test_user_1", course_id=child_course_1.course_id)
+        dict(
+            username="test_user_1",
+            course_id=child_course_1.course_id,
+            course_name=child_course_1.course_name,
+            # Provide a non-null value for these required fields.
+            first_name="",
+            last_name="",
+            email="",
+            password="",
+            created_on="01-01-2000",
+            modified_on="01-01-2000",
+            registration_key="",
+            reset_password_key="",
+            registration_id="",
+            active="T",
+            donated="F",
+            accept_tcp="T",
+        )
     )
 
     # First, test on a base course.
@@ -514,49 +531,6 @@ def test_payments(runestone_controller, runestone_db_tools, test_user):
         .first()
     )
     assert payment.charge_id
-
-
-# Test the LP endpoint.
-@pytest.mark.skipif(six.PY2, reason="Requires Python 3.")
-def test_lp(test_user_1):
-    test_user_1.login()
-
-    # Check that omitting parameters produces an error.
-    ret = test_user_1.hsblog(event="lp_build")
-    assert "No feedback provided" in ret["errors"][0]
-
-    # Check that database entries are validated.
-    ret = test_user_1.hsblog(
-        event="lp_build",
-        # This div_id is too long. Everything else is OK.
-        div_id="X" * 1000,
-        course=test_user_1.course.course_name,
-        builder="unsafe-python",
-        answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
-    )
-    assert "div_id" in ret["errors"][0]
-
-    # Check a passing case
-    def assert_passing():
-        ret = test_user_1.hsblog(
-            event="lp_build",
-            div_id="test_lp_1",
-            course=test_user_1.course.course_name,
-            builder="unsafe-python",
-            answer=json.dumps({"code_snippets": ["def one(): return 1"]}),
-        )
-        assert "errors" not in ret
-        assert ret["correct"] == 100
-
-    assert_passing()
-
-    # Send lots of jobs to test out the queue. Skip this for now -- not all the useinfo entries get deleted, which causes ``test_getNumOnline`` to fail.
-    if False:
-        threads = [Thread(target=assert_passing) for x in range(5)]
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
 
 
 # Test dynamic book routing.

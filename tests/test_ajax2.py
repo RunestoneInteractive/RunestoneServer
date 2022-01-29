@@ -37,3 +37,14 @@ def test_NonDonor(test_client, test_user_1):
     test_user_1.login()
     res = ajaxCall(test_client, "did_donate")
     assert not res["donate"]
+
+
+def ajaxCall(client, funcName, **kwargs):
+    """
+    Call the funcName using the client
+    Returns json.loads(funcName())
+    """
+    client.post("ajax/" + funcName, data=kwargs)
+    print(client.text)
+    if client.text != "None":
+        return json.loads(client.text)
