@@ -22,6 +22,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 cryptography = "^3.0.0"
 altair = "^4.0.0"
+beautifulsoup4 = "^4.0.0"
 bleach = "> 3.1.1"
 bookserver = "^1.0.0"
 celery = { extras = ["redis,gevent"], version = "^5.0.0" }
@@ -55,7 +56,6 @@ pyjwt = "== 2.0.1"
 # Development dependencies
 # ========================
 [tool.poetry.dev-dependencies]
-beautifulsoup4 = "^4.0.0"
 black = "^21.0b"
 bookserver = { path = "../BookServer", develop = true }
 bookserver-dev = { path = "../bookserver-dev", develop = true }

@@ -169,7 +169,7 @@ pytz = ">=2015.7"
 name = "beautifulsoup4"
 version = "4.10.0"
 description = "Screen-scraping library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">3.0.0"
 
@@ -1766,7 +1766,7 @@ python-versions = "*"
 name = "soupsieve"
 version = "2.3.1"
 description = "A modern CSS selector implementation for Beautiful Soup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -2195,7 +2195,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "f8c5722aedbf345dd3edee5b92fb8fe5f2dee4f8376d7c3d969e94af07d992e7"
+content-hash = "e1fc8fb9d5b9bee2630e9e3e380831acd617c3a89ddb8e3b6756fd63989dcd73"
 
 [metadata.files]
 aiofiles = [
