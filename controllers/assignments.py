@@ -418,16 +418,19 @@ def record_grade():
                 div_id=div_id,
                 **updates,
             )
-            do_calculate_totals(
-                assignment,
-                auth.user.course_id,
-                auth.user.course_name,
-                sid,
-                student_rownum,
-                db,
-                settings,
-            )
-
+            if assignment:
+                try:
+                    do_calculate_totals(
+                        assignment,
+                        auth.user.course_id,
+                        auth.user.course_name,
+                        sid,
+                        student_rownum,
+                        db,
+                        settings,
+                    )
+                except Exception as e:
+                    logger.error(f"Calculate totals failed for reason {e} - {auth.user.course_name} {sid} {student_rownum} {assignment}")
     except IntegrityError:
         logger.error(
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
