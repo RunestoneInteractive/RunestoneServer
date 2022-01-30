@@ -1,5 +1,5 @@
-Runestone Interactive Server and API
-====================================
+Runestone Academy Server and API
+================================
 
 .. image:: https://github.com/RunestoneInteractive/RunestoneServer/workflows/Python%20application/badge.svg
 
@@ -87,9 +87,9 @@ donation using any of the Support links at the top of this page.
 More Documentation
 ------------------
 
-I have begun a project to document the `Runestone Interactive <https://runestone.academy/runestone/static/authorguide/index.html>`_ tools
+I have begun a project to document the `Runestone Academy <https://runestone.academy/ns/books/published/authorguide/index.html>`_ tools
 
-* All of the Runestone Interactive extensions to sphinx:
+* All of the Runestone Academy extensions to sphinx:
 
   * Activecode -- Interactive Python in the browser
   * Codelens  -- Step through code examples and see variables change
@@ -99,7 +99,7 @@ I have begun a project to document the `Runestone Interactive <https://runestone
   * parsonsproblem  -- drag and drop blocks of code to complete a simple programming assignment
   * datafile -- create datafiles for activecode
 
-* How to write your own extension for Runestone Interactive
+* How to write your own extension for Runestone Academy
 
 Enable Bug Reporting on Github
 ------------------------------

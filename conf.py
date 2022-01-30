@@ -47,7 +47,7 @@ import CodeChat.CodeToRest
 # `copyright <http://sphinx-doc.org/config.html#confval-copyright>`_:
 # General information about the project. **Change this** for your project.
 project = "Runestone Server"
-copyright = "2020, Runestone Interactive LLC"
+copyright = "2020, Runestone Academy Ltd"
 
 # The version info for the project you're documenting, acts as replacement for
 # ``|version|`` and ``|release|``, also used in various other places throughout

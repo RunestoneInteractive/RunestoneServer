@@ -185,10 +185,10 @@
                                 <i class="glyphicon glyphicon-question-sign" style="opacity:0.9;"></i>
                                 </a>
                                 <ul class="dropdown-menu user-menu">
-                                    <li><a href='https://runestoneinteractive.org/pages/faq.html'>FAQ</a></li>
+                                    <li><a href='https://blog.runestone.academy/pages/faq.html'>FAQ</a></li>
                                     <li><a href='https://runestone.academy/ns/books/published/instructorguide/index.html'>Instructors Guide</a></li>
                                     <li class="divider"></li>
-                                    <li><a href='https://runestoneinteractive.org/pages/about.html'>About Runestone</a></li>
+                                    <li><a href='https://blog.runestone.academy/pages/about.html'>About Runestone</a></li>
                                     <li><a href='/{{=request.application}}/default/reportabug'>Report A Problem</a></li>
                                 </ul>
                             </li>
@@ -216,7 +216,7 @@
                         <li class="divider-vertical"></li>
                     </ul>
                     {{if not auth.user and (request.args(0) == 'login' or request.controller == 'books') and settings.academy_mode:}}
-                        <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span>Sign Up</a>
+                        <a href="/{{=request.application}}/default/user/register" class="btn btn-primary navbar-btn" ><span class="glyphicon glyphicon-user"></span> Sign Up</a>
                     {{pass}}
                 </div>
             </div>
@@ -241,7 +241,7 @@
                     {{ pass }}
                 </p>
                 <p>
-                    &copy; Copyright {{=request.now.year}} Runestone Interactive LLC
+                    &copy; Copyright {{=request.now.year}} Runestone Academy Ltd
                     {{ if settings.academy_mode: }}
                         &emsp; ● <a href="/{{=request.application}}/default/privacy">Privacy Policy</a> &emsp; ●  <a href="/{{=request.application}}/default/terms">Terms of Service</a>
                     {{ pass }}
