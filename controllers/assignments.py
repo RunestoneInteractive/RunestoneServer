@@ -430,7 +430,9 @@ def record_grade():
                         settings,
                     )
                 except Exception as e:
-                    logger.error(f"Calculate totals failed for reason {e} - {auth.user.course_name} {sid} {student_rownum} {assignment}")
+                    logger.error(
+                        f"Calculate totals failed for reason {e} - {auth.user.course_name} {sid} {student_rownum} {assignment}"
+                    )
     except IntegrityError:
         logger.error(
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
@@ -588,7 +590,7 @@ def doAssignment():
     if "access_token" not in request.cookies:
         # this means the user is logged in to web2py but not fastapi - this is not good
         # as the javascript in the questions assumes the new server and a token.
-        return redirect(URL("default","accessIssue"))
+        return redirect(URL("default", "accessIssue"))
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id

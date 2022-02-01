@@ -200,7 +200,7 @@ def _route_book(is_published=True):
     ):
         # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
         # Warning: this is slow. Configure a production server to serve this statically.
-        return response.stream(book_path, 2 ** 20, request=request)
+        return response.stream(book_path, 2**20, request=request)
 
     # It's HTML -- use the file as a template.
     #
