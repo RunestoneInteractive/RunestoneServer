@@ -56,7 +56,7 @@ pyjwt = "== 2.0.1"
 # Development dependencies
 # ========================
 [tool.poetry.dev-dependencies]
-black = "^21.0b"
+black = "~= 22.0"
 bookserver = { path = "../BookServer", develop = true }
 bookserver-dev = { path = "../bookserver-dev", develop = true }
 CodeChat = ">= 1.8.6"
