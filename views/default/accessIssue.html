@@ -1,0 +1,26 @@
+{{user_navs = True}}
+{{extend 'layout.html'}}
+
+    {{ if settings.academy_mode: }}
+    <script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
+    {{ pass }}
+{{block statusbar}}
+{{end}}
+
+<div class="container">
+    <div class="col-md-12">
+        <h1>Access Denied</h1>
+        <p>
+            Sorry, you have arrived at this page because you are lacking an important access token that is needed to save your work.
+            If you have blocked cookies from Runestone Academy then that is the problem.  Please enable cookies for this site.
+            Otherwise it may simply be a case of you needing to log out and log back in again.
+        </p>
+        <p>
+            please click the button <a href="/runestone/default/user/logout" class="btn btn-primary">Log Out</a> to log out.  Then log back in again.
+        </p>
+        <p>
+            If the problem persists you can try clearing your browser history and / or report the problem
+            on <a href="https://github.com/RunestoneInteractive/RunestoneServer/issues">our Github Issue Tracker</a>
+        </p>
+    </div>
+</div>        

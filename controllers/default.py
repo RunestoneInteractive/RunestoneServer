@@ -360,6 +360,10 @@ def bios():
 
 @auth.requires_login()
 def courses():
+    if request.vars.requested_course:
+        # We have a mismatch between the requested course and the current course
+        # in the database
+        response.flash = f"You requested {request.vars.requested_course} but are logged in to {request.vars.current_course}"
     res = db(db.user_courses.user_id == auth.user.id).select(
         db.user_courses.course_id, orderby=~db.user_courses.id
     )
@@ -604,6 +608,10 @@ def donate():
     else:
         amt = None
     return dict(donate=amt)
+
+
+def accessIssue():
+    return dict(access={})
 
 
 @auth.requires_login()

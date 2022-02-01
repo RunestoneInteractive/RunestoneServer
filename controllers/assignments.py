@@ -585,6 +585,11 @@ def update_submit():
 @auth.requires_login()
 def doAssignment():
 
+    if "access_token" not in request.cookies:
+        # this means the user is logged in to web2py but not fastapi - this is not good
+        # as the javascript in the questions assumes the new server and a token.
+        return redirect(URL("default","accessIssue"))
+
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
     if not assignment_id or assignment_id.isdigit() == False:  # noqa: E712
@@ -1024,6 +1029,10 @@ def practiceNotStartedYet():
 # Gets invoked when the student requests practicing topics.
 @auth.requires_login()
 def practice():
+
+    if "access_token" not in request.cookies:
+        return redirect(URL("default", "accessIssue"))
+
     if not session.timezoneoffset:
         session.timezoneoffset = 0
 

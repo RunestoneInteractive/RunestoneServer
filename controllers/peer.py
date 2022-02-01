@@ -215,6 +215,9 @@ def student():
 
 @auth.requires_login()
 def peer_question():
+    if "access_token" not in request.cookies:
+        return redirect(URL("default", "accessIssue"))
+
     assignment_id = request.vars.assignment_id
 
     current_question = _get_current_question(assignment_id, False)
