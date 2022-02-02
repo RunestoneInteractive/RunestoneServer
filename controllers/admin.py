@@ -2099,7 +2099,9 @@ def add__or_update_assignment_question():
     # This assumes that question will always be in DB already, before an assignment_question is created
     logger.debug("course_id %s", auth.user.course_id)
     if not question_id:
-        question_id = _get_question_id(question_name, auth.user.course_id)
+        question_id = _get_question_id(
+            question_name, auth.user.course_id, assignment_id=assignment_id
+        )
     if question_id is None:
         logger.error(
             "Question Not found for name = {} course = {}".format(
@@ -2219,20 +2221,31 @@ def add__or_update_assignment_question():
 # by name.  If there is only one match then no problem.  If there is more than one
 # then the base course of the current user should be preferred to ensure
 # backward compatibility.
-def _get_question_id(question_name, course_id):
+def _get_question_id(question_name, course_id, assignment_id=None):
     # first try to just get the question by name.
     question = db((db.questions.name == question_name)).select(db.questions.id)
     # if there is more than one then use the course_id
     if len(question) > 1:
-        question = (
-            db(
-                (db.questions.name == question_name)
-                & (db.questions.base_course == db.courses.base_course)
-                & (db.courses.id == course_id)
+        if assignment_id:
+            question = (
+                db(
+                    (db.questions.name == question_name)
+                    & (db.questions.id == db.assignment_questions.question_id)
+                    & (db.assignment_questions.assignment_id == assignment_id)
+                )
+                .select(db.questions.id)
+                .first()
             )
-            .select(db.questions.id)
-            .first()
-        )
+        else:
+            question = (
+                db(
+                    (db.questions.name == question_name)
+                    & (db.questions.base_course == db.courses.base_course)
+                    & (db.courses.id == course_id)
+                )
+                .select(db.questions.id)
+                .first()
+            )
     else:
         question = question[0]
 
@@ -2281,7 +2294,9 @@ def delete_assignment_question():
     try:
         question_name = request.vars["name"]
         assignment_id = int(request.vars["assignment_id"])
-        question_id = _get_question_id(question_name, auth.user.course_id)
+        question_id = _get_question_id(
+            question_name, auth.user.course_id, assignment_id=assignment_id
+        )
         logger.debug("DELETEING A: %s Q:%s ", assignment_id, question_id)
         db(
             (db.assignment_questions.assignment_id == assignment_id)
@@ -2344,7 +2359,9 @@ def reorder_assignment_questions():
     i = 0
     for name in question_names:
         i += 1
-        question_id = _get_question_id(name, auth.user.course_id)
+        question_id = _get_question_id(
+            name, auth.user.course_id, assignment_id=assignment_id
+        )
         db(
             (db.assignment_questions.question_id == question_id)
             & (db.assignment_questions.assignment_id == assignment_id)
