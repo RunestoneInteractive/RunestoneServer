@@ -1351,7 +1351,7 @@ function update_assignment(form) {
     data.assignment_id = getAssignmentId();
     $.getJSON("save_assignment", data, function (result) {
         alert("Assignment Saved");
-    }).error(function () {
+    }).fail(function () {
         alert("huh??");
     });
 }
