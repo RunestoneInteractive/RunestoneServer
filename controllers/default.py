@@ -360,6 +360,12 @@ def bios():
 
 @auth.requires_login()
 def courses():
+    if "access_token" not in request.cookies:
+        # The user is only partially logged in.
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+
     if request.vars.requested_course:
         # We have a mismatch between the requested course and the current course
         # in the database

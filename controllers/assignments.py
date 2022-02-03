@@ -879,6 +879,12 @@ def doAssignment():
 @auth.requires_login()
 def chooseAssignment():
 
+    if "access_token" not in request.cookies:
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
     status = []  # This will be used to show the status of each assignment on html file
     duedates = []  # This will be used to display the due date for each assignment
