@@ -362,6 +362,7 @@ def bios():
 def courses():
     if "access_token" not in request.cookies:
         # The user is only partially logged in.
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
         _create_access_token(
             {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
         )

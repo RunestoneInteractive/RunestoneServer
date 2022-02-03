@@ -237,6 +237,10 @@ def student_autograde():
     """
     assignment_id = request.vars.assignment_id
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     is_timed = request.vars.is_timed
 
     if assignment_id.isnumeric() is False:
@@ -590,7 +594,10 @@ def doAssignment():
     if "access_token" not in request.cookies:
         # this means the user is logged in to web2py but not fastapi - this is not good
         # as the javascript in the questions assumes the new server and a token.
-        return redirect(URL("default", "accessIssue"))
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
@@ -845,6 +852,10 @@ def doAssignment():
         is_graded = False
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     timestamp = datetime.datetime.utcnow()
     deadline = assignment.duedate
     if timezoneoffset:
@@ -886,6 +897,10 @@ def chooseAssignment():
         )
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     status = []  # This will be used to show the status of each assignment on html file
     duedates = []  # This will be used to display the due date for each assignment
 
