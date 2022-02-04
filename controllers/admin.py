@@ -2903,6 +2903,22 @@ def reset_exam():
     return json.dumps({"status": "Success", "mess": "Successfully Reset Exam"})
 
 
+# This displays the table that collects tickets across workers
+# for this to work you will need to add a row to ``auth_group`` with the role ``admins``
+# In addition any user that you want to have access to these tracebacks will need
+# to have their user_id and the group id for admins added to the ``auth_membership`` table.
+# This will require some manual sql manipulation.
+@auth.requires_membership("admins")
+def tickets():
+    ticks = db.executesql(
+        """
+    select * from traceback order by timestamp desc
+    """,
+        as_dict=True,
+    )
+    return dict(tickets=ticks)
+
+
 def killer():
     print(routes_onerror)
     x = 5 / 0  # noqa: F841

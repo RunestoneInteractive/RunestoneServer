@@ -1,0 +1,60 @@
+<h1>Quick Look at Tickets</h1>
+
+<style>
+    pre {
+        background-color: lightgrey;
+        display: none;
+    }
+    td {
+        font-family: monospace;
+        border: solid black 1px;
+    }
+</style>
+<table style="width: 100%">
+    <colgroup>
+        <col />
+        <col />
+        <col style="width: 30%" />
+        <col />
+        <col />
+        <col />
+        <col />
+    </colgroup>
+    <tr>
+        <th>ID</th>
+        <th>timestamp</th>
+        <th>Error Message</th>
+        <th>Path</th>
+        <th>Query String</th>
+        <th>Hostname</th>
+        <th>Traceback</th>
+    </tr>
+    {{ for ticket in tickets: }}
+    <tr>
+        <td>{{=ticket["id"]}}</td>
+        <td>{{=ticket["timestamp"]}}</td>
+        <td>{{=ticket["err_message"]}}</td>
+        <td>{{=ticket["path"]}}</td>
+        <td>{{=ticket["query_string"]}}</td>
+        <td>{{=ticket["hostname"]}}</td>
+        <td>
+            <a href="#" onclick="showtb({{=ticket['id']}});">Show</a>
+            <pre id="{{=ticket['id']}}">{{=ticket["traceback"]}}</pre>
+        </td>
+    </tr>
+    {{ pass }}
+</table>
+
+<h1>Traceback for ID: <span id="tktnum"></span></h1>
+<pre id="selectedtb"></pre>
+
+<script>
+    function showtb(theel) {
+        let tbout = document.getElementById("selectedtb");
+        let tb = document.getElementById(theel.toString()).innerText;
+        tbout.innerHTML = tb;
+        tbout.style.display = "block";
+        let tktnum = document.getElementById("tktnum");
+        tktnum.innerHTML = theel.toString();
+    }
+</script>
