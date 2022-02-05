@@ -2226,6 +2226,9 @@ def _get_question_id(question_name, course_id, assignment_id=None):
     question = db((db.questions.name == question_name)).select(db.questions.id)
     # if there is more than one then use the course_id
     if len(question) > 1:
+        # prefer to use the assignment if it is there, but when adding a question by name
+        # it will not be in the assignment so this will fail and we fall back to using
+        # the course.
         if assignment_id:
             question = (
                 db(
@@ -2236,16 +2239,19 @@ def _get_question_id(question_name, course_id, assignment_id=None):
                 .select(db.questions.id)
                 .first()
             )
-        else:
-            question = (
-                db(
-                    (db.questions.name == question_name)
-                    & (db.questions.base_course == db.courses.base_course)
-                    & (db.courses.id == course_id)
-                )
-                .select(db.questions.id)
-                .first()
+
+        if question:
+            return int(question.id)
+
+        question = (
+            db(
+                (db.questions.name == question_name)
+                & (db.questions.base_course == db.courses.base_course)
+                & (db.courses.id == course_id)
             )
+            .select(db.questions.id)
+            .first()
+        )
     else:
         question = question[0]
 
