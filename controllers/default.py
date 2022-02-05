@@ -618,7 +618,10 @@ def donate():
 
 
 def accessIssue():
-    return dict(access={})
+    if auth.user:
+        return dict(access={})
+    else:
+        return redirect(URL("default", "user/login"))
 
 
 @auth.requires_login()
