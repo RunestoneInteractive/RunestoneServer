@@ -151,7 +151,22 @@ If you ever want to completely wipe the containers, stop them and then do:
     docker-compose rm
 
 
-4. Add Books
+4. Install `rsmanage`
+
+The rsmanage command will run many useful commands inside the container for you.  With rsmanage you can:
+
+* Add a course - ``rsmanage addcourse``
+* Add a user - ``rsmanage adduser``
+* Get infromation about a course ``rsmanage courseinfo``
+* Build a book - ``rsmanage build --course bookname``
+* Get a database shell in the current database ``rsmanage db``
+
+And lots of other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type rsmanage and the subcommand you want followed by `--help`
+
+To install rsmanage type ``pip install -e /path/to/RunestoneServer/rsmanage``
+
+
+1. Add Books
 **************************
 
 To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
@@ -173,14 +188,18 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
 
-After cloning a book, or after making any edits/updates to it, you need to build the book:
+After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed. 
+You also need to rebuild after making any edits/updates to a book.
 
 .. code-block:: bash
 
-    docker-tools book-build <book-name>
+    rsmanage build --course mybook
 
+You can also have ``rsmanage`` clone the book for you the first time you want to build it for example:
 
-You will then need to restart the Runestone server to make the new/updated book available. TODO: this is old. rsmanage?
+.. code-block:: bash
+
+    rsmanage build --course thinkcspy --clone --repo https://github.com/RunestoneInteractive/thinkcspy.git
 
 .. code-block:: bash
 
