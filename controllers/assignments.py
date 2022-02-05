@@ -598,6 +598,9 @@ def doAssignment():
         _create_access_token(
             {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
         )
+        response.flash = (
+            "Access Token Created - If this re-occurs check your cookie settings"
+        )
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
