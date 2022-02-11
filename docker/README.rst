@@ -420,4 +420,4 @@ the name of BOTH the course and the basecourse when it asks.
 Changing dependencies
 *********************
 
-If you modify the dependencies of a non-Poetry project (such as the Runestone Components or rsmanage), then ``poetry update`` **will not** see these updates. To force an update, manually delete the ``*.egg-info`` directory before running ``poetry update``.
+If you modify the dependencies of a non-Poetry project (such as the Runestone Components or rsmanage), then ``poetry update`` **will not** see these updates. To force an update, manually delete the ``*.egg-info`` directory before running ``poetry update``.  Note you **must** be in shelled in to the running docker container to run ``poetry update``.
