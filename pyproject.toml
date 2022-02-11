@@ -59,10 +59,10 @@ pyjwt = "== 2.0.1"
 black = "~= 22.0"
 bookserver = { path = "../BookServer", develop = true }
 bookserver-dev = { path = "../bookserver-dev", develop = true }
-CodeChat = ">= 1.8.6"
+CodeChat = "^1.0.0"
 contextlib2 = "^0.6.0"
 coverage = "^6.0.0"
-coveralls = "^1.0.0"
+coveralls = "^3.0.0"
 flake8 = "^4.0.0"
 html5validator = "^0.3.0"
 locust = "^1.0.0"
