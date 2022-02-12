@@ -7,6 +7,7 @@ sys.path.extend([str(wd / "docker"), str(wd / "tests")])
 try:
     # Assume that a development version of the Runestone Server -- meaning the presence of `../docker/docker_tools_misc.py` -- implies Docker.
     from docker_tools_misc import ensure_in_docker, in_docker
+
     ensure_in_docker(True)
 except ModuleNotFoundError:
     pass
@@ -48,6 +49,7 @@ DBSDIR = "{}/databases".format(APP_PATH)
 BUILDDIR = "{}/build".format(APP_PATH)
 PRIVATEDIR = "{}/private".format(APP_PATH)
 BOOKSDIR = f"{APP_PATH}/books"
+
 
 @click.group(chain=True)
 @click.option("--verbose", is_flag=True, help="More verbose output")
@@ -204,8 +206,6 @@ def initdb(config, list_tables, reset, fake, force):
         _initdb(config)
 
 
-
-
 @cli.command()
 @click.option("--fake", is_flag=True, help="perform a fake migration")
 @pass_config
@@ -222,7 +222,6 @@ def migrate(config, fake):
         f"{sys.executable} web2py.py -S runestone -M -R applications/runestone/rsmanage/migrate.py",
         shell=True,
     )
-
 
 
 #
@@ -246,7 +245,9 @@ def migrate(config, fake):
 @click.option("--allowdownloads", help="enable download button", default="F")
 @click.option("--language", default="python", help="Default Language for your course")
 @click.option("--host", default="runestone.academy", help="runestone server host name")
-@click.option("--newserver/--no-newserver", default=True, help="use the new book server")
+@click.option(
+    "--newserver/--no-newserver", default=True, help="use the new book server"
+)
 @click.option(
     "--allow_pairs/--no-allow-pairs",
     default=False,
@@ -350,12 +351,9 @@ def addcourse(
 @click.option(
     "--course", help="The name of a course that should already exist in the DB"
 )
-@click.option("--repo", help="URL to a git repository with the book to build")
-@click.option(
-    "--clone", is_flag=True, default=False, help="clone book is already there"
-)
+@click.option("--clone", default=None, help="clone the book before building")
 @pass_config
-def build(config, course, repo, clone):
+def build(config, course, clone):
     """Build the book for an existing course"""
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
@@ -376,14 +374,14 @@ def build(config, course, repo, clone):
         if os.path.exists(course):
             click.echo("Book repo already cloned, skipping")
         else:
-            res = subprocess.call("git clone {}".format(repo), shell=True)
+            res = subprocess.call("git clone {}".format(clone), shell=True)
             if res != 0:
                 click.echo(
                     "Cloning the repository failed, please check the URL and try again"
                 )
                 exit(1)
 
-    #proj_dir = os.path.basename(repo).replace(".git", "")
+    # proj_dir = os.path.basename(repo).replace(".git", "")
     click.echo("Switching to book dir {}".format(course))
     os.chdir(course)
     try:
@@ -848,7 +846,8 @@ def studentinfo(config, student):
     if not student:
         student = click.prompt("Student Id: ")
 
-    res = eng.execute(f"""
+    res = eng.execute(
+        f"""
         select auth_user.id, first_name, last_name, email, courses.course_name, courses.id 
         from auth_user join user_courses ON user_courses.user_id = auth_user.id 
         join courses on courses.id = user_courses.course_id where username = '{student}'"""
@@ -864,8 +863,8 @@ def studentinfo(config, student):
     print("--------------------------")
     print(f"{first[-2].rjust(15)} {str(first[-1]).rjust(10)}")
     if res:
-       for row in res:
-           print(f"{row[-2].rjust(15)} {str(row[-1]).rjust(10)}")
+        for row in res:
+            print(f"{row[-2].rjust(15)} {str(row[-1]).rjust(10)}")
 
 
 @cli.command()
@@ -996,7 +995,6 @@ where courses.course_name = %s order by last_name
             )
     else:
         print("No instructors found for {}".format(course))
-
 
 
 @cli.command()

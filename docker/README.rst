@@ -199,7 +199,7 @@ You can also have ``rsmanage`` clone the book for you the first time you want to
 
 .. code-block:: bash
 
-    rsmanage build --course thinkcspy --clone --repo https://github.com/RunestoneInteractive/thinkcspy.git
+    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
 
 .. note::
