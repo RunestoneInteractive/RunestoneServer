@@ -192,9 +192,7 @@ def index():
     else:
         # At this point the user has logged in
         # add a jwt cookie for compatibility with bookserver
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
         # check to see if there is an entry in user_courses for
         # this user,course configuration
         in_db = db(
@@ -363,9 +361,7 @@ def courses():
     if "access_token" not in request.cookies:
         # The user is only partially logged in.
         logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
 
     if request.vars.requested_course:
         # We have a mismatch between the requested course and the current course

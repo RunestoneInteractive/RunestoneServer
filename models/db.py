@@ -1,6 +1,7 @@
 # *************************************
 # |docname| - Core tables and functions
 # *************************************
+import datetime
 import jwt
 import os
 import random
@@ -605,6 +606,12 @@ def _validateUser(username, password, fname, lname, email, course_name, line):
         errors.append(f"Email address missing @ on line {line}")
 
     return errors
+
+
+def create_rs_token():
+    d = dict(sub=auth.user.username)
+    expires = datetime.timedelta(days=30)
+    _create_access_token(d, expires=expires)
 
 
 # This function is basically copied from the fastapi_login plugin
