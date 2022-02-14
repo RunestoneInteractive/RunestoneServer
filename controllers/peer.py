@@ -13,6 +13,7 @@
 import json
 import logging
 import os
+import random
 
 # Third Party
 # -----------
@@ -250,23 +251,35 @@ def make_pairs():
         incorrect_list.remove(auth.user.username)
     logger.debug("TTT")
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    for i in range(min(len(correct_list), len(incorrect_list))):
-        p1 = incorrect_list.pop()
-        p2 = correct_list.pop()
-        r.hset(f"partnerdb_{auth.user.course_name}", p1, p2)
-        r.hset(f"partnerdb_{auth.user.course_name}", p2, p1)
 
-    remaining = correct_list or incorrect_list
-    if remaining:
-        done = False
-        while not done:
+    group_size = 2
+    # TODO: make group_size configurable - from instructor peer page??
+
+    done = False
+    peeps = df.sid.to_list()
+    random.shuffle(peeps)
+    group_list = []
+    while not done:
+        group = []
+        for i in range(group_size):
             try:
-                p1 = remaining.pop()
-                p2 = remaining.pop()
-                r.hset(f"partnerdb_{auth.user.course_name}", p1, p2)
-                r.hset(f"partnerdb_{auth.user.course_name}", p2, p1)
+                group.append(peeps.pop())
             except IndexError:
                 done = True
+        if len(group) == 1:
+            group_list[-1].append(group[0])
+        else:
+            group_list.append(group)
+
+    gdict = {}
+    for group in group_list:
+        for p in group:
+            gl = group.copy()
+            gl.remove(p)
+            gdict[p] = gl
+
+    for k, v in gdict.items():
+        r.hset(f"partnerdb_{auth.user.course_name}", k, json.dumps(v))
 
     _broadcast_peer_answers(correct, incorrect)
     return json.dumps("success")
@@ -282,18 +295,22 @@ def _broadcast_peer_answers(correct, incorrect):
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     for p1, p2 in r.hgetall(f"partnerdb_{auth.user.course_name}").items():
         p1 = p1.decode("utf8")
-        p2 = p2.decode("utf8")
-        ans = answers[p2]
-        # create a message to p1 to put into the publisher queue
-        mess = {
-            "type": "control",
-            "from": p2,
-            "message": "enableChat",
-            "broadcast": False,
-            "answer": ans,
-            "course_name": auth.user.course_name,
-        }
-        r.publish("peermessages", json.dumps(mess))
+        partner_list = json.loads(p2)
+        for p2 in partner_list:
+            ans = answers[p2]
+            # create a message to p1 to put into the publisher queue
+            # it seems odd to not have a to field in the message...
+            # but it is not necessary as the client can figure out how it is to
+            # based on who it is from.
+            mess = {
+                "type": "control",
+                "from": p2,
+                "message": "enableChat",
+                "broadcast": False,
+                "answer": ans,
+                "course_name": auth.user.course_name,
+            }
+            r.publish("peermessages", json.dumps(mess))
 
 
 def clear_pairs():
