@@ -7,27 +7,29 @@ function connect(event) {
     }
 
     ws.onclose = function () {
-        alert("You have been disconnected from the peer instruction server. Will Reconnect.")
+        alert(
+            "You have been disconnected from the peer instruction server. Will Reconnect."
+        );
         connect();
     };
 
     ws.onmessage = function (event) {
-        var messages = document.getElementById('messages')
-        var message = document.createElement('li')
-        message.classList.add("incoming-mess")
+        var messages = document.getElementById("messages");
+        var message = document.createElement("li");
+        message.classList.add("incoming-mess");
         let mess = JSON.parse(event.data);
-        // This is an easy to code solution for broadcasting that could go out to 
+        // This is an easy to code solution for broadcasting that could go out to
         // multiple courses.  It would be better to catch that on the server side
         // but that will take a bit more work and research
         if (mess.course_name != eBookConfig.course) {
-            console.log(`ignoring message to ${mess.course_name}`)
+            console.log(`ignoring message to ${mess.course_name}`);
             return;
         }
         if (mess.type === "text") {
             if (!(mess.time in messageTrail)) {
-                var content = document.createTextNode(`${mess.from}: ${mess.message}`)
-                message.appendChild(content)
-                messages.appendChild(message)
+                var content = document.createTextNode(`${mess.from}: ${mess.message}`);
+                message.appendChild(content);
+                messages.appendChild(message);
                 messageTrail[mess.time] = mess.message;
             }
         } else if (mess.type === "control") {
@@ -46,11 +48,13 @@ function connect(event) {
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             window.mcList[currentQuestion].disableInteraction();
                             clearInterval(itimerid);
-                            // Get the current answer and insert it into the 
+                            // Get the current answer and insert it into the
                             let ansSlot = document.getElementById("first_answer");
                             let currAnswer = window.mcList[currentQuestion].answer;
                             const ordA = 65;
-                            currAnswer = String.fromCharCode(ordA + parseInt(currAnswer));
+                            currAnswer = String.fromCharCode(
+                                ordA + parseInt(currAnswer)
+                            );
                             ansSlot.innerHTML = currAnswer;
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
@@ -61,14 +65,14 @@ function connect(event) {
                     break;
                 case "enableVote":
                     window.mcList[currentQuestion].submitButton.disabled = false;
-                    window.mcList[currentQuestion].enableInteraction()
+                    window.mcList[currentQuestion].enableInteraction();
                     messarea = document.getElementById("imessage");
-                    messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`
+                    messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
                     break;
                 case "enableNext":
                     let butt = document.getElementById("nextqbutton");
                     if (butt) {
-                        butt.removeAttribute("disabled")
+                        butt.removeAttribute("disabled");
                     }
                     break;
                 case "enableChat":
@@ -76,21 +80,21 @@ function connect(event) {
                     if (discPanel) {
                         discPanel.style.display = "block";
                     }
-                    let pnameSlot = document.getElementById("pname");
-                    let panswerSlot = document.getElementById("panswer");
-                    pnameSlot.innerHTML = mess.from;
+                    let peerlist = document.getElementById("peerlist");
+                    let newpeer = document.createElement("p");
                     const ordA = 65;
                     let currAnswer = String.fromCharCode(ordA + parseInt(mess.answer));
-                    panswerSlot.innerHTML = currAnswer;
+                    newpeer.innerHTML = `Your partner, ${mess.from}, answered ${currAnswer}`;
+                    peerlist.appendChild(newpeer);
                     break;
                 default:
                     console.log("unknown control message");
             }
         }
-    }
+    };
 
     window.onbeforeunload = function () {
-        ws.onclose = function () { }; // disable onclose handler first
+        ws.onclose = function () {}; // disable onclose handler first
         ws.close();
     };
 }
@@ -108,7 +112,7 @@ async function logStopVote() {
         event: "peer",
         act: "stop_question",
         course: eBookConfig.course,
-    }
+    };
     let request = new Request(eBookConfig.ajaxURL + "hsblog", {
         method: "POST",
         headers: headers,
@@ -129,7 +133,7 @@ async function logStopVote() {
 // the server can then broadcast the message or send it to a
 // specific user
 async function sendMessage(event) {
-    var input = document.getElementById("messageText")
+    var input = document.getElementById("messageText");
     //#ws.send(JSON.stringify(mess))
     let mess = {
         type: "text",
@@ -138,16 +142,16 @@ async function sendMessage(event) {
         time: Date.now(),
         broadcast: false,
         course_name: eBookConfig.course,
-        div_id: currentQuestion
+        div_id: currentQuestion,
     };
-    await publishMessage(mess)
-    var messages = document.getElementById('messages')
-    var message = document.createElement('li')
-    message.classList.add("outgoing-mess")
-    var content = document.createTextNode(input.value)
-    message.appendChild(content)
-    messages.appendChild(message)
-    input.value = ''
+    await publishMessage(mess);
+    var messages = document.getElementById("messages");
+    var message = document.createElement("li");
+    message.classList.add("outgoing-mess");
+    var content = document.createTextNode(input.value);
+    message.appendChild(content);
+    messages.appendChild(message);
+    input.value = "";
     // not needed for onclick event.preventDefault()
 }
 
@@ -157,28 +161,27 @@ function warnAndStopVote(event) {
         sender: `${user}`,
         message: "countDownAndStop",
         broadcast: true,
-        course_name: eBookConfig.course
+        course_name: eBookConfig.course,
     };
 
     publishMessage(mess);
     if (event.srcElement.id == "vote1") {
-        let butt = document.querySelector("#vote1")
-        butt.classList.replace("btn-info", "btn-secondary")
+        let butt = document.querySelector("#vote1");
+        butt.classList.replace("btn-info", "btn-secondary");
     } else {
-        let butt = document.querySelector("#vote3")
-        butt.classList.replace("btn-info", "btn-secondary")
-
+        let butt = document.querySelector("#vote3");
+        butt.classList.replace("btn-info", "btn-secondary");
     }
 }
 
 async function makePartners() {
-    let butt = document.querySelector("#makep")
-    butt.classList.replace("btn-info", "btn-secondary")
+    let butt = document.querySelector("#makep");
+    butt.classList.replace("btn-info", "btn-secondary");
 
     let data = {
         div_id: currentQuestion,
         start_time: startTime, // set in dashboard.html when loaded
-    }
+    };
     let jsheaders = new Headers({
         "Content-type": "application/json; charset=utf-8",
         Accept: "application/json",
@@ -193,8 +196,8 @@ async function makePartners() {
 }
 
 function startVote2(event) {
-    let butt = document.querySelector("#vote2")
-    butt.classList.replace("btn-info", "btn-secondary")
+    let butt = document.querySelector("#vote2");
+    butt.classList.replace("btn-info", "btn-secondary");
     voteNum += 1;
     startTime2 = new Date().toUTCString();
     let mess = {
@@ -202,21 +205,19 @@ function startVote2(event) {
         sender: `${user}`,
         message: "enableVote",
         broadcast: true,
-        course_name: eBookConfig.course
+        course_name: eBookConfig.course,
     };
     //ws.send(JSON.stringify(mess));
-    publishMessage(mess)
-
+    publishMessage(mess);
 }
 
 async function clearPartners(event) {
-
-    let butt = document.querySelector("#clearp")
-    butt.classList.replace("btn-info", "btn-secondary")
+    let butt = document.querySelector("#clearp");
+    butt.classList.replace("btn-info", "btn-secondary");
 
     let data = {
-        div_id: currentQuestion
-    }
+        div_id: currentQuestion,
+    };
     let jsheaders = new Headers({
         "Content-type": "application/json; charset=utf-8",
         Accept: "application/json",
@@ -236,7 +237,7 @@ function enableNext() {
         sender: `${user}`,
         message: "enableNext",
         broadcast: true,
-        course_name: eBookConfig.course
+        course_name: eBookConfig.course,
     };
     publishMessage(mess);
     return true;
@@ -256,7 +257,6 @@ async function publishMessage(data) {
     let spec = await resp.json();
 }
 
-
 async function ratePeer(radio) {
     let jsheaders = new Headers({
         "Content-type": "application/json; charset=utf-8",
@@ -268,7 +268,7 @@ async function ratePeer(radio) {
         event: "ratepeer",
         course_id: eBookConfig.course,
         rating: radio.value,
-    }
+    };
     let request = new Request("/runestone/peer/log_peer_rating", {
         method: "POST",
         headers: jsheaders,
@@ -297,4 +297,3 @@ $(function () {
         });
     }
 });
-
