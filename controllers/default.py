@@ -360,6 +360,17 @@ def bios():
 
 @auth.requires_login()
 def courses():
+    if "access_token" not in request.cookies:
+        # The user is only partially logged in.
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+
+    if request.vars.requested_course:
+        # We have a mismatch between the requested course and the current course
+        # in the database
+        response.flash = f"You requested {request.vars.requested_course} but are logged in to {request.vars.current_course}"
     res = db(db.user_courses.user_id == auth.user.id).select(
         db.user_courses.course_id, orderby=~db.user_courses.id
     )
@@ -604,6 +615,13 @@ def donate():
     else:
         amt = None
     return dict(donate=amt)
+
+
+def accessIssue():
+    if auth.user:
+        return dict(access={})
+    else:
+        return redirect(URL("default", "user/login"))
 
 
 @auth.requires_login()

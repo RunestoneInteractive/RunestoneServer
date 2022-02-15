@@ -130,12 +130,13 @@
         {{if is_graded:}}
             <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
                 <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is graded and is no longer
-                accepting submissions</p>
+                accepting submissions. You can still do the work, but it is up to your instructor whether 
+                they will accept it or not.</p>
             </div>
         {{elif enforce_pastdue:}}
             <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
-                <p style='margin-left:0.5cm; margin-right:0.5cm;'>The due date has passed for this assignment
-                and is no longer accepting submissions</p>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>The due date has passed for this assignment.
+                You can no longer change your status, but your work will be recorded and time stamped</p>
             </div>
         {{pass}}
     {{elif is_submit == "In Progress":}}

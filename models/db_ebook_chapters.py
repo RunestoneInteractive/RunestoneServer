@@ -93,5 +93,6 @@ def make_progress_entries(field_dict, id_of_insert):
     except Exception as e:
         logger.error(f"Failed to make progress entries for {field_dict}")
 
+
 if "auth_user" in db:
     db.auth_user._after_insert.append(make_progress_entries)

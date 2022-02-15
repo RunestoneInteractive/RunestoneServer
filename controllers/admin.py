@@ -2099,7 +2099,9 @@ def add__or_update_assignment_question():
     # This assumes that question will always be in DB already, before an assignment_question is created
     logger.debug("course_id %s", auth.user.course_id)
     if not question_id:
-        question_id = _get_question_id(question_name, auth.user.course_id)
+        question_id = _get_question_id(
+            question_name, auth.user.course_id, assignment_id=assignment_id
+        )
     if question_id is None:
         logger.error(
             "Question Not found for name = {} course = {}".format(
@@ -2219,11 +2221,28 @@ def add__or_update_assignment_question():
 # by name.  If there is only one match then no problem.  If there is more than one
 # then the base course of the current user should be preferred to ensure
 # backward compatibility.
-def _get_question_id(question_name, course_id):
+def _get_question_id(question_name, course_id, assignment_id=None):
     # first try to just get the question by name.
     question = db((db.questions.name == question_name)).select(db.questions.id)
     # if there is more than one then use the course_id
     if len(question) > 1:
+        # prefer to use the assignment if it is there, but when adding a question by name
+        # it will not be in the assignment so this will fail and we fall back to using
+        # the course.
+        if assignment_id:
+            question = (
+                db(
+                    (db.questions.name == question_name)
+                    & (db.questions.id == db.assignment_questions.question_id)
+                    & (db.assignment_questions.assignment_id == assignment_id)
+                )
+                .select(db.questions.id)
+                .first()
+            )
+
+        if question:
+            return int(question.id)
+
         question = (
             db(
                 (db.questions.name == question_name)
@@ -2281,7 +2300,9 @@ def delete_assignment_question():
     try:
         question_name = request.vars["name"]
         assignment_id = int(request.vars["assignment_id"])
-        question_id = _get_question_id(question_name, auth.user.course_id)
+        question_id = _get_question_id(
+            question_name, auth.user.course_id, assignment_id=assignment_id
+        )
         logger.debug("DELETEING A: %s Q:%s ", assignment_id, question_id)
         db(
             (db.assignment_questions.assignment_id == assignment_id)
@@ -2344,7 +2365,9 @@ def reorder_assignment_questions():
     i = 0
     for name in question_names:
         i += 1
-        question_id = _get_question_id(name, auth.user.course_id)
+        question_id = _get_question_id(
+            name, auth.user.course_id, assignment_id=assignment_id
+        )
         db(
             (db.assignment_questions.question_id == question_id)
             & (db.assignment_questions.assignment_id == assignment_id)
@@ -2884,6 +2907,22 @@ def reset_exam():
             logger.debug(f"deleted {q.name} for {username} {num}")
 
     return json.dumps({"status": "Success", "mess": "Successfully Reset Exam"})
+
+
+# This displays the table that collects tickets across workers
+# for this to work you will need to add a row to ``auth_group`` with the role ``admins``
+# In addition any user that you want to have access to these tracebacks will need
+# to have their user_id and the group id for admins added to the ``auth_membership`` table.
+# This will require some manual sql manipulation.
+@auth.requires_membership("admins")
+def tickets():
+    ticks = db.executesql(
+        """
+    select * from traceback order by timestamp desc
+    """,
+        as_dict=True,
+    )
+    return dict(tickets=ticks)
 
 
 def killer():

@@ -15,7 +15,7 @@ settings = Storage()
 
 settings.migrate = True
 settings.migprefix = "runestonebeta_"
-settings.title = "Runestone Interactive"
+settings.title = "Runestone Academy"
 settings.subtitle = "eBooks for Python"
 settings.author = "Brad Miller"
 settings.author_email = "info@interactivepython.org"

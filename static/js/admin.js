@@ -369,6 +369,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                 sid: studentId,
                 grade: grade,
                 comment: comment,
+                assignmentid: $(document.getElementById("chaporassignselector")).val(),
             },
             success: function (data) {
                 jQuery(".grade", element).html(data.grade);
@@ -445,6 +446,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         acid: acid,
                         sid: studentId,
                         grade: this.value,
+                        assignmentid: $(document.getElementById("chaporassignselector")).val()
                     },
                     success: function (data) {
                         inp.style.backgroundColor = "#ddffdd";
@@ -464,6 +466,9 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         acid: acid,
                         sid: studentId,
                         comment: this.value,
+                        assignmentid: $(
+                            document.getElementById("chaporassignselector")
+                        ).val(),
                     },
                     success: function (data) {
                         inp.style.backgroundColor = "#ddffdd";
@@ -909,6 +914,20 @@ function remove_instructor() {
     };
 }
 
+function TA_search() {
+    var elements = document.getElementsByClassName("available_students");
+    for (var i = 0; i < elements.length; i++) {
+        var name = elements[i].innerText.toUpperCase();
+        var text = $("#TA_search").val()
+        if(name.includes(text.toUpperCase())){
+            elements[i].style.display = "block"; 
+        }
+        else{
+            elements[i].style.display = "none";
+        }
+    }
+}
+
 function edit_indexrst(form) {
     let data = {
         newtext: form.editIndex.value,
@@ -1332,7 +1351,7 @@ function update_assignment(form) {
     data.assignment_id = getAssignmentId();
     $.getJSON("save_assignment", data, function (result) {
         alert("Assignment Saved");
-    }).error(function () {
+    }).fail(function () {
         alert("huh??");
     });
 }
@@ -1769,6 +1788,8 @@ function renderGradingComponents(sid, divid) {
     let div = document.createElement("div");
     let grade = document.createElement("input");
     let gradelabel = document.createElement("label");
+    let url = new URL(window.location.href);
+    let assignmentid = url.searchParams.get("assignment_id");
     gradelabel.for = "grade-input";
     $(gradelabel).text("Grade");
     grade.type = "text";
@@ -1790,6 +1811,7 @@ function renderGradingComponents(sid, divid) {
             type: "POST",
             dataType: "JSON",
             data: {
+                assignmentid: assignmentid,
                 acid: divid,
                 sid: sid,
                 grade: $(grade).val(),
@@ -1798,6 +1820,7 @@ function renderGradingComponents(sid, divid) {
             success: function (data) {
                 $(grade).css("background", "lightgreen");
                 $(comment).css("background", "lightgreen");
+                window.location.reload(true);
             },
         });
     });

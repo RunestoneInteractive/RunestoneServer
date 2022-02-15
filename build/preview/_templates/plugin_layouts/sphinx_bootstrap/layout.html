@@ -173,7 +173,7 @@
             <li><a href='/{{appname}}/static/{{course_id}}/navhelp.html'>Navigation Help</a></li>
             <li><a href='/{{appname}}/static/overview/instructor.html'>Help for Instructors</a></li>
             <li class="divider"></li>
-            <li><a href='http://runestoneinteractive.org'>About Runestone</a></li>
+            <li><a href='http://blog.runestone.academy'>About Runestone</a></li>
             <li><a href='/{{ appname }}/default/reportabug?course={{ course_id }}&page={{ pathto(pagename,1) }}'>Report A Problem</a></li>
           </ul>
         </li>
@@ -284,7 +284,7 @@
       {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}<br/>
     {%- endif %}
     {%- if show_sphinx %}
-      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://runestoneinteractive.org/">Runestone</a> {{ runestone_version }}.{% endtrans %}
+      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://blog.runestone.academy/">Runestone</a> {{ runestone_version }}.{% endtrans %}
     {%- endif %}
     </p>
   </div>

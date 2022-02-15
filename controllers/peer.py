@@ -201,6 +201,15 @@ def num_answers():
 #
 @auth.requires_login()
 def student():
+
+    if "access_token" not in request.cookies:
+        # this means the user is logged in to web2py but not fastapi - this is not good
+        # as the javascript in the questions assumes the new server and a token.
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+
     assignments = db(
         (db.assignments.is_peer == True)
         & (db.assignments.course == auth.user.course_id)
@@ -216,6 +225,9 @@ def student():
 
 @auth.requires_login()
 def peer_question():
+    if "access_token" not in request.cookies:
+        return redirect(URL("default", "accessIssue"))
+
     assignment_id = request.vars.assignment_id
 
     current_question = _get_current_question(assignment_id, False)

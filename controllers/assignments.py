@@ -136,7 +136,7 @@ def calculate_totals():
     requires_login=True,
 )
 def get_summary():
-    assignment_name = request.vars.assignment
+    assignment_name = request.vars.assignment  # recieves json sent by ajax call
     assignment = (
         db(
             (db.assignments.name == assignment_name)
@@ -145,18 +145,29 @@ def get_summary():
         .select()
         .first()
     )
+
     res = db.executesql(
-        """
-    select chapter, name, min(score), max(score), to_char(avg(score), '00.999') as mean, count(score) from assignment_questions join questions on question_id = questions.id join question_grades on name = div_id
+        """select chapter, name, min(question_type) question_type, min(score), max(score), to_char(avg(score), '00.999') as  mean, count(score) 
+from assignment_questions join questions on question_id = questions.id join question_grades on name =  div_id 
 where assignment_id = %s and course_name = %s
-group by chapter, name
-    """,
+group by chapter, name""",
         (assignment.id, auth.user.course_name),
         as_dict=True,
     )
 
+    """ List of question types that are not supported by the exercisemetrics page """
+
+    unsupported_question_types = [
+        "activecode",
+        "quizly",
+        "khanex",
+        "poll",
+        "shortanswer",
+    ]
+
     for row in res:
-        if row["count"] > 0:
+        # do not construct links for unsupported questions
+        if row["question_type"] not in unsupported_question_types and row["count"] > 0:
             row[
                 "name"
             ] = f"""<a href="/runestone/dashboard/exercisemetrics?id={row['name']}&chapter={row['chapter']}">{row['name']}</a>"""
@@ -226,6 +237,10 @@ def student_autograde():
     """
     assignment_id = request.vars.assignment_id
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     is_timed = request.vars.is_timed
 
     if assignment_id.isnumeric() is False:
@@ -342,6 +357,8 @@ def record_grade():
         return json.dumps(
             {"success": False, "message": "Must provide either grade or comment."}
         )
+    if "assignmentid" not in request.vars:
+        return json.dumps({"success": False, "message": "Must provide assignment id."})
 
     # Create a dict of updates for this grade.
     updates = dict(course_name=auth.user.course_name)
@@ -368,6 +385,28 @@ def record_grade():
     div_id = request.vars.acid
     # Accept input of a single sid from the request variable ``sid`` or a list from ``sid[]``, following the way `jQuery serielizes this <https://api.jquery.com/jQuery.param/>`_ (with the ``traditional`` flag set to its default value of ``false``). Note that ``$.param({sid: ["one"]})`` produces ``"sid%5B%5D=one"``, meaning that this "list" will still be a single-element value. Therefore, use ``getlist`` for **both** "sid" (which should always be only one element) and "sid[]" (which could be a single element or a list).
     sids = request.vars.getlist("sid") or request.vars.getlist("sid[]")
+    # Gather assignment id for future use by do_calculate_totals function
+    assignment_id = request.vars.assignmentid
+    if assignment_id.isnumeric():
+        assignment = (
+            db(
+                (db.assignments.id == assignment_id)
+                & (db.assignments.course == auth.user.course_id)
+            )
+            .select()
+            .first()
+        )
+    else:
+        assignment = (
+            db(
+                (db.assignments.name == assignment_id)
+                & (db.assignments.course == auth.user.course_id)
+            )
+            .select()
+            .first()
+        )
+
+    student_rownum = None
 
     # Update the score(s).
     try:
@@ -383,6 +422,21 @@ def record_grade():
                 div_id=div_id,
                 **updates,
             )
+            if assignment:
+                try:
+                    do_calculate_totals(
+                        assignment,
+                        auth.user.course_id,
+                        auth.user.course_name,
+                        sid,
+                        student_rownum,
+                        db,
+                        settings,
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Calculate totals failed for reason {e} - {auth.user.course_name} {sid} {student_rownum} {assignment}"
+                    )
     except IntegrityError:
         logger.error(
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
@@ -536,6 +590,17 @@ def update_submit():
 
 @auth.requires_login()
 def doAssignment():
+
+    if "access_token" not in request.cookies:
+        # this means the user is logged in to web2py but not fastapi - this is not good
+        # as the javascript in the questions assumes the new server and a token.
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+        response.flash = (
+            "Access Token Created - If this re-occurs check your cookie settings"
+        )
 
     course = db(db.courses.id == auth.user.course_id).select(**SELECT_CACHE).first()
     assignment_id = request.vars.assignment_id
@@ -790,6 +855,10 @@ def doAssignment():
         is_graded = False
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     timestamp = datetime.datetime.utcnow()
     deadline = assignment.duedate
     if timezoneoffset:
@@ -824,7 +893,17 @@ def doAssignment():
 @auth.requires_login()
 def chooseAssignment():
 
+    if "access_token" not in request.cookies:
+        logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
+        _create_access_token(
+            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
+        )
+
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
+    if not timezoneoffset and "RS_info" in request.cookies:
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+        timezoneoffset = parsed_js.get("tz_offset", None)
+
     status = []  # This will be used to show the status of each assignment on html file
     duedates = []  # This will be used to display the due date for each assignment
 
@@ -976,6 +1055,10 @@ def practiceNotStartedYet():
 # Gets invoked when the student requests practicing topics.
 @auth.requires_login()
 def practice():
+
+    if "access_token" not in request.cookies:
+        return redirect(URL("default", "accessIssue"))
+
     if not session.timezoneoffset:
         session.timezoneoffset = 0
 

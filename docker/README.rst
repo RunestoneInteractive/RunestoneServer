@@ -151,7 +151,22 @@ If you ever want to completely wipe the containers, stop them and then do:
     docker-compose rm
 
 
-4. Add Books
+4. Install `rsmanage`
+
+The rsmanage command will run many useful commands inside the container for you.  With rsmanage you can:
+
+* Add a course - ``rsmanage addcourse``
+* Add a user - ``rsmanage adduser``
+* Get infromation about a course ``rsmanage courseinfo``
+* Build a book - ``rsmanage build --course bookname``
+* Get a database shell in the current database ``rsmanage db``
+
+And lots of other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type rsmanage and the subcommand you want followed by `--help`
+
+To install rsmanage type ``pip install -e /path/to/RunestoneServer/rsmanage``
+
+
+1. Add Books
 **************************
 
 To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
@@ -173,18 +188,19 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
 
-After cloning a book, or after making any edits/updates to it, you need to build the book:
+After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed. 
+You also need to rebuild after making any edits/updates to a book.
 
 .. code-block:: bash
 
-    docker-tools book-build <book-name>
+    rsmanage build --course mybook
 
-
-You will then need to restart the Runestone server to make the new/updated book available. TODO: this is old. rsmanage?
+You can also have ``rsmanage`` clone the book for you the first time you want to build it for example:
 
 .. code-block:: bash
 
-    docker-compose restart runestone
+    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+
 
 .. note::
 
@@ -194,16 +210,18 @@ You will then need to restart the Runestone server to make the new/updated book 
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-5. Add Courses
+1. Add Courses
 **************************
 
-TODO: This scripts needs to be updated. It doesn't work.
-
-To add a course based on a book, run the ``daddcourse`` script:
+To add a course based on a book, run the ``rsmanage addcourse`` script. If you run it just like
+that it will prompt you for all of the necessary details. Probably the **most important** thing 
+to point out is that if this is a new book the first time you add it you want to make sure that the
+basecourse and the course-name are the same.  If you are creating your own course but want it 
+based on an existing book then make sure to use the correct base course name.
 
 .. code-block:: bash
 
-    scripts/daddcourse
+    rsmanage addcourse
 
 
 It will ask for:
@@ -225,28 +243,26 @@ You do not have to restart the server to make use of the course.
     Some of the default books already have "default" courses with the same name as the book. If you try to create
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
-6. Add a User
+1. Add a User
 **************************
-
-TODO: This scripts needs to be updated. It doesn't work.
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
 an existing user as an instructor to the course.
 
-To add a new user, use the ``dmanage`` script to run **inituser**. It asks for what class to add the user to and whether or not
+To add a new user, use the ``rsmanage adduser`` subcommand  it asks for what class to add the user to and whether or not
 they should be made an instructor.
 
 .. code-block:: bash
 
-    scripts/dmanage inituser
+    rsmanage adduser
 
 
 Or, if you already have an account that you want to add as an instructor to the new course, you can use the
-``dmanage`` script to execute **addinstructor** which will prompt you for a username and course name:
+``rsmanage`` command to execute **addinstructor** which will prompt you for a username and course name:
 
 .. code-block:: bash
 
-    scripts/dmanage addinstructor
+    rsmanage addinstructor
 
 
 Neither of these will require restarting the server.
@@ -382,13 +398,13 @@ Writing Your Own Book
 If you are writing your own book you will want to get that book set up properly in the runestone
 system. You need to do the following:
 
-1. Run the command ``dmanage addcourse`` Use the project name you configured in ``pavement.py`` as
-the name of BOTH the course and the basecourse when it asks. The dmanage command is in the scripts
-folder of RunestoneServer.
+1. Run the command ``rsmanage addcourse`` Use the project name you configured in ``pavement.py`` as
+the name of BOTH the course and the basecourse when it asks. 
 
-2. Now that your course is registered rebuild it using the command ``docker/docker_tools.py book-build <book_name>`` command. TODO: This is old. rsmanage?
 
-3. If this book is a PreTeXt book you will need to navigate to the directory that contains the
+1. Now that your course is registered rebuild it using the command ``rsmanage build --course <book_name>`` command. 
+
+2. If this book is a PreTeXt book you will need to navigate to the directory that contains the
 ``runestone-manifest.xml`` file and run the command:
 
 .. code-block:: bash
@@ -404,4 +420,4 @@ folder of RunestoneServer.
 Changing dependencies
 *********************
 
-If you modify the dependencies of a non-Poetry project (such as the Runestone Components or rsmanage), then ``poetry update`` **will not** see these updates. To force an update, manually delete the ``*.egg-info`` directory before running ``poetry update``.
+If you modify the dependencies of a non-Poetry project (such as the Runestone Components or rsmanage), then ``poetry update`` **will not** see these updates. To force an update, manually delete the ``*.egg-info`` directory before running ``poetry update``.  Note you **must** be in shelled in to the running docker container to run ``poetry update``.

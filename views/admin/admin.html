@@ -201,13 +201,13 @@
         <div class="col-md-4" style="text-align: center">
             <h3>Add a New Instructor</h3>
             <div class="list-group-item">
-                <form>
-                    <input type="text"><input type="submit" value="Search">
-                </form>
+                <div>
+                    <input id="TA_search" type="text" placeholder="Search..." onkeyup="TA_search()">
+                </div>
                 <form id="addins" method="POST" action="Javascript:add_instructor();">
                     <select size="10" id="studentlist" name="student" class="form-control">
                         {{ for user in students: }}
-                        <option value="{{=user}}">{{ =students[user] }}</option>
+                        <option class="available_students" value="{{=user}}">{{ =students[user] }}</option>
                         {{ pass }}
                     </select>
                     <div style="text-align: center">
