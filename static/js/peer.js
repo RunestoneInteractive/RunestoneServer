@@ -86,6 +86,11 @@ function connect(event) {
                     let currAnswer = String.fromCharCode(ordA + parseInt(mess.answer));
                     newpeer.innerHTML = `Your partner, ${mess.from}, answered ${currAnswer}`;
                     peerlist.appendChild(newpeer);
+                    let peersel = document.getElementById("peersel");
+                    let peeropt = document.createElement("option");
+                    peeropt.value = mess.from;
+                    peeropt.innerHTML = mess.from;
+                    peersel.appendChild(peeropt);
                     break;
                 default:
                     console.log("unknown control message");
@@ -269,10 +274,12 @@ async function ratePeer(radio) {
         "Content-type": "application/json; charset=utf-8",
         Accept: "application/json",
     });
+    let peerToRate = document.getElementById("peersel").value;
     let eventInfo = {
         sid: eBookConfig.username,
         div_id: currentQuestion,
         event: "ratepeer",
+        peer_id: peerToRate,
         course_id: eBookConfig.course,
         rating: radio.value,
     };

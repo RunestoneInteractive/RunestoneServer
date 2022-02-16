@@ -137,6 +137,7 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
     df = df.dropna(subset=["answer"])
     logger.debug(df.head())
     # FIXME: this breaks for multiple answer mchoice!
+    df = df[df.answer != ""]
     df["answer"] = df.answer.astype("int64")
 
     return df
@@ -248,7 +249,7 @@ def make_pairs():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
     df = _get_n_answers(1, div_id, auth.user.course_name, request.vars.start_time)
-    group_size = request.vars.get("group_size", 2)
+    group_size = int(request.vars.get("group_size", 2))
     logger.debug(f"STARTING to make pairs for {auth.user.course_name}")
     # answers = list(df.answer.unique())
     correct = df[df.correct == "T"][["sid", "answer"]]
@@ -345,10 +346,10 @@ def publish_message():
 def log_peer_rating():
     response.headers["content-type"] = "application/json"
     current_question = request.vars.div_id
+    peer_sid = request.vars.peer_id
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-    peer_sid = r.hget(f"partnerdb_{auth.user.course_name}", auth.user.username)
+    retmess = "Error: no peer to rate"
     if peer_sid:
-        peer_sid = peer_sid.decode("utf8")
         db.useinfo.insert(
             course_id=auth.user.course_name,
             sid=auth.user.username,
@@ -357,6 +358,6 @@ def log_peer_rating():
             act=f"{peer_sid}:{request.vars.rating}",
             timestamp=datetime.datetime.utcnow(),
         )
-        return json.dumps("success")
+        retmess = "success"
 
-    return json.dumps("Error: no peer to rate")
+    return json.dumps(retmess)
