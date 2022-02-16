@@ -15,12 +15,18 @@
     <div class="col-md-6">
         <form action="/runestone/peer/dashboard" method="GET" onsubmit="return enableNext();">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
+            Group Size <select id="groupsize" name="groupsize">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+            <br/>
             <button type="button" id="vote1" class="btn btn-info" onclick="warnAndStopVote(event)">Stop Vote 1</button>
             <button type="button" id="makep" class="btn btn-info" onclick="makePartners(event)">Make Partners</button>
             <button type="button" id="vote2" class="btn btn-info" onclick="startVote2(event)">Start Vote 2</button>
             <button type="button" id="vote3" class="btn btn-info" onclick="warnAndStopVote(event)">Stop Vote 2</button>
-            <button type="button" id="clearp" class="btn btn-info" onclick="clearPartners(event)">Clear
-                Partners</button>
             <button type="submit" id="nextq" class="btn btn-info" name="next" value="Next">Next
                 Question</button>
             <button type="submit" id="restart" class="btn btn-danger" name="next" value="Reset">Start Over</button>

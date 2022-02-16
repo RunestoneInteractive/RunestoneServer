@@ -177,10 +177,11 @@ function warnAndStopVote(event) {
 async function makePartners() {
     let butt = document.querySelector("#makep");
     butt.classList.replace("btn-info", "btn-secondary");
-
+    let gs = document.getElementById("groupsize").value;
     let data = {
         div_id: currentQuestion,
         start_time: startTime, // set in dashboard.html when loaded
+        group_size: gs,
     };
     let jsheaders = new Headers({
         "Content-type": "application/json; charset=utf-8",
@@ -192,7 +193,13 @@ async function makePartners() {
         body: JSON.stringify(data),
     });
     let resp = await fetch(request);
+    if (!resp.ok) {
+        alert(`Pairs not made ${resp.statusText}`);
+    }
     let spec = await resp.json();
+    if (spec !== "success") {
+        alert(`Pairs not made! ${spec}`);
+    }
 }
 
 function startVote2(event) {

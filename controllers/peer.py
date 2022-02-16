@@ -248,7 +248,8 @@ def make_pairs():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
     df = _get_n_answers(1, div_id, auth.user.course_name, request.vars.start_time)
-    logger.debug("HELLO")
+    group_size = request.vars.get("group_size", 2)
+    logger.debug(f"STARTING to make pairs for {auth.user.course_name}")
     # answers = list(df.answer.unique())
     correct = df[df.correct == "T"][["sid", "answer"]]
     # answers.remove(correct.iloc[0].answer)
@@ -261,11 +262,9 @@ def make_pairs():
         correct_list.remove(auth.user.username)
     if auth.user.username in incorrect_list:
         incorrect_list.remove(auth.user.username)
-    logger.debug("TTT")
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
-
-    group_size = 2
-    # TODO: make group_size configurable - from instructor peer page??
+    logger.debug(f"Clearing partnerdb_{auth.user.course_name}")
+    r.delete(f"partnerdb_{auth.user.course_name}")
 
     done = False
     peeps = df.sid.to_list()
@@ -293,7 +292,9 @@ def make_pairs():
     for k, v in gdict.items():
         r.hset(f"partnerdb_{auth.user.course_name}", k, json.dumps(v))
 
+    logger.debug(f"DONE making pairs for {auth.user.course_name} {gdict}")
     _broadcast_peer_answers(correct, incorrect)
+    logger.debug(f"DONE broadcasting pair information")
     return json.dumps("success")
 
 
@@ -309,7 +310,7 @@ def _broadcast_peer_answers(correct, incorrect):
         p1 = p1.decode("utf8")
         partner_list = json.loads(p2)
         for p2 in partner_list:
-            ans = answers[p2]
+            ans = answers.get(p2, None)
             # create a message to p1 to put into the publisher queue
             # it seems odd to not have a to field in the message...
             # but it is not necessary as the client can figure out how it is to
