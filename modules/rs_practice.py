@@ -18,7 +18,7 @@ def _get_practice_data(user, timezoneoffset, db):
     practice_today_left = 0
     points_received = 0
     total_possible_points = 0
-    flashcard_creation_method = 0
+    flashcard_creation_method = 2
     questions_to_complete_day = 0
     practice_graded = 1
     spacing = 0
