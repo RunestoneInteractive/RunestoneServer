@@ -91,7 +91,7 @@ def _get_current_question(assignment_id, get_next):
         idx = assignment.current_index
 
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
-        orderby=db.assignment_questions.sorting_priority
+        orderby=[db.assignment_questions.sorting_priority, db.assignment_questions.id]
     )
     logger.debug(f"idx = {idx} len of qs = {len(a_qs)}")
     if idx > len(a_qs) - 1:
@@ -310,21 +310,24 @@ def _broadcast_peer_answers(correct, incorrect):
     for p1, p2 in r.hgetall(f"partnerdb_{auth.user.course_name}").items():
         p1 = p1.decode("utf8")
         partner_list = json.loads(p2)
+        pdict = {}
         for p2 in partner_list:
             ans = answers.get(p2, None)
-            # create a message to p1 to put into the publisher queue
-            # it seems odd to not have a to field in the message...
-            # but it is not necessary as the client can figure out how it is to
-            # based on who it is from.
-            mess = {
-                "type": "control",
-                "from": p2,
-                "message": "enableChat",
-                "broadcast": False,
-                "answer": ans,
-                "course_name": auth.user.course_name,
-            }
-            r.publish("peermessages", json.dumps(mess))
+            pdict[p2] = ans
+        # create a message from p1 to put into the publisher queue
+        # it seems odd to not have a to field in the message...
+        # but it is not necessary as the client can figure out how it is to
+        # based on who it is from.
+        mess = {
+            "type": "control",
+            "from": p1,
+            "to": p1,
+            "message": "enableChat",
+            "broadcast": False,
+            "answer": json.dumps(pdict),
+            "course_name": auth.user.course_name,
+        }
+        r.publish("peermessages", json.dumps(mess))
 
 
 def clear_pairs():

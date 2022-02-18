@@ -27,11 +27,11 @@
         {{=XML(current_question['htmlsrc'])}}
     </div>
     <div id="discussion_panel" class='col-md-6' style="display: none">
-        <p>Your first answer <span id="first_answer"></span></p>
+        <p>Your answer <span id="first_answer"></span></p>
         <div id="peerlist">
         </div>
-        <p>Please explain your answer to your partner(s)</p>
-        <textarea id="messageText" rows="2" cols="33">
+        <p>Please discuss the answers with your group members</p>
+        <textarea id="messageText" rows="2" cols="40">
 </textarea>
         <button id="sendpeermsg" type="button" onclick="sendMessage()">Send</button>
         <div>
@@ -43,13 +43,13 @@
             <div class="form-group">
                 Please provide a confidential rating of <select id="peersel" name="peercel"></select>
                  peer's explanation<br />
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="poor"
+                <input class="form-check-input ratingradio" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="poor"
                     onclick="ratePeer(this)">
                 <label class="form-check-label" for="inlineRadio1">Poor</label>
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="good"
+                <input class="form-check-input ratingradio" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="good"
                     onclick="ratePeer(this)">
                 <label class="form-check-label" for="inlineRadio2">Good</label>
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                <input class="form-check-input ratingradio" type="radio" name="inlineRadioOptions" id="inlineRadio3"
                     value="excellent" onclick="ratePeer(this)">
                 <label class="form-check-label" for="inlineRadio3">Excellent</label>
             </div>
@@ -64,7 +64,18 @@
     document.addEventListener("DOMContentLoaded", function (event) {
         setTimeout(connect, 1000);
     });
-
+    $(document).bind("runestone:login-complete", function () {
+        setTimeout(function() {
+        $("[name='do answer']").text("Submit")
+        $("[name='do answer']").click(function() {
+            let currentText = $(this).text();
+            if (currentText.indexOf("Thanks") > 0 ) {
+                $(this).text("Submit")
+            } else {
+                $(this).text("Thanks, your answer is recorded.")}
+            })
+        }, 1000);
+    })
 </script>
 
 {{ end }}

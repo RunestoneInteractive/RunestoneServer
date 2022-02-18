@@ -41,10 +41,17 @@ function connect(event) {
                     let count = 10;
                     let itimerid = setInterval(async function () {
                         if (count > 0) {
+                            messarea.style.color = "red";
                             messarea.innerHTML = `<h3>Finish Up only ${count} seconds remaining</h3>`;
                             count = count - 1;
                         } else {
-                            messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your partner</p>`;
+                            messarea.style.color = "black";
+                            // hide the discussion
+                            let discPanel = document.getElementById("discussion_panel");
+                            if (discPanel) {
+                                discPanel.style.display = "none";
+                            }
+                            messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your group members</p>`;
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             window.mcList[currentQuestion].disableInteraction();
                             clearInterval(itimerid);
@@ -65,9 +72,11 @@ function connect(event) {
                     break;
                 case "enableVote":
                     window.mcList[currentQuestion].submitButton.disabled = false;
+                    window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
                     window.mcList[currentQuestion].enableInteraction();
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
+                    $("[type=radio]").prop("checked", false);
                     break;
                 case "enableNext":
                     let butt = document.getElementById("nextqbutton");
@@ -81,16 +90,22 @@ function connect(event) {
                         discPanel.style.display = "block";
                     }
                     let peerlist = document.getElementById("peerlist");
-                    let newpeer = document.createElement("p");
                     const ordA = 65;
-                    let currAnswer = String.fromCharCode(ordA + parseInt(mess.answer));
-                    newpeer.innerHTML = `Your partner, ${mess.from}, answered ${currAnswer}`;
-                    peerlist.appendChild(newpeer);
+                    adict = JSON.parse(mess.answer);
                     let peersel = document.getElementById("peersel");
-                    let peeropt = document.createElement("option");
-                    peeropt.value = mess.from;
-                    peeropt.innerHTML = mess.from;
-                    peersel.appendChild(peeropt);
+                    for (const key in adict) {
+                        let currAnswer = String.fromCharCode(ordA + adict[key]);
+                        let newpeer = document.createElement("p");
+                        newpeer.innerHTML = `${key} answered ${currAnswer}`;
+                        peerlist.appendChild(newpeer);
+                        let peeropt = document.createElement("option");
+                        peeropt.value = key;
+                        peeropt.innerHTML = key;
+                        peersel.appendChild(peeropt);
+                        peersel.addEventListener("change", function () {
+                            $(".ratingradio").prop("checked", false);
+                        });
+                    }
                     break;
                 default:
                     console.log("unknown control message");
