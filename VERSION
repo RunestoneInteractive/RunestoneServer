@@ -1,4 +1,16 @@
-RunestoneServer-6.0.1
+RunestoneServer-6.0.2
+
+Changes in 6.0.2
+
+Bug fixes and updates to Peer Instruction
+* [x] Allow groups > 2 for peer instruction
+* [x] Fix the duplication of partners problem
+* [x] Didn't like your partner over and over again
+* [x] Reset the radio button when a new peer is selected
+* [x] Blank out answer when you start vote 2
+* [x] On second vote it still says your first answer
+* [x] Please discuss the answers with your group members.
+* [x] Put the countdown in red
 
 Changes in this release, tagged 6.0.1
 
@@ -15,6 +27,6 @@ Big Changes to the 6.x series
 3. Version 6.x requires Docker - use docker-tools to build a container and docker compose to launch.
 4. All book apis in ajax.py are deprecated. All of books.py is deprecated
 5. The RunestoneServer can be built in 3 modes
-    - --single - good for a single course production setup
-    - --single-dev - good for development work
-    - --multi - Good for running multiple Containers with a single database server and a load balancer
+- --single - good for a single course production setup
+- --single-dev - good for development work
+- --multi - Good for running multiple Containers with a single database server and a load balancer
