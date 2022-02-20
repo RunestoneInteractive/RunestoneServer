@@ -168,7 +168,8 @@ function autoGrade() {
                         `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
                             student
-                        )}&assignment_id=${encodeURIComponent(assignment)}">${students[student]
+                        )}&assignment_id=${encodeURIComponent(assignment)}">${
+                            students[student]
                         }</a>
                         ${res.message}
                         Score: ${res.total_mess} <br>`
@@ -446,7 +447,9 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
                         acid: acid,
                         sid: studentId,
                         grade: this.value,
-                        assignmentid: $(document.getElementById("chaporassignselector")).val()
+                        assignmentid: $(
+                            document.getElementById("chaporassignselector")
+                        ).val(),
                     },
                     success: function (data) {
                         inp.style.backgroundColor = "#ddffdd";
@@ -518,7 +521,10 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             var obj = new XMLHttpRequest();
             obj.open(
                 "GET",
-                "/runestone/admin/getGradeComments?acid=" + acid + "&sid=" + encodeURIComponent(studentId),
+                "/runestone/admin/getGradeComments?acid=" +
+                    acid +
+                    "&sid=" +
+                    encodeURIComponent(studentId),
                 true
             );
             obj.send(
@@ -918,11 +924,10 @@ function TA_search() {
     var elements = document.getElementsByClassName("available_students");
     for (var i = 0; i < elements.length; i++) {
         var name = elements[i].innerText.toUpperCase();
-        var text = $("#TA_search").val()
-        if(name.includes(text.toUpperCase())){
-            elements[i].style.display = "block"; 
-        }
-        else{
+        var text = $("#TA_search").val();
+        if (name.includes(text.toUpperCase())) {
+            elements[i].style.display = "block";
+        } else {
             elements[i].style.display = "none";
         }
     }
@@ -1313,7 +1318,7 @@ function update_assignment(form) {
         }
     }
     if (form.is_peer.checked && form.is_timed.checked) {
-        alert("An assignment can not have both Timed and Peer checked")
+        alert("An assignment can not have both Timed and Peer checked");
         return;
     }
     if (form.visible.checked) {
@@ -1622,9 +1627,9 @@ function remove_question(question_name) {
     var assignment_id = getAssignmentId();
     $.getJSON(
         "delete_assignment_question/?name=" +
-        question_name +
-        "&assignment_id=" +
-        assignment_id,
+            question_name +
+            "&assignment_id=" +
+            assignment_id,
         {
             variable: "variable",
         }
@@ -1738,22 +1743,19 @@ function create_question(formdata) {
                     "Name is already in use. Please try a different name.";
             } else {
                 alert("Question created successfully");
+                appendToQuestionTable(
+                    name,
+                    points,
+                    "pct_correct",
+                    ["manual", "all_or_nothing", "pct_correct", "interact"],
+                    "best_answer",
+                    ["first_answer", "last_answer", "best_answer"]
+                );
+
                 var newPoints = iserror.points;
                 var q_type = activetab;
                 var totalPoints = document.getElementById("totalPoints");
                 totalPoints.innerHTML = "Total points: " + newPoints;
-                // Add this question to the question picker and the table.
-                var tqp = question_picker.jstree(true);
-                // Find the exercises for this chapter. They have an ID set, making them easy to find.
-                chapter = chapterMap[chapter];
-                var exercises_node = tqp.get_node(chapter + " Exercises");
-                // See https://www.jstree.com/api/#/?f=create_node([par, node, pos, callback, is_loaded]).
-                tqp.check_node(
-                    tqp.create_node(exercises_node, {
-                        id: name,
-                        text: name,
-                    })
-                );
             }
         },
         "json"
@@ -1861,7 +1863,9 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
      *  source into the actual component.
      */
     if (!componentSrc) {
-        jQuery(`#${whereDiv}`).html(`<p>Sorry, no source is available for preview or grading</p>`);
+        jQuery(`#${whereDiv}`).html(
+            `<p>Sorry, no source is available for preview or grading</p>`
+        );
         return;
     }
     if (typeof moreOpts === "undefined") {

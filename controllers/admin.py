@@ -1483,6 +1483,18 @@ def createquestion():
                 acid=divid,
             )
         else:
+            max_sort = (
+                db(db.assignment_questions.assignment_id == assignmentid)
+                .select(
+                    db.assignment_questions.sorting_priority,
+                    orderby=~db.assignment_questions.sorting_priority,
+                )
+                .first()
+            )
+            if max_sort:
+                max_sort = max_sort.sorting_priority + 1
+            else:
+                max_sort = 0
             db.assignment_questions.insert(
                 assignment_id=assignmentid,
                 question_id=newqID,
@@ -1490,7 +1502,7 @@ def createquestion():
                 points=points,
                 autograde=unittest or "pct_correct",
                 which_to_grade="best_answer",
-                sorting_priority=0,
+                sorting_priority=max_sort,
             )
 
         returndict = {request.vars["name"]: newqID, "timed": timed, "points": points}
