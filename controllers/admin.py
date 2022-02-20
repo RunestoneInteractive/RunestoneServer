@@ -1348,12 +1348,11 @@ def question_text():
     try:
         q_text = db(query).select(db.questions.question).first().question
     except Exception:
-        q_text = "Error: Could not find source for {} in the database".format(qname)
+        q_text = f"Error: Could not find source for {qname} in the database"
 
-    if (
-        q_text[0:2] == "\\x"
-    ):  # workaround Python2/3 SQLAlchemy/DAL incompatibility with text
-        q_text = q_text[2:].decode("hex")
+    if q_text == None:
+        q_text = f"Error: Could not find source for {qname} in the database"
+
     logger.debug(q_text)
     return json.dumps(q_text)
 
