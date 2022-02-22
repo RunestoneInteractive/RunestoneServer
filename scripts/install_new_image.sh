@@ -15,3 +15,6 @@ docker pull registry.digitalocean.com/runestone-registry/production_server:lates
 
 docker compose stop
 docker compose up -d
+
+echo "Pruning old images"
+docker image prune -f
