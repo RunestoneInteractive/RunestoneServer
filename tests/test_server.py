@@ -160,8 +160,6 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
             "This page is a utility for accepting redirects from external services like Spotify or LinkedIn that use oauth.",
             1,
         ),
-        ("books/index", False, "Runestone Test Book", 1),
-        ("books/published", False, "Runestone Test Book", 1),
         # TODO: Many other views!
     ],
 )
@@ -534,6 +532,9 @@ def test_payments(runestone_controller, runestone_db_tools, test_user):
 
 
 # Test dynamic book routing.
+@pytest.mark.skip(
+    reason="Can't render new BookServer template using old server. TODO: Port to the BookServer."
+)
 def test_dynamic_book_routing_1(test_client, test_user_1):
     test_user_1.login()
     dbr_tester(test_client, test_user_1, True)
@@ -548,6 +549,9 @@ def test_dynamic_book_routing_1(test_client, test_user_1):
 
 
 # Test the no-login case.
+@pytest.mark.skip(
+    reason="Can't render new BookServer template using old server. TODO: Port to the BookServer."
+)
 def test_dynamic_book_routing_2(test_client, test_user_1):
     test_client.logout()
     # Test for a book that doesn't require a login. First, change the book to not require a login.
@@ -913,17 +917,12 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
 
     # Add questions to the assignment.
     def add_to_assignment(question_kwargs, points):
-        assert (
-            tu.test_client.validate(
-                "admin/add__or_update_assignment_question",
-                data=dict(
-                    question=question_kwargs["div_id"],
-                    points=points,
-                    **assignment_kwargs
-                ),
-            )
-            != json.dumps("Error")
-        )
+        assert tu.test_client.validate(
+            "admin/add__or_update_assignment_question",
+            data=dict(
+                question=question_kwargs["div_id"], points=points, **assignment_kwargs
+            ),
+        ) != json.dumps("Error")
 
     # Determine the order of the questions and the _`point values`.
     add_to_assignment(shortanswer_kwargs, 0)
@@ -1115,6 +1114,103 @@ def test_grades_1(runestone_db_tools, test_user, tmp_path):
     grades_report("", "About Runestone")
 
 
+# Test the teaming report.
+@pytest.mark.skip(
+    reason="Can't render new BookServer template using old server. TODO: Port to the BookServer."
+)
+def test_team_1(runestone_db_tools, test_user, runestone_name):
+    # Create test users.
+    course = runestone_db_tools.create_course()
+    course_name = course.course_name
+
+    # **Create test data**
+    # =====================
+    # Create test users.
+    test_user_array = [
+        test_user(
+            "test_user_{}".format(index), "x", course, last_name="user_{}".format(index)
+        )
+        for index in range(3)
+    ]
+
+    def assert_passing(index, *args, **kwargs):
+        res = test_user_array[index].hsblog(*args, **kwargs)
+        assert "errors" not in res
+
+    # Prepare common arguments for each question type.
+    shortanswer1_kwargs = dict(
+        event="shortanswer", div_id="team_eval_role_0", course=course_name
+    )
+    shortanswer2_kwargs = dict(
+        event="shortanswer", div_id="team_eval_communication", course=course_name
+    )
+    fitb_kwargs = dict(
+        event="fillb", div_id="team_eval_ge_contributions_0", course=course_name
+    )
+
+    # *User 0*
+    # ---------------------------
+    logout = test_user_array[2].test_client.logout
+    logout()
+    test_user_array[0].login()
+    assert_passing(
+        0, act=json.dumps(test_user_array[0].username), **shortanswer1_kwargs
+    )
+    assert_passing(0, act=json.dumps("comm 0"), **shortanswer2_kwargs)
+    assert_passing(0, answer=json.dumps(["5"]), **fitb_kwargs)
+
+    # *User 1*
+    # --------------------------
+    # It doesn't matter which user logs out, since all three users share the same client.
+    logout()
+    test_user_array[1].login()
+    assert_passing(
+        1, act=json.dumps(test_user_array[1].username), **shortanswer1_kwargs
+    )
+    assert_passing(1, act=json.dumps("comm 1"), **shortanswer2_kwargs)
+    assert_passing(1, answer=json.dumps(["25"]), **fitb_kwargs)
+
+    # *User 2*
+    # ----------------------------
+    logout()
+    test_user_array[2].login()
+    # Add three shortanswer answers, to make sure the number of attempts is correctly recorded.
+    assert_passing(
+        2, act=json.dumps(test_user_array[2].username), **shortanswer1_kwargs
+    )
+    assert_passing(2, act=json.dumps("comm 2"), **shortanswer2_kwargs)
+    assert_passing(2, answer=json.dumps(["90"]), **fitb_kwargs)
+
+    # **Test the team report**
+    # =========================
+    with open(
+        "applications/{}/books/{}/test_course_1.csv".format(
+            runestone_name, course.base_course
+        ),
+        "w",
+        encoding="utf-8",
+    ) as f:
+        f.write(
+            "user id,user name,team name\n"
+            "test_user_0@foo.com,test user_0,team 1\n"
+            "test_user_1@foo.com,test user_1,team 1\n"
+            "test_user_2@foo.com,test user_2,team 1\n"
+        )
+
+    # TODO: Test not being an instructor.
+    tu = test_user_array[2]
+    tu.make_instructor()
+    tu.test_client.validate(
+        "books/published/{}/test_chapter_1/team_report_1.html".format(course_name)
+    )
+
+    logout()
+    # TODO: Test with no login.
+
+
+@pytest.mark.skip(
+    reason="Can't render new BookServer template using old server. TODO: Port to the BookServer."
+)
 def test_pageprogress(test_client, runestone_db_tools, test_user_1):
     test_user_1.login()
     test_user_1.hsblog(
@@ -1138,6 +1234,9 @@ def test_pageprogress(test_client, runestone_db_tools, test_user_1):
     assert '"subc_b_fitb": 0' in test_user_1.test_client.text
 
 
+@pytest.mark.skip(
+    reason="Can't render new BookServer template using old server. What does this test do? Should it be ported?"
+)
 def test_lockdown(test_client, test_user_1):
     test_user_1.login()
     base_course = test_user_1.course.base_course
