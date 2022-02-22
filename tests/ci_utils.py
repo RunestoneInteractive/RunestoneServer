@@ -24,7 +24,7 @@ is_linux = sys.platform.startswith("linux")
 is_darwin = sys.platform == "darwin"
 
 # Copied from https://docs.python.org/3.5/library/platform.html#cross-platform.
-is_64bits = sys.maxsize > 2 ** 32
+is_64bits = sys.maxsize > 2**32
 
 
 # Support code

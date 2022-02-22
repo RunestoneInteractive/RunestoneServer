@@ -92,7 +92,7 @@ def _start_servers(dev: bool) -> None:
     # for a production environment with several worker containers
     xqt(
         f"cp {env.RUNESTONE_PATH}/scripts/tickets2db.py {env.WEB2PY_PATH}",
-        f"python web2py.py -M -S runestone --run tickets2db.py &",
+        "python web2py.py -M -S runestone --run tickets2db.py &",
         cwd=f"{env.WEB2PY_PATH}",
     )
 
