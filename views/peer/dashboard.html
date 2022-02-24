@@ -111,7 +111,7 @@
 
 
 </script>
-<script src="/runestone/static/js/peer.js"></script>
+<script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
 <script>
     var user = '{{=auth.user.username}}';
     var currentQuestion = '{{=XML(current_question.name)}}';

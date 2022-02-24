@@ -25,6 +25,14 @@ from dateutil.parser import parse
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+peerjs = os.path.join("applications", request.application, "static", "js", "peer.js")
+try:
+    mtime = int(os.path.getmtime(peerjs))
+except FileNotFoundError:
+    mtime = random.randrange(10000)
+
+request.peer_mtime = str(mtime)
+
 
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
