@@ -20,11 +20,11 @@
                 type="text"
                 id="searchbar"
                 onkeyup="search_book()"
-                placeholder="Search by topic.."
+                placeholder="Search by keyword..."
             />
         </div>
         {{ for section in sections: }}
-        <b style="font-size: 25px">{{=section}} Textbooks:</b>
+        <div class="sectionName" style="font-size: 25px">{{=section}} Textbooks:</div>
 
             {{ for book in book_list: }}
                 {{ if book['section'] == section: }}
@@ -46,6 +46,7 @@
         {{pass}}
         <script src="../static/js/books.js"></script>
 
+        <h3>License Information</h3>
         <p>
             The books published on Runestone are all licensed under the Creative Commons
             CC-BY license or the GNU Free Documentation license. The source code for each
