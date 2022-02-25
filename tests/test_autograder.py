@@ -95,6 +95,7 @@ HOW_TO_SCORE = ["all_or_nothing", "pct_correct", "interact"]
         ),
     ],
 )
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_grade_one_student(
     div_id,
     event,
@@ -214,6 +215,7 @@ SCA = "/srv/web2py/applications/runestone/books/test_course_1/published/test_cou
 SCB = "/srv/web2py/applications/runestone/books/test_course_1/published/test_course_1/test_chapter_1/subchapter_b.html"
 
 
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_reading(
     test_assignment, test_user_1, test_user, runestone_db_tools, test_client
 ):
@@ -304,11 +306,22 @@ def test_reading(
     assert totres["score"] == 20
 
 
-def test_record_grade(test_user_1, test_user, runestone_db_tools, test_client):
+def test_record_grade(test_user_1, test_user, test_client, test_assignment):
     student1 = test_user("student1", "password", test_user_1.course)
     student1.logout()
     test_user_1.make_instructor()
     test_user_1.login()
+
+    my_a = test_assignment("assignment1", test_user_1.course, is_visible="True")
+    my_a.addq_to_assignment(
+        question="shorta1",
+        points=2,
+        autograde="null",
+        which_to_grade="best_answer",
+        reading_assignment=False,
+    )
+    my_a.save_assignment()
+    assignment_id = my_a.assignment_id
 
     # put this in a loop because we want to make sure update_or_insert is correct, so we are testing
     # the initial grade plus updates to the grade
@@ -316,7 +329,11 @@ def test_record_grade(test_user_1, test_user, runestone_db_tools, test_client):
         res = test_client.validate(
             "assignments/record_grade",
             data=dict(
-                sid=student1.username, acid="shorta1", grade=g, comment="very good test"
+                sid=student1.username,
+                acid="shorta1",
+                assignmentid=assignment_id,
+                grade=g,
+                comment="very good test",
             ),
         )
 
@@ -403,35 +420,21 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
     # record grades for individual questions
     res = test_user_1.test_client.validate(
         "assignments/record_grade",
-        data=dict(sid=student1.username, acid="shorta1", grade=1, comment="very good"),
+        data=dict(
+            sid=student1.username,
+            acid="shorta1",
+            assignmentid=assignment_id,
+            grade=1,
+            comment="very good",
+        ),
     )
 
     res = json.loads(res)
+    print(res)
     assert res["response"] == "replaced"
 
     test_user_1.logout()
     student1.login()
-
-    # try to have student self-grade
-    res = student1.test_client.validate(
-        "assignments/student_autograde", data=dict(assignment_id=assignment_id)
-    )
-
-    # but make sure that the grade has *not* been written into the db
-    db = runestone_db_tools.db
-    grade = (
-        db(
-            (db.grades.auth_user == student1.user_id)
-            & (db.grades.assignment == assignment_id)
-        )
-        .select()
-        .first()
-    )
-    assert not grade
-
-    res = json.loads(res)
-    assert res["success"]
-    print(res)
 
     # check if score is now 50%
     res = student1.test_client.validate(
@@ -439,16 +442,6 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
         "Grade: 1.0 of 2 = 50.0%",
         data=dict(assignment_id=assignment_id),
     )
-    # and that the grade has still *not* been written into the db
-    grade = (
-        db(
-            (db.grades.auth_user == student1.user_id)
-            & (db.grades.assignment == assignment_id)
-        )
-        .select()
-        .first()
-    )
-    assert not grade.score
 
     # ******** change the settings and try again,
     # the total should be calculated and stored in db now ***********
@@ -467,6 +460,7 @@ def test_student_autograde(test_user_1, test_user, runestone_db_tools, test_assi
             data=dict(assignment_id=assignment_id),
         )
         # and that the grade **has** been written into the db
+        db = runestone_db_tools.db
         grade = (
             db(
                 (db.grades.auth_user == student1.user_id)

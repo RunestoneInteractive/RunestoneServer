@@ -776,6 +776,7 @@ def test_instructor_practice_admin(test_client, runestone_db_tools, test_user):
     assert practice_settings_1
 
 
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_deleteaccount(test_client, runestone_db_tools, test_user):
     course_3 = runestone_db_tools.create_course("test_course_3")
     the_user = test_user("user_to_delete", "password_1", course_3)
