@@ -176,7 +176,7 @@ def web2py_server(runestone_name, web2py_server_address, pytestconfig):
         #
         # Make sure runestone_test is nice and clean -- this will remove many
         # tables that web2py will then re-create.
-        xqt(f"rsmanage --verbose initdb --reset --force")
+        xqt("rsmanage --verbose initdb --reset --force")
 
         # Copy the test book to the books directory.
         rmtree("{}/books/test_course_1".format(rs_path), ignore_errors=True)
