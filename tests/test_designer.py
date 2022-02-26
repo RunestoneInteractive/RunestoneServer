@@ -1,3 +1,9 @@
+import pytest
+
+
+@pytest.mark.skip(
+    reason="See https://github.com/RunestoneInteractive/RunestoneServer/issues/1904"
+)
 def test_build(test_client, test_user_1, runestone_db_tools):
     test_user_1.make_instructor()
     test_user_1.login()

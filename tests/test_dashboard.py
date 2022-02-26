@@ -1,4 +1,5 @@
 import datetime
+import pytest
 
 #
 # Unit Tests for DASHBOARD API endpoints
@@ -10,6 +11,7 @@ import datetime
 # Run these from the main web2py directory with the command:
 #
 #
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_student_report(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course("test_course_3")
     test_instructor_1 = test_user("test_instructor_1", "password_1", course_3)
@@ -40,6 +42,7 @@ def test_student_report(test_client, runestone_db_tools, test_user, test_user_1)
     )
 
 
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course(
         "test_course_3", base_course="test_course_1"
@@ -75,6 +78,7 @@ def test_subchapteroverview(test_client, runestone_db_tools, test_user, test_use
     )
 
 
+@pytest.mark.skip(reason="Requires BookServer for testing -- TODO")
 def test_exercisemetrics(test_client, runestone_db_tools, test_user, test_user_1):
     course_3 = runestone_db_tools.create_course(
         "test_course_3", base_course="test_course_1"
