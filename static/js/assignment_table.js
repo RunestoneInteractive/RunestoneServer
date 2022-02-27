@@ -325,6 +325,8 @@ function populateAssignmentTable() {
                                 sid: assignment_table.getDataAtCell(row, atch.USERID),
                                 // The ``acid`` is the div_id. Get it from the table. The ``prop`` is actually the column.
                                 acid: assignment_table.getDataAtCell(atrh.DIV_ID, prop),
+                                // The name of the assignment.
+                                assignmentid: $("#chaporassignselector").val(),
 
                                 grade: newValue.score,
                                 comment: "Manually graded",
@@ -845,6 +847,9 @@ function createGroupedAssignmentTable() {
                         sid: newValue.user_ids,
                         // The ``acid`` is the div_id. Get it from the table. The ``prop`` is actually the column.
                         acid: grouped_assignment_table.getDataAtCell(atrh.DIV_ID, prop),
+                        // The name of the assignment.
+                        assignmentid: $("#chaporassignselector").val(),
+
                         grade: newValue.score,
                         comment: "Manually graded",
                     });
