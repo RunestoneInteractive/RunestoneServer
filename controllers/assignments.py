@@ -147,8 +147,8 @@ def get_summary():
     )
 
     res = db.executesql(
-        """select chapter, name, min(question_type) question_type, min(score), max(score), to_char(avg(score), '00.999') as  mean, count(score) 
-from assignment_questions join questions on question_id = questions.id join question_grades on name =  div_id 
+        """select chapter, name, min(question_type) question_type, min(score), max(score), to_char(avg(score), '00.999') as  mean, count(score)
+from assignment_questions join questions on question_id = questions.id join question_grades on name =  div_id
 where assignment_id = %s and course_name = %s
 group by chapter, name""",
         (assignment.id, auth.user.course_name),
@@ -595,9 +595,7 @@ def doAssignment():
         # this means the user is logged in to web2py but not fastapi - this is not good
         # as the javascript in the questions assumes the new server and a token.
         logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
         response.flash = (
             "Access Token Created - If this re-occurs check your cookie settings"
         )
@@ -895,9 +893,7 @@ def chooseAssignment():
 
     if "access_token" not in request.cookies:
         logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
 
     timezoneoffset = session.timezoneoffset if "timezoneoffset" in session else None
     if not timezoneoffset and "RS_info" in request.cookies:

@@ -140,7 +140,7 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
         rn <= {num_answer}
     ORDER BY
         sid
-    limit 4000    
+    limit 4000
     """,
         dburl,
     )
@@ -233,9 +233,7 @@ def student():
         # this means the user is logged in to web2py but not fastapi - this is not good
         # as the javascript in the questions assumes the new server and a token.
         logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
 
     assignments = db(
         (db.assignments.is_peer == True)
