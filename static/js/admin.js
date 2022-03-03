@@ -791,6 +791,25 @@ function selectChapOrAssignment() {
         pickedChapters("chaporassignselector");
     }
 
+    // TODO: After collecting data from the logs we can decide whether to keep
+    // the chapter selection.
+    let data = {
+        event: "grading",
+        act: val,
+        div_id: "chooseChapOrAssign",
+        course_name: eBookConfig.course,
+    };
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/ns/logger/bookevent", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    fetch(request);
+
     displayDefaultQuestion("questionselector");
     pickedStudents("studentselector");
 }
