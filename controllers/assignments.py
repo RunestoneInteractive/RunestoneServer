@@ -441,9 +441,8 @@ def record_grade():
         logger.error(
             "IntegrityError {} {} {}".format(sid, div_id, auth.user.course_name)
         )
+        # TODO: Maybe we should just do an update when we get an Integrity error?
         return json.dumps({"response": "not replaced"})
-
-    # TODO: call do_calculate_totals when request.vars.recalc is true
 
     return json.dumps({"response": "replaced"})
 
