@@ -98,7 +98,7 @@ def _start_servers(dev: bool) -> None:
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
     )
 
-    # Start the script to collect tickets and store them in the database.  Most useful
+    # Start the script to collect tickets and store them in the database. Most useful
     # for a production environment with several worker containers
     xqt(
         f"cp {env.RUNESTONE_PATH}/scripts/tickets2db.py {env.WEB2PY_PATH}",
@@ -123,6 +123,7 @@ def _stop_servers() -> None:
     xqt(
         "pkill celery",
         "pkill -f gunicorn",
+        "pkill -f tickets2db.py",
         "nginx -s stop",
         check=False,
     )
