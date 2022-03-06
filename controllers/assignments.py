@@ -806,9 +806,9 @@ def doAssignment():
         ]
     session.readings = readings_names
     user_is_instructor = (
-        "true"
+        True
         if auth.user and verifyInstructorStatus(auth.user.course_id, auth.user)
-        else "false"
+        else False
     )
 
     set_latex_preamble(course.base_course)
