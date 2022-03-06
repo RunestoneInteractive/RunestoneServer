@@ -33,7 +33,7 @@
     height: 32px;
     line-height: 3em;
     text-align: left;
-    /* border: 1px solid rgb(36, 35, 35);*/
+    border: 2px solid rgb(36, 35, 35);
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: unset;
@@ -43,7 +43,10 @@
     position: relative;
     border-radius: 0px 0px 5px 5px;
     padding: 5px;
+    margin-bottom: 10px;
 }
+
+.book_descript {}
 
 .book_descript:hover {
     height: unset;
