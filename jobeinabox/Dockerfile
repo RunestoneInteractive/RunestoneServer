@@ -6,7 +6,7 @@ RUN rm -rf /var/www/html/jobe && \
     apache2ctl start && \
     cd /var/www/html/jobe && ./install
 
-RUN pip3 install install beautifulsoup4 pandas
+RUN pip3 install install beautifulsoup4 pandas requests altair
 
 # Healthcheck, minimaltest.py should complete within 2 seconds
 HEALTHCHECK --interval=5m --timeout=2s \
