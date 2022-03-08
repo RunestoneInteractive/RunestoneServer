@@ -164,7 +164,7 @@ function autoGrade() {
                 ajax_params.data.sid = student;
                 try {
                     res = await jQuery.ajax(ajax_params);
-                    $("#autogradingprogress").append(
+                    $("#autogradingprogress").prepend(
                         `${index + 1} of ${student_array.length}: ${student}
                         <a href="/runestone/dashboard/questiongrades?sid=${encodeURIComponent(
                             student
@@ -175,19 +175,13 @@ function autoGrade() {
                         Score: ${res.total_mess} <br>`
                     );
                     total = total + res.total_mess;
-                    $("#autogradingprogress").animate({
-                        scrollTop: $("#autogradingprogress").height(),
-                    });
                 } catch (e) {
                     console.log(`Error when autograding ${student} is ${e}`);
                 }
             } // end for
-            $("#autogradingprogress").append(
-                `Average Score: ${total / student_array.length}`
+            $("#autogradingprogress").prepend(
+                `Average Score: ${total / student_array.length} <br>`
             );
-            $("#autogradingprogress").animate({
-                scrollTop: $("#autogradingprogress").height(),
-            });
             $("#gradingprogresstitle").html("<h3>Grading Complete</h3>");
             gradingSummary("autogradingsummary");
             $("#autogradesubmit").prop("disabled", false);
