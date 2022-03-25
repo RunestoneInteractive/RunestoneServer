@@ -59,9 +59,18 @@ function connect(event) {
                             let ansSlot = document.getElementById("first_answer");
                             let currAnswer = window.mcList[currentQuestion].answer;
                             const ordA = 65;
-                            currAnswer = String.fromCharCode(
-                                ordA + parseInt(currAnswer)
-                            );
+                            if (currAnswer.indexOf(",") > -1) {
+                                let alist = currAnswer.split(",");
+                                let nlist = [];
+                                for (let x of alist) {
+                                    nlist.push(String.fromCharCode(ordA + parseInt(x)));
+                                }
+                                currAnswer = nlist.join(",");
+                            } else {
+                                currAnswer = String.fromCharCode(
+                                    ordA + parseInt(currAnswer)
+                                );
+                            }
                             ansSlot.innerHTML = currAnswer;
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
@@ -93,7 +102,7 @@ function connect(event) {
                     adict = JSON.parse(mess.answer);
                     let peersel = document.getElementById("peersel");
                     for (const key in adict) {
-                        let currAnswer = String.fromCharCode(ordA + adict[key]);
+                        let currAnswer = adict[key];
                         let newpeer = document.createElement("p");
                         newpeer.innerHTML = `${key} answered ${currAnswer}`;
                         peerlist.appendChild(newpeer);

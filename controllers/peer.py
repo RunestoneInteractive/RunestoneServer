@@ -148,9 +148,18 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
     logger.debug(df.head())
     # FIXME: this breaks for multiple answer mchoice!
     df = df[df.answer != ""]
-    df["answer"] = df.answer.astype("int64")
 
     return df
+
+
+def to_letter(astring: str):
+    if astring.isnumeric():
+        return chr(65 + int(astring))
+    if "," in astring:
+        alist = astring.split(",")
+        alist = [chr(65 + int(x)) for x in alist]
+        return ",".join(alist)
+    return None
 
 
 @auth.requires(
@@ -165,7 +174,7 @@ def chartdata():
     course_name = auth.user.course_name
     logger.debug(f"divid = {div_id}")
     df = _get_n_answers(2, div_id, course_name, start_time)
-    df["letter"] = df.answer.map(lambda x: chr(65 + x))
+    df["letter"] = df.answer.map(to_letter)
     x = df.groupby(["letter", "rn"])["answer"].count()
     df = x.reset_index()
     yheight = df.answer.max()
@@ -336,7 +345,7 @@ def _broadcast_peer_answers(correct, incorrect):
         partner_list = json.loads(p2)
         pdict = {}
         for p2 in partner_list:
-            ans = answers.get(p2, None)
+            ans = to_letter(answers.get(p2, None))
             pdict[p2] = ans
         # create a message from p1 to put into the publisher queue
         # it seems odd to not have a to field in the message...
