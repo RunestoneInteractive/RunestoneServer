@@ -113,7 +113,7 @@ def _stop_servers() -> None:
     xqt(
         "pkill celery",
         "pkill -f gunicorn",
-        "service nginx stop",
+        "nginx -s stop",
         check=False,
     )
 
