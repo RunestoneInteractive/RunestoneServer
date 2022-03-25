@@ -7,5 +7,6 @@ setup(
     name="runestone-docker-tools",
     version="0.1",
     install_requires=["click"],
+    packages=[""],
     entry_points={"console_scripts": ["docker-tools = docker_tools:cli"]},
 )
