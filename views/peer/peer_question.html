@@ -14,10 +14,8 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <form action="/runestone/peer/peer_question" method="GET">
+        <form action="/runestone/peer/peer_question" method="GET" id="nextqform">
             <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-            <button id="nextqbutton" type="submit" class="btn btn-success" name="next" disabled value="Next">Next
-                Question</button>
         </form>
     </div>
 </div>
@@ -57,7 +55,7 @@
     </div>
 </div>
 
-<script src="/runestone/static/js/peer.js"></script>
+<script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
 <script>
     var user = '{{=auth.user.username}}';
     var currentQuestion = '{{=XML(current_question.name)}}';

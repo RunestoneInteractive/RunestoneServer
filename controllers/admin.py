@@ -632,6 +632,12 @@ def admin():
 @auth.requires_login()
 def course_students():
     response.headers["content-type"] = "application/json"
+    row = get_course_row()
+    if row.course_name == row.base_course and not verifyInstructorStatus(
+        auth.user.course_id, auth.user
+    ):
+        return json.dumps({"message": "invalid call for this course"})
+
     cur_students = db(
         (db.user_courses.course_id == auth.user.course_id)
         & (db.auth_user.id == db.user_courses.user_id)

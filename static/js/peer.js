@@ -79,10 +79,9 @@ function connect(event) {
                     $("[type=radio]").prop("checked", false);
                     break;
                 case "enableNext":
-                    let butt = document.getElementById("nextqbutton");
-                    if (butt) {
-                        butt.removeAttribute("disabled");
-                    }
+                    // This moves the student to the next question in the assignment
+                    let nextForm = document.getElementById("nextqform");
+                    nextForm.submit();
                     break;
                 case "enableChat":
                     let discPanel = document.getElementById("discussion_panel");

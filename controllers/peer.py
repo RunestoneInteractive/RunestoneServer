@@ -25,6 +25,14 @@ from dateutil.parser import parse
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
 
+peerjs = os.path.join("applications", request.application, "static", "js", "peer.js")
+try:
+    mtime = int(os.path.getmtime(peerjs))
+except FileNotFoundError:
+    mtime = random.randrange(10000)
+
+request.peer_mtime = str(mtime)
+
 
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
@@ -69,6 +77,8 @@ def dashboard():
         act="start_question",
         timestamp=datetime.datetime.utcnow(),
     )
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    r.hset(f"{auth.user.course_name}_state", "mess_count", "0")
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
@@ -130,7 +140,7 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
         rn <= {num_answer}
     ORDER BY
         sid
-    limit 4000    
+    limit 4000
     """,
         dburl,
     )
@@ -158,6 +168,7 @@ def chartdata():
     df["letter"] = df.answer.map(lambda x: chr(65 + x))
     x = df.groupby(["letter", "rn"])["answer"].count()
     df = x.reset_index()
+    yheight = df.answer.max()
     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     y = pd.DataFrame(
         {
@@ -170,12 +181,26 @@ def chartdata():
     c = (
         alt.Chart(df[df.rn == 1], title="First Answer")
         .mark_bar()
-        .encode(x="letter", y=alt.Y("sum(answer)", title="Number of Students"))
+        .encode(
+            x="letter",
+            y=alt.Y(
+                "sum(answer)",
+                title="Number of Students",
+                scale=alt.Scale(domain=(0, yheight)),
+            ),
+        )
     )
     d = (
         alt.Chart(df[df.rn == 2], title="Second Answer")
         .mark_bar()
-        .encode(x="letter", y=alt.Y("sum(answer)", title="Number of Students"))
+        .encode(
+            x="letter",
+            y=alt.Y(
+                "sum(answer)",
+                title="Number of Students",
+                scale=alt.Scale(domain=(0, yheight)),
+            ),
+        )
     )
 
     return alt.hconcat(c, d).to_json()
@@ -193,8 +218,9 @@ def num_answers():
         & (db.mchoice_answers.course_name == auth.user.course_name)
         & (db.mchoice_answers.timestamp > parse(request.vars.start_time))
     ).count(distinct=db.mchoice_answers.sid)
-
-    return json.dumps({"count": acount})
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    mess_count = int(r.hget(f"{auth.user.course_name}_state", "mess_count"))
+    return json.dumps({"count": acount, "mess_count": mess_count})
 
 
 #
@@ -207,9 +233,7 @@ def student():
         # this means the user is logged in to web2py but not fastapi - this is not good
         # as the javascript in the questions assumes the new server and a token.
         logger.error(f"Missing Access Token: {auth.user.username} adding one Now")
-        _create_access_token(
-            {"sub": auth.user.username}, expires=datetime.timedelta(days=30)
-        )
+        create_rs_token()
 
     assignments = db(
         (db.assignments.is_peer == True)
@@ -292,7 +316,7 @@ def make_pairs():
 
     for k, v in gdict.items():
         r.hset(f"partnerdb_{auth.user.course_name}", k, json.dumps(v))
-
+    r.hset(f"{auth.user.course_name}_state", "mess_count", "0")
     logger.debug(f"DONE making pairs for {auth.user.course_name} {gdict}")
     _broadcast_peer_answers(correct, incorrect)
     logger.debug(f"DONE broadcasting pair information")
@@ -343,6 +367,11 @@ def publish_message():
     data = json.dumps(request.vars)
     logger.debug(f"data = {data}")
     r.publish("peermessages", data)
+    mess_count = int(r.hget(f"{auth.user.course_name}_state", "mess_count"))
+    if not mess_count:
+        mess_count = 0
+    if request.vars.type == "text":
+        r.hset(f"{auth.user.course_name}_state", "mess_count", str(mess_count + 1))
     return json.dumps("success")
 
 

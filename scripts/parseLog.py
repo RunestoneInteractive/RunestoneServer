@@ -4,11 +4,21 @@
 
 import re, sys
 
-timepat = re.compile(r'.*\[((Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*\d\d\d\d)\].*/runestone/ajax/(\w+)(\s|\?).*\s(\d+)\s+msecs.*')
-logfile = open(sys.argv[1], 'r')
+refer_pat = re.compile(r".*Referrer: (.*) Agent:.*")
+logfile = open(sys.argv[1], "r")
+referrers = {}
 
 for line in logfile:
-    g = timepat.match(line)
-    if g:
-        print("{},{},{}".format(g.group(1),g.group(4), g.group(6)))
+    if g := refer_pat.match(line):
+        ref = g.group(1).strip('"')
+        if "runestone.academy" not in ref:
+            referrers[ref] = referrers.get(ref, 0) + 1
 
+
+i = 0
+for k, v in sorted(referrers.items(), key=lambda x: x[1], reverse=True):
+    if i < 25:
+        print(k, v)
+        i += 1
+    else:
+        break

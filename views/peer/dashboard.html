@@ -1,46 +1,90 @@
-{{ extend "admin/instructors.html"}}
-
-{{ block tabcontent }}
+{{ extend "admin/instructors.html"}} {{ block tabcontent }}
 
 <script>
     eBookConfig.peer = true;
 </script>
 
 <h2>Peer Instruction Dashboard</h2>
-<div id="imessage">
-
-</div>
+<div id="imessage"></div>
 
 <div class="row">
     <div class="col-md-6">
-        <form action="/runestone/peer/dashboard" method="GET" onsubmit="return enableNext();">
-            <input type="hidden" name="assignment_id" value={{=assignment_id}}>
-            Group Size <select id="groupsize" name="groupsize">
+        <form
+            action="/runestone/peer/dashboard"
+            method="GET"
+            onsubmit="return enableNext();"
+        >
+            <input type="hidden" name="assignment_id" value="{{=assignment_id}}" />
+            Group Size
+            <select id="groupsize" name="groupsize">
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
                 <option value="6">6</option>
             </select>
-            <br/>
-            <button type="button" id="vote1" class="btn btn-info" onclick="warnAndStopVote(event)">Stop Vote 1</button>
-            <button type="button" id="makep" class="btn btn-info" onclick="makePartners(event)">Enable Discussion</button>
-            <button type="button" id="vote2" class="btn btn-info" onclick="startVote2(event)">Start Vote 2</button>
-            <button type="button" id="vote3" class="btn btn-info" onclick="warnAndStopVote(event)">Stop Vote 2</button>
-            <button type="submit" id="nextq" class="btn btn-info" name="next" value="Next">Next
-                Question</button>
-            <button type="submit" id="restart" class="btn btn-danger" name="next" value="Reset">Start Over</button>
+            <br />
+            <button
+                type="button"
+                id="vote1"
+                class="btn btn-info"
+                onclick="warnAndStopVote(event)"
+            >
+                Stop Vote 1
+            </button>
+            <button
+                type="button"
+                id="makep"
+                class="btn btn-info"
+                onclick="makePartners(event)"
+            >
+                Enable Discussion
+            </button>
+            <button
+                type="button"
+                id="vote2"
+                class="btn btn-info"
+                onclick="startVote2(event)"
+            >
+                Start Vote 2
+            </button>
+            <button
+                type="button"
+                id="vote3"
+                class="btn btn-info"
+                onclick="warnAndStopVote(event)"
+            >
+                Stop Vote 2
+            </button>
+            <button
+                type="submit"
+                id="nextq"
+                class="btn btn-info"
+                name="next"
+                value="Next"
+            >
+                Next Question
+            </button>
+            <button
+                type="submit"
+                id="restart"
+                class="btn btn-danger"
+                name="next"
+                value="Reset"
+            >
+                Start Over
+            </button>
         </form>
     </div>
 </div>
 
 <div class="row">
-    <div class='oneq col-md-6'>
-        {{=XML(current_question['htmlsrc'])}}
-    </div>
-    <div class='col-md-6'>
-        <div id="counter">Graphs Here</div>
-        <div id="first_answer" style="display:none"></div>
+    <div class="oneq col-md-6">{{=XML(current_question['htmlsrc'])}}</div>
+    <div class="col-md-6">
+        <div id="counter1"></div>
+        <div id="counter2"></div>
+        <div id="messcounter"></div>
+        <div id="first_answer" style="display: none"></div>
         <div id="second_answer"></div>
         <button type="button" onclick="hideShowGraph()">Hide/Show Graph</button>
     </div>
@@ -50,14 +94,15 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <script>
-    async function updateGraphs() {// Every five seconds get the graph data
-        var opt = { "renderer": "canvas", "actions": false };
+    async function updateGraphs() {
+        // Every five seconds get the graph data
+        var opt = { renderer: "canvas", actions: false };
         let data = {
-            "div_id": "{{=XML(current_question['name'])}}",
-            "answer_num": 1,
-            "start_time": startTime,
-            "num_answers": window.mcList[currentQuestion].answerList.length,
-        }
+            div_id: "{{=XML(current_question['name'])}}",
+            answer_num: 1,
+            start_time: startTime,
+            num_answers: window.mcList[currentQuestion].answerList.length,
+        };
         let jsheaders = new Headers({
             "Content-type": "application/json; charset=utf-8",
             Accept: "application/json",
@@ -77,19 +122,19 @@
         let graph = document.getElementById("first_answer");
         if (graph.style.display == "none") {
             graph.style.display = "block";
-        }
-        else {
+        } else {
             graph.style.display = "none";
         }
         updateGraphs();
         setInterval(updateGraphs, 5000);
     }
 
-    async function updateCount() {// Every five seconds get the graph data
+    async function updateCount() {
+        // Every five seconds get the graph data
         let data = {
-            "div_id": "{{=XML(current_question['name'])}}",
-            "start_time": startTime,
-        }
+            div_id: "{{=XML(current_question['name'])}}",
+            start_time: startTime,
+        };
         if (startTime2 !== null) {
             data.start_time = startTime2;
         }
@@ -104,17 +149,27 @@
         });
         let resp = await fetch(request);
         let spec = await resp.json();
+        let counterel = null;
+        let v = 0;
+        if (startTime2 === null) {
+            counterel = document.querySelector("#counter1");
+            v = 1;
+        } else {
+            counterel = document.querySelector("#counter2");
+            v = 2;
+        }
+        if (spec.mess_count > 0) {
+            mcounterel = document.querySelector("#messcounter");
+            mcounterel.innerHTML = `<p>Messages Sent ${spec.mess_count}</p>`;
+        }
 
-        let counterel = document.querySelector("#counter")
-        counterel.innerHTML = `<p>Number of Answers ${spec.count}</p>`;
+        counterel.innerHTML = `<p>Vote ${v} Answers: ${spec.count}</p>`;
     }
-
-
 </script>
-<script src="/runestone/static/js/peer.js"></script>
+<script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
 <script>
-    var user = '{{=auth.user.username}}';
-    var currentQuestion = '{{=XML(current_question.name)}}';
+    var user = "{{=auth.user.username}}";
+    var currentQuestion = "{{=XML(current_question.name)}}";
     var voteNum = 1;
     document.addEventListener("DOMContentLoaded", function (event) {
         setTimeout(connect, 1000);
@@ -122,5 +177,6 @@
     });
     var startTime = new Date().toUTCString();
     var startTime2 = null;
+    var mess_count = 0;
 </script>
 {{ end }}

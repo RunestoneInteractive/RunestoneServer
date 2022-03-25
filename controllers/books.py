@@ -38,6 +38,7 @@ logger.setLevel(settings.log_level)
 
 # Supporting functions
 # ====================
+# THIS FUNCTION IS DEPRECATED
 def _route_book(is_published=True):
     # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
     base_course = request.args(0)
@@ -404,12 +405,15 @@ def index():
 
     Produce a list of books based on the directory structure of runestone/books
 
+    TODO: Port this to books in bookserver
+
     """
 
     book_list = os.listdir("applications/{}/books".format(request.application))
     book_list = [book for book in book_list if ".git" not in book]
 
     res = []
+    sections = ["Computer Science"]
     for book in sorted(book_list):
         try:
             # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
@@ -417,7 +421,7 @@ def index():
                 "applications.{}.books.{}.conf".format(request.application, book)
             )
         except Exception as e:
-            logger.error("Error in book list: {}".format(e))
+            logger.warn(f"Error adding book {book} to library list: {e}")
             continue
         book_info = {}
         book_info.update(course_description="")
@@ -437,11 +441,26 @@ def index():
         if hasattr(config, "key_words"):
             book_info.update(key_words=config.key_words)
         if hasattr(config, "publisher") and config.publisher == "PTX":
-            bks = request.application
+            bks = settings.bks
+            book_info["source"] = "PTX"
         else:
             bks = settings.bks
+            book_info["source"] = "Runestone"
+
+        if hasattr(config, "shelf_section"):
+            book_info["section"] = config.shelf_section
+            if config.shelf_section not in sections:
+                sections.append(config.shelf_section)
+        else:
+            book_info["section"] = "Computer Science"
+        logger.debug(f"{book} is in section {book_info['section']}")
 
         book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
         book_info["regname"] = book
-        res.append(book_info)
-    return dict(book_list=res)
+        sections.sort()
+        if hasattr(config, "is_private") and config.is_private == True:
+            pass
+        else:
+            res.append(book_info)
+
+    return dict(book_list=res, sections=sections)

@@ -165,7 +165,7 @@ def get_sim_run_str_mdb(
 
 # Get a verification code (a random, 32-bit value).
 def get_verification_code():
-    return random.randrange(0, 2 ** 32)
+    return random.randrange(0, 2**32)
 
 
 # Returns True if a simulation produced the correct answer.
