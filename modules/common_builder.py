@@ -211,23 +211,22 @@ def sim_run_mdb(
             _tls.simout_path, "w+", encoding="utf-8", errors="backslashreplace"
         )
 
+        # Java, by default, doesn't free memory until it gets low, making it a memory hog. The `Java command-line flags <https://docs.oracle.com/en/java/javase/13/docs/specs/man/java.html>`_ ``-Xms750M -Xmx750M`` specify a heap size of 750 MB. However, these options must go before the ``--jar`` option when invoking ``java``, meaning they require hand edits to ``mdb.bat/sh``; they can't be passed as paramters (which are placed after ``--jar`` by ``mdb.bat/sh``). Therefore, use the `JAVA_TOOL_OPTIONS <https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/envvars002.html>`_ env var to pass these parameters.
+        sim_env = os.environ.copy()
+        sim_env["JAVA_TOOL_OPTIONS"] = "-Xms750M -Xmx750M"
         # Start the simulator.
         po = subprocess.Popen(
             [
                 mdb_path,
-                # These options must go before the ``--jar`` option, meaning they require hand edits to ``mdb.bat/sh``; they can't be passed as paramters (which are placed after ```--jar`` by ``mdb.bat/sh``.)
-                #
                 # Per a conversation with Microchip's support team, this disables the start-up check for new language packs, which takes several seconds to complete.
                 ##"-Dpackslib.workonline=false",
-                # Java, by default, doesn't free memory until it gets low, making this a memory hog. On Windows, it starts up at around 400 MB. This seems to keep it below 600 MB.
-                ##"-Xmx750M",
             ],
             text=True,
             shell=True,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
-            env=os.environ,
+            env=sim_env,
         )
         s = get_sim_setup_str_mdb(mcu_name)
         po.stdin.write(s)
