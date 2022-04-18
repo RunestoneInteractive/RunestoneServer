@@ -12,7 +12,7 @@
 # Standard library
 # ----------------
 # None.
-
+#
 # Third-party imports
 # -------------------
 # None.
@@ -20,8 +20,8 @@
 # Local application imports
 # -------------------------
 # None.
-
-
+#
+#
 # Configuration
 # =============
 # `user <https://docs.gunicorn.org/en/stable/settings.html#user>`_: Switch worker processes to run as this user.

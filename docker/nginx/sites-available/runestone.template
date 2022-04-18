@@ -8,13 +8,25 @@
 # `gzip_static <http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html>`_: Enables ("on") or disables ("off") checking the existence of precompressed files. Send compressed files in lieu of uncompressed files where they exist. This requires the optional ``ngx_http_gzip_static_module`` module.
 gzip_static on;
 
+# Specify a custom log format.
+#
+#`log_format <http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format>_`: Specifies log format.
+log_format custom_log_format '$remote_addr - [$time_local] '
+    'Request: "$request" Status: $status Bytes: $body_bytes_sent '
+    'RequestTime: $request_time '
+    'Referrer: "$http_referer" Agent: "$http_user_agent"';
+
+# Use this format.
+#
+# `access_log <http://nginx.org/en/docs/http/ngx_http_log_module.html#access_log>`_: Sets the path, format, and configuration for a buffered log write.
+access_log /var/log/nginx/access.log custom_log_format;
+
 # Define the web2py and FastAPI servers.
 server {
     include /etc/nginx/default.d/*.conf;
 
     # `server_name <http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name>`_: Set name(s) of a virtual server.
     server_name ${RUNESTONE_HOST};
-
 
     rewrite ^/ads.txt /runestone/static/ads.txt;
 
