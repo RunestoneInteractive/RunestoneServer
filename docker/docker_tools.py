@@ -933,15 +933,6 @@ def _build_phase_2_core(
 
     # Start the servers
     # ^^^^^^^^^^^^^^^^^
-    print("Starting Celery...")
-    # sudo doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
-    xqt(
-        'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
-        "poetry run celery --app=scheduled_builder worker --pool=threads "
-        "--concurrency=3 --loglevel=info &",
-        cwd=f"{env.RUNESTONE_PATH}/modules",
-    )
-
     print("Starting web servers.")
     _start_servers(build_config.is_dev())
 
