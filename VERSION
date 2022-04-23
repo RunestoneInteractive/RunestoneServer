@@ -1,3 +1,11 @@
+RunestoneServer-6.0.4
+
+Changes in 6.0.4
+
+-   Add mode=browsing to books in the library to make it more conventient to just look
+-   Also added mode=browsing to all links to the instructor guide
+-   fix bug with adding datafiles to source_code table
+
 RunestoneServer-6.0.3
 
 Changes in 6.0.3
