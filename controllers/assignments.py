@@ -804,7 +804,19 @@ def doAssignment():
             "{}/{}.html".format(d["chapter"], d["subchapter"])
             for d in readings[chapname]["subchapters"]
         ]
-    session.readings = readings_names
+
+    if "RS_info" in request.cookies:
+        logger.debug(f"RS_info Cookie {request.cookies['RS_info']}")
+        # Note that to get to the value of the cookie you must use ``.value``
+        parsed_js = json.loads(request.cookies["RS_info"].value)
+    else:
+        parsed_js = {}
+    parsed_js["readings"] = readings_names
+    # But to set the cookie you do NOT use ``.value``
+    response.cookies["RS_info"] = json.dumps(parsed_js)
+    response.cookies["RS_info"]["path"] = "/"
+    # By not setting expire this remains/becomes a session cookie
+    
     user_is_instructor = (
         True
         if auth.user and verifyInstructorStatus(auth.user.course_id, auth.user)
