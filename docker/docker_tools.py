@@ -674,8 +674,8 @@ def _build_phase_1(
     if pic24:
         # When changing the xc16 version, update the string below **and** the path added at the end of this block.
         xc16_ver = "xc16-v1.70-full-install-linux64-installer.run"
-        mplabx_ver = "MPLABX-v5.50(1)-linux-installer.tar"
-        mplabx_sh = "MPLABX-v5.50-linux-installer.sh"
+        mplabx_ver = "MPLABX-v6.00-linux-installer.tar"
+        mplabx_sh = "MPLABX-v6.00-linux-installer.sh"
         xqt(
             # Install the xc16 compiler.
             f"eatmydata wget --no-verbose https://ww1.microchip.com/downloads/en/DeviceDoc/{xc16_ver}",
