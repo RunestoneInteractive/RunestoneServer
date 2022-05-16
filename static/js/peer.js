@@ -38,7 +38,7 @@ function connect(event) {
                 // This will be some kind of control message for the page
                 case "countDownAndStop":
                     messarea = document.getElementById("imessage");
-                    let count = 10;
+                    let count = 5;
                     let itimerid = setInterval(async function () {
                         if (count > 0) {
                             messarea.style.color = "red";
@@ -51,13 +51,17 @@ function connect(event) {
                             if (discPanel) {
                                 discPanel.style.display = "none";
                             }
-                            messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your group members</p>`;
+                            let currAnswer = window.mcList[currentQuestion].answer;
+                            if (typeof currAnswer === "undefined") {
+                                messarea.innerHTML = `<h3>You have not answered the question</h3><p>You will not be able to participate in any discussion unless you answer the question.</p>`;
+                            } else {
+                                messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your group members</p>`;
+                            }
                             window.mcList[currentQuestion].submitButton.disabled = true;
                             window.mcList[currentQuestion].disableInteraction();
                             clearInterval(itimerid);
                             // Get the current answer and insert it into the
                             let ansSlot = document.getElementById("first_answer");
-                            let currAnswer = window.mcList[currentQuestion].answer;
                             const ordA = 65;
                             if (currAnswer.indexOf(",") > -1) {
                                 let alist = currAnswer.split(",");
@@ -93,6 +97,7 @@ function connect(event) {
                     nextForm.submit();
                     break;
                 case "enableChat":
+                    console.log(`got enableChat message with ${mess.answer}`);
                     let discPanel = document.getElementById("discussion_panel");
                     if (discPanel) {
                         discPanel.style.display = "block";
