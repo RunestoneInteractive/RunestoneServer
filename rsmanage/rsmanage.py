@@ -21,7 +21,7 @@ import re
 import shutil
 import signal
 import subprocess
-
+import redis
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
@@ -1085,6 +1085,18 @@ def check_db_for_useinfo(config):
     res = eng.execute("select count(*) from pg_class where relname = 'useinfo'")
     count = res.first()[0]
     return count
+
+
+@cli.command()
+@click.option("--course", help="name of course")
+def peergroups(course):
+    r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
+    ap = r.hgetall(f"partnerdb_{course}")
+    if len(ap) > 0:
+        for x in ap.items():
+            click.echo(x)
+    else:
+        click.echo(f"No Peer Groups found for {course}")
 
 
 if __name__ == "__main__":
