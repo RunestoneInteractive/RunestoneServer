@@ -84,6 +84,7 @@ def dashboard():
         course=get_course_row(db.courses.ALL),
         current_question=current_question,
         assignment_id=assignment_id,
+        is_instructor=True,
     )
 
 
@@ -326,7 +327,7 @@ def make_pairs():
     for k, v in gdict.items():
         r.hset(f"partnerdb_{auth.user.course_name}", k, json.dumps(v))
     r.hset(f"{auth.user.course_name}_state", "mess_count", "0")
-    logger.debug(f"DONE making pairs for {auth.user.course_name} {gdict}")
+    logger.debug(f"DONE makeing pairs for {auth.user.course_name} {gdict}")
     _broadcast_peer_answers(correct, incorrect)
     logger.debug(f"DONE broadcasting pair information")
     return json.dumps("success")
