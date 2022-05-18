@@ -63,19 +63,23 @@ function connect(event) {
                             // Get the current answer and insert it into the
                             let ansSlot = document.getElementById("first_answer");
                             const ordA = 65;
-                            if (currAnswer.indexOf(",") > -1) {
-                                let alist = currAnswer.split(",");
-                                let nlist = [];
-                                for (let x of alist) {
-                                    nlist.push(String.fromCharCode(ordA + parseInt(x)));
+                            if (typeof currAnswer !== "undefined") {
+                                if (currAnswer.indexOf(",") > -1) {
+                                    let alist = currAnswer.split(",");
+                                    let nlist = [];
+                                    for (let x of alist) {
+                                        nlist.push(
+                                            String.fromCharCode(ordA + parseInt(x))
+                                        );
+                                    }
+                                    currAnswer = nlist.join(",");
+                                } else {
+                                    currAnswer = String.fromCharCode(
+                                        ordA + parseInt(currAnswer)
+                                    );
                                 }
-                                currAnswer = nlist.join(",");
-                            } else {
-                                currAnswer = String.fromCharCode(
-                                    ordA + parseInt(currAnswer)
-                                );
+                                ansSlot.innerHTML = currAnswer;
                             }
-                            ansSlot.innerHTML = currAnswer;
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
                                 await logStopVote();

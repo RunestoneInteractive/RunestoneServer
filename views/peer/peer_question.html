@@ -62,18 +62,6 @@
     document.addEventListener("DOMContentLoaded", function (event) {
         setTimeout(connect, 1000);
     });
-    $(document).bind("runestone:login-complete", function () {
-        setTimeout(function() {
-        $("[name='do answer']").text("Submit")
-        $("[name='do answer']").click(function() {
-            let currentText = $(this).text();
-            if (currentText.indexOf("Thanks") > 0 ) {
-                $(this).text("Submit")
-            } else {
-                $(this).text("Thanks, your answer is recorded.")}
-            })
-        }, 1000);
-    })
 </script>
 
 {{ end }}

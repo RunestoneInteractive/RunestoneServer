@@ -113,8 +113,14 @@ def _get_current_question(assignment_id, get_next):
     return current_question
 
 
-def _get_n_answers(num_answer, div_id, course_name, start_time):
+def _get_lastn_answers(num_answer, div_id, course_name, start_time, end_time=None):
     dburl = settings.database_uri.replace("postgres://", "postgresql://")
+
+    time_clause = f"""
+        AND timestamp > '{start_time}'
+        """
+    if end_time:
+        time_clause += f" AND timestamp < '{end_time}'"
 
     df = pd.read_sql_query(
         f"""
@@ -124,14 +130,14 @@ def _get_n_answers(num_answer, div_id, course_name, start_time):
             ROW_NUMBER() OVER (
                 PARTITION BY sid
                 ORDER BY
-                    id
+                    id desc
             ) AS rn
         FROM
             mchoice_answers
         WHERE
             div_id = '{div_id}'
             AND course_name = '{course_name}'
-            AND timestamp > '{start_time}'
+            {time_clause}
     )
     SELECT
         *
@@ -171,10 +177,17 @@ def chartdata():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
     start_time = request.vars.start_time
+    end_time = request.vars.start_time2  # start time of vote 2
     num_choices = request.vars.num_answers
     course_name = auth.user.course_name
     logger.debug(f"divid = {div_id}")
-    df = _get_n_answers(2, div_id, course_name, start_time)
+    df1 = _get_lastn_answers(1, div_id, course_name, start_time, end_time)
+    if end_time:
+        df2 = _get_lastn_answers(1, div_id, course_name, end_time)
+        df2.rn = 2
+        df = pd.concat([df1, df2])
+    else:
+        df = df1
     df["letter"] = df.answer.map(to_letter)
     x = df.groupby(["letter", "rn"])["answer"].count()
     df = x.reset_index()
@@ -282,7 +295,7 @@ def peer_question():
 def make_pairs():
     response.headers["content-type"] = "application/json"
     div_id = request.vars.div_id
-    df = _get_n_answers(1, div_id, auth.user.course_name, request.vars.start_time)
+    df = _get_lastn_answers(1, div_id, auth.user.course_name, request.vars.start_time)
     group_size = int(request.vars.get("group_size", 2))
     logger.debug(f"STARTING to make pairs for {auth.user.course_name}")
     # answers = list(df.answer.unique())
