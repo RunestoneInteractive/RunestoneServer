@@ -57,8 +57,12 @@ function connect(event) {
                             } else {
                                 messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your group members</p>`;
                             }
-                            window.mcList[currentQuestion].submitButton.disabled = true;
-                            window.mcList[currentQuestion].disableInteraction();
+                            if (!eBookConfig.isInstructor) {
+                                window.mcList[
+                                    currentQuestion
+                                ].submitButton.disabled = true;
+                                window.mcList[currentQuestion].disableInteraction();
+                            }
                             clearInterval(itimerid);
                             // Get the current answer and insert it into the
                             let ansSlot = document.getElementById("first_answer");
