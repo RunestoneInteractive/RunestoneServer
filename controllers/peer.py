@@ -77,8 +77,18 @@ def dashboard():
         act="start_question",
         timestamp=datetime.datetime.utcnow(),
     )
+
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     r.hset(f"{auth.user.course_name}_state", "mess_count", "0")
+    mess = {
+        "sender": auth.user.username,
+        "type": "control",
+        "message": "enableNext",
+        "broadcast": True,
+        "course_name": auth.user.course_name,
+    }
+    r.publish("peermessages", json.dumps(mess))
+
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
@@ -100,7 +110,7 @@ def _get_current_question(assignment_id, get_next):
         db(db.assignments.id == assignment_id).update(current_index=idx)
     else:
         idx = assignment.current_index
-
+    db.commit()  # commit changes to current question to prevent race condition.
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=[db.assignment_questions.sorting_priority, db.assignment_questions.id]
     )
