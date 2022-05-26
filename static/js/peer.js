@@ -95,6 +95,9 @@ function connect(event) {
                     window.mcList[currentQuestion].submitButton.disabled = false;
                     window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
                     window.mcList[currentQuestion].enableInteraction();
+                    if (typeof studentVoteCount !== "undefined") {
+                        studentVoteCount += 1;
+                    }
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
                     $("[type=radio]").prop("checked", false);
