@@ -86,7 +86,13 @@ function connect(event) {
                             }
                             // send log message to indicate voting is over
                             if (typeof voteNum !== "undefined" && voteNum == 2) {
-                                await logStopVote();
+                                logPeerEvent({
+                                    sid: eBookConfig.username,
+                                    div_id: currentQuestion,
+                                    event: "peer",
+                                    act: "stop_question",
+                                    course: eBookConfig.course,
+                                });
                             }
                         }
                     }, 1000);
@@ -143,20 +149,13 @@ function connect(event) {
     };
 }
 
-async function logStopVote() {
+async function logPeerEvent(eventInfo) {
     // This can be refactored to take some parameters if peer grows
     // to require more logging functionality.
     let headers = new Headers({
         "Content-type": "application/json; charset=utf-8",
         Accept: "application/json",
     });
-    let eventInfo = {
-        sid: eBookConfig.username,
-        div_id: currentQuestion,
-        event: "peer",
-        act: "stop_question",
-        course: eBookConfig.course,
-    };
     let request = new Request(eBookConfig.ajaxURL + "hsblog", {
         method: "POST",
         headers: headers,
@@ -337,6 +336,49 @@ async function ratePeer(radio) {
         alert(`Error: Your action was not saved! The error was ${e}`);
         console.log(`Error: ${e}`);
     }
+}
+
+// This function is only for use with the async mode of peer instruction
+//
+async function showPeerEnableVote2() {
+    // Log the justification from this student
+    let mess = document.getElementById("messageText").value;
+
+    await logPeerEvent({
+        sid: eBookConfig.username,
+        div_id: currentQuestion,
+        event: "sendmessage",
+        act: `to:system:${mess}`,
+        course: eBookConfig.course,
+    });
+
+    // send a request to get a peer response and display it.
+    let data = {
+        div_id: currentQuestion,
+        course: eBookConfig.course,
+    };
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/get_async_explainer", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    let resp = await fetch(request);
+    if (!resp.ok) {
+        alert(`Pairs not made ${resp.statusText}`);
+    }
+    let spec = await resp.json();
+    let peerMess = spec.mess;
+    let peerEl = document.getElementById("peerJust");
+    peerEl.innerHTML = peerMess;
+    let nextStep = document.getElementById("nextStep");
+    nextStep.innerHTML =
+        "Please Answer the question again.  Even if you do not wish to change your answer.  After answering click the button to go on to the next question.";
+
+    // ask the student to vote again
 }
 
 $(function () {
