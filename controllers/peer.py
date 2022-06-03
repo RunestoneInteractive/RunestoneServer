@@ -52,6 +52,8 @@ def instructor():
     )
 
 
+# Instructor's interface to peer
+# ------------------------------
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
     requires_login=True,
@@ -111,13 +113,17 @@ def _get_current_question(assignment_id, get_next):
     else:
         idx = assignment.current_index
     db.commit()  # commit changes to current question to prevent race condition.
+    return _get_numbered_question(assignment_id, idx)
+
+
+def _get_numbered_question(assignment_id, qnum):
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=[db.assignment_questions.sorting_priority, db.assignment_questions.id]
     )
-    logger.debug(f"idx = {idx} len of qs = {len(a_qs)}")
-    if idx > len(a_qs) - 1:
-        idx = len(a_qs) - 1
-    current_question_id = a_qs[idx].question_id
+    if qnum > len(a_qs) - 1:
+        qnum = len(a_qs) - 1
+
+    current_question_id = a_qs[qnum].question_id
     current_question = db(db.questions.id == current_question_id).select().first()
 
     return current_question
@@ -281,6 +287,8 @@ def student():
     )
 
 
+# Student's Interface to Peer Instruction
+# ---------------------------------------
 @auth.requires_login()
 def peer_question():
     if "access_token" not in request.cookies:
@@ -437,3 +445,74 @@ def log_peer_rating():
         retmess = "success"
 
     return json.dumps(retmess)
+
+
+# Students Async Interface to Peer Instruction
+# --------------------------------------------
+
+
+@auth.requires_login()
+def peer_async():
+    if "access_token" not in request.cookies:
+        return redirect(URL("default", "accessIssue"))
+
+    assignment_id = request.vars.assignment_id
+
+    qnum = 0
+    if request.vars.question_num:
+        qnum = int(request.vars.question_num)
+
+    current_question = _get_numbered_question(assignment_id, qnum)
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        current_question=current_question,
+        assignment_id=assignment_id,
+        nextQnum=qnum + 1,
+    )
+
+
+@auth.requires_login()
+def get_async_explainer():
+    course_name = request.vars.course
+    sid = auth.user.username
+    div_id = request.vars.div_id
+
+    # Messages are in useinfo with an event of "sendmessage" and a div_id corresponding to the div_id of the question.
+    # The act field is to:user:message
+    # Ratings of messages are in useinfo with an event of "ratepeer"
+    # the act field is rateduser:rating (excellent, good, poor)
+    ratings = []
+    for rate in ["excellent", "good"]:
+        ratings = db(
+            (db.useinfo.event == "ratepeer")
+            & (db.useinfo.act.like(f"%{rate}"))
+            & (db.useinfo.div_id == div_id)
+            & (db.useinfo.course_id == course_name)
+        ).select()
+        if len(ratings) > 0:
+            break
+
+    if len(ratings) > 0:
+        idx = random.randrange(len(ratings))
+        act = ratings[idx].act
+        user = act.split(":")[0]
+        messages = db(
+            (db.useinfo.event == "sendmessage")
+            & (db.useinfo.sid == user)
+            & (db.useinfo.div_id == div_id)
+            & (db.useinfo.course_id == course_name)
+        ).select(orderby=db.useinfo.id)
+        user = messages[0].sid
+        mess = "<ul>"
+        for row in messages:
+            mpart = row.act.split(":")[2]
+            mess += f"<li>{mpart}</li>"
+        mess += "</ul>"
+    else:
+        mess = "Sorry there were no good explanations for you."
+        user = "nobody"
+
+    logger.debug(f"Get message for {div_id}")
+    return json.dumps({"mess": mess, "user": user})
