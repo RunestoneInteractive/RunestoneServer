@@ -87,10 +87,10 @@ def _score_one_interaction(row, points, autograde):
 
 
 def _score_peer_instruction(rows, points, autograde):
+    has_vote1 = 0
+    has_vote2 = 0
+    sent_message = 0
     for row in rows:
-        has_vote1 = 0
-        has_vote2 = 0
-        sent_message = 0
         if "vote1" in row.act:
             has_vote1 = 1
         if "vote2" in row.act:
@@ -98,13 +98,13 @@ def _score_peer_instruction(rows, points, autograde):
         if row.event == "sendmessage":
             sent_message = 1
 
-        tot = has_vote1 + has_vote2 + sent_message
-        if autograde == "peer+chat":
-            score = tot / 3 * points
-        else:
-            score = min(1.0, tot / 2) * points
+    tot = has_vote1 + has_vote2 + sent_message
+    if autograde == "peer_chat":
+        score = tot / 3 * points
+    else:
+        score = min(1.0, tot / 2) * points
 
-        return score
+    return score
 
 
 def _score_one_parsons(row, points, autograde):
@@ -264,7 +264,9 @@ def _scorable_useinfos(
         query = query & (db.useinfo.timestamp >= practice_start_time)
         if now:
             query = query & (db.useinfo.timestamp <= now)
-    return db(query).select(db.useinfo.id, db.useinfo.act, orderby=db.useinfo.timestamp)
+    return db(query).select(
+        db.useinfo.id, db.useinfo.event, db.useinfo.act, orderby=db.useinfo.timestamp
+    )
 
 
 def _scorable_parsons_answers(
@@ -534,7 +536,8 @@ def _autograde_one_q(
         scoring_fn = _score_one_code_run
         logger.debug("AGDB - done with activecode")
     elif question_type == "mchoice":
-        if autograde in ["peer", "peer+chat"]:
+        logger.debug(f"PEER - {autograde}")
+        if autograde in ["peer", "peer_chat"]:
             results = _scorable_useinfos(
                 course_name,
                 sid,
@@ -742,6 +745,8 @@ def _autograde_one_q(
         ):  # This is used for scoring peer instruction where we want to look at multiple answers
             score = scoring_fn(results, points, autograde)
             id = None
+            logger.debug("SCORE = %s by %s", score, scoring_fn)
+
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
             id = 0
