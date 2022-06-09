@@ -70,7 +70,12 @@ if sys.platform == "win32":
     sys.exit()
 
 # See if we're root.
-is_root = subprocess.run(["id", "-u"], capture_output=True, text=True, check=True).stdout.strip() == "0"
+is_root = (
+    subprocess.run(
+        ["id", "-u"], capture_output=True, text=True, check=True
+    ).stdout.strip()
+    == "0"
+)
 
 
 # Check to see if a program is installed; if not, install it.
@@ -87,8 +92,8 @@ def check_install(
         print("Not found. Installing...")
         subprocess.run(
             # Only run with ``sudo`` if we're not root.
-            ([] if is_root else ["sudo"]) +
-            [
+            ([] if is_root else ["sudo"])
+            + [
                 "apt-get",
                 "install",
                 "-y",
@@ -542,7 +547,7 @@ def _build_phase_0(
             xqt(
                 "sudo dscl . create /Groups/www-data",
                 "sudo dseditgroup -o edit -a $USER -t user www-data",
-                "sudo dscl . append /Groups/www-data GroupMembership $USER"
+                "sudo dscl . append /Groups/www-data GroupMembership $USER",
             )
         else:
             xqt('sudo usermod -a -G www-data "$USER"')
@@ -772,7 +777,9 @@ def _build_phase_1(
     )
 
     # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
-    Path("/srv/build_info.txt").write_text(f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n")
+    Path("/srv/build_info.txt").write_text(
+        f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n"
+    )
 
     xqt(
         # Do any final updates.
