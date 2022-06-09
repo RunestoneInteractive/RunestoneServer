@@ -22,6 +22,8 @@ import shutil
 import signal
 import subprocess
 import redis
+import xml.etree.ElementTree as ET
+from xml.etree import ElementInclude
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import IntegrityError
@@ -31,6 +33,7 @@ from psycopg2.errors import UniqueViolation
 from bookserver.crud import create_initial_courses_users
 from bookserver.db import init_models, term_models
 from bookserver.config import settings
+from runestone.pretext.chapter_pop import manifest_data_to_db
 
 
 class Config(object):
@@ -351,9 +354,11 @@ def addcourse(
 @click.option(
     "--course", help="The name of a course that should already exist in the DB"
 )
-@click.option("--clone", default=None, help="clone the book before building")
+@click.option("--clone", default=None, help="clone the given repo before building")
+@click.option("--ptx", is_flag=True, help="Build a PreTeXt book")
+@click.option("--manifest", default="runestone-manifest.xml", help="Manifest file")
 @pass_config
-def build(config, course, clone):
+def build(config, course, clone, ptx, manifest):
     """Build the book for an existing course"""
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
@@ -384,46 +389,146 @@ def build(config, course, clone):
     # proj_dir = os.path.basename(repo).replace(".git", "")
     click.echo("Switching to book dir {}".format(course))
     os.chdir(course)
-    try:
-        if os.path.exists("pavement.py"):
-            sys.path.insert(0, os.getcwd())
-            from pavement import options, dest
+    if ptx:
+        if not os.path.exists("project.ptx"):
+            click.echo("PreTeXt books need a project.ptx file")
+            sys.exit(1)
         else:
+            main_file = check_project_ptx()
+            tree = ET.parse(main_file)
+            root = tree.getroot()
+            ElementInclude.include(root)  # include all xi:include parts
+            # build the book
+            res = subprocess.call("pretext build runestone", shell=True)
+            if res != 0:
+                click.echo("Building failed")
+                sys.exit(1)
+            # process the manifest
+            click.echo("processing manifest...")
+            el = root.find("./docinfo/document-id")
+            if el is not None:
+                cname = el.text
+                if cname != course:
+                    click.echo(
+                        f"Error course: {course} does not match document-id: {cname}"
+                    )
+                    sys.exit(1)
+            else:
+                click.echo("Missing document-id please add to <docinfo>")
+                sys.exit(1)
+            mpath = os.path.join(os.getcwd(), "published", cname, manifest)
+            if os.path.exists(mpath):
+                manifest_data_to_db(cname, mpath)
+            else:
+                raise IOError(
+                    f"You must provide a valid path to a manifest file: {mpath} does not exist."
+                )
+
+            # update the library page
+            click.echo("updating library.... TODO")
+            update_library(config, mpath, course)
+
+    else:
+        try:
+            if os.path.exists("pavement.py"):
+                sys.path.insert(0, os.getcwd())
+                from pavement import options, dest
+            else:
+                click.echo(
+                    "I can't find a pavement.py file in {} you need that to build".format(
+                        os.getcwd()
+                    )
+                )
+                exit(1)
+        except ImportError as e:
+            click.echo("You do not appear to have a good pavement.py file.")
+            print(e)
+            exit(1)
+
+        if options.project_name != course:
             click.echo(
-                "I can't find a pavement.py file in {} you need that to build".format(
-                    os.getcwd()
+                "Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(
+                    course, project_name
                 )
             )
             exit(1)
-    except ImportError as e:
-        click.echo("You do not appear to have a good pavement.py file.")
-        print(e)
-        exit(1)
 
-    if options.project_name != course:
-        click.echo(
-            "Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(
-                course, project_name
+        res = subprocess.call("runestone build --all", shell=True)
+        if res != 0:
+            click.echo(
+                "building the book failed, check the log for errors and try again"
             )
-        )
-        exit(1)
+            exit(1)
+        click.echo("Build succeedeed... Now deploying to published")
+        if dest != "./published":
+            click.echo(
+                "Incorrect deployment directory.  dest should be ./published in pavement.py"
+            )
+            exit(1)
 
-    res = subprocess.call("runestone build --all", shell=True)
-    if res != 0:
-        click.echo("building the book failed, check the log for errors and try again")
-        exit(1)
-    click.echo("Build succeedeed... Now deploying to published")
-    if dest != "./published":
-        click.echo(
-            "Incorrect deployment directory.  dest should be ./publisehd in pavement.py"
-        )
-        exit(1)
+        res = subprocess.call("runestone deploy", shell=True)
+        if res == 0:
+            click.echo("Success! Book deployed")
+        else:
+            click.echo("Deploy failed, check the log to see what went wrong.")
 
-    res = subprocess.call("runestone deploy", shell=True)
-    if res == 0:
-        click.echo("Success! Book deployed")
+
+import pdb
+
+
+def check_project_ptx():
+    tree = ET.parse("project.ptx")
+    targ = tree.find(".//target[@name='runestone']")
+    if not targ:
+        click.echo("No runestone target in project.ptx - please add one")
+        sys.exit(1)
     else:
-        click.echo("Deploy failed, check the log to see what went wrong.")
+        dest = targ.find("./output-dir")
+        if "published" not in dest.text:
+            click.echo("destination for build must be in published/<document-id>")
+            sys.exit(1)
+        main = targ.find("./source")
+        if main is not None:
+            return main.text
+        else:
+            click.echo("No main source file specified")
+            sys.exit(1)
+
+
+def extract_docinfo(tree, string):
+    el = tree.find(f"./{string}")
+    if el is not None:
+        # using method="text" will strip the outer tag as well as any html tags in the value
+        return ET.tostring(el, encoding="unicode", method="text").strip()
+    return ""
+
+
+def update_library(config, mpath, course):
+    tree = ET.parse(mpath)
+    docinfo = tree.find("./library-metadata")
+    eng = create_engine(config.dburl)
+    title = extract_docinfo(docinfo, "title")
+    subtitle = extract_docinfo(docinfo, "subtitle")
+    description = extract_docinfo(docinfo, "description")
+    shelf = extract_docinfo(docinfo, "shelf")
+    click.echo(f"{title} : {subtitle}")
+    res = eng.execute(f"select * from library where basecourse = '{course}'")
+    if res.rowcount == 0:
+        eng.execute(
+            f"""insert into library 
+        (title, subtitle, description, shelf_section, basecourse ) 
+        values('{title}', '{subtitle}', '{description}', '{shelf}', '{course}') """
+        )
+    else:
+        eng.execute(
+            f"""update library set
+            title = '{title}',
+            subtitle = '{subtitle}',
+            description = '{description}',
+            shelf_section = '{shelf}'
+        where basecourse = '{course}'
+        """
+        )
 
 
 #
