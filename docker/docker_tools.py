@@ -536,6 +536,7 @@ def _build_phase_0(
                     )
 
     # Ensure the user is in the ``www-data`` group.
+    # TODO - macos does not support usermod
     print("Checking to see if the current user is in the www-data group...")
     if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
         xqt('sudo usermod -a -G www-data "$USER"')
