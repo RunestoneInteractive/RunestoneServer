@@ -816,7 +816,7 @@ def doAssignment():
     response.cookies["RS_info"] = json.dumps(parsed_js)
     response.cookies["RS_info"]["path"] = "/"
     # By not setting expire this remains/becomes a session cookie
-    
+
     user_is_instructor = (
         True
         if auth.user and verifyInstructorStatus(auth.user.course_id, auth.user)
