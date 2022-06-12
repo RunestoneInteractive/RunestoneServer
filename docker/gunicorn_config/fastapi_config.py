@@ -32,3 +32,9 @@ workers = multiprocessing.cpu_count() * 2 + 1
 
 # `worker_class <https://docs.gunicorn.org/en/stable/settings.html#worker-class>`_: The type of workers to use. Use `uvicorn's worker class for gunicorn <https://www.uvicorn.org/deployment/#gunicorn>`_.
 worker_class = "uvicorn.workers.UvicornWorker"
+
+# Detach and run in the background
+daemon = True
+capture_output = True
+enable_stdio_inheritance = True
+pidfile = "/srv/books.pid"
