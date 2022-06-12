@@ -12,6 +12,7 @@
 # Standard library
 # ----------------
 import multiprocessing
+import os
 
 # Third-party imports
 # -------------------
@@ -24,6 +25,10 @@ from common_config import *
 
 # Configuration
 # =============
+# `chdir <https://docs.gunicorn.org/en/stable/settings.html#chdir>`_: Change directory to specified directory before loading apps. Otherwise gunicorn does not know where to look for changes to your code.
+if os.environ["BOOK_SERVER_CONFIG"] == "development":
+    chdir = "/srv/BookServer"
+
 # `wsgi_app <https://docs.gunicorn.org/en/stable/settings.html#wsgi-app>`_: A WSGI application path in pattern ``$(MODULE_NAME):$(VARIABLE_NAME)``.
 wsgi_app = "bookserver.main:app"
 
@@ -38,3 +43,4 @@ daemon = True
 capture_output = True
 enable_stdio_inheritance = True
 pidfile = "/srv/books.pid"
+# reload_engine = "inotify"
