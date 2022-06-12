@@ -3,6 +3,10 @@
 # *************************************
 # This files provides most of the subcommands for `docker_tools.py`.
 #
+# If you want to add a new subcommand you must add it to the list in the add_commands
+# function.  That command ensures that docker_tools.py knows about the commands added
+# in docker_tools_misc.py
+#
 # Imports
 # =======
 # These are listed in the order prescribed by PEP 8, with exceptions noted below.
@@ -12,6 +16,7 @@
 # Standard library
 # ----------------
 from pathlib import Path
+import os
 import sys
 import subprocess
 from time import sleep
@@ -69,7 +74,7 @@ def start_servers(dev: bool) -> None:
     Run the web servers -- nginx, web2py, and FastAPI -- used by Runestone. Before starting the server, it will stop any currently-running servers.
     """
 
-    _stop_servers()
+    # _stop_servers()
     _start_servers(dev)
     # If we exit too early, the servers don't start. Perhaps losing the stdout prematurely causes this?
     sleep(7)
@@ -78,6 +83,9 @@ def start_servers(dev: bool) -> None:
 # Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
 def _start_servers(dev: bool) -> None:
     ensure_in_docker()
+    bs_config = os.environ.get("BOOK_SERVER_CONFIG", "production")
+    if bs_config == "development":
+        dev = True
 
     # sudo doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
     xqt(
@@ -92,9 +100,11 @@ def _start_servers(dev: bool) -> None:
         "--error_path /tmp "
         "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
         # This much match the address in `../nginx/sites-available/runestone.template`.
-        "--bind unix:/run/fastapi.sock " + ("--reload " if dev else "") + "&",
+        "--bind unix:/run/fastapi.sock "
+        + ("--reload " if dev else "")
+        + "2>&1 > /proc/1/fd/1 &", # This redirect ensures output ends up in the docker log
         "service nginx start",
-        "poetry run gunicorn --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
+        "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
     )
 
@@ -127,6 +137,16 @@ def _stop_servers() -> None:
         "nginx -s stop",
         check=False,
     )
+
+
+@click.command()
+def reloadbks() -> None:
+    ensure_in_docker()
+    with open("/srv/books.pid") as pfile:
+        pid = pfile.read().strip()
+
+    pid = int(pid)
+    os.kill(pid, 1)  # send the HUP signal to bookserver
 
 
 # ``test``
@@ -186,7 +206,7 @@ def wait() -> None:
 # ----
 # Add all subcommands in this file to the CLI.
 def add_commands(cli) -> None:
-    for cmd in (shell, start_servers, stop_servers, test, wait):
+    for cmd in (shell, start_servers, stop_servers, test, wait, reloadbks):
         cli.add_command(cmd)
 
 
