@@ -416,7 +416,7 @@ def build(config, course, clone, ptx, manifest):
             else:
                 click.echo("Missing document-id please add to <docinfo>")
                 sys.exit(1)
-            mpath = os.path.join(os.getcwd(), "published", cname, manifest)
+            mpath = Path(os.getcwd(), "published", cname, manifest)
             if os.path.exists(mpath):
                 manifest_data_to_db(cname, mpath)
             else:
@@ -424,8 +424,12 @@ def build(config, course, clone, ptx, manifest):
                     f"You must provide a valid path to a manifest file: {mpath} does not exist."
                 )
 
+            # Fetch and copy the runestone components release as advertised by the manifest
+            # - Use wget to get all the js files and put them in _static
+            click.echo("populating with the latest runestone files")
+            populate_static(config, mpath, course)
             # update the library page
-            click.echo("updating library.... TODO")
+            click.echo("updating library...")
             update_library(config, mpath, course)
 
     else:
@@ -503,7 +507,7 @@ def extract_docinfo(tree, string):
     return ""
 
 
-def update_library(config, mpath, course):
+def update_library(config: Config, mpath, course):
     tree = ET.parse(mpath)
     docinfo = tree.find("./library-metadata")
     eng = create_engine(config.dburl)
@@ -529,6 +533,38 @@ def update_library(config, mpath, course):
         where basecourse = '{course}'
         """
         )
+
+
+def populate_static(config: Config, mpath: Path, course: str):
+
+    # <runestone-services version="6.2.1"/>
+    sdir = mpath.parent / "_static"
+    current_version = ""
+    if (sdir / "webpack_static_imports.xml").exists():
+        tree = ET.parse(sdir / "webpack_static_imports.xml")
+        current_version = tree.find("./version").text
+    else:
+        sdir.mkdir(mode=775, exist_ok=True)
+    tree = ET.parse(mpath)
+    el = tree.find("./runestone-services[@version]")
+    version = el.attrib["version"].strip()
+    # Do not download if the versions already match.
+    if version != current_version:
+        click.echo(f"Fetching {version} files to {sdir} ")
+        for f in os.listdir(sdir):
+            try:
+                os.remove(sdir / f)
+            except:
+                click.echo(f"ERROR - could not delete {f}")
+        # call wget non-verbose, recursive, no parents, no hostname, no directoy copy files to sdir
+        # trailing slash is important or otherwise you will end up with everything below runestone
+        subprocess.call(
+            f"""wget -nv -r -np -nH -nd -P {sdir} https://runestone.academy/cdn/runestone/{version}/
+    """,
+            shell=True,
+        )
+    else:
+        click.echo(f"_static files already up to date for {version}")
 
 
 #
