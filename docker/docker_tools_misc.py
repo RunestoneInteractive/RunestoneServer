@@ -102,7 +102,7 @@ def _start_servers(dev: bool) -> None:
         # This much match the address in `../nginx/sites-available/runestone.template`.
         "--bind unix:/run/fastapi.sock "
         + ("--reload " if dev else "")
-        + "2>&1 > /proc/1/fd/1 &", # This redirect ensures output ends up in the docker log
+        + "2>&1 > /proc/1/fd/1 &",  # This redirect ensures output ends up in the docker log
         "service nginx start",
         "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
@@ -141,6 +141,9 @@ def _stop_servers() -> None:
 
 @click.command()
 def reloadbks() -> None:
+    """
+    Tell BookServer to reload the application.
+    """
     ensure_in_docker()
     with open("/srv/books.pid") as pfile:
         pid = pfile.read().strip()

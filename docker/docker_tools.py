@@ -70,7 +70,12 @@ if sys.platform == "win32":
     sys.exit()
 
 # See if we're root.
-is_root = subprocess.run(["id", "-u"], capture_output=True, text=True, check=True).stdout.strip() == "0"
+is_root = (
+    subprocess.run(
+        ["id", "-u"], capture_output=True, text=True, check=True
+    ).stdout.strip()
+    == "0"
+)
 
 
 # Check to see if a program is installed; if not, install it.
@@ -87,8 +92,8 @@ def check_install(
         print("Not found. Installing...")
         subprocess.run(
             # Only run with ``sudo`` if we're not root.
-            ([] if is_root else ["sudo"]) +
-            [
+            ([] if is_root else ["sudo"])
+            + [
                 "apt-get",
                 "install",
                 "-y",
@@ -766,7 +771,9 @@ def _build_phase_1(
     )
 
     # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
-    Path("/srv/build_info.txt").write_text(f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n")
+    Path("/srv/build_info.txt").write_text(
+        f"Built on {datetime.datetime.now(datetime.timezone.utc)} using arguments {env.DOCKER_BUILD_ARGS}.\n"
+    )
 
     xqt(
         # Do any final updates.
@@ -880,17 +887,13 @@ def _build_phase_2_core(
         # Build the webpack after the Runestone Components are installed.
         xqt("npm install", "npm run build")
 
-    # changing permissions groups and permissions makes a restart super slow.
-    # lets avoid doing this if we don't have to.
-    # if Path(env.RUNESTONE_PATH).group() != "www-data":
-    if os.environ.get("QUICK_START", "No") != "Yes":
+    for folder in ["databases", "errors", "modules", "build"]:
+        # web2py needs write access to databases, errors, modules, build
+        tmp_path = Path(env.RUNESTONE_PATH) / folder
         xqt(
-            # web2py needs write access to update logs, database schemas, etc. Give it group ownership with write permission to allow this.
-            f"chgrp -R www-data {Path(env.RUNESTONE_PATH).parent}",
-            f"chmod -R g+w {Path(env.RUNESTONE_PATH).parent}",
+            f"chgrp -R www-data {tmp_path}",
+            f"chmod -R g+w {tmp_path}",
         )
-    else:
-        print("Skipping permissions changes")
 
     # Set up Postgres database
     # ^^^^^^^^^^^^^^^^^^^^^^^^
