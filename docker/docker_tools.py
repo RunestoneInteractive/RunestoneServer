@@ -890,10 +890,11 @@ def _build_phase_2_core(
     for folder in ["databases", "errors", "modules", "build"]:
         # web2py needs write access to databases, errors, modules, build
         tmp_path = Path(env.RUNESTONE_PATH) / folder
-        xqt(
-            f"chgrp -R www-data {tmp_path}",
-            f"chmod -R g+w {tmp_path}",
-        )
+        if tmp_path.exists():
+            xqt(
+                f"chgrp -R www-data {tmp_path}",
+                f"chmod -R g+w {tmp_path}",
+            )
 
     # Set up Postgres database
     # ^^^^^^^^^^^^^^^^^^^^^^^^
