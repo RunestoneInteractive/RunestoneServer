@@ -887,6 +887,11 @@ def _build_phase_2_core(
         # Build the webpack after the Runestone Components are installed.
         xqt("npm install", "npm run build")
 
+    xqt(
+        f"chgrp www-data {Path(env.RUNESTONE_PATH)}",
+        f"chmod g+w {Path(env.RUNESTONE_PATH)}",
+    )
+
     for folder in ["databases", "errors", "modules", "build"]:
         # web2py needs write access to databases, errors, modules, build
         tmp_path = Path(env.RUNESTONE_PATH) / folder
@@ -895,6 +900,8 @@ def _build_phase_2_core(
                 f"chgrp -R www-data {tmp_path}",
                 f"chmod -R g+w {tmp_path}",
             )
+        else:
+            print(f"Cannot set permissions for {tmp_path}")
 
     # Set up Postgres database
     # ^^^^^^^^^^^^^^^^^^^^^^^^
