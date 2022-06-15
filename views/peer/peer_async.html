@@ -1,4 +1,6 @@
-{{extend 'layout.html'}} {{block moreincludes}} {{include '_sphinx_static_files.html'}}
+{{extend 'layout.html'}} 
+{{block moreincludes}} 
+{{include '_sphinx_static_files.html'}}
 {{end}}
 
 <script>
@@ -13,11 +15,15 @@
     <div class="oneq col-md-6">{{=XML(current_question['htmlsrc'])}}</div>
 
     <div class="col-md-6">
-        <p>Please provide an explanation for your chosen answer.</p>
+        <p>
+            Please provide an explanation for why you answered
+            <span id="current_answer">__</span>
+        </p>
         <textarea id="messageText" rows="2" cols="40"> </textarea> <br />
         <button type="button" onclick="showPeerEnableVote2()">Submit</button>
         <div>
             <h4>Another Student's Justification for you to consider</h4>
+            <p id="peerName"></p>
             <p id="peerJust"></p>
             <p id="nextStep"></p>
         </div>
@@ -41,4 +47,19 @@
     });
     var studentVoteCount = 1;
     var nextQuestionNumber = {{= nextQnum}};
+
+    // this cannot happen until the event that indicates components are loaded
+    $(document).on("runestone:login-complete", function () {
+        setTimeout(function () {
+            $(window.mcList[currentQuestion].submitButton).click(function () {
+                if (studentVoteCount == 1) {
+                    let currAnswer = window.mcList[currentQuestion].answer;
+                    console.log(`current answer is ${currAnswer}`);
+                    let sAnswer = answerToString(currAnswer);
+                    console.log(sAnswer);
+                    $("#current_answer").html(sAnswer)
+                }
+            })
+        }, 2000)
+    });
 </script>

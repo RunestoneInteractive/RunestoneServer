@@ -68,20 +68,7 @@ function connect(event) {
                             let ansSlot = document.getElementById("first_answer");
                             const ordA = 65;
                             if (typeof currAnswer !== "undefined") {
-                                if (currAnswer.indexOf(",") > -1) {
-                                    let alist = currAnswer.split(",");
-                                    let nlist = [];
-                                    for (let x of alist) {
-                                        nlist.push(
-                                            String.fromCharCode(ordA + parseInt(x))
-                                        );
-                                    }
-                                    currAnswer = nlist.join(",");
-                                } else {
-                                    currAnswer = String.fromCharCode(
-                                        ordA + parseInt(currAnswer)
-                                    );
-                                }
+                                currAnswer = answerToString(currAnswer);
                                 ansSlot.innerHTML = currAnswer;
                             }
                             // send log message to indicate voting is over
@@ -147,6 +134,22 @@ function connect(event) {
         ws.onclose = function () {}; // disable onclose handler first
         ws.close();
     };
+}
+
+function answerToString(currAnswer) {
+    const ordA = 65;
+    if (currAnswer.indexOf(",") > -1) {
+        let alist = currAnswer.split(",");
+        let nlist = [];
+        for (let x of alist) {
+            nlist.push(String.fromCharCode(ordA + parseInt(x)));
+        }
+        currAnswer = nlist.join(",");
+    } else {
+        currAnswer = String.fromCharCode(ordA + parseInt(currAnswer));
+    }
+    console.log(`returning ${currAnswer}`);
+    return currAnswer;
 }
 
 async function logPeerEvent(eventInfo) {
@@ -368,17 +371,18 @@ async function showPeerEnableVote2() {
     });
     let resp = await fetch(request);
     if (!resp.ok) {
-        alert(`Pairs not made ${resp.statusText}`);
+        alert(`Error getting a justification ${resp.statusText}`);
     }
     let spec = await resp.json();
     let peerMess = spec.mess;
+    let peerNameEl = document.getElementById("peerName");
+    peerNameEl.innerHTML = `User ${spec.user} answered ${answerToString(spec.answer)}`;
     let peerEl = document.getElementById("peerJust");
     peerEl.innerHTML = peerMess;
     let nextStep = document.getElementById("nextStep");
     nextStep.innerHTML =
         "Please Answer the question again.  Even if you do not wish to change your answer.  After answering click the button to go on to the next question.";
-
-    // ask the student to vote again
+    $("[type=radio]").prop("checked", false);
 }
 
 $(function () {

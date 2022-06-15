@@ -479,6 +479,8 @@ def get_async_explainer():
     sid = auth.user.username
     div_id = request.vars.div_id
 
+    this_answer = _get_user_answer(div_id, sid)
+
     # Messages are in useinfo with an event of "sendmessage" and a div_id corresponding to the div_id of the question.
     # The act field is to:user:message
     # Ratings of messages are in useinfo with an event of "ratepeer"
@@ -495,24 +497,74 @@ def get_async_explainer():
             break
 
     if len(ratings) > 0:
-        idx = random.randrange(len(ratings))
-        act = ratings[idx].act
-        user = act.split(":")[0]
+        done = False
+        tries = 0
+        while not done and tries < 10:
+            idx = random.randrange(len(ratings))
+            act = ratings[idx].act
+            user = act.split(":")[0]
+            peer_answer = _get_user_answer(div_id, user)
+            if peer_answer != this_answer:
+                done = True
+            else:
+                tries += 1
+        mess = _get_user_messages(user, div_id, course_name)
+    else:
         messages = db(
             (db.useinfo.event == "sendmessage")
-            & (db.useinfo.sid == user)
             & (db.useinfo.div_id == div_id)
             & (db.useinfo.course_id == course_name)
-        ).select(orderby=db.useinfo.id)
-        user = messages[0].sid
-        mess = "<ul>"
-        for row in messages:
-            mpart = row.act.split(":")[2]
-            mess += f"<li>{mpart}</li>"
-        mess += "</ul>"
-    else:
-        mess = "Sorry there were no good explanations for you."
-        user = "nobody"
+        ).select(db.useinfo.sid)
+        if len(messages) > 0:
+            senders = set((row.sid for row in messages))
+            done = False
+            tries = 0
+            while not done and tries < 10:
+                user = random.choice(list(senders))
+                peer_answer = _get_user_answer(div_id, user)
+                if peer_answer != this_answer:
+                    done = True
+                else:
+                    tries += 1
+            mess = _get_user_messages(user, div_id, course_name)
+        else:
+            mess = "Sorry there were no good explanations for you."
+            user = "nobody"
 
     logger.debug(f"Get message for {div_id}")
-    return json.dumps({"mess": mess, "user": user})
+    return json.dumps({"mess": mess, "user": user, "answer": peer_answer})
+
+
+def _get_user_answer(div_id, s):
+    ans = (
+        db(
+            (db.useinfo.event == "mChoice")
+            & (db.useinfo.sid == s)
+            & (db.useinfo.div_id == div_id)
+            & (db.useinfo.act.like("%vote1"))
+        )
+        .select(orderby=~db.useinfo.id)
+        .first()
+    )
+    # act is answer:0[,x]+:correct:voteN
+    if ans:
+        return ans.act.split(":")[1]
+    else:
+        return ""
+
+
+def _get_user_messages(user, div_id, course_name):
+    messages = db(
+        (db.useinfo.event == "sendmessage")
+        & (db.useinfo.sid == user)
+        & (db.useinfo.div_id == div_id)
+        & (db.useinfo.course_id == course_name)
+    ).select(orderby=db.useinfo.id)
+    user = messages[0].sid
+    mess = "<ul>"
+    for row in messages:
+        mpart = row.act.split(":")[2]
+        mess += f"<li>{mpart}</li>"
+    mess += "</ul>"
+
+    return mess
