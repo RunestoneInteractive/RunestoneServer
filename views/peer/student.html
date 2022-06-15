@@ -10,6 +10,7 @@
 <table class="table table-striped">
     <tr>
         <th>Name</th>
+        <th>Async Link</th>
         <th>Due</th>
         <th>Description</th>
     </tr>
@@ -17,9 +18,12 @@
     {{for assignment in assignments:}}
     <tr>
         <td><a href="peer_question?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+        <td><a href="peer_async?assignment_id={{=assignment['id']}}">{{=assignment['name']}} (Async)</a></td>
         <td>{{=assignment['duedate']}}</td>
         <td>{{=assignment['description']}}</td>
 
     </tr>
     {{pass}}
 </table>
+
+<p>Note: The async version of the assignment is only for use outside of and AFTER the class it was introduced.</p>
