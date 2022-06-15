@@ -74,10 +74,7 @@ def start_servers(dev: bool) -> None:
     Run the web servers -- nginx, web2py, and FastAPI -- used by Runestone. Before starting the server, it will stop any currently-running servers.
     """
 
-    # _stop_servers()
     _start_servers(dev)
-    # If we exit too early, the servers don't start. Perhaps losing the stdout prematurely causes this?
-    sleep(7)
 
 
 # Since click changes the way argument passing works, have a non-click version that's easily callable from Python code.
@@ -137,6 +134,16 @@ def _stop_servers() -> None:
         "nginx -s stop",
         check=False,
     )
+
+
+@click.command()
+def restart_servers():
+    """
+    Restart the web servers and celery.
+    """
+    _stop_servers()
+    sleep(2)
+    _start_servers()
 
 
 @click.command()
@@ -209,7 +216,15 @@ def wait() -> None:
 # ----
 # Add all subcommands in this file to the CLI.
 def add_commands(cli) -> None:
-    for cmd in (shell, start_servers, stop_servers, test, wait, reloadbks):
+    for cmd in (
+        shell,
+        start_servers,
+        stop_servers,
+        test,
+        wait,
+        reloadbks,
+        restart_servers,
+    ):
         cli.add_command(cmd)
 
 
