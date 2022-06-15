@@ -130,7 +130,7 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, is_linux, pushd, xqt
+from ci_utils import chdir, env, is_darwin, is_linux, pushd, xqt
 # fmt: on
 
 # Third-party bootstrap
@@ -544,7 +544,14 @@ def _build_phase_0(
     # TODO - macos does not support usermod
     print("Checking to see if the current user is in the www-data group...")
     if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-        xqt('sudo usermod -a -G www-data "$USER"')
+        if is_darwin:
+            xqt(
+                "sudo dscl . create /Groups/www-data",
+                "sudo dseditgroup -o edit -a $USER -t user www-data",
+                "sudo dscl . append /Groups/www-data GroupMembership $USER",
+            )
+        else:
+            xqt('sudo usermod -a -G www-data "$USER"')
         did_group_add = True
         docker_sudo = True
 
