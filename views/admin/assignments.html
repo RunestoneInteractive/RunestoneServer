@@ -460,7 +460,7 @@ $(function () {
                 // A bit of a hack: editable is normally a Boolean, but is used to initialized the editable object, so I'm providing an Object instead which produces custom menus for each cell.
                 editable: {
                     source: function () {
-                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction'}, 'autograde_possible_values', question_table);
+                        return menu_from_editable(this, {manual: 'Manual', all_or_nothing: 'All or nothing', pct_correct: '% correct', interact: 'Interaction', peer: 'Peer', peer_chat: 'Peer+Chat' }, 'autograde_possible_values', question_table);
                     },
                 },
                 editableType: 'select',
@@ -473,7 +473,7 @@ $(function () {
                 editable: {
                     source: function () {
                         // Update the menu for this item.
-                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer'}, 'which_to_grade_possible_values', question_table);
+                        return menu_from_editable(this, {first_answer: 'First answer', last_answer: 'Last answer', best_answer: 'Best answer', all_answer: 'All Answers'}, 'which_to_grade_possible_values', question_table);
                     }
                 },
                 editableType: 'select',

@@ -86,6 +86,27 @@ def _score_one_interaction(row, points, autograde):
         return 0
 
 
+def _score_peer_instruction(rows, points, autograde):
+    has_vote1 = 0
+    has_vote2 = 0
+    sent_message = 0
+    for row in rows:
+        if "vote1" in row.act:
+            has_vote1 = 1
+        if "vote2" in row.act:
+            has_vote2 = 1
+        if row.event == "sendmessage":
+            sent_message = 1
+
+    tot = has_vote1 + has_vote2 + sent_message
+    if autograde == "peer_chat":
+        score = tot / 3 * points
+    else:
+        score = min(1.0, tot / 2) * points
+
+    return score
+
+
 def _score_one_parsons(row, points, autograde):
     # row is from parsons_answers
     # Much like mchoice, parsons_answers currently stores a binary correct value
@@ -243,7 +264,9 @@ def _scorable_useinfos(
         query = query & (db.useinfo.timestamp >= practice_start_time)
         if now:
             query = query & (db.useinfo.timestamp <= now)
-    return db(query).select(db.useinfo.id, db.useinfo.act, orderby=db.useinfo.timestamp)
+    return db(query).select(
+        db.useinfo.id, db.useinfo.event, db.useinfo.act, orderby=db.useinfo.timestamp
+    )
 
 
 def _scorable_parsons_answers(
@@ -513,17 +536,32 @@ def _autograde_one_q(
         scoring_fn = _score_one_code_run
         logger.debug("AGDB - done with activecode")
     elif question_type == "mchoice":
-        results = _scorable_mchoice_answers(
-            course_name,
-            sid,
-            question_name,
-            points,
-            deadline,
-            practice_start_time,
-            db=db,
-            now=now,
-        )
-        scoring_fn = _score_one_mchoice
+        logger.debug(f"PEER - {autograde}")
+        if autograde in ["peer", "peer_chat"]:
+            results = _scorable_useinfos(
+                course_name,
+                sid,
+                question_name,
+                points,
+                deadline,
+                None,
+                practice_start_time,
+                db=db,
+                now=now,
+            )
+            scoring_fn = _score_peer_instruction
+        else:
+            results = _scorable_mchoice_answers(
+                course_name,
+                sid,
+                question_name,
+                points,
+                deadline,
+                practice_start_time,
+                db=db,
+                now=now,
+            )
+            scoring_fn = _score_one_mchoice
         logger.debug("AGDB - done with mchoice")
     elif question_type == "page":
         # question_name does not help us
@@ -702,6 +740,13 @@ def _autograde_one_q(
             id = best_row.id
             score = scoring_fn(best_row, points, autograde)
             logger.debug("SCORE = %s by %s", score, scoring_fn)
+        elif (
+            which_to_grade == "all_answer"
+        ):  # This is used for scoring peer instruction where we want to look at multiple answers
+            score = scoring_fn(results, points, autograde)
+            id = None
+            logger.debug("SCORE = %s by %s", score, scoring_fn)
+
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
             id = 0
