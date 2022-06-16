@@ -93,6 +93,7 @@ def _start_servers(dev: bool) -> None:
     )
 
     xqt(
+        "rm -f /srv/books.pid",
         "poetry run bookserver --root /ns "
         "--error_path /tmp "
         "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
@@ -137,11 +138,16 @@ def _stop_servers() -> None:
 
 
 @click.command()
-def restart_servers():
+@click.option(
+    "--dev/--no-dev",
+    default=False,
+    help="Run the BookServer in development mode, auto-reloading if the code changes.",
+)
+def restart_servers(dev):
     """
     Restart the web servers and celery.
     """
-    _stop_servers()
+    _stop_servers(dev)
     sleep(2)
     _start_servers()
 
