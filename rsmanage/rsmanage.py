@@ -397,7 +397,9 @@ def build(config, course, clone, ptx, manifest):
             main_file = check_project_ptx()
             tree = ET.parse(main_file)
             root = tree.getroot()
-            ElementInclude.include(root)  # include all xi:include parts
+            ElementInclude.include(
+                root, base_url=main_file
+            )  # include all xi:include parts
             # build the book
             res = subprocess.call("pretext build runestone", shell=True)
             if res != 0:
