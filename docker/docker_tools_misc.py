@@ -97,7 +97,7 @@ def _start_servers(dev: bool) -> None:
         "poetry run bookserver --root /ns "
         "--error_path /tmp "
         "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
-        # This much match the address in `../nginx/sites-available/runestone.template`.
+        # This much match the address in `./nginx/sites-available/runestone.template`.
         "--bind unix:/run/fastapi.sock "
         + ("--reload " if dev else "")
         + "2>&1 > /proc/1/fd/1 &",  # This redirect ensures output ends up in the docker log
