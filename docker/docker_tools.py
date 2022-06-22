@@ -66,8 +66,7 @@ from textwrap import dedent
 # ---------------------------
 # Everything after this depends on Unix utilities.
 if sys.platform == "win32":
-    print("Run this program in WSL/VirtualBox/VMWare/etc.")
-    sys.exit()
+    sys.exit("Run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
 is_root = (
@@ -111,13 +110,26 @@ def check_install_curl() -> None:
     check_install("curl --version", "curl")
 
 
+# Check if we're running in WSL -- don't install Docker if so.
+def check_in_wsl() -> None:
+    if "WSL" in Path("/proc/version").read_text():
+        sys.exit(
+            "Docker for Windows not detected while running in WSL. You must install this before proceeding."
+        )
+
+
+# Outside a venv, install locally.
+def pip_user() -> str:
+    return "" if in_venv else "--user"
+
+
 # The working directory of this script.
 wd = Path(__file__).resolve().parent
 sys.path.append(str(wd / "../tests"))
 # fmt: off
 try:
     # This unused import triggers the script download if it's not present. This only happens outside the container.
-    import ci_utils
+    import ci_utils  # noqa: F401
 except ImportError:
     assert not os.environ.get("IN_DOCKER")
     check_install_curl()
@@ -130,7 +142,7 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, is_darwin, is_linux, pushd, xqt
+from ci_utils import chdir, env, is_darwin, pushd, xqt  # noqa: E402
 # fmt: on
 
 # Third-party bootstrap
@@ -150,8 +162,8 @@ except ImportError:
     # Outside a venv, install locally.
     user = " " if in_venv else "--user "
     xqt(
-        f"{sys.executable} -m pip install {user}--upgrade pip",
-        f"{sys.executable} -m pip install {user}--upgrade click",
+        f"{sys.executable} -m pip install {pip_user()} --upgrade pip",
+        f"{sys.executable} -m pip install {pip_user()} --upgrade click",
     )
     # If pip is upgraded, it won't find click. `Re-load sys.path <https://stackoverflow.com/a/25384923/16038919>`_ to fix this.
     reload(site)
@@ -360,6 +372,7 @@ def _build_phase_0(
     try:
         xqt("docker --version")
     except subprocess.CalledProcessError as e:
+        check_in_wsl()
         check_install_curl()
         print(f"Unable to run docker: {e} Installing Docker...")
         # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
@@ -378,6 +391,7 @@ def _build_phase_0(
     try:
         xqt("docker-compose --version")
     except subprocess.CalledProcessError as e:
+        check_in_wsl()
         print(f"Unable to run docker-compose: {e} Installing...")
         # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
         xqt(
@@ -395,7 +409,7 @@ def _build_phase_0(
     if clone_all != "RunestoneInteractive":
         # Print Warning and provide countdown to abort script
         click.secho(
-            "Warning: Clone-all flag was initalized and will override any other clone flag specified!",
+            "Warning: Clone-all flag was initialized and will override any other clone flag specified!",
             fg="red",
         )
         # Set each individual flag to the clone-all argument
@@ -555,11 +569,11 @@ def _build_phase_0(
         did_group_add = True
         docker_sudo = True
 
-    # Provide server-related CLIs.
+    # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
     check_install(f"{sys.executable} -m pip --version", "python3-pip")
     xqt(
-        f"{sys.executable} -m pip install --user -e docker",
-        f"{sys.executable} -m pip install --user -e rsmanage",
+        f"{sys.executable} -m pip install {pip_user()} -e docker",
+        f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
     )
 
     # Run the Docker build.
@@ -567,7 +581,7 @@ def _build_phase_0(
         f'ENABLE_BUILDKIT=1{" sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
     )
 
-    # Print thesse messages last; otherwise, it will be lost in all the build noise.
+    # Print these messages last; otherwise, it will be lost in all the build noise.
     if change_dir:
         print(
             "\n"

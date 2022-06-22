@@ -8,22 +8,21 @@ Docker Deployment
     If you would prefer to install all the components directly on a server yourself,
     see the `Manual Installation instructions <../docs/installation.html>`_.
 
-
 Using Docker, we can bring up the server without needing to install dependencies directly on
 the host. Instead, the software required to run the server will be installed in four separate
-docker containers (Runestone application, redis cache, postgres DB, jobe code compilation).
-
+Docker containers (the Runestone application, redis cache, postgres DB, and Jobe code compilation).
 
 .. note::
 
     These instructions have been tested on Ubuntu 20.04 and should work on any version of Ubuntu 18.04+.
     Installation on older versions of Ubuntu or other Linux distributions may require adjustments.
-    These instructions have also been tested on OS X. For Windows, use WSL, VirtualBox, or other similar virtualization software.
+    These instructions have also been tested on OS X. For Windows, use `WSL2 <https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview>`_, VirtualBox, or other similar virtualization software.
 
 
-Contents
---------
+**Contents**
+
 .. contents::
+    :local:
 
 
 Setup
@@ -40,18 +39,16 @@ To build a Docker application with the server and all its dependencies, download
     curl -fsSLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
     # See what build options are available.
     python3 docker_tools.py build --help
-    # Run the build.
+    # Run the build, choosing appropriate options for your case.
     python3 docker_tools.py build <your options here>
 
-This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings
-inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_
-to make changes or rebuild the image.
+This will take a while. But once built, you will not need to rebuild the image unless you need to modify settings inside it. If you do need to modify a built image, you can either `shell into the built container <Shelling Inside>`_ to make changes or rebuild the image.
 
 When this completes, **log out then back in** (reboot if using a VM) to update your group membership. Next, ``cd RunestoneServer``.
 
 .. note::
 
-    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
+    All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise. After the first **successful** invocation of ``python3 docker_tools.py build``, use the (newly-installed) ``docker-tools`` command, instead of ``python3 docker_tools.py``. For example, ``docker-tools build <your options here>``.
 
 .. note:: VirtualBox
 
@@ -90,12 +87,10 @@ Python Settings
 You also will also likely want to configure some options in the Python code. These options
 will be in the file ``models/1.py`` (which is automatically created on the first build).
 
-
 Again, if you are installing for local development/testing you should not need to modify
 any of the settings. If you are installing for production, you will want/need to modify
 some of them (so that things like sending students emails for lost passwords work).
 See comments in the file for details.
-
 
 .. warning::
 
@@ -128,7 +123,6 @@ To stop all containers use:
 
     docker-compose stop
 
-
 To restart the containers, to reload configuration files or because you have added a new book,
 do:
 
@@ -136,13 +130,11 @@ do:
 
     docker-compose restart
 
-
 Or to just restart the Runestone container (which is generally the only one that needs to be updated):
 
 .. code-block:: bash
 
     docker-compose restart runestone
-
 
 If you ever want to completely wipe the containers, stop them and then do:
 
@@ -151,22 +143,20 @@ If you ever want to completely wipe the containers, stop them and then do:
     docker-compose rm
 
 
-4. Install `rsmanage`
-
-The rsmanage command will run many useful commands inside the container for you.  With rsmanage you can:
+Introducing `rsmanage`
+^^^^^^^^^^^^^^^^^^^^^^
+The ``rsmanage`` command will run many useful commands inside the container for you.  With ``rsmanage`` you can:
 
 * Add a course - ``rsmanage addcourse``
 * Add a user - ``rsmanage adduser``
-* Get infromation about a course ``rsmanage courseinfo``
+* Get information about a course ``rsmanage courseinfo``
 * Build a book - ``rsmanage build --course bookname``
 * Get a database shell in the current database ``rsmanage db``
 
-And lots of other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type rsmanage and the subcommand you want followed by `--help`
-
-To install rsmanage type ``pip install -e /path/to/RunestoneServer/rsmanage``
+...and lots of other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
 
 
-1. Add Books
+4. Add Books
 **************************
 
 To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
@@ -179,7 +169,6 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
     git clone https://github.com/RunestoneInteractive/thinkcspy.git
     cd ..
 
-
 .. warning::
 
    It is important that the folder name for the book matches the ``project_name`` set in its ``pavement.py``.
@@ -188,7 +177,7 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
 
-After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed. 
+After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 You also need to rebuild after making any edits/updates to a book.
 
 .. code-block:: bash
@@ -201,7 +190,6 @@ You can also have ``rsmanage`` clone the book for you the first time you want to
 
     rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
-
 .. note::
 
    Most Runestone books set ``master_url`` to ``get_master_url()`` in their ``pavement.py`` file. However, if the book
@@ -210,19 +198,18 @@ You can also have ``rsmanage`` clone the book for you the first time you want to
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-1. Add Courses
+5. Add Courses
 **************************
 
 To add a course based on a book, run the ``rsmanage addcourse`` script. If you run it just like
-that it will prompt you for all of the necessary details. Probably the **most important** thing 
+that it will prompt you for all of the necessary details. Probably the **most important** thing
 to point out is that if this is a new book the first time you add it you want to make sure that the
-basecourse and the course-name are the same.  If you are creating your own course but want it 
+basecourse and the course-name are the same.  If you are creating your own course but want it
 based on an existing book then make sure to use the correct base course name.
 
 .. code-block:: bash
 
     rsmanage addcourse
-
 
 It will ask for:
 
@@ -243,7 +230,8 @@ You do not have to restart the server to make use of the course.
     Some of the default books already have "default" courses with the same name as the book. If you try to create
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
-1. Add a User
+
+6. Add a User
 **************************
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
@@ -256,14 +244,12 @@ they should be made an instructor.
 
     rsmanage adduser
 
-
 Or, if you already have an account that you want to add as an instructor to the new course, you can use the
 ``rsmanage`` command to execute **addinstructor** which will prompt you for a username and course name:
 
 .. code-block:: bash
 
     rsmanage addinstructor
-
 
 Neither of these will require restarting the server.
 
@@ -297,7 +283,6 @@ To re-build an image:
     # Actually run the build (add options as desired)
     docker-tools build
 
-
 To force a rebuild, make sure the containers are `stopped <4. Starting/Stopping>`_, then rerun the build
 command. The build process caches results from previous builds and should complete much more rapidly. However, the
 cache can cause issues if you modify a file that the system is checking for changes. If you need to force a
@@ -318,7 +303,6 @@ the RunestoneServer directory do:
 .. code-block:: bash
 
     docker-tools shell
-
 
 Remember that the folder under web2py applications/runestone is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change
@@ -399,10 +383,10 @@ If you are writing your own book you will want to get that book set up properly 
 system. You need to do the following:
 
 1. Run the command ``rsmanage addcourse`` Use the project name you configured in ``pavement.py`` as
-the name of BOTH the course and the basecourse when it asks. 
+the name of BOTH the course and the basecourse when it asks.
 
 
-1. Now that your course is registered rebuild it using the command ``rsmanage build --course <book_name>`` command. 
+1. Now that your course is registered rebuild it using the command ``rsmanage build --course <book_name>`` command.
 
 2. If this book is a PreTeXt book you will need to navigate to the directory that contains the
 ``runestone-manifest.xml`` file and run the command:
