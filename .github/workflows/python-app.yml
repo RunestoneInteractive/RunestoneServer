@@ -29,7 +29,8 @@ jobs:
                 id: docker-build
                 run: |
                     cd RunestoneServer
-                    python3 docker/docker_tools.py build --single-dev
+                    python3 docker/docker_tools.py init
+                    docker-tools build --single-dev --clone-all RunestoneInteractive
             -   name: Start container
                 id: docker-up
                 run: |

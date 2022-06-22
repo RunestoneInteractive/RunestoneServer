@@ -11,13 +11,15 @@
 #
 # Design goals
 # ============
-# - Bootstrap: this script is designed to be downloaded then executed as a single file. In this case, bootstrap code downloads dependencies, the repo it belongs in, etc. This makes it easy to create a development or production environment from a fresh install of the host OS.
+# - Bootstrap (the ``init command``): this script is designed to be downloaded then executed as a single file. In this case, bootstrap code downloads dependencies, the repo it belongs in, etc. This makes it easy to create a development or production environment from a fresh install of the host OS.
 #
-# - Multiple modes: this script builds two distinctly different containers.
+# - Multiple modes (the ``build command``): this script builds two distinctly different containers.
 #
-#   -   Single-container: ``docker-tools build --single`` (the default) creates a container designed for either production (which includes obtaining an HTTPS certificate) or development on a single server. The Dockerized application associated with it includes Redis and Postgres. A volume is used to persist data, such as updates to the server.
+#   -   Single-container: these commands creates a container designed to execute on a single server. The Dockerized applications associated with it include Jobe, Redis, and Postgres. A volume is used to persist data, such as updates to the server.
 #
-#       -   Development mode: single-container builds support a development mode, which provides additional tools and installs the BookServer and Runestone Components from github, instead of from releases on PyPI.
+#       -   Production mode (the default): ``docker-tool build --single`` creates a container designed for production (which includes obtaining an HTTPS certificate).
+#
+#       -   Development mode: ``docker-tools build --single-dev`` creates a container supporting a development mode, which provides additional tools and installs the BookServer and Runestone Components from github, instead of from releases on PyPI.
 #
 #   -   Multi-container: ``docker-tools build --multi`` creates a container designed for cluster operation, when many instances of this container accept requests passed on by a load balancer. In this mode, no volumes are mounted; HTTPS certificates cannot be requested, since this is the responsibility of the load balancer.
 #
@@ -64,9 +66,9 @@ from textwrap import dedent
 
 # Local application bootstrap
 # ---------------------------
-# Everything after this depends on Unix utilities.
+# Everything after this depends on Unix utilities. We can't use ``is_win`` because we don't know if ``ci_utils`` is available.
 if sys.platform == "win32":
-    sys.exit("Run this program in WSL/VirtualBox/VMWare/etc.")
+    sys.exi("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
 is_root = (
@@ -110,14 +112,6 @@ def check_install_curl() -> None:
     check_install("curl --version", "curl")
 
 
-# Check if we're running in WSL -- don't install Docker if so.
-def check_in_wsl() -> None:
-    if "WSL" in Path("/proc/version").read_text():
-        sys.exit(
-            "Docker for Windows not detected while running in WSL. You must install this before proceeding."
-        )
-
-
 # Outside a venv, install locally.
 def pip_user() -> str:
     return "" if in_venv else "--user"
@@ -142,7 +136,7 @@ except ImportError:
         ],
         check=True,
     )
-from ci_utils import chdir, env, is_darwin, pushd, xqt  # noqa: E402
+from ci_utils import chdir, env, is_darwin, is_linux, pushd, xqt  # noqa: E402
 # fmt: on
 
 # Third-party bootstrap
@@ -201,6 +195,132 @@ except NameError:
     pass
 
 
+# ``init`` command
+# ================
+# Check if we're running in WSL or OS X -- don't install Docker if so.
+def check_requires_docker_desktop() -> None:
+    if (is_linux and "WSL" in Path("/proc/version").read_text()) or is_darwin:
+        sys.exit(
+            "ERROR: Docker Desktop not detected. You must install and run this\n"
+            "before proceeding."
+        )
+
+
+@cli.command()
+@click.option(
+    "--clone-rs",
+    default="RunestoneInteractive",
+    nargs=1,
+    metavar="<USERNAME>",
+    help="Clone RunestoneServer repo with USERNAME",
+)
+def init(
+    clone_rs: str,
+) -> None:
+    """
+    Install prereqs needed for all other commands available in this tool.
+    """
+    # Did we add the current user to a group?
+    did_group_add = False
+
+    # Ensure Docker is installed.
+    try:
+        xqt("docker --version")
+    except subprocess.CalledProcessError as e:
+        check_requires_docker_desktop()
+        check_install_curl()
+        print(f"Unable to run docker: {e} Installing Docker...")
+        # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
+        xqt(
+            "curl -fsSL https://get.docker.com -o get-docker.sh",
+            "sudo sh ./get-docker.sh",
+            "rm get-docker.sh",
+        )
+        # The group add doesn't take effect until the user logs out then back in. Work around it for now.
+        did_group_add = True
+
+    # Ensure the user is in the ``docker`` group. This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__. Put this step here, instead of after the Docker install, for people who manually installed Docker but skipped this step.
+    print("Checking to see if the current user is in the docker group...")
+    if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
+        if is_darwin:
+            xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
+        else:
+            xqt("sudo usermod -aG docker ${USER}")
+
+    # Ensure docker-compose is installed.
+    try:
+        xqt("docker-compose --version")
+    except subprocess.CalledProcessError as e:
+        check_requires_docker_desktop()
+        print(f"Unable to run docker-compose: {e} Installing...")
+        # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
+        xqt(
+            'sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
+            "sudo chmod +x /usr/local/bin/docker-compose",
+        )
+
+    # Make sure git's installed.
+    try:
+        xqt("git --version")
+    except Exception as e:
+        print(f"Unable to run git: {e} Installing...")
+        xqt("sudo apt-get install -y --no-install-recommends git")
+    # Are we inside the Runestone repo?
+    if not (wd / "nginx").is_dir():
+        change_dir = True
+        # No, we must be running from a downloaded script. Clone the runestone repo.
+        print("Didn't find the runestone repo. Cloning...")
+        try:
+            # Check if possible to clone RunestoneServer with Custom Repo
+            xqt(
+                f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git"
+            )
+        except subprocess.CalledProcessError:
+            # Exit script with Git Clone Error
+            sys.exit(
+                f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}"
+            )
+        chdir("RunestoneServer")
+    else:
+        # Make sure we're in the root directory of the web2py repo.
+        chdir(wd.parent)
+        change_dir = False
+
+    # Ensure the user is in the ``www-data`` group.
+    print("Checking to see if the current user is in the www-data group...")
+    if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
+        if is_darwin:
+            xqt(
+                "sudo dscl . create /Groups/www-data",
+                "sudo dseditgroup -o edit -a $USER -t user www-data",
+                "sudo dscl . append /Groups/www-data GroupMembership $USER",
+            )
+        else:
+            xqt('sudo usermod -a -G www-data "$USER"')
+        did_group_add = True
+
+    # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
+    check_install(f"{sys.executable} -m pip --version", "python3-pip")
+    xqt(
+        f"{sys.executable} -m pip install {pip_user()} -e docker",
+        f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
+    )
+
+    # Print these messages last; otherwise, it will be lost in all the build noise.
+    if change_dir:
+        print(
+            "\n" + "*" * 80 + "\n"
+            "Downloaded the RunestoneServer repo. You must \n"
+            '"cd RunestoneServer" before running this script again.'
+        )
+    if did_group_add:
+        print(
+            "\n" + "*" * 80 + "\n"
+            "Added the current user to the www-data and/or docker group(s).\n"
+            "You must reboot for this to take effect."
+        )
+
+
 # ``build`` command
 # =================
 class BuildConfiguration(Enum):
@@ -242,32 +362,21 @@ class BuildConfiguration(Enum):
 @click.option(
     "-c",
     "--clone-all",
-    default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone all System components from repos with specified USERNAME",
 )
 @click.option(
     "--clone-bks",
-    # Default since BookServer not forked by RunestoneInteractive yet!
-    default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone BookServer repo with USERNAME",
 )
 @click.option(
     "--clone-rc",
-    default="RunestoneInteractive",
     nargs=1,
     metavar="<USERNAME>",
     help="Clone RunestoneComponents repo with USERNAME",
-)
-@click.option(
-    "--clone-rs",
-    default="RunestoneInteractive",
-    nargs=1,
-    metavar="<USERNAME>",
-    help="Clone RunestoneServer repo with USERNAME",
 )
 # Provide additional build options.
 @click.option("--arm/--no-arm", default=False, help="Install the ARMv7 toolchain.")
@@ -284,7 +393,6 @@ def build(
     clone_all: str,
     clone_bks: str,
     clone_rc: str,
-    clone_rs: str,
     arm: bool,
     pic24: bool,
     rust: bool,
@@ -310,7 +418,6 @@ def build(
             clone_all,
             clone_bks,
             clone_rc,
-            clone_rs,
             arm,
             pic24,
             rust,
@@ -358,56 +465,13 @@ def _build_phase_0(
     clone_all: str,
     clone_bks: str,
     clone_rc: str,
-    clone_rs: str,
     arm: bool,
     pic24: bool,
     rust: bool,
     tex: bool,
 ) -> None:
-    # Did we add the current user to a group?
-    did_group_add = False
-    # Do we need to use ``sudo`` to execute Docker?
-    docker_sudo = False
-    # Check to make sure Docker is installed.
-    try:
-        xqt("docker --version")
-    except subprocess.CalledProcessError as e:
-        check_in_wsl()
-        check_install_curl()
-        print(f"Unable to run docker: {e} Installing Docker...")
-        # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
-        xqt(
-            "curl -fsSL https://get.docker.com -o get-docker.sh",
-            "sudo sh ./get-docker.sh",
-            "rm get-docker.sh",
-            # This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__.`
-            "sudo usermod -aG docker ${USER}",
-        )
-        # The group add doesn't take effect until the user logs out then back in. Work around it for now.
-        did_group_add = True
-        docker_sudo = True
-
-    # ...and docker-compose.
-    try:
-        xqt("docker-compose --version")
-    except subprocess.CalledProcessError as e:
-        check_in_wsl()
-        print(f"Unable to run docker-compose: {e} Installing...")
-        # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
-        xqt(
-            'sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
-            "sudo chmod +x /usr/local/bin/docker-compose",
-        )
-
-    # Make sure git's installed.
-    try:
-        xqt("git --version")
-    except Exception as e:
-        print(f"Unable to run git: {e} Installing...")
-        xqt("sudo apt-get install -y --no-install-recommends git")
     # If Clone-all flag is set override other Clone Flags
-    if clone_all != "RunestoneInteractive":
-        # Print Warning and provide countdown to abort script
+    if clone_all:
         click.secho(
             "Warning: Clone-all flag was initialized and will override any other clone flag specified!",
             fg="red",
@@ -415,28 +479,6 @@ def _build_phase_0(
         # Set each individual flag to the clone-all argument
         clone_bks = clone_all
         clone_rc = clone_all
-        clone_rs = clone_all
-
-    # Are we inside the Runestone repo?
-    if not (wd / "nginx").is_dir():
-        change_dir = True
-        # No, we must be running from a downloaded script. Clone the runestone repo.
-        print("Didn't find the runestone repo. Cloning...")
-        try:
-            # Check if possible to clone RunestoneServer with Custom Repo
-            xqt(
-                f"export GIT_TERMINAL_PROMPT=0 && git clone https://github.com/{clone_rs}/RunestoneServer.git"
-            )
-        except subprocess.CalledProcessError:
-            # Exit script with Git Clone Error
-            sys.exit(
-                f"ERROR: Unable to clone RunestoneServer remote repository via User - {clone_rs}"
-            )
-        chdir("RunestoneServer")
-    else:
-        # Make sure we're in the root directory of the web2py repo.
-        chdir(wd.parent)
-        change_dir = False
 
     # Create the ``docker/.env`` if it doesn't already exist. TODO: keep a dict of {file name, checksum} and save as JSON. Use this to detect if a file was hand-edited; if not, we can simply replace it.
     if not Path(".env").is_file():
@@ -528,6 +570,9 @@ def _build_phase_0(
             bks = Path("BookServer")
             if not bks.exists():
                 print(f"Dev mode: since {bks} doesn't exist, cloning the BookServer...")
+                if not clone_bks:
+                    sys.exit("ERROR: in development mode, you must provide\n"
+                    "either --clone-all or --clone-bks.")
                 try:
                     # Check if possible to clone BookServer with Custom Repo
                     xqt(
@@ -543,6 +588,9 @@ def _build_phase_0(
                 print(
                     f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
                 )
+                if not clone_rc:
+                    sys.exit("ERROR: in development mode, you must provide\n"
+                    "either --clone-all or --clone-rc.")
                 try:
                     # Check if possible to clone RunestoneComponents with Custom Repo
                     xqt(
@@ -554,46 +602,10 @@ def _build_phase_0(
                         f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rc}"
                     )
 
-    # Ensure the user is in the ``www-data`` group.
-    # TODO - macos does not support usermod
-    print("Checking to see if the current user is in the www-data group...")
-    if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-        if is_darwin:
-            xqt(
-                "sudo dscl . create /Groups/www-data",
-                "sudo dseditgroup -o edit -a $USER -t user www-data",
-                "sudo dscl . append /Groups/www-data GroupMembership $USER",
-            )
-        else:
-            xqt('sudo usermod -a -G www-data "$USER"')
-        did_group_add = True
-        docker_sudo = True
-
-    # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
-    check_install(f"{sys.executable} -m pip --version", "python3-pip")
-    xqt(
-        f"{sys.executable} -m pip install {pip_user()} -e docker",
-        f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
-    )
-
     # Run the Docker build.
     xqt(
-        f'ENABLE_BUILDKIT=1{" sudo" if docker_sudo else ""} docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
+        f'ENABLE_BUILDKIT=1 docker build -t runestone/server . --build-arg DOCKER_BUILD_ARGS="{" ".join(sys.argv[1:])}" --progress plain {" ".join(passthrough)}'
     )
-
-    # Print these messages last; otherwise, it will be lost in all the build noise.
-    if change_dir:
-        print(
-            "\n"
-            + "*" * 80
-            + '\nDownloaded the RunestoneServer repo. You must "cd RunestoneServer" before running this script again.'
-        )
-    if did_group_add:
-        print(
-            "\n"
-            + "*" * 80
-            + '\nAdded the current user to the www-data and/or docker group(s). You must log out and log back in for this to take effect, or run "su -s ${USER}".'
-        )
 
 
 # Phase 1: install Runestone dependencies
