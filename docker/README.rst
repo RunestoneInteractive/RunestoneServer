@@ -196,6 +196,8 @@ For the use case of running the server, you will need to modify these settings t
 5. Starting the containerized application
 *****************************************
 
+Pre-start
+^^^^^^^^^
 Once your environment is ready to go, you can use ``docker-compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
 
 For the use case of running the server, execute:
@@ -217,11 +219,12 @@ For the developer use case, execute:
     This displays logging data from the container in the terminal. To Stop the container, press when ctrl-c.
 
 
-The first time you run the command will take a **lot** longer as it downloads containers then installs software into the various
-containers. You may ignore a red message about the Jobe container. After it is complete, you can go to http://localhost/ to see the application (if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
+Post-start
+^^^^^^^^^^
+The first time you run the command will take a **lot** longer as it downloads containers then installs software into the various containers. You may ignore a red message about the Jobe container. After it is complete, you can go to http://localhost/ to see the application (if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
 
-Introducing `rsmanage`
-^^^^^^^^^^^^^^^^^^^^^^
+Introducing ``rsmanage``
+^^^^^^^^^^^^^^^^^^^^^^^^
 The ``rsmanage`` command will run many useful commands inside the container for you.  With ``rsmanage`` you can:
 
 * Add a course - ``rsmanage addcourse``
@@ -236,21 +239,18 @@ The ``rsmanage`` command will run many useful commands inside the container for 
 6. Add books
 **************************
 
-No books are installed by default; you must add books using the following process.
+No books are installed by default; you must add books using the following process. To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. Typically, that means cloning its source code. For example, to add
+`thinkcspy <https://github.com/RunestoneInteractive/thinkcspy>`_:
+
+.. code-block:: bash
+
+    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+
 
 .. note::
 
     TODO: Edit/improve the docs from this point forward.
 
-To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. For an existing
-`Runestone book <https://github.com/RunestoneInteractive>`_, that means cloning its source code. For example, to add
-`thinkcspy <https://github.com/RunestoneInteractive/thinkcspy>`_ you would do:
-
-.. code-block:: bash
-
-    cd books/
-    git clone https://github.com/RunestoneInteractive/thinkcspy.git
-    cd ..
 
 .. warning::
 
@@ -261,17 +261,6 @@ To add a book, you need to add its source code to the ``RunestoneServer/books/``
    matches the ``project_name``.
 
 After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
-You also need to rebuild after making any edits/updates to a book.
-
-.. code-block:: bash
-
-    rsmanage build --course mybook
-
-You can also have ``rsmanage`` clone the book for you the first time you want to build it for example:
-
-.. code-block:: bash
-
-    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
 .. note::
 
