@@ -117,6 +117,10 @@ For the developer use case:
 
     python3 docker_tools.py init --clone-rs <your Github userid>
 
+.. note::
+
+    On Windows using Ubuntu under WSL2: if you see the error message "Docker Desktop not detected..." but you are running the Docker Desktop, then click the gear (settings) icon in Docker Desktop, select Resources then WSL Integration, and make sure the switch next to Ubuntu is turned on.
+
 3. Build the necessary containers
 *********************************
 In the terminal, type:
