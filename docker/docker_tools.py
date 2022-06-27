@@ -552,6 +552,7 @@ def _build_phase_0(
                     db:
                         image:
                             postgres:13
+                        restart: always
                         environment:
                             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
                             POSTGRES_USER: ${POSTGRES_USER}
@@ -559,6 +560,7 @@ def _build_phase_0(
 
                     redis:
                         image: redis
+                        restart: always
 
                     runestone:
                         ${DEV_MISC}
