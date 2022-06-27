@@ -68,7 +68,7 @@ from textwrap import dedent
 # ---------------------------
 # Everything after this depends on Unix utilities. We can't use ``is_win`` because we don't know if ``ci_utils`` is available.
 if sys.platform == "win32":
-    sys.exi("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
+    sys.exit("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
 is_root = (
@@ -180,6 +180,17 @@ except ImportError:
     print("Note: this must be an initial install; additional commands missing.")
 
 
+# Global variables
+# ================
+# .. note::
+#
+#   Update these regularly!
+#
+# See the `Docker compose release page <https://github.com/docker/compose/releases>`_ for the latest version.
+DOCKER_COMPOSE_VERSION = "2.29.2"
+
+
+
 # CLI
 # ===
 # Create a series of subcommands for this CLI.
@@ -236,16 +247,17 @@ def init(
             "sudo sh ./get-docker.sh",
             "rm get-docker.sh",
         )
-        # The group add doesn't take effect until the user logs out then back in. Work around it for now.
-        did_group_add = True
+    # Linux only: Ensure the user is in the ``docker`` group. This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__. Put this step here, instead of after the Docker install, for people who manually installed Docker but skipped this step.
+    if is_linux:
+        print("Checking to see if the current user is in the docker group...")
+        if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
+            if is_darwin:
+                xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
+            else:
+                xqt("sudo usermod -aG docker ${USER}")
 
-    # Ensure the user is in the ``docker`` group. This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__. Put this step here, instead of after the Docker install, for people who manually installed Docker but skipped this step.
-    print("Checking to see if the current user is in the docker group...")
-    if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-        if is_darwin:
-            xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
-        else:
-            xqt("sudo usermod -aG docker ${USER}")
+            # The group add doesn't take effect until the user logs out then back in. Work around it for now.
+            did_group_add = True
 
     # Ensure docker-compose is installed.
     try:
@@ -255,7 +267,7 @@ def init(
         print(f"Unable to run docker-compose: {e} Installing...")
         # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
         xqt(
-            'sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
+            f'sudo curl -L "https://github.com/docker/compose/releases/download/{DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
             "sudo chmod +x /usr/local/bin/docker-compose",
         )
 
@@ -302,6 +314,7 @@ def init(
     # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
     check_install(f"{sys.executable} -m pip --version", "python3-pip")
     xqt(
+        # TODO: OS X installs these into a place that's not in the default $PATH, making the scripts ``docker-tools`` and ``rsmanage`` not work unless the user manually adds the path. Add the ``--verbose`` flag to the install commands below to see where the scripts are place on OS X. I don't know how to work around this.
         f"{sys.executable} -m pip install {pip_user()} -e docker",
         f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
     )
@@ -470,7 +483,7 @@ def _build_phase_0(
     rust: bool,
     tex: bool,
 ) -> None:
-    # If Clone-all flag is set override other Clone Flags
+    # If the ``clone-all`` flag is set, override the other ``clone-xxx`` flags.
     if clone_all:
         click.secho(
             "Warning: Clone-all flag was initialized and will override any other clone flag specified!",
@@ -571,8 +584,10 @@ def _build_phase_0(
             if not bks.exists():
                 print(f"Dev mode: since {bks} doesn't exist, cloning the BookServer...")
                 if not clone_bks:
-                    sys.exit("ERROR: in development mode, you must provide\n"
-                    "either --clone-all or --clone-bks.")
+                    sys.exit(
+                        "ERROR: in development mode, you must provide\n"
+                        "either --clone-all or --clone-bks."
+                    )
                 try:
                     # Check if possible to clone BookServer with Custom Repo
                     xqt(
@@ -581,7 +596,8 @@ def _build_phase_0(
                 except subprocess.CalledProcessError:
                     # Exit script with Git Clone Error
                     sys.exit(
-                        f"ERROR: Unable to clone BookServer remote repository via User - {clone_bks}"
+                        "ERROR: Unable to clone BookServer remote repository\n"
+                        f"via user {clone_bks}."
                     )
             rsc = Path("RunestoneComponents")
             if not rsc.exists():
@@ -589,8 +605,10 @@ def _build_phase_0(
                     f"Dev mode: since {rsc} doesn't exist, cloning the Runestone Components..."
                 )
                 if not clone_rc:
-                    sys.exit("ERROR: in development mode, you must provide\n"
-                    "either --clone-all or --clone-rc.")
+                    sys.exit(
+                        "ERROR: in development mode, you must provide\n"
+                        "either --clone-all or --clone-rc."
+                    )
                 try:
                     # Check if possible to clone RunestoneComponents with Custom Repo
                     xqt(
@@ -599,7 +617,8 @@ def _build_phase_0(
                 except subprocess.CalledProcessError:
                     # Exit script with Git Clone Error
                     sys.exit(
-                        f"ERROR: Unable to clone RunestoneComponents remote repository via User - {clone_rc}"
+                        "ERROR: Unable to clone RunestoneComponents remote\n"
+                        f"repository via user {clone_rc}."
                     )
 
     # Run the Docker build.

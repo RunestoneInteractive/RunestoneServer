@@ -5,7 +5,14 @@ Docker Deployment
 
     Docs to update:
 
-    Jobe thing turns red?
+    Enable the script to download and install the Docker Desktop if necessary.
+
+        Blocker: how to determine if the Docker Desktop is installed in Windows? The discussion on `Poweruser <https://superuser.com/questions/68611/get-list-of-installed-applications-from-windows-command-line>`__ on WMIC didn't work for me.
+
+        Blocker: how to determine if OS X is running on x86 or M1? Python doesn't provide accurate info on older x86 versions of the code (see `SO <https://stackoverflow.com/questions/66842004/get-the-processor-type-using-python-for-apple-m1-processor-gives-me-an-intel-pro>`__). Using a specific library just to detect this seems like more trouble than it's worth.
+
+    TODO: Create a Windows batch file that checks for WSL and Ubuntu and installs them if not, then starts this script in Ubuntu.
+
 
 .. note::
 
@@ -33,12 +40,6 @@ To build a Docker application with the server and all its dependencies:
 1. Install OS-dependent prerequisites
 *************************************
 
-.. TODO
-
-    Enable the script to download and install the Docker Desktop if necessary. Challenge: how to determine if an app in installed in Windows/OS X? On Windows, should we assume WSL2 + Docker Desktop or ask the user if they want to VirtualBox? (I think we should assume -- an advanced user would probably understand to install VirtualBox if they wanted to.)
-
-    Is there any way to download the script without installing curl? It seems like neither curl nor wget is installed by default in Ubuntu. The solution I can see: write OS-specific scripts (Powershell for Windows, bash for Linux and OS X) that can be
-
 Linux
 ^^^^^
 If running on Linux, you must use Ubuntu 20.04 (although any version of Ubuntu 18.0+ should work). Installation on older versions of Ubuntu or other Linux distributions may require adjustments. Install ``curl`` by opening a terminal then typing:
@@ -59,12 +60,12 @@ Windows
 ^^^^^^^
 If running on Windows, either:
 
-    Install Ubuntu on `WSL2 <https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview>`_. Next, install then run
+    `Install Ubuntu on WSL2 <https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview>`_. Next, install then run
     `Docker Desktop`_; see the note above on the initialization process.
 
-    or
+    **OR**
 
-    Install Ubuntu on `VirtualBox <https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox>`_ or on some other virtualization software. You do not need to install the Docker Desktop.
+    `Install Ubuntu on VirtualBox <https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox>`_ or on some other virtualization software. You do not need to install the Docker Desktop.
 
         .. note:: VirtualBox
 
@@ -92,15 +93,17 @@ Next, download the bootstrap script. To do this, open a terminal in Ubuntu or OS
 
     curl -fLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
 
-This download the bootstrap script. The next step, which installs required dependencies for the remainder of the process, depends on your use case:
+This download the bootstrap script. The next step, which installs required dependencies for the remainder of the process, depends on the two mutually exclusive use cases below. **Remember which use case you select**; many of the following steps vary based on your use case.
 
 Use case: running the server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For the devops use case, execute:
+For the use case of running the server, execute:
 
 .. code-block:: bash
 
     python3 docker_tools.py init
+
+**OR**
 
 Use case: change the way Runestone works or change/add to the way `interactive exercises <https://pretextbook.org/doc/guide/html/topic-interactive-exercises.html>`_ behave
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -126,25 +129,39 @@ In the terminal, type:
 
     All future commands should be run in the ``RunestoneServer`` directory unless instructions specify otherwise.
 
-The next command depends on the you case you chose in the previous step:
+The next command depends on the use case you chose in the previous step.
 
-    For the devops use case, execute:
+Pre-build
+^^^^^^^^^
+.. note::
 
-        .. code-block:: bash
+    OS X warning: On OS X, use ``python3 -m docker_tools`` instead of ``docker-tools`` in the following instructions. Likewise, use ``python3 -m rsmanage`` instead of ``rsmanage``.
 
-            docker-tools build
+For the use case of running the server, execute:
 
-    For the developer use case, execute:
+    .. code-block:: bash
 
-        .. code-block:: bash
+        docker-tools build
 
-            docker-tools build --single-dev --clone-all <your Github userid>
+**OR**
 
-    .. note:
+For the developer use case, execute:
 
-        The ``docker-tools build`` command offers many additional options for advanced users, viewable by running ``docker-tools build --help``.
+    .. code-block:: bash
 
-This will take a **long** time (5-10 minutes in many cases). When this completes, **reboot your computer** to update your group membership. Next, open a terminal then ``cd RunestoneServer``.
+        docker-tools build --single-dev --clone-all <your Github userid>
+
+.. note:
+
+    The ``docker-tools build`` command offers many additional options for advanced users, viewable by running ``docker-tools build --help``.
+
+Post-build
+^^^^^^^^^^
+The build will take a **long** time (5-10 minutes in many cases). When this completes:
+
+#.  **Reboot your computer** to update your group membership.
+#.  Run the Docker Desktop if using WSL on Windows or using OS X.
+#.  Open a terminal then ``cd RunestoneServer``.
 
 4. Configuration
 ***********************
@@ -156,12 +173,20 @@ need to stop the containers and restart them.
 Environment Variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the developer use case, you should not need to modify any of the default environment variables. For the devops use case, you will need to modify these. To do so, edit the ``.env`` file, which Docker will read automatically as it loads containers. A sample ``.env`` file is provided as ``./.env`` (copied from `docker/.env.prototype <.env.prototype>` on the first build). See comments in the file for details.
+For the developer use case, you do not need to modify any of the default environment variables.
+
+**OR**
+
+For the use case of running the server, you will need to modify these variables. To do so, edit the ``.env`` file, which Docker will read automatically as it loads containers. A sample ``.env`` file is provided as ``./.env`` (copied from `docker/.env.prototype <.env.prototype>` on the first build). See comments in the file for details.
 
 Python Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the developer use case, you should not need to modify any of the default Python settings. For the devops use case, you will need to modify these to obtain an HTTPS certificate, send the lost password e-mails, etc. These options will be in the file ``models/1.py`` (which is automatically created on the first build).
+For the developer use case, you do not need to modify any of the default Python settings.
+
+**OR**
+
+For the use case of running the server, you will need to modify these settings to obtain an HTTPS certificate, send the lost password e-mails, etc. These options will be in the file ``models/1.py`` (which is automatically created on the first build).
 
 .. warning::
 
@@ -173,7 +198,7 @@ For the developer use case, you should not need to modify any of the default Pyt
 
 Once your environment is ready to go, you can use ``docker-compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
 
-For the devops use case:
+For the use case of running the server, execute:
 
     .. code-block:: bash
 
@@ -181,7 +206,9 @@ For the devops use case:
 
     This run the container in the background (detached mode). Use ``docker-compose logs --follow`` to view logging data as the container starts up and runs.
 
-For the developer use case use:
+**OR**
+
+For the developer use case, execute:
 
     .. code-block:: bash
 
@@ -191,9 +218,7 @@ For the developer use case use:
 
 
 The first time you run the command will take a **lot** longer as it downloads containers then installs software into the various
-containers. After it is complete, you can go to http://localhost/ to see the application
-(if you configured a hostname, substitute it for localhost). If everything so far is set up correctly,
-you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
+containers. You may ignore a red message about the Jobe container. After it is complete, you can go to http://localhost/ to see the application (if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
 
 Introducing `rsmanage`
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -208,8 +233,10 @@ The ``rsmanage`` command will run many useful commands inside the container for 
 ...and many other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
 
 
-6. Add Books
+6. Add books
 **************************
+
+No books are installed by default; you must add books using the following process.
 
 .. note::
 
@@ -254,7 +281,7 @@ You can also have ``rsmanage`` clone the book for you the first time you want to
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-7. Add Courses
+7. Add courses
 **************************
 
 To add a course based on a book, run the ``rsmanage addcourse`` script. If you run it just like
@@ -287,7 +314,7 @@ You do not have to restart the server to make use of the course.
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
 
-8. Add a User
+8. Add a user
 **************************
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
