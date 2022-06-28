@@ -294,6 +294,7 @@ def init(
         if is_darwin:
             xqt(
                 "sudo dscl . create /Groups/www-data",
+                "sudo dscl . create /Groups/www-data gid 799",
                 "sudo dseditgroup -o edit -a $USER -t user www-data",
                 "sudo dscl . append /Groups/www-data GroupMembership $USER",
             )
