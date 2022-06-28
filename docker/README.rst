@@ -37,6 +37,10 @@ Setup
 -----------------------------
 To build a Docker application with the server and all its dependencies:
 
+.. note::
+
+    You will need to enter the root user password several times during the following steps. Look for the ``Password:`` prompt, then enter your password. Note that **no characters** will be echoed when you type your password -- this is a normal security precaution built into Unix.
+
 1. Install OS-dependent prerequisites
 *************************************
 
@@ -137,9 +141,9 @@ The next command depends on the use case you chose in the previous step.
 
 Pre-build
 ^^^^^^^^^
-.. note::
+.. warning::
 
-    OS X warning: On OS X, use ``python3 -m docker_tools`` instead of ``docker-tools`` in the following instructions. Likewise, use ``python3 -m rsmanage`` instead of ``rsmanage``.
+    On OS X, use ``python3 -m docker_tools`` instead of ``docker-tools`` in the following instructions. Likewise, use ``python3 -m rsmanage`` instead of ``rsmanage``.
 
 For the use case of running the server, execute:
 
@@ -231,11 +235,11 @@ Introducing ``rsmanage``
 ^^^^^^^^^^^^^^^^^^^^^^^^
 The ``rsmanage`` command will run many useful commands inside the container for you.  With ``rsmanage`` you can:
 
-* Add a course - ``rsmanage addcourse``
-* Add a user - ``rsmanage adduser``
-* Get information about a course ``rsmanage courseinfo``
-* Build a book - ``rsmanage build --course bookname``
-* Get a database shell in the current database - ``rsmanage db``
+*   Add a course - ``rsmanage addcourse``
+*   Add a user - ``rsmanage adduser``
+*   Get information about a course ``rsmanage courseinfo``
+*   Build a book - ``rsmanage build --course bookname``
+*   Get a database shell in the current database - ``rsmanage db``
 
 ...and many other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
 
@@ -345,17 +349,7 @@ trying to load the same records and entering a restart loop because the records 
 
 Operation
 ---------
-To run the containerized application after a stop/reboot/etc.:
-
-#.  On WSL or OS X, run the Docker Desktop.
-#.  In a terminal, stop any currently-running containers:
-
-    .. code:: bash
-
-        docker-compose stop
-
-#.  Next, start them by following the directions in `5. Starting the containerized application`_.
-
+The containerized application is configured to automatically start as soon as Docker / the Docker Desktop is started. Therefore, on OS X or Windows (when using WSL2): after a reboot or after manually shutting down the Docker Desktop, remember to start the Docker Desktop application.
 
 
 Other Tips & Tricks
@@ -414,25 +408,16 @@ To install a VNC client on Linux, execute ``sudo apt install gvncviewer``. Next,
 
 Execute ``sudo apt install openssh-server`` to install a SSH server. This allows easy access from VSCode, as well as usual SSH access.
 
-Runestone Components / BookServer Development
+Developer notes
 ***********************************************
 
-If you are doing development work on Runestone itself, you will want to install the RunestoneComponents and/or the BookServer from source. To do this, rebuild the image with the ``--single-dev`` option:
+If you make changes to the Runestone Components, you must rebuild the bundle of JavaScript bundle produced by webpack using ``npm run build``, then re-build the book (or page of a book) which uses the component you're editing via a ``runestone build`` or ``pretext build``. The unit tests do this automatically; for development, it's easiest to make changes to the test then re-run the test to guarantee the correct builds are done.
 
-.. code-block:: bash
+If you make changes to the BookServer, you'll need to stop then restart the BookServer. To do this, use ``docker-tools start-servers`` / ``docker-tools stop-servers``.
 
-    docker-tools build --single-dev
-    docker-compose up
-
-This command automatically clones the `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents>`_ and/or the `BookServer <https://github.com/bnmnetp/BookServer>`_
-as a sibling of the root directory. Use the ``docker-tools build --clone-all/bks/rc/rs`` options to clone your repositories.
-
-As you make changes to Runestone Components or the BookServer, you should not have to restart the Docker containerized application. Any rebuild
-of a book should immediately use the new code. This is because the host filesystem is mounted as a `volume <https://docs.docker.com/storage/volumes/>`_ in the container; see the generated ``docker-compose.overrides.yaml`` file.
+If you make changes to the Runestone server, most changes will be immediately applied. However, changes in the ``modules`` folder require a stop / start sequence to apply these changes.
 
 You can run the unit tests in the container using the ``docker-tools test`` command.
-
-To start or stop the servers, use ``docker-tools start-servers`` / ``docker-tools stop-servers``. While changes to web2py controllers don't require a server restart, any changes to code in the ``modules`` folder does.
 
 Testing the Entrypoint
 **********************************
@@ -449,28 +434,25 @@ File Permissions
 **********************************
 
 File permissions can seem a little strange when you start this container on Linux. Primarily because both
-nginx and uwsgi run as the ``www-data`` user. So you will suddenly find your files under RunestoneServer
+nginx and Gunicorn run as the ``www-data`` user. So you will suddenly find your files under RunestoneServer
 owned by ``www-data`` . The container's entry point script updates permissions to allow both you and the
 container enough privileges to do your work.
 
 Writing Your Own Book
 **********************************
 
-If you are writing your own book you will want to get that book set up properly in the runestone
+If you are writing your own book you will want to get that book set up properly in the Runestone
 system. You need to do the following:
 
-1. Run the command ``rsmanage addcourse`` Use the project name you configured in ``pavement.py`` as
-the name of BOTH the course and the basecourse when it asks.
+#.  Run the command ``rsmanage addcourse``. Use the project name you configured in ``pavement.py`` as the name of BOTH the course and the basecourse when it asks.
 
+#.  Now that your course is registered, rebuild it using the command ``rsmanage build --course <book_name>`` command.
 
-1. Now that your course is registered rebuild it using the command ``rsmanage build --course <book_name>`` command.
+#.  If this book is a PreTeXt book you will need to navigate to the directory that contains the ``runestone-manifest.xml`` file and run the command:
 
-2. If this book is a PreTeXt book you will need to navigate to the directory that contains the
-``runestone-manifest.xml`` file and run the command:
+    .. code-block:: bash
 
-.. code-block:: bash
-
-    runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml
+        runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml
 
 .. note::
 
