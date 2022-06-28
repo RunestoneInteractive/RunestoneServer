@@ -356,9 +356,12 @@ def addcourse(
 )
 @click.option("--clone", default=None, help="clone the given repo before building")
 @click.option("--ptx", is_flag=True, help="Build a PreTeXt book")
+@click.option(
+    "--gen", is_flag=True, help="Build PreTeXt generated assets (a one time thing)"
+)
 @click.option("--manifest", default="runestone-manifest.xml", help="Manifest file")
 @pass_config
-def build(config, course, clone, ptx, manifest):
+def build(config, course, clone, ptx, gen, manifest):
     """Build the book for an existing course"""
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
@@ -400,6 +403,10 @@ def build(config, course, clone, ptx, manifest):
             ElementInclude.include(
                 root, base_url=main_file
             )  # include all xi:include parts
+            if gen:
+                res = subprocess.call("pretext generate web")
+                if res != 0:
+                    click.echo("Failed to build")
             # build the book
             res = subprocess.call("pretext build runestone", shell=True)
             if res != 0:
@@ -438,7 +445,7 @@ def build(config, course, clone, ptx, manifest):
         try:
             if os.path.exists("pavement.py"):
                 sys.path.insert(0, os.getcwd())
-                from pavement import options, dest
+                from pavement import options, dest, project_name
             else:
                 click.echo(
                     "I can't find a pavement.py file in {} you need that to build".format(
@@ -451,7 +458,7 @@ def build(config, course, clone, ptx, manifest):
             print(e)
             exit(1)
 
-        if options.project_name != course:
+        if project_name != course:
             click.echo(
                 "Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(
                     course, project_name
@@ -501,8 +508,12 @@ def check_project_ptx():
             sys.exit(1)
 
 
-def extract_docinfo(tree, string):
+def extract_docinfo(tree, string, attr=None):
     el = tree.find(f"./{string}")
+    if attr is not None and el is not None:
+        print(f"{el.attrib[attr]=}")
+        return el.attrib[attr].strip()
+
     if el is not None:
         # using method="text" will strip the outer tag as well as any html tags in the value
         return ET.tostring(el, encoding="unicode", method="text").strip()
@@ -515,7 +526,7 @@ def update_library(config: Config, mpath, course):
     eng = create_engine(config.dburl)
     title = extract_docinfo(docinfo, "title")
     subtitle = extract_docinfo(docinfo, "subtitle")
-    description = extract_docinfo(docinfo, "description")
+    description = extract_docinfo(docinfo, "blurb")
     shelf = extract_docinfo(docinfo, "shelf")
     click.echo(f"{title} : {subtitle}")
     res = eng.execute(f"select * from library where basecourse = '{course}'")
@@ -531,7 +542,7 @@ def update_library(config: Config, mpath, course):
             title = '{title}',
             subtitle = '{subtitle}',
             description = '{description}',
-            shelf_section = '{shelf}'
+            shelf = '{shelf}'
         where basecourse = '{course}'
         """
         )
