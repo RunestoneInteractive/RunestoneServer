@@ -206,15 +206,15 @@ For the use case of running the server, you will need to modify these settings t
 
 Pre-start
 ^^^^^^^^^
-Once your environment is ready to go, you can use ``docker-compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
+Once your environment is ready to go, you can use ``docker compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
 
 For the use case of running the server, execute:
 
     .. code-block:: bash
 
-        docker-compose up -d
+        docker compose up -d
 
-    This run the container in the background (detached mode). Use ``docker-compose logs --follow`` to view logging data as the container starts up and runs.
+    This run the container in the background (detached mode). Use ``docker compose logs --follow`` to view logging data as the container starts up and runs.
 
 **OR**
 
@@ -222,7 +222,7 @@ For the developer use case, execute:
 
     .. code-block:: bash
 
-        docker-compose up
+        docker compose up
 
     This displays logging data from the container in the terminal. To Stop the container, press when ctrl-c.
 
@@ -423,12 +423,12 @@ Testing the Entrypoint
 **********************************
 
 If you want to test the script, the easiest thing
-to do is add a command to the docker-compose to disable it, and then run commands
+to do is add a command to the ``docker compose`` to disable it, and then run commands
 interactively by shelling into the container.
 
 Bring up the containers and then shell inside. Once inside, you can then issue commands
 to test the entry point script - since the other containers were started
-with docker-compose everything in them is ready to go.
+with ``docker compose`` everything in them is ready to go.
 
 File Permissions
 **********************************
