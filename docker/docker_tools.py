@@ -217,17 +217,6 @@ def init(
     # Ensure Docker is installed.
     try:
         xqt("docker --version")
-        # Ensure the Docker Desktop is running if this is OS X. On OS X, the ``docker`` command exists, but can't run the hello, world script.
-        if is_darwin:
-            print("Checking that the Docker Desktop is running...")
-            try:
-                xqt("docker run hello-world")
-            except subprocess.CalledProcessError as e:
-                print(f"Unable to execute docker run hello-world: {e}")
-                sys.exit(
-                    "ERROR: Docker Desktop not detected. You must install and run this\n"
-                    "before proceeding."
-                )
     except subprocess.CalledProcessError as e:
         print(f"Unable to run docker: {e}")
         # Ensure the Docker Desktop is running if we're running in WSL. On Windows, the ``docker`` command doesn't exist when the Docker Desktop isn't running.
@@ -252,10 +241,25 @@ def init(
             if is_darwin:
                 xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
             else:
-                xqt("sudo usermod -aG docker ${USER}")
+                xqt("sudo usermod -a -G docker ${USER}")
 
             # The group add doesn't take effect until the user logs out then back in. Work around it for now.
             did_group_add = True
+
+    # Ensure the Docker Desktop is running if this is OS X. On OS X, the ``docker`` command exists, but can't run the hello, world script. It also serves as a sanity check for the other platforms.
+    print("Checking that Docker works...")
+    try:
+        xqt("docker run hello-world")
+    except subprocess.CalledProcessError as e:
+        print(f"Unable to execute docker run hello-world: {e}")
+        sys.exit(
+            (
+                "ERROR: Docker Desktop not detected. You must install and run this\n"
+                "before proceeding."
+            )
+            if is_darwin
+            else "ERROR: Unable to run a basic Docker application."
+        )
 
     # Make sure git's installed.
     try:
