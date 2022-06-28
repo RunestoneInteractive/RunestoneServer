@@ -88,7 +88,7 @@ def _start_servers(dev: bool) -> None:
     xqt(
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
         "poetry run celery --app=scheduled_builder worker --pool=threads "
-        "--concurrency=3 --loglevel=info &",
+        "--concurrency=3 --loglevel=info --logfile=/dev/stdout &",
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
 
@@ -100,14 +100,15 @@ def _start_servers(dev: bool) -> None:
         # This much match the address in `./nginx/sites-available/runestone.template`.
         "--bind unix:/run/fastapi.sock "
         + ("--reload " if dev else "")
-        + "2>&1 > /proc/1/fd/1 &",  # This redirect ensures output ends up in the docker log
+        # This redirect ensures output ends up in the Docker log.
+        + "2>&1 > /proc/1/fd/1 &",
         "service nginx start",
         "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
     )
 
     # Start the script to collect tickets and store them in the database. Most useful
-    # for a production environment with several worker containers
+    # for a production environment with several worker containers.
     xqt(
         f"cp {env.RUNESTONE_PATH}/scripts/tickets2db.py {env.WEB2PY_PATH}",
         "python web2py.py -M -S runestone --run tickets2db.py &",
@@ -137,6 +138,8 @@ def _stop_servers() -> None:
     )
 
 
+# ``restart_servers``
+# -------------------
 @click.command()
 @click.option(
     "--dev/--no-dev",
@@ -152,6 +155,8 @@ def restart_servers(dev):
     _start_servers()
 
 
+# ``reloadbks``
+# -------------
 @click.command()
 def reloadbks() -> None:
     """
@@ -162,7 +167,8 @@ def reloadbks() -> None:
         pid = pfile.read().strip()
 
     pid = int(pid)
-    os.kill(pid, 1)  # send the HUP signal to bookserver
+    # send the HUP signal to the BookServer.
+    os.kill(pid, 1)
 
 
 # ``test``
@@ -179,12 +185,17 @@ def reloadbks() -> None:
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
 def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     """
-    Run unit tests.
+    Run unit tests. All tests are disabled by default; manually select which test to run.
 
         PASSTHROUGH: These arguments are passed directly to the underlying "pytest" command. To pass options to this command, prefix this argument with "--". For example, use "docker_tools.py test -- -k test_just_this" instead of "docker_tools.py test -k test_just_this" (which produces an error).
 
     """
     ensure_in_docker()
+    if not bks and not rc and not rs:
+        sys.exit(
+            "ERROR: No tests selected to run. Pass any combination of --rs, --rs,\n"
+            "and/or --bks."
+        )
     _stop_servers()
     pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
     passthrough_args = " ".join(passthrough)
