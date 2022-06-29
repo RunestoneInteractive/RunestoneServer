@@ -71,6 +71,8 @@ def dashboard():
     else:
         next = False
     current_question = _get_current_question(assignment_id, next)
+    assignment = db(db.assignments.id == assignment_id).select().first()
+
     db.useinfo.insert(
         course_id=auth.user.course_name,
         sid=auth.user.username,
@@ -96,6 +98,7 @@ def dashboard():
         course=get_course_row(db.courses.ALL),
         current_question=current_question,
         assignment_id=assignment_id,
+        assignment_name=assignment.name,
         is_instructor=True,
     )
 
@@ -297,11 +300,13 @@ def peer_question():
     assignment_id = request.vars.assignment_id
 
     current_question = _get_current_question(assignment_id, False)
+    assignment = db(db.assignments.id == assignment_id).select().first()
 
     return dict(
         course_id=auth.user.course_name,
         course=get_course_row(db.courses.ALL),
         current_question=current_question,
+        assignment_name=assignment.name,
         assignment_id=assignment_id,
     )
 
