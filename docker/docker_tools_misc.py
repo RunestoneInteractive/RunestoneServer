@@ -89,7 +89,7 @@ def _start_servers(dev: bool) -> None:
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
         "poetry run celery --app=scheduled_builder worker --pool=threads "
         "--concurrency=3 --loglevel=info "
-        # This redirect ensures output ends up in the Docker log even if the servers are restarted. Sending to ``/dev/stdout`` only works at initial startup, but doesn't redirect after the servers are restarted.
+        # This redirect ensures output ends up in the Docker log even if the servers are restarted. Sending to ``/dev/stdout`` only works at initial startup, but doesn't redirect after the servers are restarted. For more discussion, see `Github <https://github.com/moby/moby/issues/19616#issuecomment-174355979>`_.
         "--logfile=/proc/1/fd/1 &",
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
