@@ -67,7 +67,7 @@ from textwrap import dedent
 # Local application bootstrap
 # ---------------------------
 # Everything after this depends on Unix utilities. We can't use ``is_win`` because we don't know if ``ci_utils`` is available.
-if sys.platform == "win32x":
+if sys.platform == "win32":
     sys.exit("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
