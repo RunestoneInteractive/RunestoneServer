@@ -201,7 +201,7 @@ def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
     passthrough_args = " ".join(passthrough)
     if bks:
-        xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/BookServer")
+        xqt(f"{pytest} -v {passthrough_args}", cwd=env.BOOK_SERVER_PATH)
     if rc:
         xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/RunestoneComponents")
     if rs:

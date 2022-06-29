@@ -19,10 +19,9 @@ ENV DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 # Define some ARGs which could be passed into while building.
 #
 # **Warning:** Changing this path will require changes in many other places: the Docker volume locations, the paths in ``pyproject.toml``, paths used to run tests, etc.
-ARG WEB2PY_PATH=/srv/web2py
-# And export some as env vars so they could be available at run time
-ENV WEB2PY_PATH=${WEB2PY_PATH}
+ENV WEB2PY_PATH=/srv/web2py
 ENV RUNESTONE_PATH=${WEB2PY_PATH}/applications/runestone
+ENV BOOK_SERVER_PATH=/srv/BookServer
 
 # Click needs these encodings for Python 3.
 ENV LC_ALL=C.UTF-8
