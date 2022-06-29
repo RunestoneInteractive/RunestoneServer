@@ -88,7 +88,9 @@ def _start_servers(dev: bool) -> None:
     xqt(
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
         "poetry run celery --app=scheduled_builder worker --pool=threads "
-        "--concurrency=3 --loglevel=info --logfile=/dev/stdout &",
+        "--concurrency=3 --loglevel=info "
+        # This redirect ensures output ends up in the Docker log even if the servers are restarted. Sending to ``/dev/stdout`` only works at initial startup, but doesn't redirect after the servers are restarted.
+        "--logfile=/proc/1/fd/1 &",
         cwd=f"{env.RUNESTONE_PATH}/modules",
     )
 
@@ -98,9 +100,8 @@ def _start_servers(dev: bool) -> None:
         "--error_path /tmp "
         "--gconfig $RUNESTONE_PATH/docker/gunicorn_config/fastapi_config.py "
         # This much match the address in `./nginx/sites-available/runestone.template`.
-        "--bind unix:/run/fastapi.sock "
-        + ("--reload " if dev else "")
-        # This redirect ensures output ends up in the Docker log.
+        f"--bind unix:/run/fastapi.sock {'--reload ' if dev else ''}"
+        # See previous comment on redirecting output to ``/dev/stdout`` even after server restarts.
         + "2>&1 > /proc/1/fd/1 &",
         "service nginx start",
         "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
@@ -272,7 +273,7 @@ def ensure_in_docker(
         return True
     # Get the name of the container running the Runestone servers.
     res = subprocess.run(
-        'docker ps --filter "ancestor=runestone/server"  --format "{{.Names}}"',
+        'docker ps --filter "ancestor=runestone/server" --format "{{.Names}}"',
         shell=True,
         capture_output=True,
         text=True,
