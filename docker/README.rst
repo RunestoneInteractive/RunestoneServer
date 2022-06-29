@@ -206,15 +206,15 @@ For the use case of running the server, you will need to modify these settings t
 
 Pre-start
 ^^^^^^^^^
-Once your environment is ready to go, you can use ``docker-compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
+Once your environment is ready to go, you can use ``docker compose`` to bring the containers up. This command will create four containers to run different parts of the application stack (the Runestone server, redis cache, postgres DB, jobe code testing environment).
 
 For the use case of running the server, execute:
 
     .. code-block:: bash
 
-        docker-compose up -d
+        docker compose up -d
 
-    This run the container in the background (detached mode). Use ``docker-compose logs --follow`` to view logging data as the container starts up and runs.
+    This run the container in the background (detached mode). Use ``docker compose logs --follow`` to view logging data as the container starts up and runs.
 
 **OR**
 
@@ -222,7 +222,7 @@ For the developer use case, execute:
 
     .. code-block:: bash
 
-        docker-compose up
+        docker compose up
 
     This displays logging data from the container in the terminal. To Stop the container, press when ctrl-c.
 
@@ -254,11 +254,11 @@ No books are installed by default; you must add books using the following proces
 
     rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
+After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 
 .. note::
 
-    TODO: Edit/improve the docs from this point forward.
-
+    PreTeXt authors, see `Publishing to Runestone Academy <https://pretextbook.org/doc/guide/html/sec-publishing-to-runestone-academy.html>`_. The following information applies only *authoring* books using the Runestone.
 
 .. warning::
 
@@ -267,8 +267,6 @@ No books are installed by default; you must add books using the following proces
    repository will normally be cloned into **ThinkCPP** but it has the ``project_name`` set to ``thinkcpp``.
    If there is a mismatch, you will want to rename the folder you cloned the code into so that it
    matches the ``project_name``.
-
-After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 
 .. note::
 
@@ -349,7 +347,7 @@ trying to load the same records and entering a restart loop because the records 
 
 Operation
 ---------
-The containerized application is configured to automatically start as soon as Docker / the Docker Desktop is started. Therefore, on OS X or Windows (when using WSL2): after a reboot or after manually shutting down the Docker Desktop, remember to start the Docker Desktop application.
+The containerized application is configured to automatically start as soon as Docker / the Docker Desktop is started. Therefore, on OS X or Windows (when using WSL2): after a reboot or after manually shutting down the Docker Desktop, **remember to start the Docker Desktop application**.
 
 
 Other Tips & Tricks
@@ -423,12 +421,12 @@ Testing the Entrypoint
 **********************************
 
 If you want to test the script, the easiest thing
-to do is add a command to the docker-compose to disable it, and then run commands
+to do is add a command to the ``docker compose`` to disable it, and then run commands
 interactively by shelling into the container.
 
 Bring up the containers and then shell inside. Once inside, you can then issue commands
 to test the entry point script - since the other containers were started
-with docker-compose everything in them is ready to go.
+with ``docker compose`` everything in them is ready to go.
 
 File Permissions
 **********************************
@@ -441,6 +439,10 @@ container enough privileges to do your work.
 Writing Your Own Book
 **********************************
 
+.. note::
+
+    PreTeXt authors, see `Publishing to Runestone Academy <https://pretextbook.org/doc/guide/html/sec-publishing-to-runestone-academy.html>`_. The following information applies only *authoring* books using the Runestone.
+
 If you are writing your own book you will want to get that book set up properly in the Runestone
 system. You need to do the following:
 
@@ -448,16 +450,6 @@ system. You need to do the following:
 
 #.  Now that your course is registered, rebuild it using the command ``rsmanage build --course <book_name>`` command.
 
-#.  If this book is a PreTeXt book you will need to navigate to the directory that contains the ``runestone-manifest.xml`` file and run the command:
-
-    .. code-block:: bash
-
-        runestone process-manifest --course <yourcourse> --manifest runestone-manifest.xml
-
-.. note::
-
-    If you are missing ``runestone-manifest.xml`` then you need to rebuild your PreTeXt
-    book with ``runestone`` as the publisher. See the PreTeXt docs for how do do this.
 
 Changing dependencies
 *********************

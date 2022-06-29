@@ -67,7 +67,7 @@ from textwrap import dedent
 # Local application bootstrap
 # ---------------------------
 # Everything after this depends on Unix utilities. We can't use ``is_win`` because we don't know if ``ci_utils`` is available.
-if sys.platform == "win32":
+if sys.platform == "win32x":
     sys.exit("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
@@ -180,16 +180,6 @@ except ImportError:
     print("Note: this must be an initial install; additional commands missing.")
 
 
-# Global variables
-# ================
-# .. note::
-#
-#   Update these regularly!
-#
-# See the `Docker compose release page <https://github.com/docker/compose/releases>`_ for the latest version.
-DOCKER_COMPOSE_VERSION = "2.29.2"
-
-
 # CLI
 # ===
 # Create a series of subcommands for this CLI.
@@ -207,15 +197,6 @@ except NameError:
 
 # ``init`` command
 # ================
-# Check if we're running in WSL or OS X -- don't install Docker if so.
-def check_requires_docker_desktop() -> None:
-    if (is_linux and "WSL" in Path("/proc/version").read_text()) or is_darwin:
-        sys.exit(
-            "ERROR: Docker Desktop not detected. You must install and run this\n"
-            "before proceeding."
-        )
-
-
 @cli.command()
 @click.option(
     "--clone-rs",
@@ -237,9 +218,16 @@ def init(
     try:
         xqt("docker --version")
     except subprocess.CalledProcessError as e:
-        check_requires_docker_desktop()
+        print(f"Unable to run docker: {e}")
+        # Ensure the Docker Desktop is running if we're running in WSL. On Windows, the ``docker`` command doesn't exist when the Docker Desktop isn't running.
+        if is_linux and "WSL" in Path("/proc/version").read_text():
+            sys.exit(
+                "ERROR: Docker Desktop not detected. You must install and run this\n"
+                "before proceeding."
+            )
+
         check_install_curl()
-        print(f"Unable to run docker: {e} Installing Docker...")
+        print("Installing Docker...")
         # Use the `convenience script <https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script>`_.
         xqt(
             "curl -fsSL https://get.docker.com -o get-docker.sh",
@@ -253,21 +241,24 @@ def init(
             if is_darwin:
                 xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
             else:
-                xqt("sudo usermod -aG docker ${USER}")
+                xqt("sudo usermod -a -G docker ${USER}")
 
             # The group add doesn't take effect until the user logs out then back in. Work around it for now.
             did_group_add = True
 
-    # Ensure docker-compose is installed.
+    # Ensure the Docker Desktop is running if this is OS X. On OS X, the ``docker`` command exists, but can't run the hello, world script. It also serves as a sanity check for the other platforms.
+    print("Checking that Docker works...")
     try:
-        xqt("docker-compose --version")
+        xqt("docker run hello-world")
     except subprocess.CalledProcessError as e:
-        check_requires_docker_desktop()
-        print(f"Unable to run docker-compose: {e} Installing...")
-        # This is from the `docker-compose install instructions <https://docs.docker.com/compose/install/#install-compose-on-linux-systems>`_.
-        xqt(
-            f'sudo curl -L "https://github.com/docker/compose/releases/download/{DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose',
-            "sudo chmod +x /usr/local/bin/docker-compose",
+        print(f"Unable to execute docker run hello-world: {e}")
+        sys.exit(
+            (
+                "ERROR: Docker Desktop not detected. You must install and run this\n"
+                "before proceeding."
+            )
+            if is_darwin
+            else "ERROR: Unable to run a basic Docker application."
         )
 
     # Make sure git's installed.
@@ -303,6 +294,7 @@ def init(
         if is_darwin:
             xqt(
                 "sudo dscl . create /Groups/www-data",
+                "sudo dscl . create /Groups/www-data gid 799",
                 "sudo dseditgroup -o edit -a $USER -t user www-data",
                 "sudo dscl . append /Groups/www-data GroupMembership $USER",
             )
