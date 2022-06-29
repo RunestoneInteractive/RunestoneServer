@@ -36,6 +36,7 @@ pathlib2 = "^2.0.0"
 Paver = ">= 1.2.4"
 # This is actually an rsmanage dependency. It's here so that rsmanage can be installed without installing this, which requires Postgres (available only in the container).
 pgcli = "^3.0.0"
+pretextbook = "^0.7"
 psycopg2-binary = "^2.0.0"
 pylint = ">= 1.2.1"
 python = "^3.8"
