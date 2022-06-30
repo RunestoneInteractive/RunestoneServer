@@ -813,6 +813,7 @@ def _build_phase_1(
         "ln -sf /srv/BookServer $WEB2PY_PATH/applications/BookServer",
         "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
         "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
+        "ln -sf /srv/runestone-dev $WEB2PY_PATH/applications/runestone-dev",
     )
 
     # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
