@@ -180,7 +180,7 @@ def reloadbks() -> None:
     "--rc/--no-rc", default=False, help="Run/skip tests on the Runestone components."
 )
 @click.option(
-    "--rs/--no-rs", default=True, help="Run/skip tests on the Runestone server."
+    "--rs/--no-rs", default=False, help="Run/skip tests on the Runestone server."
 )
 # Allow users to pass args directly to the underlying ``pytest`` command -- see the `click docs <https://click.palletsprojects.com/en/8.0.x/arguments/#option-like-arguments>`_.
 @click.argument("passthrough", nargs=-1, type=click.UNPROCESSED)
@@ -194,7 +194,7 @@ def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     ensure_in_docker()
     if not bks and not rc and not rs:
         sys.exit(
-            "ERROR: No tests selected to run. Pass any combination of --rs, --rs,\n"
+            "ERROR: No tests selected to run. Pass any combination of --rc, --rs,\n"
             "and/or --bks."
         )
     _stop_servers()
