@@ -802,9 +802,15 @@ def _build_phase_1(
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
         "ln -sf $RUNESTONE_PATH/docker/nginx/sites-available/runestone /etc/nginx/sites-enabled/runestone",
-        # Send nginx logs to stdout/stderr, so they'll show up in Docker logs.
-        "ln -sf /dev/stdout /var/log/nginx/access.log",
-        "ln -sf /dev/stderr /var/log/nginx/error.log",
+        # Send celery, gunicorn, and nginx logs to Docker's stdout/stderr, so they'll show up in Docker logs even after restarting the servers. (Linking to ``/dev/stdout`` and ``/dev/stderr`` means that on restart, these links point not to Docker, but to the console which invoked the restart). See a `related issue on Github <https://github.com/moby/moby/issues/19616#issuecomment-174355979>`_.
+        "ln -sf /proc/1/fd/1 /var/log/nginx/access.log",
+        "ln -sf /proc/1/fd/2 /var/log/nginx/error.log",
+        "mkdir -p /var/log/celery",
+        "ln -sf /proc/1/fd/1 /var/log/celery/access.log",
+        "ln -sf /proc/1/fd/2 /var/log/celery/error.log",
+        "mkdir -p /var/log/gunicorn",
+        "ln -sf /proc/1/fd/1 /var/log/gunicorn/access.log",
+        "ln -sf /proc/1/fd/2 /var/log/gunicorn/error.log",
         # Set up web2py routing.
         "cp $RUNESTONE_PATH/docker/routes.py $WEB2PY_PATH",
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
