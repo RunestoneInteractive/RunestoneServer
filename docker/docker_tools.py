@@ -707,7 +707,7 @@ def _build_phase_1(
             # Tests use `html5validator <https://github.com/svenkreiss/html5validator>`_, which requires the JDK.
             f"{apt_install} openjdk-11-jre-headless git xvfb x11-utils {browser} lsof emacs-nox",
             # Install Chromedriver. Based on https://tecadmin.net/setup-selenium-with-chromedriver-on-debian/.
-            "wget --no-verbose https://chromedriver.storage.googleapis.com/96.0.4664.18/chromedriver_linux64.zip",
+            "wget --no-verbose https://chromedriver.storage.googleapis.com/103.0.5060.53/chromedriver_linux64.zip",
             "unzip chromedriver_linux64.zip",
             "rm chromedriver_linux64.zip",
             "mv chromedriver /usr/bin/chromedriver",
