@@ -50,4 +50,4 @@ jobs:
                     echo "Checking if site is up..."
                     curl --silent --location 127.0.0.1 | grep "About Runestone"
                     # Test just the Runestone server.
-                    docker-tools test --no-bks --no-rc
+                    docker-tools test --rs
