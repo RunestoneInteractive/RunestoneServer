@@ -511,7 +511,8 @@ def _build_phase_0(
                 # Set the base dedent; this defines column 0. The following section of the file should be indented by 2 tabs.
                         # Set up for VNC.
                         environment:
-                            DISPLAY: ${DISPLAY}
+                            # I don't know how to correctly forward X11 traffic (see notes on VNC), so ignore the X11 ``DISPLAY`` outside the container.
+                            DISPLAY: ":0"
                         ports:
                             # For VNC.
                             -   "5900:5900"
@@ -528,6 +529,7 @@ def _build_phase_0(
                             -   ../BookServer/:/srv/BookServer
                             # To make Chrome happy.
                             -   /dev/shm:/dev/shm
+                            -   /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
                 """
             )
             if build_config.is_dev()
@@ -711,7 +713,7 @@ def _build_phase_1(
             "mv chromedriver /usr/bin/chromedriver",
             "chown root:root /usr/bin/chromedriver",
             "chmod +x /usr/bin/chromedriver",
-            # Provide VNC access. TODO: just pass the correct DISPLAY value and ports and use X11 locally, but how? Notes on my failures:
+            # Provide VNC access. TODO: just pass the correct DISPLAY value and ports and use X11 locally, but how? Here's the `best info <http://wiki.ros.org/docker/Tutorials/GUI>`_ I've found. Notes on my failures:
             #
             # - Including ``network_mode: host`` in `../docker-compose.yml` works. However, this breaks everything else (port mapping, links, etc.). It suggests that the correct networking setup would make this work.
             # - Passing ``volume: - /tmp/.X11-unix:/tmp/.X11-unix`` has no effect (on a Ubuntu 20.03.4 LTS host). Per the previous point, it seems that X11 is using TCP as its transport.
@@ -862,12 +864,11 @@ def _build_phase_2_core(
     # Misc setup
     # ^^^^^^^^^^
     if build_config.is_dev():
-        # Start up everything needed for vnc access. Handle the case of no ``DISPLAY`` available or empty.
-        x_display = env.DISPLAY or ":0"
+        # Since I don't know how to forard the X11 ``$DISPLAY`` correctly (see notes on VNC access), run a virtual frame buffer in the container and provide access via VNC. TODO: only do this if the provided ``$DISPLAY`` is not set.
         xqt(
             # Sometimes, previous runs leave this file behind, which causes Xvfb to output ``Fatal server error: Server is already active for display 0. If this server is no longer running, remove /tmp/.X0-lock and start again.``
-            f"rm -f /tmp/.X{x_display.split(':', 1)[1]}-lock",
-            f"Xvfb {x_display} &",
+            f"rm -f /tmp/.X{env.DISPLAY.split(':', 1)[1]}-lock",
+            "Xvfb &",
             # Wait a bit for Xvfb to start up before running the following X applications.
             "sleep 1",
             "x11vnc -forever &",
