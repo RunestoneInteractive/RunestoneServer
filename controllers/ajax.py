@@ -60,7 +60,7 @@ from dateutil.parser import parse
 
 # Local application imports
 # -------------------------
-from feedback import is_server_feedback, fitb_feedback, lp_feedback
+from feedback import is_server_feedback, fitb_feedback
 from rs_practice import _get_qualified_questions
 
 logger = logging.getLogger(settings.logger)
@@ -340,40 +340,6 @@ def hsblog():
             course_name=course,
             percent=pct,
         )
-
-    elif event == "lp_build" and auth.user:
-        ret, new_fields = db.lp_answers._validate_fields(
-            dict(sid=sid, timestamp=ts, div_id=div_id, course_name=course)
-        )
-        if not ret.errors:
-            do_server_feedback, feedback = is_server_feedback(div_id, course)
-            if do_server_feedback:
-                try:
-                    code_snippets = json.loads(request.vars.answer)["code_snippets"]
-                except Exception:
-                    code_snippets = []
-                result = lp_feedback(code_snippets, feedback)
-                # If an error occurred or we're not testing, pass the answer through.
-                res.update(result)
-
-                # Record the results in the database.
-                correct = result.get("correct")
-                answer = result.get("answer", {})
-                answer["code_snippets"] = code_snippets
-                ret = db.lp_answers.validate_and_insert(
-                    sid=sid,
-                    timestamp=ts,
-                    div_id=div_id,
-                    answer=json.dumps(answer),
-                    correct=correct,
-                    course_name=course,
-                )
-                if ret.errors:
-                    res.setdefault("errors", []).append(ret.errors.as_dict())
-            else:
-                res["errors"] = ["No feedback provided."]
-        else:
-            res.setdefault("errors", []).append(ret.errors.as_dict())
 
     response.headers["content-type"] = "application/json"
     if setCookie:
@@ -1405,28 +1371,6 @@ def getAssessResults():
             res["comment"] = srow.comment
 
         return json.dumps(res)
-    elif event == "lp_build":
-        rows = (
-            db(
-                (db.lp_answers.div_id == div_id)
-                & (db.lp_answers.course_name == course)
-                & (db.lp_answers.sid == sid)
-            )
-            .select(
-                db.lp_answers.answer,
-                db.lp_answers.timestamp,
-                db.lp_answers.correct,
-                orderby=~db.lp_answers.id,
-            )
-            .first()
-        )
-        if not rows:
-            return ""  # server doesn't have it so we load from local storage instead
-        answer = json.loads(rows.answer)
-        correct = rows.correct
-        return json.dumps(
-            {"answer": answer, "timestamp": str(rows.timestamp), "correct": correct}
-        )
 
 
 def tookTimedAssessment():

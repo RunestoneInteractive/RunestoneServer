@@ -686,7 +686,7 @@ def _build_phase_1(
         "nano less ",
     )
 
-    # Build runguard and set up jobe users. Needed by `../modules/scheduled_builder.py`.
+    # Build runguard and set up Jobe users. Needed by BookServer's ``internal/scheduled_builder.py```.
     xqt("mkdir /var/www/jobe")
     chdir("/var/www/jobe")
     xqt(

@@ -25,7 +25,6 @@ altair = "^4.0.0"
 beautifulsoup4 = "^4.0.0"
 bleach = "> 3.1.1"
 bookserver = "^1.0.0"
-celery = { extras = ["redis,gevent"], version = "^5.0.0" }
 cssselect = ">= 1.0"
 diff-match-patch = ">= 20110725.1"
 lxml = ">= 4.6.2"
