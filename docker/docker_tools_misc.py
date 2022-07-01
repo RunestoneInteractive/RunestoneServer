@@ -151,9 +151,9 @@ def restart_servers(dev):
     """
     Restart the web servers and celery.
     """
-    _stop_servers(dev)
+    _stop_servers()
     sleep(2)
-    _start_servers()
+    _start_servers(dev)
 
 
 # ``reloadbks``
