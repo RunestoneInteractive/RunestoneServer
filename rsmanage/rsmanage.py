@@ -556,7 +556,7 @@ def update_library(config: Config, mpath, course):
             title = '{title}',
             subtitle = '{subtitle}',
             description = '{description}',
-            shelf = '{shelf}'
+            shelf_section = '{shelf}'
         where basecourse = '{course}'
         """
         )
