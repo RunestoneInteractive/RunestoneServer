@@ -238,7 +238,7 @@ The ``rsmanage`` command will run many useful commands inside the container for 
 *   Add a course - ``rsmanage addcourse``
 *   Add a user - ``rsmanage adduser``
 *   Get information about a course ``rsmanage courseinfo``
-*   Build a book - ``rsmanage build --course bookname``
+*   Build a book - ``rsmanage build  bookname``
 *   Get a database shell in the current database - ``rsmanage db``
 
 ...and many other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
@@ -252,7 +252,7 @@ No books are installed by default; you must add books using the following proces
 
 .. code-block:: bash
 
-    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+    rsmanage build thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
 After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 
@@ -448,7 +448,7 @@ system. You need to do the following:
 
 #.  Run the command ``rsmanage addcourse``. Use the project name you configured in ``pavement.py`` as the name of BOTH the course and the basecourse when it asks.
 
-#.  Now that your course is registered, rebuild it using the command ``rsmanage build --course <book_name>`` command.
+#.  Now that your course is registered, rebuild it using the command ``rsmanage build <book_name>`` command.  If this is a PreTeXt book then build with the command ``rsmanage build --ptx <book_name>`` where the ``book_name`` should match the document-id specified in the docinfo section of the pretext book.  Often found in ``bookinfo.ptx`` but sometimes as a peer of ``<book>`` in the ``main.ptx`` file for the book.
 
 
 Changing dependencies
