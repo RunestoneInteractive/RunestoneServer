@@ -351,18 +351,19 @@ def addcourse(
 
 
 @cli.command()
-@click.option(
-    "--course", help="The name of a course that should already exist in the DB"
-)
 @click.option("--clone", default=None, help="clone the given repo before building")
 @click.option("--ptx", is_flag=True, help="Build a PreTeXt book")
 @click.option(
     "--gen", is_flag=True, help="Build PreTeXt generated assets (a one time thing)"
 )
 @click.option("--manifest", default="runestone-manifest.xml", help="Manifest file")
+@click.argument("course", nargs=1)
 @pass_config
-def build(config, course, clone, ptx, gen, manifest):
-    """Build the book for an existing course"""
+def build(config, clone, ptx, gen, manifest, course):
+    """
+    rsmanage build [options] COURSE
+    Build the book for an existing course
+    """
     os.chdir(findProjectRoot())  # change to a known location
     eng = create_engine(config.dburl)
     res = eng.execute(
@@ -393,100 +394,108 @@ def build(config, course, clone, ptx, gen, manifest):
     click.echo("Switching to book dir {}".format(course))
     os.chdir(course)
     if ptx:
-        if not os.path.exists("project.ptx"):
-            click.echo("PreTeXt books need a project.ptx file")
-            sys.exit(1)
-        else:
-            main_file = check_project_ptx()
-            tree = ET.parse(main_file)
-            root = tree.getroot()
-            ElementInclude.include(
-                root, base_url=main_file
-            )  # include all xi:include parts
-            if gen:
-                res = subprocess.call("pretext generate web")
-                if res != 0:
-                    click.echo("Failed to build")
-            # build the book
-            res = subprocess.call("pretext build runestone", shell=True)
-            if res != 0:
-                click.echo("Building failed")
-                sys.exit(1)
-            # process the manifest
-            click.echo("processing manifest...")
-            el = root.find("./docinfo/document-id")
-            if el is not None:
-                cname = el.text
-                if cname != course:
-                    click.echo(
-                        f"Error course: {course} does not match document-id: {cname}"
-                    )
-                    sys.exit(1)
-            else:
-                click.echo("Missing document-id please add to <docinfo>")
-                sys.exit(1)
-            mpath = Path(os.getcwd(), "published", cname, manifest)
-            if os.path.exists(mpath):
-                manifest_data_to_db(cname, mpath)
-            else:
-                raise IOError(
-                    f"You must provide a valid path to a manifest file: {mpath} does not exist."
-                )
-
-            # Fetch and copy the runestone components release as advertised by the manifest
-            # - Use wget to get all the js files and put them in _static
-            click.echo("populating with the latest runestone files")
-            populate_static(config, mpath, course)
-            # update the library page
-            click.echo("updating library...")
-            update_library(config, mpath, course)
+        _build_ptx_book(config, gen, manifest, course)
 
     else:
-        try:
-            if os.path.exists("pavement.py"):
-                sys.path.insert(0, os.getcwd())
-                from pavement import options, dest, project_name
-            else:
-                click.echo(
-                    "I can't find a pavement.py file in {} you need that to build".format(
-                        os.getcwd()
-                    )
-                )
-                exit(1)
-        except ImportError as e:
-            click.echo("You do not appear to have a good pavement.py file.")
-            print(e)
-            exit(1)
+        _build_runestone_book(course)
 
-        if project_name != course:
-            click.echo(
-                "Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(
-                    course, project_name
-                )
-            )
-            exit(1)
 
-        res = subprocess.call("runestone build --all", shell=True)
-        if res != 0:
-            click.echo(
-                "building the book failed, check the log for errors and try again"
-            )
-            exit(1)
-        click.echo("Build succeedeed... Now deploying to published")
-        if dest != "./published":
-            click.echo(
-                "Incorrect deployment directory.  dest should be ./published in pavement.py"
-            )
-            exit(1)
-
-        res = subprocess.call("runestone deploy", shell=True)
-        if res == 0:
-            click.echo("Success! Book deployed")
+def _build_runestone_book(course):
+    try:
+        if os.path.exists("pavement.py"):
+            sys.path.insert(0, os.getcwd())
+            from pavement import options, dest, project_name
         else:
-            click.echo("Deploy failed, check the log to see what went wrong.")
+            click.echo(
+                "I can't find a pavement.py file in {} you need that to build".format(
+                    os.getcwd()
+                )
+            )
+            exit(1)
+    except ImportError as e:
+        click.echo("You do not appear to have a good pavement.py file.")
+        print(e)
+        exit(1)
+
+    if project_name != course:
+        click.echo(
+            "Error: {} and {} do not match.  Your course name needs to match the project_name in pavement.py".format(
+                course, project_name
+            )
+        )
+        exit(1)
+
+    res = subprocess.call("runestone build --all", shell=True)
+    if res != 0:
+        click.echo("building the book failed, check the log for errors and try again")
+        exit(1)
+    click.echo("Build succeedeed... Now deploying to published")
+    if dest != "./published":
+        click.echo(
+            "Incorrect deployment directory.  dest should be ./published in pavement.py"
+        )
+        exit(1)
+
+    res = subprocess.call("runestone deploy", shell=True)
+    if res == 0:
+        click.echo("Success! Book deployed")
+    else:
+        click.echo("Deploy failed, check the log to see what went wrong.")
+
+
+def _build_ptx_book(config, gen, manifest, course):
+    if not os.path.exists("project.ptx"):
+        click.echo("PreTeXt books need a project.ptx file")
+        sys.exit(1)
+    else:
+        main_file = check_project_ptx()
+        tree = ET.parse(main_file)
+        root = tree.getroot()
+        ElementInclude.include(root, base_url=main_file)  # include all xi:include parts
+        if gen:
+            res = subprocess.call("pretext generate web")
+            if res != 0:
+                click.echo("Failed to build")
+            # build the book
+        res = subprocess.call("pretext build runestone", shell=True)
+        if res != 0:
+            click.echo("Building failed")
+            sys.exit(1)
+            # process the manifest
+        el = root.find("./docinfo/document-id")
+        if el is not None:
+            cname = el.text
+            if cname != course:
+                click.echo(
+                    f"Error course: {course} does not match document-id: {cname}"
+                )
+                sys.exit(1)
+        else:
+            click.echo("Missing document-id please add to <docinfo>")
+            sys.exit(1)
+
+        mpath = Path(os.getcwd(), "published", cname, manifest)
+        process_manifest(cname, mpath)
+        # Fetch and copy the runestone components release as advertised by the manifest
+        # - Use wget to get all the js files and put them in _static
+        click.echo("populating with the latest runestone files")
+        populate_static(config, mpath, course)
+        # update the library page
+        click.echo("updating library...")
+        update_library(config, mpath, course)
 
 
 import pdb
+
+
+def process_manifest(cname, mpath):
+    click.echo("processing manifest...")
+    if os.path.exists(mpath):
+        manifest_data_to_db(cname, mpath)
+    else:
+        raise IOError(
+            f"You must provide a valid path to a manifest file: {mpath} does not exist."
+        )
 
 
 def check_project_ptx():
@@ -529,7 +538,12 @@ def update_library(config: Config, mpath, course):
     description = extract_docinfo(docinfo, "blurb")
     shelf = extract_docinfo(docinfo, "shelf")
     click.echo(f"{title} : {subtitle}")
-    res = eng.execute(f"select * from library where basecourse = '{course}'")
+    try:
+        res = eng.execute(f"select * from library where basecourse = '{course}'")
+    except:
+        click.echo("Missing library table?  You may need to run an alembic migration.")
+        sys.exit()
+
     if res.rowcount == 0:
         eng.execute(
             f"""insert into library 
