@@ -115,11 +115,11 @@ This download the bootstrap script.
 ****************************************************
 A Python virtual environment ensures that all the Python dependencies installed by this process don't interfere with your global / system Python installation.
 
-#.  `Create a Python virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment>`_ named ``runestone``:
+#.  `Create a Python virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment>`_ named ``rsvenv`` (RuneStone Virtual ENVironment):
 
     .. code-block:: bash
 
-        python3 -m venv runestone
+        python3 -m venv rsvenv
 
 #.  `Activate the virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#activating-a-virtual-environment>`_ you just created.
 
@@ -127,13 +127,13 @@ A Python virtual environment ensures that all the Python dependencies installed 
 
         .. code-block:: bash
 
-            runestone\Scripts\activate
+            rsvenv\Scripts\activate
 
     On Linux and OS X:
 
         .. code-block:: bash
 
-            . runestone/bin/activate
+            . rsvenv/bin/activate
 
 4. Run the bootstrap script
 ***************************
@@ -205,7 +205,7 @@ The build will take a **long** time (5-10 minutes in many cases). When this comp
 
 #.  **Reboot your computer** to update your group membership.
 #.  Run the Docker Desktop if using WSL on Windows or using OS X.
-#.  Open a terminal then ``cd runestone``.
+#.  Open a terminal then ``cd rsvenv``.
 #.  Activate your virtual environment -- see the second step of `create a virtual environment <Create then activate a Python virtual environment>`_.
 #.  ``cd RunestoneServer``.
 
@@ -374,7 +374,7 @@ Once you have logged in as an instructor, you can bulk add students through the 
 It is also possible to use a csv file to add multiple instructors or students as you start
 up the server. However, this process is brittle (any error loading the information results
 in the server entering a restart loop as it fails to load). To do so, make a file named either
-`instructors.csv` or `students.csv` in a folder called `configs` in the RunestoneServer folder.
+`instructors.csv` or `students.csv` in a folder called `configs` in the ``RunestoneServer/`` folder.
 The format of the csv files is to have one person per line with the format of each line as follows:
 
     username,email,first_name,last_name,pw,course
@@ -389,7 +389,7 @@ The containerized application is configured to automatically start as soon as Do
 
 Before using ``docker-tools`` or ``rsmanage``:
 
-#.  Open a terminal then ``cd runestone``.
+#.  Open a terminal then ``cd rsvenv``.
 #.  Activate your virtual environment -- see the second step of `create a virtual environment <Create then activate a Python virtual environment>`_.
 #.  ``cd RunestoneServer``.
 
@@ -423,14 +423,13 @@ Shelling Inside
 **********************************
 
 You can shell into the container to look around, or otherwise test. When you enter,
-you'll be in the web2py folder, where runestone is an application under applications. From
-the RunestoneServer directory do:
+you'll be in the web2py folder, where ``runestone/`` is an application under ``applications/``. From the ``RunestoneServer/`` directory do:
 
 .. code-block:: bash
 
     docker-tools shell
 
-Remember that the folder under web2py applications/runestone is bound to your host,
+Remember that the folder under ``web2py/applications/runestone`` is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
