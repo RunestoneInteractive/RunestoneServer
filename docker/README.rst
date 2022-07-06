@@ -60,8 +60,6 @@ If running on OS X, install then run the `Docker Desktop <https://www.docker.com
 
         Expect to wait a few minutes the first time you start the Docker Desktop. Don't proceed until the Docker Desktop's initialization is complete.
 
-        On OS X 12.4, Apple's new security features require you to give Docker `additional permissions <https://support.apple.com/guide/mac-help/control-access-to-files-and-folders-on-mac-mchld5a35146/mac>`_ if you place the files you install below in the Documents folder.
-
 Next, `install Python 3 <https://docs.python-guide.org/starting/install3/osx/>`_.
 
 Windows
@@ -99,8 +97,12 @@ To keep your filesystem tidy, create a directory before running the following co
 
     .. code-block:: bash
 
-        mkdir runestone
-        cd runestone
+        mkdir rsdocker
+        cd rsdocker
+
+.. note::
+
+    On OS X, avoid placing your files in the Documents folder, since security features introduced in OS X 12.4 require you to give Docker `additional permissions <https://support.apple.com/guide/mac-help/control-access-to-files-and-folders-on-mac-mchld5a35146/mac>`_.
 
 Next, download the bootstrap script. To do this, open a terminal in Ubuntu or OS X then type:
 
@@ -108,7 +110,7 @@ Next, download the bootstrap script. To do this, open a terminal in Ubuntu or OS
 
     curl -fLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
 
-This download the bootstrap script.
+This downloads the bootstrap script.
 
 
 3. Create then activate a Python virtual environment
@@ -389,7 +391,7 @@ The containerized application is configured to automatically start as soon as Do
 
 Before using ``docker-tools`` or ``rsmanage``:
 
-#.  Open a terminal then ``cd rsvenv``.
+#.  Open a terminal then ``cd rsdocker``.
 #.  Activate your virtual environment -- see the second step of `create a virtual environment <Create then activate a Python virtual environment>`_.
 #.  ``cd RunestoneServer``.
 
