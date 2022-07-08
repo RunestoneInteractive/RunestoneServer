@@ -11,7 +11,7 @@
 # ================
 [tool.poetry]
 name = "runestone_poetry_project"
-version = "0.1.0"
+version = "6.0.6"
 description = "A web2py-based server for the Runestone e-book system."
 authors = ["Brad Miller <bonelake@mac.com>", "Bryan A. Jones <bjones AT ece DOT msstate DOT edu"]
 license = "MIT"
