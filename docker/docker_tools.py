@@ -67,7 +67,7 @@ from textwrap import dedent
 # Local application bootstrap
 # ---------------------------
 # Everything after this depends on Unix utilities. We can't use ``is_win`` because we don't know if ``ci_utils`` is available.
-if sys.platform == "win32x":
+if sys.platform == "win32":
     sys.exit("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
 # See if we're root.
@@ -816,7 +816,8 @@ def _build_phase_1(
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
         "ln -sf $RUNESTONE_PATH/.venv/bin/sphinx-build /usr/local/bin",
         # Deal with a different subdirectory layout inside the container (mandated by web2py) and outside the container by adding these symlinks.
-        "ln -sf /srv/BookServer $WEB2PY_PATH/applications/BookServer",
+        "ln -sf $BOOK_SERVER_PATH $WEB2PY_PATH/applications/BookServer",
+        # We can't use ``$BOOK_SERVER_PATH`` here, since we need ``/srv/bookserver-dev`` in lowercase, not CamelCase.
         "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
         "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
         "ln -sf /srv/runestone-dev $WEB2PY_PATH/applications/runestone-dev",
