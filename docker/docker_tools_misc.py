@@ -87,11 +87,11 @@ def _start_servers(dev: bool) -> None:
     # ``sudo`` doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
     xqt(
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
-        "poetry run celery --app=scheduled_builder worker --pool=threads "
+        "poetry run celery --app=internal.scheduled_builder worker --pool=threads "
         "--concurrency=3 --loglevel=info "
         # Celery runs as the ``www-data`` user, so it doesn't have access to the root-owned log files (which are symbolic links to files owned by root -- changing permission doesn't work). Therefore, redirect output (as root) to make this work.
         "> /var/log/celery/access.log 2> /var/log/error.log &",
-        cwd=f"{env.RUNESTONE_PATH}/modules",
+        cwd=f"{env.BOOK_SERVER_PATH}/bookserver",
     )
 
     xqt(
