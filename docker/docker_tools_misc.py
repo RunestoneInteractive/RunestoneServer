@@ -102,7 +102,7 @@ def _start_servers(dev: bool) -> None:
         # This much match the address in `./nginx/sites-available/runestone.template`.
         f"--bind unix:/run/fastapi.sock {'--reload ' if dev else ''} "
         # If logging to a file, then Gunicorn tries to append to it (open the file with a mode of "a+"). This fails if the underlying "file" is actually ``stdout`` or ``stderr`` with the error ``io.UnsupportedOperation: File or stream is not seekable.``. So, redirect these instead.
-        "> /var/log/celery/access.log 2> /var/log/error.log &",
+        "> /var/log/celery/access.log 2> /var/log/celery/error.log &",
         "service nginx start",
         "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
@@ -201,7 +201,7 @@ def test(bks: bool, rc: bool, rs: bool, passthrough: Tuple) -> None:
     pytest = "$RUNESTONE_PATH/.venv/bin/pytest"
     passthrough_args = " ".join(passthrough)
     if bks:
-        xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/BookServer")
+        xqt(f"{pytest} -v {passthrough_args}", cwd=env.BOOK_SERVER_PATH)
     if rc:
         xqt(f"{pytest} -v {passthrough_args}", cwd="/srv/RunestoneComponents")
     if rs:

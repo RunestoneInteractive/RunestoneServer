@@ -20,14 +20,14 @@ import os
 #
 # Local application imports
 # -------------------------
-from common_config import *
+from common_config import *  # noqa: F401, F403
 
 
 # Configuration
 # =============
 # `chdir <https://docs.gunicorn.org/en/stable/settings.html#chdir>`_: Change directory to specified directory before loading apps. Otherwise gunicorn does not know where to look for changes to your code.
 if os.environ["BOOK_SERVER_CONFIG"] == "development":
-    chdir = "/srv/BookServer"
+    chdir = os.environ["BOOK_SERVER_PATH"]
 
 # `wsgi_app <https://docs.gunicorn.org/en/stable/settings.html#wsgi-app>`_: A WSGI application path in pattern ``$(MODULE_NAME):$(VARIABLE_NAME)``.
 wsgi_app = "bookserver.main:app"

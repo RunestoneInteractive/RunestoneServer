@@ -1,4 +1,10 @@
-RunestoneServer-6.0.4
+RunestoneServer-6.0.5
+
+Changes in 6.0.5
+
+-   fix delete course
+-   misc peer assignment fixes
+-   RunestoneServer-6.0.4
 
 Changes in 6.0.4
 

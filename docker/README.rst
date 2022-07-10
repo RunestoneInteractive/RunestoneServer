@@ -3,7 +3,7 @@ Docker Deployment
 
 .. TODO
 
-    Docs to update:
+    Is there some way to simplify these instructions? It's still a long, error-prone process! Do we need another setup script that follows these directions and prompts the user for input (do you want to run the server or do development? What is your github userid? Etc.)? Such a script would be able to take care of the first 7 steps, which would be good progress. But, we'd need os-dependent stuff for the first bits (install WSL/Ubuntu on Windows); can we assume Python 3 on Mac?
 
     Enable the script to download and install the Docker Desktop if necessary.
 
@@ -60,6 +60,8 @@ If running on OS X, install then run the `Docker Desktop <https://www.docker.com
 
         Expect to wait a few minutes the first time you start the Docker Desktop. Don't proceed until the Docker Desktop's initialization is complete.
 
+Next, `install Python 3 <https://docs.python-guide.org/starting/install3/osx/>`_.
+
 Windows
 ^^^^^^^
 If running on Windows, either:
@@ -89,15 +91,55 @@ Next, install ``curl`` by opening an Ubuntu terminal then typing:
 
     sudo apt-get install -y curl
 
-2. Run the bootstrap script
-***************************
+2. Download the bootstrap script
+********************************
+To keep your filesystem tidy, create a directory before running the following commands, since these commands download several scripts and subdirectories. To do this:
+
+    .. code-block:: bash
+
+        mkdir rsdocker
+        cd rsdocker
+
+.. note::
+
+    On OS X, avoid placing your files in the Documents folder, since security features introduced in OS X 12.4 require you to give Docker `additional permissions <https://support.apple.com/guide/mac-help/control-access-to-files-and-folders-on-mac-mchld5a35146/mac>`_.
+
 Next, download the bootstrap script. To do this, open a terminal in Ubuntu or OS X then type:
 
 .. code-block:: bash
 
     curl -fLO https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/docker/docker_tools.py
 
-This download the bootstrap script. The next step, which installs required dependencies for the remainder of the process, depends on the two mutually exclusive use cases below. **Remember which use case you select**; many of the following steps vary based on your use case.
+This downloads the bootstrap script.
+
+
+3. Create then activate a Python virtual environment
+****************************************************
+A Python virtual environment ensures that all the Python dependencies installed by this process don't interfere with your global / system Python installation.
+
+#.  `Create a Python virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#creating-a-virtual-environment>`_ named ``rsvenv`` (RuneStone Virtual ENVironment):
+
+    .. code-block:: bash
+
+        python3 -m venv rsvenv
+
+#.  `Activate the virtual environment <https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/#activating-a-virtual-environment>`_ you just created.
+
+    On Windows:
+
+        .. code-block:: bash
+
+            rsvenv\Scripts\activate
+
+    On Linux and OS X:
+
+        .. code-block:: bash
+
+            . rsvenv/bin/activate
+
+4. Run the bootstrap script
+***************************
+The next step, which installs required dependencies for the remainder of the process, depends on the two mutually exclusive use cases below. **Remember which use case you select**; many of the following steps vary based on your use case.
 
 Use case: running the server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -109,11 +151,11 @@ For the use case of running the server, execute:
 
 **OR**
 
-Use case: change the way Runestone works or change/add to the way `interactive exercises <https://pretextbook.org/doc/guide/html/topic-interactive-exercises.html>`_ behave
+Use case: in addition to running the server, change the way Runestone works or change/add to the way `interactive exercises <https://pretextbook.org/doc/guide/html/topic-interactive-exercises.html>`_ behave
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For the developer use case:
 
-#.  `Fork <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_ the `RunestoneServer <https://github.com/RunestoneInteractive/RunestoneServer.git>`_, `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents.git>`_, and `BookServer <https://github.com/RunestoneInteractive/BookServer.git>`_ repositories.
+#.  `Fork <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_ the `RunestoneServer <https://github.com/RunestoneInteractive/RunestoneServer.git>`_, `RunestoneComponents <https://github.com/RunestoneInteractive/RunestoneComponents.git>`_, and `BookServer <https://github.com/RunestoneInteractive/BookServer.git>`_ repositories. If you've already forked these repositories, `fetch the latest updates from these upstream repositories <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork>`_.
 
 #.  In the terminal, run:
 
@@ -125,7 +167,7 @@ For the developer use case:
 
     On Windows using Ubuntu under WSL2: if you see the error message "Docker Desktop not detected..." but you are running the Docker Desktop, then click the gear (settings) icon in Docker Desktop, select Resources then WSL Integration, and make sure the switch next to Ubuntu is turned on.
 
-3. Build the necessary containers
+5. Build the necessary containers
 *********************************
 In the terminal, type:
 
@@ -141,10 +183,6 @@ The next command depends on the use case you chose in the previous step.
 
 Pre-build
 ^^^^^^^^^
-.. warning::
-
-    On OS X, use ``python3 -m docker_tools`` instead of ``docker-tools`` in the following instructions. Likewise, use ``python3 -m rsmanage`` instead of ``rsmanage``.
-
 For the use case of running the server, execute:
 
     .. code-block:: bash
@@ -169,9 +207,11 @@ The build will take a **long** time (5-10 minutes in many cases). When this comp
 
 #.  **Reboot your computer** to update your group membership.
 #.  Run the Docker Desktop if using WSL on Windows or using OS X.
-#.  Open a terminal then ``cd RunestoneServer``.
+#.  Open a terminal then ``cd rsvenv``.
+#.  Activate your virtual environment -- see the second step of `create a virtual environment <Create then activate a Python virtual environment>`_.
+#.  ``cd RunestoneServer``.
 
-4. Configuration
+6. Configuration
 ***********************
 
 Most basic configuration can be done via two files you will need to create. These files
@@ -201,7 +241,7 @@ For the use case of running the server, you will need to modify these settings t
     You will NOT want to check either ``.env`` or ``models/1.py`` into source control, since these contain passwords. The ``.gitignore`` file is set to ignore both of them.
 
 
-5. Starting the containerized application
+7. Starting the containerized application
 *****************************************
 
 Pre-start
@@ -229,7 +269,7 @@ For the developer use case, execute:
 
 Post-start
 ^^^^^^^^^^
-The first time you run the command will take a **lot** longer as it downloads containers then installs software into the various containers. You may ignore a red message about the Jobe container. After it is complete, you can go to http://localhost/ to see the application (if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
+The first time you run the command will take a **lot** longer as it downloads containers then installs software into the various containers. You may ignore the red message ``jobe error`` that appears during this process. After it is complete, you can go to http://localhost/ to see the application (if you configured a hostname, substitute it for localhost). If everything so far is set up correctly, you should see a welcome/login page. Continue in the instructions to add book(s), course(s) and a user account.
 
 Introducing ``rsmanage``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -238,13 +278,13 @@ The ``rsmanage`` command will run many useful commands inside the container for 
 *   Add a course - ``rsmanage addcourse``
 *   Add a user - ``rsmanage adduser``
 *   Get information about a course ``rsmanage courseinfo``
-*   Build a book - ``rsmanage build --course bookname``
+*   Build a book - ``rsmanage build  bookname``
 *   Get a database shell in the current database - ``rsmanage db``
 
 ...and many other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
 
 
-6. Add books
+8. Add books
 **************************
 
 No books are installed by default; you must add books using the following process. To add a book, you need to add its source code to the ``RunestoneServer/books/`` directory. Typically, that means cloning its source code. For example, to add
@@ -252,7 +292,7 @@ No books are installed by default; you must add books using the following proces
 
 .. code-block:: bash
 
-    rsmanage build --course thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+    rsmanage build thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
 
 After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 
@@ -276,7 +316,7 @@ After cloning a book, you may need to add it to the database.  Most of the stand
    If you are running docker on a remote host then make sure to set it to the name of the remote host.
 
 
-7. Add courses
+9. Add courses
 **************************
 
 To add a course based on a book, run the ``rsmanage addcourse`` script. If you run it just like
@@ -309,7 +349,7 @@ You do not have to restart the server to make use of the course.
     a course with a name like ``thinkcspy`` you will be told that the course name is the same as the book.
 
 
-8. Add a user
+10. Add a user
 **************************
 
 To add an initial instructor account to the course you have created, you can either create a new user or add
@@ -336,7 +376,7 @@ Once you have logged in as an instructor, you can bulk add students through the 
 It is also possible to use a csv file to add multiple instructors or students as you start
 up the server. However, this process is brittle (any error loading the information results
 in the server entering a restart loop as it fails to load). To do so, make a file named either
-`instructors.csv` or `students.csv` in a folder called `configs` in the RunestoneServer folder.
+`instructors.csv` or `students.csv` in a folder called `configs` in the ``RunestoneServer/`` folder.
 The format of the csv files is to have one person per line with the format of each line as follows:
 
     username,email,first_name,last_name,pw,course
@@ -348,6 +388,12 @@ trying to load the same records and entering a restart loop because the records 
 Operation
 ---------
 The containerized application is configured to automatically start as soon as Docker / the Docker Desktop is started. Therefore, on OS X or Windows (when using WSL2): after a reboot or after manually shutting down the Docker Desktop, **remember to start the Docker Desktop application**.
+
+Before using ``docker-tools`` or ``rsmanage``:
+
+#.  Open a terminal then ``cd rsdocker``.
+#.  Activate your virtual environment -- see the second step of `create a virtual environment <Create then activate a Python virtual environment>`_.
+#.  ``cd RunestoneServer``.
 
 
 Other Tips & Tricks
@@ -379,14 +425,13 @@ Shelling Inside
 **********************************
 
 You can shell into the container to look around, or otherwise test. When you enter,
-you'll be in the web2py folder, where runestone is an application under applications. From
-the RunestoneServer directory do:
+you'll be in the web2py folder, where ``runestone/`` is an application under ``applications/``. From the ``RunestoneServer/`` directory do:
 
 .. code-block:: bash
 
     docker-tools shell
 
-Remember that the folder under web2py applications/runestone is bound to your host,
+Remember that the folder under ``web2py/applications/runestone`` is bound to your host,
 so **do not edit files from inside the container** otherwise they will have a change
 in permissions on the host.
 
@@ -448,7 +493,7 @@ system. You need to do the following:
 
 #.  Run the command ``rsmanage addcourse``. Use the project name you configured in ``pavement.py`` as the name of BOTH the course and the basecourse when it asks.
 
-#.  Now that your course is registered, rebuild it using the command ``rsmanage build --course <book_name>`` command.
+#.  Now that your course is registered, rebuild it using the command ``rsmanage build <book_name>`` command.  If this is a PreTeXt book then build with the command ``rsmanage build --ptx <book_name>`` where the ``book_name`` should match the document-id specified in the docinfo section of the pretext book.  Often found in ``bookinfo.ptx`` but sometimes as a peer of ``<book>`` in the ``main.ptx`` file for the book.
 
 
 Changing dependencies
