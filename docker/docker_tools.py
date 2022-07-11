@@ -995,7 +995,7 @@ def _build_phase_2_core(
         )
 
     print("Checking the State of Database and Migration Info")
-    p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
+    p = xqt(f"psql {effective_dburl} -c '\\d'", capture_output=True, text=True)
     if p.stderr == "Did not find any relations.\n":
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated). TODO: rsmanage should do this eventually; it doesn't right now.
         xqt("rm -f $RUNESTONE_PATH/databases/*")
