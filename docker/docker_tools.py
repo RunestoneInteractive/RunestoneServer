@@ -95,7 +95,7 @@ def check_install(
             # Only run with ``sudo`` if we're not root.
             ([] if is_root else ["sudo"])
             + [
-                "apt-get",
+                "apt",
                 "install",
                 "-y",
                 "--no-install-recommends",
@@ -277,7 +277,7 @@ def init(
         xqt("git --version")
     except Exception as e:
         print(f"Unable to run git: {e} Installing...")
-        xqt("sudo apt-get install -y --no-install-recommends git")
+        xqt("sudo apt install -y --no-install-recommends git")
     # Are we inside the Runestone repo?
     if not (wd / "nginx").is_dir():
         change_dir = True
@@ -310,7 +310,7 @@ def init(
                 "sudo dscl . append /Groups/www-data GroupMembership $USER",
             )
         else:
-            xqt('sudo usermod -a -G www-data "$USER"')
+            xqt('sudo usermod -a -G www-data $USER')
         did_group_add = True
 
     # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
@@ -647,13 +647,13 @@ def _build_phase_1(
 
     # Set up apt correctly; include Postgres repo.
     xqt(
-        "apt-get update",
-        "apt-get install -y --no-install-recommends eatmydata lsb-release",
+        "apt update",
+        "apt install -y --no-install-recommends eatmydata lsb-release",
         """echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list""",
         "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -",
-        "apt-get update",
+        "apt update",
     )
-    apt_install = "eatmydata apt-get install -y --no-install-recommends"
+    apt_install = "eatmydata apt install -y --no-install-recommends"
     # This uses apt; run it after apt is set up.
     check_install_curl()
 
@@ -748,8 +748,8 @@ def _build_phase_1(
             #
             # Needed to run sim30: per https://unix.stackexchange.com/questions/486806/steam-missing-32-bit-libraries-libx11-6, enable 32-bit libs.
             "eatmydata dpkg --add-architecture i386",
-            "eatmydata apt-get update",
-            "eatmydata apt-get install -y lib32stdc++6 libc6:i386",
+            "eatmydata apt update",
+            "eatmydata apt install -y lib32stdc++6 libc6:i386",
             # Then download and install MPLAB X.
             f'eatmydata wget --no-verbose "https://ww1.microchip.com/downloads/en/DeviceDoc/{MPLABX_VERSION}"',
             f'eatmydata tar -xf "{MPLABX_VERSION}"',
@@ -840,11 +840,11 @@ def _build_phase_1(
 
     xqt(
         # Do any final updates.
-        "eatmydata sudo apt-get -y update",
-        "eatmydata sudo apt-get -y upgrade",
+        "eatmydata sudo apt -y update",
+        "eatmydata sudo apt -y upgrade",
         # Clean up after install.
-        "eatmydata sudo apt-get -y autoclean",
-        "eatmydata sudo apt-get -y autoremove",
+        "eatmydata sudo apt -y autoclean",
+        "eatmydata sudo apt -y autoremove",
         "rm -rf /tmp/* /var/tmp/*",
     )
 
@@ -995,7 +995,7 @@ def _build_phase_2_core(
         )
 
     print("Checking the State of Database and Migration Info")
-    p = xqt(f"psql {effective_dburl} -c '\d'", capture_output=True, text=True)
+    p = xqt(f"psql {effective_dburl} -c '\\d'", capture_output=True, text=True)
     if p.stderr == "Did not find any relations.\n":
         # Remove any existing web2py migration data, since this is out of date and confuses web2py (an empty db, but migration files claiming it's populated). TODO: rsmanage should do this eventually; it doesn't right now.
         xqt("rm -f $RUNESTONE_PATH/databases/*")
