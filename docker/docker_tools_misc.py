@@ -87,11 +87,11 @@ def _start_servers(dev: bool) -> None:
     # ``sudo`` doesn't pass root's env vars; provide only the env vars Celery needs when invoking it.
     xqt(
         'sudo -u www-data env "PATH=$PATH" "REDIS_URI=$REDIS_URI" '
-        "poetry run celery --app=internal.scheduled_builder worker --pool=threads "
+        "poetry run celery --app=bookserver.internal.scheduled_builder worker --pool=threads "
         "--concurrency=3 --loglevel=info "
         # Celery runs as the ``www-data`` user, so it doesn't have access to the root-owned log files (which are symbolic links to files owned by root -- changing permission doesn't work). Therefore, redirect output (as root) to make this work.
-        "> /var/log/celery/access.log 2> /var/log/error.log &",
-        cwd=f"{env.BOOK_SERVER_PATH}/bookserver",
+        "> /var/log/celery/access.log 2> /var/log/celery/error.log &",
+        cwd=env.RUNESTONE_PATH,
     )
 
     xqt(
@@ -102,7 +102,7 @@ def _start_servers(dev: bool) -> None:
         # This much match the address in `./nginx/sites-available/runestone.template`.
         f"--bind unix:/run/fastapi.sock {'--reload ' if dev else ''} "
         # If logging to a file, then Gunicorn tries to append to it (open the file with a mode of "a+"). This fails if the underlying "file" is actually ``stdout`` or ``stderr`` with the error ``io.UnsupportedOperation: File or stream is not seekable.``. So, redirect these instead.
-        "> /var/log/celery/access.log 2> /var/log/celery/error.log &",
+        "> /var/log/gunicorn/access.log 2> /var/log/gunicorn/error.log &",
         "service nginx start",
         "poetry run gunicorn -D --config $RUNESTONE_PATH/docker/gunicorn_config/web2py_config.py &",
         cwd=f"{env.RUNESTONE_PATH}/docker/gunicorn_config",
