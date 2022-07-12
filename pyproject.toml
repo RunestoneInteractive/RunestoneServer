@@ -2,9 +2,15 @@
 # |docname| - Poetry configuration
 # ********************************
 # See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>`_ to get an understanding of
-# how poetry does specifies dependencies.
+# how poetry specifies dependencies.
 #
-# **Important**: Before running ``poetry install`` or ``poetry update``, run ``poetry-fix`` so that development dependencies will be installed correctly. See `runestone_poetry_project/poetry_fix.py`. Since this script isn't installed until the first run of ``poetry install``, run the script after the install then run ``poetry update`` again.
+# **Important**: Before running ``poetry install`` or ``poetry update``, run ``python runestone/poetry_fix.py`` so that development dependencies will be installed correctly.
+#
+# .. toctree::
+#   :maxdepth: 2
+#
+#   runestone_poetry_project/__init__.py
+#   runestone_poetry_project/poetry_fix.py
 #
 #
 # Project metadata
@@ -77,19 +83,6 @@ pywin32 = { version = ">= 301", markers = "sys.platform == 'win32'" }
 runestone = { path = "../RunestoneComponents", develop = true }
 runestone-dev = { path = "../runestone-dev", develop = true }
 selenium = "^3.0.0"
-
-
-# Scripts
-# =======
-# See `scripts <https://python-poetry.org/docs/pyproject/#scripts>`_. This refers to the following files:
-#
-# .. toctree::
-#
-#   runestone_poetry_project/__init__.py
-#   runestone_poetry_project/poetry_fix.py
-#
-[tool.poetry.scripts]
-poetry-fix = "runestone_poetry_project.poetry_fix:main"
 
 
 # Poetry backend
