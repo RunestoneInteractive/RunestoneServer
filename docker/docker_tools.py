@@ -285,18 +285,15 @@ def init(
     # Linux only: Ensure the user is in the ``docker`` group. This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__. Put this step here, instead of after the Docker install, for people who manually installed Docker but skipped this step.
     if is_linux:
         print("Checking to see if the current user is in the docker group...")
-        if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-            if is_darwin:
-                xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
+        if "docker" not in xqt("groups", capture_output=True, text=True).stdout:
+            # Per the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`_, enable running Docker as a non-root user.
+            #
+            # Ignore errors if the groupadd fails; the group may already exist.
+            xqt('sudo groupadd docker', check=False)
+            xqt('sudo usermod -a -G docker $USER')
 
-            else:
-                # Per the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`_, enable running Docker as a non-root user.
-                #
-                # Ignore errors if the groupadd fails; the group may already exist.
-                xqt('sudo groupadd docker', check=False)
-                xqt('sudo usermod -a -G docker $USER')
-                # Until group privileges to take effect, use ``sudo`` to run Docker.
-                docker_sudo = True
+            # Until group privileges to take effect, use ``sudo`` to run Docker.
+            docker_sudo = True
             # The group add doesn't take effect until the user logs out then back in. Work around it for now.
             did_group_add = True
 
