@@ -4,7 +4,7 @@
 # See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>`_ to get an understanding of
 # how poetry specifies dependencies.
 #
-# **Important**: Before running ``poetry install`` or ``poetry update``, run ``python runestone/poetry_fix.py`` so that development dependencies will be installed correctly.
+# **Important**: This program performs automated edits to the ``pyproject.toml`` files for this project and all its subprojects (such as the BookServer and the Runestone Components) specified by `path dependencies <https://python-poetry.org/docs/dependency-specification/#path-dependencies>`_. Therefore, you **must** run ``python runestone/poetry_fix.py`` after making any changes to this file or any ``pyproject.toml`` `path dependencies`_ to keep these files up to date.
 #
 # .. toctree::
 #   :maxdepth: 2
