@@ -258,7 +258,9 @@ After cloning a book, you may need to add it to the database.  Most of the stand
 
 .. note::
 
-    PreTeXt authors, see `Publishing to Runestone Academy <https://pretextbook.org/doc/guide/html/sec-publishing-to-runestone-academy.html>`_. The following information applies only *authoring* books using the Runestone.
+    PreTeXt authors, see `Publishing to Runestone Academy <https://pretextbook.org/doc/guide/html/sec-publishing-to-runestone-academy.html>`_.  After that, you can build a pretext book just like building a Runestone book ``rsmanage build --ptx coursename``
+
+The following information applies only *authoring* books using the Runestone. 
 
 .. warning::
 
