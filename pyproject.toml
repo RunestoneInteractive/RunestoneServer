@@ -2,9 +2,15 @@
 # |docname| - Poetry configuration
 # ********************************
 # See the `Poetry docs <https://python-poetry.org/docs/dependency-specification/>`_ to get an understanding of
-# how poetry does specifies dependencies.
+# how poetry specifies dependencies.
 #
-# **Important**: Before running ``poetry install`` or ``poetry update``, run ``poetry-fix`` so that development dependencies will be installed correctly. See `runestone_poetry_project/poetry_fix.py`. Since this script isn't installed until the first run of ``poetry install``, run the script after the install then run ``poetry update`` again.
+# **Important**: This program performs automated edits to the ``pyproject.toml`` files for this project and all its subprojects (such as the BookServer and the Runestone Components) specified by `path dependencies <https://python-poetry.org/docs/dependency-specification/#path-dependencies>`_. Therefore, you **must** run ``python runestone/poetry_fix.py`` after making any changes to this file or any ``pyproject.toml`` `path dependencies`_ to keep these files up to date.
+#
+# .. toctree::
+#   :maxdepth: 2
+#
+#   runestone_poetry_project/__init__.py
+#   runestone_poetry_project/poetry_fix.py
 #
 #
 # Project metadata
@@ -25,7 +31,6 @@ altair = "^4.0.0"
 beautifulsoup4 = "^4.0.0"
 bleach = "> 3.1.1"
 bookserver = "^1.0.0"
-celery = { extras = ["redis,gevent"], version = "^5.0.0" }
 cssselect = ">= 1.0"
 diff-match-patch = ">= 20110725.1"
 lxml = ">= 4.6.2"
@@ -78,19 +83,6 @@ pywin32 = { version = ">= 301", markers = "sys.platform == 'win32'" }
 runestone = { path = "../RunestoneComponents", develop = true }
 runestone-dev = { path = "../runestone-dev", develop = true }
 selenium = "^3.0.0"
-
-
-# Scripts
-# =======
-# See `scripts <https://python-poetry.org/docs/pyproject/#scripts>`_. This refers to the following files:
-#
-# .. toctree::
-#
-#   runestone_poetry_project/__init__.py
-#   runestone_poetry_project/poetry_fix.py
-#
-[tool.poetry.scripts]
-poetry-fix = "runestone_poetry_project.poetry_fix:main"
 
 
 # Poetry backend

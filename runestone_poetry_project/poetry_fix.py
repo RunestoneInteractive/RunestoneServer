@@ -169,16 +169,19 @@ def make_dev_pyproject():
 
 # Fix for the main ``pyproject.toml``
 # ===================================
-# This function updates the ``pyproject.toml`` in the current directory by switching between a section named ``[tool.poetry.dev-dependencies]`` when in development mode or ``[tool.no-poetry.dev-dependencies]`` when not in development mode. Next, it runs ``poetry update`` if a change was made, to update the ``poetry.lock`` file.
+# This function updates the ``pyproject.toml`` in the current directory by switching between a section named ``[tool.poetry.dev-dependencies]`` when in development mode or ``[tool.no-poetry.dev-dependencies]`` when not in development mode. This is because Poetry does not support either/or dependencies: either resolve dependency x in dev mode, or dependency y when not in dev mode. Instead, it takes a both/and approach: during its dependency resolution phase, it resolves ALL dependencies, then installs a subset (such all non-dev dependencies, or dev and non-dev dependencies). Quoting from the `manual <https://python-poetry.org/docs/master/managing-dependencies/>`_:
 #
-# Reason: sadly, Poetry v1.1.11 is broken in some important ways. Specifically, `path based dev-dependencies break 'install --no-dev' when the directory does not exist <https://github.com/python-poetry/poetry/issues/668>`_. In addition, if a dependency exists both in the ``[tool.poetry.dependencies]`` and the same dependency with a path in ``[tool.poetry.dev-dependencies]`` sections, this version of Poetry will place the path in the resulting ``poetry.lock`` file even when the ``--no-dev`` option is passed, causing Poetry to install the dev version or fail if it's not available.
+#   All dependencies must be compatible with each other across groups since they will be resolved regardless of whether they are required for installation or not (see Installing group dependencies).
+#
+#   Think of dependency groups as labels associated with your dependencies: they don’t have any bearings on whether their dependencies will be resolved and installed by default, they are simply a way to organize the dependencies logically.
+#
+# Therefore, `path based dev-dependencies break 'install --no-dev' when the directory does not exist <https://github.com/python-poetry/poetry/issues/668>`_. In addition, if a dependency exists both in the ``[tool.poetry.dependencies]`` and the same dependency with a path in ``[tool.poetry.dev-dependencies]`` sections, this version of Poetry will place the path in the resulting ``poetry.lock`` file even when the ``--no-dev`` option is passed, causing Poetry to install the dev version or fail if it's not available.
 #
 # As a workaround, this function renames the ``[tool.poetry.dependencies]``  section, effectively hiding it, for ``--no-dev`` option, and un-hides it otherwise. It then deletes ``poetry.lock`` if it makes a change, ensuring that poetry will the run ``poetry update`` with these changed dependencies.
 def rewrite_pyproject(is_dev: bool) -> None:
     # Determine the current mode by setting ``has_dev``.
     pyproject = Path("pyproject.toml")
     pp_text = pyproject.read_text()
-    must_update = False
     dev_section = "\n[tool.poetry.dev-dependencies]\n"
     no_dev_section = "\n[tool.no-poetry.dev-dependencies]\n"
     if dev_section in pp_text:
@@ -207,8 +210,8 @@ def rewrite_pyproject(is_dev: bool) -> None:
     # #.    But ``poetry update`` will update the wrong venv, since ``poetry config virtualenvs.in-project true`` hasn't run yet.
     # #.    Go to step 1.
     #
-    # So, just delete the lock file and let Poetry rebuild it.
-    Path("poetry.lock").unlink()
+    # So, just delete the lock file and let Poetry rebuild it; don't complain if the file's already been deleted.
+    Path("poetry.lock").unlink(missing_ok=True)
 
 
 # CLI interface
