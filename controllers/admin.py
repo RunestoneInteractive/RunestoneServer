@@ -887,6 +887,8 @@ def removeinstructor():
         return json.dumps(removed)
 
 
+# This function is used from the web admin page to add TA's or co-instructors to the course.
+# It is not used by the rsmanage command.
 @auth.requires(
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
     requires_login=True,
