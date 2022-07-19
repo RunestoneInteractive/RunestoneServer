@@ -876,6 +876,30 @@ function getLog() {
         }
     };
 }
+function sortSelect(selectedElem) {
+    let tmpAry = new Array();
+    for (let i = 0; i < selectedElem.options.length; i++) {
+        tmpAry[i] = new Array();
+        tmpAry[i][0] = selectedElem.options[i].text;
+        tmpAry[i][1] = selectedElem.options[i].value;
+    }
+    tmpAry.sort(function(a, b) {
+        if(a[0].split(" ")[1].toUpperCase() > b[0].split(" ")[1].toUpperCase()) return 1;
+        else if(a[0].split(" ")[1].toUpperCase() < b[0].split(" ")[1].toUpperCase()) return -1;
+        return 0;
+    });
+        while (selectedElem.options.length > 0) {
+        // console.log(selectedElem[0])
+        selectedElem.options[0] = null;
+    }
+    for (let i = 0; i < tmpAry.length; i++) {
+        let op = new Option(tmpAry[i][0], tmpAry[i][1]);
+        selectedElem.options[i] = op;
+    }
+    return;
+}
+instructorlist = document.getElementById("instructorlist");
+sortSelect(instructorlist)
 
 function add_instructor() {
     var select = document.getElementById("addins").elements.student;
@@ -899,6 +923,7 @@ function add_instructor() {
             newopt.value = studentid;
             newopt.innerHTML = studentname;
             inslist.appendChild(newopt);
+            sortSelect(inslist);
         }
     };
 }
