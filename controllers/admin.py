@@ -2402,6 +2402,25 @@ def reorder_assignment_questions():
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
     requires_login=True,
 )
+def test():
+    this_course = db(db.courses.course_name == auth.user.course_name).select().first()
+    assignments1 = db(
+        (db.assignments.course == db.courses.id)
+        & (db.courses.course_name == "thinkcpp1")
+    ).select()
+
+    ids1 = []
+    for a in assignments1:
+        ids1.append(a.assignments["name"])
+    assignments2 = db(
+        (db.assignments.course == db.courses.id)
+        & (db.courses.course_name == "thinkcpp2")
+    ).select()
+    ids2 = []
+    for a in assignments2:
+        ids2.append(a.assignments["name"])
+    return dict(fromThinkcpp1=ids1, fromThinkcpp2=ids2)
+    
 def copy_assignment():
     """
     vars:
@@ -2418,11 +2437,21 @@ def copy_assignment():
                 (db.assignments.course == db.courses.id)
                 & (db.courses.course_name == request.vars["course"])
             ).select()
+            
+            destAssignments = db(
+                (db.assignments.course == db.courses.id)
+                & (db.courses.course_name == request.vars["destCourse"])
+            ).select()
+            destAssignmentNames = []
+            for a in destAssignments:
+                destAssignmentNames.append(a.assignments["name"])
+
             for a in assignments:
-                print("A = {}".format(a))
-                res = _copy_one_assignment(request.vars["course"], a.assignments["id"])
-                if res != "success":
-                    break
+                if a.assignments["name"] not in destAssignmentNames:
+                    print("A = {}".format(a))
+                    res = _copy_one_assignment(request.vars["course"], a.assignments["id"])
+                    if res != "success":
+                        break
         else:
             res = _copy_one_assignment(
                 request.vars["course"], request.vars["oldassignment"]
