@@ -2292,9 +2292,12 @@ function copyAssignments() {
     let selectedAssignment = document.getElementById("assignmentsDropdown");
     selectedAssignment =
         selectedAssignment.options[selectedAssignment.selectedIndex].value;
+    // Get the destination course and send it along to check for duplicates before making queries
+    let currentCourse = document.getElementById("coursename").innerText;
     data = {
         oldassignment: selectedAssignment,
         course: selectedCourse,
+        destCourse: currentCourse,
     };
     $.post("/runestone/admin/copy_assignment", data, function (mess, stat, w) {
         if (mess == "success") {
