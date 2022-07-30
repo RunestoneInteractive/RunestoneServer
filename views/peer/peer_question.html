@@ -61,7 +61,9 @@
     var currentQuestion = '{{=XML(current_question.name)}}';
     document.addEventListener("DOMContentLoaded", function (event) {
         setTimeout(connect, 1000);
-        window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
+        setTimeout(function () {
+            window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
+        }, 1000);
     });
     var studentVoteCount = 1;
 </script>

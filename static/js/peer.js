@@ -55,7 +55,7 @@ function connect(event) {
                             if (typeof currAnswer === "undefined") {
                                 messarea.innerHTML = `<h3>You have not answered the question</h3><p>You will not be able to participate in any discussion unless you answer the question.</p>`;
                             } else {
-                                if (voteNum < 2) {
+                                if (getVoteNum() < 2) {
                                     messarea.innerHTML = `<h3>Please Give an explanation for your answer</h3><p>Then discuss your answer with your group members</p>`;
                                 } else {
                                     messarea.innerHTML = `<h3>Voting for this question is complete</h3>`;
@@ -139,6 +139,16 @@ function connect(event) {
         ws.onclose = function () {}; // disable onclose handler first
         ws.close();
     };
+}
+
+function getVoteNum() {
+    if (typeof voteNum !== "undefined") {
+        return voteNum;
+    } else if (typeof studentVoteCount !== "undefined") {
+        return studentVoteCount;
+    } else {
+        throw "Both voteNum and studentVoteCount are undefined";
+    }
 }
 
 function answerToString(currAnswer) {
