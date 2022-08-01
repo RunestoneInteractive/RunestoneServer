@@ -2402,7 +2402,6 @@ def reorder_assignment_questions():
     lambda: verifyInstructorStatus(auth.user.course_id, auth.user),
     requires_login=True,
 )
-
 def copy_assignment():
     """
     vars:
@@ -2430,9 +2429,13 @@ def copy_assignment():
                 destAssignmentNames.append(a.assignments["name"])
 
             for a in assignments:
-                if a.assignments["name"] not in destAssignmentNames: #If there is no duplicates
+                if (
+                    a.assignments["name"] not in destAssignmentNames
+                ):  # If there is no duplicates
                     print("A = {}".format(a))
-                    res = _copy_one_assignment(request.vars["course"], a.assignments["id"])
+                    res = _copy_one_assignment(
+                        request.vars["course"], a.assignments["id"]
+                    )
                     if res != "success":
                         break
         else:
