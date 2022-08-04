@@ -666,6 +666,10 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
         response.cookies["access_token"] = encoded_jwt
         response.cookies["access_token"]["expires"] = 24 * 3600 * 30
         response.cookies["access_token"]["path"] = "/"
+        if "LOAD_BALANCER_HOST" in os.environ:
+            response.cookies["access_token"]["domain"] = os.environ[
+                "LOAD_BALANCER_HOST"
+            ]
 
     # decode here decodes the byte str to a normal str not the token
     return encoded_jwt
