@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+from zmq import PROTOCOL_ERROR_ZMTP_MALFORMED_COMMAND_MESSAGE
+
 # Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.)
 wd = (Path(__file__).parents[1]).resolve()
 sys.path.extend([str(wd / "docker"), str(wd / "tests")])
@@ -1094,7 +1096,7 @@ def addbookauthor(config, book, author, github):
         f"""select * from courses where course_name = '{book}' and base_course='{book}'"""
     ).first()
     if res:
-        click.echo(f"Warning - Book {book} already exists")
+        click.echo(f"Warning - Book {book} already exists in courses table")
     # Create an entry in courses (course_name, term_start_date, institution, base_course, login_required, allow_pairs, student_price, downloads_enabled, courselevel, newserver)
     if not res:
         res = engine.execute(
@@ -1112,6 +1114,10 @@ def addbookauthor(config, book, author, github):
                 'T')
                 """
         )
+    else:
+        # Try to deduce the github url from the working directory
+        if not github:
+            github = f"https://github.com/RunestoneInteractive/{book}.git"
 
     # Create an entry in book (document_id, github_url)
     try:
@@ -1119,18 +1125,16 @@ def addbookauthor(config, book, author, github):
             f"""insert into book
                 (document_id, github_url)
                 values ( '{book}', '{github}' )
-                )
             """
         )
-    except:
-        click.echo("Book already exists")
+    except Exception as e:
+        click.echo(f"Book already exists in book table {e}")
     # create an entry in book_author (author, book)
     try:
         res = engine.execute(
             f"""insert into book_author
                 (author, book)
                 values ( '{author}', '{book}' )
-                )
             """
         )
     except:
