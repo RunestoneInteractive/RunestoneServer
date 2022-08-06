@@ -125,6 +125,7 @@ def _initdb(config):
     eng = create_engine(config.dburl)
     eng.execute("""insert into auth_group (role) values ('instructor')""")
     eng.execute("""insert into auth_group (role) values ('editor')""")
+    eng.execute("""insert into auth_group (role) values ('author')""")
 
 
 #
@@ -1072,6 +1073,82 @@ def peergroups(course):
             click.echo(x)
     else:
         click.echo(f"No Peer Groups found for {course}")
+
+
+@cli.command()
+@click.option("--book", help="document-id or basecourse")
+@click.option("--author", help="username")
+@click.option("--github", help="url of book on github", default="")
+@pass_config
+def addbookauthor(config, book, author, github):
+    book = book or click.prompt("document-id or basecourse ")
+    author = author or click.prompt("username of author ")
+    engine = create_engine(config.dburl)
+    a_row = engine.execute(
+        f"""select * from auth_user where username = '{author}'"""
+    ).first()
+    if not a_row:
+        click.echo(f"Error - author {author} does not exist")
+        sys.exit(-1)
+    res = engine.execute(
+        f"""select * from courses where course_name = '{book}' and base_course='{book}'"""
+    ).first()
+    if res:
+        click.echo(f"Warning - Book {book} already exists")
+    # Create an entry in courses (course_name, term_start_date, institution, base_course, login_required, allow_pairs, student_price, downloads_enabled, courselevel, newserver)
+    if not res:
+        res = engine.execute(
+            f"""insert into courses
+            (course_name, base_course, python3, term_start_date, login_required, institution, courselevel, downloads_enabled, allow_pairs, new_server)
+                values ('{book}',
+                '{book}',
+                'T',
+                '2022-01-01',
+                'F',
+                'Runestone',
+                '',
+                'F',
+                'F',
+                'T')
+                """
+        )
+
+    # Create an entry in book (document_id, github_url)
+    try:
+        res = engine.execute(
+            f"""insert into book
+                (document_id, github_url)
+                values ( '{book}', '{github}' )
+                )
+            """
+        )
+    except:
+        click.echo("Book already exists")
+    # create an entry in book_author (author, book)
+    try:
+        res = engine.execute(
+            f"""insert into book_author
+                (author, book)
+                values ( '{author}', '{book}' )
+                )
+            """
+        )
+    except:
+        click.echo(f"{author} is already an author for {book}")
+
+    # create an entry in auth_membership (group_id, user_id)
+    auth_row = engine.execute(
+        """select * from auth_group where role = 'author'"""
+    ).first()
+    auth_group_id = auth_row[0]
+
+    res = engine.execute(
+        f"""
+        insert into auth_membership
+        (group_id, user_id)
+        values ({auth_group_id}, {a_row[0]})
+        """
+    )
 
 
 if __name__ == "__main__":
