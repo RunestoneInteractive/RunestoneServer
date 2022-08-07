@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 
-from zmq import PROTOCOL_ERROR_ZMTP_MALFORMED_COMMAND_MESSAGE
 
 # Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.)
 wd = (Path(__file__).parents[1]).resolve()
