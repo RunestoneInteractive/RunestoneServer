@@ -40,7 +40,7 @@ import javax.tools.ToolProvider;
  * @update 2.0.0 - standard version since 2020
  */
 public class CodeTestHelper {
-    public static boolean replit = true;
+    public static boolean replit = false;
 
     private static String results = "";
     private static String mainOutput = "";
