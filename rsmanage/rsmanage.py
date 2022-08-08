@@ -1145,13 +1145,14 @@ def addbookauthor(config, book, author, github):
     ).first()
     auth_group_id = auth_row[0]
 
-    res = engine.execute(
-        f"""
-        insert into auth_membership
-        (group_id, user_id)
-        values ({auth_group_id}, {a_row[0]})
-        """
-    )
+    if not is_author:
+        res = engine.execute(
+            f"""
+            insert into auth_membership
+            (group_id, user_id)
+            values ({auth_group_id}, {a_row[0]})
+            """
+        )
 
 
 if __name__ == "__main__":

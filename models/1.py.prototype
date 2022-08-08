@@ -79,3 +79,6 @@ else:
 
 # Define the path used to route to the BookServer.
 settings.bks = "ns"
+
+# Define the URL for the author server pages
+# settings.author_server = "https://author.runestone.academy"

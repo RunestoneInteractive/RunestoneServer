@@ -157,6 +157,9 @@
                                         {{if is_editor(auth.user.id): }}
                                         <li><a href='/{{=request.application}}/admin/manage_exercises'>Editorial Page</a></li>
                                         {{ pass }}
+                                        {{if is_author(auth.user.id): }}
+                                        <li><a href='https://author.runestone.academy'>Author Tools</a></li>
+                                        {{ pass }}
                                         <li><a href="{{=URL('dashboard','studentreport')}}">Progress Page</a></li>
                                         <li class="divider"></li>
                                         <li><a href="/{{=request.application}}/default/user/profile">Edit Profile</a>
