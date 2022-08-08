@@ -103,6 +103,19 @@ def dashboard():
     )
 
 
+def extra():
+    assignment_id = request.vars.assignment_id
+    current_question = _get_current_question(assignment_id, False)
+
+    return dict(
+        course_id=auth.user.course_name,
+        course=get_course_row(db.courses.ALL),
+        current_question=current_question,
+        assignment_id=assignment_id,
+        is_instructor=True,
+    )
+
+
 def _get_current_question(assignment_id, get_next):
 
     assignment = db(db.assignments.id == assignment_id).select().first()
@@ -263,6 +276,21 @@ def num_answers():
     r = redis.from_url(os.environ.get("REDIS_URI", "redis://redis:6379/0"))
     mess_count = int(r.hget(f"{auth.user.course_name}_state", "mess_count"))
     return json.dumps({"count": acount, "mess_count": mess_count})
+
+
+def percent_correct():
+    div_id = request.vars.div_id
+    start_time = request.vars.start_time
+    course_name = request.vars.course_name
+    df = _get_lastn_answers(1, div_id, course_name, start_time)
+    logger.debug(f"Data Frame is {df}")
+    tot = len(df)
+    logger.debug(f"num rows = {tot}")
+    corr = len(df[df.correct == "T"])
+    if corr == 0:
+        return json.dumps({"pct_correct": "No Correct Answers"})
+    else:
+        return json.dumps({"pct_correct": tot / corr * 100})
 
 
 #
