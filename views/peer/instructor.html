@@ -3,30 +3,26 @@
 <h1>Peer Work</h1>
 <h2></h2>
 <table class="table table-striped">
-    <tr>
-        <th>Name</th>
-        <th>Extra**</th>
-        <th>Due</th>
-        <th>Description</th>
-    </tr>
-    {{for assignment in assignments:}}
-    <tr>
-        <td>
-            <a href="dashboard?assignment_id={{=assignment['id']}}&next=Reset"
-                >{{=assignment['name']}}</a
-            >
-        </td>
-        <td>
-            <a href="extra?assignment_id={{=assignment['id']}}"
-                >{{=assignment['name']}} - Extra Info</a
-            >
-        </td>
+	<tr>
+		<th>Name</th>
+		<th>Extra**</th>
+		<th>Due</th>
+		<th>Description</th>
+	</tr>
+	{{for assignment in assignments:}}
+	<tr>
+		<td>
+			<a href="dashboard?assignment_id={{=assignment['id']}}&next=Reset">{{=assignment['name']}}</a>
+		</td>
+		<td>
+			<a href="extra?assignment_id={{=assignment['id']}}">{{=assignment['name']}} - Extra Info</a>
+		</td>
 
-        <td>{{=assignment['duedate']}}</td>
-        <td>{{=assignment['description']}}</td>
-    </tr>
-    {{pass}}
+		<td>{{=assignment['duedate']}}</td>
+		<td>{{=assignment['description']}}</td>
+	</tr>
+	{{pass}}
 </table>
 
-<p>** Note:  The Extra Info link for each peer assignment can be brought up on your phone or another device or in a different window, it contains information that you might not want to share with your students.</p>
+<p>** Note: The Extra Info link for each peer assignment can be brought up on your phone or another device or in a different window, it contains information that you might not want to share with your students.</p>
 {{ end }}
