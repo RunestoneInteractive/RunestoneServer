@@ -1954,6 +1954,7 @@ def get_assignment():
     assignment_data["nofeedback"] = assignment_row.nofeedback
     assignment_data["nopause"] = assignment_row.nopause
     assignment_data["is_peer"] = assignment_row.is_peer
+    assignment_data["peer_async_visible"] = assignment_row.peer_async_visible
 
     # Still need to get:
     #  -- timed properties of assignment
@@ -2058,6 +2059,7 @@ def save_assignment():
     nofeedback = request.vars["nofeedback"]
     nopause = request.vars["nopause"]
     is_peer = request.vars["is_peer"]
+    peer_async_visible = request.vars["peer_async_visible"]
     try:
         d_str = request.vars["due"]
         format_str = "%Y/%m/%d %H:%M"
@@ -2080,6 +2082,7 @@ def save_assignment():
             nopause=nopause,
             is_peer=is_peer,
             current_index=0,
+            peer_async_visible=peer_async_visible,
         )
         return json.dumps({request.vars["name"]: assignment_id, "status": "success"})
     except Exception as ex:
