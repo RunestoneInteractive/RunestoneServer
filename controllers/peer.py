@@ -587,9 +587,10 @@ def _get_user_answer(div_id, s):
 
 
 def _get_user_messages(user, div_id, course_name):
+    # this gets both sides of the conversation -- thus the | in the query below.
     messages = db(
         (db.useinfo.event == "sendmessage")
-        & (db.useinfo.sid == user)
+        & ((db.useinfo.sid == user) | (db.useinfo.act.like(f"to:{user}%")))
         & (db.useinfo.div_id == div_id)
         & (db.useinfo.course_id == course_name)
     ).select(orderby=db.useinfo.id)
