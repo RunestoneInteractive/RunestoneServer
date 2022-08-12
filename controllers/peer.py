@@ -598,7 +598,7 @@ def _get_user_messages(user, div_id, course_name):
     mess = "<ul>"
     for row in messages:
         mpart = row.act.split(":")[2]
-        mess += f"<li>{mpart}</li>"
+        mess += f"<li>{row.sid} said: {mpart}</li>"
     mess += "</ul>"
 
     return mess
