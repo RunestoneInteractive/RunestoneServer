@@ -15,6 +15,15 @@ read -p "Did you update/commit the version in pyproject.toml " yn
     esac
 done
 
+while true; do
+read -p "Did you update motd and VERSION? " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
  
 echo "tagging this release and pushing to github"
 
