@@ -12,8 +12,8 @@
             in, but trying to access a course that you have not registered for. This is for your own good. You can click
             on the <code>Enroll in a Course</code> button and register for the course on the profile page. You do this
             by typing the name of the course into the Course Name box.</p>
-        <p>Choose your course. If you want to add a new course, click Add Another Course then change the course name in
-            your profile.</p>
+        <p>Choose your course. If you want to add a new course, click on the <code>Enroll in a Course</code> button,
+             then change the course name in your profile.</p>
         {{ for course in courses: }}
         <form action="/{{=request.application}}/default/coursechooser/{{=course}}" method="post">
             <button class="ac_opt book-btn btn btn-default" type="submit" name=course
