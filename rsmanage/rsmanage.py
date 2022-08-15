@@ -1076,6 +1076,22 @@ def peergroups(course):
         click.echo(f"No Peer Groups found for {course}")
 
 
+def is_author(config, userid):
+    engine = create_engine(config.dburl)
+    ed = engine.execute(
+        """select id from auth_group where auth_group.role = 'author'"""
+    ).first()
+
+    row = engine.execute(
+        f"""select * from auth_membership where user_id = {userid} and group_id = {ed.id}"""
+    ).first()
+
+    if row:
+        return True
+    else:
+        return False
+
+
 @cli.command()
 @click.option("--book", help="document-id or basecourse")
 @click.option("--author", help="username")
@@ -1145,7 +1161,7 @@ def addbookauthor(config, book, author, github):
     ).first()
     auth_group_id = auth_row[0]
 
-    if not is_author:
+    if not is_author(config, a_row.id):
         res = engine.execute(
             f"""
             insert into auth_membership
