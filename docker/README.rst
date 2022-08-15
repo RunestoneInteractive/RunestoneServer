@@ -3,8 +3,7 @@ Docker Deployment
 
 .. TODO
 
-    See https://github.com/RunestoneInteractive/RunestoneServer/issues/1973 for ideas on how to improve this still-complex problem.
-
+    See https://github.com/RunestoneInteractive/RunestoneServer/issues/1973 for ideas on how to improve this still-complex problem. See https://github.com/RunestoneInteractive/RunestoneServer/pull/1977 for OS X problems and fixes.
 
 .. note::
 
@@ -41,6 +40,7 @@ OS X
 ^^^^
 Open a Terminal. In the Terminal:
 
+#.  Edit ``/etc/paths``; add ``/opt/homebrew/bin`` as the first line in that file.
 #.  `Install Homebrew <https://brew.sh/#install>`_.
 #.  Execute ``brew install python docker``.
 #.  Run the newly-installed Docker Desktop application.
@@ -54,7 +54,7 @@ Windows
 If running on Windows, either:
 
     `Install Ubuntu on WSL2 <https://ubuntu.com/tutorials/install-ubuntu-on-wsl2-on-windows-10#1-overview>`_. Next, install then run
-    `Docker Desktop`_; see the note above on the initialization process.
+    `Docker Desktop <https://docs.docker.com/desktop/install/windows-install/>`_; see the note above on the initialization process.
 
     **OR**
 
@@ -140,7 +140,6 @@ This process may take a few minutes to complete. When it does:
 #.  **Reboot your computer** to update your group membership.
 #.  Run the Docker Desktop if using WSL2 on Windows or using OS X.
 #.  Open a terminal.
-#.  **OS X only**: Activate your virtual environment -- at the terminal, execute ``source rsdocker/rsvenv/bin/activate``.
 
 
 4. Build the necessary containers
@@ -273,7 +272,7 @@ After cloning a book, you may need to add it to the database.  Most of the stand
 
     PreTeXt authors, see `Publishing to Runestone Academy <https://pretextbook.org/doc/guide/html/sec-publishing-to-runestone-academy.html>`_.  After that, you can build a pretext book just like building a Runestone book ``rsmanage build --ptx coursename``
 
-The following information applies only *authoring* books using the Runestone. 
+The following information applies only *authoring* books using the Runestone.
 
 .. warning::
 
@@ -357,7 +356,6 @@ Before using ``docker-tools`` or ``rsmanage``:
 
 #.  Run the Docker Desktop if using WSL2 on Windows or using OS X.
 #.  Open a terminal.
-#.  **OS X only**: Activate your virtual environment -- at the terminal, execute ``source rsdocker/rsvenv/bin/activate``.
 #.  At the terminal, execute ``cd rsdocker/RunestoneServer``.
 
 

@@ -162,19 +162,6 @@ from ci_utils import chdir, env, is_darwin, is_linux, pushd, xqt  # noqa: E402
 
 # Third-party bootstrap
 # ---------------------
-# On OS X, create then activate a venv. Otherwise, the ``docker-tools`` and ``rsmanage`` scripts don't get put in the default path (while on Linux they do) when not in a venv. Rather than require users to manually edit their path, use a venv and require them to activate the venv before running these scripts.
-if is_darwin and not IN_VENV:
-    # If the repo's already cloned, but the venv isn't activated, create it if it doesn't exist.
-    venv_path = (wd / (("../../" if IN_REPO else "") + "rsvenv")).resolve()
-    if not venv_path.is_dir():
-        xqt(f"python3 -m venv {venv_path}")
-    # pip doesn't provide ``activate_this.py`` (Poetry does). For now, ask the user to run this in the created venv.
-    sys.exit(
-        "Phase 1 init complete. Execute:\n"
-        f"  source {venv_path}/bin/activate\n"
-        "then re-run this command to continue to phase 2."
-    )
-
 # This comes after importing ``ci_utils``, since we use that to install click if necessary.
 try:
     import click
@@ -359,7 +346,7 @@ def init(
     # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
     check_install(f"{sys.executable} -m pip --version", "python3-pip")
     xqt(
-        # Note: Outside a venv, OS X installs these into a place that's not in the default $PATH, making the scripts ``docker-tools`` and ``rsmanage`` not work unless the user manually adds the path. Add the ``--verbose`` flag to the install commands below to see where the scripts are place on OS X.
+        # Note: Sometimes, OS X installs these into a place that's not in the default $PATH, making the scripts ``docker-tools`` and ``rsmanage`` not work unless the user manually adds the path. Add the ``--verbose`` flag to the install commands below to see where the scripts are placed on OS X.
         f"{sys.executable} -m pip install {pip_user()} -e docker",
         f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
     )
@@ -369,6 +356,7 @@ def init(
         print(
             "\n" + "*" * 80 + "\n"
             "Downloaded the RunestoneServer repo. You must \n"
+            '"cd RunestoneServer" before running this script again.'
         )
     if did_group_add:
         print(
