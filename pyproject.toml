@@ -60,7 +60,7 @@ pyjwt = "== 2.0.1"
 
 # Development dependencies
 # ========================
-pretextbook = "^0.7.8"
+pretext = "^1.0.0"
 [tool.poetry.dev-dependencies]
 black = "~= 22.0"
 bookserver = { path = "../BookServer", develop = true }
