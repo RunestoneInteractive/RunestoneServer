@@ -70,15 +70,28 @@ from textwrap import dedent
 if sys.platform == "win32":
     sys.exit("ERROR: You must run this program in WSL/VirtualBox/VMWare/etc.")
 
-# See if we're root.
-is_root = (
+# Globals
+# ^^^^^^^
+# True if we're root.
+IS_ROOT = (
     subprocess.run(
         ["id", "-u"], capture_output=True, text=True, check=True
     ).stdout.strip()
     == "0"
 )
 
+# True if this script is running in a Python virtual environment.
+IN_VENV = sys.prefix != sys.base_prefix
 
+# The working directory of this script.
+wd = Path(__file__).resolve().parent
+
+# True if this script is executing from the Runestone repository; otherwise, we assume only this script was downloaded as a part of the bootstrap process.
+IN_REPO = (wd / "nginx").is_dir()
+
+
+# Supporting functions
+# ^^^^^^^^^^^^^^^^^^^^
 # Check to see if a program is installed; if not, install it.
 def check_install(
     # The command to run to check if the program is installed.
@@ -93,7 +106,7 @@ def check_install(
         print("Not found. Installing...")
         subprocess.run(
             # Only run with ``sudo`` if we're not root.
-            ([] if is_root else ["sudo"])
+            ([] if IS_ROOT else ["sudo"])
             + [
                 "apt",
                 "install",
@@ -114,13 +127,22 @@ def check_install_curl() -> None:
 
 # Outside a venv, install locally.
 def pip_user() -> str:
-    return "" if in_venv else "--user"
+    return "" if IN_VENV else "--user"
 
 
-# The working directory of this script.
-wd = Path(__file__).resolve().parent
+# Bootstrap ``ci_utils``
+# ^^^^^^^^^^^^^^^^^^^^^^
+# Bootstrap check: if we're not in the repo, do some tidying.
+if not IN_REPO:
+    print("Creating directory rsdocker/ to store all Runestone files.")
+    wd = wd / "rsdocker"
+    wd.mkdir(exist_ok=True)
+    os.chdir(wd)
+    # Add this directory -- which is where the ci_utils will be downloaded -- to the path; otherwise, ci_utils won't be found.
+    sys.path.append(str(wd))
+
+
 sys.path.append(str(wd / "../tests"))
-# fmt: off
 try:
     # This unused import triggers the script download if it's not present. This only happens outside the container.
     import ci_utils  # noqa: F401
@@ -131,18 +153,16 @@ except ImportError:
     subprocess.run(
         [
             "curl",
-            "-fsSLO",
+            "-fLO",
             "https://raw.githubusercontent.com/RunestoneInteractive/RunestoneServer/master/tests/ci_utils.py",
         ],
         check=True,
     )
 from ci_utils import chdir, env, is_darwin, is_linux, pushd, xqt  # noqa: E402
-# fmt: on
 
 # Third-party bootstrap
 # ---------------------
 # This comes after importing ``ci_utils``, since we use that to install click if necessary.
-in_venv = sys.prefix != sys.base_prefix
 try:
     import click
 except ImportError:
@@ -154,7 +174,7 @@ except ImportError:
 
     print("Installing Python dependencies...")
     # Outside a venv, install locally.
-    user = " " if in_venv else "--user "
+    user = " " if IN_VENV else "--user "
     xqt(
         f"{sys.executable} -m pip install {pip_user()} --upgrade pip",
         f"{sys.executable} -m pip install {pip_user()} --upgrade click",
@@ -225,13 +245,16 @@ def init(
     # Did we add the current user to a group?
     did_group_add = False
 
+    # True if running a Docker container requires use of ``sudo``.
+    docker_sudo = False
+
     # Ensure Docker is installed.
     try:
         xqt("docker --version")
     except subprocess.CalledProcessError as e:
         print(f"Unable to run docker: {e}")
-        # Ensure the Docker Desktop is running if we're running in WSL. On Windows, the ``docker`` command doesn't exist when the Docker Desktop isn't running.
-        if is_linux and "WSL" in Path("/proc/version").read_text():
+        # Ensure the Docker Desktop is running if we're running in WSL or OS X. On Windows, the ``docker`` command doesn't exist when the Docker Desktop isn't running.
+        if (is_linux and "WSL" in Path("/proc/version").read_text()) or is_darwin:
             sys.exit(
                 "ERROR: Docker Desktop not detected. You must install and run this\n"
                 "before proceeding."
@@ -245,31 +268,38 @@ def init(
             "sudo sh ./get-docker.sh",
             "rm get-docker.sh",
         )
+
     # Linux only: Ensure the user is in the ``docker`` group. This follows the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`__. Put this step here, instead of after the Docker install, for people who manually installed Docker but skipped this step.
     if is_linux:
         print("Checking to see if the current user is in the docker group...")
-        if "www-data" not in xqt("groups", capture_output=True, text=True).stdout:
-            if is_darwin:
-                xqt("sudo dscl . append /Groups/docker GroupMembership $USER")
-            else:
-                xqt("sudo usermod -a -G docker ${USER}")
+        if "docker" not in xqt("groups", capture_output=True, text=True).stdout:
+            # Per the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`_, enable running Docker as a non-root user.
+            #
+            # Ignore errors if the groupadd fails; the group may already exist.
+            xqt('sudo groupadd docker', check=False)
+            xqt('sudo usermod -a -G docker $USER')
 
+            # Until group privileges to take effect, use ``sudo`` to run Docker.
+            docker_sudo = True
             # The group add doesn't take effect until the user logs out then back in. Work around it for now.
             did_group_add = True
 
     # Ensure the Docker Desktop is running if this is OS X. On OS X, the ``docker`` command exists, but can't run the hello, world script. It also serves as a sanity check for the other platforms.
     print("Checking that Docker works...")
     try:
-        xqt("docker run hello-world")
+        xqt(f"{'sudo' if docker_sudo else ''} docker run hello-world")
     except subprocess.CalledProcessError as e:
-        print(f"Unable to execute docker run hello-world: {e}")
         sys.exit(
-            (
-                "ERROR: Docker Desktop not detected. You must install and run this\n"
-                "before proceeding."
+            f"ERROR: Unable to execute docker run hello-world: {e}"
+            + (
+                (
+                    "\n"
+                    "Docker Desktop not detected or not working. You must install and run\n"
+                    "this before proceeding."
+                )
+                if is_darwin
+                else ""
             )
-            if is_darwin
-            else "ERROR: Unable to run a basic Docker application."
         )
 
     # Make sure git's installed.
@@ -279,7 +309,7 @@ def init(
         print(f"Unable to run git: {e} Installing...")
         xqt("sudo apt install -y --no-install-recommends git")
     # Are we inside the Runestone repo?
-    if not (wd / "nginx").is_dir():
+    if not IN_REPO:
         change_dir = True
         # No, we must be running from a downloaded script. Clone the runestone repo.
         print("Didn't find the runestone repo. Cloning...")
@@ -316,7 +346,7 @@ def init(
     # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
     check_install(f"{sys.executable} -m pip --version", "python3-pip")
     xqt(
-        # TODO: OS X installs these into a place that's not in the default $PATH, making the scripts ``docker-tools`` and ``rsmanage`` not work unless the user manually adds the path. Add the ``--verbose`` flag to the install commands below to see where the scripts are place on OS X. I don't know how to work around this.
+        # Note: Sometimes, OS X installs these into a place that's not in the default $PATH, making the scripts ``docker-tools`` and ``rsmanage`` not work unless the user manually adds the path. Add the ``--verbose`` flag to the install commands below to see where the scripts are placed on OS X.
         f"{sys.executable} -m pip install {pip_user()} -e docker",
         f"{sys.executable} -m pip install {pip_user()} -e rsmanage",
     )
