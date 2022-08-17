@@ -397,10 +397,15 @@ def build(config, clone, ptx, gen, manifest, course):
     click.echo("Switching to book dir {}".format(course))
     os.chdir(course)
     if ptx:
-        _build_ptx_book(config, gen, manifest, course)
+        res = _build_ptx_book(config, gen, manifest, course)
 
     else:
-        _build_runestone_book(course)
+        res = _build_runestone_book(course)
+
+    if res:
+        click.echo("Build Succeeded")
+    else:
+        click.echo("Build Failed, see cli.log for details")
 
 
 #
