@@ -1001,6 +1001,7 @@ def _build_phase_2_core(
         xqt("rm -f $RUNESTONE_PATH/databases/*")
         print("Populating database...")
         xqt("rsmanage initdb --force", cwd=env.WEB2PY_PATH)
+        xqt("alembic stamp head", cwd=env.BOOK_SERVER_PATH)
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
