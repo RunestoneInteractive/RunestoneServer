@@ -188,8 +188,8 @@
             <div class="list-group">
                 <form method="POST" id="removeins" action="Javascript:remove_instructor();">
                     <select size="10" id="instructorlist" name="instructor" class="form-control">
-                        {{ for person in instructors: }}
-                        <option value="{{=person}}">{{ =instructors[person] }}</option>
+                        {{ for person in sorted(list(instructors.values()), key=lambda s: str(s).split(" ")[1]): }}
+                        <option value="{{=person}}">{{ =person }}</option>
                         {{ pass }}
                     </select>
                     <div style="text-align: center">
