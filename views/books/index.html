@@ -1,6 +1,10 @@
 {{user_navs = True}} {{extend 'layout.html'}}
+{{ block moreincludes }}
+    <link rel="canonical" 
+        href="{{= settings.canonical_server}}/runestone/books/index" />
+    <link rel="stylesheet" href="/runestone/static/css/index.css" />
+{{ end }}
 
-<link rel="stylesheet" href="/runestone/static/css/index.css" />
 
 <div class="container">
     <div class="col-md-8 col-md-offset-2">

@@ -82,3 +82,4 @@ settings.bks = "ns"
 
 # Define the URL for the author server pages
 # settings.author_server = "https://author.runestone.academy"
+# settings.canonical_server = "https://runestone.academy"
