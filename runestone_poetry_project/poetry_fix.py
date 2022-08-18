@@ -1,11 +1,68 @@
 # ***********************************
 # |docname| - Work around Poetry bugs
 # ***********************************
-# This script contains two fixes for Poetry bugs: one bug which manifests when the ``--no-dev`` flag is passed to ``poetry install/update`` and another which occurs when the ``--no-dev`` flag isn't passed. It doesn't provide a fix to a third bug, discussed below
+# This script contains workarounds for Poetry design decisions and bugs:
+#
+# #.    Poetry doesn't support either/or dependencies, but this project needs them. Specifically, we want to install either the released, PyPI-published version of the RunestoneComponents and the BookServer, or the development version of these projects which are cloned to the local filesystem. The ``pyproject.toml`` file therefore contains (with all other dependencies removed for clarity):
+#
+#       .. code-block:: text
+#
+#           [tool.poetry.dependencies]
+#           bookserver = "^1.0.0"
+#           runestone = "^6.1.0"
+#
+#           [tool.poetry.dev-dependencies]
+#           bookserver = { path = "../BookServer", develop = true }
+#           runestone = { path = "../RunestoneComponents", develop = true }
+#
+#       This breaks Poetry, since it looks for BOTH dependencies during dependency resolution. To work around this, `rename_pyproject <rename_pyproject>` changes this to:
+#
+#       .. code-block:: text
+#
+#           [tool.poetry.dependencies]
+#           bookserver = "^1.0.0"
+#           runestone = "^6.1.0"
+#
+#           [tool.no-poetry.dev-dependencies]   # <== CHANGED!
+#           bookserver = { path = "../BookServer", develop = true }
+#           runestone = { path = "../RunestoneComponents", develop = true }
+#
+#       ...in production mode; it does the opposite (changes ``[tool.poetry.dependencies]`` to ``[tool.no-poetry.dependencies]``) in development mode. This hides the modified section from Poetry, so the file now looks like an either/or project.
+#
+# #.    Poetry doesn't install development dependencies in projects included through a path dependency. As a workaround, this script creates additional "projects" which only contain the development dependencies, but places these in the production dependencies section of the "project". For example, the BookServer ``pyproject.toml`` contains:
+#
+#       .. code-block:: text
+#
+#           [tool.poetry.dev-dependencies]
+#           black = "~= 22.0"
+#           console-ctrl = "^0.1.0"
+#           ...many more, which are omitted for clarity...
+#
+#       Poetry won't install these. Therefore, `make_dev_pyproject <make_dev_pyproject>` creates a "project" named ``bookserver-dev`` which contains:
+#
+#       .. code-block:: text
+#
+#           [tool.poetry.dependencies]   # <== CHANGED!
+#           black = "~= 22.0"
+#           console-ctrl = "^0.1.0"
+#           ...many more, which are omitted for clarity...
+#
+#       This also means that the ``pyproject.toml`` file must be manually edited to include a reference to this "project":
+#
+#       .. code-block:: text
+#
+#           [tool.poetry.dev-dependencies]
+#           bookserver = { path = "../BookServer", develop = true }
+#           bookserver-dev = { path = "../bookserver-dev", develop = true }  # <== MANUALLY ADDED!
+#
+# #.    Poetry generates invalid package metadata for local path dependencies, so that running ``pip show click`` results in a bunch of exceptions. This program doesn't provide a fix for this bug.
+#
+# ...and that's how using Poetry makes dependency management easier...
+#
 #
 # `Invalid package METADATA <https://github.com/python-poetry/poetry/issues/3148>`_
 # =====================================================================================
-# Per this issue, Poetry generates invalid package metadata for local path dependencies. For example, the last few lines of ``.venv/lib/python3.8/site-packages/runestone_poetry_project-0.1.0.dist-info/METADATA`` contain:
+# Per the issue linked in the title above, Poetry generates invalid package metadata for local path dependencies (tested on Poetry v1.1.14). For example, the last few lines of ``.venv/lib/python3.8/site-packages/runestone_poetry_project-0.1.0.dist-info/METADATA`` contain:
 #
 # .. code-block:: text
 #
@@ -45,7 +102,7 @@
 #   Requires-Dist: sphinxcontrib-paverutils (>=1.17)
 #   Requires-Dist: stripe (>=2.0.0,<3.0.0)
 #
-# ... along with a similar fix to the ``METADATA`` for ``bookserver_dev`` allow ``pip`` to run successfully.
+# ... along with a similar fix to the ``METADATA`` for ``bookserver_dev`` allows ``pip`` to run successfully.
 #
 #
 # TODO
@@ -55,11 +112,12 @@
 #
 # Imports
 # =======
-# These are listed in the order prescribed by `PEP 8`_.
+# These are listed in the order prescribed by `PEP 8 <http://www.python.org/dev/peps/pep-0008/#imports>`_.
 #
 # Standard library
 # ----------------
 from pathlib import Path
+import sys
 from typing import Any, Dict, Set
 
 # Third-party imports
@@ -71,7 +129,6 @@ import toml
 # Local application imports
 # -------------------------
 # None.
-#
 #
 # Fix for ``dev-dependencies`` in subprojects
 # ===========================================
@@ -124,12 +181,14 @@ def walk_dependencies(
     project_path: Path,
     # See `walked_paths_set`.
     walked_paths_set: Set[Path],
+    # See `poetry_paths_set`.
+    poetry_paths_set: Set[Path],
 ):
     key = "dependencies" if is_deps else "dev-dependencies"
     for dep in poetry_dict.get(key, {}).values():
         pth = dep.get("path", "") if isinstance(dep, dict) else None
         if pth:
-            walk_pyproject(project_path / pth, walked_paths_set)
+            walk_pyproject(project_path / pth, walked_paths_set, poetry_paths_set)
 
 
 # Given a ``pyproject.toml``, optionally create a dev dependencies project and walk all requirements with path dependencies.
@@ -138,6 +197,8 @@ def walk_pyproject(
     project_path: Path,
     # _`walked_paths_set`: a set of Paths already walked.
     walked_paths_set: Set[Path],
+    # _`poetry_paths_set`: a set of Paths that contained a Poetry project. This is a strict subset of walked_paths_set_.
+    poetry_paths_set: Set[Path],
     # True if this is the root ``pyproject.toml`` file -- no dev dependencies will be created for it.
     is_root: bool = False,
 ):
@@ -153,22 +214,41 @@ def walk_pyproject(
         d = toml.load(project_path / "pyproject.toml")
     except FileNotFoundError:
         return
+    poetry_paths_set.add(project_path)
     tp = d["tool"]["poetry"]
-    walk_dependencies(tp, True, project_path, walked_paths_set)
-    walk_dependencies(tp, False, project_path, walked_paths_set)
+    # Search both the dependencies and dev dependencies in this project for path dependencies.
+    walk_dependencies(tp, True, project_path, walked_paths_set, poetry_paths_set)
+    walk_dependencies(tp, False, project_path, walked_paths_set, poetry_paths_set)
 
     # (Usually) process this file.
     if not is_root:
         create_dev_dependencies(project_path)
 
 
+# .. _make_dev_pyproject:
+#
 # Core function: run the whole process on the ``pyproject.toml`` in the current directory.
 def make_dev_pyproject():
-    walk_pyproject(Path("."), set(), True)
+    project_paths_set = set()
+    walk_pyproject(Path("."), set(), project_paths_set, True)
+
+    # Check that we processed the BookServer and the RunestoneComponents.
+    found_bookserver = False
+    found_runestone_components = False
+    for path in project_paths_set:
+        name = path.name
+        found_bookserver |= name == "BookServer"
+        found_runestone_components |= name == "RunestoneComponents"
+    if not found_bookserver:
+        sys.exit("Error: did not process the BookServer Poetry project.")
+    if not found_runestone_components:
+        sys.exit("Error: did not process the RunestoneComponents Poetry project.")
 
 
-# Fix for the main ``pyproject.toml``
-# ===================================
+# .. _rename_pyproject:
+#
+# Workaround for the main ``pyproject.toml``
+# ==========================================
 # This function updates the ``pyproject.toml`` in the current directory by switching between a section named ``[tool.poetry.dev-dependencies]`` when in development mode or ``[tool.no-poetry.dev-dependencies]`` when not in development mode. This is because Poetry does not support either/or dependencies: either resolve dependency x in dev mode, or dependency y when not in dev mode. Instead, it takes a both/and approach: during its dependency resolution phase, it resolves ALL dependencies, then installs a subset (such all non-dev dependencies, or dev and non-dev dependencies). Quoting from the `manual <https://python-poetry.org/docs/master/managing-dependencies/>`_:
 #
 #   All dependencies must be compatible with each other across groups since they will be resolved regardless of whether they are required for installation or not (see Installing group dependencies).

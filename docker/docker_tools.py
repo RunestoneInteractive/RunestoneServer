@@ -45,7 +45,7 @@
 #
 # Imports and bootstrap
 # =====================
-# These are listed in the order prescribed by PEP 8, with exceptions noted below.
+# These are listed in the order prescribed by `PEP 8 <http://www.python.org/dev/peps/pep-0008/#imports>`_, with exceptions noted below.
 #
 # There's a fair amount of bootstrap code here to download and install required imports and their dependencies.
 #
