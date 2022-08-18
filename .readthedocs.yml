@@ -1,6 +1,7 @@
-# .readthedocs.yml
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# ********************************************
+# |docname| - Read the Docs configuration file
+# ********************************************
+# This sets up the RTD build to use CodeChat. See https://docs.readthedocs.io/en/stable/config-file/v2.html for details on this file's format.
 
 # Required
 version: 2
