@@ -22,7 +22,9 @@ import json
 import logging
 import datetime
 import importlib
+import pathlib
 import random
+import re
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -455,7 +457,14 @@ def index():
             book_info["section"] = "Computer Science"
         logger.debug(f"{book} is in section {book_info['section']}")
 
-        book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
+        if book_info["source"] == "Runestone":
+            book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
+        else:
+            book_info["url"] = "/{}/books/published/{}/{}".format(
+                bks,
+                book,
+                _find_real_url(f"applications/{request.application}/books", book),
+            )
         book_info["regname"] = book
         sections.sort()
         if hasattr(config, "is_private") and config.is_private == True:
@@ -464,3 +473,17 @@ def index():
             res.append(book_info)
 
     return dict(book_list=res, sections=sections)
+
+
+#
+# PreTeXt books are set up with an index.thml that meta refreshes to the real start page.
+# This is great for flexibility but not good for ?mode=browsing or for SEO scores.
+# We can parse the "real" home page for the book from index.html
+def _find_real_url(libdir, book):
+    idx = pathlib.Path(libdir, book, "published", book, "index.html")
+    if idx.exists():
+        with open(idx, "r") as idxf:
+            for line in idxf:
+                if g := re.search(r"refresh.*URL='(.*?)'", line):
+                    return g.group(1)
+    return "index.html"
