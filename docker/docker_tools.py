@@ -830,8 +830,8 @@ def _build_phase_1(
         # Clean up after web2py install.
         "rm -rf $WEB2PY_PATH/.cache/*",
         "cp scripts/routes.py $WEB2PY_PATH/routes.py",
-        # `Install Poetry <https://python-poetry.org/docs/master/#osx--linux--bashonwindows-install-instructions>`_.
-        "eatmydata curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | POETRY_HOME=/usr/local python -",
+        # `Install Poetry <https://python-poetry.org/docs/master/#installing-with-the-official-installer>`_, putting it in a location already in ``$PATH``.
+        "eatmydata curl -sSL https://install.python-poetry.org | POETRY_HOME=/usr/local python3 -",
     )
 
     # Set up config files
