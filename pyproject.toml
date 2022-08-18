@@ -39,6 +39,7 @@ oauth2 = ">=1.9"
 pandas = "^1.0.0"
 pathlib2 = "^2.0.0"
 Paver = ">= 1.2.4"
+pretext = "^1.0.0"
 # This is actually an rsmanage dependency. It's here so that rsmanage can be installed without installing this, which requires Postgres (available only in the container).
 pgcli = "^3.0.0"
 psycopg2-binary = "^2.0.0"
@@ -60,7 +61,6 @@ pyjwt = "== 2.0.1"
 
 # Development dependencies
 # ========================
-pretext = "^1.0.0"
 [tool.poetry.dev-dependencies]
 black = "~= 22.0"
 bookserver = { path = "../BookServer", develop = true }
