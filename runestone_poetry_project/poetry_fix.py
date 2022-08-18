@@ -3,7 +3,7 @@
 # ***********************************
 # This script contains workarounds for Poetry design decisions and bugs:
 #
-# #.    Poetry doesn't support either/or dependencies, but this project needs them. Specifically, we want to install either the released, PyPI-published version of the RunestoneComponents and the BookServer, or the development version of these projects which are cloned to the local filesystem. The ``pyproject.toml`` file therefore contains (with all other dependencies removed for clarity):
+# #.    Poetry doesn't support either/or dependencies, but this project needs them. Specifically, we want to install either the released, PyPI-published version of the RunestoneComponents and the BookServer, or the development version of these projects which are cloned to the local filesystem. The RunestoneServer ``pyproject.toml`` file therefore contains (with all other dependencies removed for clarity):
 #
 #       .. code-block:: text
 #
@@ -29,7 +29,7 @@
 #
 #       ...in production mode; it does the opposite (changes ``[tool.poetry.dependencies]`` to ``[tool.no-poetry.dependencies]``) in development mode. This hides the modified section from Poetry, so the file now looks like an either/or project.
 #
-# #.    Poetry doesn't install development dependencies in projects included through a path dependency. As a workaround, this script creates additional "projects" which only contain the development dependencies, but places these in the production dependencies section of the "project". For example, the BookServer ``pyproject.toml`` contains:
+# #.    Poetry doesn't install development dependencies in projects included through a `path dependency <https://python-poetry.org/docs/dependency-specification/#path-dependencies>`_. As a workaround, this script copies development dependencies from a project into an otherwise empty, auto-created "project", but puts them in the production dependencies section of this newly-created "project", so they will be installed. For example, the BookServer ``pyproject.toml`` contains:
 #
 #       .. code-block:: text
 #
@@ -38,7 +38,7 @@
 #           console-ctrl = "^0.1.0"
 #           ...many more, which are omitted for clarity...
 #
-#       Poetry won't install these. Therefore, `make_dev_pyproject <make_dev_pyproject>` creates a "project" named ``bookserver-dev`` which contains:
+#       Poetry won't install these. Therefore, `make_dev_pyproject <make_dev_pyproject>` creates a "project" named bookserver-dev whose ``pyproject.toml`` contains a copy of the BookServer development dependencies, but placed in the production dependencies section of this ``bookserver-dev`` "project", so they will be installed. For example, the bookserver-dev ``pyproject.toml`` contains:
 #
 #       .. code-block:: text
 #
@@ -47,13 +47,17 @@
 #           console-ctrl = "^0.1.0"
 #           ...many more, which are omitted for clarity...
 #
-#       This also means that the ``pyproject.toml`` file must be manually edited to include a reference to this "project":
+#       This also means that the RunestoneServer ``pyproject.toml`` file must be manually edited to include a reference to this "project":
 #
 #       .. code-block:: text
 #
 #           [tool.poetry.dev-dependencies]
 #           bookserver = { path = "../BookServer", develop = true }
 #           bookserver-dev = { path = "../bookserver-dev", develop = true }  # <== MANUALLY ADDED!
+#
+#       The final result looks like this:
+#
+#       .. image:: poetry_fix_diagram.png
 #
 # #.    Poetry generates invalid package metadata for local path dependencies, so that running ``pip show click`` results in a bunch of exceptions. This program doesn't provide a fix for this bug.
 #
