@@ -5,14 +5,10 @@ Sphinx includes
 ===============
 These files are copied from a Sphinx build.
 -->
-<link rel="stylesheet" href="{{=base_static_url}}/pygments.css" type="text/css" />
-<link rel="stylesheet" href="{{=base_static_url}}/basic.css" type="text/css" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/accessibility.css?v=ACB8D062" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/CodeChat.css" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/matrixeq.css?v=EA7C0F6C" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webgldemo.css?v=4EB84728" />
-<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webglinteractive.css?v=21C88BC4" />
-<script src="{{=base_static_url}}/jquery.js"></script>
+<link rel="stylesheet" href="{{=URL('static','css/pygments.css')}}" type="text/css" />
+<link rel="stylesheet" href="{{=URL('static','css/basic.css')}}" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'css/accessibility.css')}}" />
+<script src="{{=URL('static', 'js/jquery.js')}}"></script>
 <script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
 
 
@@ -38,15 +34,13 @@ These files are copied from a Sphinx build.
     pass
 }}
 
-<script id="documentation_options" data-url_root="./" src="{{=base_static_url}}/documentation_options.js"></script>
+<script id="documentation_options" data-url_root="./" src="{{=URL('static','js/documentation_options.js')}}"></script>
 
-<script src="{{=base_static_url}}/underscore.js"></script>
-<script src="{{=base_static_url}}/doctools.js"></script>
-<script src="{{=base_static_url}}/animationbase.js?v=B45130AE"></script>
-<script src="{{=base_static_url}}/html4css1.css?v=62F7CBB1"></script>
-<script src="{{=base_static_url}}/matrixeq.js?v=1FB22B23"></script>
-<script src="{{=base_static_url}}/webglinteractive.js?v=7D80F988"></script>
-<script src="{{=base_static_url}}/FileSaver.min.js?v=8B232E7A"></script>
+<script src="{{=URL('static','js/underscore.js')}}"></script>
+<script src="{{=URL('static','js/doctools.js')}}"></script>
+<script src="{{=URL('static','js/animationbase.js')}}"></script>
+<script src="{{=URL('static','css/html4css1.css')}}"></script>
+<script src="{{=URL('static','js/FileSaver.min.js')}}"></script>
 
 
 <!--

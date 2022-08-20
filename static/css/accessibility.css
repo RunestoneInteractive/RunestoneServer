@@ -1,0 +1,155 @@
+/*
+**********************************************
+|docname| - a WCAG 2.0 AA compliant stylesheet
+**********************************************
+*/
+
+/* Variables holding theme colors */
+:root {
+	--codebuttons: #474949;
+}
+[data-theme="dark"] {
+	--codebuttons: #2c0aa6;
+}
+/*Navigation Tabbing Styling*/
+li.dropdown.open a.dropdown-toggle, li.dropdown.open a.dropdown-toggle:focus {
+	border:0px !important;
+	/*background-color: #346A6E!important;*/
+	background-color: #2A5659 !important;
+	color:#F8F8F8 !important;
+}
+a.dropdown-toggle:focus {
+	 /*border:1px solid #5B9DD9 !important;
+	 color:#5B9DD9 !important;
+	 width:48px !important;*/
+	 background-color: #52A6AC!important;
+	 color:#F8F8F8 !important;
+}
+/* Border Manipulation */
+li.divider-vertical {
+	margin:0px !important;
+}
+li.dropdown a.dropdown-toggle {
+	padding:15px 18px !important;
+}
+
+/*
+Bootstrap button styling
+*/
+
+/* Default Button */
+/* Passes WCAG 2.0 */
+button.btn.btn-default:active {
+	color:#474949 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-default:focus {
+	color:#474949 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-default{
+	color:#FFFFFF !important;
+	background-color: var(--codebuttons) !important;
+}
+button.btn.btn-default.btn-sm.disabled:active {
+	color:#474949 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-default.btn-sm.disabled:focus {
+	color:#474949 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-default.btn-sm.disabled{
+	color:#FFFFFF !important;
+	background-color:#474949 !important;
+}
+/* Sucess Button */
+/* Failed WCAG 2.0, #255425 passes */
+button.btn.btn-success:active {
+	color:#427e44 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-success:focus {
+	color:#427e44!important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-success {
+	color:#FFFFFF !important;
+	background-color:#427e44!important;
+}
+
+/*Primary Button*/
+/* fails WCAG 2.0, #265986 passes */
+button.btn.btn-primary:active {
+	color:#3379b6!important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-primary:focus {
+	color:#3379b6 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-primary {
+	color:#FFFFFF !important;
+	background-color:#3379b6 !important;
+}
+
+
+/*Info Button */
+/* Fails, WCAG 2.0, #155569 passes*/
+button.btn.btn-info:active {
+	color:#1a6a83!important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-info:focus {
+	color:#1a6a83 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-info{
+	color:#FFFFFF !important;
+	background-color:#1a6a83 !important;
+}
+
+/*Warning Button*/
+/*Fails WCAG 2.0, #794b0b*/
+button.btn.btn-warning:active {
+	color:#945c0e !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-warning:focus {
+	color:#945c0e !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-warning {
+	color:#FFFFFF !important;
+	background-color:#945c0e !important;
+}
+
+/*Danger Button */
+/*Fails, #a62924 passes*/
+button.btn.btn-danger:active {
+	color:#d33a35 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-danger:focus {
+	color:#d33a35 !important;
+	background-color:#FFFFFF !important;
+}
+button.btn.btn-danger{
+	color:#FFFFFF !important;
+	background-color:#d33a35 !important;
+}
+
+/*Link Button*/
+/*Fails AAA, passes with #265986*/
+button.btn.btn-link:active {
+	color:#FFFFFF!important;
+	background-color:#1a6a83 !important;
+}
+button.btn.btn-link:focus {
+	color:#FFFFFF !important;
+	background-color:#1a6a83 !important;
+}
+button.btn.btn-link {
+	color:#1a6a83 !important;
+	background-color:#FFFFFF !important;
+}
