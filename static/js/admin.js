@@ -1364,6 +1364,11 @@ function update_assignment(form) {
     } else {
         data.is_peer = "F";
     }
+    if (form.peer_async_visible.checked) {
+        data.peer_async_visible = "T"
+    } else {
+        data.peer_async_visible = "F"
+    }
     data.timelimit = form.timelimit.value;
     data.description = form.description.value;
     data.assignment_id = getAssignmentId();
@@ -1426,6 +1431,7 @@ function assignmentInfo() {
             $("#nopause").val(assignmentData.nopause);
             $("#nofeedback").val(assignmentData.nofeedback);
             $("#assign_is_peer").val(assignmentData.is_peer);
+            $("#peer_async_visible").val(assignmentData.peer_async_visible);            
             if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
             } else {
@@ -1450,6 +1456,11 @@ function assignmentInfo() {
                 $("#assign_is_peer").prop("checked", true);
             } else {
                 $("#assign_is_peer").prop("checked", false);
+            }
+            if (assignmentData.peer_async_visible === true) {
+                $("#peer_async_visible").prop("checked", true);
+            } else {
+                $("#peer_async_visible").prop("checked", false);
             }
             if (assignmentData.is_timed === true) {
                 $("#assign_is_timed").prop("checked", true);

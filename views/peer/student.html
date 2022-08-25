@@ -18,7 +18,11 @@
     {{for assignment in assignments:}}
     <tr>
         <td><a href="peer_question?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+        {{if assignment.peer_async_visible:}}
         <td><a href="peer_async?assignment_id={{=assignment['id']}}">{{=assignment['name']}} (Async)</a></td>
+        {{else:}}
+        <td>Async Not Available</td>
+        {{pass}}
         <td>{{=assignment['duedate']}}</td>
         <td>{{=assignment['description']}}</td>
 

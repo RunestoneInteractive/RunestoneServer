@@ -1,0 +1,50 @@
+{{ extend "admin/instructors.html"}} {{ block tabcontent }}
+
+<div>
+    <h2>Percent Correct for {{=current_question['name']}}</h2>
+
+    <p><span id="pct_corr"></span>%</p>
+    
+</div>
+
+<script>
+    async function updatePctCorrect() {
+    // Every five seconds get the graph data
+    let data = {
+        div_id: "{{=XML(current_question['name'])}}",
+        course_name: "{{=XML(auth.user.course_name)}}",
+        start_time: startTime,
+    };
+    if (startTime2 !== null) {
+        data.start_time = startTime2;
+    }
+    let jsheaders = new Headers({
+        "Content-type": "application/json; charset=utf-8",
+        Accept: "application/json",
+    });
+    let request = new Request("/runestone/peer/percent_correct", {
+        method: "POST",
+        headers: jsheaders,
+        body: JSON.stringify(data),
+    });
+    let resp = await fetch(request);
+    let spec = await resp.json();
+    let pct_corr = document.getElementById("pct_corr");
+    pct_corr.innerHTML = spec.pct_correct
+}
+
+</script>
+<script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
+<script>
+    var user = "{{=auth.user.username}}";
+    var currentQuestion = "{{=XML(current_question.name)}}";
+    var voteNum = 1;
+    document.addEventListener("DOMContentLoaded", function (event) {
+        setInterval(updatePctCorrect, 2000, currentQuestion, voteNum);
+    });
+    var startTime = new Date().toUTCString();
+    var startTime2 = null;
+    var mess_count = 0;
+</script>
+
+{{ end }}
