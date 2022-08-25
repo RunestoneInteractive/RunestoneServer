@@ -17,7 +17,7 @@
 # ================
 [tool.poetry]
 name = "runestone_poetry_project"
-version = "6.1.0"
+version = "6.0.6"
 description = "A web2py-based server for the Runestone e-book system."
 authors = ["Brad Miller <bonelake@mac.com>", "Bryan A. Jones <bjones AT ece DOT msstate DOT edu"]
 license = "MIT"
@@ -39,7 +39,6 @@ oauth2 = ">=1.9"
 pandas = "^1.0.0"
 pathlib2 = "^2.0.0"
 Paver = ">= 1.2.4"
-pretext = "^1.0.0"
 # This is actually an rsmanage dependency. It's here so that rsmanage can be installed without installing this, which requires Postgres (available only in the container).
 pgcli = "^3.0.0"
 psycopg2-binary = "^2.0.0"
@@ -57,7 +56,7 @@ Sphinx = "> 4.1.0"
 sphinxcontrib-paverutils = ">= 1.17"
 SQLAlchemy = ">= 1.0.14"
 pyjwt = "== 2.0.1"
-
+pretext = "^1.0.0"
 
 # Development dependencies
 # ========================
