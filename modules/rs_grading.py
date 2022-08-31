@@ -191,6 +191,28 @@ def _score_one_khanex(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
+def _score_one_webwork(row, points, autograde):
+    # row is from useinfo for now -- we may want to make a webwork_answers table later
+    # the act field can be very convoluted but it willl end with: :correct:0:count:4:pct:0
+    if "act" in row:
+        parts = row.act.split(":")
+        if parts[-2] == "pct":
+            percent = float(parts[-1]) * 100
+        else:
+            logger.error("ACT field has no pct for a webwork problem")
+            percent = None
+    else:
+        return 0.0
+    if autograde == "pct_correct":
+        pct_correct = percent
+    else:
+        if percent >= 99.99:
+            pct_correct = 100
+        else:
+            pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+
 def _scorable_mchoice_answers(
     course_name,
     sid,
@@ -657,6 +679,20 @@ def _autograde_one_q(
         )
         scoring_fn = _score_one_khanex
         logger.debug("AGDB - done with khanex")
+    elif question_type == "webwork":
+        logger.debug("grading a WebWork!!")
+        results = _scorable_useinfos(
+            course_name,
+            sid,
+            question_name,
+            points,
+            deadline,
+            practice_start_time,
+            db=db,
+            now=now,
+        )
+        scoring_fn = _score_one_webwork
+        logger.debug("AGDB - done with webwork")
 
     elif question_type == "codelens":
         if (

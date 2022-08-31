@@ -57,6 +57,7 @@ AUTOGRADE_POSSIBLE_VALUES = dict(
     shortanswer=ALL_AUTOGRADE_OPTIONS,
     showeval=["interact"],
     video=["interact"],
+    webwork=ALL_AUTOGRADE_OPTIONS,
     youtube=["interact"],
 )
 
@@ -70,6 +71,7 @@ AUTOGRADEABLE = set(
         "parsonsprob",
         "quizly",
         "selectquestion",
+        "webwork",
     ]
 )
 
@@ -95,6 +97,7 @@ WHICH_TO_GRADE_POSSIBLE_VALUES = dict(
     shortanswer=ALL_WHICH_OPTIONS,
     showeval=ALL_WHICH_OPTIONS,
     video=[],
+    webwork=ALL_WHICH_OPTIONS,
     youtube=[],
 )
 
@@ -1890,6 +1893,7 @@ def _add_q_meta_info(qrow):
         "fillintheblank": "FillB ✓",
         "quizly": "Quizly ✓",
         "khanex": "KhanAcademy ✓",
+        "webwork": "WebWork ✓",
     }
     qt = qt.get(qrow.questions.question_type, "")
 
@@ -1919,6 +1923,9 @@ def _add_q_meta_info(qrow):
     requires_login=True,
 )
 def get_assignment():
+    """
+    Called when ann assignment is chosed on the assignmentn builder page
+    """
     try:
         assignment_id = int(request.vars.assignmentid)
     except (TypeError, ValueError):
