@@ -94,6 +94,7 @@ function connect(event) {
                     window.mcList[currentQuestion].enableInteraction();
                     if (typeof studentVoteCount !== "undefined") {
                         studentVoteCount += 1;
+                        if (studentVoteCount > 2) studentVoteCount = 2;
                     }
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
