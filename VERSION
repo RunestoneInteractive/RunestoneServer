@@ -1,4 +1,14 @@
-RunestoneServer-6.0.5
+RunestoneServer-6.1.2
+
+Changes Since 6.0.5
+
+- Add grading for peer assignments
+- Add grading for webwork problems
+- Add async peer instruction
+- Add canonical links to books
+- Create sitemap for better SEO
+- Infer real homepage for ptx books to avoid redirects
+- Add files so webwork problems work on assignment page
 
 Changes in 6.0.5
 
