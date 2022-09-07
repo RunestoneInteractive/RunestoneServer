@@ -182,6 +182,11 @@ input[type="button"].btn.btn-sm {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
+ /* Fix search menu button */
+ .dropdown-menu .input-group .input-group-btn button.btn {
+     font-size: 14px;
+ }
 .btn {
     margin: 5px 0;
 }
