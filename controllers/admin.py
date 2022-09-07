@@ -2765,7 +2765,7 @@ def get_assignment_list():
     course_name = request.vars.course_name
     course = db(db.courses.course_name == course_name).select().first()
     assign_list = db(db.assignments.course == course.id).select(
-        db.assignments.id, db.assignments.name, orderby=db.assignments.duedate
+        db.assignments.id, db.assignments.name, orderby=db.assignments.name
     )
     res = []
     for assign in assign_list:
