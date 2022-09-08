@@ -432,6 +432,7 @@ class BuildConfiguration(Enum):
 )
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Install LaTeX and related tools.")
+@click.option("--verilog/--no-verilog", default=False, help="Install the Icarus Verilog simulation tool.")
 def build(
     passthrough: Tuple,
     build_config_name: str,
@@ -442,6 +443,7 @@ def build(
     pic24: bool,
     rust: bool,
     tex: bool,
+    verilog: bool,
 ) -> None:
     """
     When executed outside a Docker build, build a Docker container for the Runestone webservers.
@@ -467,10 +469,11 @@ def build(
             pic24,
             rust,
             tex,
+            verilog,
         )
     # Phase 1 -- build the container.
     elif phase == "1":
-        _build_phase_1(build_config, arm, pic24, rust, tex)
+        _build_phase_1(build_config, arm, pic24, rust, tex, verilog)
     # Phase 2 - run the startup script for container.
     if phase == "2":
         base_ready_text = dedent(
@@ -483,7 +486,7 @@ def build(
         )
         get_ready_file().write_text(base_ready_text)
         try:
-            _build_phase_2_core(build_config, arm, pic24, rust, tex)
+            _build_phase_2_core(build_config, arm, pic24, rust, tex, verilog)
         except Exception:
             msg = SERVER_START_FAILURE_MESSAGE
             print_exc()
@@ -514,6 +517,7 @@ def _build_phase_0(
     pic24: bool,
     rust: bool,
     tex: bool,
+    verilog: bool,
 ) -> None:
     # If the ``clone-all`` flag is set, override the other ``clone-xxx`` flags.
     if clone_all:
@@ -672,6 +676,7 @@ def _build_phase_1(
     pic24: bool,
     rust: bool,
     tex: bool,
+    verilog: bool,
 ):
     assert in_docker()
 
@@ -808,6 +813,9 @@ def _build_phase_1(
     if rust:
         xqt(f"{apt_install} cargo")
 
+    if verilog:
+        xqt(f"{apt_install} iverilog")
+
     # Install web2py and Poetry
     # ^^^^^^^^^^^^^^^^^^^^^^^^^
     xqt(
@@ -894,6 +902,7 @@ def _build_phase_2_core(
     pic24: bool,
     rust: bool,
     tex: bool,
+    verilog: bool,
 ):
     # Check the environment.
     assert env.POSTGRES_PASSWORD, "Please export POSTGRES_PASSWORD."
