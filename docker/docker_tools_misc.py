@@ -43,22 +43,14 @@ SERVER_START_FAILURE_MESSAGE = "Failed to start the Runestone servers."
 # ``shell``
 # ---------
 @click.command()
-@click.option(
-    "--venv/--no-venv",
-    default=True,
-    help="Open a shell within the Python virtual environment for the Runestone servers.",
-)
-def shell(venv: bool) -> None:
+def shell() -> None:
     """
-    Open a Bash shell in the Docker container.
+    Open a Bash shell in the Docker container, using the Python virtual environment for the Runestone servers.
     """
     # Ask for an interactive console.
     ensure_in_docker(True)
     # Skip a check, since the user will see any failures and because this raises an exception of the last command in the shell produced a non-zero exit code.
-    if venv:
-        xqt("poetry run bash", cwd=env.RUNESTONE_PATH, check=False)
-    else:
-        xqt("bash", check=False)
+    xqt("bash", cwd=env.RUNESTONE_PATH, check=False)
 
 
 # ``start_servers``
