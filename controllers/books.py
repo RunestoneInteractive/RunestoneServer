@@ -411,68 +411,7 @@ def index():
 
     """
 
-    book_list = os.listdir("applications/{}/books".format(request.application))
-    book_list = [book for book in book_list if ".git" not in book]
-
-    res = []
-    sections = ["Computer Science"]
-    for book in sorted(book_list):
-        try:
-            # WARNING: This imports from ``applications.<runestone application name>.books.<book name>``. Since ``runestone/books/<book_name>`` lacks an ``__init__.py``, it will be treated as a `namespace package <https://www.python.org/dev/peps/pep-0420/>`_. Therefore, odd things will happen if there are other modules named ``applications.<runestone application name>.books.<book name>`` in the Python path.
-            config = importlib.import_module(
-                "applications.{}.books.{}.conf".format(request.application, book)
-            )
-        except Exception as e:
-            logger.warn(f"Error adding book {book} to library list: {e}")
-            continue
-        book_info = {}
-        book_info.update(course_description="")
-        book_info.update(key_words="")
-        if hasattr(config, "navbar_title"):
-            book_info["title"] = config.navbar_title
-        elif hasattr(config, "html_title"):
-            book_info["title"] = config.html_title
-        elif hasattr(config, "html_short_title"):
-            book_info["title"] = config.html_short_title
-        else:
-            book_info["title"] = "Runestone Book"
-        # update course description if found in the book's conf.py
-        if hasattr(config, "course_description"):
-            book_info.update(course_description=config.course_description)
-        # update course key_words if found in book's conf.py
-        if hasattr(config, "key_words"):
-            book_info.update(key_words=config.key_words)
-        if hasattr(config, "publisher") and config.publisher == "PTX":
-            bks = settings.bks
-            book_info["source"] = "PTX"
-        else:
-            bks = settings.bks
-            book_info["source"] = "Runestone"
-
-        if hasattr(config, "shelf_section"):
-            book_info["section"] = config.shelf_section
-            if config.shelf_section not in sections:
-                sections.append(config.shelf_section)
-        else:
-            book_info["section"] = "Computer Science"
-        logger.debug(f"{book} is in section {book_info['section']}")
-
-        if book_info["source"] == "Runestone":
-            book_info["url"] = "/{}/books/published/{}/index.html".format(bks, book)
-        else:
-            book_info["url"] = "/{}/books/published/{}/{}".format(
-                bks,
-                book,
-                _find_real_url(f"applications/{request.application}/books", book),
-            )
-        book_info["regname"] = book
-        sections.sort()
-        if hasattr(config, "is_private") and config.is_private == True:
-            pass
-        else:
-            res.append(book_info)
-
-    return dict(book_list=res, sections=sections)
+    redirect("/ns/books/index")
 
 
 #
