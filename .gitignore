@@ -50,6 +50,7 @@ node_modules
 !/static/images
 !/static/bootstrap*
 !/static/dashboard*
+!/static/motd.html
 .vscode/*
 *.egg-info/
 *.egg
