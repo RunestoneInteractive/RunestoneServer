@@ -295,7 +295,7 @@ def percent_correct():
     if corr == 0:
         return json.dumps({"pct_correct": "No Correct Answers"})
     else:
-        return json.dumps({"pct_correct": tot / corr * 100})
+        return json.dumps({"pct_correct": corr / tot * 100})
 
 
 #
