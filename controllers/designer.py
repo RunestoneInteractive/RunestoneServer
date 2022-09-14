@@ -34,6 +34,18 @@ def index():
         To begin, enter a project name below."""
         )
         # return dict(message=T('Welcome to CourseWare Manager'))
+        course_list = db.executesql(
+            "select * from library where for_classes = 'T' and is_visible = 'T'",
+            as_dict=True,
+        )
+        sections = set()
+        for course in course_list:
+            if course["shelf_section"] not in sections:
+                sections.add(course["shelf_section"])
+
+        basicvalues["course_list"] = course_list
+        basicvalues["sections"] = sections
+
     return basicvalues
 
 
