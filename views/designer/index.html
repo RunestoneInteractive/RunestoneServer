@@ -1,7 +1,11 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,True}} 
 
 {{extend 'layout.html'}} 
-
+<style>
+h3 {
+	color: #ab1059;
+}
+</style>
 {{if 'message' in globals():}}
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -204,7 +208,7 @@
 		</div>
 		<h3>Step 6</h3>
 		<p><i>Click Submit to create your course.</i></p>
-		<input type="submit" class="btn btn-default" value="Submit" />
+		<input type="submit" class="btn btn-default" value="Submit" style="margin-bottom: 30px;"/>
 	</form>
 </div>
 
