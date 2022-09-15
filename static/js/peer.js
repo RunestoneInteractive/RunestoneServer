@@ -37,6 +37,7 @@ function connect(event) {
             switch (mess.message) {
                 // This will be some kind of control message for the page
                 case "countDownAndStop":
+                    console.log("Got countDownAndStop message");
                     messarea = document.getElementById("imessage");
                     let count = 5;
                     let itimerid = setInterval(async function () {
@@ -45,10 +46,11 @@ function connect(event) {
                             messarea.innerHTML = `<h3>Finish Up only ${count} seconds remaining</h3>`;
                             count = count - 1;
                         } else {
+                            console.log("Timer expired clean up and get ready to chat");
                             messarea.style.color = "black";
                             // hide the discussion
                             let discPanel = document.getElementById("discussion_panel");
-                            if (discPanel) {
+                            if (discPanel && getVoteNum() > 1) {
                                 discPanel.style.display = "none";
                             }
                             let currAnswer = window.mcList[currentQuestion].answer;
@@ -89,12 +91,16 @@ function connect(event) {
                     }, 1000);
                     break;
                 case "enableVote":
+                    console.log("Got enableVote message");
                     window.mcList[currentQuestion].submitButton.disabled = false;
                     window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
                     window.mcList[currentQuestion].enableInteraction();
                     if (typeof studentVoteCount !== "undefined") {
                         studentVoteCount += 1;
-                        if (studentVoteCount > 2) studentVoteCount = 2;
+                        if (studentVoteCount > 2) {
+                            studentVoteCount = 2;
+                            console.log("WARNING: resetting studentVoteCount to 2");
+                        }
                     }
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
