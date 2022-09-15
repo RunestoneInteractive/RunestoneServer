@@ -110,6 +110,7 @@ def update_library(book):
     return True
 
 
+print("Warning -- this script will leave __pycache__ in every book folder")
 os.chdir(cwd)
 for path in cwd.iterdir():
     if path.is_dir():
