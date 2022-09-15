@@ -6,12 +6,15 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-<h3>{{=message}}</h3>
+
+<div class="col-md-8 col-md-offset-2">
+<h1>{{=message}}</h1>
 
 <p><strong>For Instructors ONLY</strong> If you are an independent learner you DO NOT need to build your own course. If you are a student and think that building your own course will show you the answers, YOU ARE WRONG.</p>
 <p>
 	This page allows you to select a book for your own class. Once you have selected and built the book, you will be able to create assignments for your students. These assignments will be published right in the book. As the instructor, You can grade your students homework, and have access to a dashboard that allows you to monitor student progress. To begin, enter a course name below. Selecting an appropriate course level will help us to recommend questions and practice exercises from the question bank.
 </p>
+</div>
 
 <script type="text/javascript">
 	function validateForm() {
@@ -61,7 +64,7 @@
 		let suggestedCourse = ""
 	
 		if ( instid ) {
-			suggestedCourse += instid.toLowerCase();
+			suggestedCourse += instid.toLowerCase().replace(/ /g,'');
 		}
 		if (basecourse) {
 			suggestedCourse += "_" + basecourse.toLowerCase();
@@ -74,13 +77,18 @@
 	
 
 </script>
-<div class="col-md-7">
+<div class="col-md-8 col-md-offset-2">
 	<form name="mainform" action="/{{=request.application}}/{{=request.controller}}/build" method="get" onsubmit="return validateForm();">
 
 		<div class="form-group row">
-			<div class="col-md-6">
+			<div class="col-md-8">
+				<h3>Step 1</h3>
+				<p><i>Tell us the name of your Institution. We may use this to verify your status as an instructor.</i></p>
 				<label for="institution">Institution (required)</label>
 				<input type="text" class="form-control" placeholder="Your school" name="institution" id="institution" onchange="suggested_course_name()" />
+				<hr />
+				<h3>Step 2</h3>
+				<p><i>Tell us approximately what level you are teaching at. This is important for research and providing you with appropriate questions.</i></p>
 				<label for="courselevel">Course Level (required)</label>
 				<select id="courselevel" class="form-control" name="courselevel">
 					<option value="unknown" disabled selected>Please Select</option>
@@ -94,9 +102,10 @@
 			</div>
 		</div>
 
-		<br />
-
 		<div class="form-group">
+			<hr />
+			<h3>Step 3</h3>
+			<p><i>Choose a book to use in your course.</i></p>
 			{{ for section in sorted(sections): }}
 			<h4>{{=section}}</h4>
 			{{ for course in course_list: }}
@@ -125,24 +134,26 @@
 			rad[i].addEventListener('change', suggested_course_name);
 		}
 		</script>	
+		<hr />
+		<h3>Step 4</h3>
 
-		<br />
-
-		<p>This is our <strong>suggestion</strong> for your course name it will be the name your students use when they register.  Feel free to change it if it does not work for you.</p>
+		<p><i>Choose a name for your course.  This is our <strong>suggestion</strong> for your course name it will be the name your students use when they register.  Feel free to change it if it does not work for you.</i></p>
 		<div class="form-group row">
 			<div class="col-md-6">
 				<label for="projectname">Course Name</label>
 				<input type="text" class="form-control" placeholder="myproject" name="projectname" id="projectname" size="50" />
 			</div>
 		</div>
-
+		<!--
 		<div class="form-group row">
 			<div class="col-md-6">
 				<label for="projectdescription">Description</label>
 				<input type="text" class="form-control" placeholder="Enter a short description" name="projectdescription" id="projectdescription" />
 			</div>
-		</div>
-
+		</div> -->
+		<hr />
+		<h3>Step 5</h3>
+		<p><i>Choose Options and set your start date.  An accurate start date is important when you copy questions from previous courses as well as for educational research.</i></p>
 		<div class="form-group">
 			<div class="checkbox">
 				<label>
@@ -191,6 +202,8 @@
 				</p>
 			</div>
 		</div>
+		<h3>Step 6</h3>
+		<p><i>Click Submit to create your course.</i></p>
 		<input type="submit" class="btn btn-default" value="Submit" />
 	</form>
 </div>
