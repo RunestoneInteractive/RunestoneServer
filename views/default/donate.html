@@ -30,18 +30,20 @@
                 <input type="radio" name="donate" id="donate20" value="20.00"> <label for="donate20">$20</label><br>
                 <input type="radio" name="donate" id="donate50" value="50.00"> <label for="donate50">$50</label><br>
                 Other: <input type="text" name="donate" id="donateother" value=""/><br>
-                <a class="btn btn-warning" href="{{=URL('index')}}" role="button">Sorry, not Today</a><br>
-                If you don't PayPal, see below for Venmo option!
+		<div style="margin-top: 15px; margin-left: 30px;">
+                  <a class="btn btn-warning" href="{{=URL('index')}}" role="button">Sorry, not Today</a>
+		  </div>
             </div>
         </div>
     </div>
 </div>
 <div id="paypal-button-container" class="col-md-8 col-md-offset-2"></div>
 
+<div class="col-md-8 col-md-offset-2" style="margin-top: 20px;">
+    <p>Note:  <i>Payment processing is handled by Paypal Inc., Runestone Academy LTD has no access to your payment information.</i></p>
+</div>
 
-
-<script src="https://www.paypal.com/sdk/js?client-id=AVsIrTPVGQOcMILmCSyfLioKBiqdTgAzC_ax74na1CZ0HZV0EPf9Vq7PDp_sWPeqNitq0yRGRYq5vjDp
-&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=ASkp77N-Kiw5GKOF_0I13P0GCW6lrnaukdVqeFykz7zBT9F-WXHRIisBsau5VEmC-vCKCzt--41kaOjb&currency=USD&intent=capture&enable-funding=venmo"></script>
 
     <script>
       const fundingSources = [
@@ -65,11 +67,27 @@
           createOrder: (data, actions) => {
             // pass in any options from the v2 orders create call:
             // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+            var amt_opts = document.getElementsByName("donate")
+            var amt = ""
+            for (let rb of amt_opts) {
+                if (rb.type === "radio" & rb.checked) {
+                    amt = rb.value
+                }
+            }
+            if (amt === "") {
+                amt = document.getElementById("donateother").value
+                let amtFloat = parseFloat(amt);
+                // amounts under a dollar are not worth processing
+                if (isNaN(amtFloat) || amtFloat < 1.0 ) {
+                    alert("Sorry we cannot accept donations under $1")
+                    return
+                }
+            }
             const createOrderPayload = {
               purchase_units: [
                 {
                   amount: {
-                    value: '88.44',
+                    value: amt,
                   },
                 },
               ],
@@ -82,6 +100,9 @@
           onApprove: (data, actions) => {
             const captureOrderHandler = (details) => {
               const payerName = details.payer.name.given_name
+              $.get("/{{=request.application}}/ajax/save_donate")
+              alert('Payment successful - Thank you! ')
+              window.location.href = "/{{=request.application}}/default"
               console.log('Transaction completed!')
             }
 
