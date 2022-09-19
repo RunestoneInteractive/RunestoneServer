@@ -1,9 +1,6 @@
 {{user_navs = True}}
 {{extend 'layout.html'}}
 
-    {{ if settings.academy_mode: }}
-    <script src="https://www.paypalobjects.com/api/checkout.js" type="text/javascript"></script>
-    {{ pass }}
 {{block statusbar}}
 {{end}}
 
@@ -39,86 +36,77 @@
         </div>
     </div>
 </div>
-<div id="paypal-button"></div>
+<div id="paypal-button-container" class="col-md-8 col-md-offset-2"></div>
 
-<div class="panel panel-default" style="text-align: center; font-size: large; width: 80%; margin-left: auto; margin-right: auto;">
-    <div class="panel-heading" >
-        <h2>Support with Venmo</h2>
-    </div>
-    <div class="panel panel-body">
-    <p style="padding: 5px;">For your Convenience you can also <strong>Venmo</strong> your support to @RunestoneInteractive
-        <button type="button" class="btn btn-info btn-sm" onclick="venmosupport()">I have Venmo'd my Support</button>
-    </p>
-    </div>
-</div>
 
-<script>
-    paypal.Button.render({
-      env: 'production', // Or 'sandbox', 'production'
-      client: {
-          sandbox: 'AVsIrTPVGQOcMILmCSyfLioKBiqdTgAzC_ax74na1CZ0HZV0EPf9Vq7PDp_sWPeqNitq0yRGRYq5vjDp',
-          production: 'ASkp77N-Kiw5GKOF_0I13P0GCW6lrnaukdVqeFykz7zBT9F-WXHRIisBsau5VEmC-vCKCzt--41kaOjb'
-      },
 
-      commit: true, // Show a 'Pay Now' button
+<script src="https://www.paypal.com/sdk/js?client-id=AVsIrTPVGQOcMILmCSyfLioKBiqdTgAzC_ax74na1CZ0HZV0EPf9Vq7PDp_sWPeqNitq0yRGRYq5vjDp
+&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
 
-      style: {
-        color: 'blue',
-        size: 'responsive',
-        layout: 'vertical'
-      },
+    <script>
+      const fundingSources = [
+        paypal.FUNDING.PAYPAL,
+          paypal.FUNDING.VENMO,
+          paypal.FUNDING.CARD
+        ]
 
-      payment: function(data, actions) {
-        var amt_opts = document.getElementsByName("donate")
-        var amt = ""
-        for (let rb of amt_opts) {
-            if (rb.type === "radio" & rb.checked) {
-                amt = rb.value
+      for (const fundingSource of fundingSources) {
+        const paypalButtonsComponent = paypal.Buttons({
+          fundingSource: fundingSource,
+
+          // optional styling for buttons
+          // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+          style: {
+            shape: 'rect',
+            height: 40,
+          },
+
+          // set up the transaction
+          createOrder: (data, actions) => {
+            // pass in any options from the v2 orders create call:
+            // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+            const createOrderPayload = {
+              purchase_units: [
+                {
+                  amount: {
+                    value: '88.44',
+                  },
+                },
+              ],
             }
+
+            return actions.order.create(createOrderPayload)
+          },
+
+          // finalize the transaction
+          onApprove: (data, actions) => {
+            const captureOrderHandler = (details) => {
+              const payerName = details.payer.name.given_name
+              console.log('Transaction completed!')
+            }
+
+            return actions.order.capture().then(captureOrderHandler)
+          },
+
+          // handle unrecoverable errors
+          onError: (err) => {
+            console.error(
+              'An error prevented the buyer from checking out with PayPal',
+            )
+          },
+        })
+
+        if (paypalButtonsComponent.isEligible()) {
+          paypalButtonsComponent
+            .render('#paypal-button-container')
+            .catch((err) => {
+              console.error('PayPal Buttons failed to render')
+            })
+        } else {
+          console.log('The funding source is ineligible')
         }
-        if (amt === "") {
-            amt = document.getElementById("donateother").value
-        }
-        return actions.payment.create({
-                payment: {
-                    transactions: [
-                        {
-                            amount: { total: amt, currency: 'USD' }
-                        }
-                    ]
-                }
-            });
-      },
-
-      onAuthorize: function(data, actions) {
-        return actions.payment.execute().then(function(payment) {
-
-                // The payment is complete!
-                // You can now show a confirmation message to the customer
-            $.get("/{{=request.application}}/ajax/save_donate")
-            alert('Payment successful - Thank you! ')
-            window.location.href = "/{{=request.application}}/default"
-            });
-      },
-
-      onCancel: function(data, actions) {
-        /*
-         * Buyer cancelled the payment
-         */
-      },
-
-      onError: function(err) {
-        /*
-         * An error occurred during the transaction
-         */
       }
-    }, '#paypal-button');
-
-    function venmosupport() {
-        $.get("/{{=request.application}}/ajax/save_donate");
-        window.location.href = "/{{=request.application}}/default";
-    }
-</script>
+    </script>
 
 {{ if request.args: }}
 <script>
