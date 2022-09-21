@@ -546,7 +546,8 @@ def get_async_explainer():
                 done = True
             else:
                 tries += 1
-        mess = _get_user_messages(user, div_id, course_name)
+        mess, participants = _get_user_messages(user, div_id, course_name)
+        participants.remove(user)
     else:
         messages = db(
             (db.useinfo.event == "sendmessage")
@@ -562,15 +563,22 @@ def get_async_explainer():
                 peer_answer = _get_user_answer(div_id, user)
                 if peer_answer != this_answer:
                     done = True
+
                 else:
                     tries += 1
-            mess = _get_user_messages(user, div_id, course_name)
+            mess, participants = _get_user_messages(user, div_id, course_name)
         else:
             mess = "Sorry there were no good explanations for you."
             user = "nobody"
+            participants = set()
 
+    responses = {}
+    for p in participants:
+        responses[p] = _get_user_answer(div_id, p)
     logger.debug(f"Get message for {div_id}")
-    return json.dumps({"mess": mess, "user": user, "answer": peer_answer})
+    return json.dumps(
+        {"mess": mess, "user": user, "answer": peer_answer, "responses": responses}
+    )
 
 
 def _get_user_answer(div_id, s):
@@ -601,9 +609,11 @@ def _get_user_messages(user, div_id, course_name):
     ).select(orderby=db.useinfo.id)
     user = messages[0].sid
     mess = "<ul>"
+    participants = set()
     for row in messages:
         mpart = row.act.split(":")[2]
         mess += f"<li>{row.sid} said: {mpart}</li>"
+        participants.add(row.sid)
     mess += "</ul>"
 
-    return mess
+    return mess, participants

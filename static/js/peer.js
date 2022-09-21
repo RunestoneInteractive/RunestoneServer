@@ -398,7 +398,13 @@ async function showPeerEnableVote2() {
     let spec = await resp.json();
     let peerMess = spec.mess;
     let peerNameEl = document.getElementById("peerName");
-    peerNameEl.innerHTML = `User ${spec.user} answered ${answerToString(spec.answer)}`;
+    // iterate over responses
+    let res = "";
+    for (let response in spec.responses) {
+        res += `User ${response} answered ${answerToString(spec.responses[response])} <br />`;
+    }
+    //peerNameEl.innerHTML = `User ${spec.user} answered ${answerToString(spec.answer)}`;
+    peerNameEl.innerHTML = res;
     let peerEl = document.getElementById("peerJust");
     peerEl.innerHTML = peerMess;
     let nextStep = document.getElementById("nextStep");
