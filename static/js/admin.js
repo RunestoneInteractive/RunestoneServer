@@ -940,8 +940,10 @@ function TA_search() {
         var text = $("#TA_search").val();
         if (name.includes(text.toUpperCase())) {
             elements[i].style.display = "block";
+            elements[i].disabled = false;
         } else {
             elements[i].style.display = "none";
+            elements[i].disabled = true;
         }
     }
 }
