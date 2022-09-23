@@ -54,6 +54,7 @@
         </form>
     </div>
 </div>
+    <p>Please do not leave or refresh the page during a peer instruction session.  <strong>Exception:</strong> If you should have seen a new question at this point then you may continue.</p>
 
 <script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
 <script>
@@ -66,4 +67,17 @@
         }, 1000);
     });
     var studentVoteCount = 1;
+    $(window).on(
+        "beforeunload",
+        function (event) {
+            // this actual value gets ignored by newer browsers
+            if (this.done) {
+                return;
+            }
+            event.preventDefault();
+            event.returnValue =
+                "Please do not leave or refresh the page during a peer instruction session.";
+            return "Please do not leave or refresh the page during a peer instruction session.  Exception: If you should have seen a new question at this point then you may continue.";
+        }.bind(this)
+    );
 </script>
