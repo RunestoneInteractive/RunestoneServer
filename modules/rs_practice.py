@@ -300,4 +300,5 @@ def _get_qualified_questions(base_course, chapter_label, sub_chapter_label, db):
             )
         )
         & (db.questions.practice == True)  # noqa: E712
+        & (db.questions.review_flag == False)
     ).select()
