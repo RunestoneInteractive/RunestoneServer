@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]
+  then
+    echo "Usage:  install_new_image.sh <release no>"
+    exit
+fi
+
 set -e
 
 cd /home/bmiller/Runestone/RunestoneServer/production
@@ -11,7 +17,7 @@ fi
 
 # pull the latest
 git pull
-docker pull registry.digitalocean.com/runestone-registry/production_server:latest
+docker pull registry.digitalocean.com/runestone-registry/production_server:version$1
 
 docker compose stop
 docker compose up -d
