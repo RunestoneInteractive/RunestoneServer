@@ -21,6 +21,10 @@ h5 {
     white-space: pre;
 }
 
+div#component-preview {
+    background: white;
+}
+
 /* navbar and menu related styles */
 @media (max-width: 768px) {
 
