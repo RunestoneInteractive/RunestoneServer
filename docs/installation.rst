@@ -3,7 +3,7 @@ Manual Installation
 
 .. warning::
 
-   Note: These are the instructions for installing Runestone Server by hand environment. There are also `simpler Docker based instructions <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_ available.
+   Note: These are the instructions for installing Runestone Server by hand environment. There are also `simpler Docker based instructions <https://runestoneserver.readthedocs.io/en/latest/docker/README.html>`_ available.  I **strongly** recommend you use Docker.  I have not tested these instructions in over two years and they are out of date.  For example we no longer have a requirements-dev.txt file it has been replaced by pyproject.toml and poetry.lock files.  Those files themselves are tailored to a docker environment.  Really it is much simpler to use docker for all this and you don't lose anything in terms of development speed.
 
 
 #. Install python.
