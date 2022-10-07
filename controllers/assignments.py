@@ -1206,13 +1206,18 @@ def practice():
         # present the next one in the list after the last one that was asked
         question = questions[(qIndex + 1) % len(questions)]
 
-        # This replacement is to render images
-        question.htmlsrc = question.htmlsrc.replace(
-            'src="../_static/', 'src="' + get_course_url("_static/")
-        )
-        question.htmlsrc = question.htmlsrc.replace(
-            "../_images/", get_course_url("_images/")
-        )
+        if question.htmlsrc:
+            # This replacement is to render images
+            question.htmlsrc = question.htmlsrc.replace(
+                'src="../_static/', 'src="' + get_course_url("_static/")
+            )
+            question.htmlsrc = question.htmlsrc.replace(
+                "../_images/", get_course_url("_images/")
+            )
+        else:
+            logger.error(
+                f"NO HTML SOURCE for question {question.id}, {question.name} sid: {auth.user.username}"
+            )
 
         autogradable = 1
         # If it is possible to autograde it:
