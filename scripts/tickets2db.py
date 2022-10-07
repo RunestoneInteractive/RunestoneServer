@@ -4,7 +4,9 @@
 import datetime
 import hashlib
 import os
+import pathlib
 import pickle
+import shutil
 import stat
 import sys
 import time
@@ -16,6 +18,8 @@ from sqlalchemy.orm.session import sessionmaker
 SLEEP_MINUTES = 5
 
 errors_path = os.path.join(request.folder, "errors")
+tickets_path = pathlib.Path(request.folder, "books", "tickets")
+tickets_path.mkdir(exist_ok=True)
 
 if os.environ["WEB2PY_CONFIG"] == "production":
     db_string = os.environ["DBURL"]
@@ -75,6 +79,6 @@ while 1:
         )
         sess.execute(newtb)
         sess.commit()
-        os.unlink(filename)
+        shutil.move(filename, tickets_path)
 
     time.sleep(SLEEP_MINUTES * 60)
