@@ -1,11 +1,5 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]
-  then
-    echo "Usage:  install_new_image.sh <release no>"
-    exit
-fi
-
 set -e
 
 cd /home/bmiller/Runestone/RunestoneServer/production
