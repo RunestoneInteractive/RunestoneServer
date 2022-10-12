@@ -78,7 +78,10 @@ Finally, follow the directions for Linux below.
 
 Linux
 ^^^^^
-If running on Linux, you must use Ubuntu 20.04 (although any version of Ubuntu 18.0+ should work). Installation on older versions of Ubuntu or other Linux distributions may require adjustments. Install ``curl`` by opening a terminal then typing:
+If running on Linux, you must use Ubuntu 20.04 (although any version of Ubuntu 18.0+ should work). Installation on older versions of Ubuntu or other Linux distributions may require adjustments. I am a fan
+of digital ocean droplets and I would recommend starting out with a Docker droplet from their Marketplace.  This will save you a few steps.  You can of course use AWS or Linode or any other provider, but I know DO the best.  **Sizing Virtual Machines:** You will want to make sure that you have at least 1 GB of RAM as parts of the install process do use quite a bit of memory.  If you are going to use this for several classes I would recommend 2 GB.  If you are teaching courses that will involve compiling Java, C, or C++ then I would recommend a configuration that includes 4 cpus as well as 4 GB of RAM.
+
+ Install ``curl`` by opening a terminal then typing:
 
 .. code:: bash
 
@@ -108,7 +111,7 @@ Download the bootstrap script. To do this, open a terminal in Ubuntu or OS X the
 
     On Windows using Ubuntu under WSL2: if you see the error message "Docker Desktop not detected..." when running either command below, but you are running the Docker Desktop, then click the gear (settings) icon in Docker Desktop, select Resources then WSL Integration, and make sure the switch next to Ubuntu is turned on.
 
-The next step, which installs required dependencies for the remainder of the process, depends on the two mutually exclusive use cases below. **Remember which use case you select** (either *production* or *development*); many of the following steps vary based on your use case.
+The next step, which installs required dependencies for the remainder of the process, depends on the two mutually exclusive use cases below. **Remember which use case you select** (either *production* or *development*); many of the following steps vary based on your use case.  **Note** if you are just kicking the tires on a Runestone Server you should use *production* not *test* or *development*.  The *test* mode is for our testing of the server by running 100's of unit tests.
 
 Production use case
 ^^^^^^^^^^^^^^^^^^^
