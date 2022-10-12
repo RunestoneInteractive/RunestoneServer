@@ -33,12 +33,15 @@ def _get_practice_data(user, timezoneoffset, db):
     practice_settings = db(db.course_practice.course_name == user.course_name)
     if (
         practice_settings.isempty()
-        or practice_settings.select().first().end_date is None
+        or practice_settings.select(orderby=~db.course_practice.id).first().end_date
+        is None
     ):
         practice_message1 = "Practice tool is not set up for this course yet."
         practice_message2 = "Please ask your instructor to set it up."
     else:
-        practice_settings = practice_settings.select().first()
+        practice_settings = practice_settings.select(
+            orderby=~db.course_practice.id
+        ).first()
         practice_start_date = practice_settings.start_date
         flashcard_creation_method = practice_settings.flashcard_creation_method
         # Calculates the remaining days to the end of the semester.
