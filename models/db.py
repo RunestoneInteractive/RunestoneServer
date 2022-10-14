@@ -687,3 +687,8 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
 
     # decode here decodes the byte str to a normal str not the token
     return encoded_jwt
+
+
+# This **may** be a workaround for the bad urls in email resets
+if os.environ.get("LOAD_BALANCER_HOST", "") == "runestone.academy":
+    request.env.wsgi_url_scheme = "https"
