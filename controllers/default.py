@@ -289,6 +289,10 @@ def ack():
     return dict()
 
 
+def start():
+    return dict()
+
+
 @auth.requires_login()
 def bio():
     existing_record = db(db.user_biography.user_id == auth.user.id).select().first()

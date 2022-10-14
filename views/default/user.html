@@ -22,7 +22,7 @@
 
     {{if (request.args(0) != 'register'):}}
 
-        <div class="row">
+        <div class="row rsheading">
           {{ if settings.academy_mode: }}
             <!-- Carousel
             ================================================== -->
@@ -32,9 +32,9 @@
             {{else: }}
                 <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel"  style="margin-bottom: 50px;">
             {{ pass }}
-            <p style="text-align: center;">
+            <div class="col-md-4 col-md-offset-2" style="text-align: center;">
                 <img src="/static/images/logo_small.png" width="400" style="margin: auto;" alt="Runestone Logo" >
-            </p>
+            </div>
             </div><!-- /.carousel -->
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
@@ -43,10 +43,10 @@
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
           {{ if not auth.user or request.args(0) == 'impersonate': }}
-              <h4 class="col-md-4">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+              <h4 class="col-md-4 col-md-offset-1">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
           {{ pass }}
           {{ if request.args(0) == 'login' and not auth.user: }}
-                <div id="web2py_user_form" class="col-md-4">
+                <div id="web2py_user_form" class="col-md-4 col-md-offset-1">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
                             <div class="form-group">
@@ -108,9 +108,9 @@
 
 
             {{if request.args(0) in ['retrieve_username', 'profile', 'request_reset_password', 'reset_password', 'change_password']: }}
-                <div class="content row">
-                    
-                <div id="web2py_user_form" class="col-md-6 col-sm-6 col-xs-12">
+                <div class="rsheading">
+
+                <div id="web2py_user_form" class="col-md-4 col-sm-6 col-xs-12 col-md-offset-1">
                     <p><strong>Important:</strong>  Some school email systems block all external emails, filter "password reset" type emails, or use other filters that may prevent you from getting this email! <strong>Your instructor can reset your password.</strong></p>
                     {{=form}}
                     {{ if settings.academy_mode and request.args(0) == 'profile':}}
@@ -129,6 +129,7 @@
                     {{pass}}
 
                 </div>
+                <!--
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <h4>Course IDs for open courses</h4>
                     <p>If your instructor gave you the name of a course to register for, type that into the Course Name box. If you are learning on your own you can use one of the courses listed below. All are welcome!</p>
@@ -156,6 +157,7 @@
                             <li>webfundamentals</li>
                     </ul>
                 </div>
+            -->
                 </div>
             {{pass}}
           {{else:}}
@@ -326,56 +328,137 @@
         {{pass}} <!-- end register page -->
         <div class="row">
         {{if (request.args(0) != 'register') and settings.academy_mode:}}
-                <div class='col-md-6 col-sm-12 col-xs-12'>
-                    <h2>About</h2>
-                    <p>The mission of Runestone Academy is to democratize textbooks for the 21st century.  Textbook prices are too high, and paper textbooks are too old fashioned.  We are changing that.  Runestone Academy Provides:</p>
-                    <ul>
-                        <li>Many Freely available open source books for CS and Mathematics</li>
-                        <li>Easy to use authoring tools to create Runestone books</li>
-                        <li>Hosting services for your course - See our <a href="https://runestone.academy/ns/books/published/instructorguide/index.html">Instructor Guide</a></li>
+                <div class='col-md-8 col-md-offset-2 col-sm-offset-0 mission'>
+                    <h2>Our Mission</h2>
+                    <p>The mission of Runestone Academy is to <i>democratize textbooks for the 21st century.</i>  To accomplish that mission we make high quality interactive textbooks available for free to <strong>all students.</strong>  In the 21st century it is silly to ignore the wonderful possibilities for interactivity in a web browser, so we make great interactive textbooks that engage students in learning.  It would also be silly to ignore the rich data that an online textbook can provide to <strong>teachers, authors and researchers.</strong>  To support these different stakeholders we have built a Learning Engineering and Analytics Portal (LEAP).</p>
+                    <details>
+                        <summary>What is a LEAP?</summary>
+                    <ul class="simple">
+                    <li><p><strong class="big">Learning Engineering</strong> is the systematic application of evidence-based principles and methods from educational technology and the learning sciences to create engaging and effective learning experiences, support the difficulties and challenges of learners as they learn, and come to better understand learners and learning.  Everything we do on Runestone Academy takes this engineering approach to continuous improvement.</p></li>
+                    <li><p><strong class="big">Analytics</strong> As an instructor it is key to understand which of your students is struggling, which of them are working hard, which of them are successful or not.  Runestone lets you quickly look at a dashboard of student progress to help you decide how to spend your classroom time most effectively.  As a  researcher or author you want to know what parts of your book are read the most, which questions are effective and which are duds that should be replaced or fixed to make them better.</p></li>
+                    <li><p><strong class="big">Portal</strong>: Runestone Academy is a portal for online textbooks, students can interact with our books on any device for free.  Runestone Academy is a portal for teachers who want to create a course, grade their students work, and monitor their progress all in one place.  Runestone Acaademy is a portal for authors and researchers who want to invent new pedagogical strategies and try them out on lots of students while gaining access to anonymous information to help them better understand how students learn.</p></li>
                     </ul>
-                    <p>To learn more about interactive textbooks <a href="https://runestone.academy/ns/books/published/overview/overview.html">Check out our Demo Book</a>. </p>
-                    <p>Runestone Academy Ltd is a non-profit corporation, 501(c)(3) status pending.</p>
-                    <h4>New Teachers</h4>
-                    <p><p>Here is a <a href="https://youtu.be/t78ktTWrGkc">Short Video</a> that will help you get started.  For details on specific tasks in Runestone try this <a href="https://www.youtube.com/playlist?list=PLnjfglXW2QQSVCuOj4VsdmWTRAfQy6Zrb">Workshop Playlist</a> </p>
+                    </details>
+                    <p>We have partnered with the <strong class="big"><a class="reference external" href="https://pretextbook.org">PreTeXt project</a></strong> to provide an outstanding authoring tool to create interactive textbooks.  And not only interactive textbooks in HTML but highly accessible textbooks in many formats including ePub, PDF, and braille.</p>
+                    <p>Runestone Academy LTD operates as a non-profit.  We are awaiting official 501(c)(3) approval from the IRS.</p>
+                    <details>
+                        <summary>How many ways is Runestone "free?"</summary>
+                        <ul>
+                            <li>No-cost textbook hosting. You can be up and running in minutes with no local IT involvement!</li>
+                            <li>Ad-free textbooks when logged in.  Yes, you might see some ads when you are poking around.  We serve ads to un-registered users to help cover our costs.</li>
+                            <li>Freedom from slimy ways of monitizing your personal information.</li>
+                            <li>Freedom to change and modify textbooks.  All textbooks on Runestone are Open Source either GNU-FDL or Creative Commons.</li>
+                            <li>Freedom to run your own server or change the server code.  All of our code carries an MIT open source license.</li>
+                        </ul>
+                    </details>
+                    <p style="text-align: center;">Help me <a role="button" class="btn btn-primary" href="/runestone/default/start">Get Started</a></p>
+                </div>
+                <style>
+                    .partnertable td {
+                        padding: 5px;
+                    }
+                    .mission {
+                        margin-top: 20px;
+                        border-style: solid;
+                        border-width: 3px;
+                        border-radius: 10px;
+                        background-color: #fef7ec;
+                        font-size: medium;
+                    }
+                    .mission h2,
+                    .partners h2 {
+                        text-align: center;
+                    }
+                    strong.big {
+                        font-size: larger;
+                    }
+                    div.container {
+                        background-color: #eeeeee;
+                    }
+                    div.content {
+                        margin-top: 10px;
+                        background-color: #9ac5da;
+                        border-radius: 10px;
+                    }
+                    div.rsheading {
+                        background-color: #251051;
+                        padding-bottom: 10px;
+                        border-radius: 10px;
+                    }
+                    .rsheading label,
+                    .rsheading h4,
+                    .rsheading p {
+                        color: white;
+                    }
+                    /* work around bug in bootstrap 3 */
+                    summary {
+                        display: list-item;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                        margin-top: -10px;
 
+                    }
+                    summary:hover {
+                        cursor: pointer;
+                    }
+                    div.partners {
+                        margin-top: 20px;
+                        background-color: #251051;
+                        padding-bottom: 10px;
+                        border-radius: 10px;
+                        border-width: 3px;
+                        border-color: black;
+                        border-style: solid;
+                        color: white;
+                    }
+                    .partners a {
+                        color: white;
+                    }
+                </style>
 
                     {{if settings.academy_mode:}}
-                    <hr>
-                        <h2>Your Privacy</h2>
-                        <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part
-                            of our educational mission we do collect usage data to help us better understand how you learn and how you
-                            use our
-                            books. In exchange, we may use this data to make decisions about revisions to the content, and we may use
-                            this data to publish
-                            academic papers. We would never publish anything that revealed your identity. We may share this data with
-                            fellow
-                            educational researchers, but rest assured that all personally identifying information will be anonymized
-                            before we do.
-                            If you have questions about this please feel free to <a
-                                    href="mailto:runestoneinteractive@gmail.com">contact</a> us.
-                            <strong>High School Teachers</strong>  please read <a href="https://blog.runestone.academy/2021/05/28/data_privacy_agreements.html">This letter</a> before asking the Runestone Academy to sign a contract.
-                        </p>
+
+                        <div class="row">
+                        <div class="col-md-offset-2 col-md-8 partners">
+                        <h2>Partners and Supporters</h2>
+                        <table class="partnertable">
+                            <tr>
+                                <td class="col-md-4"><a href="https://pretextbook.org"><img src="/runestone/static/_images/ptx-logo.png" width=64 alt="PreTeXt Logo"> <span style="font-size: x-large">PreTeXt</span></a></td>
+                                <td class="col-md-4"><a href="https://www.si.umich.edu"><img src="/runestone/static/_images/U-M-logo-preview.jpg" width=64 alt="UMSI Logo"></a>School of Information</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4"><img src="/runestone/static/_images/nsf-logo.png" width=64 alt="NSF Logo">PROSE - NSF Award #2230153</td>
+                                <td class="col-md-4"><img src="https://blog.runestone.academy/_static/_images/NCCSELogo.png" width=64 alt="SIGCSE logo">CSAwesome and MobileCSP</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4"><img src="/runestone/static/_images/SIGCSE-logo-large.jpg" width=64 alt="SIGCSE logo"> Special Projects Grant 2013</td>
+                                <td class="col-md-4"><img src="https://blog.runestone.academy/_static/_images/berea.png" width=64 alt="NSF Logo">Summer Intern Program</td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4"><img src="/runestone/static/_images/Texas__oneColor_orange.png" alt="UTexas Logo"></td>
+                                <td class="col-md-4"><a href="https://www.luther.edu"><img src="/runestone/static/_images/luther_college_vertical_blue.png" width=64 alt="Luther Logo (Go Norse!)" style="background-color: white; padding: 3px;"></a> Summer Student Faculty Research</td>
+                            </tr>
+                        </table>
+
+                        </div>
+                        </div>
+
                     {{pass}}
 
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-6">
-                    <h2>How can I help?</h2>
-                    <p>This project is free and open source. We would like to grow 
+                <div class="col-md-8 col-md-offset-2 mission">
+                <h2>Your Privacy</h2>
+                <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part of our educational mission we do collect usage data to help us better understand how you learn and how you use our books. In exchange, we may use this data to make decisions about revisions to the content, and we may use this data to publish academic papers. We would never publish anything that revealed your identity. We may share this data with fellow educational researchers, but rest assured that all anything we share is fully de-identified. Please read our full <a href="/runestone/default/privacy">Privacy Policy</a>.  Also you may be interested in our <a href="/runestone/default/terms">Terms of Service</a>. <strong>High School Teachers</strong>  please read <a href="https://blog.runestone.academy/2021/05/28/data_privacy_agreements.html">This letter</a> before asking the Runestone Academy to sign a contract.                         </p>
+                </div>
+                <div class="col-md-8 col-md-offset-2 mission" style="margin-bottom: 20px;">
+                    <h2>Get Involved</h2>
+                    <p>This project is free and open source. We would like to grow
                         and add support staff, authors, and developers.  This takes time, money, and volunteers.
-                        We welcome your help with code, editing, bug fixes almost anything you can think of.  Join us on <a href="https://github.com/RunestoneInteractive">GitHub</a> </p>
-                    <p>We also welcome your monetary suppport.  If these books have helped you, please consider making a small donation. Any amount is welcome!
+                        We welcome anyone, no matter your skill set.  We need authors, editors, coders, reviewers, bug reporters, community builders, pick your role!  Join us on <a href="https://github.com/RunestoneInteractive">GitHub</a> or in our <a href="https://discord.gg/f3Qmbk9P3U">Discord Server</a> </p>
+                    <p>We also welcome your financial suppport.  If Runestone Academy has helped you, please consider making a small donation. Any amount is welcome!
                             Make a one-time donation <a href="{{=URL("default","donate")}}"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" alt="PayPal - The safer, easier way to pay online!"></a> or
                         <a href="https://www.patreon.com/bePatron?u=19581921">Become a Patron!</a>
                     </p>
-                    <hr>
-                    <h2>Partners and Supporters</h2>
-                    <p><a href="https://pretextbook.org"><img src="/runestone/static/_images/ptx-logo.png" width=64 alt="PreTeXt Logo"> <span style="font-size: x-large">PreTeXt</span></a></p>
-                    <p><a href="https://www.si.umich.edu"><img src="/runestone/static/_images/U-M-logo-preview.jpg" width=64 alt="UMSI Logo"></a>School of Information</p>
-                    <p><img src="/runestone/static/_images/SIGCSE-logo-large.jpg" width=64 alt="SIGCSE logo"> Special Projects Grant 2013</p>
-                    <p><img src="/runestone/static/_images/nsf-logo.png" width=64 alt="NSF Logo"> REU Support Summers 2014-2017</p>
-                    <p><img src="/runestone/static/_images/Texas__oneColor_orange.png" alt="UTexas Logo"></p>
-                    <p><a href="https://www.luther.edu"><img src="/runestone/static/_images/luther_college_vertical_blue.png" width=64 alt="Luther Logo (Go Norse!)"></a> Summer Student Faculty Research</p>
 
                 </div>
             </div>
