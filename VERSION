@@ -1,4 +1,10 @@
-RunestoneServer-6.1.5
+RunestoneServer-6.1.6
+
+Changes since 6.1.5
+- New homepage
+- Workaround for the non-https link web2py creates for password resets.  Should be https now.
+- Fix in bookserver for PreTeXt books that were not updating the activity bar
+- Use the latest practice settings if the DB contains duplicates
 
 Changes since 6.1.4
 - Fix: potential crasher in practice if a question is missing htmlsrc
