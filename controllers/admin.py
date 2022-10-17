@@ -171,13 +171,13 @@ def practice():
     course_start_date = course.term_start_date
 
     start_date = course_start_date + datetime.timedelta(days=13)
-    end_date = ""
+    end_date = start_date + datetime.timedelta(weeks=12)  # provide a reasonable default
     max_practice_days = 50
     max_practice_questions = 500
     day_points = 2
     question_points = 0.2
     questions_to_complete_day = 10
-    flashcard_creation_method = 0
+    flashcard_creation_method = 2
     graded = 1
     spacing = 0
     interleaving = 0
@@ -192,14 +192,20 @@ def practice():
     error_graded = 0
 
     already_exists = 0
-    any_practice_settings = db(db.course_practice.auth_user_id == auth.user.id)
+    any_practice_settings = db(
+        (db.course_practice.auth_user_id == auth.user.id)
+        | (db.course_practice.course_name == course.course_name)
+    )
+
     practice_settings = any_practice_settings(
         db.course_practice.course_name == course.course_name
     )
     # If the instructor has created practice for other courses, don't randomize spacing and interleaving for the new
     # course.
     if not any_practice_settings.isempty():
-        any_practice_settings = any_practice_settings.select().first()
+        any_practice_settings = any_practice_settings.select(
+            orderby=~db.course_practice.id
+        ).first()
         spacing = any_practice_settings.spacing
         interleaving = any_practice_settings.interleaving
 
@@ -207,10 +213,18 @@ def practice():
         #  If not, stick with the defaults.
         if (
             not practice_settings.isempty()
-            and practice_settings.select().first().end_date is not None
-            and practice_settings.select().first().end_date != ""
+            and practice_settings.select(orderby=~db.course_practice.id)
+            .first()
+            .end_date
+            is not None
+            and practice_settings.select(orderby=~db.course_practice.id)
+            .first()
+            .end_date
+            != ""
         ):
-            practice_setting = practice_settings.select().first()
+            practice_setting = practice_settings.select(
+                orderby=~db.course_practice.id
+            ).first()
             start_date = practice_setting.start_date
             end_date = practice_setting.end_date
             max_practice_days = practice_setting.max_practice_days
@@ -228,7 +242,7 @@ def practice():
             spacing = 1
         if randint(0, 1) == 1:
             interleaving = 1
-    if practice_settings.isempty():
+    if practice_settings.isempty():  # If there are no settings for THIS course
         db.course_practice.insert(
             auth_user_id=auth.user.id,
             course_name=course.course_name,
