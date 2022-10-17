@@ -598,6 +598,10 @@ def wisp():
     return dict(wisp={})
 
 
+def ads():
+    return dict(wisp={})
+
+
 def ct_addendum():
     return dict(private={})
 
