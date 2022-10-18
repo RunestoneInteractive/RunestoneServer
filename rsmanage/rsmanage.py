@@ -400,7 +400,7 @@ def build(config, clone, ptx, gen, manifest, course):
         res = _build_ptx_book(config, gen, manifest, course)
 
     else:
-        res = _build_runestone_book(course)
+        res = _build_runestone_book(config, course)
 
     if res:
         click.echo("Build Succeeded")
@@ -830,8 +830,8 @@ def studentinfo(config, student):
 
     res = eng.execute(
         f"""
-        select auth_user.id, first_name, last_name, email, courses.course_name, courses.id 
-        from auth_user join user_courses ON user_courses.user_id = auth_user.id 
+        select auth_user.id, first_name, last_name, email, courses.course_name, courses.id
+        from auth_user join user_courses ON user_courses.user_id = auth_user.id
         join courses on courses.id = user_courses.course_id where username = '{student}'"""
     )
     print(f"res = {res}")
