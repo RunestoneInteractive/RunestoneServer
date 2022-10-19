@@ -1,5 +1,5 @@
-{{extend 'layout.html'}} 
-{{block moreincludes}} 
+{{extend 'layout.html'}}
+{{block moreincludes}}
 {{include '_sphinx_static_files.html'}}
 {{end}}
 
@@ -47,9 +47,17 @@
     });
     var studentVoteCount = 1;
     var nextQuestionNumber = {{= nextQnum}};
+    var assignId = '{{=assignment_id}}'
 
     // this cannot happen until the event that indicates components are loaded
     $(document).on("runestone:login-complete", function () {
+        logPeerEvent({
+            sid: eBookConfig.username,
+            div_id: `${assignId}`,
+            event: "peer",
+            act: "start_async",
+            course: eBookConfig.course,
+        })
         setTimeout(function () {
             $(window.mcList[currentQuestion].submitButton).click(function () {
                 if (studentVoteCount == 1) {
