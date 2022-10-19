@@ -1433,7 +1433,7 @@ function assignmentInfo() {
             $("#nopause").val(assignmentData.nopause);
             $("#nofeedback").val(assignmentData.nofeedback);
             $("#assign_is_peer").val(assignmentData.is_peer);
-            $("#peer_async_visible").val(assignmentData.peer_async_visible);            
+            $("#peer_async_visible").val(assignmentData.peer_async_visible);
             if (assignmentData.visible === true) {
                 $("#assign_visible").prop("checked", true);
             } else {
@@ -1897,6 +1897,11 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     if (typeof moreOpts === "undefined") {
         moreOpts = {};
     }
+    var author = null;
+    if ("author" in moreOpts) {
+        author = moreOpts.author;
+        delete moreOpts.author;
+    }
     patt = /..\/_images/g;
     componentSrc = componentSrc.replace(
         patt,
@@ -1911,7 +1916,7 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     let componentKind = $($(`#${whereDiv} [data-component]`)[0]).data("component");
     // webwork problems do not have a data-component attribute so we have to try to figure it out.
     //
-    if (! componentKind && 
+    if (! componentKind &&
         (componentSrc.indexOf("handleWW") >= 0) || (componentSrc.indexOf("webwork") >= 0)) {
         componentKind = "webwork";
     }
@@ -1963,6 +1968,11 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
                 "orig_divid",
                 opt.acid || moreOpts.acid || opt.orig.id
             ); // save the original divid
+            if (author) {
+                let authorInfo = document.createElement("p");
+                authorInfo.innerHTML = `Written by: ${author}`
+                $(`#${whereDiv}`).append(authorInfo);
+            }
             let editButton = document.createElement("button");
             let constrainbc = document.getElementById("qbankform").constrainbc.checked;
             $(editButton).text("Edit Question");
@@ -2038,6 +2048,7 @@ function questionBank(form) {
     var cbc = form.constrainbc.checked;
     var obj = new XMLHttpRequest();
     var url = "/runestone/admin/questionBank";
+    var qlanguage = form.language.value;
     var data = {
         variable: "variable",
         chapter: chapter,
@@ -2049,6 +2060,7 @@ function questionBank(form) {
         term: term,
         competency: competency,
         isprim: isprim,
+        language: qlanguage,
     };
     jQuery.post(url, data, function (resp, textStatus, whatever) {
         if (resp == "Error") {
@@ -2135,6 +2147,7 @@ function getQuestionInfo() {
 
         await renderRunestoneComponent(data.htmlsrc, "component-preview", {
             acid: question_name,
+            author: data.author,
         });
 
         var q_author = document.getElementById("q_author");

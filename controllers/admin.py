@@ -1127,8 +1127,15 @@ def questionBank():
     query_clauses = []
 
     # should we search the question by term?
+    term_list = []
     if request.vars.term:
         term_list = [x.strip() for x in request.vars.term.split()]
+
+    # this will not be perfect but is an ok start.
+    if request.vars["language"] != "python" and request.vars["language"] != "any":
+        term_list.append(f':language: {request.vars["language"]}')
+
+    if term_list:
         query_clauses.append(db.questions.question.contains(term_list, all=True))
 
     if request.vars["chapter"]:
