@@ -24,18 +24,16 @@
 
         <div class="row rsheading">
           {{ if settings.academy_mode: }}
-            <!-- Carousel
-            ================================================== -->
             <link href="/{{=request.application}}/static/css/carousel.css" rel="stylesheet">
             {{ if (not auth.user): }}
-                <div class="carousel slide col-md-6" data-ride="carousel" id="myCarousel">
+                <div class="col-md-6 col-sm-6" data-ride="carousel" id="myCarousel">
             {{else: }}
-                <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel"  style="margin-bottom: 50px;">
+                <div class="col-md-12" data-ride="carousel" id="myCarousel"  style="margin-bottom: 50px;">
             {{ pass }}
-            <div class="col-md-4 col-md-offset-2" style="text-align: center;">
-                <img src="/static/images/logo_small.png" width="400" style="margin: auto; max-width: 100%" alt="Runestone Logo" >
+            <div class="col-md-8 col-md-offset-2" style="text-align: center;">
+                <img src="/static/images/logo_small.png" width="300" style="margin: auto; display:block; max-width: 100%" alt="Runestone Logo" >
             </div>
-            </div><!-- /.carousel -->
+            </div>
             {{ if 'static' in request.env.query_string:}}
                 <p>It appears you are trying to get to a class for which you must log in.  If you have already registered, please login below.  Otherwise you can <a href="{{=URL(f='user/register')}}">Register</a> here.</p>
             {{pass}}
@@ -43,10 +41,9 @@
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
           {{ if not auth.user or request.args(0) == 'impersonate': }}
-              <h4 class="col-md-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
           {{ pass }}
           {{ if request.args(0) == 'login' and not auth.user: }}
-                <div id="web2py_user_form" class="col-md-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                <div id="web2py_user_form" class="col-md-4 col-sm-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
                             <div class="form-group">
@@ -76,7 +73,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-4">
-                                    <button type="submit" class="btn btn-default" id="login_button">Login</button>
+                                    <button type="submit" class="btn btn-primary" id="login_button">Login</button><br/>
+                                    {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+                                    <a class="btn btn-xs btn-default" href="{{=URL(args='request_reset_password')}}"
+                                        role="button">{{=T('Lost Password')}}</a>
+                                    <a class="btn btn-xs btn-default" href="{{=URL(args='retrieve_username')}}"
+                                        role="button">{{=T('Forgot Username')}}</a>
+                                    {{pass}}        
                                 </div>
                             </div>
                         {{else:}}
@@ -95,13 +98,8 @@
                         {{pass}}
                     {{=form.custom.end}}
                     <!-- Must use this to get all the good defaults for the form -->
-                    <div id='auth-actions' style="margin-left: 20px;" class="col-md-4 col-sm-4 col-xs-4">
-                        {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
-                            <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
-                                role="button">{{=T('Lost Password')}}</a>
-                            <a class="btn btn-sm btn-primary" href="{{=URL(args='retrieve_username')}}"
-                                role="button">{{=T('Forgot Username')}}</a>
-                        {{pass}}
+                    <div id='auth-actions' style="margin-left: 20px;" class="col-md-2 col-sm-2 col-xs-2">
+                        <!-- pw reset goes here -->
                     </div>
                 </div>
             {{pass}}
