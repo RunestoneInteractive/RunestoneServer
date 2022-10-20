@@ -33,7 +33,7 @@
                 <div class="carousel slide col-md-12" data-ride="carousel" id="myCarousel"  style="margin-bottom: 50px;">
             {{ pass }}
             <div class="col-md-4 col-md-offset-2" style="text-align: center;">
-                <img src="/static/images/logo_small.png" width="400" style="margin: auto;" alt="Runestone Logo" >
+                <img src="/static/images/logo_small.png" width="400" style="margin: auto; max-width: 100%" alt="Runestone Logo" >
             </div>
             </div><!-- /.carousel -->
             {{ if 'static' in request.env.query_string:}}
@@ -43,7 +43,7 @@
             <!--  LOGIN -->
           {{if not settings.lti_only_mode:}}
           {{ if not auth.user or request.args(0) == 'impersonate': }}
-              <h4 class="col-md-4 col-md-offset-1">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
+              <h4 class="col-md-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
           {{ pass }}
           {{ if request.args(0) == 'login' and not auth.user: }}
                 <div id="web2py_user_form" class="col-md-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
