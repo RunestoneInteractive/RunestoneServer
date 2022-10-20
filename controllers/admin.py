@@ -177,7 +177,10 @@ def practice():
     day_points = 2
     question_points = 0.2
     questions_to_complete_day = 10
-    flashcard_creation_method = 2
+    flashcard_creation_method = 0
+    # 0 is self paced - when a student marks a page complete
+    # 1 is removed - it was for when a reading assignment deadline passes but was not implemented
+    # 2 is manually as checked by the instructor
     graded = 1
     spacing = 0
     interleaving = 0
