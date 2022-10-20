@@ -46,7 +46,7 @@
               <h4 class="col-md-4 col-md-offset-1">{{=T( request.args(0).replace('_',' ').capitalize() )}}</h4>
           {{ pass }}
           {{ if request.args(0) == 'login' and not auth.user: }}
-                <div id="web2py_user_form" class="col-md-4 col-md-offset-1">
+                <div id="web2py_user_form" class="col-md-4 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
                     <form class="form-horizontal" method="post">
                         {{if not session.auth_two_factor_user:}}
                             <div class="form-group">
@@ -95,7 +95,7 @@
                         {{pass}}
                     {{=form.custom.end}}
                     <!-- Must use this to get all the good defaults for the form -->
-                    <div id='auth-actions' style="margin-left: 20px;">
+                    <div id='auth-actions' style="margin-left: 20px;" class="col-md-4 col-sm-4 col-xs-4">
                         {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
                             <a class="btn btn-sm btn-primary" href="{{=URL(args='request_reset_password')}}"
                                 role="button">{{=T('Lost Password')}}</a>
