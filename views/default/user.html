@@ -310,7 +310,7 @@
         {{pass}} <!-- end register page -->
         <div class="row">
         {{if (request.args(0) != 'register') and settings.academy_mode:}}
-                <div class='col-md-8 col-md-offset-2 col-sm-offset-0 mission'>
+                <div class='col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 mission'>
                     <h2>Our Mission</h2>
                     <p>The mission of Runestone Academy is to <i>democratize textbooks for the 21st century.</i>  To accomplish that mission we make high quality interactive textbooks available for free to <strong>all students.</strong>  In the 21st century it is silly to ignore the wonderful possibilities for interactivity in a web browser, so we make great interactive textbooks that engage students in learning.  It would also be silly to ignore the rich data that an online textbook can provide to <strong>teachers, authors and researchers.</strong>  To support these different stakeholders we have built a Learning Engineering and Analytics Portal (LEAP).</p>
                     <details>
@@ -378,7 +378,8 @@
                         font-weight: bold;
                         margin-bottom: 10px;
                         margin-top: -10px;
-
+                        text-decoration: underline;
+                        color: darkblue;
                     }
                     summary:hover {
                         cursor: pointer;
@@ -401,7 +402,7 @@
                     {{if settings.academy_mode:}}
 
                         <div class="row">
-                        <div class="col-md-offset-2 col-md-8 partners">
+                        <div class="col-md-offset-2 col-md-8 partners col-sm-8 col-sm-offset-2  col-xs-10 col-xs-offset-1">
                         <h2>Partners and Supporters</h2>
                         <table class="partnertable">
                             <tr>
@@ -428,11 +429,11 @@
                     {{pass}}
 
                 </div>
-                <div class="col-md-8 col-md-offset-2 mission">
+                <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2  col-xs-10 col-xs-offset-1 mission">
                 <h2>Your Privacy</h2>
                 <p>The books provided on Runestone Academy are free and open source. They are for educational purposes. As part of our educational mission we do collect usage data to help us better understand how you learn and how you use our books. In exchange, we may use this data to make decisions about revisions to the content, and we may use this data to publish academic papers. We would never publish anything that revealed your identity. We may share this data with fellow educational researchers, but rest assured that all anything we share is fully de-identified. Please read our full <a href="/runestone/default/privacy">Privacy Policy</a>.  Also you may be interested in our <a href="/runestone/default/terms">Terms of Service</a>. <strong>High School Teachers</strong>  please read <a href="https://blog.runestone.academy/2021/05/28/data_privacy_agreements.html">This letter</a> before asking the Runestone Academy to sign a contract.                         </p>
                 </div>
-                <div class="col-md-8 col-md-offset-2 mission" style="margin-bottom: 20px;">
+                <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2  col-xs-10 col-xs-offset-1 mission" style="margin-bottom: 20px;">
                     <h2>Get Involved</h2>
                     <p>This project is free and open source. We would like to grow
                         and add support staff, authors, and developers.  This takes time, money, and volunteers.
