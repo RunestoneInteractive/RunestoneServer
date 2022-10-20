@@ -314,11 +314,13 @@ div.flash {
 /* Styles for the login, registration, and Janrain forms */
 #web2py_user_form {
     margin-top: 10px;
+    margin-right: 20px;
+    max-height: 300px;
+    margin-bottom: 20px;
 }
 
 #web2py_user_form form {
-    float: left;
-    margin-right: 150px;
+
     padding-top: 3px;
 }
 
