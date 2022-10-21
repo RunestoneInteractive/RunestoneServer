@@ -173,9 +173,9 @@
         {{if (request.args(0) == 'register'): }} <!-- register page -->
           {{if not settings.lti_only_mode:}}
             <div id="registration_div">
-                <div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="col-md-6 col-sm-6 col-xs-12">
                     <h2>Runestone Registration</h2>
-                    <div id="web2py_user_form">
+                    <div id="web2py_register_form">
                         <script type="text/javascript">
                             function checkTcp() {
                                 let cb = document.getElementById("auth_user_accept_tcp");
@@ -289,7 +289,7 @@
                     </div> <!-- end form div -->
                 </div>
             </div> <!-- end register div -->
-             <div class="col-md-6 col-sm-6 col-xs-6">
+             <div class="col-md-6 col-sm-6 col-xs-12">
                 <h4>Registration Hints</h4>
                 <p>In the field for the <strong>Course Name</strong> please use the course name your instructor gave you. Or...</p>
                 <p> If you are an <strong>instructor</strong> registering for the first time OR an <strong>independent learner</strong> use one of the following for our open, public courses.</p>
