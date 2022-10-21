@@ -1,40 +1,52 @@
-RunestoneServer-6.1.6
+RunestoneServer-6.1.7
+
+Changes since 6.1.6
+
+-   Add a page explaning our advertising policy
+-   More formatting changes on the homepage. Should look better on all device sizes now
+-   Show author and allow a language selection
+-   Restore the Ad-hoc practice functionality (add questions when students complete pages)
+-   Experiment with using ethicalads.io (NO tracking cookies!)
 
 Changes since 6.1.5
-- New homepage
-- Workaround for the non-https link web2py creates for password resets.  Should be https now.
-- Fix in bookserver for PreTeXt books that were not updating the activity bar
-- Use the latest practice settings if the DB contains duplicates
+
+-   New homepage
+-   Workaround for the non-https link web2py creates for password resets. Should be https now.
+-   Fix in bookserver for PreTeXt books that were not updating the activity bar
+-   Use the latest practice settings if the DB contains duplicates
 
 Changes since 6.1.4
-- Fix: potential crasher in practice if a question is missing htmlsrc
-- Change: Save tickets to folder so for access when debugging
-- Documentation updates
+
+-   Fix: potential crasher in practice if a question is missing htmlsrc
+-   Change: Save tickets to folder so for access when debugging
+-   Documentation updates
 
 RunestoneServer-6.1.4
 
 Changes Since 6.1.3
-- discourage students from leaving or refreshing their peer assignment page.
-- detect webwork questions in the instructor interface
-- Do not include flagged questions for practice
-- Upgrade the paypal payment page
-- Show the answer given by all participants in the async peer chat
+
+-   discourage students from leaving or refreshing their peer assignment page.
+-   detect webwork questions in the instructor interface
+-   Do not include flagged questions for practice
+-   Upgrade the paypal payment page
+-   Show the answer given by all participants in the async peer chat
 
 RunestoneServer-6.1.3
 
 Changes Since 6.1.2
-- Use the new library page
-- Minor updates and bug fixes
+
+-   Use the new library page
+-   Minor updates and bug fixes
 
 Changes Since 6.0.5
 
-- Add grading for peer assignments
-- Add grading for webwork problems
-- Add async peer instruction
-- Add canonical links to books
-- Create sitemap for better SEO
-- Infer real homepage for ptx books to avoid redirects
-- Add files so webwork problems work on assignment page
+-   Add grading for peer assignments
+-   Add grading for webwork problems
+-   Add async peer instruction
+-   Add canonical links to books
+-   Create sitemap for better SEO
+-   Infer real homepage for ptx books to avoid redirects
+-   Add files so webwork problems work on assignment page
 
 Changes in 6.0.5
 
