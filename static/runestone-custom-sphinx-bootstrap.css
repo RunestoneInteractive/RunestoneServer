@@ -325,7 +325,8 @@ div.flash {
 }
 
 #web2py_user_form td,
-#web2py_register_form td {
+#web2py_register_form td,
+#web2py_profile_form td {
     padding-bottom: 15px;
 }
 
