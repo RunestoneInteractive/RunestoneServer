@@ -109,6 +109,8 @@ function connect(event) {
                     break;
                 case "enableNext":
                     // This moves the student to the next question in the assignment
+                    // first disable the handler to prevent leaving the page.
+                    $(window).off("beforeunload");
                     let nextForm = document.getElementById("nextqform");
                     nextForm.submit();
                     break;
@@ -401,7 +403,9 @@ async function showPeerEnableVote2() {
     // iterate over responses
     let res = "";
     for (let response in spec.responses) {
-        res += `User ${response} answered ${answerToString(spec.responses[response])} <br />`;
+        res += `User ${response} answered ${answerToString(
+            spec.responses[response]
+        )} <br />`;
     }
     //peerNameEl.innerHTML = `User ${spec.user} answered ${answerToString(spec.answer)}`;
     peerNameEl.innerHTML = res;
