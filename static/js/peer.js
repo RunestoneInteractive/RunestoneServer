@@ -316,6 +316,15 @@ function enableNext() {
         broadcast: true,
         course_name: eBookConfig.course,
     };
+    if (typeof voteNum !== "undefined" && voteNum < 2) {
+        logPeerEvent({
+            sid: eBookConfig.username,
+            div_id: currentQuestion,
+            event: "peer",
+            act: "stop_question",
+            course: eBookConfig.course,
+        });
+    }
     publishMessage(mess);
     return true;
 }
