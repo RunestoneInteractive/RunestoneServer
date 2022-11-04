@@ -678,7 +678,7 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
     # Added Runestone-only code: set cookie
     if encoded_jwt:
         response.cookies["access_token"] = encoded_jwt
-        response.cookies["access_token"]["expires"] = 24 * 3600 * 30
+        response.cookies["access_token"]["expires"] = 24 * 3600 * 105  # 15 weeks
         response.cookies["access_token"]["path"] = "/"
         if "LOAD_BALANCER_HOST" in os.environ:
             response.cookies["access_token"]["domain"] = os.environ[
