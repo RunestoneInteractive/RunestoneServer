@@ -132,9 +132,9 @@ def assignments():
         assigndict[row.id] = row.name
 
     tags = []
-    tag_query = db(db.tags).select()
-    for tag in tag_query:
-        tags.append(tag.tag_name)
+    # tag_query = db(db.tags).select()
+    # for tag in tag_query:
+    #     tags.append(tag.tag_name)
 
     course = get_course_row(db.courses.ALL)
     base_course = course.base_course
