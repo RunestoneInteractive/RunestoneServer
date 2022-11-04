@@ -1,3 +1,10 @@
+RunestoneServer-6.1.9
+Changes since 6.1.7
+
+- Hide original webwork on the assignment and grading interface
+- Change access token expiration
+- Log a stop_question event if vote2 is skipped in peer
+
 RunestoneServer-6.1.7
 
 Changes since 6.1.6
