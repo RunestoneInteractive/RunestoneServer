@@ -639,6 +639,11 @@ div.settingsbox {
     /* 1 */
 }
 
+/* hide original webwork problem when an iframe is opened */
+div.hidden-content {
+    display: none;
+}
+
 /*
  * Extends the .visuallyhidden class to allow the element
  * to be focusable when navigated to via the keyboard:
