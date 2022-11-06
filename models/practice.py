@@ -23,7 +23,7 @@ db.define_table(
     #   assignment deadline passes.
     # A value of 2 indicates manually by the instructor, as it is implemented currently.
     Field("flashcard_creation_method", type="integer", default=0),
-    migrate=table_migrate_prefix + "course_practice.table",
+    migrate=bookserver_owned("course_practice"),
 )
 
 
@@ -42,7 +42,7 @@ db.define_table(
     Field("next_eligible_date", type="date"),
     Field("creation_time", type="datetime"),
     Field("timezoneoffset", type="integer", default=0),
-    migrate=table_migrate_prefix + "spacing.table",
+    migrate=bookserver_owned("user_topic_practice"),
 )
 
 
