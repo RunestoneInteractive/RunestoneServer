@@ -659,3 +659,22 @@ def delete():
         auth.logout()  # logout user and redirect to home page
     else:
         redirect(URL("default", "user/profile"))
+
+
+@auth.requires_login()
+def enroll():
+    logger.debug(f"Request to login for {request.vars.course_name}")
+    course = db(db.courses.course_name == request.vars.course_name).select().first()
+    # is the user already registered for this course?
+    res = db(db.user_courses.course_id == course.id).select().first()
+    if res:
+        session.flash = f"You are already registered for {request.vars.course_name}"
+        redirect(URL("default", "courses"))
+
+    db.user_courses.insert(user_id=auth.user.id, course_id=course.id)
+    db(db.auth_user.id == auth.user.id).update(course_id=course.id, active="T")
+    db(db.auth_user.id == auth.user.id).update(course_name=request.vars.course_name)
+    auth.user.update(course_name=request.course_name)
+    auth.user.update(course_id=course.id)
+
+    redirect(URL("default", "donate"))
