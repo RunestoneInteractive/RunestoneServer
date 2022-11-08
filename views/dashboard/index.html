@@ -14,8 +14,9 @@
         <span class="dash-title-description">{{=course.course_name}} Instructor Dashboard</span>
         <a href="{{=URL('dashboard','subchapoverview')}}" class="btn btn-med btn-primary" role="button" style="float: right; font-size: small;">Chapter Activity</a>
     </h1>
-    <h2 style="width: 800px; display: inline;">{{=selected_chapter['chapter_name']}}</h2>
-    <div style="float: right"><b>Select Chapter</b>
+    <div >
+        <span style="font-size: 18px; margin-left:4%">{{=selected_chapter['chapter_name']}}</span>
+    <b><span style="margin-left: 30px;">Select Chapter</span></b>
         <select onchange="window.location=[window.location.protocol, '//', window.location.host, window.location.pathname].join('') + '?chapter=' + this.value;">
             {{for chapter in chapters:}}
                 {{if chapter['chapter_label'] == selected_chapter['chapter_label']: }}
