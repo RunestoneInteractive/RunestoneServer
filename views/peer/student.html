@@ -5,23 +5,23 @@
 {{end}}
 
 
-<h1>Peer Work</h1>
+<h1>Peer Instruction Links</h1>
 <h2></h2>
 <table class="table table-striped">
     <tr>
-        <th>Name</th>
-        <th>Async Link</th>
+        <th>In Class Link</th>
+        <th>After Class Link</th>
         <th>Due</th>
         <th>Description</th>
     </tr>
     {{i=0}}
     {{for assignment in assignments:}}
     <tr>
-        <td><a href="peer_question?assignment_id={{=assignment['id']}}">{{=assignment['name']}}</a></td>
+        <td><a href="peer_question?assignment_id={{=assignment['id']}}">{{=assignment['name']}} (in class)</a></td>
         {{if assignment.peer_async_visible:}}
-        <td><a href="peer_async?assignment_id={{=assignment['id']}}">{{=assignment['name']}} (Async)</a></td>
+        <td><a href="peer_async?assignment_id={{=assignment['id']}}">{{=assignment['name']}} (after class)</a></td>
         {{else:}}
-        <td>Async Not Available</td>
+        <td>Not Available</td>
         {{pass}}
         <td>{{=assignment['duedate']}}</td>
         <td>{{=assignment['description']}}</td>
@@ -30,4 +30,4 @@
     {{pass}}
 </table>
 
-<p>Note: The async version of the assignment is only for use outside of and AFTER the class it was introduced.</p>
+<p><b>Note:</b> The "After Class" version of the assignment is only for use outside of and AFTER the class it was introduced.  You will be able to vote for each question twice and review a chat trascript from a group that was recorded during class.</p>
