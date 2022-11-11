@@ -31,7 +31,15 @@ function gradeIndividualItem() {
 
     $(rightSideDiv)[0].style.visibility = "visible";
     rightSideDiv.html(""); //empty it out
-    rightSideDiv.html("<input id='filterto0' type=checkbox unchecked/>Click to only show questions with a grade of 0 or not graded<br/>")
+    rightSideDiv.html(`<div id='filterqs'
+    style="
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border: solid blue;
+    border-radius: 5px;
+    padding: 5px;">
+    <input id='filterto0' type=checkbox unchecked/>Click to only show questions with a grade of 0 or not graded</div>`);
     let rsd = document.querySelector("#filterto0");
     rsd.addEventListener('change',
     function () {
@@ -39,7 +47,9 @@ function gradeIndividualItem() {
         for (let panel of gPanels) {
             let v = panel.querySelector("#gradingform").querySelector("#input-grade").value;
             if (rsd.checked) {
-                if (v != 0 || v != "") {
+                if (v == 0 || v == "") {
+                    panel.style.display = "block";
+                } else {
                     panel.style.display = "none";
                 }
             } else {
