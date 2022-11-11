@@ -31,6 +31,23 @@ function gradeIndividualItem() {
 
     $(rightSideDiv)[0].style.visibility = "visible";
     rightSideDiv.html(""); //empty it out
+    rightSideDiv.html("<input id='filterto0' type=checkbox unchecked/>Click to only show questions with a grade of 0 or not graded<br/>")
+    let rsd = document.querySelector("#filterto0");
+    rsd.addEventListener('change',
+    function () {
+        let gPanels = document.querySelectorAll(".loading");
+        for (let panel of gPanels) {
+            let v = panel.querySelector("#gradingform").querySelector("#input-grade").value;
+            if (rsd.checked) {
+                if (v != 0 || v != "") {
+                    panel.style.display = "none";
+                }
+            } else {
+                panel.style.display = "block";
+            }
+        }
+    });
+
     //Not sure if questions or students should be the outer loop
     var mg = false;
     if (questions.length * sstudents.length > 1) {
