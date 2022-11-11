@@ -1139,26 +1139,24 @@ def addbookauthor(config, book, author, github):
         if not github:
             github = f"https://github.com/RunestoneInteractive/{book}.git"
 
-    # Create an entry in book (document_id, github_url)
-    try:
-        res = engine.execute(
-            f"""insert into book
-                (document_id, github_url)
-                values ( '{book}', '{github}' )
-            """
-        )
-    except Exception as e:
-        click.echo(f"Book already exists in book table {e}")
     # create an entry in book_author (author, book)
     try:
+        res = engine.execute(
+            f"""
+            insert into library
+            (title, basecourse)
+            values ( 'Temporary title for {book}', '{book}' )
+            """
+        )
         res = engine.execute(
             f"""insert into book_author
                 (author, book)
                 values ( '{author}', '{book}' )
             """
         )
-    except:
-        click.echo(f"{author} is already an author for {book}")
+
+    except Exception as e:
+        click.echo(f"Error setting book,author pair {e}")
 
     # create an entry in auth_membership (group_id, user_id)
     auth_row = engine.execute(
