@@ -1,4 +1,9 @@
-RunestoneServer-6.1.9
+RunestoneServer-6.1.10
+
+- Add filter to manual grading to only show ungraded questions.
+- Clean up the student peer instruction selection page
+- Allow users to register from the library page.
+
 Changes since 6.1.7
 
 - Hide original webwork on the assignment and grading interface
