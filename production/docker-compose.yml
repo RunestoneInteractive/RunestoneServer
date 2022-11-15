@@ -50,3 +50,5 @@ services:
       # LOGIN_URL will override the bookserver setting login_url so that it redirects back to web2py
       LOGIN_URL: "/runestone/default/user"
       ADS_FILE: '${ADS_FILE}'
+      WORKER_NAME: ${HOSTNAME}
+
