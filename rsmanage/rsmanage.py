@@ -1148,15 +1148,18 @@ def addbookauthor(config, book, author, github):
             values ( 'Temporary title for {book}', '{book}' )
             """
         )
+    except Exception as e:
+        click.echo(f"Warning Book already exists in library {e}")
+
+    try:
         res = engine.execute(
             f"""insert into book_author
                 (author, book)
                 values ( '{author}', '{book}' )
             """
         )
-
     except Exception as e:
-        click.echo(f"Error setting book,author pair {e}")
+        click.echo(f"Warning setting book,author pair failed {e}")
 
     # create an entry in auth_membership (group_id, user_id)
     auth_row = engine.execute(
