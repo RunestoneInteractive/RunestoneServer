@@ -1,4 +1,8 @@
-RunestoneServer-6.1.10
+RunestoneServer-6.1.11
+
+Changes since 6.1.10
+
+- Minor updates
 
 - Add filter to manual grading to only show ungraded questions.
 - Clean up the student peer instruction selection page
