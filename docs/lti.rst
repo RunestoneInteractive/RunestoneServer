@@ -79,3 +79,23 @@ Moodle
 #.  Students can now click on these external tool assignments to be enrolled/logged directly into your Runestone course and assignment. The grades should appear in Moodle once they are released in Runestone through the Instructor interface.
 
 #.  The course instructor must also be an LTI sourced user, so use the "LTI Login Link" URL. This can be hidden for users.
+
+Blackboard Learn Original or Ultra
+------
+#.  Follow the LTI instructions on help.blackboard.com for other LTI tools.  You can enable this integration by approving the domain in LTI tools, then creating placements (which puts menus under Build Content), or by using "Web Link" functionality in Original courses.  In Ultra courses LTI links can be added per course. `Blackboard information on LTI <https://help.blackboard.com/Learn/Administrator/SaaS/Integrations/Learning_Tools_Interoperability>`_   
+
+#. Start by approving the LTI domain in the Admin panel of Blackboard Learn:
+
+    :Admin setup: Approve runestone.academy as a domain in Admin -> LTI Tool Providers -> Register LTI 1.1 Provider
+    :Course setup: In a course go to Build Content -> Web Link
+    :Name: Runestone
+    :Url: https://runestone.academy/runestone/lti
+    :Check the box This link is to a Tool Provider: True (if you cannot, review the Admin step above to approve the domain)
+    :LTI: Once the checkbox is selected, you will see additional fields: key, secret, Custom Parameters, Enable Evaluation
+    :Key: Enter this from Phase 1.
+    :Secret: Enter this from Phase 1.
+    :Description: Interactive textbooks from Runestone Academy
+
+#. Advanced setup
+
+        -   For a site-wide installation, or for installing the Runestone external app for use across multiple courses, leave this blank.  You will enter key/secret in the Admin step above.
