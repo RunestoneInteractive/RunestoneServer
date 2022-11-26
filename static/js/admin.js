@@ -1967,7 +1967,7 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
     }
 
     if (typeof component_factory === "undefined") {
-        alert("Error:  Missing the component factory!  Clear you browser cache.");
+        alert("Error:  Missing the component factory!  Clear your browser cache.");
     } else {
         if (!component_factory[componentKind] && !jQuery(`#${whereDiv}`).html()) {
             jQuery(`#${whereDiv}`).html(
