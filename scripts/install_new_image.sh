@@ -9,6 +9,8 @@ if [[ $PWD != */production ]]; then
     exit
 fi
 
+export HOSTNAME=$HOSTNAME
+
 # pull the latest
 git pull
 docker pull registry.digitalocean.com/runestone-registry/production_server:latest
