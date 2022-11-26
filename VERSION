@@ -1,4 +1,9 @@
-RunestoneServer-6.1.11
+RunestoneServer-6.1.12
+
+Changes since 6.1.11
+
+- minor updates
+- support for adding hparsons to assignments -- still need to get autograder working
 
 Changes since 6.1.10
 
