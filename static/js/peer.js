@@ -101,6 +101,13 @@ function connect(event) {
                             studentVoteCount = 2;
                             console.log("WARNING: resetting studentVoteCount to 2");
                         }
+                        // set a timer to check if the student hasn't voted in 10 seconds
+                        // give them a warning.
+                        setTimeout(() => {
+                            if (studentVoteCount > 1 && !vote2done) {
+                                alert("You must vote twice! Even if want to keep your answer the same.")
+                            }
+                        }, 10000)
                     }
                     messarea = document.getElementById("imessage");
                     messarea.innerHTML = `<h3>Time to make your 2nd vote</h3>`;
@@ -425,6 +432,7 @@ async function showPeerEnableVote2() {
         "Please Answer the question again.  Even if you do not wish to change your answer.  After answering click the button to go on to the next question.";
     $(".runestone [type=radio]").prop("checked", false);
     $(".runestone [type=checkbox]").prop("checked", false);
+    studentVoteCount += 1;
 }
 
 $(function () {

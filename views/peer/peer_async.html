@@ -8,8 +8,17 @@
     eBookConfig.peerMOde = "async";
 </script>
 
-<h2>Peer Instruction Question (Async)</h2>
-<div id="imessage"></div>
+<h2>Peer Instruction Question (After Class)</h2>
+<div id="imessage">
+    <p>This page is meant for you to use <i>after</i> the inclass peer instruction is over.
+        <ol>
+            <li>Answer the question as best you can.</li>
+            <li>Then, in the space provided write a justification for your answer.</li>
+            <li>Read the dialog between two of your peers on why they answered the question the way they did.</li>
+            <li>Answer the question <strong>again.</strong>  Even if you are not changing your answer from the first time.</li>
+        </ol>
+    </p>
+</div>
 
 <div class="row">
     <div class="oneq col-md-6">{{=XML(current_question['htmlsrc'])}}</div>
@@ -34,7 +43,7 @@
     <form action="/peer/peer_async">
         <input type="hidden" name="assignment_id" value="{{=assignment_id}}" />
         <input type="hidden" name="question_num" value="{{=nextQnum}}" />
-        <button type="submit">Next Question</button>
+        <button type="submit" onclick="return checkVoteCount()">Next Question</button>
     </form>
 </div>
 
@@ -46,8 +55,17 @@
         setTimeout(connect, 1000);
     });
     var studentVoteCount = 1;
+    var vote2done = false;
     var nextQuestionNumber = {{= nextQnum}};
     var assignId = '{{=assignment_id}}'
+
+    function checkVoteCount() {
+        if (studentVoteCount < 2) {
+            alert("You must vote twice before moving on");
+            return false;
+        }
+        return true;
+    }
 
     // this cannot happen until the event that indicates components are loaded
     $(document).on("runestone:login-complete", function () {

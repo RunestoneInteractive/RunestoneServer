@@ -60,10 +60,19 @@
 <script>
     var user = '{{=auth.user.username}}';
     var currentQuestion = '{{=XML(current_question.name)}}';
+    var vote2done = false;
     document.addEventListener("DOMContentLoaded", function (event) {
         setTimeout(connect, 1000);
         setTimeout(function () {
             window.mcList[currentQuestion].submitButton.innerHTML = "Submit";
+            window.mcList[currentQuestion].submitButton.addEventListener(
+                "click",
+                function() {
+                    if (studentVoteCount == 2) {
+                        vote2done = true;
+                    }
+                }
+            );
         }, 1000);
     });
     var studentVoteCount = 1;
