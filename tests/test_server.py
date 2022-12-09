@@ -130,7 +130,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # ('default/sendreport', True, 'Could not create issue', 1),
         ("default/terms", False, "Terms and Conditions", 1),
         ("default/privacy", False, "Runestone Academy Privacy Policy", 1),
-        ("default/donate", False, "Support Runestone Interactive", 1),
+        ("default/donate", False, "Support Runestone Academy", 1),
         # TODO: This doesn't really test much of the body of either of these.
         ("default/coursechooser", True, "Course Selection", 1),
         # If we choose an invalid course, then we go to the profile to allow the user to add that course. The second validation failure seems to be about the ``for`` attribute of the ```<label class="readonly" for="auth_user_email" id="auth_user_email__label">`` tag, since the id ``auth_user_email`` isn't defined elsewhere.
