@@ -1,7 +1,7 @@
 RunestoneServer-6.1.12
 
 Changes since 6.1.11
-
+- Peer Instruction updates
 - minor updates
 - support for adding hparsons to assignments -- still need to get autograder working
 
