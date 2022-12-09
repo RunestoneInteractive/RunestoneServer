@@ -15,19 +15,25 @@ Runestone Academy Server and API
 Runestone Server Introduction
 -----------------------------
 
-The Runestone Server has evolved into a streamlined LMS to support interactive textbooks.  The features of the Runestone Server include:
+The mission of Runestone Academy is to democratize textbooks for the 21st century. To accomplish that mission we make high quality interactive textbooks available for free to all **students.** In the 21st century it is silly to ignore the wonderful possibilities for interactivity in a web browser, so we make great interactive textbooks that engage students in learning. It would also be silly to ignore the rich data that an online textbook can provide to **teachers, authors** and **researchers.** To support these different stakeholders we have built a Learning Engineering and Analytics Portal (LEAP).
 
-* Serving one or more interactive textbooks
-* Creating and Managing a class of students
-* Creating Reading Assignments for students
-* Creating Problem sets for students
-* Grading assignments manually and automatically
-* Authoring new questions for the question bank
-* Analytics on your students activities
-* Checking student progress through the book
-* Enabling practice problems for your students based on "spaced repetition"
+What is a LEAP?
+~~~~~~~~~~~~~~~
 
-You are welcome to fork this source and run your own server, but you are also welcome to use the Runestone Server as a free service on `Runestone Academy <https://runestone.academy>`_
+* **Learning Engineering** is the systematic application of evidence-based principles and methods from educational technology and the learning sciences to create engaging and effective learning experiences, support the difficulties and challenges of learners as they learn, and come to better understand learners and learning. Everything we do on `Runestone Academy <https://runestone.academy>`_ takes this engineering approach to continuous improvement.
+
+* **Analytics** As an instructor it is key to understand which of your students is struggling, which of them are working hard, which of them are successful or not. Runestone lets you quickly look at a dashboard of student progress to help you decide how to spend your classroom time most effectively. As a researcher or author you want to know what parts of your book are read the most, which questions are effective and which are duds that should be replaced or fixed to make them better.
+
+* **Portal:** Runestone Academy is a portal for online textbooks, students can interact with our books on any device for free. Runestone Academy is a portal for teachers who want to create a course, grade their students work, and monitor their progress all in one place. Runestone Acaademy is a portal for authors and researchers who want to invent new pedagogical strategies and try them out on lots of students while gaining access to anonymous information to help them better understand how students learn.
+
+Our primary stakeholders are students, teachers, authors, and educational researchers.  You might think of what we are trying to accomplish in terms of a virtuous circle of improvement.   Educational Research makes good Open Educational Resources better, which in turn helps teachers teach more effectively, which improves student learning, which drives even more interesting educational research…
+
+.. image:: https://blog.runestone.academy/_images/VirtuousCircle.png
+
+
+We welcome contributions to all aspects of the Runestone ecosystem.  Our vision is big and our todo list is long.  If you are interested in finding out more about our community see `Our blog page <https://blog.runestone.academy>`_  We have recently received funding from the NSF to grow our community and ecosystem, see `The PROSE Project <https://prose.runestone.academy>`_ to learn more about that project and how you can participate.
+
+We understand that privacy in student learning is paramount.  If you are uncomforable using a cloud based solution to host your courses, You are welcome to fork this source and run your own server.
 
 
 Installation
