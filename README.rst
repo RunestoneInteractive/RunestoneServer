@@ -1,7 +1,11 @@
 Runestone Academy Server and API
 ================================
 
-.. image:: https://github.com/RunestoneInteractive/RunestoneServer/workflows/Python%20application/badge.svg
+.. image:: https://runestone.academy/static/images/logo_small.png
+    :align: center
+    :width: 300
+
+.. image:: https://github.com/RunestoneInteractive/RunestoneServer/actions/workflows/python-app.yml/badge.svg
 
 .. image:: https://coveralls.io/repos/github/RunestoneInteractive/RunestoneServer/badge.png?branch=master
    :target: https://coveralls.io/github/RunestoneInteractive/RunestoneServer?branch=master
