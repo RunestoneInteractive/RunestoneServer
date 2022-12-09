@@ -18,7 +18,7 @@ Runestone Server Introduction
 The mission of Runestone Academy is to democratize textbooks for the 21st century. To accomplish that mission we make high quality interactive textbooks available for free to all **students.** In the 21st century it is silly to ignore the wonderful possibilities for interactivity in a web browser, so we make great interactive textbooks that engage students in learning. It would also be silly to ignore the rich data that an online textbook can provide to **teachers, authors** and **researchers.** To support these different stakeholders we have built a Learning Engineering and Analytics Portal (LEAP).
 
 What is a LEAP?
-~~~~~~~~~~~~~~~
+***************
 
 * **Learning Engineering** is the systematic application of evidence-based principles and methods from educational technology and the learning sciences to create engaging and effective learning experiences, support the difficulties and challenges of learners as they learn, and come to better understand learners and learning. Everything we do on `Runestone Academy <https://runestone.academy>`_ takes this engineering approach to continuous improvement.
 
