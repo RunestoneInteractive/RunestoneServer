@@ -2457,11 +2457,26 @@ def copy_assignment():
                 (db.assignments.course == db.courses.id)
                 & (db.courses.course_name == request.vars["course"])
             ).select()
+            # Get the destination course assignments from the db
+            destAssignments = db(
+                (db.assignments.course == db.courses.id)
+                & (db.courses.course_name == request.vars["destCourse"])
+            ).select()
+            # Get the destination course assignments' names
+            destAssignmentNames = []
+            for a in destAssignments:
+                destAssignmentNames.append(a.assignments["name"])
+
             for a in assignments:
-                print("A = {}".format(a))
-                res = _copy_one_assignment(request.vars["course"], a.assignments["id"])
-                if res != "success":
-                    break
+                if (
+                    a.assignments["name"] not in destAssignmentNames
+                ):  # If there is no duplicates
+                    print("A = {}".format(a))
+                    res = _copy_one_assignment(
+                        request.vars["course"], a.assignments["id"]
+                    )
+                    if res != "success":
+                        break
         else:
             res = _copy_one_assignment(
                 request.vars["course"], request.vars["oldassignment"]
