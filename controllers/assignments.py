@@ -550,7 +550,7 @@ def update_submit():
     assignment_id = (
         request.vars.assignment_id
     )  # used to grab the data from jQuery request
-    student_id = request.vars.student_id
+    student_id = auth.user.id
     # pull the grades table for the current student
     grade = (
         db(
@@ -560,17 +560,23 @@ def update_submit():
         .select()
         .first()
     )
+    if request.vars.new_state:
+        is_submit = request.vars.new_state
+    else:
+        is_submit = None
 
     res = {}
 
     if grade:
         # toggles the is_submit variable from True to False
-        if grade.is_submit == "In Progress":
-            is_submit = "Complete"
-        elif grade.is_submit == "Complete":
-            is_submit = "Not Started"
-        else:
-            is_submit = "In Progress"
+        # keep this clause for backward compatibility
+        if is_submit is None:
+            if grade.is_submit == "In Progress":
+                is_submit = "Complete"
+            elif grade.is_submit == "Complete":
+                is_submit = "Not Started"
+            else:
+                is_submit = "In Progress"
 
         db.grades.update_or_insert(
             (db.grades.auth_user == student_id)
@@ -912,7 +918,9 @@ def chooseAssignment():
         timezoneoffset = parsed_js.get("tz_offset", None)
 
     status = []  # This will be used to show the status of each assignment on html file
+    score = []
     duedates = []  # This will be used to display the due date for each assignment
+    ontime = []
 
     course = db(db.courses.id == auth.user.course_id).select().first()
     assignments = db(
@@ -951,10 +959,18 @@ def chooseAssignment():
                     percent_grade = 0.0
                 percent_grade = 100 * grade.score / assignment.points
                 if percent_grade % 10 == 0:
-                    status.append(str(int(percent_grade)) + "%")
+                    score.append(str(int(percent_grade)) + "%")
                 else:
-                    status.append("{0:.1f}%".format(percent_grade))
-            elif grade.is_submit:
+                    score.append("{0:.1f}%".format(percent_grade))
+            else:
+                score.append("Not Graded")
+
+            if deadline <= datetime.datetime.utcnow() and grade.is_submit != "Complete":
+                ontime.append(False)
+            else:
+                ontime.append(True)
+
+            if grade.is_submit:
                 status.append(grade.is_submit)
             elif timestamp > deadline and assignment.enforce_due:
                 status.append("Past Due")
@@ -972,8 +988,10 @@ def chooseAssignment():
         assignments=assignments,
         status=status,
         duedates=duedates,
+        score=score,
         course_id=auth.user.course_name,
         course=course,
+        ontime=ontime,
     )
 
 

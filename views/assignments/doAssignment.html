@@ -24,15 +24,15 @@
     <div>
         {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
             <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
-                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>You have marked this assignment Complete.  Click to mark it <button onclick="updateAssignmentProgress('In Progress', assignmentId)" class="btn btn-info">In Progress</button></p>
             </div>
         {{elif is_submit == "In Progress":}}
             <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
-                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>You have marked this assignment as In Progress.  Click to mark it as <button onclick="updateAssignmentProgress('Complete', assignmentId)" class="btn btn-info">Complete</button></p>
             </div>
         {{else:}}
             <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
-                <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been started</p>
+                <p style='margin-left:0.5cm; margin-right:0.5cm;'>You can mark this assignment as <button onclick="updateAssignmentProgress('In Progress', assignmentId)" class="btn btn-info">In Progress</button> by clicking the button.</p>
             </div>
         {{pass}}
     </div>
@@ -125,7 +125,7 @@
 <div>
     {{if is_submit == "Complete" or is_graded or enforce_pastdue:}}
         <div style='background-color:rgb(146, 207, 165); margin-left:2cm; margin-right:2cm;'>
-            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has been submitted</p>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>You have marked this assignment Complete.  Click to mark it <button onclick="updateAssignmentProgress('In Progress', assignmentId)" class="btn btn-info">In Progress</button></p>
         </div>
         {{if is_graded:}}
             <div style='background-color:powderblue; margin-left:2cm; margin-right:2cm;'>
@@ -141,29 +141,18 @@
         {{pass}}
     {{elif is_submit == "In Progress":}}
         <div style='background-color:rgb(247, 238, 158); margin-left:2cm; margin-right:2cm;'>
-            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment is in progress</p>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>You have marked this assignment as In Progress.  Click to mark it as <button onclick="updateAssignmentProgress('Complete', assignmentId)" class="btn btn-info">Complete</button></p>
         </div>
     {{else:}}
         <div style='background-color:rgb(236, 189, 189); margin-left:2cm; margin-right:2cm;'>
-            <p style='margin-left:0.5cm; margin-right:0.5cm;'>This assignment has not been started</p>
+            <p style='margin-left:0.5cm; margin-right:0.5cm;'>You can mark this assignment as <button onclick="updateAssignmentProgress('In Progress', assignmentId)" class="btn btn-info">In Progress</button> by clicking the button.</p>
         </div>
     {{pass}}
 </div>
 
 {{ if not released and not assignment.is_timed: }}
 <div style="text-align:center">
-    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Score Me</button>
-    {{if not is_graded and not enforce_pastdue:}}
-        <button class="btn btn-lg buttonAskCompletion" id="submitMeButton">
-            {{if is_submit == "Not Started":}}
-                Mark In Progress
-            {{elif is_submit == "In Progress":}}
-                Mark Complete
-            {{else:}}
-                Mark Incomplete
-            {{pass}}
-        </button>
-    {{pass}}
+    <button class="btn btn-lg buttonAskCompletion" id="gradeMeButton">Compute Score for Assignment</button>
     <p><strong>Warning:</strong> Scores for problems that you self grade are unofficial.
         Some problems will need to be manually graded, and your instructor may have requirements that cannot be autograded.
         No deadlines are enforced when self grading, but your instructor may penalize you
