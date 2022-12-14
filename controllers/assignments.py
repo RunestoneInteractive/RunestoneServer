@@ -572,8 +572,8 @@ def update_submit():
         # keep this clause for backward compatibility
         if is_submit is None:
             if grade.is_submit == "In Progress":
-                is_submit = "Complete"
-            elif grade.is_submit == "Complete":
+                is_submit = "Finished"
+            elif grade.is_submit == "Finished":
                 is_submit = "Not Started"
             else:
                 is_submit = "In Progress"
@@ -852,7 +852,7 @@ def doAssignment():
         db.grades.update_or_insert(
             auth_user=auth.user.id,
             assignment=assignment_id,
-            is_submit="Not Started",  # set is_submit variable to incomplete
+            is_submit="",  # set is_submit variable to incomplete
         )
         grade = (
             db(
@@ -965,7 +965,7 @@ def chooseAssignment():
             else:
                 score.append("Not Graded")
 
-            if deadline <= datetime.datetime.utcnow() and grade.is_submit != "Complete":
+            if deadline <= datetime.datetime.utcnow() and grade.is_submit != "Finished":
                 ontime.append(False)
             else:
                 ontime.append(True)
@@ -975,11 +975,11 @@ def chooseAssignment():
             elif timestamp > deadline and assignment.enforce_due:
                 status.append("Past Due")
             else:
-                status.append("Not Started")
+                status.append("")
         elif timestamp > deadline and assignment.enforce_due:
             status.append("Past Due")
         else:
-            status.append("Not Started")
+            status.append("")
 
         # Convert the duedate for current assignment to string
         duedates.append(date2String(deadline))
