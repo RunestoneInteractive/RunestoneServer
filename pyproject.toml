@@ -60,6 +60,7 @@ pretext = "^1.0.0"
 
 # Development dependencies
 # ========================
+boto3 = "^1.26.30"
 [tool.poetry.dev-dependencies]
 black = "~= 22.0"
 bookserver = { path = "../BookServer", develop = true }

@@ -355,7 +355,8 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
         }
     }
     $.getJSON("/runestone/admin/htmlsrc", data, async function (result) {
-        var htmlsrc = result;
+        var htmlsrc = result.htmlsrc;
+        const attachURL = result.attach_url;
         var enforceDeadline = $("#enforceDeadline").is(":checked");
         var dl = showDeadline();
         await renderRunestoneComponent(htmlsrc, elementID + ">#questiondisplay", {
@@ -367,6 +368,7 @@ function createGradingPanel(element, acid, studentId, multiGrader) {
             tzoff: new Date().getTimezoneOffset() / 60,
             multiGrader: multiGrader,
             gradingContainer: elementID,
+            attachURL: attachURL,
         });
     });
 
@@ -1816,6 +1818,8 @@ function create_question(formdata) {
 }
 
 // Given a question ID, preview it.
+// This is NOT the function used to generate the grading panel on the grades page
+// this is used in other places.
 function preview_question_id(question_id, preview_div, sid, gradeit) {
     if (arguments.length == 1) {
         preview_div = "component-preview";
@@ -1823,7 +1827,8 @@ function preview_question_id(question_id, preview_div, sid, gradeit) {
     // Request the preview HTML from the server.
     $.getJSON("/runestone/admin/htmlsrc", {
         acid: question_id,
-    }).done(function (html_src) {
+    }).done(function (jsonData) {
+        html_src = jsonData.htmlsrc
         // Render it.
         data = { acid: question_id };
         if (sid) {
@@ -2058,7 +2063,7 @@ async function renderRunestoneComponent(componentSrc, whereDiv, moreOpts) {
         }
         // $(`#${whereDiv}`).css("background-color", "white");
     }
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    MathJax.typeset([document.querySelector(`#${whereDiv}`)])
 }
 
 // Called by the "Search" button in the "Search question bank" panel.

@@ -77,6 +77,8 @@ server {
         #
         # _`gunicorn socket`: This matches the ``--bind`` parameter when `gunicorn is run <run_bookserver>`.
         proxy_pass http://unix:/run/fastapi.sock:/;
+        # For file uploads we need a larger limit than 1M for whiteboard pictures and pdf uploads
+        client_max_body_size 25M;
     }
 
     location / {

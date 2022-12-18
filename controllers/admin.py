@@ -22,6 +22,7 @@ from random import randint
 
 # Third Party library
 # -------------------
+import boto3, botocore
 from dateutil.parser import parse
 from rs_grading import _get_assignment, send_lti_grades
 from runestone import cmap
@@ -1618,7 +1619,38 @@ def htmlsrc():
         htmlsrc and htmlsrc[0:2] == "\\x"
     ):  # Workaround Python3/Python2  SQLAlchemy/DAL incompatibility with text columns
         htmlsrc = htmlsrc.decode("hex")
-    return json.dumps(htmlsrc)
+
+    result = {"htmlsrc": htmlsrc}
+    logger.debug("htmlsrc = {htmlsrc}")
+    if "data-attachment" in htmlsrc:
+        # get the URL for the attachment, but we need the course, the user and the divid
+        session = boto3.session.Session()
+        client = session.client(
+            "s3",
+            config=botocore.config.Config(s3={"addressing_style": "virtual"}),
+            region_name=settings.region,
+            endpoint_url="https://nyc3.digitaloceanspaces.com",
+            aws_access_key_id=settings.spaces_key,
+            aws_secret_access_key=settings.spaces_secret,
+        )
+
+        prepath = f"{auth.user.course_name}/{acid}/{studentId}"
+        logger.debug(f"checking path {prepath}")
+        response = client.list_objects(Bucket=settings.bucket, Prefix=prepath)
+        logger.debug(f"response = {response}")
+        if response and "Contents" in response:
+            obj = response["Contents"][0]
+            logger.debug("key = {obj['Key']}")
+            url = client.generate_presigned_url(
+                ClientMethod="get_object",
+                Params={"Bucket": settings.bucket, "Key": obj["Key"]},
+                ExpiresIn=300,
+            )
+
+        else:
+            url = ""
+        result["attach_url"] = url
+    return json.dumps(result)
 
 
 @auth.requires(

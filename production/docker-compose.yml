@@ -51,4 +51,7 @@ services:
       LOGIN_URL: "/runestone/default/user"
       ADS_FILE: '${ADS_FILE}'
       WORKER_NAME: ${HOSTNAME}
+      SPACES_KEY: ${SPACES_KEY}
+      SPACES_SECRET: ${SPACES_SECRET}
+
 
