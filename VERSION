@@ -1,4 +1,7 @@
-RunestoneServer-6.1.12
+RunestoneServer-6.1.13
+
+- Support for grading attachments to short answer questions!
+- Major improvement to help students track their assignment status
 
 Changes since 6.1.11
 - Peer Instruction updates
