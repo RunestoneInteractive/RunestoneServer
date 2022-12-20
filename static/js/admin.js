@@ -36,18 +36,27 @@ function gradeIndividualItem() {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    border: solid blue;
-    border-radius: 5px;
     padding: 5px;">
-    <input id='filterto0' type=checkbox unchecked/>Click to only show questions with a grade of 0 or not graded</div>`);
-    let rsd = document.querySelector("#filterto0");
+    <select id="filterSelect">
+        <option value="nofilter">Show All</option>
+        <option value="filterto0">Show questions with a score of 0 or None</option>
+        <option value="filterto1">Show questions with a non-zero score</option>
+    </select>
+    `)
+    let rsd = document.querySelector("#filterSelect");
     rsd.addEventListener('change',
     function () {
         let gPanels = document.querySelectorAll(".loading");
         for (let panel of gPanels) {
             let v = panel.querySelector("#gradingform").querySelector("#input-grade").value;
-            if (rsd.checked) {
+            if (rsd.value == "filterto0") {
                 if (v == 0 || v == "") {
+                    panel.style.display = "block";
+                } else {
+                    panel.style.display = "none";
+                }
+            } else if (rsd.value == "filterto1") {
+                if (v > 0) {
                     panel.style.display = "block";
                 } else {
                     panel.style.display = "none";
