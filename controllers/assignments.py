@@ -981,7 +981,10 @@ def chooseAssignment():
         else:
             status.append("")
             score.append("Not Graded")
-            ontime.append("")
+            if deadline > datetime.datetime.utcnow():
+                ontime.append(True)
+            else:
+                ontime.append(False)
 
         # Convert the duedate for current assignment to string
         duedates.append(date2String(deadline))
