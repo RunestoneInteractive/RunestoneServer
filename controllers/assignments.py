@@ -980,6 +980,8 @@ def chooseAssignment():
             status.append("Past Due")
         else:
             status.append("")
+            score.append("Not Graded")
+            ontime.append("")
 
         # Convert the duedate for current assignment to string
         duedates.append(date2String(deadline))
