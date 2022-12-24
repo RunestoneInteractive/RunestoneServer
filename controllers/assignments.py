@@ -588,7 +588,10 @@ def update_submit():
         res["success"] = True
     # if can't find grades table for current user, return no success
     else:
-        res["success"] = False
+        db.grades.insert(
+            auth_user=auth.user.id, assignment=assignment_id, is_submit=is_submit
+        )
+        res["success"] = True
 
     return json.dumps(res)
 
