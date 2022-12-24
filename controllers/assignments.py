@@ -978,16 +978,27 @@ def chooseAssignment():
                 status.append("")
         elif timestamp > deadline and assignment.enforce_due:
             status.append("Past Due")
+            score.append("Not Graded")
+            ontime.append(False)
         else:
             status.append("")
             score.append("Not Graded")
-            if deadline > datetime.datetime.utcnow():
-                ontime.append(True)
-            else:
-                ontime.append(False)
+            ontime.append(True)
 
         # Convert the duedate for current assignment to string
         duedates.append(date2String(deadline))
+
+    is_parallel = len(status) == len(score) == len(ontime) == len(duedates)
+    if is_parallel is False:
+        logger.error(
+            "Arrays must be parallel {auth.user.username=} {course.course_name=}"
+        )
+        logger.debug(f"{status=}")
+        logger.debug(f"{score=}")
+        logger.debug(f"{ontime=}")
+        logger.debug(f"{duedates=}")
+
+    assert len(status) == len(score) == len(ontime) == len(duedates)
 
     return dict(
         assignments=assignments,
