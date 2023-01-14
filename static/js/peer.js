@@ -433,6 +433,13 @@ async function showPeerEnableVote2() {
     $(".runestone [type=radio]").prop("checked", false);
     $(".runestone [type=checkbox]").prop("checked", false);
     studentVoteCount += 1;
+    studentSubmittedVote2 = false;
+    let checkme = document.querySelector(".runestone button");
+    if (checkme.innerHTML === "Check Me") {
+        checkme.addEventListener("click", function (event) {
+            studentSubmittedVote2 = true;
+        });
+    }
 }
 
 $(function () {

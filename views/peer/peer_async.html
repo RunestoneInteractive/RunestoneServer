@@ -55,12 +55,13 @@
         setTimeout(connect, 1000);
     });
     var studentVoteCount = 1;
+    var studentSubmittedVote2 = false;
     var vote2done = false;
     var nextQuestionNumber = {{= nextQnum}};
     var assignId = '{{=assignment_id}}'
 
     function checkVoteCount() {
-        if (studentVoteCount < 2) {
+        if (studentVoteCount < 2 || studentSubmittedVote2 == false) {
             alert("You must vote twice before moving on");
             return false;
         }
