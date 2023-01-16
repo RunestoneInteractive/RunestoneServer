@@ -21,8 +21,14 @@
 </div>
 
 <div class="row">
+    {{ if not all_done: }}
     <div class="oneq col-md-6">{{=XML(current_question['htmlsrc'])}}</div>
-
+    {{ else: }}
+    <div class="oneq col-md-6">
+        <h3>Congratulations, you have completed this assignment!</h3>
+    </div>
+    {{ pass }}
+    {{ if not all_done: }}
     <div class="col-md-6">
         <p>
             Please provide an explanation for why you answered
@@ -37,8 +43,10 @@
             <p id="nextStep"></p>
         </div>
     </div>
+    {{pass}}
 </div>
 
+{{ if not all_done: }}
 <div>
     <form action="/peer/peer_async">
         <input type="hidden" name="assignment_id" value="{{=assignment_id}}" />
@@ -46,7 +54,7 @@
         <button type="submit" onclick="return checkVoteCount()">Next Question</button>
     </form>
 </div>
-
+{{ pass }}
 <script src="/runestone/static/js/peer.js?v={{=request.peer_mtime}}"></script>
 <script>
     var user = "{{=auth.user.username}}";

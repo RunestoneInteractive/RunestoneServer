@@ -136,13 +136,15 @@ def _get_numbered_question(assignment_id, qnum):
     a_qs = db(db.assignment_questions.assignment_id == assignment_id).select(
         orderby=[db.assignment_questions.sorting_priority, db.assignment_questions.id]
     )
+    done = False
     if qnum > len(a_qs) - 1:
         qnum = len(a_qs) - 1
+        done = True
 
     current_question_id = a_qs[qnum].question_id
     current_question = db(db.questions.id == current_question_id).select().first()
 
-    return current_question
+    return current_question, done
 
 
 def _get_lastn_answers(num_answer, div_id, course_name, start_time, end_time=None):
@@ -500,7 +502,7 @@ def peer_async():
     if request.vars.question_num:
         qnum = int(request.vars.question_num)
 
-    current_question = _get_numbered_question(assignment_id, qnum)
+    current_question, all_done = _get_numbered_question(assignment_id, qnum)
 
     return dict(
         course_id=auth.user.course_name,
@@ -508,6 +510,7 @@ def peer_async():
         current_question=current_question,
         assignment_id=assignment_id,
         nextQnum=qnum + 1,
+        all_done=all_done,
     )
 
 
