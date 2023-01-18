@@ -70,7 +70,7 @@ def dashboard():
         next = "Reset"
     else:
         next = False
-    current_question = _get_current_question(assignment_id, next)
+    current_question, done = _get_current_question(assignment_id, next)
     assignment = db(db.assignments.id == assignment_id).select().first()
 
     db.useinfo.insert(
@@ -105,7 +105,7 @@ def dashboard():
 
 def extra():
     assignment_id = request.vars.assignment_id
-    current_question = _get_current_question(assignment_id, False)
+    current_question, done = _get_current_question(assignment_id, False)
 
     return dict(
         course_id=auth.user.course_name,
@@ -334,7 +334,7 @@ def peer_question():
 
     assignment_id = request.vars.assignment_id
 
-    current_question = _get_current_question(assignment_id, False)
+    current_question, done = _get_current_question(assignment_id, False)
     assignment = db(db.assignments.id == assignment_id).select().first()
 
     return dict(
@@ -550,7 +550,9 @@ def get_async_explainer():
             else:
                 tries += 1
         mess, participants = _get_user_messages(user, div_id, course_name)
-        participants.remove(user)
+        # This is the easy solution, but may result in a one-sided conversation.
+        if user in participants:
+            participants.remove(user)
     else:
         messages = db(
             (db.useinfo.event == "sendmessage")
