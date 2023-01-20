@@ -124,6 +124,11 @@ def index():
     chapters = db(db.chapters.course_id == course.base_course).select(
         orderby=db.chapters.chapter_num
     )
+    c_origin = getCourseOrigin(course.base_course)
+    if c_origin and c_origin.value == "PreTeXt":
+        c_origin = "PreTeXt"
+    else:
+        c_origin = "Runestone"
 
     logger.debug("getting chapters for {}".format(auth.user.course_name))
     chapget = ChapterGet(chapters)
@@ -320,6 +325,7 @@ def index():
         studentactivity=studentactivity,
         recentactivity=recentactivity,
         dailyactivity=dailyactivity,
+        origin=c_origin,
     )
 
 
