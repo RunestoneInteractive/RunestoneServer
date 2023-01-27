@@ -393,9 +393,15 @@ def build(config, clone, ptx, gen, manifest, course):
                 )
                 exit(1)
 
-    # proj_dir = os.path.basename(repo).replace(".git", "")
+    # if course name is different from book name, clone to the right folder
+    if not os.path.isdir(course):
+        course = str(clone).split("/")[4]
+
+    #proj_dir = os.path.basename(repo).replace(".git", "")
     click.echo("Switching to book dir {}".format(course))
+
     os.chdir(course)
+
     if ptx:
         res = _build_ptx_book(config, gen, manifest, course)
 
