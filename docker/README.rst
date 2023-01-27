@@ -267,7 +267,7 @@ No books are installed by default; you must add books using the following proces
 
 .. code-block:: bash
 
-    rsmanage build thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+    rsmanage build --clone https://github.com/RunestoneInteractive/thinkcspy.git thinkcspy
 
 After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 
