@@ -387,6 +387,16 @@ complete rebuild, use:
 
     docker-tools build -- --no-cache
 
+Rebuilding The Book
+***************
+
+To manually rebuild the book:
+
+.. code-block:: bash
+   docker-tools shell
+   cd books/thinkcspy
+   runestone build -all deploy
+
 Shelling Inside
 ***************
 
