@@ -192,24 +192,14 @@ def _score_one_khanex(row, points, autograde):
 
 
 def _score_one_webwork(row, points, autograde):
-    # row is from useinfo for now -- we may want to make a webwork_answers table later
-    # the act field can be very convoluted but it willl end with: :correct:0:count:4:pct:0
-    if "act" in row:
-        parts = row.act.split(":")
-        if parts[-2] == "pct":
-            percent = float(parts[-1]) * 100
-        else:
-            logger.error("ACT field has no pct for a webwork problem")
-            percent = None
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
     else:
-        return 0.0
-    if autograde == "pct_correct":
-        pct_correct = percent
-    else:
-        if percent >= 99.99:
+        if row.correct:
             pct_correct = 100
         else:
             pct_correct = 0
+
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
@@ -289,6 +279,30 @@ def _scorable_useinfos(
     return db(query).select(
         db.useinfo.id, db.useinfo.event, db.useinfo.act, orderby=db.useinfo.timestamp
     )
+
+
+def _scorable_webwork_answers(
+    course_name,
+    sid,
+    question_name,
+    points,
+    deadline,
+    practice_start_time=None,
+    db=None,
+    now=None,
+):
+    query = (
+        (db.webwork_answers.course_name == course_name)
+        & (db.webwork_answers.sid == sid)
+        & (db.webwork_answers.div_id == question_name)
+    )
+    if deadline:
+        query = query & (db.webwork_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.webwork_answers.timestamp >= practice_start_time)
+    if now:
+        query = query & (db.webwork_answers.timestamp <= now)
+    return db(query).select(orderby=db.webwork_answers.timestamp)
 
 
 def _scorable_parsons_answers(
@@ -681,7 +695,7 @@ def _autograde_one_q(
         logger.debug("AGDB - done with khanex")
     elif question_type == "webwork":
         logger.debug("grading a WebWork!!")
-        results = _scorable_useinfos(
+        results = _scorable_webwork_answers(
             course_name,
             sid,
             question_name,
