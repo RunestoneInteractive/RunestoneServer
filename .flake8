@@ -2,12 +2,15 @@
 max-line-length=88
 ignore=F821,
   W503,
-  E203,  # space before :
+  E203,
+  # space before :
   E501,
   E265,
-  E266,   # too many #
+  E266,
+  # too many #
   E711,
-  E712    # web2py needs to compare to == True or == False for queries
+  E712
+  # web2py needs to compare to == True or == False for queries
 
 builtins=settings,
   request,
