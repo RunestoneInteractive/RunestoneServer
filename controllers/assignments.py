@@ -706,6 +706,9 @@ def doAssignment():
                 'src="../_static/', 'src="' + get_course_url("_static/")
             )
             htmlsrc = htmlsrc.replace("../_images", get_course_url("_images"))
+            htmlsrc = htmlsrc.replace(
+                "generated/webwork", get_course_url("generated/webwork")
+            )
         else:
             htmlsrc = None
 
