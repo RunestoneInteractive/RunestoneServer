@@ -121,6 +121,18 @@ def _score_one_parsons(row, points, autograde):
     return _score_from_pct_correct(pct_correct, points, autograde)
 
 
+def _score_one_microparsons(row, points, autograde):
+    # row is from microparsons_answers
+    if autograde == "pct_correct" and "percent" in row and row.percent is not None:
+        pct_correct = int(round(row.percent * 100))
+    else:
+        if row.correct:
+            pct_correct = 100
+        else:
+            pct_correct = 0
+    return _score_from_pct_correct(pct_correct, points, autograde)
+
+
 def _score_one_fitb(row, points, autograde):
     # row is from fitb_answers
     if autograde == "pct_correct" and "percent" in row and row.percent is not None:
@@ -327,6 +339,30 @@ def _scorable_parsons_answers(
         if now:
             query = query & (db.parsons_answers.timestamp <= now)
     return db(query).select(orderby=db.parsons_answers.timestamp)
+
+
+def _scorable_microparsons_answers(
+    course_name,
+    sid,
+    question_name,
+    points,
+    deadline,
+    practice_start_time=None,
+    db=None,
+    now=None,
+):
+    query = (
+        (db.microparsons_answers.course_name == course_name)
+        & (db.microparsons_answers.sid == sid)
+        & (db.microparsons_answers.div_id == question_name)
+    )
+    if deadline:
+        query = query & (db.microparsons_answers.timestamp < deadline)
+    if practice_start_time:
+        query = query & (db.microparsons_answers.timestamp >= practice_start_time)
+        if now:
+            query = query & (db.microparsons_answers.timestamp <= now)
+    return db(query).select(orderby=db.microparsons_answers.timestamp)
 
 
 def _scorable_fitb_answers(
@@ -707,6 +743,21 @@ def _autograde_one_q(
         )
         scoring_fn = _score_one_webwork
         logger.debug("AGDB - done with webwork")
+
+    elif question_type == "hparsons":
+        logger.debug("grading a microparsons!!")
+        results = _scorable_microparsons_answers(
+            course_name,
+            sid,
+            question_name,
+            points,
+            deadline,
+            practice_start_time,
+            db=db,
+            now=now,
+        )
+        scoring_fn = _score_one_microparsons
+        logger.debug("AGDB - done with microparsons")
 
     elif question_type == "codelens":
         if (

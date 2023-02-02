@@ -248,6 +248,21 @@ db.define_table(
     migrate=bookserver_owned("webwork_answers"),
 )
 
+# webwork_answers
+# ------------
+db.define_table(
+    "microparsons_answers",
+    Field("timestamp", "datetime"),
+    Field("div_id", "string"),
+    Field("sid", "string"),
+    Field("course_name", "string"),
+    Field("answer", "json"),
+    Field("correct", "boolean"),
+    Field("percent", "double"),
+    migrate=bookserver_owned("microparsons_answers"),
+)
+
+
 # payments
 # --------
 db.define_table(
