@@ -832,10 +832,8 @@ def studentinfo(config, student):
         from auth_user join user_courses ON user_courses.user_id = auth_user.id
         join courses on courses.id = user_courses.course_id where username = '{student}'"""
     )
-    print(f"res = {res}")
     # fetchone fetches the first row without closing the cursor.
     first = res.fetchone()
-    print(student)
     print("id\tFirst\tLast\temail")
     print("\t".join(str(x) for x in first[:4]))
     print("")
