@@ -409,10 +409,8 @@ def build(config, clone, ptx, gen, manifest, course):
 
 
 #
-#    inituser
+#    adduser
 #
-
-
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
 @click.option(
@@ -460,7 +458,7 @@ def adduser(
         for line in csv.reader(fromfile):
             if len(line) != 6:
                 click.echo("Not enough data to create a user.  Lines must be")
-                click.echo("username, email first_name, last_name, password, course")
+                click.echo("username, email, first_name, last_name, password, course")
                 exit(1)
             if "@" not in line[1]:
                 click.echo("emails should have an @ in them in column 2")
