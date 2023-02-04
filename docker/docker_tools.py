@@ -276,8 +276,8 @@ def init(
             # Per the `Docker docs <https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user>`_, enable running Docker as a non-root user.
             #
             # Ignore errors if the groupadd fails; the group may already exist.
-            xqt('sudo groupadd docker', check=False)
-            xqt('sudo usermod -a -G docker $USER')
+            xqt("sudo groupadd docker", check=False)
+            xqt("sudo usermod -a -G docker $USER")
 
             # Until group privileges to take effect, use ``sudo`` to run Docker.
             docker_sudo = True
@@ -340,7 +340,7 @@ def init(
                 "sudo dscl . append /Groups/www-data GroupMembership $USER",
             )
         else:
-            xqt('sudo usermod -a -G www-data $USER')
+            xqt("sudo usermod -a -G www-data $USER")
         did_group_add = True
 
     # Provide server-related CLIs. While installing this sooner would be great, we can't assume that the prereqs (the downloaded repo) are available.
@@ -432,7 +432,11 @@ class BuildConfiguration(Enum):
 )
 @click.option("--rust/--no-rust", default=False, help="Install the Rust toolchain.")
 @click.option("--tex/--no-tex", default=False, help="Install LaTeX and related tools.")
-@click.option("--verilog/--no-verilog", default=False, help="Install the Icarus Verilog simulation tool.")
+@click.option(
+    "--verilog/--no-verilog",
+    default=False,
+    help="Install the Icarus Verilog simulation tool.",
+)
 def build(
     passthrough: Tuple,
     build_config_name: str,
@@ -827,9 +831,9 @@ def _build_phase_1(
     )
     w2p_parent = Path(env.WEB2PY_PATH).parent
     xqt(
-        f"eatmydata wget --no-verbose https://mdipierro.pythonanywhere.com/examples/static/{WEB2PY_VERSION}/web2py_src.zip",
-        "eatmydata unzip -q web2py_src.zip",
-        "rm -f web2py_src.zip",
+        "eatmydata wget --no-verbose https://runestone.academy/cdn/runestone/web2py_src_2.21.zip",
+        "eatmydata unzip -q web2py_src_2.21.zip",
+        "rm -f web2py_src_2.21.zip",
         cwd=w2p_parent,
     )
 
