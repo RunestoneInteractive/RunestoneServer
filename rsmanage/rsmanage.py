@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 
-# Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.)
+# Launch into the Docker container before attempting imports that are only installed there. (If Docker isn't installed, we assume the current venv already contains the necessary packages.
 wd = (Path(__file__).parents[1]).resolve()
 sys.path.extend([str(wd / "docker"), str(wd / "tests")])
 try:
