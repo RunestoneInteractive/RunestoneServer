@@ -1,9 +1,12 @@
 # *************************
 # |docname| - Runestone API
 # *************************
-# This module implements the API that the Runestone Components use to communicate with a Runestone Server.
 #  **Most of this file is Deprecated**
+# **Most of the endpoints in this file are no longer used. See BookServer **
 # **Do not** make any changes to the following functions. They will be removed in an upcoming release.
+# This module implements the API that the Runestone Components use to communicate with a Runestone Server.
+# If you are trying to debug some browser to server API stuff you almost certainly
+# want to check the BookServer not here.
 # def compareAndUpdateCookieData(sid: str):
 # def hsblog():
 # def runlog():
