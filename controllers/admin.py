@@ -1934,6 +1934,7 @@ def _get_toc_and_questions():
 
 # This is the place to add meta information about questions for the
 # assignment builder
+# TODO: Incorporate which_to_grade stuff in here.
 def _add_q_meta_info(qrow):
     qt = {
         "mchoice": "Mchoice ✓",
@@ -1953,6 +1954,7 @@ def _add_q_meta_info(qrow):
         "quizly": "Quizly ✓",
         "khanex": "KhanAcademy ✓",
         "webwork": "WebWork ✓",
+        "hparsons": "MicroParsons ✓",
     }
     qt = qt.get(qrow.questions.question_type, "")
 
