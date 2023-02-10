@@ -844,9 +844,16 @@ def _autograde_one_q(
         elif (
             which_to_grade == "all_answer"
         ):  # This is used for scoring peer instruction where we want to look at multiple answers
-            score = scoring_fn(results, points, autograde)
-            id = None
-            logger.debug("SCORE = %s by %s", score, scoring_fn)
+            # TODO: This will need to change if there are other question types
+            # that support the all_answer which to grade.
+            if scoring_fn == _score_peer_instruction:
+                score = scoring_fn(results, points, autograde)
+                id = None
+                logger.debug("SCORE = %s by %s", score, scoring_fn)
+            else:
+                logger.error(
+                    "Scoring function must be _score_peer_instruction for all_answer"
+                )
 
         else:
             logger.error("Unknown Scoring Scheme %s ", which_to_grade)
