@@ -416,6 +416,11 @@
 	            autograde = 'manual';
 	            whichto = '';
 	          }
+			  let atype = document.querySelector("#assign_is_peer")
+			  if (atype.checked) {
+			  	autograde = "peer"
+				  whichto = "all_answer"
+			  }
 	          let resp = await updateAssignmentRaw(node.id, null, 1, autograde, whichto);
 	          return resp;
 	        },
