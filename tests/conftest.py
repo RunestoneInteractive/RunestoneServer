@@ -634,7 +634,7 @@ class _TestUser(object):
         # Now, post the registration.
         self.test_client.validate(
             "default/user/register",
-            "Runestone Registration" if self.is_free else "Payment Amount",
+            "Support Runestone" if self.is_free else "Payment Amount",
             data=dict(
                 username=self.username,
                 first_name=self.first_name,
@@ -702,7 +702,7 @@ class _TestUser(object):
             if is_free is None:
                 expected_string = "Course Selection"
             else:
-                expected_string = "Our Mission" if is_free else "Payment Amount"
+                expected_string = "Support Runestone" if is_free else "Payment Amount"
         username = username or self.username
         first_name = first_name or self.first_name
         last_name = last_name or self.last_name

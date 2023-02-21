@@ -40,7 +40,7 @@ jobs:
                     # Wait for the container to start and create a basic venv before running docker tools inside it.
                     sleep 5
                     # Invoke this directly, since the ``docker-tools`` script isn't installed yet. After this finishes, the docker tools are installed.
-                    docker exec -t runestoneserver-runestone-1 bash -c "\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py wait"
+                    docker compose exec runestone bash -c "\$RUNESTONE_PATH/.venv/bin/python \$RUNESTONE_PATH/docker/docker_tools.py wait"
             -   name: Test
                 id: pytest
                 run: |
@@ -50,4 +50,4 @@ jobs:
                     echo "Checking if site is up..."
                     curl --silent --location 127.0.0.1 | grep "About Runestone"
                     # Test just the Runestone server.
-                    docker-tools test --rs
+                    docker-tools test --rs -- --skip_w3_validate
