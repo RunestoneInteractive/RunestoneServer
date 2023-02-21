@@ -1191,7 +1191,6 @@ def questionBank():
     for clause in query_clauses[1:]:
         myquery = myquery & clause
 
-    print(myquery)
     rows = db(myquery).select()
 
     questions = []
