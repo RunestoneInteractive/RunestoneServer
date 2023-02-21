@@ -7,7 +7,7 @@
 # ************************************************************
 # To build, execute `docker-tools <docker/docker_tools.py>` ``build``.
 
-FROM python:3.9-bullseye
+FROM python:3.10-bullseye
 
 LABEL authors="@bnmnetp,@vsoch,@yarikoptic,@bjones1"
 
