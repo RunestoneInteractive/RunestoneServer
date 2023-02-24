@@ -225,7 +225,7 @@ async function sendMessage(event) {
     var messages = document.getElementById("messages");
     var message = document.createElement("li");
     message.classList.add("outgoing-mess");
-    var content = document.createTextNode(input.value);
+    var content = document.createTextNode(`${user}: ${input.value}`);
     message.appendChild(content);
     messages.appendChild(message);
     input.value = "";
@@ -249,6 +249,7 @@ function warnAndStopVote(event) {
         let butt = document.querySelector("#vote3");
         butt.classList.replace("btn-info", "btn-secondary");
     }
+    event.srcElement.disabled = true;
 }
 
 async function makePartners() {
@@ -276,6 +277,9 @@ async function makePartners() {
     let spec = await resp.json();
     if (spec !== "success") {
         alert(`Pairs not made! ${spec}`);
+    } else {
+        // success
+        document.querySelector("#makep").disabled = true;
     }
 }
 
@@ -293,6 +297,7 @@ function startVote2(event) {
     };
     //ws.send(JSON.stringify(mess));
     publishMessage(mess);
+    event.srcElement.disabled = true;
 }
 
 async function clearPartners(event) {
