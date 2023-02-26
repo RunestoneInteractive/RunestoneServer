@@ -73,6 +73,10 @@ def start_servers(dev: bool) -> None:
 def _start_servers(dev: bool) -> None:
     ensure_in_docker()
     bs_config = os.environ.get("BOOK_SERVER_CONFIG", "production")
+    w2p_config = os.environ.get("WEB2PY_CONFIG", "production")
+    if bs_config != w2p_config:
+        raise ValueError("web2py and bookserver configs do not match")
+
     if bs_config == "development":
         dev = True
 
