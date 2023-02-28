@@ -1112,7 +1112,7 @@ def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
 
 # Run Poetry and associated tools.
 def run_poetry(is_dev: bool):
-    no_dev_arg = "" if is_dev else " --only main"
+    no_dev_arg = "" if is_dev else " --no-dev"
     xqt(
         # Update dependencies. See `scripts/poetry_fix.py`. This must come before Poetry, since it will check for the existence of the project created by these commands. (Even calling ``poetry config`` will perform this check!)
         f"{sys.executable} runestone_poetry_project/poetry_fix.py{no_dev_arg}",
