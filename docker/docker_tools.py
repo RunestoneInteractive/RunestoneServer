@@ -1115,7 +1115,6 @@ def run_poetry(is_dev: bool):
     no_dev_arg = "" if is_dev else " --only main"
     xqt(
         # Update dependencies. See `scripts/poetry_fix.py`. This must come before Poetry, since it will check for the existence of the project created by these commands. (Even calling ``poetry config`` will perform this check!)
-        f"{sys.executable} -m pip install --user toml",
         f"{sys.executable} runestone_poetry_project/poetry_fix.py{no_dev_arg}",
         # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible and at a known location (``./.venv``).
         "poetry config virtualenvs.in-project true",
