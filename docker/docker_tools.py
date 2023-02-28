@@ -17,7 +17,7 @@
 #
 #   -   Single-container: these commands creates a container designed to execute on a single server. The Dockerized applications associated with it include Jobe, Redis, and Postgres. A volume is used to persist data, such as updates to the server.
 #
-#       -   Production mode (the default): ``docker-tool build --single`` creates a container designed for production (which includes obtaining an HTTPS certificate).
+#       -   Production mode (the default): ``docker-tools build --single`` creates a container designed for production (which includes obtaining an HTTPS certificate).
 #
 #       -   Development mode: ``docker-tools build --single-dev`` creates a container supporting a development mode, which provides additional tools and installs the BookServer and Runestone Components from github, instead of from releases on PyPI.
 #
@@ -868,6 +868,7 @@ def _build_phase_1(
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
         "ln -sf $RUNESTONE_PATH/.venv/bin/sphinx-build /usr/local/bin",
         # Deal with a different subdirectory layout inside the container (mandated by web2py) and outside the container by adding these symlinks.
+        # TODO: should only do this in dev
         "ln -sf $BOOK_SERVER_PATH $WEB2PY_PATH/applications/BookServer",
         # We can't use ``$BOOK_SERVER_PATH`` here, since we need ``/srv/bookserver-dev`` in lowercase, not CamelCase.
         "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
@@ -1044,7 +1045,9 @@ def _build_phase_2_core(
         xqt("rm -f $RUNESTONE_PATH/databases/*")
         print("Populating database...")
         xqt("rsmanage initdb --force", cwd=env.WEB2PY_PATH)
-        xqt("alembic stamp head", cwd=env.BOOK_SERVER_PATH)
+        # Should only use alembic in dev mode.
+        if build_config.is_dev():
+            xqt("alembic stamp head", cwd=env.BOOK_SERVER_PATH)
     else:
         print("Database already populated.")
         # TODO: any checking to see if the db is healthy? Perhaps run Alembic autogenerate to see if it wants to do anything?
