@@ -8,5 +8,5 @@ setup(
     version="0.1",
     install_requires=["click"],
     py_modules=["docker_tools"],
-    entry_points={"console_scripts": ["docker-tools = docker_tools.docker_tools:cli"]},
+    entry_points={"console_scripts": ["docker-tools = docker.docker_tools:cli"]},
 )
