@@ -863,7 +863,7 @@ def _build_phase_1(
     # ^^^^^^^^^^^^^^^^^^^
     xqt(
         "mkdir -p $WEB2PY_PATH/logs",
-        "mkdir -p $WEB2PY_PATH/errors",
+        "mkdir -p $RUNESTONE_PATH/errors",
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
