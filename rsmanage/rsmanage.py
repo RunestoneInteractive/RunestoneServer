@@ -409,10 +409,8 @@ def build(config, clone, ptx, gen, manifest, course):
 
 
 #
-#    inituser
+#    adduser
 #
-
-
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
 @click.option(
@@ -460,7 +458,7 @@ def adduser(
         for line in csv.reader(fromfile):
             if len(line) != 6:
                 click.echo("Not enough data to create a user.  Lines must be")
-                click.echo("username, email first_name, last_name, password, course")
+                click.echo("username, email, first_name, last_name, password, course")
                 exit(1)
             if "@" not in line[1]:
                 click.echo("emails should have an @ in them in column 2")
@@ -834,10 +832,8 @@ def studentinfo(config, student):
         from auth_user join user_courses ON user_courses.user_id = auth_user.id
         join courses on courses.id = user_courses.course_id where username = '{student}'"""
     )
-    print(f"res = {res}")
     # fetchone fetches the first row without closing the cursor.
     first = res.fetchone()
-    print(student)
     print("id\tFirst\tLast\temail")
     print("\t".join(str(x) for x in first[:4]))
     print("")
