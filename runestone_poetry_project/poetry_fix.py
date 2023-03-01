@@ -27,86 +27,7 @@
 #           bookserver = { path = "../BookServer", develop = true }
 #           runestone = { path = "../RunestoneComponents", develop = true }
 #
-#       ...in production mode; it does the opposite (changes ``[tool.poetry.dependencies]`` to ``[tool.no-poetry.dependencies]``) in development mode. This hides the modified section from Poetry, so the file now looks like an either/or project.
-#
-# #.    Poetry doesn't install development dependencies in projects included through a `path dependency <https://python-poetry.org/docs/dependency-specification/#path-dependencies>`_. As a workaround, this script copies development dependencies from a project into an otherwise empty, auto-created "project", but puts them in the production dependencies section of this newly-created "project", so they will be installed. For example, the BookServer ``pyproject.toml`` contains:
-#
-#       .. code-block:: text
-#
-#           [tool.poetry.dev-dependencies]
-#           black = "~= 22.0"
-#           console-ctrl = "^0.1.0"
-#           ...many more, which are omitted for clarity...
-#
-#       Poetry won't install these. Therefore, `make_dev_pyproject <make_dev_pyproject>` creates a "project" named bookserver-dev whose ``pyproject.toml`` contains a copy of the BookServer development dependencies, but placed in the production dependencies section of this ``bookserver-dev`` "project", so they will be installed. For example, the bookserver-dev ``pyproject.toml`` contains:
-#
-#       .. code-block:: text
-#
-#           [tool.poetry.dependencies]   # <== CHANGED!
-#           black = "~= 22.0"
-#           console-ctrl = "^0.1.0"
-#           ...many more, which are omitted for clarity...
-#
-#       This also means that the RunestoneServer ``pyproject.toml`` file must be manually edited to include a reference to this "project":
-#
-#       .. code-block:: text
-#
-#           [tool.poetry.dev-dependencies]
-#           bookserver = { path = "../BookServer", develop = true }
-#           bookserver-dev = { path = "../bookserver-dev", develop = true }  # <== MANUALLY ADDED!
-#
-#       The final result looks like this:
-#
-#       .. image:: poetry_fix_diagram.png
-#
-# #.    Poetry generates invalid package metadata for local path dependencies, so that running ``pip show click`` results in a bunch of exceptions. This program doesn't provide a fix for this bug.
-#
-# ...and that's how using Poetry makes dependency management easier...
-#
-#
-# `Invalid package METADATA <https://github.com/python-poetry/poetry/issues/3148>`_
-# =====================================================================================
-# Per the issue linked in the title above, Poetry generates invalid package metadata for local path dependencies (tested on Poetry v1.1.14). For example, the last few lines of ``.venv/lib/python3.8/site-packages/runestone_poetry_project-0.1.0.dist-info/METADATA`` contain:
-#
-# .. code-block:: text
-#
-#   Requires-Dist: pytz (>=2016.6.1)
-#   Requires-Dist: requests (>=2.10.0)
-#   Requires-Dist: rsmanage @ rsmanage
-#   Requires-Dist: runestone
-#   Requires-Dist: runestone-docker-tools @ docker
-#   Requires-Dist: six (>=1.10.0)
-#   Requires-Dist: sphinxcontrib-paverutils (>=1.17)
-#   Requires-Dist: stripe (>=2.0.0,<3.0.0)
-#
-# This causes an exception when running a command such as ``pip show click``:
-#
-# .. code-block:: text
-#
-#   ERROR: Exception:
-#   Traceback (most recent call last):
-#     File "/srv/web2py/applications/runestone/.venv/lib/python3.8/site-packages/pip/_vendor/pkg_resources/__init__.py", line 3021, in _dep_map
-#       return self.__dep_map
-#     File "/srv/web2py/applications/runestone/.venv/lib/python3.8/site-packages/pip/_vendor/pkg_resources/__init__.py", line 2815, in __getattr__
-#       raise AttributeError(attr)
-#   AttributeError: _DistInfoDistribution__dep_map
-#
-# ... along with a long traceback of other chained exceptions.
-#
-# Fixing the ``METADATA`` file to be:
-#
-# .. code-block:: text
-#
-#   Requires-Dist: pytz (>=2016.6.1)
-#   Requires-Dist: requests (>=2.10.0)
-#   Requires-Dist: rsmanage @ file://rsmanage
-#   Requires-Dist: runestone
-#   Requires-Dist: runestone-docker-tools @ file://docker
-#   Requires-Dist: six (>=1.10.0)
-#   Requires-Dist: sphinxcontrib-paverutils (>=1.17)
-#   Requires-Dist: stripe (>=2.0.0,<3.0.0)
-#
-# ... along with a similar fix to the ``METADATA`` for ``bookserver_dev`` allows ``pip`` to run successfully.
+#       ...in production mode; it does the opposite (changes ``[tool.poetry.dev-dependencies]`` to ``[tool.no-poetry.dev-dependencies]``) in development mode. This hides the modified section from Poetry, so the file now looks like an either/or project.
 #
 #
 # TODO
@@ -121,134 +42,16 @@
 # Standard library
 # ----------------
 from pathlib import Path
-import sys
-from typing import Any, Dict, Set
 
 # Third-party imports
 # -------------------
 import click
-import toml
 
 
 # Local application imports
 # -------------------------
 # None.
 #
-# Fix for ``dev-dependencies`` in subprojects
-# ===========================================
-# Given a main Poetry ``pyproject.toml``, these functions look for all subprojects included via path dependencies, creating additional subprojects named ``projectname-dev`` in which the subproject's dev-dependencies become dependencies in the newly-created subproject. This is a workaround for Poetry's inability to install the dev dependencies for a sub project included via a path requirement. To use this, in the main project, do something like:
-#
-# .. code-block:: TOML
-#   :linenos:
-#
-#   [tool.poetry.dev-dependencies]
-#   sub = { path = "../sub", develop = true }
-#   sub-dev = { path = "../sub-dev", develop = true }
-#
-# Create a project clone where the original project's dev-dependencies are dependencies in the clone.
-def create_dev_dependencies(
-    # The path to the project.
-    project_path: Path,
-) -> None:
-    # Create a dev-only flavor.
-    d = toml.load(project_path / "pyproject.toml")
-    tp = d["tool"]["poetry"]
-    dd = "dev-dependencies"
-    # If there are no dev-dependencies, there's nothing to do. Otherwise, move them to dependencies.
-    if dd not in tp:
-        return
-    tp["dependencies"] = tp.pop(dd)
-    # Update the project name.
-    project_name = tp["name"] = tp["name"] + "-dev"
-    # We don't have a readme -- if it exists, Poetry will complain about the missing file it references. Remove it if it exists.
-    tp.pop("readme", None)
-
-    # Put the output in a ``project_name-dev/`` directory.
-    dev = project_path.parent / project_name
-    print(f"Creating {dev}...")
-    dev.mkdir(exist_ok=True)
-    (dev / "pyproject.toml").write_text(toml.dumps(d))
-
-    # Create a minimal project to make Poetry happy.
-    project_name = project_name.replace("-", "_")
-    p = dev / project_name
-    p.mkdir(exist_ok=True)
-    (p / "__init__.py").write_text("")
-
-
-def walk_dependencies(
-    # A dict of Poetry-specific values.
-    poetry_dict: Dict[str, Any],
-    # True to look at dependencies; False to look at dev-dependencies.
-    is_deps: bool,
-    # See `project_path`.
-    project_path: Path,
-    # See `walked_paths_set`.
-    walked_paths_set: Set[Path],
-    # See `poetry_paths_set`.
-    poetry_paths_set: Set[Path],
-):
-    key = "dependencies" if is_deps else "dev-dependencies"
-    for dep in poetry_dict.get(key, {}).values():
-        pth = dep.get("path", "") if isinstance(dep, dict) else None
-        if pth:
-            walk_pyproject(project_path / pth, walked_paths_set, poetry_paths_set)
-
-
-# Given a ``pyproject.toml``, optionally create a dev dependencies project and walk all requirements with path dependencies.
-def walk_pyproject(
-    # The path where a ``pyproject.toml`` exists.
-    project_path: Path,
-    # _`walked_paths_set`: a set of Paths already walked.
-    walked_paths_set: Set[Path],
-    # _`poetry_paths_set`: a set of Paths that contained a Poetry project. This is a strict subset of walked_paths_set_.
-    poetry_paths_set: Set[Path],
-    # True if this is the root ``pyproject.toml`` file -- no dev dependencies will be created for it.
-    is_root: bool = False,
-):
-    project_path = project_path.resolve()
-    # Avoid cycles and unnecessary work.
-    if project_path in walked_paths_set:
-        return
-    walked_paths_set.add(project_path)
-    print(f"Examining {project_path} ...")
-
-    # Process dependencies, if this is a Poetry project.
-    try:
-        d = toml.load(project_path / "pyproject.toml")
-    except FileNotFoundError:
-        return
-    poetry_paths_set.add(project_path)
-    tp = d["tool"]["poetry"]
-    # Search both the dependencies and dev dependencies in this project for path dependencies.
-    walk_dependencies(tp, True, project_path, walked_paths_set, poetry_paths_set)
-    walk_dependencies(tp, False, project_path, walked_paths_set, poetry_paths_set)
-
-    # (Usually) process this file.
-    if not is_root:
-        create_dev_dependencies(project_path)
-
-
-# .. _make_dev_pyproject:
-#
-# Core function: run the whole process on the ``pyproject.toml`` in the current directory.
-def make_dev_pyproject():
-    project_paths_set = set()
-    walk_pyproject(Path("."), set(), project_paths_set, True)
-
-    # Check that we processed the BookServer and the RunestoneComponents.
-    found_bookserver = False
-    found_runestone_components = False
-    for path in project_paths_set:
-        name = path.name
-        found_bookserver |= name == "BookServer"
-        found_runestone_components |= name == "RunestoneComponents"
-    if not found_bookserver:
-        sys.exit("Error: did not process the BookServer Poetry project.")
-    if not found_runestone_components:
-        sys.exit("Error: did not process the RunestoneComponents Poetry project.")
-
-
 # .. _rename_pyproject:
 #
 # Workaround for the main ``pyproject.toml``
@@ -306,12 +109,10 @@ def rewrite_pyproject(is_dev: bool) -> None:
 )
 def main(no_dev: bool):
     """
-    This script works around Poetry bugs related to path dependencies.
+    This script works around Poetry limitations to provide support of either/or dependencies.
     """
     is_dev = not no_dev
     rewrite_pyproject(is_dev)
-    if is_dev:
-        make_dev_pyproject()
 
 
 if __name__ == "__main__":
