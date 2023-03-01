@@ -533,9 +533,22 @@ def _build_phase_0(
         clone_bks = clone_all
         clone_rc = clone_all
 
-    # Create the ``docker/.env`` if it doesn't already exist. TODO: keep a dict of {file name, checksum} and save as JSON. Use this to detect if a file was hand-edited; if not, we can simply replace it.
-    if not Path(".env").is_file():
-        xqt("cp docker/.env.prototype .env")
+    # Create ``docker/.env`` if it doesn't already exist or wasn't edited.
+    dot_env = Path(".env")
+    if not dot_env.is_file() or not subprocess.run(["md5sum", "--check", ".env.md5"]).returncode:
+        # Edit the prototype file, providing the correct value of ``SERVER_CONFIG``.
+        dot_env.write_text(
+            replace_vars(
+                Path("docker/.env.prototype").read_text(),
+                dict(
+                    SERVER_CONFIG="development"
+                    if build_config.is_dev()
+                    else "production"
+                ),
+            )
+        )
+        # Save a checksum, so we can auto-update this if no hand edits were made.
+        xqt("md5sum .env > .env.md5")
 
     # Do the same for ``1.py``.
     one_py = Path("models/1.py")
@@ -850,6 +863,7 @@ def _build_phase_1(
     # ^^^^^^^^^^^^^^^^^^^
     xqt(
         "mkdir -p $WEB2PY_PATH/logs",
+        "mkdir -p $RUNESTONE_PATH/errors",
         "cp $RUNESTONE_PATH/docker/wsgihandler.py $WEB2PY_PATH/wsgihandler.py",
         # Set up nginx (partially -- more in step 3 below).
         "rm /etc/nginx/sites-enabled/default",
@@ -867,14 +881,17 @@ def _build_phase_1(
         "cp $RUNESTONE_PATH/docker/routes.py $WEB2PY_PATH",
         # ``sphinxcontrib.paverutils.run_sphinx`` lacks venv support -- it doesn't use ``sys.executable``, so it doesn't find ``sphinx-build`` in the system path when executing ``/srv/venv/bin/runestone`` directly, instead of activating the venv first (where it does work). As a huge, ugly hack, symlink it to make it available in the system path.
         "ln -sf $RUNESTONE_PATH/.venv/bin/sphinx-build /usr/local/bin",
-        # Deal with a different subdirectory layout inside the container (mandated by web2py) and outside the container by adding these symlinks.
-        # TODO: should only do this in dev
-        "ln -sf $BOOK_SERVER_PATH $WEB2PY_PATH/applications/BookServer",
-        # We can't use ``$BOOK_SERVER_PATH`` here, since we need ``/srv/bookserver-dev`` in lowercase, not CamelCase.
-        "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
-        "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
-        "ln -sf /srv/runestone-dev $WEB2PY_PATH/applications/runestone-dev",
     )
+
+    if build_config.is_dev():
+        xqt(
+            # Deal with a different subdirectory layout inside the container (mandated by web2py) and outside the container by adding these symlinks.
+            "ln -sf $BOOK_SERVER_PATH $WEB2PY_PATH/applications/BookServer",
+            # We can't use ``$BOOK_SERVER_PATH`` here, since we need ``/srv/bookserver-dev`` in lowercase, not CamelCase.
+            "ln -sf /srv/bookserver-dev $WEB2PY_PATH/applications/bookserver-dev",
+            "ln -sf /srv/RunestoneComponents $WEB2PY_PATH/applications/RunestoneComponents",
+            "ln -sf /srv/runestone-dev $WEB2PY_PATH/applications/runestone-dev",
+        )
 
     # Record info about this build. We can't provide ``git`` info, since the repo isn't available (the ``${RUNSTONE_PATH}.git`` directory is hidden, so it's not present at this time). Likewise, volumes aren't mapped, so ``git`` info for the Runestone Components and BookServer isn't available.
     Path("/srv/build_info.txt").write_text(
@@ -1076,7 +1093,7 @@ def _build_phase_2_core(
 
 # Utilities
 # =========
-# A utility to replace all instances of ``${var_name}`` in  a string, where the variables are provided in ``vars_``. This is an alternative to the build-in ``str.format()`` which doesn't require escaping all the curly braces.
+# A utility to replace all instances of ``${var_name}`` in  a string, where the variables are provided in ``vars_``. This is an alternative to the built-in ``str.format()`` which doesn't require escaping all the curly braces.
 def replace_vars(str_: str, vars_: Dict[str, str]) -> str:
     def repl(matchobj: re.Match):
         var_name = matchobj.group(1)
@@ -1098,7 +1115,6 @@ def run_poetry(is_dev: bool):
     no_dev_arg = "" if is_dev else " --no-dev"
     xqt(
         # Update dependencies. See `scripts/poetry_fix.py`. This must come before Poetry, since it will check for the existence of the project created by these commands. (Even calling ``poetry config`` will perform this check!)
-        f"{sys.executable} -m pip install --user toml",
         f"{sys.executable} runestone_poetry_project/poetry_fix.py{no_dev_arg}",
         # By default, Poetry creates a venv in the home directory of the current user (root). However, this isn't accessible when running as ``www-data``. So, tell it to create the venv in a `subdirectory of the project <https://python-poetry.org/docs/configuration/#virtualenvsin-project>`_ instead, which is accessible and at a known location (``./.venv``).
         "poetry config virtualenvs.in-project true",

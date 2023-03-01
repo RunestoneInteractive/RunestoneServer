@@ -200,7 +200,7 @@ For the development use case, you do not need to modify any of the default envir
 
 **OR**
 
-For the production use case, you will need to modify these variables. To do so, edit the ``.env`` file, which Docker will read automatically as it loads containers. A sample ``.env`` file is provided as ``./.env`` (copied from `docker/.env.prototype <.env.prototype>` on the first build). See comments in the file for details.  Especially pay attention to the `SERVER_CONFIG` value.   It defaults to `development` and you will need to change it to `production` if you do a `build --single` or just `build` defaults to single or `build --multi`.
+For the production use case, you will need to modify these variables. To do so, edit the ``.env`` file, which Docker will read automatically as it loads containers. A sample ``.env`` file is provided as ``./.env`` (copied from `docker/.env.prototype <.env.prototype>` on the first build). See comments in the file for details.
 
 Python Settings
 ^^^^^^^^^^^^^^^

@@ -634,7 +634,7 @@ class _TestUser(object):
         # Now, post the registration.
         self.test_client.validate(
             "default/user/register",
-            "Runestone Registration" if self.is_free else "Payment Amount",
+            "Support Runestone Academy" if self.is_free else "Payment Amount",
             data=dict(
                 username=self.username,
                 first_name=self.first_name,
@@ -646,8 +646,6 @@ class _TestUser(object):
                 # Note that ``course_id`` is (on the form) actually a course name.
                 course_id=self.course.course_name,
                 accept_tcp="on",
-                donate="0",
-                _next="/runestone/default/index",
                 _formname="register",
             ),
         )
