@@ -18,7 +18,7 @@ jobs:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
             SERVER_CONFIG: test
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
                 with:
                     path: RunestoneServer
             -   name: Set up Python 3.10

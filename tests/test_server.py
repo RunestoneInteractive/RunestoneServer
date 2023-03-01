@@ -84,7 +84,7 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         # ----------------
         ("assignments/chooseAssignment", True, "Assignments", 2),
         ("assignments/doAssignment", True, "Bad Assignment ID", 2),
-        # ("assignments/practice", True, "access token", 1),
+        ("assignments/practice", True, "Practice", 1),
         ("assignments/practiceNotStartedYet", True, "test_course_1", 1),
         # **Default**
         # ------------
