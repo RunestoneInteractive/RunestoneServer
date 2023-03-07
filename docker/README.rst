@@ -42,7 +42,7 @@ Open a Terminal. In the Terminal:
 
 #.  Edit ``/etc/paths``; add ``/opt/homebrew/bin`` as the first line in that file.
 #.  `Install Homebrew <https://brew.sh/#install>`_.
-#.  Execute ``brew install python docker``.
+#.  Execute ``brew install python docker md5sha1sum``.
 #.  Run the newly-installed Docker Desktop application.
 
     .. note::
