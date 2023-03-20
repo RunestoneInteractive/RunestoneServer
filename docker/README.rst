@@ -395,7 +395,7 @@ To manually rebuild the book:
 .. code-block:: bash
    docker-tools shell
    cd books/thinkcspy
-   runestone build -all deploy
+   runestone build --all deploy
 
 Shelling Inside
 ***************
