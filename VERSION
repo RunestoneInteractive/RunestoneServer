@@ -1,3 +1,11 @@
+RunestoneServer-6.2.0
+
+- Support for grading microparsons
+- Support for grading webwork questions
+- Fix Webwork question images on assignment page
+- Fix registering from library with one click
+- Enable pct correct for dragndrop and clickable questions
+
 RunestoneServer-6.1.16
 
 - Bug fixes for peer instruction

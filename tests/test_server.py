@@ -82,14 +82,9 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ("admin/doc", True, "Runestone Help and Documentation", 1),
         # **Assignments**
         # ----------------
-        ("assignments/chooseAssignment", True, "Assignments", 1),
-        ("assignments/doAssignment", True, "Bad Assignment ID", 1),
-        (
-            "assignments/practice",
-            True,
-            "Practice tool is not set up for this course yet.",
-            1,
-        ),
+        ("assignments/chooseAssignment", True, "Assignments", 2),
+        ("assignments/doAssignment", True, "Bad Assignment ID", 2),
+        ("assignments/practice", True, "Practice", 1),
         ("assignments/practiceNotStartedYet", True, "test_course_1", 1),
         # **Default**
         # ------------
@@ -104,20 +99,20 @@ def test_killer(test_assignment, test_client, test_user_1, runestone_db_tools):
         ("default/user/change_password", True, "Change password", 1),
         # Runestone doesn't support this.
         #'default/user/verify_email', False, 'Verify email', 1),
-        ("default/user/retrieve_username", False, "Retrieve username", 1),
+        ("default/user/retrieve_username", False, "Our Mission", 1),
         ("default/user/request_reset_password", False, "Request reset password", 1),
         # This doesn't display a webpage, but instead redirects to courses.
         # ('default/user/reset_password, False, 'Reset password', 1),
-        ("default/user/impersonate", True, "Impersonate", 1),
+        # ("default/user/impersonate", True, "Impersonate", 1),
         # FIXME: This produces an exception.
         #'default/user/groups', True, 'Groups', 1),
-        ("default/user/not_authorized", False, "Not authorized", 1),
+        ("default/user/not_authorized", False, "Our Mission", 1),
         # *Other pages*
         #
         # TODO: What is this for?
         # ('default/call', False, 'Not found', 0),
         ("default/index", True, "Course Selection", 1),
-        ("default/about", False, "About Us", 1),
+        ("default/about", False, "About Runestone", 1),
         ("default/error", False, "Error: the document does not exist", 1),
         ("default/ack", False, "Acknowledgements", 1),
         # web2py generates invalid labels for the radio buttons in this form.

@@ -40,10 +40,10 @@ ALL_AUTOGRADE_OPTIONS = ["manual", "all_or_nothing", "pct_correct", "interact"]
 AUTOGRADE_POSSIBLE_VALUES = dict(
     actex=ALL_AUTOGRADE_OPTIONS,
     activecode=ALL_AUTOGRADE_OPTIONS,
-    clickablearea=["manual", "all_or_nothing", "interact"],
+    clickablearea=["manual", "all_or_nothing", "pct_correct", "interact"],
     codelens=ALL_AUTOGRADE_OPTIONS,
     datafile=[],
-    dragndrop=["manual", "all_or_nothing", "interact"],
+    dragndrop=["manual", "all_or_nothing", "pct_correct", "interact"],
     external=[],
     fillintheblank=ALL_AUTOGRADE_OPTIONS,
     khanex=ALL_AUTOGRADE_OPTIONS,
@@ -1191,7 +1191,6 @@ def questionBank():
     for clause in query_clauses[1:]:
         myquery = myquery & clause
 
-    print(myquery)
     rows = db(myquery).select()
 
     questions = []
@@ -1934,6 +1933,7 @@ def _get_toc_and_questions():
 
 # This is the place to add meta information about questions for the
 # assignment builder
+# TODO: Incorporate which_to_grade stuff in here.
 def _add_q_meta_info(qrow):
     qt = {
         "mchoice": "Mchoice ✓",
@@ -1953,6 +1953,7 @@ def _add_q_meta_info(qrow):
         "quizly": "Quizly ✓",
         "khanex": "KhanAcademy ✓",
         "webwork": "WebWork ✓",
+        "hparsons": "MicroParsons ✓",
     }
     qt = qt.get(qrow.questions.question_type, "")
 

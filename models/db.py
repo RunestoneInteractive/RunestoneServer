@@ -624,7 +624,7 @@ def _validateUser(username, password, fname, lname, email, course_name, line):
 
 def create_rs_token():
     d = dict(sub=auth.user.username)
-    expires = datetime.timedelta(days=30)
+    expires = datetime.timedelta(days=105)
     _create_access_token(d, expires=expires)
 
 
@@ -652,8 +652,8 @@ def _create_access_token(data: dict, expires=None, scopes=None) -> bytes:
     if expires:
         expires_in = datetime.datetime.utcnow() + expires
     else:
-        # default to 15 minutes expiry times
-        expires_in = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
+        # default to 105 days expiry times about a semester
+        expires_in = datetime.datetime.utcnow() + datetime.timedelta(days=105)
 
     to_encode.update({"exp": expires_in})
 

@@ -415,10 +415,8 @@ def build(config, clone, ptx, gen, manifest, course):
 
 
 #
-#    inituser
+#    adduser
 #
-
-
 @cli.command()
 @click.option("--instructor", is_flag=True, help="Make this user an instructor")
 @click.option(
@@ -466,7 +464,7 @@ def adduser(
         for line in csv.reader(fromfile):
             if len(line) != 6:
                 click.echo("Not enough data to create a user.  Lines must be")
-                click.echo("username, email first_name, last_name, password, course")
+                click.echo("username, email, first_name, last_name, password, course")
                 exit(1)
             if "@" not in line[1]:
                 click.echo("emails should have an @ in them in column 2")
@@ -835,24 +833,28 @@ def studentinfo(config, student):
         student = click.prompt("Student Id: ")
 
     res = eng.execute(
+        ## Index  0             1           2         3            4               5                6
         f"""
-        select auth_user.id, first_name, last_name, email, courses.course_name, courses.id
-        from auth_user join user_courses ON user_courses.user_id = auth_user.id
+        select auth_user.id, first_name, last_name, email, courses.course_name, courses.id, payments.charge_id
+        from auth_user
+        join user_courses on user_courses.user_id = auth_user.id
+        full outer join payments on user_courses.id = payments.user_courses_id
         join courses on courses.id = user_courses.course_id where username = '{student}'"""
     )
-    print(f"res = {res}")
     # fetchone fetches the first row without closing the cursor.
     first = res.fetchone()
-    print(student)
-    print("id\tFirst\tLast\temail")
-    print("\t".join(str(x) for x in first[:4]))
-    print("")
-    print("         Course        cid")
-    print("--------------------------")
-    print(f"{first[-2].rjust(15)} {str(first[-1]).rjust(10)}")
-    if res:
+    if first:
+        print("id\tFirst\tLast\temail")
+        print("\t".join(str(x) for x in first[:4]))
+        print("")
+        print("Course                                     cid")
+        print("----------------------------------- ----------")
+        print(f"{first[4].ljust(35)} {str(first[5]).rjust(10)} {first[6] if first[6] is not None else ''}")
         for row in res:
-            print(f"{row[-2].rjust(15)} {str(row[-1]).rjust(10)}")
+            print(f"{row[4].ljust(35)} {str(row[5]).rjust(10)} {row[6] if row[6] is not None else ''}")
+        print("\n")
+    else:
+        print("Student not found.")
 
 
 @cli.command()

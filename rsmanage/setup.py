@@ -7,6 +7,6 @@ setup(
     install_requires=["click"],
     entry_points="""
         [console_scripts]
-        rsmanage=rsmanage:cli
+        rsmanage=rsmanage.rsmanage:cli
     """,
 )

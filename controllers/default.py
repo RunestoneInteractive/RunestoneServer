@@ -666,7 +666,14 @@ def enroll():
     logger.debug(f"Request to login for {request.vars.course_name}")
     course = db(db.courses.course_name == request.vars.course_name).select().first()
     # is the user already registered for this course?
-    res = db(db.user_courses.course_id == course.id).select().first()
+    res = (
+        db(
+            (db.user_courses.course_id == course.id)
+            & (db.user_courses.user_id == auth.user.id)
+        )
+        .select()
+        .first()
+    )
     if res:
         session.flash = f"You are already registered for {request.vars.course_name}"
         redirect(URL("default", "courses"))
