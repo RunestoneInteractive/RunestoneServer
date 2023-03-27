@@ -67,6 +67,7 @@
     var vote2done = false;
     var nextQuestionNumber = {{= nextQnum}};
     var assignId = '{{=assignment_id}}'
+    eBookConfig.is_peer_async = true;
 
     function checkVoteCount() {
         if (studentVoteCount < 2 || studentSubmittedVote2 == false) {
