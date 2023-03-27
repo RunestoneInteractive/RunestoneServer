@@ -32,7 +32,10 @@ chdir = os.environ["WEB2PY_PATH"]
 wsgi_app = "wsgihandler:application"
 
 # `workers <https://docs.gunicorn.org/en/stable/settings.html#workers>`_: The number of worker processes for handling requests. Pick this based on CPU count.
-workers = multiprocessing.cpu_count()
+if os.environ["BOOK_SERVER_CONFIG"] == "development":
+    workers = 4
+else:
+    workers = multiprocessing.cpu_count()
 
 # `bind <https://docs.gunicorn.org/en/stable/settings.html#bind>`_: The socket to bind. This must match the socket nginx sends to.
 bind = "unix:/run/web2py.sock"

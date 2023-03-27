@@ -33,7 +33,10 @@ if os.environ["BOOK_SERVER_CONFIG"] == "development":
 wsgi_app = "bookserver.main:app"
 
 # `workers <https://docs.gunicorn.org/en/stable/settings.html#workers>`_: The number of worker processes for handling requests. Pick this based on CPU count.
-workers = multiprocessing.cpu_count() * 2 + 1
+if os.environ["BOOK_SERVER_CONFIG"] == "development":
+    workers = 4
+else:
+    workers = multiprocessing.cpu_count() * 2 + 1
 
 # `worker_class <https://docs.gunicorn.org/en/stable/settings.html#worker-class>`_: The type of workers to use. Use `uvicorn's worker class for gunicorn <https://www.uvicorn.org/deployment/#gunicorn>`_.
 worker_class = "uvicorn.workers.UvicornWorker"
