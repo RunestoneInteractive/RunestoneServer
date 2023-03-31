@@ -5,7 +5,7 @@
 
 <script>
     eBookConfig.peer = true;
-    eBookConfig.peerMOde = "async";
+    eBookConfig.peerMode = "async";
 </script>
 
 <h2>Peer Instruction Question (After Class)</h2>
@@ -51,7 +51,7 @@
     <form action="/peer/peer_async">
         <input type="hidden" name="assignment_id" value="{{=assignment_id}}" />
         <input type="hidden" name="question_num" value="{{=nextQnum}}" />
-        <button type="submit" onclick="return checkVoteCount()">Next Question</button>
+        <button type="submit" onclick="return checkVoteCount()" style="float: right; margin-bottom: 20px;">Next Question</button>
     </form>
 </div>
 {{ pass }}
@@ -67,7 +67,6 @@
     var vote2done = false;
     var nextQuestionNumber = {{= nextQnum}};
     var assignId = '{{=assignment_id}}'
-    eBookConfig.is_peer_async = true;
 
     function checkVoteCount() {
         if (studentVoteCount < 2 || studentSubmittedVote2 == false) {
