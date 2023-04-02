@@ -386,22 +386,16 @@ def build(config, clone, ptx, gen, manifest, course):
         if os.path.exists(course):
             click.echo("Book repo already cloned, skipping")
         else:
-            res = subprocess.call("git clone {}".format(clone), shell=True)
+            res = subprocess.call("git clone {} {}".format(clone, str(clone).split("/")[4].split(".")[0]), shell=True)
             if res != 0:
                 click.echo(
                     "Cloning the repository failed, please check the URL and try again"
                 )
                 exit(1)
 
-    # if course name is different from book name, clone to the right folder
-    if not os.path.isdir(course):
-        course = str(clone).split("/")[4]
-
-    #proj_dir = os.path.basename(repo).replace(".git", "")
+    # proj_dir = os.path.basename(repo).replace(".git", "")
     click.echo("Switching to book dir {}".format(course))
-
     os.chdir(course)
-
     if ptx:
         res = _build_ptx_book(config, gen, manifest, course)
 
