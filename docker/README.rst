@@ -258,6 +258,8 @@ The ``rsmanage`` command will run many useful commands inside the container for 
 
 ...and many other things.  Just type ``rsmanage`` for a list of things it can do.  For a list of options just type ``rsmanage`` and the subcommand you want followed by ``--help``; for example, ``rsmanage build --help``.
 
+If at this stage you type `rsmanage --help` and you get a command not found it is likely that pip installed the command in a different location than the one in your PATH.  It could be in ``~/.local/bin`` or ``/usr/local/bin`` or ``/opt/local/bin``.  You can add that location to your PATH or you can just type the full path to the command.  For example, ``~/.local/bin/rsmanage``
+
 
 7. Add books
 ************
@@ -267,7 +269,7 @@ No books are installed by default; you must add books using the following proces
 
 .. code-block:: bash
 
-    rsmanage build thinkcspy --clone https://github.com/RunestoneInteractive/thinkcspy.git
+    rsmanage build --clone https://github.com/RunestoneInteractive/thinkcspy.git thinkcspy
 
 After cloning a book, you may need to add it to the database.  Most of the standard books are already there, but you can use ``rsmanage addcourse`` to add it if needed.
 

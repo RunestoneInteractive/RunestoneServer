@@ -13,7 +13,9 @@ Runestone Academy Server and API
 
 .. image:: https://readthedocs.org/projects/runestoneserver/badge/?version=latest
     :target: https://runestoneserver.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+    :alt: Documentation Status 
+
+**Note:** This repository will be archived very soon.  All Runestone Development has moved to the ``RunestoneInteractive/rs`` monorepo.
 
 
 Runestone Server Introduction
