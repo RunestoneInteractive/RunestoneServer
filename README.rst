@@ -1,6 +1,8 @@
 Runestone Academy Server and API
 ================================
 
+**This Repository is Archived -- See the new monorepo called rs**. This contains the combined code for all Runestone services and interactive components.
+
 .. image:: https://runestone.academy/static/images/logo_small.png
     :align: center
     :width: 300
