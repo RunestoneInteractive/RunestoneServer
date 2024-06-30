@@ -1,5 +1,7 @@
-Runestone Academy Server and API
-================================
+This Repository is Archived please do not clone it - clone the rs repository instead
+====================================================================================
+
+The RS respository is under active development.  This repository is not!
 
 **This Repository is Archived -- See the new monorepo called rs**. This contains the combined code for all Runestone services and interactive components.
 
